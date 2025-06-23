@@ -62,6 +62,13 @@ interface SituationGoal {
   icon: React.ReactNode;
   documents: DocumentItem[];
   viewAllLink: string;
+  tabs?: TabSection[];
+}
+
+interface TabSection {
+  id: string;
+  title: string;
+  documents: DocumentItem[];
 }
 
 interface SituationSection {
@@ -78,96 +85,142 @@ const SITUATION_SECTIONS: SituationSection[] = [
     icon: <Heart className="h-5 w-5" />,
     goals: [
       {
-        id: 'rent-property',
-        title: 'Rent Out Property',
-        description: 'Lease agreements, rental forms, and property management documents',
+        id: 'property-management',
+        title: 'Property & Real Estate',
+        description: 'Complete property lifecycle: lease, manage, and transfer',
         icon: <Home className="h-5 w-5" />,
-        documents: [
-          { slug: 'residential-lease-agreement', title: 'Residential Lease Agreement', description: 'outlining terms between landlord and tenant for property rental' },
-          { slug: 'commercial-lease-agreement', title: 'Commercial Lease Agreement', description: 'defining rental terms for business properties and office spaces' },
-          { slug: 'eviction-notice', title: 'Eviction Notice', description: 'officially notifying a tenant of lease violations or termination' },
-        ],
-        viewAllLink: '/docs?goal=rent-property'
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=property-management',
+        tabs: [
+          {
+            id: 'lease',
+            title: 'Lease',
+            documents: [
+              { slug: 'residential-lease-agreement', title: 'Residential Lease Agreement', description: 'outlining terms between landlord and tenant for property rental' },
+              { slug: 'commercial-lease-agreement', title: 'Commercial Lease Agreement', description: 'defining rental terms for business properties and office spaces' },
+              { slug: 'lease-termination-letter', title: 'Lease Termination Letter', description: 'providing proper notice when ending a rental lease' },
+            ]
+          },
+          {
+            id: 'manage',
+            title: 'Manage',
+            documents: [
+              { slug: 'eviction-notice', title: 'Eviction Notice', description: 'officially notifying a tenant of lease violations or termination' },
+              { slug: 'tenant-maintenance-request', title: 'Tenant Maintenance Request', description: 'formally requesting property repairs from your landlord' },
+              { slug: 'late-rent-notice', title: 'Late Rent Notice', description: 'addressing late payment issues with your landlord' },
+            ]
+          },
+          {
+            id: 'transfer',
+            title: 'Transfer',
+            documents: [
+              { slug: 'real-estate-purchase-agreement', title: 'Real Estate Purchase Agreement', description: 'detailing terms and conditions for buying or selling property' },
+              { slug: 'property-deed', title: 'Property Deed', description: 'transferring ownership of real estate from seller to buyer' },
+              { slug: 'quitclaim-deed', title: 'Quitclaim Deed', description: 'transferring property rights without warranties or guarantees' },
+            ]
+          }
+        ]
       },
       {
-        id: 'plan-estate',
-        title: 'Plan My Estate',
-        description: 'Wills, trusts, and advance directives for your future',
+        id: 'family-relationships',
+        title: 'Family & Relationships',
+        description: 'Life event documents from start to end',
+        icon: <Heart className="h-5 w-5" />,
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=family-relationships',
+        tabs: [
+          {
+            id: 'start',
+            title: 'Start',
+            documents: [
+              { slug: 'prenuptial-agreement', title: 'Prenuptial Agreement', description: 'protecting assets and defining financial arrangements before marriage' },
+              { slug: 'postnuptial-agreement', title: 'Postnuptial Agreement', description: 'modifying financial arrangements after marriage' },
+              { slug: 'cohabitation-agreement', title: 'Cohabitation Agreement', description: 'defining rights and responsibilities for unmarried couples living together' },
+              { slug: 'name-change-notification-letter', title: 'Name Change Notification Letter', description: 'notifying organizations and institutions of your legal name change' },
+            ]
+          },
+          {
+            id: 'grow',
+            title: 'Grow',
+            documents: [
+              { slug: 'child-custody-agreement', title: 'Child Custody Agreement', description: 'establishing custody arrangements and parenting responsibilities' },
+              { slug: 'child-support-agreement', title: 'Child Support Agreement', description: 'defining financial support obligations for children' },
+              { slug: 'parenting-plan', title: 'Parenting Plan', description: 'outlining detailed custody schedules and decision-making authority' },
+              { slug: 'child-care-contract', title: 'Child Care Contract', description: 'hiring professional childcare services with clear terms' },
+            ]
+          },
+          {
+            id: 'end',
+            title: 'End',
+            documents: [
+              { slug: 'divorce-settlement-agreement', title: 'Divorce Settlement Agreement', description: 'finalizing property division and support arrangements in divorce' },
+              { slug: 'separation-agreement', title: 'Separation Agreement', description: 'defining terms for couples who choose to live apart' },
+              { slug: 'mediation-agreement', title: 'Mediation Agreement', description: 'resolving disputes through alternative dispute resolution' },
+              { slug: 'settlement-agreement', title: 'Settlement Agreement', description: 'resolving legal disputes without going to court' },
+            ]
+          }
+        ]
+      },
+      {
+        id: 'estate-health',
+        title: 'Estate & Health Planning',
+        description: 'Wills, trusts, and medical directives for your future',
         icon: <FileText className="h-5 w-5" />,
-        documents: [
-          { slug: 'last-will-testament', title: 'Last Will & Testament', description: 'stating your final wishes for asset distribution after death' },
-          { slug: 'living-trust', title: 'Living Trust', description: 'managing and transferring assets while avoiding probate' },
-          { slug: 'power-of-attorney', title: 'Power of Attorney', description: 'granting someone authority to act on your behalf legally' },
-        ],
-        viewAllLink: '/docs?goal=estate-planning'
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=estate-health',
+        tabs: [
+          {
+            id: 'wills-trusts',
+            title: 'Wills & Trusts',
+            documents: [
+              { slug: 'last-will-testament', title: 'Last Will & Testament', description: 'stating your final wishes for asset distribution after death' },
+              { slug: 'living-trust', title: 'Living Trust', description: 'managing and transferring assets while avoiding probate' },
+              { slug: 'power-of-attorney', title: 'Power of Attorney', description: 'granting someone authority to act on your behalf legally' },
+            ]
+          },
+          {
+            id: 'medical-powers',
+            title: 'Medical & Powers',
+            documents: [
+              { slug: 'medical-consent-form', title: 'Medical Consent Form', description: 'authorizing medical treatment and healthcare decisions' },
+              { slug: 'medical-consent', title: 'Medical Consent', description: 'granting permission for specific medical procedures' },
+              { slug: 'elder-care-agreement', title: 'Elder Care Agreement', description: 'arranging care services for elderly family members' },
+              { slug: 'hipaa-authorization-form', title: 'HIPAA Authorization Form', description: 'authorizing disclosure of protected health information' },
+            ]
+          }
+        ]
       },
       {
-        id: 'sell-transfer-property',
-        title: 'Sell or Transfer Real Estate',
-        description: 'Agreements for buying, selling, or gifting property',
-        icon: <ArrowRight className="h-5 w-5" />,
-        documents: [
-          { slug: 'real-estate-purchase-agreement', title: 'Real Estate Purchase Agreement', description: 'detailing terms and conditions for buying or selling property' },
-          { slug: 'property-deed', title: 'Property Deed', description: 'transferring ownership of real estate from seller to buyer' },
-          { slug: 'quitclaim-deed', title: 'Quitclaim Deed', description: 'transferring property rights without warranties or guarantees' },
-        ],
-        viewAllLink: '/docs?goal=real-estate-transfer'
+        id: 'legal-support',
+        title: 'Legal Support & Services',
+        description: 'Professional legal assistance and document authentication',
+        icon: <Scale className="h-5 w-5" />,
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=legal-support',
+        tabs: [
+          {
+            id: 'advice-inquiry',
+            title: 'Advice & Inquiry',
+            documents: [
+              { slug: 'affidavit-general', title: 'General Affidavit', description: 'making sworn statements of fact for legal proceedings' },
+              { slug: 'complaint-letter', title: 'Complaint Letter', description: 'formally documenting issues or concerns with a service' },
+              { slug: 'demand-letter-payment', title: 'Demand Letter for Payment', description: 'formally requesting payment of outstanding debts' },
+            ]
+          },
+          {
+            id: 'authentication',
+            title: 'Authentication',
+            documents: [
+              { slug: 'notarization-request', title: 'Notarization Request', description: 'requesting official notarization of important documents' },
+              { slug: 'affidavit-of-identity', title: 'Affidavit of Identity', description: 'sworn statement confirming your identity for legal purposes' },
+            ]
+          }
+        ]
       },
       {
-        id: 'get-married',
-        title: 'Get Married',
-        description: 'Legal agreements for starting your marriage',
-        icon: <Users className="h-5 w-5" />,
-        documents: [
-          { slug: 'prenuptial-agreement', title: 'Prenuptial Agreement', description: 'protecting assets and defining financial arrangements before marriage' },
-          { slug: 'postnuptial-agreement', title: 'Postnuptial Agreement', description: 'modifying financial arrangements after marriage' },
-          { slug: 'cohabitation-agreement', title: 'Cohabitation Agreement', description: 'defining rights and responsibilities for unmarried couples living together' },
-        ],
-        viewAllLink: '/docs?goal=marriage'
-      },
-      {
-        id: 'separate-divorce',
-        title: 'Separate or Divorce',
-        description: 'Agreements and forms for legal separation or divorce',
-        icon: <HeartHandshake className="h-5 w-5" />,
-        documents: [
-          { slug: 'divorce-settlement-agreement', title: 'Divorce Settlement Agreement', description: 'finalizing property division and support arrangements in divorce' },
-          { slug: 'separation-agreement', title: 'Separation Agreement', description: 'defining terms for couples who choose to live apart' },
-          { slug: 'mediation-agreement', title: 'Mediation Agreement', description: 'resolving disputes through alternative dispute resolution' },
-          { slug: 'settlement-agreement', title: 'Settlement Agreement', description: 'resolving legal disputes without going to court' },
-        ],
-        viewAllLink: '/docs?goal=separate-divorce'
-      },
-      {
-        id: 'plan-child-care',
-        title: 'Plan My Child\'s Care',
-        description: 'Custody, support, and care agreements for children',
-        icon: <Baby className="h-5 w-5" />,
-        documents: [
-          { slug: 'child-custody-agreement', title: 'Child Custody Agreement', description: 'establishing custody arrangements and parenting responsibilities' },
-          { slug: 'child-support-agreement', title: 'Child Support Agreement', description: 'defining financial support obligations for children' },
-          { slug: 'parenting-plan', title: 'Parenting Plan', description: 'outlining detailed custody schedules and decision-making authority' },
-          { slug: 'child-care-contract', title: 'Child Care Contract', description: 'hiring professional childcare services with clear terms' },
-        ],
-        viewAllLink: '/docs?goal=child-care'
-      },
-      {
-        id: 'manage-tenancy',
-        title: 'Manage My Tenancy',
-        description: 'Notices and forms for tenants dealing with landlords',
-        icon: <Key className="h-5 w-5" />,
-        documents: [
-          { slug: 'tenant-maintenance-request', title: 'Tenant Maintenance Request', description: 'formally requesting property repairs from your landlord' },
-          { slug: 'lease-termination-letter', title: 'Lease Termination Letter', description: 'providing proper notice when ending a rental lease' },
-          { slug: 'late-rent-notice', title: 'Late Rent Notice', description: 'addressing late payment issues with your landlord' },
-          { slug: 'complaint-letter', title: 'Complaint Letter', description: 'formally documenting issues or concerns with a service' },
-        ],
-        viewAllLink: '/docs?goal=tenant-documents'
-      },
-      {
-        id: 'prepare-job-application',
-        title: 'Prepare a Job Application',
-        description: 'Essential documents to help you apply for jobs',
+        id: 'employment-career',
+        title: 'Employment & Career',
+        description: 'Job applications, employment verification, and career transitions',
         icon: <UserCheck className="h-5 w-5" />,
         documents: [
           { slug: 'job-application-form', title: 'Job Application Form', description: 'applying for employment positions with standardized information' },
@@ -175,60 +228,24 @@ const SITUATION_SECTIONS: SituationSection[] = [
           { slug: 'resignation-letter', title: 'Resignation Letter', description: 'formally notifying your employer of your intent to quit' },
           { slug: 'twoweeksnoticeletter', title: 'Two Weeks Notice Letter', description: 'providing standard notice period when leaving employment' },
         ],
-        viewAllLink: '/docs?goal=job-application'
+        viewAllLink: '/docs?goal=employment-career'
       },
       {
-        id: 'handle-legal-dispute',
-        title: 'Handle a Legal Dispute or Issue',
-        description: 'Affidavits, demand letters, and dispute resolution documents',
-        icon: <Scale className="h-5 w-5" />,
-        documents: [
-          { slug: 'affidavit-general', title: 'General Affidavit', description: 'making sworn statements of fact for legal proceedings' },
-          { slug: 'demand-letter-payment', title: 'Demand Letter for Payment', description: 'formally requesting payment of outstanding debts' },
-          { slug: 'mediation-agreement', title: 'Mediation Agreement', description: 'resolving disputes through alternative dispute resolution' },
-          { slug: 'complaint-letter', title: 'Complaint Letter', description: 'formally documenting issues or concerns with a service' },
-        ],
-        viewAllLink: '/docs?goal=legal-dispute'
-      },
-      {
-        id: 'manage-risk-liability',
-        title: 'Manage Risk & Liability',
+        id: 'risk-protection',
+        title: 'Risk Protection & Liability',
         description: 'Waivers, releases, and protective forms for personal activities',
         icon: <ShieldCheck className="h-5 w-5" />,
         documents: [
           { slug: 'general-liability-waiver', title: 'General Liability Waiver', description: 'protecting against claims from activities or events' },
           { slug: 'release-of-liability', title: 'Release of Liability', description: 'waiving legal claims for potential injuries or damages' },
           { slug: 'fitness-waiver', title: 'Fitness Waiver', description: 'protecting gyms and trainers from injury-related claims' },
-          { slug: 'hipaa-authorization-form', title: 'HIPAA Authorization Form', description: 'authorizing disclosure of protected health information' },
-        ],
-        viewAllLink: '/docs?goal=risk-liability'
-      },
-      {
-        id: 'personal-health-care',
-        title: 'Personal Health & Care',
-        description: 'Documents related to personal medical decisions and care',
-        icon: <Stethoscope className="h-5 w-5" />,
-        documents: [
-          { slug: 'medical-consent-form', title: 'Medical Consent Form', description: 'authorizing medical treatment and healthcare decisions' },
-          { slug: 'medical-consent', title: 'Medical Consent', description: 'granting permission for specific medical procedures' },
-          { slug: 'elder-care-agreement', title: 'Elder Care Agreement', description: 'arranging care services for elderly family members' },
           { slug: 'personal-care-agreement', title: 'Personal Care Agreement', description: 'hiring personal care assistants with defined responsibilities' },
         ],
-        viewAllLink: '/docs?goal=personal-health'
-      },
-      {
-        id: 'name-changes',
-        title: 'Name Changes',
-        description: 'Forms to legally notify of a name change',
-        icon: <UserX className="h-5 w-5" />,
-        documents: [
-          { slug: 'name-change-notification-letter', title: 'Name Change Notification Letter', description: 'notifying organizations and institutions of your legal name change' },
-        ],
-        viewAllLink: '/docs?goal=name-changes'
+        viewAllLink: '/docs?goal=risk-protection'
       },
       {
         id: 'lifestyle-activities',
-        title: 'General Lifestyle & Activities',
+        title: 'Lifestyle & Personal Activities',
         description: 'Miscellaneous documents for personal events and activities',
         icon: <Star className="h-5 w-5" />,
         documents: [
@@ -248,21 +265,37 @@ const SITUATION_SECTIONS: SituationSection[] = [
     icon: <Briefcase className="h-5 w-5" />,
     goals: [
       {
-        id: 'start-business',
-        title: 'Start a Business',
-        description: 'Formation documents, operating agreements, and business plans',
+        id: 'business-setup',
+        title: 'Business Setup & Management',
+        description: 'Complete business lifecycle from formation to governance',
         icon: <Sparkles className="h-5 w-5" />,
-        documents: [
-          { slug: 'articles-of-incorporation', title: 'Articles of Incorporation', description: 'formally establishing a corporation with the state government' },
-          { slug: 'llc-operating-agreement', title: 'LLC Operating Agreement', description: 'defining ownership and management structure for your LLC' },
-          { slug: 'partnership-agreement', title: 'Partnership Agreement', description: 'establishing terms for business partnerships and profit sharing' },
-          { slug: 'buy-sell-agreement', title: 'Buy-Sell Agreement', description: 'planning for ownership transfers when partners leave the business' },
-        ],
-        viewAllLink: '/docs?goal=start-business'
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=business-setup',
+        tabs: [
+          {
+            id: 'launch',
+            title: 'Launch',
+            documents: [
+              { slug: 'articles-of-incorporation', title: 'Articles of Incorporation', description: 'formally establishing a corporation with the state government' },
+              { slug: 'llc-operating-agreement', title: 'LLC Operating Agreement', description: 'defining ownership and management structure for your LLC' },
+              { slug: 'partnership-agreement', title: 'Partnership Agreement', description: 'establishing terms for business partnerships and profit sharing' },
+            ]
+          },
+          {
+            id: 'govern',
+            title: 'Govern',
+            documents: [
+              { slug: 'buy-sell-agreement', title: 'Shareholder Agreement', description: 'governing shareholder rights and business decision-making' },
+              { slug: 'articles-of-incorporation-biz', title: 'Corporate Bylaws', description: 'establishing internal rules and procedures for your corporation' },
+              { slug: 'joint-venture-agreement', title: 'Joint Venture Agreement', description: 'partnering with other businesses for specific projects' },
+              { slug: 'partnership-dissolution-agreement', title: 'Partnership Dissolution Agreement', description: 'formally ending business partnerships with asset division' },
+            ]
+          }
+        ]
       },
       {
         id: 'hire-employees',
-        title: 'Hire Employees or Contractors',
+        title: 'Hire Employees & Contractors',
         description: 'Employment contracts, NDAs, and hiring documents',
         icon: <Users className="h-5 w-5" />,
         documents: [
@@ -275,7 +308,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
       },
       {
         id: 'protect-business',
-        title: 'Protect My Business',
+        title: 'Business Protection & IP',
         description: 'NDAs, non-competes, and intellectual property protection',
         icon: <Shield className="h-5 w-5" />,
         documents: [
@@ -286,68 +319,62 @@ const SITUATION_SECTIONS: SituationSection[] = [
         viewAllLink: '/docs?goal=protect-business'
       },
       {
-        id: 'get-paid',
-        title: 'Get Paid or Collect Debts',
-        description: 'Invoices, demand letters, and payment agreements',
-        icon: <DollarSign className="h-5 w-5" />,
-        documents: [
-          { slug: 'demand-letter-payment', title: 'Demand Letter for Payment' },
-          { slug: 'promissory-note', title: 'Promissory Note' },
-          { slug: 'loan-agreement', title: 'Loan Agreement' },
-        ],
-        viewAllLink: '/docs?goal=get-paid'
-      },
-      {
-        id: 'sell-services',
-        title: 'Sell Services',
-        description: 'Contracts for providing professional, creative, or specialized services',
+        id: 'commerce-payments',
+        title: 'Commerce & Payments',
+        description: 'Service contracts and payment collection documents',
         icon: <Handshake className="h-5 w-5" />,
-        documents: [
-          { slug: 'service-agreement', title: 'Service Agreement', description: 'defining scope and terms for professional services provided' },
-          { slug: 'consulting-agreement-meta', title: 'Consulting Agreement', description: 'hiring consultants with clear deliverables and compensation' },
-          { slug: 'coaching-agreement', title: 'Coaching Agreement', description: 'establishing coaching relationships with goals and expectations' },
-          { slug: 'website-development-agreement', title: 'Website Development Agreement', description: 'contracting web developers with project specifications and timeline' },
-        ],
-        viewAllLink: '/docs?goal=sell-services'
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=commerce-payments',
+        tabs: [
+          {
+            id: 'provide-services',
+            title: 'Provide Services',
+            documents: [
+              { slug: 'service-agreement', title: 'Service Agreement', description: 'defining scope and terms for professional services provided' },
+              { slug: 'consulting-agreement-meta', title: 'Consulting Agreement', description: 'hiring consultants with clear deliverables and compensation' },
+              { slug: 'coaching-agreement', title: 'Coaching Agreement', description: 'establishing coaching relationships with goals and expectations' },
+              { slug: 'website-development-agreement', title: 'Website Development Agreement', description: 'contracting web developers with project specifications and timeline' },
+            ]
+          },
+          {
+            id: 'handle-payments',
+            title: 'Handle Payments',
+            documents: [
+              { slug: 'demand-letter-payment', title: 'Demand Letter for Payment', description: 'formally requesting payment of outstanding debts' },
+              { slug: 'promissory-note', title: 'Promissory Note', description: 'documenting a promise to repay debt with specific terms' },
+              { slug: 'invoice', title: 'Invoice', description: 'billing clients for services or products provided' },
+            ]
+          }
+        ]
       },
       {
-        id: 'lend-borrow-money',
-        title: 'Lend or Borrow Money',
-        description: 'Legal documents for personal and business loans and credit',
-        icon: <CreditCard className="h-5 w-5" />,
-        documents: [
-          { slug: 'loan-agreement', title: 'Loan Agreement', description: 'formalizing business loan terms and repayment schedules' },
-          { slug: 'promissory-note', title: 'Promissory Note', description: 'documenting a promise to repay debt with specific terms' },
-          { slug: 'personal-loan-agreement', title: 'Personal Loan Agreement', description: 'lending money to individuals with clear repayment terms' },
-          { slug: 'credit-card-agreement', title: 'Credit Card Agreement', description: 'establishing credit terms and payment obligations' },
-        ],
-        viewAllLink: '/docs?goal=lend-borrow-money'
-      },
-      {
-        id: 'buy-sell-rent-goods',
-        title: 'Buy, Sell, or Rent Goods',
-        description: 'Agreements for purchasing, selling, or renting products and inventory',
-        icon: <ShoppingCart className="h-5 w-5" />,
-        documents: [
-          { slug: 'sales-agreement', title: 'Sales Agreement', description: 'formalizing the sale of products or goods with terms' },
-          { slug: 'vehicle-bill-of-sale', title: 'Vehicle Bill of Sale', description: 'transferring ownership of vehicles with legal documentation' },
-          { slug: 'boat-bill-of-sale', title: 'Boat Bill of Sale', description: 'documenting watercraft sales with proper ownership transfer' },
-          { slug: 'vehicle-lease-agreement', title: 'Vehicle Lease Agreement', description: 'renting vehicles with terms and monthly payment details' },
-        ],
-        viewAllLink: '/docs?goal=buy-sell-rent-goods'
-      },
-      {
-        id: 'manage-corporation',
-        title: 'Manage My Corporation/Business Governance',
-        description: 'Documents for managing corporate structure, board decisions, and shareholder relations',
-        icon: <Building className="h-5 w-5" />,
-        documents: [
-          { slug: 'buy-sell-agreement', title: 'Shareholder Agreement', description: 'governing shareholder rights and business decision-making' },
-          { slug: 'articles-of-incorporation-biz', title: 'Corporate Bylaws', description: 'establishing internal rules and procedures for your corporation' },
-          { slug: 'joint-venture-agreement', title: 'Joint Venture Agreement', description: 'partnering with other businesses for specific projects' },
-          { slug: 'partnership-dissolution-agreement', title: 'Partnership Dissolution Agreement', description: 'formally ending business partnerships with asset division' },
-        ],
-        viewAllLink: '/docs?goal=manage-corporation'
+        id: 'finance-transactions',
+        title: 'Finance & Transactions',
+        description: 'Loans, credit, and trading agreements',
+        icon: <DollarSign className="h-5 w-5" />,
+        documents: [], // Will be populated from active tab
+        viewAllLink: '/docs?goal=finance-transactions',
+        tabs: [
+          {
+            id: 'loans-credit',
+            title: 'Loans & Credit',
+            documents: [
+              { slug: 'loan-agreement', title: 'Loan Agreement', description: 'formalizing business loan terms and repayment schedules' },
+              { slug: 'personal-loan-agreement', title: 'Personal Loan Agreement', description: 'lending money to individuals with clear repayment terms' },
+              { slug: 'credit-card-agreement', title: 'Credit Card Agreement', description: 'establishing credit terms and payment obligations' },
+            ]
+          },
+          {
+            id: 'trade-lease',
+            title: 'Trade & Lease',
+            documents: [
+              { slug: 'sales-agreement', title: 'Sales Agreement', description: 'formalizing the sale of products or goods with terms' },
+              { slug: 'vehicle-bill-of-sale', title: 'Vehicle Bill of Sale', description: 'transferring ownership of vehicles with legal documentation' },
+              { slug: 'boat-bill-of-sale', title: 'Boat Bill of Sale', description: 'documenting watercraft sales with proper ownership transfer' },
+              { slug: 'vehicle-lease-agreement', title: 'Vehicle Lease Agreement', description: 'renting vehicles with terms and monthly payment details' },
+            ]
+          }
+        ]
       },
       {
         id: 'create-update-contract',
@@ -394,6 +421,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
   const [isSearching, setIsSearching] = useState(false);
   const [expandedSection, setExpandedSection] = useState<'personal' | 'business' | null>(null);
   const [hoveredDoc, setHoveredDoc] = useState<string | null>(null);
+  const [activeTabs, setActiveTabs] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setIsClient(true);
@@ -484,6 +512,18 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
 
   const handleClose = () => {
     if (onLinkClick) onLinkClick();
+  };
+
+  const getActiveTabDocuments = (goal: SituationGoal) => {
+    if (!goal.tabs) return goal.documents;
+    
+    const activeTabId = activeTabs[goal.id] || goal.tabs[0]?.id;
+    const activeTab = goal.tabs.find(tab => tab.id === activeTabId);
+    return activeTab?.documents || goal.documents;
+  };
+
+  const setActiveTab = (goalId: string, tabId: string) => {
+    setActiveTabs(prev => ({ ...prev, [goalId]: tabId }));
   };
 
   return (
@@ -672,13 +712,40 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                           </div>
                         </div>
 
+                        {goal.tabs && (
+                          <div className="mb-4">
+                            <div className="flex gap-1 p-1 bg-gray-100 rounded-lg mb-4">
+                              {goal.tabs.map((tab) => {
+                                const isActive = (activeTabs[goal.id] || goal.tabs![0]?.id) === tab.id;
+                                return (
+                                  <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(goal.id, tab.id)}
+                                    className={cn(
+                                      "px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200",
+                                      isActive 
+                                        ? "bg-white text-pink-600 shadow-sm" 
+                                        : "text-gray-600 hover:text-gray-900"
+                                    )}
+                                  >
+                                    {tab.title}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
                         <div className="space-y-3 mb-4">
-                          {goal.documents.map((doc) => (
+                          {getActiveTabDocuments(goal).map((doc) => (
                             <Link
                               key={doc.slug}
                               href={`/${locale}/docs/${doc.slug}`}
                               onClick={onLinkClick}
-                              className="group/doc block p-3 rounded-lg hover:bg-gray-50 hover:border-pink-200 border border-transparent transition-all duration-200"
+                              className={cn(
+                                "group/doc block rounded-lg hover:bg-gray-50 hover:border-pink-200 border border-transparent transition-all duration-200",
+                                hoveredDoc === doc.slug && doc.description ? "p-3 pb-4" : "p-3"
+                              )}
                               onMouseEnter={() => {
                                 if (doc.description) {
                                   setTimeout(() => setHoveredDoc(doc.slug), 100);
@@ -688,21 +755,21 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                             >
                               <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-3 flex-1">
-                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5" />
-                                  <div className="flex-1">
-                                    <div className="font-medium text-gray-700 group-hover/doc:text-pink-600 transition-colors pb-1">
+                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-gray-700 group-hover/doc:text-pink-600 transition-colors pb-0.5">
                                       {doc.title}
                                     </div>
                                     {hoveredDoc === doc.slug && doc.description && (
                                       <div className="animate-in slide-in-from-top-1 duration-200">
-                                        <div className="text-xs text-gray-500 font-normal ml-2 mt-1">
+                                        <div className="text-xs text-gray-500 font-light pl-3 mt-1.5 leading-relaxed">
                                           <span className="font-medium text-gray-600">Use for:</span> {doc.description}
                                         </div>
                                       </div>
                                     )}
                                   </div>
                                 </div>
-                                <div className="relative flex items-center self-start mt-0.5">
+                                <div className="relative flex items-center self-start mt-0.5 ml-2">
                                   <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-pink-600 group-hover/doc:opacity-0 transition-all duration-300" />
                                   <span className="absolute right-0 text-sm font-medium text-pink-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
                                     Start For Free
@@ -787,7 +854,10 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                               key={doc.slug}
                               href={`/${locale}/docs/${doc.slug}`}
                               onClick={onLinkClick}
-                              className="group/doc block p-3 rounded-lg hover:bg-gray-50 hover:border-blue-200 border border-transparent transition-all duration-200"
+                              className={cn(
+                                "group/doc block rounded-lg hover:bg-gray-50 hover:border-blue-200 border border-transparent transition-all duration-200",
+                                hoveredDoc === doc.slug && doc.description ? "p-3 pb-4" : "p-3"
+                              )}
                               onMouseEnter={() => {
                                 if (doc.description) {
                                   setTimeout(() => setHoveredDoc(doc.slug), 100);
@@ -797,21 +867,21 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                             >
                               <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-3 flex-1">
-                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5" />
-                                  <div className="flex-1">
-                                    <div className="font-medium text-gray-700 group-hover/doc:text-blue-600 transition-colors pb-1">
+                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-gray-700 group-hover/doc:text-blue-600 transition-colors pb-0.5">
                                       {doc.title}
                                     </div>
                                     {hoveredDoc === doc.slug && doc.description && (
                                       <div className="animate-in slide-in-from-top-1 duration-200">
-                                        <div className="text-xs text-gray-500 font-normal ml-2 mt-1">
+                                        <div className="text-xs text-gray-500 font-light pl-3 mt-1.5 leading-relaxed">
                                           <span className="font-medium text-gray-600">Use for:</span> {doc.description}
                                         </div>
                                       </div>
                                     )}
                                   </div>
                                 </div>
-                                <div className="relative flex items-center self-start mt-0.5">
+                                <div className="relative flex items-center self-start mt-0.5 ml-2">
                                   <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-blue-600 group-hover/doc:opacity-0 transition-all duration-300" />
                                   <span className="absolute right-0 text-sm font-medium text-blue-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
                                     Start For Free
