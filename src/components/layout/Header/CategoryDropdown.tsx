@@ -327,16 +327,15 @@ export default function CategoryDropdown({
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
                 {content.subtitle || 'Choose from our professionally crafted templates'}
               </p>
               <p className="text-xs text-primary mt-2 font-medium">
-                ✓ Save thousands in legal fees • ✓ State-compliant documents • ✓ Ready in minutes
+                ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Tailored by You
               </p>
             </div>
             <div className="ml-4 text-right">
-              <span className="text-xs text-muted-foreground">Trusted by</span>
-              <p className="text-sm font-semibold text-foreground">50,000+ businesses</p>
+              <p className="text-sm font-semibold text-foreground">Smart Legal Documents</p>
             </div>
           </div>
         </div>
@@ -373,7 +372,7 @@ export default function CategoryDropdown({
                   {section.label}
                 </h3>
                 {sortedDocuments.length > 4 && (
-                  <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                  <span className="text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
                     {sortedDocuments.length} total
                   </span>
                 )}
@@ -408,9 +407,9 @@ export default function CategoryDropdown({
                             onClick={onLinkClick}
                             className={cn(
                               "group flex items-start justify-between p-2 rounded-md transition-all duration-200 hover:shadow-sm",
-                              isBestSeller ? "hover:bg-amber-50/50 ring-1 ring-amber-100" : "hover:bg-muted/50"
+                              isBestSeller ? "hover:bg-blue-50/70 ring-1 ring-blue-100/50" : "hover:bg-slate-50 dark:hover:bg-slate-700/50"
                             )}
-                            title={isBestSeller ? "⭐ Most popular choice - trusted by thousands" : undefined}
+                            title={isBestSeller ? "📈 Popular choice - frequently selected by users" : undefined}
                           >
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
@@ -419,37 +418,32 @@ export default function CategoryDropdown({
                                 </div>
                                 <div className="flex gap-1 flex-wrap">
                                   {isBestSeller && index < 4 && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded-full">
-                                      <Star className="h-3 w-3 fill-current" />
-                                      Best Seller
+                                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200 rounded-full shrink-0">
+                                      <TrendingUp className="h-2.5 w-2.5" />
+                                      <span className="text-xs">Popular</span>
                                     </span>
                                   )}
                                   {isNew && index < 4 && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
-                                      <Sparkles className="h-3 w-3" />
-                                      New
+                                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full shrink-0">
+                                      <Sparkles className="h-2.5 w-2.5" />
+                                      <span className="text-xs">New</span>
                                     </span>
                                   )}
                                   {isHighValue && index < 4 && !isBestSeller && !isNew && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary border border-primary/20 rounded-full">
-                                      <TrendingUp className="h-3 w-3" />
-                                      Popular
+                                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200 rounded-full shrink-0">
+                                      <TrendingUp className="h-2.5 w-2.5" />
+                                      <span className="text-xs">Popular</span>
                                     </span>
                                   )}
                                 </div>
                               </div>
                               {translatedDoc.description && (
-                                <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                                <div className="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2">
                                   {translatedDoc.description}
                                 </div>
                               )}
-                              {isBestSeller && index < 2 && (
-                                <div className="text-xs text-amber-600 mt-1 font-medium">
-                                  💼 Chosen by 90% of businesses like yours
-                                </div>
-                              )}
                             </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary ml-2 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
+                            <ChevronRight className="h-4 w-4 text-slate-500 dark:text-slate-400 group-hover:text-primary ml-2 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
                           </Link>
                         </li>
                       );
@@ -457,7 +451,7 @@ export default function CategoryDropdown({
                 </ul>
                 </div>
                 {sortedDocuments.length > 4 && !expandedSections[section.id] && (
-                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none" />
                 )}
                 {sortedDocuments.length > 4 && (
                   <div className={cn(
@@ -468,29 +462,29 @@ export default function CategoryDropdown({
                       onClick={() => toggleSection(section.id)}
                       className={cn(
                         "group w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg",
-                        "bg-muted/30 hover:bg-muted/50 text-foreground",
+                        "bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-foreground",
                         "transition-all duration-200 hover:shadow-sm",
                         "focus:outline-none focus:ring-2 focus:ring-primary/20",
-                        "border border-transparent hover:border-border/50"
+                        "border border-transparent hover:border-slate-300 dark:hover:border-slate-500"
                       )}
                       aria-expanded={expandedSections[section.id]}
                       aria-label={`${expandedSections[section.id] ? 'Show fewer' : 'View all'} ${section.label} documents`}
                       title="Expand list here in this menu"
                     >
-                      <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+                      <Layers className="h-3.5 w-3.5 text-slate-600 dark:text-slate-300" />
                       <span className="flex items-center gap-1">
                         {expandedSections[section.id] ? (
                           <>Show fewer</>
                         ) : (
                           <>
                             View all {sortedDocuments.length} in {section.label}
-                            <span className="text-xs text-muted-foreground ml-1">(+{sortedDocuments.length - 4})</span>
+                            <span className="text-xs text-slate-600 dark:text-slate-300 ml-1">(+{sortedDocuments.length - 4})</span>
                           </>
                         )}
                       </span>
                       <ChevronDown 
                         className={cn(
-                          "h-4 w-4 transition-transform duration-300 text-muted-foreground",
+                          "h-4 w-4 transition-transform duration-300 text-slate-600 dark:text-slate-300",
                           expandedSections[section.id] && "rotate-180"
                         )} 
                       />
