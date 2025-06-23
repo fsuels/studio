@@ -81,7 +81,7 @@ export default function DirectCategoryNav({
             className={cn(
               "flex items-center gap-2 px-3 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200",
               isActive && "bg-primary text-primary-foreground shadow-sm",
-              !isActive && "hover:bg-muted/50"
+              !isActive && "text-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20"
             )}
             aria-expanded={isActive}
           >
