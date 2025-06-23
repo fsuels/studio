@@ -206,6 +206,36 @@ const nextConfig = {
 
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
+
+  /* Redirects for Firebase Auth actions */
+  async redirects() {
+    return [
+      {
+        source: '/__/auth/action',
+        has: [
+          {
+            type: 'query',
+            key: 'mode',
+            value: 'resetPassword',
+          },
+        ],
+        destination: '/en/auth/action?mode=resetPassword&oobCode=:oobCode&continueUrl=:continueUrl',
+        permanent: false,
+      },
+      {
+        source: '/__/auth/action',
+        has: [
+          {
+            type: 'query',
+            key: 'mode',
+            value: 'verifyEmail',
+          },
+        ],
+        destination: '/en/auth/action?mode=verifyEmail&oobCode=:oobCode&continueUrl=:continueUrl',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

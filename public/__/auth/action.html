@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting - 123LegalDoc</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        .fallback {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .fallback a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        .fallback a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h1>123LegalDoc</h1>
+        <p>Redirecting to secure password reset...</p>
+        <div class="fallback">
+            <p>If you're not redirected automatically, <a href="#" id="manualLink">click here</a></p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            try {
+                // Get current URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const mode = urlParams.get('mode');
+                const oobCode = urlParams.get('oobCode');
+                const continueUrl = urlParams.get('continueUrl');
+                const lang = urlParams.get('lang') || 'en';
+                
+                // Determine locale (default to 'en' if not specified)
+                let locale = 'en';
+                if (lang === 'es' || lang === 'español' || lang === 'spanish') {
+                    locale = 'es';
+                }
+                
+                // Build the redirect URL to our custom handler
+                const redirectParams = new URLSearchParams();
+                if (mode) redirectParams.set('mode', mode);
+                if (oobCode) redirectParams.set('oobCode', oobCode);
+                if (continueUrl) redirectParams.set('continueUrl', continueUrl);
+                
+                // Construct the target URL
+                const baseUrl = window.location.origin;
+                const targetUrl = `${baseUrl}/${locale}/auth/action?${redirectParams.toString()}`;
+                
+                // Update manual link
+                const manualLink = document.getElementById('manualLink');
+                if (manualLink) {
+                    manualLink.href = targetUrl;
+                }
+                
+                // Log for debugging
+                console.log('Firebase Auth Action Redirect:', {
+                    originalUrl: window.location.href,
+                    targetUrl: targetUrl,
+                    mode: mode,
+                    oobCode: oobCode ? 'present' : 'missing',
+                    locale: locale
+                });
+                
+                // Perform the redirect after a short delay
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Redirect error:', error);
+                
+                // Fallback redirect to sign-in page
+                const fallbackUrl = `${window.location.origin}/en/signin`;
+                setTimeout(() => {
+                    window.location.href = fallbackUrl;
+                }, 3000);
+                
+                // Update the page to show error
+                document.querySelector('.container').innerHTML = `
+                    <h1>Redirect Error</h1>
+                    <p>There was an issue processing your request.</p>
+                    <div class="fallback">
+                        <p><a href="${fallbackUrl}">Return to Sign In</a></p>
+                    </div>
+                `;
+            }
+        })();
+    </script>
+</body>
+</html>

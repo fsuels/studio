@@ -2,7 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 import { tenantMiddleware } from '@/middleware/tenant';
 
 export async function middleware(request: NextRequest) {
-  // Handle tenant routing first
+  // Handle Firebase Auth action redirects first
+  if (request.nextUrl.pathname === '/__/auth/action') {
+    const mode = request.nextUrl.searchParams.get('mode');
+    const oobCode = request.nextUrl.searchParams.get('oobCode');
+    const continueUrl = request.nextUrl.searchParams.get('continueUrl');
+    const lang = request.nextUrl.searchParams.get('lang') || 'en';
+    
+    // Determine locale
+    const locale = lang === 'es' ? 'es' : 'en';
+    
+    // Build redirect URL
+    const redirectUrl = new URL(`/${locale}/auth/action`, request.url);
+    if (mode) redirectUrl.searchParams.set('mode', mode);
+    if (oobCode) redirectUrl.searchParams.set('oobCode', oobCode);
+    if (continueUrl) redirectUrl.searchParams.set('continueUrl', continueUrl);
+    
+    console.log('🔥 Firebase Auth Action Redirect:', {
+      from: request.nextUrl.href,
+      to: redirectUrl.href,
+      mode,
+      locale
+    });
+    
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  // Handle tenant routing
   const tenantResponse = await tenantMiddleware(request);
 
   // If tenant middleware returned a redirect or rewrite, use it
