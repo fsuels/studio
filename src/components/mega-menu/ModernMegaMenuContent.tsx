@@ -30,7 +30,13 @@ import {
   ShieldCheck,
   Stethoscope,
   UserX,
-  Star
+  Star,
+  Handshake,
+  CreditCard,
+  ShoppingCart,
+  Building,
+  Edit,
+  Settings
 } from 'lucide-react';
 
 interface DocumentItem {
@@ -76,8 +82,8 @@ const SITUATION_SECTIONS: SituationSection[] = [
         description: 'Lease agreements, rental forms, and property management documents',
         icon: <Home className="h-5 w-5" />,
         documents: [
-          { slug: 'residential-rental-agreement', title: 'Residential Lease Agreement' },
-          { slug: 'lease-agreement', title: 'Commercial Lease Agreement' },
+          { slug: 'residential-lease-agreement', title: 'Residential Lease Agreement' },
+          { slug: 'commercial-lease-agreement', title: 'Commercial Lease Agreement' },
           { slug: 'eviction-notice', title: 'Eviction Notice' },
         ],
         viewAllLink: '/docs?goal=rent-property'
@@ -88,7 +94,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
         description: 'Wills, trusts, and advance directives for your future',
         icon: <FileText className="h-5 w-5" />,
         documents: [
-          { slug: 'will', title: 'Last Will & Testament' },
+          { slug: 'last-will-testament', title: 'Last Will & Testament' },
           { slug: 'living-trust', title: 'Living Trust' },
           { slug: 'power-of-attorney', title: 'Power of Attorney' },
         ],
@@ -100,7 +106,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
         description: 'Agreements for buying, selling, or gifting property',
         icon: <ArrowRight className="h-5 w-5" />,
         documents: [
-          { slug: 'purchase-agreement', title: 'Real Estate Purchase Agreement' },
+          { slug: 'real-estate-purchase-agreement', title: 'Real Estate Purchase Agreement' },
           { slug: 'property-deed', title: 'Property Deed' },
           { slug: 'quitclaim-deed', title: 'Quitclaim Deed' },
         ],
@@ -113,7 +119,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
         icon: <Users className="h-5 w-5" />,
         documents: [
           { slug: 'prenuptial-agreement', title: 'Prenuptial Agreement' },
-          { slug: 'marriage-contract', title: 'Marriage Contract' },
+          { slug: 'postnuptial-agreement', title: 'Postnuptial Agreement' },
           { slug: 'cohabitation-agreement', title: 'Cohabitation Agreement' },
         ],
         viewAllLink: '/docs?goal=marriage'
@@ -152,8 +158,8 @@ const SITUATION_SECTIONS: SituationSection[] = [
         documents: [
           { slug: 'tenant-maintenance-request', title: 'Tenant Maintenance Request' },
           { slug: 'lease-termination-letter', title: 'Lease Termination Letter' },
-          { slug: 'rent-payment-notice', title: 'Rent Payment Notice' },
-          { slug: 'tenant-complaint-letter', title: 'Tenant Complaint Letter' },
+          { slug: 'late-rent-notice', title: 'Late Rent Notice' },
+          { slug: 'complaint-letter', title: 'Complaint Letter' },
         ],
         viewAllLink: '/docs?goal=tenant-documents'
       },
@@ -166,7 +172,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
           { slug: 'job-application-form', title: 'Job Application Form' },
           { slug: 'employment-verification-letter', title: 'Employment Verification Letter' },
           { slug: 'resignation-letter', title: 'Resignation Letter' },
-          { slug: 'two-weeks-notice-letter', title: 'Two Weeks Notice Letter' },
+          { slug: 'twoweeksnoticeletter', title: 'Two Weeks Notice Letter' },
         ],
         viewAllLink: '/docs?goal=job-application'
       },
@@ -176,7 +182,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
         description: 'Affidavits, demand letters, and dispute resolution documents',
         icon: <Scale className="h-5 w-5" />,
         documents: [
-          { slug: 'general-affidavit', title: 'General Affidavit' },
+          { slug: 'affidavit-general', title: 'General Affidavit' },
           { slug: 'demand-letter-payment', title: 'Demand Letter for Payment' },
           { slug: 'mediation-agreement', title: 'Mediation Agreement' },
           { slug: 'complaint-letter', title: 'Complaint Letter' },
@@ -202,8 +208,8 @@ const SITUATION_SECTIONS: SituationSection[] = [
         description: 'Documents related to personal medical decisions and care',
         icon: <Stethoscope className="h-5 w-5" />,
         documents: [
-          { slug: 'general-medical-consent-form', title: 'General Medical Consent Form' },
           { slug: 'medical-consent-form', title: 'Medical Consent Form' },
+          { slug: 'medical-consent', title: 'Medical Consent' },
           { slug: 'elder-care-agreement', title: 'Elder Care Agreement' },
           { slug: 'personal-care-agreement', title: 'Personal Care Agreement' },
         ],
@@ -229,7 +235,7 @@ const SITUATION_SECTIONS: SituationSection[] = [
           { slug: 'event-planning-contract', title: 'Event Planning Contract' },
           { slug: 'lottery-pool-contract', title: 'Lottery Pool Contract' },
           { slug: 'membership-agreement', title: 'Membership Agreement' },
-          { slug: 'pet-adoption-agreement', title: 'Pet Adoption Agreement' },
+          { slug: 'pet-agreement', title: 'Pet Agreement' },
         ],
         viewAllLink: '/docs?goal=lifestyle-activities'
       }
@@ -247,9 +253,9 @@ const SITUATION_SECTIONS: SituationSection[] = [
         icon: <Sparkles className="h-5 w-5" />,
         documents: [
           { slug: 'articles-of-incorporation', title: 'Articles of Incorporation' },
-          { slug: 'operating-agreement', title: 'LLC Operating Agreement' },
-          { slug: 'business-plan', title: 'Business Plan Template' },
+          { slug: 'llc-operating-agreement', title: 'LLC Operating Agreement' },
           { slug: 'partnership-agreement', title: 'Partnership Agreement' },
+          { slug: 'buy-sell-agreement', title: 'Buy-Sell Agreement' },
         ],
         viewAllLink: '/docs?goal=start-business'
       },
@@ -289,6 +295,84 @@ const SITUATION_SECTIONS: SituationSection[] = [
           { slug: 'loan-agreement', title: 'Loan Agreement' },
         ],
         viewAllLink: '/docs?goal=get-paid'
+      },
+      {
+        id: 'sell-services',
+        title: 'Sell Services',
+        description: 'Contracts for providing professional, creative, or specialized services',
+        icon: <Handshake className="h-5 w-5" />,
+        documents: [
+          { slug: 'service-agreement', title: 'Service Agreement' },
+          { slug: 'consulting-agreement-meta', title: 'Consulting Agreement' },
+          { slug: 'coaching-agreement', title: 'Coaching Agreement' },
+          { slug: 'website-development-agreement', title: 'Website Development Agreement' },
+        ],
+        viewAllLink: '/docs?goal=sell-services'
+      },
+      {
+        id: 'lend-borrow-money',
+        title: 'Lend or Borrow Money',
+        description: 'Legal documents for personal and business loans and credit',
+        icon: <CreditCard className="h-5 w-5" />,
+        documents: [
+          { slug: 'loan-agreement', title: 'Loan Agreement' },
+          { slug: 'promissory-note', title: 'Promissory Note' },
+          { slug: 'personal-loan-agreement', title: 'Personal Loan Agreement' },
+          { slug: 'credit-card-agreement', title: 'Credit Card Agreement' },
+        ],
+        viewAllLink: '/docs?goal=lend-borrow-money'
+      },
+      {
+        id: 'buy-sell-rent-goods',
+        title: 'Buy, Sell, or Rent Goods',
+        description: 'Agreements for purchasing, selling, or renting products and inventory',
+        icon: <ShoppingCart className="h-5 w-5" />,
+        documents: [
+          { slug: 'sales-agreement', title: 'Sales Agreement' },
+          { slug: 'vehicle-bill-of-sale', title: 'Vehicle Bill of Sale' },
+          { slug: 'boat-bill-of-sale', title: 'Boat Bill of Sale' },
+          { slug: 'vehicle-lease-agreement', title: 'Vehicle Lease Agreement' },
+        ],
+        viewAllLink: '/docs?goal=buy-sell-rent-goods'
+      },
+      {
+        id: 'manage-corporation',
+        title: 'Manage My Corporation/Business Governance',
+        description: 'Documents for managing corporate structure, board decisions, and shareholder relations',
+        icon: <Building className="h-5 w-5" />,
+        documents: [
+          { slug: 'buy-sell-agreement', title: 'Shareholder Agreement' },
+          { slug: 'articles-of-incorporation-biz', title: 'Corporate Bylaws' },
+          { slug: 'joint-venture-agreement', title: 'Joint Venture Agreement' },
+          { slug: 'partnership-dissolution-agreement', title: 'Partnership Dissolution Agreement' },
+        ],
+        viewAllLink: '/docs?goal=manage-corporation'
+      },
+      {
+        id: 'create-update-contract',
+        title: 'Create or Update a Contract',
+        description: 'General agreements, amendments, and termination letters for various business contexts',
+        icon: <Edit className="h-5 w-5" />,
+        documents: [
+          { slug: 'business-contract', title: 'Business Contract' },
+          { slug: 'partnership-amendment', title: 'Contract Amendment' },
+          { slug: 'termination-letter', title: 'Contract Termination Letter' },
+          { slug: 'letter-of-intent', title: 'Memorandum of Understanding (MOU)' },
+        ],
+        viewAllLink: '/docs?goal=create-update-contract'
+      },
+      {
+        id: 'specialized-industries',
+        title: 'Navigate Specialized Industries',
+        description: 'Agreements tailored for specific sectors like construction, tech, and entertainment',
+        icon: <Settings className="h-5 w-5" />,
+        documents: [
+          { slug: 'construction-contract', title: 'Construction Contract' },
+          { slug: 'app-development-agreement', title: 'App Development Agreement' },
+          { slug: 'clinical-trial-agreement', title: 'Clinical Trial Agreement' },
+          { slug: 'film-production-agreement', title: 'Film Production Agreement' },
+        ],
+        viewAllLink: '/docs?goal=specialized-industries'
       }
     ]
   }
@@ -563,7 +647,10 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
 
                 {/* Personal Life Goals */}
                 {(expandedSection === 'personal' || expandedSection === null) && (
-                  <div className="p-8 space-y-6">
+                  <div className={cn(
+                    "p-8 space-y-6",
+                    expandedSection === 'personal' ? "grid grid-cols-2 gap-8 space-y-0" : ""
+                  )}>
                     {personalSection?.goals.map((goal) => (
                       <div
                         key={goal.id}
@@ -647,7 +734,10 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
 
                 {/* Business Goals */}
                 {(expandedSection === 'business' || expandedSection === null) && (
-                  <div className="p-8 space-y-6">
+                  <div className={cn(
+                    "p-8 space-y-6",
+                    expandedSection === 'business' ? "grid grid-cols-2 gap-8 space-y-0" : ""
+                  )}>
                     {businessSection?.goals.map((goal) => (
                       <div
                         key={goal.id}
