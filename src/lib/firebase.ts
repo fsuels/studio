@@ -111,4 +111,5 @@ export const auth = getFirebaseAuth(app);
 /* Exports                                                            */
 /* ------------------------------------------------------------------ */
 export { app };
-export const db = getDb();
+// Export a resolved Firestore instance to avoid collection() errors
+export const db = await getDb();
