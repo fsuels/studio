@@ -21,7 +21,16 @@ import {
   FileText,
   Shield,
   X,
-  ChevronRight
+  ChevronRight,
+  HeartHandshake,
+  Baby,
+  Key,
+  UserCheck,
+  Scale,
+  ShieldCheck,
+  Stethoscope,
+  UserX,
+  Star
 } from 'lucide-react';
 
 interface DocumentItem {
@@ -108,6 +117,121 @@ const SITUATION_SECTIONS: SituationSection[] = [
           { slug: 'cohabitation-agreement', title: 'Cohabitation Agreement' },
         ],
         viewAllLink: '/docs?goal=marriage'
+      },
+      {
+        id: 'separate-divorce',
+        title: 'Separate or Divorce',
+        description: 'Agreements and forms for legal separation or divorce',
+        icon: <HeartHandshake className="h-5 w-5" />,
+        documents: [
+          { slug: 'divorce-settlement-agreement', title: 'Divorce Settlement Agreement' },
+          { slug: 'separation-agreement', title: 'Separation Agreement' },
+          { slug: 'mediation-agreement', title: 'Mediation Agreement' },
+          { slug: 'settlement-agreement', title: 'Settlement Agreement' },
+        ],
+        viewAllLink: '/docs?goal=separate-divorce'
+      },
+      {
+        id: 'plan-child-care',
+        title: 'Plan My Child\'s Care',
+        description: 'Custody, support, and care agreements for children',
+        icon: <Baby className="h-5 w-5" />,
+        documents: [
+          { slug: 'child-custody-agreement', title: 'Child Custody Agreement' },
+          { slug: 'child-support-agreement', title: 'Child Support Agreement' },
+          { slug: 'parenting-plan', title: 'Parenting Plan' },
+          { slug: 'child-care-contract', title: 'Child Care Contract' },
+        ],
+        viewAllLink: '/docs?goal=child-care'
+      },
+      {
+        id: 'manage-tenancy',
+        title: 'Manage My Tenancy',
+        description: 'Notices and forms for tenants dealing with landlords',
+        icon: <Key className="h-5 w-5" />,
+        documents: [
+          { slug: 'tenant-maintenance-request', title: 'Tenant Maintenance Request' },
+          { slug: 'lease-termination-letter', title: 'Lease Termination Letter' },
+          { slug: 'rent-payment-notice', title: 'Rent Payment Notice' },
+          { slug: 'tenant-complaint-letter', title: 'Tenant Complaint Letter' },
+        ],
+        viewAllLink: '/docs?goal=tenant-documents'
+      },
+      {
+        id: 'prepare-job-application',
+        title: 'Prepare a Job Application',
+        description: 'Essential documents to help you apply for jobs',
+        icon: <UserCheck className="h-5 w-5" />,
+        documents: [
+          { slug: 'job-application-form', title: 'Job Application Form' },
+          { slug: 'employment-verification-letter', title: 'Employment Verification Letter' },
+          { slug: 'resignation-letter', title: 'Resignation Letter' },
+          { slug: 'two-weeks-notice-letter', title: 'Two Weeks Notice Letter' },
+        ],
+        viewAllLink: '/docs?goal=job-application'
+      },
+      {
+        id: 'handle-legal-dispute',
+        title: 'Handle a Legal Dispute or Issue',
+        description: 'Affidavits, demand letters, and dispute resolution documents',
+        icon: <Scale className="h-5 w-5" />,
+        documents: [
+          { slug: 'general-affidavit', title: 'General Affidavit' },
+          { slug: 'demand-letter-payment', title: 'Demand Letter for Payment' },
+          { slug: 'mediation-agreement', title: 'Mediation Agreement' },
+          { slug: 'complaint-letter', title: 'Complaint Letter' },
+        ],
+        viewAllLink: '/docs?goal=legal-dispute'
+      },
+      {
+        id: 'manage-risk-liability',
+        title: 'Manage Risk & Liability',
+        description: 'Waivers, releases, and protective forms for personal activities',
+        icon: <ShieldCheck className="h-5 w-5" />,
+        documents: [
+          { slug: 'general-liability-waiver', title: 'General Liability Waiver' },
+          { slug: 'release-of-liability', title: 'Release of Liability' },
+          { slug: 'fitness-waiver', title: 'Fitness Waiver' },
+          { slug: 'hipaa-authorization-form', title: 'HIPAA Authorization Form' },
+        ],
+        viewAllLink: '/docs?goal=risk-liability'
+      },
+      {
+        id: 'personal-health-care',
+        title: 'Personal Health & Care',
+        description: 'Documents related to personal medical decisions and care',
+        icon: <Stethoscope className="h-5 w-5" />,
+        documents: [
+          { slug: 'general-medical-consent-form', title: 'General Medical Consent Form' },
+          { slug: 'medical-consent-form', title: 'Medical Consent Form' },
+          { slug: 'elder-care-agreement', title: 'Elder Care Agreement' },
+          { slug: 'personal-care-agreement', title: 'Personal Care Agreement' },
+        ],
+        viewAllLink: '/docs?goal=personal-health'
+      },
+      {
+        id: 'name-changes',
+        title: 'Name Changes',
+        description: 'Forms to legally notify of a name change',
+        icon: <UserX className="h-5 w-5" />,
+        documents: [
+          { slug: 'name-change-notification-letter', title: 'Name Change Notification Letter' },
+        ],
+        viewAllLink: '/docs?goal=name-changes'
+      },
+      {
+        id: 'lifestyle-activities',
+        title: 'General Lifestyle & Activities',
+        description: 'Miscellaneous documents for personal events and activities',
+        icon: <Star className="h-5 w-5" />,
+        documents: [
+          { slug: 'donation-agreement', title: 'Donation Agreement' },
+          { slug: 'event-planning-contract', title: 'Event Planning Contract' },
+          { slug: 'lottery-pool-contract', title: 'Lottery Pool Contract' },
+          { slug: 'membership-agreement', title: 'Membership Agreement' },
+          { slug: 'pet-adoption-agreement', title: 'Pet Adoption Agreement' },
+        ],
+        viewAllLink: '/docs?goal=lifestyle-activities'
       }
     ]
   },
