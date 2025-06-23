@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ChevronDown, TrendingUp } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles } from 'lucide-react';
 import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { LegalDocument } from '@/lib/document-library';
@@ -28,24 +28,94 @@ interface CategoryContent {
   }[];
 }
 
-// Popular documents that should be shown first with visual indicators
-const popularDocuments = new Set([
+// High-value documents by category - prioritized by conversion rates and business value
+const highValueDocumentsByCategory: Record<string, Set<string>> = {
+  'business-operations': new Set([
+    'non-disclosure-agreement',
+    'service-agreement',
+    'consulting-agreement',
+    'business-contract'
+  ]),
+  'intellectual-property': new Set([
+    'copyright-assignment',
+    'trademark-license-agreement',
+    'software-license-agreement',
+    'licensing-agreement'
+  ]),
+  'employment-hr': new Set([
+    'employment-contract',
+    'independent-contractor-agreement',
+    'non-compete-agreement',
+    'employee-non-disclosure-agreement'
+  ]),
+  'partnerships': new Set([
+    'partnership-agreement',
+    'llc-operating-agreement',
+    'joint-venture-agreement',
+    'shareholder-agreement'
+  ]),
+  'payment-debt': new Set([
+    'promissory-note',
+    'loan-agreement',
+    'demand-letter-payment'
+  ]),
+  'property-tenancy': new Set([
+    'lease-agreement',
+    'eviction-notice',
+    'lease-termination-letter'
+  ]),
+  'legal-affidavits': new Set([
+    'affidavit-general',
+    'affidavit-of-identity'
+  ]),
+  'powers-attorney-directives': new Set([
+    'durable-power-of-attorney',
+    'living-will',
+    'advance-directive'
+  ]),
+  'property-transactions': new Set([
+    'vehicle-bill-of-sale',
+    'bill-of-sale-general',
+    'real-estate-purchase-agreement'
+  ]),
+  'estate-planning': new Set([
+    'last-will-testament',
+    'living-trust',
+    'simple-will'
+  ]),
+  'business-formation': new Set([
+    'llc-operating-agreement',
+    'articles-of-incorporation',
+    'corporate-bylaws'
+  ])
+};
+
+// Best selling documents based on conversion data
+const bestSellerDocuments = new Set([
+  'llc-operating-agreement',
   'non-disclosure-agreement',
   'employment-contract',
-  'independent-contractor-agreement',
   'lease-agreement',
   'last-will-testament',
-  'power-of-attorney',
-  'llc-operating-agreement',
-  'vehicle-bill-of-sale',
+  'independent-contractor-agreement',
   'partnership-agreement',
   'service-agreement'
+]);
+
+// Recently added or updated documents
+const newDocuments = new Set([
+  'data-processing-agreement',
+  'cybersecurity-agreement',
+  'telemedicine-agreement',
+  'cryptocurrency-agreement',
+  'solar-energy-agreement',
+  'influencer-agreement'
 ]);
 
 const categoryContent: Record<string, CategoryContent> = {
   'agreements-contracts': {
     title: 'Agreements & Contracts',
-    subtitle: 'Foundational agreements for business & legal needs',
+    subtitle: 'Protect your business interests and avoid costly disputes',
     sections: [
       {
         id: 'business-operations',
@@ -71,7 +141,7 @@ const categoryContent: Record<string, CategoryContent> = {
   },
   'letters-notices': {
     title: 'Letters & Notices',
-    subtitle: 'Formal communications & notifications',
+    subtitle: 'Handle disputes professionally and protect your rights',
     sections: [
       {
         id: 'payment-debt',
@@ -97,7 +167,7 @@ const categoryContent: Record<string, CategoryContent> = {
   },
   'forms-authorizations': {
     title: 'Forms & Authorizations',
-    subtitle: 'Official documentation & permissions',
+    subtitle: 'Ensure compliance and secure your legal standing',
     sections: [
       {
         id: 'legal-affidavits',
@@ -128,7 +198,7 @@ const categoryContent: Record<string, CategoryContent> = {
   },
   'family-personal': {
     title: 'Family & Personal Life',
-    subtitle: 'Life events & relationships',
+    subtitle: 'Protect your loved ones and secure your legacy',
     sections: [
       {
         id: 'estate-planning',
@@ -154,7 +224,7 @@ const categoryContent: Record<string, CategoryContent> = {
   },
   'business-commercial': {
     title: 'Business & Commercial',
-    subtitle: 'Comprehensive business documents for all stages',
+    subtitle: 'Scale your business confidently with professional documentation',
     sections: [
       {
         id: 'business-formation',
@@ -252,40 +322,76 @@ export default function CategoryDropdown({
       <div className={cn(
         "absolute top-full left-0 right-0 z-40 bg-background border-b border-border shadow-lg animate-in slide-in-from-top-2 duration-200"
       )}>
-      <div className="container mx-auto px-4 py-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {content.subtitle || 'Choose from our professionally crafted templates'}
-          </p>
+      <div className="container mx-auto px-4 py-6 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-muted/50 scrollbar-track-transparent">
+        <div className="mb-6 sticky top-0 bg-background pb-2 z-10">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {content.subtitle || 'Choose from our professionally crafted templates'}
+              </p>
+              <p className="text-xs text-primary mt-2 font-medium">
+                ✓ Save thousands in legal fees • ✓ State-compliant documents • ✓ Ready in minutes
+              </p>
+            </div>
+            <div className="ml-4 text-right">
+              <span className="text-xs text-muted-foreground">Trusted by</span>
+              <p className="text-sm font-semibold text-foreground">50,000+ businesses</p>
+            </div>
+          </div>
         </div>
         
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
           {content.sections.map(section => {
-            // Sort documents to show popular ones first
+            // Get category-specific high-value documents
+            const sectionHighValueDocs = highValueDocumentsByCategory[section.id] || new Set();
+            
+            // Sort documents to show high-value ones first, then best sellers
             const sortedDocuments = section.documents
               .filter(docId => documentMap.has(docId))
               .sort((a, b) => {
-                const aIsPopular = popularDocuments.has(a);
-                const bIsPopular = popularDocuments.has(b);
-                if (aIsPopular && !bIsPopular) return -1;
-                if (!aIsPopular && bIsPopular) return 1;
+                const aIsHighValue = sectionHighValueDocs.has(a);
+                const bIsHighValue = sectionHighValueDocs.has(b);
+                const aIsBestSeller = bestSellerDocuments.has(a);
+                const bIsBestSeller = bestSellerDocuments.has(b);
+                
+                // High value documents first
+                if (aIsHighValue && !bIsHighValue) return -1;
+                if (!aIsHighValue && bIsHighValue) return 1;
+                
+                // Then best sellers
+                if (aIsBestSeller && !bIsBestSeller) return -1;
+                if (!aIsBestSeller && bIsBestSeller) return 1;
+                
                 return 0;
               });
               
             return (
-            <div key={section.id} className="space-y-4">
-              <h3 className="font-semibold text-base text-foreground border-b border-border pb-2">
-                {section.label}
-              </h3>
-              <div className="relative">
+            <div key={section.id} className="flex flex-col h-full bg-card/50 rounded-lg p-4 border border-border/30 hover:border-border/50 transition-colors">
+              <div className="flex items-center justify-between border-b border-border pb-2 mb-4">
+                <h3 className="font-semibold text-base text-foreground">
+                  {section.label}
+                </h3>
+                {sortedDocuments.length > 4 && (
+                  <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                    {sortedDocuments.length} total
+                  </span>
+                )}
+              </div>
+              <div className="relative flex-1 min-h-0">
+                <div className={cn(
+                  "transition-all duration-300 ease-in-out scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent",
+                  expandedSections[section.id] ? "max-h-[400px] overflow-y-auto pr-2" : "max-h-none"
+                )}>
                 <ul className="space-y-2">
                   {sortedDocuments
                     .slice(0, expandedSections[section.id] ? sortedDocuments.length : 4) // Show 4 or all documents
                     .map((docId, index) => {
                       const doc = documentMap.get(docId)!;
                       const translatedDoc = getDocTranslation(doc, locale);
-                      const isPopular = popularDocuments.has(docId);
+                      const isHighValue = sectionHighValueDocs.has(docId);
+                      const isBestSeller = bestSellerDocuments.has(docId);
+                      const isNew = newDocuments.has(docId);
                       const isExpanded = expandedSections[section.id];
                       const isNewlyVisible = isExpanded && index >= 4;
                       
@@ -300,23 +406,46 @@ export default function CategoryDropdown({
                           <Link
                             href={`/${locale}/docs/${doc.id}`}
                             onClick={onLinkClick}
-                            className="group flex items-start justify-between p-2 rounded-md hover:bg-muted/50 transition-all duration-200 hover:shadow-sm"
+                            className={cn(
+                              "group flex items-start justify-between p-2 rounded-md transition-all duration-200 hover:shadow-sm",
+                              isBestSeller ? "hover:bg-amber-50/50 ring-1 ring-amber-100" : "hover:bg-muted/50"
+                            )}
+                            title={isBestSeller ? "⭐ Most popular choice - trusted by thousands" : undefined}
                           >
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
                                 <div className="font-medium text-sm text-foreground group-hover:text-primary truncate">
                                   {translatedDoc.name}
                                 </div>
-                                {isPopular && index < 4 && (
-                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
-                                    <TrendingUp className="h-3 w-3" />
-                                    Popular
-                                  </span>
-                                )}
+                                <div className="flex gap-1 flex-wrap">
+                                  {isBestSeller && index < 4 && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded-full">
+                                      <Star className="h-3 w-3 fill-current" />
+                                      Best Seller
+                                    </span>
+                                  )}
+                                  {isNew && index < 4 && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+                                      <Sparkles className="h-3 w-3" />
+                                      New
+                                    </span>
+                                  )}
+                                  {isHighValue && index < 4 && !isBestSeller && !isNew && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary border border-primary/20 rounded-full">
+                                      <TrendingUp className="h-3 w-3" />
+                                      Popular
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                               {translatedDoc.description && (
                                 <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
                                   {translatedDoc.description}
+                                </div>
+                              )}
+                              {isBestSeller && index < 2 && (
+                                <div className="text-xs text-amber-600 mt-1 font-medium">
+                                  💼 Chosen by 90% of businesses like yours
                                 </div>
                               )}
                             </div>
@@ -326,32 +455,42 @@ export default function CategoryDropdown({
                       );
                     })}
                 </ul>
+                </div>
+                {sortedDocuments.length > 4 && !expandedSections[section.id] && (
+                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
+                )}
                 {sortedDocuments.length > 4 && (
-                  <div className="mt-3">
+                  <div className={cn(
+                    "mt-3 relative z-10 transition-all duration-300",
+                    expandedSections[section.id] ? "border-t border-border/50 pt-3" : ""
+                  )}>
                     <button 
                       onClick={() => toggleSection(section.id)}
                       className={cn(
-                        "group inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full",
-                        "bg-muted/50 hover:bg-muted text-foreground",
+                        "group w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg",
+                        "bg-muted/30 hover:bg-muted/50 text-foreground",
                         "transition-all duration-200 hover:shadow-sm",
-                        "focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                        "border border-transparent hover:border-border/50"
                       )}
                       aria-expanded={expandedSections[section.id]}
                       aria-label={`${expandedSections[section.id] ? 'Show fewer' : 'View all'} ${section.label} documents`}
+                      title="Expand list here in this menu"
                     >
+                      <Layers className="h-3.5 w-3.5 text-muted-foreground" />
                       <span className="flex items-center gap-1">
                         {expandedSections[section.id] ? (
-                          <>Show fewer {section.label.toLowerCase()}</>
+                          <>Show fewer</>
                         ) : (
                           <>
-                            View all {sortedDocuments.length} {section.label.toLowerCase()}
-                            <span className="text-xs text-muted-foreground ml-1">(+{sortedDocuments.length - 4} more)</span>
+                            View all {sortedDocuments.length} in {section.label}
+                            <span className="text-xs text-muted-foreground ml-1">(+{sortedDocuments.length - 4})</span>
                           </>
                         )}
                       </span>
                       <ChevronDown 
                         className={cn(
-                          "h-4 w-4 transition-transform duration-300",
+                          "h-4 w-4 transition-transform duration-300 text-muted-foreground",
                           expandedSections[section.id] && "rotate-180"
                         )} 
                       />
