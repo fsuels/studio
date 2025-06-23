@@ -73,7 +73,7 @@ interface DashboardPageProps {
   };
 }
 
-export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { locale } = await params;
+export default function DashboardPage({ params }: DashboardPageProps) {
+  const { locale } = params;
   return <DashboardClientContent locale={locale} />;
 }
