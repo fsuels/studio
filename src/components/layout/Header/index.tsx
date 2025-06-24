@@ -35,11 +35,19 @@ const Header = React.memo(function Header() {
     setMounted(true);
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const scrollPosition = window.scrollY;
+      setScrolled(scrollPosition > 10);
     };
 
+    // Initial check
+    handleScroll();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   // Close mobile menu when mega menu opens
@@ -73,12 +81,32 @@ const Header = React.memo(function Header() {
   };
 
   return (
-    <div className="relative">
+    <>
       <header
         className={cn(
-          'sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40 transition-all duration-300',
-          scrolled && 'shadow-sm border-border/60',
+          'fixed top-0 left-0 right-0 z-50',
+          'header-backdrop scroll-optimized',
+          'bg-white/95 dark:bg-gray-900/95',
+          'supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-900/80',
+          'border-b border-gray-200 dark:border-gray-700',
+          'transition-all duration-300 ease-in-out',
+          scrolled && [
+            'shadow-lg',
+            'bg-white/98 dark:bg-gray-900/98',
+            'supports-[backdrop-filter]:bg-white/90 dark:supports-[backdrop-filter]:bg-gray-900/90',
+            'border-gray-300 dark:border-gray-600',
+          ]
         )}
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          willChange: 'transform, opacity, box-shadow'
+        }}
       >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
@@ -129,7 +157,7 @@ const Header = React.memo(function Header() {
             {/* AI Document Finder Button */}
             <button
               onClick={() => setShowDiscoveryModal(true)}
-              className="group relative inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+              className="ai-finder-btn group relative inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
               title="🤖 AI Document Finder - Describe what you need and let AI find the perfect document!"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,6 +183,9 @@ const Header = React.memo(function Header() {
       </div>
       </header>
 
+      {/* Header spacer to prevent content from going under fixed header */}
+      <div className="h-16" aria-hidden="true" />
+
       {/* Category Dropdown */}
       <CategoryDropdown
         locale={clientLocale}
@@ -165,7 +196,7 @@ const Header = React.memo(function Header() {
           setActiveCategoryId(null);
         }}
       />
-    </div>
+    </>
   );
 });
 

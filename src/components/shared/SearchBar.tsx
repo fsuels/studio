@@ -152,7 +152,7 @@ const SearchBar = React.memo(function SearchBar() {
                   >
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                     <span className="truncate">{name}</span>
-                    <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70 shrink-0" />
+                    <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground shrink-0" />
                   </button>
                 </li>
               );
@@ -161,7 +161,7 @@ const SearchBar = React.memo(function SearchBar() {
         )}
       </div>
       {suggestionsHint && (
-        <p className="mt-2 text-center text-sm text-muted-foreground">
+        <p className="mt-2 text-center text-sm text-slate-700 dark:text-slate-200">
           {suggestionsHint}
         </p>
       )}

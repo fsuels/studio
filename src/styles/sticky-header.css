@@ -1,0 +1,32 @@
+/* Enhanced sticky header styles */
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure fixed header doesn't interfere with scroll */
+body {
+  scroll-padding-top: 4rem; /* 64px header height */
+}
+
+/* Optimize backdrop blur performance */
+.header-backdrop {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateZ(0);
+  will-change: transform, opacity, box-shadow;
+}
+
+/* Improve scroll performance */
+.scroll-optimized {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Ensure AI button is always visible and clickable */
+.ai-finder-btn {
+  z-index: 51; /* Higher than header */
+  position: relative;
+}

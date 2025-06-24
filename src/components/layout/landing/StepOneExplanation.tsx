@@ -25,7 +25,7 @@ export default function StepOneExplanation() {
             <h3 className="text-2xl lg:text-3xl font-semibold text-gray-800">
               Answer a Few Simple Questions
             </h3>
-            <p className="mt-2 text-lg text-gray-600 max-w-md leading-relaxed">
+            <p className="mt-2 text-lg text-gray-800 dark:text-gray-200 max-w-md leading-relaxed">
               Choose the document you’d like to create from our library of
               templates. All of our templates are sourced by attorneys to ensure
               they’re accurate, thorough, and up to date.

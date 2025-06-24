@@ -26,7 +26,7 @@ export default function StepThreeExplanation() {
             <h3 className="text-2xl lg:text-3xl font-semibold text-gray-800">
               Save, Print, Download, Share
             </h3>
-            <p className="mt-2 text-lg text-gray-600 max-w-md leading-relaxed">
+            <p className="mt-2 text-lg text-gray-800 dark:text-gray-200 max-w-md leading-relaxed">
               Once your legal document has been created and customized to fit
               your needs, it’s yours! Save it, print it, and share it with
               anyone you choose.

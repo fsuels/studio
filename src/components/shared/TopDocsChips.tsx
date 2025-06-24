@@ -142,7 +142,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-sm text-slate-700 dark:text-slate-200 mt-2">
           {tCommon('TopDocsChips.loading', {
             defaultValue: 'Loading popular documents...',
           })}
@@ -259,7 +259,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                 </div>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                    <span className="mt-2 flex items-center gap-1 text-xs text-slate-700 dark:text-slate-200">
                       <Clock className="h-3 w-3" />
                       ~3 min
                     </span>

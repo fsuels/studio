@@ -26,7 +26,7 @@ export default function StepTwoExplanation() {
             <h3 className="text-2xl lg:text-3xl font-semibold text-gray-800">
               Customize Your Document
             </h3>
-            <p className="mt-2 text-lg text-gray-600 max-w-md leading-relaxed">
+            <p className="mt-2 text-lg text-gray-800 dark:text-gray-200 max-w-md leading-relaxed">
               Your document will automatically update with the information you
               provide. It’s also fully customizable so you can make updates to
               any section.

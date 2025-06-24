@@ -153,8 +153,8 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
             </p>
           )}
           <div className="mt-auto text-center pt-3 border-t border-border/50">
-            <p className="font-medium text-gray-600">{nameText}</p>
-            <p className="text-sm text-gray-600">{titleText}</p>
+            <p className="font-medium text-gray-800 dark:text-gray-200">{nameText}</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">{titleText}</p>
           </div>
         </>
       ) : (

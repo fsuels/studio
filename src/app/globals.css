@@ -1,5 +1,7 @@
 /* Import accessibility styles */
 @import '../styles/accessibility.css';
+/* Import sticky header styles */
+@import '../styles/sticky-header.css';
 
 @tailwind base;
 @tailwind components;

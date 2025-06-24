@@ -73,7 +73,7 @@ const AnnouncementBar = React.memo(function PromoBanner() {
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="bg-blue-900/80 text-white overflow-hidden"
+          className="bg-blue-900 text-white overflow-hidden"
           role="alert"
           aria-live="polite"
         >
@@ -92,7 +92,7 @@ const AnnouncementBar = React.memo(function PromoBanner() {
               </span>
             </div>
             {!countdown.expired && (
-              <div className="flex items-center font-mono text-xs bg-white/20 px-2 py-0.5 rounded">
+              <div className="flex items-center font-mono text-xs bg-blue-800 border border-blue-700 px-2 py-0.5 rounded">
                 <Clock className="h-3 w-3 mr-1.5" />
                 <span>
                   {t('announcement.expiresIn', { defaultValue: 'Expires in:' })}{' '}
@@ -104,7 +104,7 @@ const AnnouncementBar = React.memo(function PromoBanner() {
               variant="ghost"
               size="icon"
               onClick={handleDismiss}
-              className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-7 text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-6 sm:w-6"
+              className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-7 text-white hover:bg-white/20 hover:text-white focus:bg-white/20 focus:text-white sm:h-6 sm:w-6"
               aria-label={t('announcement.dismissLabel', {
                 defaultValue: 'Dismiss promotional banner',
               })}

@@ -322,14 +322,14 @@ export default function CategoryDropdown({
       
       {/* Dropdown Content */}
       <div className={cn(
-        "absolute top-full left-0 right-0 z-40 bg-background border-b border-border shadow-lg animate-in slide-in-from-top-2 duration-200"
+        "fixed top-16 left-0 right-0 z-40 bg-background border-b border-border shadow-lg animate-in slide-in-from-top-2 duration-200"
       )}>
       <div className="container mx-auto px-4 py-6 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-muted/50 scrollbar-track-transparent">
         <div className="mb-6 sticky top-0 bg-background pb-2 z-10">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
+              <p className="text-sm text-slate-700 dark:text-slate-200 mt-1">
                 {content.subtitle || 'Choose from our professionally crafted templates'}
               </p>
               <div className="flex items-center justify-between mt-2">
@@ -460,7 +460,7 @@ export default function CategoryDropdown({
                                 </div>
                               </div>
                               {translatedDoc.description && (
-                                <div className="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2">
+                                <div className="text-xs text-slate-700 dark:text-slate-200 mt-1 line-clamp-2">
                                   {translatedDoc.description}
                                 </div>
                               )}
@@ -493,20 +493,20 @@ export default function CategoryDropdown({
                       aria-label={`${expandedSections[section.id] ? 'Show fewer' : 'View all'} ${section.label} documents`}
                       title="Expand list here in this menu"
                     >
-                      <Layers className="h-3.5 w-3.5 text-slate-600 dark:text-slate-300" />
+                      <Layers className="h-3.5 w-3.5 text-slate-700 dark:text-slate-200" />
                       <span className="flex items-center gap-1">
                         {expandedSections[section.id] ? (
                           <>Show fewer</>
                         ) : (
                           <>
                             View all {sortedDocuments.length} in {section.label}
-                            <span className="text-xs text-slate-600 dark:text-slate-300 ml-1">(+{sortedDocuments.length - 4})</span>
+                            <span className="text-xs text-slate-700 dark:text-slate-200 ml-1">(+{sortedDocuments.length - 4})</span>
                           </>
                         )}
                       </span>
                       <ChevronDown 
                         className={cn(
-                          "h-4 w-4 transition-transform duration-300 text-slate-600 dark:text-slate-300",
+                          "h-4 w-4 transition-transform duration-300 text-slate-700 dark:text-slate-200",
                           expandedSections[section.id] && "rotate-180"
                         )} 
                       />
