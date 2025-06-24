@@ -481,5 +481,33 @@
   "Select document": "Select document",
   "Move": "Move",
   "selected": "selected",
-  "duplicateNameError": "A document with that name already exists."
+  "duplicateNameError": "A document with that name already exists.",
+  "megaMenu": {
+    "title": "Legal Documents",
+    "subtitle": "Browse {{count}} professional legal documents",
+    "noDocuments": "No documents in this category yet.",
+    "showMore": "+{{count}} more",
+    "browseAll": "Browse all {{category}} documents →",
+    "viewAll": "View all {{count}} documents",
+    "searchPlaceholder": "Search all documents...",
+    "searchResults": "Found {{count}} document(s) matching \"{{query}}\"",
+    "browseByCategory": "Browse by Category",
+    "noResults": "No documents found matching your search.",
+    "noResultsHint": "Try different keywords or browse the categories below.",
+    "showLess": "Show less",
+    "cantFind": "Can't find what you're looking for?",
+    "contactSupport": "Contact Legal Support"
+  },
+  "categories": {
+    "realEstate": "Real Estate & Property",
+    "estatePlanning": "Estate Planning",
+    "business": "Business & Commercial",
+    "employment": "Employment & HR",
+    "finance": "Finance & Lending",
+    "intellectualProperty": "Intellectual Property",
+    "riskLiability": "Risk & Liability",
+    "family": "Family & Personal",
+    "construction": "Construction & Home Improvement",
+    "disputeResolution": "Dispute Resolution"
+  }
 }
