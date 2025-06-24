@@ -56,24 +56,24 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   // Get all categories from taxonomy
   const allCategories = Object.keys(taxonomy.categories);
   
-  // Category display names and icons - using all your categories
-  const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = {
-    'real-estate-property': { label: 'Real Estate & Property', icon: Home },
-    'employment-hr': { label: 'Employment & HR', icon: Users },
-    'personal-family': { label: 'Personal & Family', icon: Users },
-    'health-care': { label: 'Health & Care', icon: Users },
-    'finance-lending': { label: 'Finance & Lending', icon: Folder },
-    'business-startups': { label: 'Business & Start-ups', icon: Folder },
-    'ip-creative': { label: 'IP & Creative Works', icon: FileText },
-    'legal-process-disputes': { label: 'Legal Process & Disputes', icon: FileText },
-    'estate-planning': { label: 'Estate Planning', icon: FileText },
-    'construction-trades': { label: 'Construction & Trades', icon: FileText },
-    'technology-digital': { label: 'Technology & Digital', icon: FileText },
-    'agriculture-energy': { label: 'Agriculture & Energy', icon: FileText },
-    'vehicles-equipment': { label: 'Vehicles & Equipment', icon: FileText },
-    'general-forms': { label: 'General Forms', icon: FileText },
-    'ip-creative-works': { label: 'IP & Creative Works (Media)', icon: FileText },
-    'assets-gear': { label: 'Assets & Gear', icon: FileText },
+  // Category translation keys and icons - using all your categories
+  const categoryMeta: Record<string, { labelKey: string; icon: LucideIcon }> = {
+    'real-estate-property': { labelKey: 'categories.realEstateProperty', icon: Home },
+    'employment-hr': { labelKey: 'categories.employmentHr', icon: Users },
+    'personal-family': { labelKey: 'categories.personalFamily', icon: Users },
+    'health-care': { labelKey: 'categories.healthCare', icon: Users },
+    'finance-lending': { labelKey: 'categories.financeLending', icon: Folder },
+    'business-startups': { labelKey: 'categories.businessStartups', icon: Folder },
+    'ip-creative': { labelKey: 'categories.ipCreative', icon: FileText },
+    'legal-process-disputes': { labelKey: 'categories.legalProcessDisputes', icon: FileText },
+    'estate-planning': { labelKey: 'categories.estatePlanning', icon: FileText },
+    'construction-trades': { labelKey: 'categories.constructionTrades', icon: FileText },
+    'technology-digital': { labelKey: 'categories.technologyDigital', icon: FileText },
+    'agriculture-energy': { labelKey: 'categories.agricultureEnergy', icon: FileText },
+    'vehicles-equipment': { labelKey: 'categories.vehiclesEquipment', icon: FileText },
+    'general-forms': { labelKey: 'categories.generalForms', icon: FileText },
+    'ip-creative-works': { labelKey: 'categories.ipCreativeWorksMedia', icon: FileText },
+    'assets-gear': { labelKey: 'categories.assetsGear', icon: FileText },
   };
 
   useEffect(() => {
@@ -174,7 +174,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                 variant={selectedCategory === cat ? 'default' : 'outline'}
                 onClick={() => setSelectedCategory(cat)}
               >
-                {categoryMeta[cat]?.label || cat}
+                {tCommon(categoryMeta[cat]?.labelKey || cat, {
+                  defaultValue: categoryMeta[cat]?.labelKey || cat,
+                })}
               </Button>
             ))}
             {isMobile && moreCategories.length > 0 && (
@@ -190,7 +192,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                       key={cat}
                       onSelect={() => setSelectedCategory(cat)}
                     >
-                      {categoryMeta[cat]?.label || cat}
+                      {tCommon(categoryMeta[cat]?.labelKey || cat, {
+                        defaultValue: categoryMeta[cat]?.labelKey || cat,
+                      })}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -201,7 +205,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
         {/* Selected Category Name */}
         <h3 className="text-lg font-medium text-center mb-4 text-foreground">
-          {categoryMeta[selectedCategory]?.label || selectedCategory}
+          {tCommon(categoryMeta[selectedCategory]?.labelKey || selectedCategory, {
+            defaultValue: categoryMeta[selectedCategory]?.labelKey || selectedCategory,
+          })}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDocs.map((doc) => {

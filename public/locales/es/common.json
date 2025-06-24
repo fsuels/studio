@@ -482,4 +482,22 @@
   "Move": "Mover",
   "selected": "seleccionados",
   "duplicateNameError": "Ya existe un documento con ese nombre."
+  ,"categories": {
+    "realEstateProperty": "Bienes Raíces y Propiedad",
+    "employmentHr": "Empleo y RR. HH.",
+    "personalFamily": "Personal y Familia",
+    "healthCare": "Salud y Cuidado",
+    "financeLending": "Finanzas y Préstamos",
+    "businessStartups": "Negocios y Start-ups",
+    "ipCreative": "PI y Obras Creativas",
+    "legalProcessDisputes": "Proceso Legal y Disputas",
+    "estatePlanning": "Planificación Patrimonial",
+    "constructionTrades": "Construcción y Oficios",
+    "technologyDigital": "Tecnología y Digital",
+    "agricultureEnergy": "Agricultura y Energía",
+    "vehiclesEquipment": "Vehículos y Equipos",
+    "generalForms": "Formularios Generales",
+    "ipCreativeWorksMedia": "PI y Obras Creativas (Medios)",
+    "assetsGear": "Activos y Equipo"
+  }
 }

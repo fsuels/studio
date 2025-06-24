@@ -482,4 +482,22 @@
   "Move": "Move",
   "selected": "selected",
   "duplicateNameError": "A document with that name already exists."
+  ,"categories": {
+    "realEstateProperty": "Real Estate & Property",
+    "employmentHr": "Employment & HR",
+    "personalFamily": "Personal & Family",
+    "healthCare": "Health & Care",
+    "financeLending": "Finance & Lending",
+    "businessStartups": "Business & Start-ups",
+    "ipCreative": "IP & Creative Works",
+    "legalProcessDisputes": "Legal Process & Disputes",
+    "estatePlanning": "Estate Planning",
+    "constructionTrades": "Construction & Trades",
+    "technologyDigital": "Technology & Digital",
+    "agricultureEnergy": "Agriculture & Energy",
+    "vehiclesEquipment": "Vehicles & Equipment",
+    "generalForms": "General Forms",
+    "ipCreativeWorksMedia": "IP & Creative Works (Media)",
+    "assetsGear": "Assets & Gear"
+  }
 }
