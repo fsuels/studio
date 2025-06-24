@@ -42,6 +42,7 @@ import {
   VehicleBillOfSaleDisplay,
   PromissoryNoteDisplay,
 } from '@/components/document';
+import { RelatedDocumentsWidget } from '@/components/blog/InternalLinkWidget';
 
 // Lazy load template-specific testimonials section
 const TestimonialsCarousel = dynamic(
@@ -589,6 +590,11 @@ export default function DocPageClient({
         <div className="mt-16">
           <TestimonialsCarousel templateId={docConfig.id} />
         </div>
+
+        {/* Related Documents Section */}
+        <section className="mt-16 max-w-4xl mx-auto">
+          <RelatedDocumentsWidget documentId={docConfig.id} maxLinks={4} />
+        </section>
 
         {/* Mobile CTA */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">

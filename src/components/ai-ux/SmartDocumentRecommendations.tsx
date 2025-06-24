@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Clock, Users, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { RelatedDocumentsWidget } from '@/components/blog/InternalLinkWidget';
 
 interface DocumentRecommendation {
   id: string;
@@ -296,6 +297,13 @@ export function SmartDocumentRecommendations({
             optimized for SEO and user engagement.
           </p>
         </div>
+
+        {/* Related Documents for current document if available */}
+        {currentDocument && (
+          <div className="mt-6">
+            <RelatedDocumentsWidget documentId={currentDocument} maxLinks={3} />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -1,3 +1,29 @@
 User-agent: *
 Allow: /
 
+# Block admin and private areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /private/
+Disallow: /dashboard/
+Disallow: /generate/
+Disallow: /auth/
+
+# Allow important SEO pages
+Allow: /en/
+Allow: /es/
+Allow: /docs/
+Allow: /templates/
+Allow: /categories/
+Allow: /states/
+Allow: /resources/
+
+# Crawl-delay for performance
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://123legaldoc.com/sitemap.xml
+
+# Host declaration
+Host: https://123legaldoc.com

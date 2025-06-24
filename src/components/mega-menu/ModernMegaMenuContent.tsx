@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { enhancedSearch } from '@/lib/enhanced-search';
+import { getInternalLinks } from '@/lib/internal-linking';
 import { 
   Search, 
   ArrowRight, 
@@ -908,6 +909,69 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
             </div>
           </div>
         )}
+      </div>
+
+      {/* Quick Links Footer */}
+      <div className="border-t border-gray-200 p-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Popular Documents</h3>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={`/${locale}/docs/non-disclosure-agreement`}
+                  onClick={onLinkClick}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-sm"
+                >
+                  <FileText className="h-4 w-4 text-gray-500" />
+                  Non-Disclosure Agreement
+                </Link>
+                <Link
+                  href={`/${locale}/docs/lease-agreement`}
+                  onClick={onLinkClick}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-sm"
+                >
+                  <Home className="h-4 w-4 text-gray-500" />
+                  Lease Agreement
+                </Link>
+                <Link
+                  href={`/${locale}/docs/employment-contract`}
+                  onClick={onLinkClick}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-sm"
+                >
+                  <Users className="h-4 w-4 text-gray-500" />
+                  Employment Contract
+                </Link>
+                <Link
+                  href={`/${locale}/docs/llc-operating-agreement`}
+                  onClick={onLinkClick}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-sm"
+                >
+                  <Building className="h-4 w-4 text-gray-500" />
+                  LLC Operating Agreement
+                </Link>
+                <Link
+                  href={`/${locale}/docs/last-will-testament`}
+                  onClick={onLinkClick}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-sm"
+                >
+                  <FileText className="h-4 w-4 text-gray-500" />
+                  Last Will & Testament
+                </Link>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-gray-500 mb-1">Can't find what you need?</p>
+              <Link
+                href={`/${locale}/templates`}
+                onClick={onLinkClick}
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                Browse All Templates →
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -14,6 +14,9 @@ import PersonalizationBlock from '@/components/PersonalizationBlock';
 import { AutoImage } from '@/components/shared';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
+import { CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
+import { FileText, Users, Building } from 'lucide-react';
+import Link from 'next/link';
 
 // Minimal loading spinner without text
 const MinimalLoadingSpinner = () => (
@@ -346,6 +349,7 @@ export default function HomePageClient() {
 
       {/* Popular Documents by Category */}
       <TopDocsChips />
+
 
       {/* "Trust and Testimonials" section */}
       <TrustAndTestimonialsSection />

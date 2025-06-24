@@ -5,12 +5,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://123legaldoc.com';
   const locales = ['en', 'es'];
   const sitemap: MetadataRoute.Sitemap = [];
+  
+  // Get current date for lastModified
+  const currentDate = new Date();
+  const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   // Add homepage
   locales.forEach((locale) => {
     sitemap.push({
       url: `${baseUrl}/${locale}`,
-      lastModified: new Date(),
+      lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 1,
       alternates: {
@@ -33,19 +37,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'blog',
     'privacy-policy',
     'terms-of-service',
+    'about',
+    'contact',
+    'marketplace',
+    'electronic-signature',
+    'online-notary',
+  ];
+  
+  // Add category navigation pages
+  const categoryPages = [
+    'agreements-contracts',
+    'letters-notices', 
+    'forms-authorizations',
+    'family-personal',
+    'business-commercial',
   ];
 
   mainPages.forEach((page) => {
     locales.forEach((locale) => {
       sitemap.push({
         url: `${baseUrl}/${locale}/${page}`,
-        lastModified: new Date(),
+        lastModified: currentDate,
         changeFrequency: 'weekly',
         priority: 0.8,
         alternates: {
           languages: {
             en: `${baseUrl}/en/${page}`,
             es: `${baseUrl}/es/${page}`,
+          },
+        },
+      });
+    });
+  });
+
+  // Add category navigation pages
+  categoryPages.forEach((category) => {
+    locales.forEach((locale) => {
+      sitemap.push({
+        url: `${baseUrl}/${locale}/categories/${category}`,
+        lastModified: currentDate,
+        changeFrequency: 'weekly',
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: `${baseUrl}/en/categories/${category}`,
+            es: `${baseUrl}/es/categorias/${category}`,
           },
         },
       });
@@ -78,9 +114,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     locales.forEach((locale) => {
       sitemap.push({
         url: `${baseUrl}/${locale}/docs/${doc.id}`,
-        lastModified: new Date(),
+        lastModified: lastWeek,
         changeFrequency: 'monthly',
-        priority: 0.6,
+        priority: 0.7,
         alternates: {
           languages: {
             en: `${baseUrl}/en/docs/${doc.id}`,
@@ -186,6 +222,68 @@ export default function sitemap(): MetadataRoute.Sitemap {
             es: `${baseUrl}/es/documentos-legales-${citySlug}`,
           },
         },
+      });
+    });
+  });
+
+  // Add generated SEO content pages
+  const seoContentTypes = [
+    'city-pages',
+    'comparison-pages', 
+    'faq-pages',
+    'how-to-guides',
+    'industry-pages',
+    'legal-updates',
+    'state-documents',
+    'template-pages'
+  ];
+
+  seoContentTypes.forEach((contentType) => {
+    locales.forEach((locale) => {
+      sitemap.push({
+        url: `${baseUrl}/${locale}/resources/${contentType}`,
+        lastModified: lastWeek,
+        changeFrequency: 'monthly',
+        priority: 0.6,
+        alternates: {
+          languages: {
+            en: `${baseUrl}/en/resources/${contentType}`,
+            es: `${baseUrl}/es/recursos/${contentType}`,
+          },
+        },
+      });
+    });
+  });
+
+  // Add all US state-specific document combinations for high-value keywords
+  const highValueDocuments = [
+    'vehicle-bill-of-sale',
+    'lease-agreement', 
+    'employment-contract',
+    'llc-operating-agreement',
+    'last-will-testament',
+    'power-of-attorney',
+    'non-disclosure-agreement',
+    'independent-contractor-agreement'
+  ];
+
+  usStates.forEach((state) => {
+    const stateSlug = state.label.toLowerCase().replace(/\s+/g, '-');
+    
+    highValueDocuments.forEach((docId) => {
+      locales.forEach((locale) => {
+        sitemap.push({
+          url: `${baseUrl}/${locale}/states/${stateSlug}/${docId}`,
+          lastModified: currentDate,
+          changeFrequency: 'monthly', 
+          priority: 0.9, // High priority for state-specific high-value docs
+          alternates: {
+            languages: {
+              en: `${baseUrl}/en/states/${stateSlug}/${docId}`,
+              es: `${baseUrl}/es/estados/${stateSlug}/${docId}`,
+            },
+          },
+        });
       });
     });
   });
