@@ -29,6 +29,17 @@
     "loading": "Cargando documentos populares...",
     "exploreAll": "Explorar Todas las Categorías"
   },
+  "directCategories": {
+    "agreements": "Acuerdos",
+    "letters": "Cartas",
+    "forms": "Formularios",
+    "family": "Familia",
+    "business": "Negocios"
+  },
+  "aiFinder": "Buscador de IA",
+  "search": {
+    "placeholder": "Buscar documentos..."
+  },
   "My Account": "Mi Cuenta",
   "Logout": "Cerrar Sesión",
   "Sign Up": "Registrarse",
