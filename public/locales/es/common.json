@@ -483,6 +483,9 @@
   "Move": "Mover",
   "selected": "seleccionados",
   "duplicateNameError": "Ya existe un documento con ese nombre.",
+  "discoveryModal.title": "Encuentra el documento adecuado para tus necesidades",
+  "discoveryModal.quickNoteLabel": "Nota rápida:",
+  "discoveryModal.quickNoteMessage": "Crea fácilmente documentos legales esenciales con nuestras potentes plantillas. Ofrecemos herramientas, no asesoramiento legal: consulta a un abogado para obtener orientación personalizada.",
   "megaMenu": {
     "title": "Documentos Legales",
     "subtitle": "Explora {{count}} documentos legales profesionales",

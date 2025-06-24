@@ -483,6 +483,9 @@
   "Move": "Move",
   "selected": "selected",
   "duplicateNameError": "A document with that name already exists.",
+  "discoveryModal.title": "Find the Right Document for Your Needs",
+  "discoveryModal.quickNoteLabel": "Quick Note:",
+  "discoveryModal.quickNoteMessage": "Effortlessly create essential legal documents with our powerful templates. We provide tools, not legal advice – consult an attorney for personalized guidance.",
   "megaMenu": {
     "title": "Legal Documents",
     "subtitle": "Browse {{count}} professional legal documents",
