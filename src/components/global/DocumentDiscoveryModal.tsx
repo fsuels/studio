@@ -416,7 +416,7 @@ export default function DocumentDiscoveryModal() {
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <MessageSquare className="h-6 w-6 text-blue-600" />
-            Find the Right Document for Your Needs
+            {t('discoveryModal.title')}
           </DialogTitle>
         </DialogHeader>
         
@@ -425,7 +425,7 @@ export default function DocumentDiscoveryModal() {
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
             <p className="text-sm text-blue-800">
-              <span className="font-medium">Quick Note:</span> Effortlessly create essential legal documents with our powerful templates. We provide tools, not legal advice – consult an attorney for personalized guidance.
+              <span className="font-medium">{t('discoveryModal.quickNoteLabel')}</span> {t('discoveryModal.quickNoteMessage')}
             </p>
           </div>
         </div>
