@@ -290,9 +290,13 @@ export default function ConsolidatedMegaMenuContent({
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold">What do you need help with?</h2>
+              <h2 className="text-2xl font-bold">
+                {t('megaMenu.title', { defaultValue: 'Legal Documents' })}
+              </h2>
               <p className="text-muted-foreground mt-1">
-                Find the right legal document for your situation
+                {t('megaMenu.subtitle', {
+                  defaultValue: 'Browse professional legal documents',
+                })}
               </p>
             </div>
             <Button
@@ -310,7 +314,9 @@ export default function ConsolidatedMegaMenuContent({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search all 320+ documents..."
+              placeholder={t('megaMenu.searchPlaceholder', {
+                defaultValue: 'Search all documents...',
+              })}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-10"
@@ -336,7 +342,11 @@ export default function ConsolidatedMegaMenuContent({
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                Found {searchResults.length} document{searchResults.length !== 1 ? 's' : ''} matching "{searchQuery}"
+                {t('megaMenu.searchResults', {
+                  count: searchResults.length,
+                  query: searchQuery,
+                  defaultValue: `Found ${searchResults.length} document${searchResults.length !== 1 ? 's' : ''} matching \"${searchQuery}\"`,
+                })}
               </div>
               {searchResults.length > 0 && (
                 <Button
@@ -345,15 +355,19 @@ export default function ConsolidatedMegaMenuContent({
                   onClick={() => setSearchQuery('')}
                   className="text-xs"
                 >
-                  Browse by Category
+                  {t('megaMenu.browseByCategory', { defaultValue: 'Browse by Category' })}
                 </Button>
               )}
             </div>
             
             {Object.keys(groupedSearchResults).length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">No documents found matching your search.</p>
-                <p className="text-sm text-muted-foreground mt-2">Try different keywords or browse the categories below.</p>
+                <p className="text-muted-foreground">
+                  {t('megaMenu.noResults', { defaultValue: 'No documents found matching your search.' })}
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {t('megaMenu.noResultsHint', { defaultValue: 'Try different keywords or browse the categories below.' })}
+                </p>
               </div>
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -446,7 +460,12 @@ export default function ConsolidatedMegaMenuContent({
                             onClick={() => toggleSection(section.id)}
                             className="mt-2 p-0 h-auto"
                           >
-                            {isExpanded ? 'Show less' : `Show ${section.documents.length - 5} more`}
+                            {isExpanded
+                              ? t('megaMenu.showLess', { defaultValue: 'Show less' })
+                              : t('megaMenu.showMore', {
+                                  count: section.documents.length - 5,
+                                  defaultValue: `+${section.documents.length - 5} more`,
+                                })}
                           </Button>
                         )}
                       </div>
@@ -464,14 +483,14 @@ export default function ConsolidatedMegaMenuContent({
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              Can't find what you're looking for?
+              {t('megaMenu.cantFind', { defaultValue: "Can't find what you're looking for?" })}
             </p>
             <Link
               href={`/${currentLocale}/docs/general-inquiry`}
               onClick={handleDocumentClick}
             >
               <Button variant="outline" size="sm">
-                Contact Legal Support
+                {t('megaMenu.contactSupport', { defaultValue: 'Contact Legal Support' })}
               </Button>
             </Link>
           </div>
