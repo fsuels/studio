@@ -290,18 +290,24 @@ const TrustAndTestimonialsSection = React.memo(
                     : placeholderText}
                 </span>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="font-bold">Trustpilot</span>
-                <div className="flex items-center ml-1">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 text-green-500 fill-green-500 star-gradient"
-                    />
-                  ))}
-                  <Star className="h-4 w-4 text-green-500 fill-green-500 star-gradient star-pulse" />
-                </div>
-                <span className="ml-1 font-semibold leading-5">4.9/5</span>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-primary" />
+                <span className="font-semibold">
+                  {isHydrated
+                    ? t('home.trustStrip.customizable', {
+                        defaultValue: 'Customizable for Your Needs',
+                      })
+                    : placeholderText}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold">
+                  {isHydrated
+                    ? t('home.trustStrip.startJourney', {
+                        defaultValue: 'Start Your Legal Journey Here',
+                      })
+                    : placeholderText}
+                </span>
               </div>
             </div>
           </div>
