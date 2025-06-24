@@ -231,18 +231,24 @@ export default function DocPageClient({
   const features = [
     {
       icon: FileText,
-      title: 'Fill your responses and complete your document',
-      desc: 'Guided questions populate every field',
+      titleKey: 'docDetail.feature1Title',
+      descKey: 'docDetail.feature1Desc',
+      defaultTitle: 'Fill your responses and complete your document',
+      defaultDesc: 'Guided questions populate every field',
     },
     {
       icon: Edit3,
-      title: 'Personalize with a rich editor',
-      desc: 'Make custom tweaks before finalizing',
+      titleKey: 'docDetail.feature2Title',
+      descKey: 'docDetail.feature2Desc',
+      defaultTitle: 'Personalize with a rich editor',
+      defaultDesc: 'Make custom tweaks before finalizing',
     },
     {
       icon: FileSignature,
-      title: 'E-sign documents easily and securely',
-      desc: 'Sign online and send to others',
+      titleKey: 'docDetail.feature3Title',
+      descKey: 'docDetail.feature3Desc',
+      defaultTitle: 'E-sign documents easily and securely',
+      defaultDesc: 'Sign online and send to others',
     },
   ];
 
@@ -533,43 +539,50 @@ export default function DocPageClient({
                 >
                   <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
                   <p className="text-sm font-medium text-card-foreground mb-1">
-                    {f.title}
+                    {t(f.titleKey, f.defaultTitle)}
                   </p>
-                  <p className="text-xs text-muted-foreground">{f.desc}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t(f.descKey, f.defaultDesc)}
+                  </p>
                 </div>
               ))}
             </section>
 
             <section className="mt-16 max-w-3xl mx-auto space-y-6">
               <h2 className="text-2xl font-semibold text-center text-foreground">
-                How to Use This Template
+                {t('docDetail.howToUseTitle', 'How to Use This Template')}
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>Answer each question in the guided form.</li>
-                <li>Make any tweaks using the built-in editor.</li>
-                <li>E-sign and download your completed document.</li>
+                <li>{t('docDetail.howToStep1', 'Answer each question in the guided form.')}</li>
+                <li>{t('docDetail.howToStep2', 'Make any tweaks using the built-in editor.')}</li>
+                <li>{t('docDetail.howToStep3', 'E-sign and download your completed document.')}</li>
               </ol>
 
               <div>
                 <h3 className="text-xl font-semibold mb-2 text-foreground">
-                  Frequently Asked Questions
+                  {t('docDetail.faqTitle', 'Frequently Asked Questions')}
                 </h3>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="q1">
                     <AccordionTrigger>
-                      Do I need a notary for this document?
+                      {t('docDetail.faq1Question', 'Do I need a notary for this document?')}
                     </AccordionTrigger>
                     <AccordionContent>
-                      Requirements vary by state, but notarization can add extra
-                      authenticity.
+                      {t(
+                        'docDetail.faq1Answer',
+                        'Requirements vary by state, but notarization can add extra authenticity.',
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="q2">
                     <AccordionTrigger>
-                      Can I use it for any vehicle type?
+                      {t('docDetail.faq2Question', 'Can I use it for any vehicle type?')}
                     </AccordionTrigger>
                     <AccordionContent>
-                      Yes, simply describe the vehicle accurately in the form.
+                      {t(
+                        'docDetail.faq2Answer',
+                        'Yes, simply describe the vehicle accurately in the form.',
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -578,7 +591,7 @@ export default function DocPageClient({
                     href={`/${currentLocale}/faq`}
                     className="text-sm text-primary underline"
                   >
-                    More questions? Visit our FAQ
+                    {t('docDetail.moreQuestions', 'More questions? Visit our FAQ')}
                   </Link>
                 </div>
               </div>
