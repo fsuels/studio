@@ -5384,7 +5384,251 @@ export const blogArticles: BlogArticle[] = [
       </div>
     `,
     content_es: `
-      <p>La mayoría de los estadounidenses—incluyendo el 67% de las personas menores de 50 años—no tienen un testamento, creyendo que son demasiado jóvenes o que no tienen suficientes bienes para preocuparse por la planificación patrimonial. Esta peligrosa idea errónea cuesta a las familias miles en honorarios legales, causa trauma emocional durante el duelo y puede resultar en que tus bienes vayan a beneficiarios no deseados.</p>
+      <p>La mayoría de los estadounidenses—incluyendo el 67% de las personas menores de 50 años—no tienen un testamento, creyendo que son demasiado jóvenes o que no tienen suficientes bienes para preocuparse por la planificación patrimonial. Esta peligrosa idea errónea cuesta a las familias miles en honorarios legales, causa trauma emocional durante el duelo y puede resultar en que tus bienes vayan a beneficiarios no deseados. Un testamento no es solo para los ricos o ancianos; es protección legal esencial para cualquiera que quiera control sobre lo que pasa a sus posesiones, cuentas digitales y dependientes después de la muerte.</p>
+
+      <h2>Qué Pasa Cuando Mueres Sin Testamento</h2>
+      <p>Cuando alguien muere sin testamento (llamado "intestado"), las leyes estatales—no tus deseos—determinan qué pasa a tus bienes y dependientes. Estas leyes varían significativamente por estado y a menudo producen resultados que entran en conflicto con lo que la mayoría de las personas realmente querrían.</p>
+
+      <div class="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+          ⚠️ Consecuencias de Morir Sin Testamento
+        </h3>
+        <ul class="text-red-800 dark:text-red-200 space-y-2">
+          <li>• <strong>El estado decide la distribución de bienes:</strong> Tu propiedad puede ir a parientes que apenas conoces en lugar de personas que te importan</li>
+          <li>• <strong>La corte elige tutores:</strong> Los jueces seleccionan quién cría a tus hijos menores, potencialmente contra tus deseos</li>
+          <li>• <strong>Proceso de sucesión extendido:</strong> La administración judicial puede tomar 1-3 años y costar 3-7% de tu patrimonio</li>
+          <li>• <strong>Conflictos familiares:</strong> Los parientes pueden pelear por los bienes, destruyendo relaciones durante el duelo</li>
+          <li>• <strong>Sin protección de activos digitales:</strong> Cuentas en línea, criptomonedas y archivos digitales se vuelven inaccesibles</li>
+          <li>• <strong>Ineficiencia fiscal:</strong> Pierdes oportunidades de minimizar impuestos patrimoniales y maximizar la herencia</li>
+        </ul>
+      </div>
+
+      <h2>Por Qué Cada Adulto Necesita un Testamento</h2>
+
+      <h3>Adultos Jóvenes (18-30): Comenzando Tu Vida Financiera</h3>
+      <p>Incluso con activos limitados, los adultos jóvenes necesitan testamentos por razones cruciales:</p>
+      <ul>
+        <li><strong>Activos digitales:</strong> Cuentas de redes sociales, fotos, bibliotecas de música, billeteras de criptomonedas</li>
+        <li><strong>Pertenencias personales:</strong> Reliquias familiares, joyas, electrónicos con valor sentimental</li>
+        <li><strong>Herencia futura:</strong> Protege activos que puedas adquirir antes de actualizar tu testamento</li>
+        <li><strong>Deuda de préstamos estudiantiles:</strong> Los préstamos federales típicamente se liberan, pero los préstamos privados pueden afectar a la familia</li>
+        <li><strong>Beneficiarios de seguro de vida:</strong> El seguro de vida proporcionado por el empleador necesita designación apropiada</li>
+      </ul>
+
+      <h3>Familias Jóvenes (25-40): Protegiendo a Tus Hijos</h3>
+      <p>Los padres con hijos menores tienen la necesidad más crítica de planificación patrimonial integral:</p>
+      <ul>
+        <li><strong>Designación de tutor:</strong> Elige quién cría a tus hijos si ambos padres mueren</li>
+        <li><strong>Provisión financiera:</strong> Asegura que los hijos hereden activos y beneficios del seguro de vida</li>
+        <li><strong>Creación de fideicomiso:</strong> Protege la herencia hasta que los hijos alcancen edades apropiadas</li>
+        <li><strong>Planificación educativa:</strong> Especifica cómo los activos deben financiar la educación de los hijos</li>
+        <li><strong>Instrucciones de cuidado:</strong> Proporciona orientación sobre las necesidades, preferencias y valores de los hijos</li>
+      </ul>
+
+      <h3>Adultos Establecidos (40-65): Protección de Activos Máxima</h3>
+      <p>Esta etapa de la vida típicamente involucra los valores de activos más altos y situaciones financieras más complejas:</p>
+      <ul>
+        <li><strong>Cuentas de jubilación:</strong> 401(k)s, IRAs y pensiones necesitan planificación apropiada de beneficiarios</li>
+        <li><strong>Propiedades inmobiliarias:</strong> Casas principales, propiedades vacacionales, bienes raíces de inversión</li>
+        <li><strong>Intereses comerciales:</strong> Participaciones en sociedades, propietarios únicos, acciones corporativas</li>
+        <li><strong>Carteras de inversión:</strong> Acciones, bonos, fondos mutuos, cuentas de corretaje</li>
+        <li><strong>Planificación fiscal:</strong> Estrategias para minimizar impuestos patrimoniales y maximizar la herencia</li>
+      </ul>
+
+      <h3>Adultos Mayores (65+): Planificación de Legado y Atención Médica</h3>
+      <p>Los adultos mayores necesitan testamentos integrados con planificación integral de atención médica y legado:</p>
+      <ul>
+        <li><strong>Directivas de atención médica:</strong> Preferencias de tratamiento médico y decisiones de fin de vida</li>
+        <li><strong>Planificación de cuidado a largo plazo:</strong> Protegiendo activos de costos de hogar de ancianos</li>
+        <li><strong>Donaciones caritativas:</strong> Objetivos filantrópicos y estrategias de donación eficientes fiscalmente</li>
+        <li><strong>Legado familiar:</strong> Preservando historia, valores y tradiciones familiares</li>
+        <li><strong>Provisión para nietos:</strong> Financiamiento educativo y planificación de herencia</li>
+      </ul>
+
+      <h2>Elementos Esenciales que Todo Testamento Debe Incluir</h2>
+
+      <h3>Requisitos Legales para Testamentos Válidos</h3>
+      <ul>
+        <li><strong>Documento escrito:</strong> Debe estar por escrito (testamentos orales inválidos en la mayoría de estados)</li>
+        <li><strong>Capacidad del testador:</strong> Debes estar en pleno uso de tus facultades mentales y tener al menos 18 años</li>
+        <li><strong>Requisito de firma:</strong> Firmado por ti o alguien actuando bajo tu dirección</li>
+        <li><strong>Firmas de testigos:</strong> Usualmente 2-3 testigos (varía por estado)</li>
+        <li><strong>Ejecución apropiada:</strong> Seguir los requisitos específicos de testificación y notarización de tu estado</li>
+      </ul>
+
+      <h3>Componentes Críticos del Testamento</h3>
+
+      <h4>1. Información Personal y Declaración</h4>
+      <ul>
+        <li><strong>Nombre legal completo:</strong> Exactamente como aparece en documentos oficiales</li>
+        <li><strong>Dirección y residencia:</strong> Estado principal de residencia para jurisdicción legal</li>
+        <li><strong>Declaración de capacidad:</strong> Declaración de que estás en pleno uso de tus facultades mentales</li>
+        <li><strong>Revocación de testamentos anteriores:</strong> Declaración clara de que este testamento reemplaza todos los testamentos anteriores</li>
+      </ul>
+
+      <h4>2. Distribución de Activos (Legados)</h4>
+      <ul>
+        <li><strong>Legados específicos:</strong> Artículos particulares a personas específicas (joyas, arte, autos)</li>
+        <li><strong>Legados generales:</strong> Cantidades específicas en dólares a beneficiarios</li>
+        <li><strong>Cláusula residuaria:</strong> Distribución de activos restantes después de legados específicos</li>
+        <li><strong>Beneficiarios contingentes:</strong> Receptores de respaldo si los beneficiarios principales te preceden en la muerte</li>
+      </ul>
+
+      <h4>3. Designaciones de Tutores</h4>
+      <ul>
+        <li><strong>Tutor principal:</strong> Primera opción para criar hijos menores</li>
+        <li><strong>Tutor alternativo:</strong> Opción de respaldo si el tutor principal no puede servir</li>
+        <li><strong>Tutor de la propiedad:</strong> Persona responsable de manejar la herencia de los hijos</li>
+        <li><strong>Consideraciones:</strong> Ubicación, valores, estabilidad financiera, relación con los hijos</li>
+      </ul>
+
+      <h4>4. Nombramiento de Albacea</h4>
+      <ul>
+        <li><strong>Albacea principal:</strong> Persona responsable de administrar tu patrimonio</li>
+        <li><strong>Albacea sucesor:</strong> Respaldo si el albacea principal no puede servir</li>
+        <li><strong>Poderes del albacea:</strong> Autoridad para vender propiedad, pagar deudas, distribuir activos</li>
+        <li><strong>Fianza:</strong> Si requieres que el albacea publique fianza para protección adicional</li>
+      </ul>
+
+      <h2>Consideraciones Especiales de Planificación Patrimonial</h2>
+
+      <h3>Planificación de Activos Digitales</h3>
+      <p>Los activos digitales ahora representan valor significativo y requieren planificación específica:</p>
+      
+      <h4>Tipos de Activos Digitales:</h4>
+      <ul>
+        <li><strong>Cuentas financieras:</strong> Banca en línea, plataformas de inversión, billeteras de criptomonedas</li>
+        <li><strong>Activos comerciales:</strong> Nombres de dominio, sitios web, cuentas comerciales en línea</li>
+        <li><strong>Contenido personal:</strong> Fotos, videos, cuentas de redes sociales, correo electrónico</li>
+        <li><strong>Bibliotecas de entretenimiento:</strong> iTunes, Kindle, cuentas de servicios de streaming</li>
+        <li><strong>Servicios de suscripción:</strong> Licencias de software, almacenamiento en la nube, membresías profesionales</li>
+      </ul>
+
+      <h4>Estrategias de Planificación de Activos Digitales:</h4>
+      <ul>
+        <li><strong>Gestión de contraseñas:</strong> Método seguro para que el albacea acceda a las cuentas</li>
+        <li><strong>Inventarios de cuentas:</strong> Lista completa de todas las cuentas y activos digitales</li>
+        <li><strong>Instrucciones específicas del servicio:</strong> Diferentes plataformas tienen diferentes políticas de transferencia</li>
+        <li><strong>Consideraciones de privacidad:</strong> Equilibrar necesidades de acceso con protección de privacidad</li>
+        <li><strong>Mantenimiento continuo:</strong> Actualizaciones regulares conforme cambian las cuentas</li>
+      </ul>
+
+      <h3>Consideraciones de Familias Mixtas</h3>
+      <p>Segundos matrimonios e hijastros crean necesidades complejas de planificación patrimonial:</p>
+      <ul>
+        <li><strong>Hijos biológicos vs. hijastros:</strong> Las leyes estatales pueden no incluir automáticamente a los hijastros</li>
+        <li><strong>Relaciones con ex cónyuges:</strong> Obligaciones y consideraciones existentes</li>
+        <li><strong>Nuevo cónyuge vs. hijos:</strong> Equilibrar herencia entre cónyuge e hijos de matrimonio anterior</li>
+        <li><strong>Estructuras de fideicomiso:</strong> Pueden ser necesarias para proteger intereses de todos los miembros de la familia</li>
+        <li><strong>Coordinación de seguro de vida:</strong> Asegurar que las designaciones de beneficiarios se alineen con el testamento</li>
+      </ul>
+
+      <h3>Planificación Patrimonial LGBTQ+</h3>
+      <ul>
+        <li><strong>Reconocimiento de relación:</strong> Asegurar que el plan patrimonial refleje el estatus legal en todos los estados relevantes</li>
+        <li><strong>Familia elegida:</strong> Mecanismos legales para proteger relaciones familiares no biológicas</li>
+        <li><strong>Decisiones de atención médica:</strong> Documentación extra puede ser necesaria para toma de decisiones médicas</li>
+        <li><strong>Derechos parentales:</strong> Consideraciones especiales para padres no biológicos</li>
+        <li><strong>Protección contra discriminación:</strong> Planes de respaldo si el reconocimiento legal es desafiado</li>
+      </ul>
+
+      <h2>Integración con Otros Documentos de Planificación Patrimonial</h2>
+
+      <h3>Poder Notarial</h3>
+      <ul>
+        <li><strong>Poder notarial financiero:</strong> Maneja activos si quedas incapacitado</li>
+        <li><strong>Poder notarial de atención médica:</strong> Toma decisiones médicas cuando no puedes</li>
+        <li><strong>Provisiones duraderas:</strong> Permanece efectivo incluso si quedas mentalmente incapacitado</li>
+        <li><strong>Coordinación con testamento:</strong> La misma persona a menudo sirve como albacea y poder notarial</li>
+      </ul>
+
+      <h3>Directivas de Atención Médica</h3>
+      <ul>
+        <li><strong>Testamento en vida:</strong> Especifica preferencias de tratamiento médico</li>
+        <li><strong>Directiva de no resucitar:</strong> Instrucciones sobre medidas de soporte vital</li>
+        <li><strong>Donación de órganos:</strong> Intenciones sobre donación de órganos y tejidos</li>
+        <li><strong>Instrucciones de funeral:</strong> Preferencias sobre arreglos funerarios y entierro</li>
+      </ul>
+
+      <h3>Documentos de Fideicomiso</h3>
+      <ul>
+        <li><strong>Fideicomisos revocables:</strong> Evita sucesión mientras mantienes control</li>
+        <li><strong>Fideicomisos irrevocables:</strong> Reduce impuestos patrimoniales y protege activos</li>
+        <li><strong>Fideicomisos especiales:</strong> Fideicomisos de necesidades especiales, fideicomisos caritativos</li>
+        <li><strong>Coordinación con testamento:</strong> Testamento de vertido transfiere activos restantes al fideicomiso</li>
+      </ul>
+
+      <h2>Errores Comunes del Testamento a Evitar</h2>
+
+      <h3>Errores de Ejecución</h3>
+      <ul>
+        <li><strong>Testificación incorrecta:</strong> No seguir los requisitos específicos del estado</li>
+        <li><strong>Firmas defectuosas:</strong> Testigos que no presencian la firma real</li>
+        <li><strong>Notarización inadecuada:</strong> Requisitos de notario no cumplidos apropiadamente</li>
+        <li><strong>Capacidad mental cuestionable:</strong> Crear testamento cuando se cuestiona la capacidad mental</li>
+      </ul>
+
+      <h3>Errores de Contenido</h3>
+      <ul>
+        <li><strong>Beneficiarios vagos:</strong> Identificación poco clara de beneficiarios</li>
+        <li><strong>Descripciones de activos ambiguas:</strong> Descripciones que podrían aplicarse a múltiples artículos</li>
+        <li><strong>Provisiones residuarias faltantes:</strong> No abordar qué pasa a los activos no mencionados específicamente</li>
+        <li><strong>Beneficiarios contingentes faltantes:</strong> No nombrar receptores de respaldo</li>
+      </ul>
+
+      <h3>Errores de Planificación</h3>
+      <ul>
+        <li><strong>No actualizar después de eventos importantes de la vida:</strong> Matrimonio, divorcio, nacimientos, muertes</li>
+        <li><strong>Conflictos con otros documentos:</strong> Testamento contradice beneficiarios de seguro de vida</li>
+        <li><strong>Planificación fiscal inadecuada:</strong> No considerar las implicaciones del impuesto patrimonial</li>
+        <li><strong>Ignorar las leyes estatales:</strong> No actualizar cuando te mudas a un nuevo estado</li>
+      </ul>
+
+      <h2>Cuándo Actualizar Tu Testamento</h2>
+
+      <h3>Eventos de Vida Principales</h3>
+      <ul>
+        <li><strong>Matrimonio o nuevo compromiso:</strong> Agregar nuevo cónyuge a las disposiciones</li>
+        <li><strong>Divorcio o separación:</strong> Remover ex cónyuge y actualizar beneficiarios</li>
+        <li><strong>Nacimiento o adopción:</strong> Agregar nuevos hijos e instrucciones de tutela</li>
+        <li><strong>Muerte de beneficiarios:</strong> Actualizar disposiciones y nominar nuevos beneficiarios</li>
+      </ul>
+
+      <h3>Cambios Financieros</h3>
+      <ul>
+        <li><strong>Adquisición de activos significativos:</strong> Propiedades, negocios, inversiones</li>
+        <li><strong>Cambios en circunstancias financieras:</strong> Aumento o disminución sustancial de riqueza</li>
+        <li><strong>Nuevos tipos de activos:</strong> Criptomonedas, activos digitales, colecciones</li>
+        <li><strong>Cambios en deudas:</strong> Nuevas hipotecas, préstamos pagados, cambios de responsabilidad</li>
+      </ul>
+
+      <h3>Cambios Legales</h3>
+      <ul>
+        <li><strong>Mudanza a nuevo estado:</strong> Diferentes requisitos legales y leyes de sucesión</li>
+        <li><strong>Cambios en las leyes fiscales:</strong> Nuevas exenciones de impuestos patrimoniales o tasas</li>
+        <li><strong>Actualización de leyes estatales:</strong> Cambios en los requisitos de testamento o sucesión</li>
+        <li><strong>Cambios en el estatus de beneficiarios:</strong> Menores que alcanzan la mayoría de edad</li>
+      </ul>
+
+      <h2>Almacenamiento y Comunicación del Testamento</h2>
+
+      <h3>Opciones de Almacenamiento Seguro</h3>
+      <ul>
+        <li><strong>Caja de seguridad:</strong> Caja de seguridad bancaria (asegurar que el albacea tenga acceso)</li>
+        <li><strong>Caja fuerte del hogar:</strong> Caja fuerte resistente al fuego en tu hogar</li>
+        <li><strong>Oficina del abogado:</strong> Almacenamiento de documentos del bufete</li>
+        <li><strong>Almacenamiento digital:</strong> Almacenamiento seguro en la nube con provisiones de acceso apropiadas</li>
+        <li><strong>Registro judicial:</strong> Algunos estados permiten registro de testamento con corte de sucesión</li>
+      </ul>
+
+      <h3>Comunicación Familiar</h3>
+      <ul>
+        <li><strong>Notificación al albacea:</strong> Asegurar que tu albacea sepa dónde encontrar tu testamento</li>
+        <li><strong>Discusiones familiares:</strong> Considerar discutir decisiones importantes con miembros de la familia afectados</li>
+        <li><strong>Carta de instrucciones:</strong> Documento suplementario explicando tus decisiones</li>
+        <li><strong>Inventario de documentos:</strong> Lista de documentos importantes y sus ubicaciones</li>
+        <li><strong>Contactos profesionales:</strong> Información sobre tu abogado, asesor financiero, contador</li>
+      </ul>
 
       <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
         <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
@@ -5762,7 +6006,333 @@ export const blogArticles: BlogArticle[] = [
       </div>
     `,
     content_es: `
-      <p>Escribir una carta legal de desalojo es una de las responsabilidades más críticas que enfrentan los propietarios, con requisitos legales estrictos que varían significativamente por estado. Un aviso de desalojo escrito incorrectamente puede retrasar el proceso de desalojo por meses, costar miles en honorarios legales y potencialmente exponer a los propietarios a demandas por desalojo indebido.</p>
+      <p>Escribir una carta legal de desalojo es una de las responsabilidades más críticas que enfrentan los propietarios, con requisitos legales estrictos que varían significativamente por estado. Un aviso de desalojo escrito incorrectamente puede retrasar el proceso de desalojo por meses, costar miles en honorarios legales y potencialmente exponer a los propietarios a demandas por desalojo indebido. Comprender los requisitos específicos de aviso de tu estado, métodos de notificación adecuados y derechos de los inquilinos te asegura poder remover legalmente a inquilinos problemáticos mientras te proteges de costosos desafíos legales.</p>
+
+      <h2>Entendiendo los Requisitos de Aviso de Desalojo</h2>
+      <p>Los avisos de desalojo, también llamados "avisos para desocupar" o "avisos para dejar vacante", son documentos legales formales que inician el proceso de desalojo. Estos avisos deben cumplir con las leyes estatales y locales respecto al contenido, tiempo y métodos de notificación. Cada tipo de violación del contrato requiere un tipo diferente de aviso con plazos específicos y requisitos de lenguaje.</p>
+
+      <div class="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+          ⚠️ Requisitos Críticos del Aviso de Desalojo
+        </h3>
+        <ul class="text-red-800 dark:text-red-200 space-y-2">
+          <li>• <strong>Motivos legales requeridos:</strong> Debe tener razón válida bajo la ley estatal (falta de pago, violación del contrato, etc.)</li>
+          <li>• <strong>Período de aviso apropiado:</strong> Debe dar a los inquilinos el tiempo legalmente requerido para remediar o desocupar</li>
+          <li>• <strong>Método de notificación correcto:</strong> Debe entregar el aviso usando métodos aprobados por el estado</li>
+          <li>• <strong>Información precisa:</strong> Cualquier error en nombres de inquilinos, direcciones o montos puede invalidar el aviso</li>
+          <li>• <strong>No desalojos de autoayuda:</strong> No puede bloquear a inquilinos, cortar servicios o remover pertenencias</li>
+          <li>• <strong>Proceso judicial requerido:</strong> Debe presentar demanda formal de desalojo si el inquilino no cumple</li>
+        </ul>
+      </div>
+
+      <h2>Tipos de Avisos de Desalojo</h2>
+
+      <h3>1. Aviso de Pagar o Desocupar (Falta de Pago de Renta)</h3>
+      <p><strong>Razón más común de desalojo:</strong> Se usa cuando los inquilinos no pagan la renta a tiempo.</p>
+
+      <h4>Información Requerida:</h4>
+      <ul>
+        <li><strong>Monto exacto adeudado:</strong> Cantidad de renta, cargos por demora y otros cargos (si lo permite el contrato)</li>
+        <li><strong>Fecha límite de pago:</strong> Fecha y hora específicas en que se debe recibir el pago</li>
+        <li><strong>Método de pago:</strong> Dónde y cómo se debe pagar la renta (efectivo, cheque, en línea, etc.)</li>
+        <li><strong>Declaración de consecuencias:</strong> Advertencia clara de que el incumplimiento resultará en procedimientos de desalojo</li>
+        <li><strong>Base legal:</strong> Referencia a la cláusula del contrato o ley estatal que autoriza el desalojo</li>
+      </ul>
+
+      <h4>Períodos de Aviso Específicos por Estado:</h4>
+      <ul>
+        <li><strong>Estados con aviso de 3 días:</strong> California, Florida, Nevada, Oregón</li>
+        <li><strong>Estados con aviso de 5 días:</strong> Illinois, Texas, Georgia, Carolina del Norte</li>
+        <li><strong>Estados con aviso de 7 días:</strong> Arizona, Michigan, Ohio, Virginia</li>
+        <li><strong>Estados con aviso de 10 días:</strong> Nueva York, Massachusetts, Wisconsin</li>
+        <li><strong>Estados con aviso de 14 días:</strong> Colorado, Washington, Vermont</li>
+      </ul>
+
+      <h3>2. Aviso de Corregir o Desocupar (Violaciones del Contrato)</h3>
+      <p><strong>Para violaciones corregibles:</strong> Se usa cuando los inquilinos violan términos del contrato pero la violación puede ser arreglada.</p>
+
+      <h4>Violaciones Comunes del Contrato:</h4>
+      <ul>
+        <li><strong>Mascotas no autorizadas:</strong> Tener mascotas cuando el contrato las prohíbe</li>
+        <li><strong>Violaciones de subarrendamiento:</strong> Permitir ocupantes no autorizados</li>
+        <li><strong>Quejas por ruido:</strong> Ruido excesivo que molesta a otros inquilinos</li>
+        <li><strong>Daño a la propiedad:</strong> Daños más allá del desgaste normal</li>
+        <li><strong>Actividades ilegales:</strong> Uso de drogas, operaciones comerciales ilegales</li>
+      </ul>
+
+      <h4>Requisitos del Aviso:</h4>
+      <ul>
+        <li><strong>Descripción específica de la violación:</strong> Explicación detallada de cómo el inquilino violó el contrato</li>
+        <li><strong>Fecha límite para corrección:</strong> Tiempo razonable para arreglar la violación</li>
+        <li><strong>Documentación de evidencia:</strong> Fotos, declaraciones de testigos u otra prueba</li>
+        <li><strong>Referencia del contrato:</strong> Cláusula específica del contrato que fue violada</li>
+        <li><strong>Verificación de cumplimiento:</strong> Cómo el propietario verificará que la violación se corrija</li>
+      </ul>
+
+      <h3>3. Aviso de Desocupar Incondicional</h3>
+      <p><strong>Sin oportunidad de remediar:</strong> Para violaciones graves o infractores reincidentes.</p>
+
+      <h4>Motivos para Desocupar Incondicional:</h4>
+      <ul>
+        <li><strong>Actividad criminal grave:</strong> Tráfico de drogas, crímenes violentos en la propiedad</li>
+        <li><strong>Violaciones repetidas:</strong> Múltiples violaciones del mismo término del contrato</li>
+        <li><strong>Daño intencional a la propiedad:</strong> Destrucción deliberada de la propiedad de alquiler</li>
+        <li><strong>Uso ilegal:</strong> Usar la propiedad para negocios o actividades ilegales</li>
+        <li><strong>Violaciones de seguridad:</strong> Acciones que ponen en peligro a otros inquilinos o la propiedad</li>
+      </ul>
+
+      <h4>Requisitos Legales:</h4>
+      <ul>
+        <li><strong>Base legal sólida:</strong> Debe cumplir con los requisitos estatales para avisos incondicionales</li>
+        <li><strong>Documentación requerida:</strong> Reportes policiales, fotos, declaraciones de testigos</li>
+        <li><strong>Desocupación inmediata:</strong> Usualmente 3-5 días para desocupar (varía por estado)</li>
+        <li><strong>Sin oportunidad de corrección:</strong> Declaración clara de que la violación no puede ser remediada</li>
+      </ul>
+
+      <h3>4. Aviso de Terminación Mes a Mes</h3>
+      <p><strong>Para terminar arrendamientos periódicos:</strong> No se requiere falta para contratos mes a mes.</p>
+
+      <h4>Requisitos del Aviso:</h4>
+      <ul>
+        <li><strong>Aviso de 30 días:</strong> La mayoría de los estados requieren 30 días para arrendamientos mes a mes</li>
+        <li><strong>Fin del período de alquiler:</strong> El aviso usualmente debe expirar al final del período de alquiler</li>
+        <li><strong>No se requiere razón:</strong> Generalmente no necesitas proporcionar razón para la terminación</li>
+        <li><strong>Tiempo apropiado:</strong> Debes entregar el aviso antes del período de alquiler que quieres terminar</li>
+      </ul>
+
+      <h2>Leyes de Desalojo Específicas por Estado</h2>
+
+      <h3>Requisitos de Desalojo en California</h3>
+      <ul>
+        <li><strong>Requisito de causa justa:</strong> Debe tener razón válida para el desalojo en muchas ciudades</li>
+        <li><strong>Protecciones de control de renta:</strong> Requisitos adicionales en áreas con control de renta</li>
+        <li><strong>Protecciones COVID-19:</strong> Períodos de aviso extendidos y protecciones para inquilinos</li>
+        <li><strong>Ordenanzas locales:</strong> Las ciudades pueden tener requisitos más estrictos que la ley estatal</li>
+        <li><strong>Requisitos de idioma:</strong> Los avisos pueden necesitar traducción en ciertas áreas</li>
+      </ul>
+
+      <h3>Requisitos de Desalojo en Nueva York</h3>
+      <ul>
+        <li><strong>Estabilización de renta:</strong> Requisitos especiales para apartamentos con renta estabilizada</li>
+        <li><strong>Procedimientos del tribunal de vivienda:</strong> Procedimientos específicos para el Tribunal de Vivienda de NYC</li>
+        <li><strong>Requisito de buena causa:</strong> Debe tener buena causa para el desalojo en muchos casos</li>
+        <li><strong>Períodos de aviso extendidos:</strong> Períodos de aviso más largos para inquilinos a largo plazo</li>
+        <li><strong>Representación legal:</strong> Los inquilinos tienen derecho a representación legal</li>
+      </ul>
+
+      <h3>Requisitos de Desalojo en Texas</h3>
+      <ul>
+        <li><strong>Aviso de tres días:</strong> Aviso estándar de 3 días para falta de pago</li>
+        <li><strong>Presentación en tribunal de justicia:</strong> Los desalojos se presentan en el tribunal del Juez de Paz</li>
+        <li><strong>Proceso expedito:</strong> Procedimientos de desalojo relativamente favorables al propietario</li>
+        <li><strong>Cumplimiento del código de propiedad:</strong> Debe seguir los requisitos del Código de Propiedad de Texas</li>
+        <li><strong>Requisitos de notificación:</strong> Reglas específicas para la notificación del proceso</li>
+      </ul>
+
+      <h3>Requisitos de Desalojo en Florida</h3>
+      <ul>
+        <li><strong>Aviso de tres días:</strong> Período de aviso estándar para la mayoría de las violaciones</li>
+        <li><strong>Jurisdicción del tribunal del condado:</strong> Los desalojos se manejan en el tribunal del condado</li>
+        <li><strong>Ley de propietario-inquilino:</strong> Debe cumplir con la Ley de Propietario-Inquilino Residencial de Florida</li>
+        <li><strong>Requisitos de depósito:</strong> Reglas específicas para el manejo del depósito de seguridad</li>
+        <li><strong>Estándares de habitabilidad:</strong> Obligaciones del propietario para las condiciones de la propiedad</li>
+      </ul>
+
+      <h2>Elementos Esenciales de las Cartas Legales de Desalojo</h2>
+
+      <h3>Información del Encabezado</h3>
+      <ul>
+        <li><strong>Título del documento:</strong> "Aviso para Pagar Renta o Desocupar" o "Aviso para Corregir o Desocupar"</li>
+        <li><strong>Fecha de notificación:</strong> Fecha en que se notifica al inquilino</li>
+        <li><strong>Dirección de la propiedad:</strong> Dirección completa de la propiedad de alquiler</li>
+        <li><strong>Nombres de inquilinos:</strong> Todos los inquilinos nombrados en el contrato y cualquier otro ocupante</li>
+        <li><strong>Identificación del propietario:</strong> Nombre del propietario o administrador de la propiedad e información de contacto</li>
+      </ul>
+
+      <h3>Requisitos del Contenido del Cuerpo</h3>
+      <ul>
+        <li><strong>Declaración de base legal:</strong> Razón específica para el aviso de desalojo</li>
+        <li><strong>Detalles de la violación:</strong> Descripción clara de lo que el inquilino hizo mal</li>
+        <li><strong>Requisitos de corrección:</strong> Lo que el inquilino debe hacer para remediar la violación (si aplica)</li>
+        <li><strong>Información de fecha límite:</strong> Fecha y hora específicas para el cumplimiento o desocupación</li>
+        <li><strong>Advertencia de consecuencias:</strong> Declaración sobre acción legal si el inquilino no cumple</li>
+      </ul>
+
+      <h3>Lenguaje de Cumplimiento Legal</h3>
+      <ul>
+        <li><strong>Referencias estatutarias:</strong> Citas a las leyes estatales relevantes</li>
+        <li><strong>Avisos de derechos:</strong> Información sobre los derechos del inquilino y procedimientos legales</li>
+        <li><strong>Reconocimiento de notificación:</strong> Cómo se entregó el aviso al inquilino</li>
+        <li><strong>Firma del propietario:</strong> Firmado por el propietario o agente autorizado</li>
+        <li><strong>Información del testigo:</strong> Detalles sobre la persona que notifica (si es requerido)</li>
+      </ul>
+
+      <h2>Notificación Apropiada de Avisos de Desalojo</h2>
+
+      <h3>Notificación Personal</h3>
+      <p><strong>Método más confiable:</strong> Entregar el aviso directamente al inquilino en mano.</p>
+      <ul>
+        <li><strong>Entrega directa:</strong> Dar el aviso directamente al inquilino en persona</li>
+        <li><strong>Miembro adulto del hogar:</strong> Algunos estados permiten la notificación a un miembro adulto de la familia</li>
+        <li><strong>Notificación en el lugar de trabajo:</strong> Circunstancias limitadas donde se permite la notificación en el trabajo</li>
+        <li><strong>Documentación de notificación:</strong> Mantener registros detallados de cuándo, dónde y cómo se notificó</li>
+        <li><strong>Presencia de testigo:</strong> Considerar tener un testigo presente durante la notificación</li>
+      </ul>
+
+      <h3>Notificación Sustituta</h3>
+      <p><strong>Cuando falla la notificación personal:</strong> Métodos alternativos cuando el inquilino evita la notificación.</p>
+      <ul>
+        <li><strong>Publicación en la propiedad:</strong> Ubicación visible en la propiedad de alquiler</li>
+        <li><strong>Correo certificado:</strong> Enviado a la dirección del inquilino con acuse de recibo</li>
+        <li><strong>Clavar y enviar por correo:</strong> Publicado en la puerta y enviado por correo (varía por estado)</li>
+        <li><strong>Notificación por publicación:</strong> Publicación en periódico para inquilinos desconocidos</li>
+        <li><strong>Notificación electrónica:</strong> Email o texto donde esté específicamente permitido</li>
+      </ul>
+
+      <h3>Documentación de Notificación</h3>
+      <ul>
+        <li><strong>Formulario de prueba de notificación:</strong> Documento legal detallando el método de notificación</li>
+        <li><strong>Fotos de la publicación:</strong> Imágenes mostrando el aviso publicado prominentemente</li>
+        <li><strong>Recibos de correo certificado:</strong> Acuses de recibo del servicio postal</li>
+        <li><strong>Declaraciones de testigos:</strong> Declaraciones juradas de personas que presenciaron la notificación</li>
+        <li><strong>Registros de notificación:</strong> Registros detallados de intentos y métodos de notificación</li>
+      </ul>
+
+      <h2>Errores Comunes en Avisos de Desalojo</h2>
+
+      <h3>Errores de Contenido y Formato</h3>
+      <ul>
+        <li><strong>Período de aviso incorrecto:</strong> Usar número equivocado de días para requisitos estatales</li>
+        <li><strong>Información requerida faltante:</strong> Omitir lenguaje estatutario o derechos del inquilino</li>
+        <li><strong>Errores de cálculo:</strong> Montos de renta, fechas o plazos incorrectos</li>
+        <li><strong>Lenguaje poco claro:</strong> Términos ambiguos que confunden los requisitos</li>
+        <li><strong>Tipo de aviso incorrecto:</strong> Usar pagar-o-desocupar para violaciones del contrato o viceversa</li>
+      </ul>
+
+      <h3>Errores de Procedimiento Legal</h3>
+      <ul>
+        <li><strong>Notificación impropia:</strong> No seguir los requisitos estatales para entrega del aviso</li>
+        <li><strong>Motivos insuficientes:</strong> Base legal débil para el aviso de desalojo</li>
+        <li><strong>Presentación prematura:</strong> Presentar demanda de desalojo antes de que expire el período de aviso</li>
+        <li><strong>Aceptar pago parcial:</strong> Tomar renta después de notificar puede renunciar a derechos de desalojo</li>
+        <li><strong>Intentos de autoayuda:</strong> Cambiar cerraduras o cortar servicios públicos</li>
+      </ul>
+
+      <h3>Errores de Documentación y Mantenimiento de Registros</h3>
+      <ul>
+        <li><strong>Documentación deficiente de notificación:</strong> Prueba inadecuada de cómo se notificó el aviso</li>
+        <li><strong>Evidencia de apoyo faltante:</strong> Sin fotos, declaraciones de testigos o documentación</li>
+        <li><strong>Registros inconsistentes:</strong> Información conflictiva en el contrato y el aviso</li>
+        <li><strong>Notificación tardía:</strong> Notificar después de que la renta esté significativamente atrasada</li>
+        <li><strong>Confusión de múltiples avisos:</strong> Notificar avisos superpuestos o conflictivos</li>
+      </ul>
+
+      <h2>Después de Notificar el Aviso de Desalojo</h2>
+
+      <h3>Cumplimiento del Inquilino</h3>
+      <ul>
+        <li><strong>Verificación de pago:</strong> Asegurar que se reciba el pago completo antes de la fecha límite</li>
+        <li><strong>Corrección de violación:</strong> Verificar que las violaciones del contrato se hayan remediado</li>
+        <li><strong>Documentación:</strong> Mantener registros del cumplimiento o incumplimiento del inquilino</li>
+        <li><strong>Decisiones de aceptación:</strong> Decidir si aceptar cumplimiento tardío</li>
+        <li><strong>Monitoreo futuro:</strong> Vigilar violaciones repetidas después del cumplimiento</li>
+      </ul>
+
+      <h3>Procedimientos de Incumplimiento</h3>
+      <ul>
+        <li><strong>Presentación de demanda de desalojo:</strong> Presentar acción de detención ilegal en el tribunal apropiado</li>
+        <li><strong>Notificar documentos legales:</strong> Notificar apropiadamente al inquilino con la demanda de desalojo</li>
+        <li><strong>Comparecencia en tribunal:</strong> Asistir a todas las audiencias judiciales programadas</li>
+        <li><strong>Ejecución del fallo:</strong> Obtener y ejecutar el fallo de desalojo</li>
+        <li><strong>Coordinación con el alguacil:</strong> Trabajar con las fuerzas del orden para el desalojo físico</li>
+      </ul>
+
+      <h3>Derechos y Defensas del Inquilino</h3>
+      <ul>
+        <li><strong>Defensas de habitabilidad:</strong> Reclamos del inquilino sobre condiciones de la propiedad</li>
+        <li><strong>Reclamos de represalia:</strong> Alegaciones de que el desalojo es por represalia</li>
+        <li><strong>Defensas de discriminación:</strong> Reclamos de desalojo discriminatorio</li>
+        <li><strong>Defensas de procedimiento:</strong> Desafíos a los procedimientos de aviso o notificación</li>
+        <li><strong>Retención de renta:</strong> Retención legal de renta por problemas de reparación</li>
+      </ul>
+
+      <h2>Situaciones Especiales de Desalojo</h2>
+
+      <h3>Arrendamientos Protegidos</h3>
+      <ul>
+        <li><strong>Inquilinos de Sección 8:</strong> Requisitos y procedimientos adicionales de HUD</li>
+        <li><strong>Propiedades con control de renta:</strong> Requisitos de desalojo por causa justa</li>
+        <li><strong>Miembros del servicio militar:</strong> Protecciones SCRA y períodos de aviso más largos</li>
+        <li><strong>Inquilinos mayores:</strong> Períodos de aviso extendidos en algunas jurisdicciones</li>
+        <li><strong>Inquilinos discapacitados:</strong> Requisitos de acomodación razonable</li>
+      </ul>
+
+      <h3>Situaciones de Emergencia</h3>
+      <ul>
+        <li><strong>Violaciones de salud y seguridad:</strong> Procedimientos expeditos para condiciones peligrosas</li>
+        <li><strong>Actividad criminal:</strong> Desalojo inmediato por tráfico de drogas o violencia</li>
+        <li><strong>Daño a la propiedad:</strong> Procedimientos de emergencia para daños significativos</li>
+        <li><strong>Uso ilegal:</strong> Desalojo rápido para operaciones comerciales ilegales</li>
+        <li><strong>Violaciones de código:</strong> Coordinación con la aplicación del código municipal</li>
+      </ul>
+
+      <h3>Desalojos Comerciales</h3>
+      <ul>
+        <li><strong>Procedimientos diferentes:</strong> Los contratos comerciales tienen diferentes requisitos de aviso</li>
+        <li><strong>Interrupción del negocio:</strong> Consideraciones para operaciones comerciales en curso</li>
+        <li><strong>Garantías personales:</strong> Perseguir a garantes por renta no pagada</li>
+        <li><strong>Equipo e inventario:</strong> Tratar con propiedad comercial dejada atrás</li>
+        <li><strong>Cesión y subarrendamiento:</strong> Problemas complejos con transferencias comerciales</li>
+      </ul>
+
+      <h2>Prevenir Futuros Desalojos</h2>
+
+      <h3>Mejor Evaluación de Inquilinos</h3>
+      <ul>
+        <li><strong>Verificaciones de crédito:</strong> Revisión exhaustiva del historial crediticio</li>
+        <li><strong>Verificación de ingresos:</strong> Asegurar que la renta sea asequible (regla del 30% de ingresos)</li>
+        <li><strong>Verificación de referencias:</strong> Contactar propietarios anteriores y empleadores</li>
+        <li><strong>Verificación de antecedentes:</strong> Historial criminal y registros de desalojo</li>
+        <li><strong>Integridad de la solicitud:</strong> Requerir solicitudes completas y veraces</li>
+      </ul>
+
+      <h3>Términos Claros del Contrato</h3>
+      <ul>
+        <li><strong>Obligaciones específicas:</strong> Responsabilidades claras del inquilino y propietario</li>
+        <li><strong>Procedimientos de pago:</strong> Métodos exactos de pago de renta y fechas límite</li>
+        <li><strong>Consecuencias de violaciones:</strong> Penalidades claras por violaciones del contrato</li>
+        <li><strong>Reglas de la propiedad:</strong> Reglas específicas sobre uso y cuidado de la propiedad</li>
+        <li><strong>Requisitos de comunicación:</strong> Cómo el inquilino y propietario comunican problemas</li>
+      </ul>
+
+      <h3>Administración Proactiva de la Propiedad</h3>
+      <ul>
+        <li><strong>Inspecciones regulares:</strong> Verificaciones programadas de la condición de la propiedad</li>
+        <li><strong>Respuesta de mantenimiento:</strong> Respuesta rápida a solicitudes de reparación</li>
+        <li><strong>Intervención temprana:</strong> Abordar problemas pequeños antes de que se vuelvan mayores</li>
+        <li><strong>Seguimiento de pagos:</strong> Monitorear pagos de renta y hacer seguimiento a pagos tardíos</li>
+        <li><strong>Construcción de relaciones:</strong> Mantener relaciones positivas propietario-inquilino</li>
+      </ul>
+
+      <h2>Trabajando con Profesionales Legales</h2>
+
+      <h3>Cuándo Contratar un Abogado</h3>
+      <ul>
+        <li><strong>Casos complejos:</strong> Múltiples violaciones o circunstancias inusuales</li>
+        <li><strong>Desalojos disputados:</strong> Cuando el inquilino contrata abogado o presenta defensas</li>
+        <li><strong>Reclamos de discriminación:</strong> Cuando el inquilino alega trato discriminatorio</li>
+        <li><strong>Daños significativos:</strong> Grandes cantidades de renta no pagada o daño a la propiedad</li>
+        <li><strong>Cumplimiento regulatorio:</strong> Asegurar cumplimiento con leyes locales de control de renta</li>
+      </ul>
+
+      <h3>Compañías de Servicio de Desalojo</h3>
+      <ul>
+        <li><strong>Preparación de avisos:</strong> Redacción profesional de avisos de desalojo</li>
+        <li><strong>Coordinación de notificación:</strong> Notificación apropiada de avisos y documentos legales</li>
+        <li><strong>Representación en tribunal:</strong> Representación en procedimientos de desalojo</li>
+        <li><strong>Servicios post-fallo:</strong> Ejecutar fallos y coordinar con el alguacil</li>
+        <li><strong>Apoyo continuo:</strong> Consulta y asesoría durante todo el proceso</li>
+      </ul>
 
       <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
         <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
@@ -6149,7 +6719,291 @@ export const blogArticles: BlogArticle[] = [
       </div>
     `,
     content_es: `
-      <p>Comprar tu primera casa es una de las decisiones financieras más grandes de la vida, con miles de documentos legales, negociaciones complejas y trampas potenciales que pueden costarte miles. Entender las protecciones legales esenciales y la documentación requerida para compras de vivienda protege tu inversión y asegura un proceso de cierre suave.</p>
+      <p>Comprar tu primera casa es una de las decisiones financieras más grandes de la vida, con miles de documentos legales, negociaciones complejas y trampas potenciales que pueden costarte miles. Entender las protecciones legales esenciales y la documentación requerida para compras de vivienda protege tu inversión y asegura un proceso de cierre suave. Desde contratos de compra hasta seguro de título, cada documento legal sirve un propósito crítico en proteger tus derechos como propietario.</p>
+
+      <h2>¿Qué es el Proceso Legal de Compra de Vivienda?</h2>
+      <p>El proceso de compra de vivienda involucra múltiples etapas legales, cada una con requisitos específicos de documentación diseñados para proteger tanto a compradores como a vendedores. Este proceso típicamente toma 30-60 días desde la oferta hasta el cierre e involucra coordinar con agentes inmobiliarios, prestamistas, compañías de título, abogados e inspectores para asegurar que todos los requisitos legales se cumplan.</p>
+
+      <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+          🏠 Por Qué Importa la Documentación Legal en Bienes Raíces
+        </h3>
+        <ul class="text-blue-800 dark:text-blue-200 space-y-2">
+          <li>• <strong>Protección de título:</strong> Asegura que recibas propiedad clara de la propiedad</li>
+          <li>• <strong>Seguridad financiera:</strong> Protege tu inversión de enganche e hipoteca</li>
+          <li>• <strong>Cumplimiento legal:</strong> Cumple con requisitos de transacciones inmobiliarias estatales y federales</li>
+          <li>• <strong>Prevención de disputas:</strong> Documentación clara previene batallas legales costosas</li>
+          <li>• <strong>Protección de inversión:</strong> Salvaguarda tu activo financiero más grande</li>
+        </ul>
+      </div>
+
+      <h2>Documentos Legales Esenciales para Compradores de Vivienda</h2>
+
+      <h3>1. Contrato de Compra (Contrato de Venta)</h3>
+      <p><strong>Propósito:</strong> El contrato legalmente vinculante entre comprador y vendedor describiendo todos los términos de la venta.</p>
+
+      <h4>Elementos Críticos a Revisar:</h4>
+      <ul>
+        <li><strong>Precio de compra:</strong> Cantidad total y estructura de pago</li>
+        <li><strong>Fecha de cierre:</strong> Cuándo se transferirá la propiedad</li>
+        <li><strong>Dinero de buena fe:</strong> Cantidad de depósito y condiciones para devolución</li>
+        <li><strong>Contingencias:</strong> Condiciones que deben cumplirse para que proceda la venta</li>
+        <li><strong>Descripción de propiedad:</strong> Descripción legal y artículos incluidos</li>
+        <li><strong>Divulgaciones del vendedor:</strong> Defectos conocidos o problemas con la propiedad</li>
+      </ul>
+
+      <h4>Contingencias Comunes a Incluir:</h4>
+      <ul>
+        <li><strong>Contingencia de inspección:</strong> Derecho a inspección profesional de la casa</li>
+        <li><strong>Contingencia de financiamiento:</strong> Capacidad de cancelar si se niega el préstamo</li>
+        <li><strong>Contingencia de tasación:</strong> Protección si la casa no se tasa al precio de compra</li>
+        <li><strong>Contingencia de título:</strong> Asegura título claro y comercializable</li>
+        <li><strong>Venta de casa actual:</strong> Condicional a vender propiedad existente</li>
+      </ul>
+
+      <h3>2. Documentos de Hipoteca/Préstamo</h3>
+      <p><strong>Propósito:</strong> Acuerdos legales para financiar tu compra de vivienda.</p>
+
+      <h4>Documentos Clave del Préstamo:</h4>
+      <ul>
+        <li><strong>Solicitud de préstamo:</strong> Información financiera detallada e historial de empleo</li>
+        <li><strong>Pagaré:</strong> Tu promesa de pagar la cantidad del préstamo</li>
+        <li><strong>Hipoteca o escritura de fideicomiso:</strong> Interés de seguridad en la propiedad</li>
+        <li><strong>Divulgación de Ley de Veracidad en Préstamos (TILA):</strong> Costos y términos del préstamo</li>
+        <li><strong>Divulgación de cierre:</strong> Términos finales del préstamo y costos de cierre</li>
+        <li><strong>Estimado de buena fe:</strong> Costos estimados de cierre y términos del préstamo</li>
+      </ul>
+
+      <h4>Términos de Hipoteca a Entender:</h4>
+      <ul>
+        <li><strong>Tasa de interés:</strong> Tasas fijas vs. variables y costos a largo plazo</li>
+        <li><strong>Término del préstamo:</strong> Hipotecas de 15 años vs. 30 años</li>
+        <li><strong>Puntos:</strong> Tarifas iniciales para reducir tasa de interés</li>
+        <li><strong>PMI:</strong> Requisitos de seguro hipotecario privado</li>
+        <li><strong>Penalidades por pago anticipado:</strong> Tarifas por pago temprano del préstamo</li>
+      </ul>
+
+      <h3>3. Seguro de Título y Búsqueda de Título</h3>
+      <p><strong>Propósito:</strong> Protege contra defectos de título y asegura transferencia clara de propiedad.</p>
+
+      <h4>Tipos de Seguro de Título:</h4>
+      <ul>
+        <li><strong>Póliza del propietario:</strong> Protege el patrimonio del comprador en la propiedad</li>
+        <li><strong>Póliza del prestamista:</strong> Protege el interés del prestamista hipotecario</li>
+        <li><strong>Cobertura mejorada:</strong> Protecciones adicionales para riesgos específicos</li>
+      </ul>
+
+      <h4>Componentes de Búsqueda de Título:</h4>
+      <ul>
+        <li><strong>Cadena de título:</strong> Historia de propiedad de la propiedad</li>
+        <li><strong>Gravámenes y cargas:</strong> Deudas pendientes contra la propiedad</li>
+        <li><strong>Servidumbres:</strong> Derechos de paso o derechos de uso</li>
+        <li><strong>Restricciones:</strong> Reglas de HOA o restricciones de escritura</li>
+        <li><strong>Revisión de levantamiento:</strong> Límites de propiedad y mejoras</li>
+      </ul>
+
+      <h4>Problemas Comunes de Título:</h4>
+      <ul>
+        <li><strong>Hipotecas pendientes:</strong> Préstamos anteriores no liberados apropiadamente</li>
+        <li><strong>Gravámenes fiscales:</strong> Impuestos sobre propiedad o gravámenes de impuesto sobre la renta no pagados</li>
+        <li><strong>Gravámenes de mecánico:</strong> Reclamos de contratistas o proveedores no pagados</li>
+        <li><strong>Disputas de herencia:</strong> Reclamos de patrimonio no resueltos</li>
+        <li><strong>Errores de registro:</strong> Documentos incorrectos o registros faltantes</li>
+        <li><strong>Problemas de límites:</strong> Disputas de límites de propiedad o invasiones</li>
+      </ul>
+
+      <h3>4. Inspección de Vivienda y Documentos de Divulgación</h3>
+      <p><strong>Propósito:</strong> Identificar problemas potenciales y divulgar defectos conocidos.</p>
+
+      <h4>Tipos de Inspecciones:</h4>
+      <ul>
+        <li><strong>Inspección general de vivienda:</strong> Evaluación integral de sistemas y estructura</li>
+        <li><strong>Inspección de plagas/termitas:</strong> Detección de insectos dañinos</li>
+        <li><strong>Inspección de radón:</strong> Prueba para gas de radón peligroso</li>
+        <li><strong>Inspección de moho:</strong> Evaluación de problemas de humedad y moho</li>
+        <li><strong>Inspección de pozos/sépticos:</strong> Sistemas de agua y aguas residuales privados</li>
+      </ul>
+
+      <h4>Divulgaciones Requeridas del Vendedor:</h4>
+      <ul>
+        <li><strong>Defectos materiales:</strong> Problemas conocidos que afectan valor o habitabilidad</li>
+        <li><strong>Reparaciones anteriores:</strong> Trabajo de reparación mayor o reclamaciones de seguro</li>
+        <li><strong>Peligros ambientales:</strong> Plomo, asbesto, tanques de petróleo subterráneos</li>
+        <li><strong>Disputas de vecindario:</strong> Conflictos de límites o problemas de ruido</li>
+        <li><strong>Restricciones de propiedad:</strong> Reglas de HOA, servidumbres o restricciones de zona</li>
+      </ul>
+
+      <h3>5. Seguro de Vivienda</h3>
+      <p><strong>Propósito:</strong> Protege contra daño a la propiedad y reclamos de responsabilidad.</p>
+
+      <h4>Tipos de Cobertura Esenciales:</h4>
+      <ul>
+        <li><strong>Cobertura de vivienda:</strong> Estructura principal y características fijas</li>
+        <li><strong>Propiedad personal:</strong> Pertenencias y muebles</li>
+        <li><strong>Responsabilidad:</strong> Protección contra demandas de lesiones</li>
+        <li><strong>Gastos de vida adicionales:</strong> Costos de alojamiento temporal</li>
+        <li><strong>Deducibles:</strong> Cantidad que pagas antes de que comience la cobertura</li>
+      </ul>
+
+      <h2>Línea de Tiempo Legal del Proceso de Compra de Vivienda</h2>
+
+      <h3>Oferta y Contrato (Días 1-7):</h3>
+      <ul>
+        <li><strong>Oferta de compra:</strong> Oferta inicial con términos y contingencias</li>
+        <li><strong>Negociación:</strong> Contraofertas y acuerdo final</li>
+        <li><strong>Dinero de buena fe:</strong> Depósito de buena fe al fideicomiso</li>
+        <li><strong>Ejecución del contrato:</strong> Contrato de compra firmado</li>
+      </ul>
+
+      <h3>Período de Diligencia Debida (Días 8-21):</h3>
+      <ul>
+        <li><strong>Inspección de vivienda:</strong> Evaluación profesional de propiedad</li>
+        <li><strong>Respuesta de inspección:</strong> Solicitud de reparaciones o crédito</li>
+        <li><strong>Tasación:</strong> Valuación de propiedad requerida por prestamista</li>
+        <li><strong>Búsqueda de título:</strong> Investigación de propiedad y gravámenes</li>
+        <li><strong>Cotizaciones de seguro:</strong> Compras de seguro de propietario</li>
+      </ul>
+
+      <h3>Procesamiento del Préstamo (Días 8-45):</h3>
+      <ul>
+        <li><strong>Solicitud de préstamo:</strong> Presentación completa de solicitud de hipoteca</li>
+        <li><strong>Presentación de documentos:</strong> Verificación de ingresos, activos y deudas</li>
+        <li><strong>Suscripción:</strong> Revisión del prestamista y aprobación del préstamo</li>
+        <li><strong>Condiciones del préstamo:</strong> Requisitos adicionales para aprobación</li>
+        <li><strong>Aprobación final:</strong> Documentación libre para cerrar</li>
+      </ul>
+
+      <h3>Preparación del Cierre (Días 46-60):</h3>
+      <ul>
+        <li><strong>Inspección final:</strong> Verificación de condición de propiedad</li>
+        <li><strong>Revisión de divulgación de cierre:</strong> Términos finales del préstamo y costos</li>
+        <li><strong>Configuración de transferencia bancaria:</strong> Fondos de enganche y costos de cierre</li>
+        <li><strong>Activación de seguro:</strong> Póliza de propietario efectiva en el cierre</li>
+        <li><strong>Coordinación de mudanza:</strong> Programación y logística</li>
+      </ul>
+
+      <h2>Documentos de Cierre y Pasos Finales</h2>
+
+      <h3>Documentos que Firmarás en el Cierre:</h3>
+      <ul>
+        <li><strong>Escritura de garantía:</strong> Transferencia de propiedad del vendedor al comprador</li>
+        <li><strong>Factura de venta:</strong> Transferencia de propiedad personal incluida en la venta</li>
+        <li><strong>Declaración jurada de título:</strong> Declaración jurada del vendedor sobre propiedad de la propiedad</li>
+        <li><strong>Declaración de liquidación:</strong> Contabilidad final de todos los costos de cierre</li>
+        <li><strong>Pagaré e hipoteca:</strong> Documentos de préstamo creando interés de seguridad</li>
+      </ul>
+
+      <h3>Tareas Legales Post-Cierre:</h3>
+      <ul>
+        <li><strong>Registro de escritura:</strong> Archivar transferencia de propiedad con registrador del condado</li>
+        <li><strong>Reclamos de seguro:</strong> Archivar póliza de seguro de propietario</li>
+        <li><strong>Transferencias de servicios públicos:</strong> Cambiar servicios públicos a tu nombre</li>
+        <li><strong>Evaluación fiscal:</strong> Actualizar registros de impuestos sobre propiedad</li>
+        <li><strong>Registro de garantía:</strong> Registrar garantías de electrodomésticos y sistemas</li>
+      </ul>
+
+      <h2>Trampas Legales Comunes para Compradores Primerizos</h2>
+
+      <h3>Errores de Contrato y Contingencia</h3>
+      <ul>
+        <li><strong>Renunciar a inspecciones:</strong> Saltarse diligencia debida en mercados competitivos</li>
+        <li><strong>Períodos de contingencia cortos:</strong> Tiempo insuficiente para evaluación apropiada</li>
+        <li><strong>Términos de contrato vagos:</strong> Condiciones o responsabilidades poco claras</li>
+        <li><strong>Perder fechas límite:</strong> Perder derechos de contingencia debido al tiempo</li>
+        <li><strong>Dinero de buena fe inadecuado:</strong> Depósitos demasiado pequeños para ser tomados en serio</li>
+      </ul>
+
+      <h3>Errores de Financiamiento y Documentación Legal</h3>
+      <ul>
+        <li><strong>Pre-aprobación inadecuada:</strong> Aprobaciones condicionales que fallan</li>
+        <li><strong>Deuda no divulgada:</strong> Responsabilidades ocultas que afectan la aprobación del préstamo</li>
+        <li><strong>Cambios de trabajo durante el proceso:</strong> Cambios de empleo que afectan la calificación</li>
+        <li><strong>Problemas de título:</strong> Problemas de propiedad o gravámenes no resueltos</li>
+        <li><strong>Brechas de seguro:</strong> Cobertura insuficiente o pólizas vencidas</li>
+      </ul>
+
+      <h3>Problemas de Propiedad y Divulgación</h3>
+      <ul>
+        <li><strong>Problemas no divulgados:</strong> Defectos ocultos o reparaciones necesarias</li>
+        <li><strong>Disputas de límites:</strong> Conflictos de línea de propiedad o servidumbre</li>
+        <li><strong>Sorpresas de HOA:</strong> Tarifas o restricciones inesperadas</li>
+        <li><strong>Violaciones de zonificación:</strong> Mejoras no permitidas o violaciones de uso</li>
+        <li><strong>Problemas ambientales:</strong> Contaminación o materiales peligrosos</li>
+      </ul>
+
+      <h2>Estrategias de Protección para Compradores de Vivienda</h2>
+
+      <h3>Mejores Prácticas de Diligencia Debida</h3>
+      <ul>
+        <li><strong>Inspecciones profesionales:</strong> Contratar inspectores calificados y experimentados</li>
+        <li><strong>Revisar todas las divulgaciones:</strong> Leer cuidadosamente divulgaciones del vendedor y agente</li>
+        <li><strong>Investigar el vecindario:</strong> Crimen, escuelas, desarrollos planificados</li>
+        <li><strong>Verificar permisos:</strong> Verificar que todas las mejoras fueron apropiadamente permitidas</li>
+        <li><strong>Entender restricciones:</strong> Reglas de HOA, restricciones de escritura, ordenanzas locales</li>
+      </ul>
+
+      <h3>Medidas de Protección Financiera</h3>
+      <ul>
+        <li><strong>Comprar préstamos:</strong> Comparar tasas y términos de múltiples prestamistas</li>
+        <li><strong>Entender costos de cierre:</strong> Revisar y negociar tarifas donde sea posible</li>
+        <li><strong>Mantener reservas:</strong> Ahorros para gastos inesperados</li>
+        <li><strong>Verificar crédito:</strong> Revisar informes de crédito antes de solicitar</li>
+        <li><strong>Documentar todo:</strong> Mantener registros de todas las transacciones</li>
+      </ul>
+
+      <h3>Protección Legal</h3>
+      <ul>
+        <li><strong>Leer todos los documentos:</strong> Revisar completamente antes de firmar</li>
+        <li><strong>Hacer preguntas:</strong> Aclarar términos o condiciones confusos</li>
+        <li><strong>Obtener representación:</strong> Considerar un abogado inmobiliario para transacciones complejas</li>
+        <li><strong>Conservar copias:</strong> Mantener todos los documentos para registros</li>
+        <li><strong>Verificar credenciales:</strong> Asegurar que todos los profesionales estén licenciados</li>
+      </ul>
+
+      <h2>Cuándo Buscar Ayuda Legal Profesional</h2>
+
+      <h3>Situaciones que Requieren Abogado:</h3>
+      <ul>
+        <li><strong>Problemas de título complejos:</strong> Múltiples gravámenes o disputas de propiedad</li>
+        <li><strong>Contratos inusuales:</strong> Términos no estándar o acuerdos complicados</li>
+        <li><strong>Disputas con vendedores:</strong> Divulgaciones conflictivas o problemas de inspección</li>
+        <li><strong>Transacciones comerciales:</strong> Propiedades de inversión o uso comercial</li>
+        <li><strong>Problemas de financiamiento:</strong> Denegaciones de préstamo o cambios de términos</li>
+      </ul>
+
+      <h3>Costos de Asistencia Legal:</h3>
+      <ul>
+        <li><strong>Revisión de contrato:</strong> $300-$800 para revisión de contrato de compra</li>
+        <li><strong>Representación de cierre:</strong> $500-$1,500 para asistencia de cierre</li>
+        <li><strong>Resolución de problemas de título:</strong> $800-$2,500 para problemas complejos</li>
+        <li><strong>Revisión de documentos:</strong> $150-$400 por hora para servicios de revisión</li>
+        <li><strong>Inspecciones adicionales:</strong> $200-$600 cada una para inspecciones especializadas</li>
+        <li><strong>Levantamiento:</strong> $400-$1,000 para verificación de límites de propiedad</li>
+        <li><strong>Revisión de documentos de HOA:</strong> $200-$500 para análisis de documentos</li>
+      </ul>
+
+      <h2>Señales de Alerta: Cuándo Alejarse</h2>
+
+      <h3>Señales de Alerta Legales</h3>
+      <ul>
+        <li><strong>Problemas de título:</strong> Gravámenes no resueltos, disputas de propiedad o nubes en el título</li>
+        <li><strong>Problemas de permiso:</strong> Adiciones no permitidas o violaciones de zonificación</li>
+        <li><strong>Omisiones de divulgación:</strong> Vendedor ocultando problemas o defectos conocidos</li>
+        <li><strong>Irregularidades de contrato:</strong> Términos inusuales o demandas irrazonables</li>
+        <li><strong>Problemas de financiamiento:</strong> Problemas de aprobación de préstamo o términos cambiantes</li>
+      </ul>
+
+      <h3>Señales de Alerta de Propiedad</h3>
+      <ul>
+        <li><strong>Problemas estructurales mayores:</strong> Problemas de cimentación, techo o estructura</li>
+        <li><strong>Peligros ambientales:</strong> Moho, plomo, asbesto o contaminación</li>
+        <li><strong>Preocupaciones de seguridad:</strong> Fallas del sistema eléctrico, plomería o HVAC</li>
+        <li><strong>Problemas de vecindario:</strong> Crimen, ruido o valores de propiedad en declive</li>
+        <li><strong>Sobreprecio:</strong> Valor de propiedad significativamente por encima del mercado o tasación</li>
+      </ul>
+
+      <h2>Protege tu Inversión de Compra de Vivienda</h2>
+      <p>Comprar una casa involucra requisitos legales complejos que varían por estado y localidad. Aunque el proceso puede parecer abrumador, entender tus derechos y responsabilidades ayuda a asegurar una transacción exitosa que protege tu inversión por años venideros.</p>
 
       <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
         <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
