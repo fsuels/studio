@@ -81,10 +81,10 @@ export const boatBillOfSale: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Boat Contrato de Compraventa',
+      name: 'Contrato de Compraventa de Embarcación',
       description:
-        'Crea un Boat Contrato de Compraventa legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
-      aliases: [],
+        'Crea un contrato de compraventa de embarcación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: ['venta de barco', 'compraventa de embarcación', 'contrato de venta marina'],
     },
   },
 };
