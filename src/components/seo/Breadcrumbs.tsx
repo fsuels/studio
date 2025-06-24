@@ -56,7 +56,7 @@ export function Breadcrumbs({
             <li key={item.href} className="flex items-center">
               {index > 0 && (
                 <ChevronRight
-                  className="h-4 w-4 text-gray-400 mx-2"
+                  className="h-4 w-4 text-gray-600 dark:text-gray-400 mx-2"
                   aria-hidden="true"
                 />
               )}

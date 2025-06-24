@@ -334,7 +334,7 @@ export default function CategoryDropdown({
               </p>
               <div className="flex items-center justify-between mt-2">
                 <p className="text-xs text-primary font-medium">
-                  ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Tailored by You
+                  ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time
                 </p>
                 <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full animate-pulse">
                   💡 Try our AI finder →

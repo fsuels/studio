@@ -127,7 +127,7 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
 
           {tax > 0 && (
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-500">Tax ({userState})</span>
+              <span className="text-gray-700 dark:text-gray-300">Tax ({userState})</span>
               <span>${tax.toFixed(2)}</span>
             </div>
           )}
@@ -213,7 +213,7 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
         </Button>
 
         {/* Trust Indicators */}
-        <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-500">
+        <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-700 dark:text-gray-300">
           <div className="flex items-center gap-1">
             <Shield className="h-3 w-3" />
             <span>Secure Checkout</span>
@@ -390,7 +390,7 @@ const TermsModal: React.FC<{
           </section>
 
           {/* Terms Version */}
-          <section className="text-xs text-gray-500 border-t pt-3">
+          <section className="text-xs text-gray-700 dark:text-gray-300 border-t pt-3">
             <p>Terms Version: 2025.1.0 | Last Updated: January 2025</p>
             <p>
               By purchasing, you acknowledge that you have read and understood
@@ -402,7 +402,7 @@ const TermsModal: React.FC<{
 
       {/* Scroll Indicator */}
       {!scrolledToBottom && (
-        <div className="text-xs text-center text-gray-500 border-t pt-2">
+        <div className="text-xs text-center text-gray-700 dark:text-gray-300 border-t pt-2">
           <div className="flex items-center justify-center gap-1">
             <AlertCircle className="h-3 w-3" />
             Please scroll to read all terms

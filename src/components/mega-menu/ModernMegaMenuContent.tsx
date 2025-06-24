@@ -499,7 +499,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
       case 'category':
         return <Filter className="h-3 w-3 text-purple-600" />;
       default:
-        return <Search className="h-3 w-3 text-gray-500" />;
+        return <Search className="h-3 w-3 text-gray-700 dark:text-gray-300" />;
     }
   };
 
@@ -631,7 +631,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                             </Badge>
                           )}
                         </div>
-                        <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                        <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
                       </div>
                     </Link>
                   );
@@ -639,8 +639,8 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
               </div>
 
               {displayDocs.length === 0 && !isSearching && (
-                <div className="text-center py-16 text-gray-500">
-                  <Search className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <div className="text-center py-16 text-gray-700 dark:text-gray-300">
+                  <Search className="h-16 w-16 mx-auto mb-4 text-gray-400" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No documents found</h3>
                   <p>Try a different search term or browse by category below.</p>
                 </div>

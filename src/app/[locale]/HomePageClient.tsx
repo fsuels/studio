@@ -234,34 +234,52 @@ export default function HomePageClient() {
             <p className="mt-6 text-lg text-gray-800 tracking-wide leading-relaxed">
               {t('home.hero2.subtitle', {
                 defaultValue:
-                  'Avoid costly lawyers and complex processes. Our AI platform guides you through creating legally sound documents with ease.',
+                  'Choose from 400+ professionally drafted templates. Save $500+ per document. Create legally binding forms in under 5 minutes—no lawyer required.',
               })}
             </p>
             
             {/* Prominent CTA Section */}
             <div className="mt-8 space-y-4">
-              <div className="flex justify-start">
-                <button 
-                  onClick={() => setShowDiscoveryModal(true)}
-                  className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
-                  suppressHydrationWarning
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <span className="relative z-10 flex items-center gap-2" suppressHydrationWarning>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <div className="space-y-3">
+                {/* 30-Day Money-Back Guarantee Badge */}
+                <div className="flex items-center justify-start mb-2">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full shadow-sm">
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
-                    {!isHydrated 
-                      ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
-                      : ctaVariant === 'A' 
-                      ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
-                      : ctaVariant === 'B'
-                      ? t('home.hero2.cta.primaryB', { defaultValue: 'Start Creating Documents' })
-                      : t('home.hero2.cta.primaryC', { defaultValue: 'Create Legal Forms Now' })
-                    }
-                  </span>
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-500/20 to-blue-600/20 blur-xl"></div>
-                </button>
+                    <span className="text-sm font-semibold text-green-800">
+                      30-Day Money-Back Guarantee
+                    </span>
+                    <span className="text-xs text-green-700">
+                      • No Questions Asked
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Main CTA Button */}
+                <div className="flex justify-start">
+                  <button 
+                    onClick={() => setShowDiscoveryModal(true)}
+                    className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
+                    suppressHydrationWarning
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative z-10 flex items-center gap-2" suppressHydrationWarning>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      {!isHydrated 
+                        ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
+                        : ctaVariant === 'A' 
+                        ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
+                        : ctaVariant === 'B'
+                        ? t('home.hero2.cta.primaryB', { defaultValue: 'Start Creating Documents' })
+                        : t('home.hero2.cta.primaryC', { defaultValue: 'Create Legal Forms Now' })
+                      }
+                    </span>
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-500/20 to-blue-600/20 blur-xl"></div>
+                  </button>
+                </div>
               </div>
               
               {/* Trust indicators under CTA */}
@@ -276,7 +294,7 @@ export default function HomePageClient() {
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>30-day guarantee</span>
+                  <span>Instant download</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -302,7 +320,7 @@ export default function HomePageClient() {
                 <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                <span>Tailored by You</span>
+                <span>Editable in Real Time</span>
               </p>
             </div>
           </div>

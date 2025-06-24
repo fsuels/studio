@@ -460,7 +460,7 @@ export default function DocumentDiscoveryModal() {
             </button>
           </div>
           {isHydrated && !('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window) && (
-            <span className="text-xs text-gray-500 italic">Voice input requires Chrome, Safari, or Edge</span>
+            <span className="text-xs text-gray-700 dark:text-gray-300 italic">Voice input requires Chrome, Safari, or Edge</span>
           )}
         </div>
 
@@ -508,7 +508,7 @@ export default function DocumentDiscoveryModal() {
               </button>
               {discoveryInput && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">You said:</span>
+                  <span className="text-xs text-gray-700 dark:text-gray-300">You said:</span>
                   <span className="text-sm text-gray-700 italic bg-gray-100 px-2 py-1 rounded">"{discoveryInput}"</span>
                 </div>
               )}
@@ -526,7 +526,7 @@ export default function DocumentDiscoveryModal() {
                   Let our AI do the searching for you
                 </span>
               </div>
-              <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              <span className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                 {discoveryResults.length} result{discoveryResults.length !== 1 ? 's' : ''}
               </span>
             </div>
@@ -569,9 +569,9 @@ export default function DocumentDiscoveryModal() {
         )}
 
         {discoveryInput && discoveryResults.length === 0 && (
-          <div className="flex-1 flex items-center justify-center text-gray-500">
+          <div className="flex-1 flex items-center justify-center text-gray-700 dark:text-gray-300">
             <div className="text-center max-w-md">
-              <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+              <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <p className="text-lg font-medium text-gray-700 mb-2">Sorry, we couldn't find an exact match for that</p>
               <p className="text-sm text-gray-600 mb-4">Please try rephrasing your situation, or browse our full document library</p>
               <button
