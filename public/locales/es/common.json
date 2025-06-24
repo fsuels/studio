@@ -509,6 +509,18 @@
     "riskLiability": "Riesgo y Responsabilidad",
     "family": "Familia y Personal",
     "construction": "Construcción y Mejoras del Hogar",
-    "disputeResolution": "Resolución de Disputas"
+    "disputeResolution": "Resolución de Disputas",
+    "personalFamily": "Personal y Familia",
+    "healthCare": "Salud y Cuidado",
+    "businessStartups": "Negocios y Start-ups",
+    "ipCreative": "PI y Obras Creativas",
+    "legalProcessDisputes": "Proceso Legal y Disputas",
+    "constructionTrades": "Construcción y Oficios",
+    "technologyDigital": "Tecnología y Digital",
+    "agricultureEnergy": "Agricultura y Energía",
+    "vehiclesEquipment": "Vehículos y Equipos",
+    "generalForms": "Formularios Generales",
+    "ipCreativeWorksMedia": "PI y Obras Creativas (Medios)",
+    "assetsGear": "Activos y Equipos"
   }
 }

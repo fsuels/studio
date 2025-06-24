@@ -58,22 +58,102 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   
   // Category display names and icons - using all your categories
   const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = {
-    'real-estate-property': { label: 'Real Estate & Property', icon: Home },
-    'employment-hr': { label: 'Employment & HR', icon: Users },
-    'personal-family': { label: 'Personal & Family', icon: Users },
-    'health-care': { label: 'Health & Care', icon: Users },
-    'finance-lending': { label: 'Finance & Lending', icon: Folder },
-    'business-startups': { label: 'Business & Start-ups', icon: Folder },
-    'ip-creative': { label: 'IP & Creative Works', icon: FileText },
-    'legal-process-disputes': { label: 'Legal Process & Disputes', icon: FileText },
-    'estate-planning': { label: 'Estate Planning', icon: FileText },
-    'construction-trades': { label: 'Construction & Trades', icon: FileText },
-    'technology-digital': { label: 'Technology & Digital', icon: FileText },
-    'agriculture-energy': { label: 'Agriculture & Energy', icon: FileText },
-    'vehicles-equipment': { label: 'Vehicles & Equipment', icon: FileText },
-    'general-forms': { label: 'General Forms', icon: FileText },
-    'ip-creative-works': { label: 'IP & Creative Works (Media)', icon: FileText },
-    'assets-gear': { label: 'Assets & Gear', icon: FileText },
+    'real-estate-property': {
+      label: tCommon('categories.realEstate', {
+        defaultValue: 'Real Estate & Property',
+      }),
+      icon: Home,
+    },
+    'employment-hr': {
+      label: tCommon('categories.employment', {
+        defaultValue: 'Employment & HR',
+      }),
+      icon: Users,
+    },
+    'personal-family': {
+      label: tCommon('categories.personalFamily', {
+        defaultValue: 'Personal & Family',
+      }),
+      icon: Users,
+    },
+    'health-care': {
+      label: tCommon('categories.healthCare', {
+        defaultValue: 'Health & Care',
+      }),
+      icon: Users,
+    },
+    'finance-lending': {
+      label: tCommon('categories.finance', {
+        defaultValue: 'Finance & Lending',
+      }),
+      icon: Folder,
+    },
+    'business-startups': {
+      label: tCommon('categories.businessStartups', {
+        defaultValue: 'Business & Start-ups',
+      }),
+      icon: Folder,
+    },
+    'ip-creative': {
+      label: tCommon('categories.ipCreative', {
+        defaultValue: 'IP & Creative Works',
+      }),
+      icon: FileText,
+    },
+    'legal-process-disputes': {
+      label: tCommon('categories.legalProcessDisputes', {
+        defaultValue: 'Legal Process & Disputes',
+      }),
+      icon: FileText,
+    },
+    'estate-planning': {
+      label: tCommon('categories.estatePlanning', {
+        defaultValue: 'Estate Planning',
+      }),
+      icon: FileText,
+    },
+    'construction-trades': {
+      label: tCommon('categories.constructionTrades', {
+        defaultValue: 'Construction & Trades',
+      }),
+      icon: FileText,
+    },
+    'technology-digital': {
+      label: tCommon('categories.technologyDigital', {
+        defaultValue: 'Technology & Digital',
+      }),
+      icon: FileText,
+    },
+    'agriculture-energy': {
+      label: tCommon('categories.agricultureEnergy', {
+        defaultValue: 'Agriculture & Energy',
+      }),
+      icon: FileText,
+    },
+    'vehicles-equipment': {
+      label: tCommon('categories.vehiclesEquipment', {
+        defaultValue: 'Vehicles & Equipment',
+      }),
+      icon: FileText,
+    },
+    'general-forms': {
+      label: tCommon('categories.generalForms', {
+        defaultValue: 'General Forms',
+      }),
+      icon: FileText,
+    },
+    'ip-creative-works': {
+      label: tCommon('categories.ipCreativeWorksMedia', {
+        defaultValue: 'IP & Creative Works (Media)',
+      }),
+      icon: FileText,
+    },
+    'assets-gear': {
+      label: tCommon('categories.assetsGear', {
+        defaultValue: 'Assets & Gear',
+      }),
+      icon: FileText,
+    },
   };
 
   useEffect(() => {
