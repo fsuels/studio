@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { AccessibilityProvider } from '@/contexts/AccessibilityProvider';
+import { DiscoveryModalProvider } from '@/contexts/DiscoveryModalContext';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 
@@ -33,6 +34,12 @@ const GlobalKeyboardShortcuts = dynamic(() =>
     default: m.GlobalKeyboardShortcuts,
   })),
 );
+const DocumentDiscoveryModal = dynamic(() =>
+  import('@/components/global/DocumentDiscoveryModal'),
+);
+const AIFeatureTooltip = dynamic(() =>
+  import('@/components/shared/AIFeatureTooltip'),
+);
 
 const AppShell = React.memo(function AppShell({
   children,
@@ -54,6 +61,10 @@ const AppShell = React.memo(function AppShell({
       <ActivityTicker />
       {/* Conditionally render accessibility components only on the client after mount */}
       {isMounted && <GlobalKeyboardShortcuts />}
+      {/* Global Document Discovery Modal */}
+      {isMounted && <DocumentDiscoveryModal />}
+      {/* AI Feature Educational Tooltip */}
+      {isMounted && <AIFeatureTooltip />}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
     </>
@@ -93,9 +104,11 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <AccessibilityProvider>
-              <CartProvider>
-                <AppShell>{children}</AppShell>
-              </CartProvider>
+              <DiscoveryModalProvider>
+                <CartProvider>
+                  <AppShell>{children}</AppShell>
+                </CartProvider>
+              </DiscoveryModalProvider>
             </AccessibilityProvider>
           </AuthProvider>
         </QueryClientProvider>

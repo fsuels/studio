@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles } from 'lucide-react';
 import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import type { LegalDocument } from '@/lib/document-library';
 
 interface CategoryDropdownProps {
@@ -274,6 +275,7 @@ export default function CategoryDropdown({
   const { t } = useTranslation('common');
   const documents = getDocumentsForCountry('us');
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
+  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => ({
@@ -330,12 +332,32 @@ export default function CategoryDropdown({
               <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
                 {content.subtitle || 'Choose from our professionally crafted templates'}
               </p>
-              <p className="text-xs text-primary mt-2 font-medium">
-                ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Tailored by You
-              </p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-primary font-medium">
+                  ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Tailored by You
+                </p>
+                <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full animate-pulse">
+                  💡 Try our AI finder →
+                </p>
+              </div>
             </div>
             <div className="ml-4 text-right">
-              <p className="text-sm font-semibold text-foreground">Smart Legal Documents</p>
+              <button 
+                onClick={() => {
+                  setShowDiscoveryModal(true);
+                  onLinkClick(); // Close the dropdown
+                }}
+                className="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                title="🤖 Try our AI-powered document finder - just describe what you need!"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                  <span>🤖 AI Document Finder</span>
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+              </button>
             </div>
           </div>
         </div>
