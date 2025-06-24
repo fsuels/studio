@@ -29,6 +29,17 @@
     "loading": "Loading popular documents...",
     "exploreAll": "Explore All Categories"
   },
+  "directCategories": {
+    "agreements": "Agreements",
+    "letters": "Letters",
+    "forms": "Forms",
+    "family": "Family",
+    "business": "Business"
+  },
+  "aiFinder": "AI Finder",
+  "search": {
+    "placeholder": "Search documents..."
+  },
   "My Account": "My Account",
   "Logout": "Logout",
   "Sign Up": "Sign Up",

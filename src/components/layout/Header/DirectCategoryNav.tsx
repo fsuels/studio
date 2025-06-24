@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { 
@@ -23,27 +24,27 @@ interface DirectCategoryNavProps {
 const categories = [
   {
     id: 'agreements-contracts',
-    label: 'Agreements',
+    labelKey: 'agreements',
     icon: FileText,
   },
   {
     id: 'letters-notices',
-    label: 'Letters',
+    labelKey: 'letters',
     icon: Mail,
   },
   {
     id: 'forms-authorizations',
-    label: 'Forms',
+    labelKey: 'forms',
     icon: FileCheck,
   },
   {
     id: 'family-personal',
-    label: 'Family',
+    labelKey: 'family',
     icon: Users,
   },
   {
     id: 'business-commercial',
-    label: 'Business',
+    labelKey: 'business',
     icon: Building,
   }
 ];
@@ -54,6 +55,7 @@ export default function DirectCategoryNav({
   onCategorySelect,
   activeCategoryId
 }: DirectCategoryNavProps) {
+  const { t: tHeader } = useTranslation('header');
   if (!mounted) {
     return (
       <div className="flex items-center gap-1">
@@ -86,8 +88,12 @@ export default function DirectCategoryNav({
             aria-expanded={isActive}
           >
             <IconComponent className="h-4 w-4" />
-            <span className="hidden lg:inline">{category.label}</span>
-            <ChevronDown 
+            <span className="hidden lg:inline">
+              {tHeader(`directCategories.${category.labelKey}`, {
+                defaultValue: category.labelKey,
+              })}
+            </span>
+            <ChevronDown
               className={cn(
                 "h-3 w-3 transition-transform duration-200",
                 isActive && "rotate-180"
