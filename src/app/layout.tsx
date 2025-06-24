@@ -84,7 +84,26 @@ export default function RootLayout({
       <Head>{headElements}</Head>
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
+        suppressHydrationWarning
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var body = document.body;
+                  if (body) {
+                    body.removeAttribute('ap-style');
+                    body.removeAttribute('spellcheck');
+                    body.removeAttribute('cz-shortcut-listen');
+                    body.removeAttribute('data-new-gr-c-s-check-loaded');
+                    body.removeAttribute('data-gr-ext-installed');
+                  }
+                } catch (e) {}
+              })();
+            `
+          }}
+        />
         <RootClient>{children}</RootClient>
         {/* global gradient defs */}
         <svg width="0" height="0">

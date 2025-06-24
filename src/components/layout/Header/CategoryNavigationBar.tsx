@@ -1,7 +1,7 @@
 // src/components/layout/Header/CategoryNavigationBar.tsx
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -78,7 +78,14 @@ export default function CategoryNavigationBar({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Define all callbacks before they're used
   const handleClose = useCallback(() => {
     setActiveCategory(null);
     setShowMegaMenu(false);
@@ -87,10 +94,8 @@ export default function CategoryNavigationBar({
 
   const handleCategoryClick = useCallback((categoryId: string) => {
     if (activeCategory === categoryId && showMegaMenu) {
-      // Close if clicking the same category
       handleClose();
     } else {
-      // Open new category or switch to different category
       setActiveCategory(categoryId);
       setShowMegaMenu(true);
     }
@@ -113,8 +118,9 @@ export default function CategoryNavigationBar({
     }
   }, [showMegaMenu]);
 
+  // Only render portal on client after mounting
   const CategoryMegaMenuComponent = React.useMemo(() => {
-    if (!showMegaMenu || !mounted || typeof window === 'undefined') return null;
+    if (!showMegaMenu || !mounted || !isClient) return null;
 
     return createPortal(
       <CategoryMegaMenuContent
@@ -126,7 +132,7 @@ export default function CategoryNavigationBar({
       />,
       document.body
     );
-  }, [showMegaMenu, mounted, clientLocale, activeCategory, searchQuery, handleClose]);
+  }, [showMegaMenu, mounted, isClient, clientLocale, activeCategory, searchQuery, handleClose]);
 
   return (
     <>

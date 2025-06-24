@@ -61,8 +61,11 @@ export async function middleware(request: NextRequest) {
     "frame-src 'self' *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
   ].join('; ');
 
-  // Only apply CSP in production or when explicitly enabled
-  if (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') {
+  // Only apply CSP in production or when explicitly enabled (and not explicitly disabled for dev)
+  const shouldApplyCSP = (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') && 
+                         process.env.DISABLE_CSP_DEV !== 'true';
+  
+  if (shouldApplyCSP) {
     response.headers.set('Content-Security-Policy', cspHeader);
   }
 

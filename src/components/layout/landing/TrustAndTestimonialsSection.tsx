@@ -204,12 +204,12 @@ const TrustAndTestimonialsSection = React.memo(
     }, []);
 
     useEffect(() => {
-      if (!isInView) return;
+      if (!isInView || !isHydrated) return;
       const interval = setInterval(() => {
         setDocCount((prev) => prev + Math.floor(Math.random() * 3));
       }, 4000);
       return () => clearInterval(interval);
-    }, [isInView]);
+    }, [isInView, isHydrated]);
 
     useEffect(() => {
       if (isHydrated && ready) {

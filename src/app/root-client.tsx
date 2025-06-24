@@ -37,6 +37,25 @@ export default function RootClient({
     mark('root-layout-start');
     mark('root-layout-end');
     measure('root-layout', 'root-layout-start', 'root-layout-end');
+
+    // Handle browser extension attributes that cause hydration mismatches
+    const removeExtensionAttributes = () => {
+      const body = document.body;
+      if (body) {
+        // Remove common extension attributes that cause hydration errors
+        body.removeAttribute('ap-style');
+        body.removeAttribute('spellcheck');
+        body.removeAttribute('cz-shortcut-listen');
+        body.removeAttribute('data-new-gr-c-s-check-loaded');
+        body.removeAttribute('data-gr-ext-installed');
+      }
+    };
+
+    // Remove attributes immediately and after a short delay
+    removeExtensionAttributes();
+    const timeoutId = setTimeout(removeExtensionAttributes, 100);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
