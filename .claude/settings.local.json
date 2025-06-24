@@ -86,7 +86,8 @@
       "WebFetch(domain:www.dot.nd.gov)",
       "WebFetch(domain:transportation.wv.gov)",
       "Bash(true)",
-      "Bash(fuser:*)"
+      "Bash(fuser:*)",
+      "Bash(awk:*)"
     ],
     "deny": []
   }
