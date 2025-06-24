@@ -523,4 +523,16 @@
     "ipCreativeWorksMedia": "PI y Obras Creativas (Medios)",
     "assetsGear": "Activos y Equipos"
   }
+  ,
+  "categoryDropdown": {
+    "agreementsContracts": {
+      "title": "Acuerdos y Contratos",
+      "subtitle": "Protege tus intereses comerciales y evita disputas costosas"
+    },
+    "tagline": "\u2713 Potencia tus necesidades legales \u2022 \u2713 Plantillas redactadas profesionalmente \u2022 \u2713 Listo en minutos, editable en tiempo real",
+    "aiFinder": "Prueba nuestro buscador de IA \u2192",
+    "showFewer": "Mostrar menos",
+    "viewAllInSection": "Ver todos los {{count}} en {{section}}",
+    "viewAllCategory": "Ver todos los {{category}}"
+  }
 }

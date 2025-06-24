@@ -328,16 +328,25 @@ export default function CategoryDropdown({
         <div className="mb-6 sticky top-0 bg-background pb-2 z-10">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
+              <h2 className="text-xl font-semibold text-foreground">
+                {t(`categoryDropdown.${activeCategory || 'agreements-contracts'}.title`, {
+                  defaultValue: content.title,
+                })}
+              </h2>
               <p className="text-sm text-slate-700 dark:text-slate-200 mt-1">
-                {content.subtitle || 'Choose from our professionally crafted templates'}
+                {t(`categoryDropdown.${activeCategory || 'agreements-contracts'}.subtitle`, {
+                  defaultValue: content.subtitle || 'Choose from our professionally crafted templates',
+                })}
               </p>
               <div className="flex items-center justify-between mt-2">
                 <p className="text-xs text-primary font-medium">
-                  ✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time
+                  {t('categoryDropdown.tagline', {
+                    defaultValue:
+                      '✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time',
+                  })}
                 </p>
                 <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full animate-pulse">
-                  💡 Try our AI finder →
+                  {t('categoryDropdown.aiFinder', { defaultValue: 'Try our AI finder →' })}
                 </p>
               </div>
             </div>
@@ -490,19 +499,31 @@ export default function CategoryDropdown({
                         "border border-transparent hover:border-slate-300 dark:hover:border-slate-500"
                       )}
                       aria-expanded={expandedSections[section.id]}
-                      aria-label={`${expandedSections[section.id] ? 'Show fewer' : 'View all'} ${section.label} documents`}
+                      aria-label={
+                        expandedSections[section.id]
+                          ? t('categoryDropdown.showFewer', { defaultValue: 'Show fewer' })
+                          : t('categoryDropdown.viewAllInSection', {
+                              count: sortedDocuments.length,
+                              section: section.label,
+                              defaultValue: `View all ${sortedDocuments.length} in ${section.label}`,
+                            })
+                      }
                       title="Expand list here in this menu"
                     >
                       <Layers className="h-3.5 w-3.5 text-slate-700 dark:text-slate-200" />
                       <span className="flex items-center gap-1">
-                        {expandedSections[section.id] ? (
-                          <>Show fewer</>
-                        ) : (
-                          <>
-                            View all {sortedDocuments.length} in {section.label}
-                            <span className="text-xs text-slate-700 dark:text-slate-200 ml-1">(+{sortedDocuments.length - 4})</span>
-                          </>
-                        )}
+                        {expandedSections[section.id]
+                          ? t('categoryDropdown.showFewer', { defaultValue: 'Show fewer' })
+                          : (
+                              <>
+                                {t('categoryDropdown.viewAllInSection', {
+                                  count: sortedDocuments.length,
+                                  section: section.label,
+                                  defaultValue: `View all ${sortedDocuments.length} in ${section.label}`,
+                                })}
+                                <span className="text-xs text-slate-700 dark:text-slate-200 ml-1">(+{sortedDocuments.length - 4})</span>
+                              </>
+                            )}
                       </span>
                       <ChevronDown 
                         className={cn(
@@ -526,7 +547,10 @@ export default function CategoryDropdown({
             onClick={onLinkClick}
             className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80"
           >
-            View all {content.title.toLowerCase()}
+            {t('categoryDropdown.viewAllCategory', {
+              category: content.title.toLowerCase(),
+              defaultValue: `View all ${content.title.toLowerCase()}`,
+            })}
             <ChevronRight className="h-4 w-4 ml-1" />
           </Link>
         </div>

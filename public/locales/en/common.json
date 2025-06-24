@@ -523,4 +523,16 @@
     "ipCreativeWorksMedia": "IP & Creative Works (Media)",
     "assetsGear": "Assets & Gear"
   }
+  ,
+  "categoryDropdown": {
+    "agreementsContracts": {
+      "title": "Agreements & Contracts",
+      "subtitle": "Protect your business interests and avoid costly disputes"
+    },
+    "tagline": "\u2713 Empower Your Legal Needs \u2022 \u2713 Professionally Drafted Templates \u2022 \u2713 Ready in Minutes, Editable in Real Time",
+    "aiFinder": "Try our AI finder \u2192",
+    "showFewer": "Show fewer",
+    "viewAllInSection": "View all {{count}} in {{section}}",
+    "viewAllCategory": "View all {{category}}"
+  }
 }
