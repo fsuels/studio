@@ -322,6 +322,24 @@
   "TopDocsChips.badge.updated": "Updated",
   "TopDocsChips.tooltip.new": "Recently added",
   "TopDocsChips.tooltip.updated": "Recently refreshed",
+  "TopDocsChips.categories": {
+    "realEstateProperty": "Real Estate & Property",
+    "employmentHR": "Employment & HR",
+    "personalFamily": "Personal & Family",
+    "healthCare": "Health & Care",
+    "financeLending": "Finance & Lending",
+    "businessStartups": "Business & Start-ups",
+    "ipCreative": "IP & Creative Works",
+    "legalProcessDisputes": "Legal Process & Disputes",
+    "estatePlanning": "Estate Planning",
+    "constructionTrades": "Construction & Trades",
+    "technologyDigital": "Technology & Digital",
+    "agricultureEnergy": "Agriculture & Energy",
+    "vehiclesEquipment": "Vehicles & Equipment",
+    "generalForms": "General Forms",
+    "ipCreativeWorks": "IP & Creative Works (Media)",
+    "assetsGear": "Assets & Gear"
+  },
   "useCases": {
     "freelancers": {
       "title": "For Freelancers",
