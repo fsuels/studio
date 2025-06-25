@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Ach Authorization Form.",
+    "description": "Allow automatic bank withdrawals for bills, rent, or loan payments. Convenient way to set up recurring payments.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Collection Letter.",
+    "description": "Professionally demand payment from someone who owes you money. First step before taking legal action for unpaid debts.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Credit Card Agreement.",
+    "description": "Set terms for credit card use in business or personal situations. Covers credit limits, interest rates, and payment terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Debt Settlement Agreement.",
+    "description": "Settle debts for less than you owe. Negotiate with creditors to pay a reduced amount and close the account.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Debt Validation Letter.",
+    "description": "Force debt collectors to prove you actually owe the money they're trying to collect. Your legal right under federal law.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -54,7 +54,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Demand Letter.",
+    "description": "Formally demand payment, action, or resolution before taking legal action. Often required before filing a lawsuit.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -64,7 +64,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Demand Letter Payment.",
+    "description": "Demand payment for overdue invoices or debts. Clear final notice before pursuing collection or legal action.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -74,7 +74,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Direct Deposit Form.",
+    "description": "Set up direct deposit for payroll or other regular payments. Faster and more secure than paper checks.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -84,7 +84,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Invoice.",
+    "description": "Bill customers for goods or services you've provided. Professional invoice format for getting paid faster.",
     "popular": true,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Loan Agreement.",
+    "description": "Lend or borrow money with clear repayment terms. Protects both lender and borrower with written agreement.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Loan Modification Agreement.",
+    "description": "Change the terms of an existing loan when payments become difficult. Avoid default by modifying payment schedule.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Loan Modification Letter.",
+    "description": "Request changes to your loan terms due to financial hardship. Start the process of modifying payment amounts or schedule.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -124,7 +124,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Payment Plan.",
+    "description": "Break large debts into manageable monthly payments. Avoid collections and maintain good relationships with creditors.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Personal Loan Agreement.",
+    "description": "Lend money to friends or family members safely. Prevents relationship damage by making terms clear upfront.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Promissory Note.",
+    "description": "Simple IOU document promising to repay borrowed money. Legal proof of debt with payment terms and due date.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Promissory Note Balloon Payments.",
+    "description": "Borrow money with small payments followed by one large final payment. Useful when expecting large income later.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Promissory Note Installment Payments.",
+    "description": "Repay borrowed money in equal monthly installments over time. Most common type of loan repayment structure.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Purchase Order.",
+    "description": "Officially order goods or services from suppliers. Creates binding commitment and tracks business purchases.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -184,7 +184,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Receipt.",
+    "description": "Provide proof of payment for goods or services. Required for returns, warranties, and business expense records.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Revolving Credit Agreement.",
+    "description": "Set up credit line that can be used repeatedly up to a limit. Similar to credit card but for business purposes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Statement Of Account.",
+    "description": "Show customer's payment history, current balance, and account activity. Regular statement for ongoing business relationships.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Student Loan Agreement.",
+    "description": "Privately lend money for education expenses with specific terms for students. Alternative to federal student loans."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

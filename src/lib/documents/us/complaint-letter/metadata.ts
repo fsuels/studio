@@ -30,7 +30,7 @@ export const complaintLetterMeta: LegalDocument = {
     },
     es: {
       name: 'Carta de Queja',
-      description: 'Carta formal para abordar quejas con empresas o servicios.',
+      description: 'Quéjate formalmente con empresas por mal servicio o productos defectuosos. Aumenta posibilidades de reembolso o compensación.',
       aliases: ['carta de reclamo', 'queja formal', 'carta de disputa'],
     },
   },

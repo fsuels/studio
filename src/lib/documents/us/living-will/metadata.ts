@@ -28,7 +28,7 @@ export const metadata = {
     es: {
       name: 'Testamento Vital / Directiva Anticipada',
       description:
-        'Especificar sus deseos para la atención médica al final de la vida.',
+        'Dile a los médicos exactamente qué tratamientos médicos quieres o no quieres si estás muriendo o permanentemente inconsciente.',
       aliases: [
         'deseos médicos',
         'directiva anticipada',

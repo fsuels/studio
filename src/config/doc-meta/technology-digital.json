@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Software License Agreement.",
+    "description": "License your software to users while protecting your intellectual property rights. Sets usage terms and restrictions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for App Development Agreement.",
+    "description": "Hire developers to create your mobile app. Covers timeline, features, ownership, and what happens if problems arise.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Web Development Agreement.",
+    "description": "Hire web developers to build your website. Protects both parties with clear scope, deadlines, and payment terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Website Development Agreement.",
+    "description": "Create professional websites with clear developer agreements. Covers design, functionality, hosting, and maintenance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Cloud Services Agreement.",
+    "description": "Use cloud computing services safely for your business. Protects your data and ensures reliable service levels.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Data Processing Agreement.",
+    "description": "Ensure customer data is handled properly when using third-party services. Required for GDPR and privacy compliance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Cybersecurity Agreement.",
+    "description": "Hire cybersecurity experts to protect your business from hackers and data breaches. Essential for digital safety.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Ecommerce Terms Of Service.",
+    "description": "Set rules for customers using your online store. Protects your business and creates clear expectations for buyers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Digital Asset Agreement.",
+    "description": "Buy, sell, or license digital content like images, videos, or software. Protects ownership and usage rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Cryptocurrency Agreement.",
+    "description": "Handle cryptocurrency transactions safely with legal protections. Covers trading, mining, or investment arrangements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Gaming Agreement.",
+    "description": "Create or license video games with clear terms. Covers development, publishing, revenue sharing, and player rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Music License Agreement.",
+    "description": "Use music legally in your projects. Covers licensing fees, usage rights, and restrictions for commercial use.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Music Licensing Agreement.",
+    "description": "Advanced music licensing for complex projects. Covers multiple songs, territories, and commercial usage rights.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Video Release.",
+    "description": "Get permission to use someone's image in videos or films. Protects you from privacy lawsuits and usage claims."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

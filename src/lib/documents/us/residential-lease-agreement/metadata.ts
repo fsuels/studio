@@ -35,7 +35,7 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Contrato de Alquiler Residencial',
       description:
-        'Crea un acuerdo de arrendamiento residencial legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Alquila una casa o apartamento con términos que protegen tanto al inquilino como al propietario. Cubre renta, depósitos de seguridad y reglas de la casa.',
       aliases: [
         'contrato de arrendamiento residencial',
         'arrendamiento de apartamento',

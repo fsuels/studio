@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Affiliate Marketing Agreement.",
+    "description": "Set commission terms and protect your business when working with affiliates who promote your products for a percentage of sales.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Articles Of Incorporation.",
+    "description": "Officially register your corporation with the state. Required to legally form a business corporation and protect your personal assets.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Articles Of Incorporation Biz.",
+    "description": "Alternative format to officially register your corporation with state authorities and establish your business as a legal entity.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Bar Agreement.",
+    "description": "Set terms for bar or restaurant services, including pricing, responsibilities, and expectations for events or regular service.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Board Resolution.",
+    "description": "Document important company decisions made by your board of directors, like approving budgets, hiring executives, or major business changes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Bookkeeping Services Agreement.",
+    "description": "Hire an accountant or bookkeeper to manage your business finances. Covers what services they'll provide and how much you'll pay.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Brand Ambassador Agreement.",
+    "description": "Partner with someone to represent your brand at events or on social media. Sets expectations for how they'll promote your business.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Business Contract.",
+    "description": "General business agreement for any commercial transaction. Protects both parties and clearly defines what each side will deliver.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Business Plan.",
+    "description": "Professional document outlining your business goals, strategies, and financial projections. Essential for getting loans or attracting investors.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Catering Agreement.",
+    "description": "Hire a caterer for your event. Covers menu, pricing, setup, cleanup, and what happens if things go wrong.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Commission Agreement.",
+    "description": "Pay salespeople or partners based on the sales they generate. Sets commission rates and payment terms to avoid disputes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Corporate Bylaws.",
+    "description": "Internal rules for how your corporation operates. Covers board meetings, voting procedures, and officer responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Endorsement Agreement.",
+    "description": "Get a celebrity or influencer to officially endorse your product. Protects both parties and sets usage rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Event Planning Contract.",
+    "description": "Hire an event planner for your wedding, party, or corporate event. Covers timeline, budget, and responsibilities.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Food Truck Agreement.",
+    "description": "Rent space for your food truck or hire one for an event. Sets location, fees, and operating requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Government Contract Agreement.",
+    "description": "Work with government agencies as a contractor. Covers compliance requirements, payments, and deliverables.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Hotel Agreement.",
+    "description": "Book accommodations for events or negotiate group rates. Protects you from cancellation fees and ensures room availability.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Influencer Agreement.",
+    "description": "Hire social media influencers to promote your brand. Sets posting requirements, payment terms, and content guidelines.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Investment Agreement.",
+    "description": "Raise money for your business from investors. Protects both parties and clearly defines ownership, returns, and terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Joint Venture Agreement.",
+    "description": "Partner with another business on a specific project. Shares costs, profits, and responsibilities while protecting both companies.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Letter Of Intent.",
+    "description": "Show serious interest in a business deal before signing the final contract. Non-binding way to outline basic terms.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Limited Partnership Agreement.",
+    "description": "Create a business partnership where some partners have limited liability. Perfect for investment partnerships.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -224,7 +224,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Marketing Agreement.",
+    "description": "Hire a marketing agency or freelancer to promote your business. Sets goals, budgets, and performance expectations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -234,7 +234,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Memorandum Of Agreement.",
+    "description": "Formal agreement between organizations outlining a partnership or collaboration. More detailed than a simple handshake deal.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -244,7 +244,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Memorandum Of Understanding.",
+    "description": "Document mutual understanding between parties before creating a formal contract. Shows commitment without legal obligation.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -254,7 +254,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Nonprofit Bylaws.",
+    "description": "Operating rules for your nonprofit organization. Required for tax-exempt status and governs how your nonprofit operates.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -264,7 +264,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Operating Agreement.",
+    "description": "Essential document for LLC owners that defines roles, responsibilities, profit sharing, and decision-making processes.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -274,7 +274,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Partnership Agreement.",
+    "description": "Start a business with partners and avoid future conflicts. Defines ownership, responsibilities, and what happens if someone leaves.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -284,7 +284,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Recording Artist Agreement.",
+    "description": "Manage or represent a musical artist. Covers royalties, creative control, and business responsibilities for both parties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -294,7 +294,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Restaurant Agreement.",
+    "description": "Various restaurant business agreements including supplier contracts, franchise deals, or management arrangements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -304,7 +304,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Restaurant Lease.",
+    "description": "Rent commercial space for your restaurant. Covers rent, renovations, kitchen equipment, and restaurant-specific requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -314,7 +314,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Service Agreement.",
+    "description": "Hire someone to provide services for your business. Clearly defines what work will be done, when, and for how much.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -324,7 +324,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Service Level Agreement.",
+    "description": "Set performance standards for service providers. Ensures you get the quality and reliability you're paying for.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -334,7 +334,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Single Member Llc Operating Agreement.",
+    "description": "Required document if you're the only owner of an LLC. Protects your business status and separates personal assets.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -344,7 +344,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Social Media Management Agreement.",
+    "description": "Hire someone to manage your business social media accounts. Sets posting schedules, content guidelines, and responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -354,7 +354,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Sponsorship Agreement.",
+    "description": "Get sponsors for your event or team, or sponsor someone else's activities. Defines benefits, payments, and obligations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -364,7 +364,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Statement Of Work.",
+    "description": "Detailed description of a specific project within a larger contract. Perfect for freelancers and consultants.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -374,7 +374,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Talent Agreement.",
+    "description": "Work with entertainers, performers, or skilled professionals. Covers performance requirements, payment, and usage rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -384,7 +384,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Talent Management Agreement.",
+    "description": "Represent and manage an entertainer or professional's career. Defines commission, responsibilities, and career decisions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -394,7 +394,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Tax Preparation Agreement.",
+    "description": "Hire an accountant to prepare your business taxes. Protects both parties and ensures proper handling of financial information.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -404,7 +404,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Term Sheet.",
+    "description": "Outline basic terms of an investment or business deal before creating the full contract. Non-binding summary of key points.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -414,7 +414,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Transportation Service Agreement.",
+    "description": "Hire transportation services for your business or events. Covers schedules, pricing, insurance, and liability.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -424,7 +424,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Vendor Agreement.",
+    "description": "Work with suppliers who provide goods or services to your business. Protects quality, delivery, and payment terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -434,7 +434,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Warehouse Agreement.",
+    "description": "Rent warehouse space for storing inventory or equipment. Covers storage fees, access rights, and security responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

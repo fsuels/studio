@@ -36,7 +36,7 @@ export const photoReleaseFormMeta: LegalDocument = {
     es: {
       name: 'Formulario de Liberación Fotográfica',
       description:
-        'Formulario de permiso y liberación para fotografía y derechos de uso de imagen.',
+        'Formulario simple de permiso para usar la foto de alguien comercialmente. Requerido para marketing, sitios web y publicaciones.',
       aliases: [
         'liberación fotografía',
         'liberación imagen',

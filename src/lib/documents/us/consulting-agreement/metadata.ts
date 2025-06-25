@@ -35,7 +35,7 @@ export const consultingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Consultoría',
       description:
-        'Establece términos para servicios de consultoría profesional con alcance y compensación claros.',
+        'Contrata a un consultor independiente para experiencia especializada. Define claramente el alcance del proyecto, fechas límite y términos de pago.',
       aliases: ['contrato de consultor', 'acuerdo de asesoría'],
     },
   },

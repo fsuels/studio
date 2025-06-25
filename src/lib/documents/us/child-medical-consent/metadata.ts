@@ -31,7 +31,7 @@ export const childMedicalConsentMeta: LegalDocument = {
     es: {
       name: 'Formulario de Consentimiento Médico para Menores',
       description:
-        'Autorizar a un cuidador a tomar decisiones médicas por su hijo.',
+        'Autoriza a abuela, niñera o familiar a llevar tu hijo al doctor y tomar decisiones médicas de emergencia.',
       aliases: [],
     },
   },

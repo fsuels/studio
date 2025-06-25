@@ -37,7 +37,7 @@ export const affidavitOfSurvivorshipMeta: Omit<
     es: {
       name: 'Declaración Jurada de Supervivencia',
       description:
-        'Documento legal para propietarios conjuntos supervivientes para establecer la propiedad única de bienes después de la muerte de un co-propietario.',
+        'Transfiere propiedad de tenencia conjunta al propietario sobreviviente después de la muerte. Evita el proceso de sucesión para propiedad en tenencia conjunta.',
       aliases: [
         'declaración jurada de supervivencia',
         'declaración jurada de supervivencia de inquilinos conjuntos',

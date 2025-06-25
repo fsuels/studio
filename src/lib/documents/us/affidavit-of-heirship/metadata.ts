@@ -37,7 +37,7 @@ export const affidavitOfHeirshipMeta: Omit<
     es: {
       name: 'Declaración Jurada de Herederos',
       description:
-        'Documento legal que establece los herederos de una persona fallecida para propósitos de transferencia de propiedad y herencia.',
+        'Establece quién hereda propiedad cuando alguien muere sin testamento. Prueba relaciones familiares para transferencia de bienes.',
       aliases: [
         'declaración jurada de herencia',
         'declaración jurada de sucesión',

@@ -36,7 +36,7 @@ export const achAuthorizationFormMeta: LegalDocument = {
     es: {
       name: 'Formulario de Autorización ACH',
       description:
-        'Autorizar transferencias bancarias automáticas (ACH) para pagos recurrentes o únicos.',
+        'Permite retiros automáticos del banco para facturas, renta o pagos de préstamos. Forma conveniente de configurar pagos recurrentes.',
       aliases: [
         'autorización bancaria',
         'formulario de pago automático',

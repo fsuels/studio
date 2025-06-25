@@ -31,7 +31,7 @@ export const contractAmendmentMeta: LegalDocument = {
     es: {
       name: 'Enmienda de Contrato',
       description:
-        'Crea una enmienda formal para modificar términos y condiciones de contrato existente.',
+        'Cambia partes de un contrato existente sin tener que volver a escribir todo. Actualiza precios, fechas o condiciones.',
       aliases: ['enmienda de contrato', 'modificación de contrato', 'adenda'],
     },
   },

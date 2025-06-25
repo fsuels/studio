@@ -30,7 +30,7 @@ export const commercialLeaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Contrato de Arrendamiento Comercial',
       description:
-        'Contrato de arrendamiento específico para propiedades comerciales.',
+        'Renta espacio comercial para tu negocio (oficina, tienda, almacén). Cubre renta, depósitos, reparaciones y reglas de uso.',
       aliases: [],
     },
   },

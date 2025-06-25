@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Consulting Agreement.",
+    "description": "Hire an independent consultant for specialized expertise. Clearly defines project scope, deadlines, and payment terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employee Bonus Plan.",
+    "description": "Create a fair bonus system to motivate employees and reward good performance. Prevents disputes about bonus criteria.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -24,7 +24,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employee Evaluation Form.",
+    "description": "Review employee performance fairly and consistently. Documents achievements and areas for improvement for both parties.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employee Handbook.",
+    "description": "Set clear workplace rules and expectations for your team. Covers policies, benefits, and procedures every employee should know.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employee Non Disclosure Agreement.",
+    "description": "Protect your business secrets and confidential information when hiring employees. Prevents sharing trade secrets with competitors.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employee Warning Notice.",
+    "description": "Formally document employee performance issues or policy violations. Creates a paper trail for potential termination.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employment Contract.",
+    "description": "Hire employees with clear terms about salary, benefits, responsibilities, and expectations. Protects both employer and employee.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9,
@@ -80,7 +80,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employment Offer Letter.",
+    "description": "Extend a job offer with all the important details. Makes your offer official and gives candidates time to consider.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -90,7 +90,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employment Termination Letter.",
+    "description": "End an employee's job professionally and legally. Documents the reason and final details like last paycheck and benefits.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -100,7 +100,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Employment Verification Letter.",
+    "description": "Confirm someone's employment history for their new job, loan application, or background check. Simple verification document.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -110,7 +110,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Equity Incentive Plan.",
+    "description": "Give employees ownership stakes in your company to motivate long-term commitment. Popular with startups and growing businesses.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -120,7 +120,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Executive Employment Agreement.",
+    "description": "Hire senior executives and C-level employees. More detailed than regular employment contracts with specific compensation packages.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -130,7 +130,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Independent Contractor Agreement.",
+    "description": "Hire freelancers and contractors legally. Protects your business and ensures the worker isn't classified as an employee.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -140,7 +140,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Internship Agreement.",
+    "description": "Bring on interns with clear expectations about learning goals, responsibilities, and whether it's paid or unpaid.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -150,7 +150,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Invention Assignment Agreement.",
+    "description": "Ensure your company owns any inventions or innovations your employees create while working for you. Essential for tech companies.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -160,7 +160,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Job Application Form.",
+    "description": "Standardized form for job candidates to provide their information, experience, and qualifications. Makes hiring more organized.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -170,7 +170,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Leave Of Absence Request Form.",
+    "description": "Let employees formally request time off for medical, family, or personal reasons. Documents the request and approval process.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -180,7 +180,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Non Compete Agreement.",
+    "description": "Prevent employees from working for competitors or starting competing businesses after they leave. Protection varies by state.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -190,7 +190,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Offer Letter.",
+    "description": "Simple job offer document with basic terms. Less formal than an employment contract but makes the offer official.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -200,7 +200,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Progressive Discipline Policy.",
+    "description": "Create a fair system for addressing employee problems with clear steps from warning to termination. Protects from wrongful termination claims.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -210,7 +210,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Proof Of Income Letter.",
+    "description": "Provide official documentation of someone's salary and employment for loans, rentals, or other financial applications.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -220,7 +220,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Resignation Letter.",
+    "description": "Quit your job professionally with proper notice. Maintains good relationships and documents your last working day.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -230,7 +230,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Resignation Letter Personal.",
+    "description": "Quit your job due to personal reasons with a respectful explanation. Keeps things professional while protecting your privacy.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -240,7 +240,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Salary Verification Letter.",
+    "description": "Confirm an employee's salary for their mortgage, rental application, or other financial needs. Official income verification.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -250,7 +250,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Severance Agreement.",
+    "description": "Provide laid-off employees with compensation packages. Protects both sides and often includes agreement not to sue the company.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -260,7 +260,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Telecommuting Agreement.",
+    "description": "Set rules for employees working remotely. Covers expectations, communication, equipment, and performance standards.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -270,7 +270,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Two Weeks Notice Letter.",
+    "description": "Standard resignation letter giving employer two weeks to find your replacement. Professional way to leave any job.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -280,7 +280,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Work From Home Agreement.",
+    "description": "Allow employees to work from home with clear guidelines. Covers productivity expectations, communication, and equipment.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

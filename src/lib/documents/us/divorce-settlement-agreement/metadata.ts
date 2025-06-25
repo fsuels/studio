@@ -37,7 +37,7 @@ export const divorceSettlementAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Divorcio',
       description:
-        'Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.',
+        'Divide bienes, deudas y responsabilidades al terminar un matrimonio. Cubre propiedades, custodia y pagos de manutención.',
       aliases: [
         'divorcio',
         'separación',

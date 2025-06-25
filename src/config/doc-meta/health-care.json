@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Advance Directive.",
+    "description": "Tell doctors your medical wishes if you can't speak for yourself. Covers life support, feeding tubes, and end-of-life care.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Advance Directive Revocation.",
+    "description": "Cancel your previous advance directive when your medical wishes change. Important to keep documents current.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Clinical Trial Agreement.",
+    "description": "Participate in medical research studies safely. Understand risks, benefits, and your rights as a research participant.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Coaching Agreement.",
+    "description": "Hire a life coach, business coach, or wellness coach. Sets expectations, goals, and payment terms for coaching services.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Fitness Waiver.",
+    "description": "Protect your gym or fitness business from injury lawsuits. Required legal protection for personal trainers and fitness centers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Health Care Directive.",
+    "description": "Document your healthcare preferences for serious medical situations. Guides family and doctors when you can't decide.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Healthcare Power Of Attorney.",
+    "description": "Choose someone to make medical decisions for you if you can't. Essential backup for emergencies and serious illness.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Hipaa Authorization Form.",
+    "description": "Allow someone to access your medical records and talk to doctors. Required for family members to get health information.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -84,7 +84,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Living Will.",
+    "description": "Tell doctors exactly what medical treatments you want or don't want if you're dying or permanently unconscious.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Medical Consent.",
+    "description": "Give permission for medical treatment for yourself or your children. Required for most medical procedures and surgeries.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Medical Consent Form.",
+    "description": "Simple form to authorize medical treatment. Perfect for schools, camps, and caregivers who might need emergency care.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Medical Power Of Attorney.",
+    "description": "Appoint someone to make all your healthcare decisions if you become unable to communicate your wishes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Personal Training Agreement.",
+    "description": "Hire a personal trainer with clear expectations about workouts, goals, and safety. Protects both trainer and client.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Telemedicine Agreement.",
+    "description": "Get medical care through video calls and online consultations. Sets expectations for remote healthcare services."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

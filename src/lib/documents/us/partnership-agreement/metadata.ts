@@ -31,7 +31,7 @@ export const partnershipAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Sociedad',
       description:
-        'Definir los términos, responsabilidades y reparto de beneficios para socios comerciales.',
+        'Inicia un negocio con socios. Define quién aporta qué, cómo se reparten ganancias y quién toma qué decisiones.',
       aliases: ['socios de negocios', 'empresa conjunta', 'términos de socios'],
     },
   },

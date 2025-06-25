@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Care Authorization Form.",
+    "description": "Give caregivers permission to make decisions for your child when you're not available. Required for babysitters, schools, and daycares.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Care Contract.",
+    "description": "Hire a nanny, babysitter, or daycare provider with clear terms about care, payment, and responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Custody Agreement.",
+    "description": "Decide where children will live and when they'll spend time with each parent after separation or divorce.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Medical Consent.",
+    "description": "Allow others to make medical decisions for your child in emergencies when you can't be reached.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Support Agreement.",
+    "description": "Set fair financial support payments for children after parents separate or divorce. Covers basic needs and expenses.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Child Travel Consent.",
+    "description": "Give permission for your child to travel with the other parent, relatives, or on school trips.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Cohabitation Agreement.",
+    "description": "Live together as a couple without marriage while protecting your individual assets and defining responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Divorce Settlement Agreement.",
+    "description": "Divide assets, debts, and responsibilities when ending a marriage. Covers property, custody, and support payments.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Dog Breeding Agreement.",
+    "description": "Breed your dog with someone else's while protecting both parties. Covers stud fees, puppy rights, and health guarantees.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Elder Care Agreement.",
+    "description": "Arrange care for elderly family members. Covers caregiving responsibilities, living arrangements, and financial support.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Guardianship Agreement.",
+    "description": "Appoint someone to care for your children if something happens to you. Essential for single parents and families.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Horse Boarding Agreement.",
+    "description": "Board your horse at a stable with clear terms about care, feeding, riding privileges, and monthly costs.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Marriage Separation Agreement.",
+    "description": "Separate from your spouse while remaining legally married. Covers living arrangements, finances, and children.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Parenting Plan.",
+    "description": "Detailed plan for raising children after divorce or separation. Covers schedules, decisions, holidays, and communication.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Personal Care Agreement.",
+    "description": "Hire someone to provide personal care services for yourself or a family member. Covers daily living assistance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Pet Addendum.",
+    "description": "Add pet rules to your lease agreement. Covers pet deposits, restrictions, and tenant responsibilities for damages.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Pet Agreement.",
+    "description": "Set rules and responsibilities for pet ownership in shared living situations or rental properties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Pet Custody Agreement.",
+    "description": "Decide who gets the pets when a couple separates or divorces. Covers visitation, expenses, and care responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Postnuptial Agreement.",
+    "description": "Protect assets and define financial responsibilities after you're already married. Similar to prenup but signed during marriage.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Power Of Attorney For Child.",
+    "description": "Give someone legal authority to make decisions for your minor child when you're unavailable or incapacitated.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Prenuptial Agreement.",
+    "description": "Protect your assets and define financial responsibilities before getting married. Prevents disputes if relationship ends.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Separation Agreement.",
+    "description": "Legally separate from your spouse while working out divorce details. Covers temporary arrangements for children and finances."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

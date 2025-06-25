@@ -24,7 +24,7 @@ export const metadata = {
     es: {
       name: 'Contrato de Contratista Independiente',
       description:
-        'Definir términos para contratar a un freelancer o contratista independiente.',
+        'Contrata freelancers y contratistas legalmente. Protege tu negocio y asegura que el trabajador no sea clasificado como empleado.',
       aliases: ['freelance', 'contratista', 'trabajo gig', 'trabajo 1099'],
     },
   },

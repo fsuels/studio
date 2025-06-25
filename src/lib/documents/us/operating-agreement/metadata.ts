@@ -31,7 +31,7 @@ export const operatingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo Operativo (LLC)',
       description:
-        'Esbozar la estructura de propiedad y los procedimientos operativos para una LLC.',
+        'Documento esencial para propietarios de LLC que define roles, responsabilidades, participación en ganancias y procesos de toma de decisiones.',
       aliases: ['acuerdo de LLC', 'sociedad de responsabilidad limitada'],
     },
   },

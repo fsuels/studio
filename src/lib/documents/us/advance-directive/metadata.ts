@@ -35,7 +35,7 @@ export const advanceDirectiveMeta: Omit<LegalDocument, 'schema' | 'questions'> =
       es: {
         name: 'Directiva Médica Anticipada',
         description:
-          'Crear una directiva médica anticipada integral para especificar sus preferencias de tratamiento médico y nombrar un agente de atención médica.',
+          'Dile a los médicos tus deseos médicos si no puedes hablar por ti mismo. Cubre soporte vital, tubos de alimentación y cuidado al final de la vida.',
         aliases: [
           'directiva de atención médica anticipada',
           'testamento vital con poder médico',

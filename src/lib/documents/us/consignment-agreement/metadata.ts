@@ -31,7 +31,7 @@ export const consignmentAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Consignación',
       description:
-        'Crea un Acuerdo de Consignación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Vende productos a través de otra tienda o vendedor. Define quién recibe qué porcentaje de las ventas y qué pasa con productos no vendidos.',
       aliases: ['contrato de consignación', 'acuerdo de ventas'],
     },
   },

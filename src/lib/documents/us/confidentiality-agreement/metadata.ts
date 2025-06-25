@@ -36,7 +36,7 @@ export const confidentialityAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Confidencialidad',
       description:
-        'Acuerdo general de confidencialidad para proteger información sensible compartida entre partes.',
+        'Protege tus secretos comerciales y datos confidenciales. Evita que empleados, socios o contratistas compartan tu información privada.',
       aliases: [
         'acuerdo confidencial',
         'acuerdo de secreto',

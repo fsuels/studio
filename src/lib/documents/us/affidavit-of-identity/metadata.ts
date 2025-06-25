@@ -31,7 +31,7 @@ export const affidavitOfIdentityMeta: LegalDocument = {
     es: {
       name: 'Declaración Jurada de Identidad',
       description:
-        'Declaración jurada que verifica la identidad para propósitos legales o administrativos.',
+        'Prueba tu identidad para procedimientos legales cuando la identificación oficial se pierde o es cuestionada. Declaración jurada de quién eres.',
       aliases: ['declaración de identidad', 'declaración jurada de identidad'],
     },
   },

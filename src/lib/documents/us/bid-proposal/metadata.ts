@@ -31,7 +31,7 @@ export const bidproposalMeta: LegalDocument = {
     es: {
       name: 'Propuesta de Oferta',
       description:
-        'Propuesta profesional de oferta de contratista para proyectos de construcción con precios y términos detallados.',
+        'Presenta ofertas competitivas para ganar contratos de construcción. Formato profesional que incluye precios detallados y cronogramas de trabajo.',
       aliases: ['oferta de construcción', 'propuesta de contratista'],
     },
   },

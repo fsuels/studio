@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Architect Contract.",
+    "description": "Hire an architect to design your building or renovation project. Sets design scope, fees, timeline, and what happens if plans need changes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Certificate Substantial Completion.",
+    "description": "Officially document that a construction project is essentially finished and ready for use, even if minor work remains.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Change Order.",
+    "description": "Modify an existing construction contract when project scope, materials, or costs need to change. Prevents disputes about extra work.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Commercial Lease Agreement.",
+    "description": "Rent office, retail, or industrial space for your business. More complex than residential leases with specific business terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Commercial Lease With Option To Purchase.",
+    "description": "Rent commercial space with the right to buy it later. Combines leasing and purchasing into one flexible agreement.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Construction Bid Form.",
+    "description": "Get competitive bids from contractors for your construction project. Ensures all contractors bid on the same scope of work.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Construction Contract.",
+    "description": "Hire contractors for building or renovation projects. Protects you from cost overruns, delays, and poor workmanship.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Construction Management Agreement.",
+    "description": "Hire a construction manager to oversee your building project. They coordinate contractors, materials, and schedules for you.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Earnest Money Agreement.",
+    "description": "Show you're serious about buying property by putting money in escrow. Protects both buyer and seller during negotiations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Eviction Notice.",
+    "description": "Legally notify tenants they must leave your property. Required first step before filing eviction in court.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for General Contractor Agreement.",
+    "description": "Hire a main contractor to manage your entire construction project. They handle all subcontractors, permits, and scheduling.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Home Improvement Contract.",
+    "description": "Hire contractors to renovate your home. Covers timeline, materials, costs, and what happens if work isn't done properly.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Landscaping Contract.",
+    "description": "Hire landscapers for yard work, garden design, or ongoing maintenance. Covers plants, materials, and seasonal services.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Late Rent Notice.",
+    "description": "Formally notify tenants their rent is overdue. Documents late payment and potential consequences like fees or eviction.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Lease Addendum.",
+    "description": "Add new rules or modify existing lease terms without creating a completely new lease agreement.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Lease Agreement.",
+    "description": "Rent out your property or rent a place to live. Sets monthly rent, rules, and responsibilities for both landlord and tenant.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Lease Amendment.",
+    "description": "Officially change specific terms in an existing lease, like rent amount, lease duration, or house rules.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Lease Renewal Agreement.",
+    "description": "Extend your current lease for another term. May include updated rent, terms, or conditions for the new period.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Lease Termination Letter.",
+    "description": "End a lease early or give proper notice you're moving out. Protects your security deposit and avoids legal issues.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Mechanics Lien.",
+    "description": "Secure payment for construction work by claiming a legal interest in the property. Forces property owner to pay before selling.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Mechanics Lien Waiver.",
+    "description": "Release your right to file a mechanics lien once you've been paid for construction work. Required for final payments.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Mortgage Agreement.",
+    "description": "Formal loan agreement for buying real estate. The property serves as collateral until the loan is fully paid off.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -224,7 +224,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Notice Of Lease Violation.",
+    "description": "Formally notify tenants they've broken lease rules. Required first step before eviction and gives them chance to fix the problem.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -234,7 +234,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Notice To Enter.",
+    "description": "Give tenants proper legal notice before entering their rental unit for inspections, repairs, or showings.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -244,7 +244,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Notice To Pay Rent Or Quit.",
+    "description": "Give tenants final warning to pay overdue rent or face eviction. Required legal step before filing eviction lawsuit.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -254,7 +254,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Notice To Proceed.",
+    "description": "Officially authorize a contractor to start work on your project. Establishes the start date and work schedule.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -264,7 +264,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Office Space Lease.",
+    "description": "Rent office space for your business with terms specific to commercial use, including common areas and business hours.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -274,7 +274,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Parking Space Lease Agreement.",
+    "description": "Rent parking spaces separately from property rental. Common in cities where parking is scarce and valuable.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -284,7 +284,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Property Deed.",
+    "description": "Transfer ownership of real estate from one person to another. Required to legally change who owns the property.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -294,7 +294,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Property Manager Agreement.",
+    "description": "Hire someone to manage your rental properties. They handle tenants, maintenance, and rent collection for a percentage fee.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -304,7 +304,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Purchase Agreement.",
+    "description": "Buy or sell any property with clear terms. Protects both buyer and seller by defining price, conditions, and closing details.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -314,7 +314,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Quitclaim Deed.",
+    "description": "Give up your ownership interest in property to someone else. Common in divorces or transferring property to family.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -324,7 +324,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Real Estate Purchase Agreement.",
+    "description": "Buy or sell a house with professional terms. Includes inspections, financing contingencies, and closing procedures.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -334,7 +334,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Remodeling Contract.",
+    "description": "Hire contractors to renovate specific areas of your home. Covers materials, timeline, permits, and cleanup requirements."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -344,7 +344,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Rent Increase Letter.",
+    "description": "Notify tenants about rent increases with proper legal notice. Must follow state and local laws about timing and amounts.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -354,7 +354,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Rent Receipt.",
+    "description": "Provide tenants with proof they paid rent on time. Protects both landlord and tenant from payment disputes.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -364,7 +364,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Rental Agreement.",
+    "description": "Month-to-month rental arrangement with flexible terms. Easier to modify than long-term leases but less stability.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -374,7 +374,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Residential Lease Agreement.",
+    "description": "Rent a house or apartment with terms that protect both tenant and landlord. Covers rent, security deposits, and house rules.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -384,7 +384,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Residential Rental Application.",
+    "description": "Screen potential tenants by collecting their income, employment, and rental history. Helps you choose reliable renters.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -394,7 +394,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Residential Rental Inspection Report.",
+    "description": "Document property condition before tenants move in or out. Protects security deposits and prevents damage disputes.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -404,7 +404,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Retail Space Lease.",
+    "description": "Rent commercial space for your store or restaurant. Includes foot traffic considerations and signage rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -414,7 +414,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Roofing Contract.",
+    "description": "Hire roofers to repair or replace your roof. Covers materials, labor, warranties, and cleanup responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -424,7 +424,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Room Rental Agreement.",
+    "description": "Rent out individual rooms in your house while you still live there. Covers shared spaces and house rules.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -434,7 +434,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Roommate Agreement.",
+    "description": "Share living space with roommates while avoiding conflicts. Covers rent splitting, chores, guests, and house rules.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -444,7 +444,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Storage Space Lease Agreement.",
+    "description": "Rent storage units for personal belongings or business inventory. Covers access hours, security, and insurance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -454,7 +454,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Subcontractor Agreement.",
+    "description": "Hire specialized workers for specific parts of your construction project. Defines their scope within the larger job.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -464,7 +464,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Sublease Agreement.",
+    "description": "Rent out part of your lease to someone else, or rent from someone who's already renting. Requires original landlord approval.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -474,7 +474,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Tenant Maintenance Request.",
+    "description": "Let tenants formally request repairs or maintenance. Creates a paper trail for landlord response times and responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -484,7 +484,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Triple Net Lease.",
+    "description": "Commercial lease where tenant pays rent plus all property expenses including taxes, insurance, and maintenance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -494,7 +494,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Vacation Rental Agreement.",
+    "description": "Rent your property to short-term guests for vacations. Covers check-in procedures, house rules, and damage policies.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -504,7 +504,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Warehouse Lease.",
+    "description": "Rent warehouse space for storing inventory or equipment. Includes loading dock access and security requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -514,7 +514,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Warranty Deed.",
+    "description": "Transfer property ownership with guarantee that the title is clear and free of legal problems. Strongest form of deed.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

@@ -34,7 +34,7 @@ export const automotiveServiceAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Servicio Automotriz',
       description:
-        'Acuerdo para servicios de reparación y mantenimiento automotriz.',
+        'Acuerdo regular de servicio para mantener tu auto en buen estado. Cubre mantenimiento preventivo, reparaciones y garantias.',
       aliases: [
         'acuerdo de reparación de autos',
         'contrato de servicio vehicular',

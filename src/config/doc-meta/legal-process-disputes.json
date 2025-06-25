@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Cease Desist Letter.",
+    "description": "Stop someone from harmful actions like harassment, copyright infringement, or trademark violations. Legal warning letter.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Breach Contract Notice.",
+    "description": "Notify someone they've broken contract terms. Required first step before taking legal action for contract violations.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Complaint Letter.",
+    "description": "Formally complain about poor service, defective products, or unprofessional behavior. Gets better results than phone calls.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Arbitration Agreement.",
+    "description": "Resolve disputes through arbitration instead of court. Faster and less expensive way to settle business disagreements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Mediation Agreement.",
+    "description": "Use a neutral mediator to resolve conflicts peacefully. Avoid costly court battles while finding mutually acceptable solutions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Settlement Agreement.",
+    "description": "End legal disputes with negotiated settlement terms. Avoid trial costs while resolving claims and conflicts.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Small Claims Worksheet.",
+    "description": "Organize your case for small claims court. Helps you prepare evidence and arguments for disputes under $10,000.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Court Filing Document.",
+    "description": "Properly format legal documents for court submission. Ensures your paperwork meets court requirements and deadlines.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Termination Letter.",
+    "description": "End business relationships, employment, or contracts professionally. Provides clear notice and protects against legal issues.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -94,7 +94,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Contract Termination Letter.",
+    "description": "Cancel contracts legally with proper notice. Protects you from breach of contract claims when ending agreements.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -104,7 +104,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Name Change Notification Letter.",
+    "description": "Notify banks, employers, and agencies about your legal name change. Required to update all official records and accounts.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -114,7 +114,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Force Majeure Notice.",
+    "description": "Invoke force majeure clause when natural disasters or emergencies prevent contract performance. Legal protection from penalties.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Notarization Request.",
+    "description": "Request notary services for documents requiring official verification. Ensures legal validity for important agreements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for General Inquiry.",
+    "description": "Make formal business inquiries with professional format. Better response rates for information requests and proposals.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit.",
+    "description": "Make sworn statements under oath for legal proceedings. Required for many court cases and official documentation.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit General.",
+    "description": "General sworn statement format for various legal situations. Flexible document for testimony and fact declarations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit Of Death.",
+    "description": "Legally certify someone's death for estate and insurance purposes. Required to transfer assets and collect benefits.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit Of Heirship.",
+    "description": "Establish who inherits property when someone dies without a will. Proves family relationships for asset transfer.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit Of Identity.",
+    "description": "Prove your identity for legal proceedings when official ID is lost or questioned. Sworn statement of who you are.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Affidavit Of Survivorship.",
+    "description": "Transfer jointly-owned property to surviving owner after death. Avoids probate for property held in joint tenancy.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Immigration Affidavit.",
+    "description": "Support immigration applications with sworn statements about relationships, employment, or financial support.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Small Estate Affidavit.",
+    "description": "Transfer small estates without full probate proceedings. Faster and cheaper way to distribute modest inheritances.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -224,7 +224,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Incident Report.",
+    "description": "Document workplace accidents, property damage, or security incidents. Creates official record for insurance and legal protection.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -234,7 +234,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Accident Report.",
+    "description": "Record details of vehicle accidents, injuries, or property damage. Essential for insurance claims and legal proceedings.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -244,7 +244,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Covid19 Health Screening.",
+    "description": "Screen employees and visitors for COVID-19 symptoms. Workplace safety tool to prevent virus spread.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -254,7 +254,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Insurance Claim Form.",
+    "description": "File insurance claims for damages, theft, or covered losses. Proper documentation helps get claims approved faster.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -264,7 +264,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Bid Proposal.",
+    "description": "Submit competitive bids for contracts and projects. Professional format increases chances of winning business."
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3

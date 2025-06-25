@@ -31,7 +31,7 @@ export const appDevelopmentAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Desarrollo de Aplicaciones',
       description:
-        'Acuerdo para servicios de desarrollo de aplicaciones móviles y web.',
+        'Contrata desarrolladores para crear tu aplicación móvil. Cubre cronograma, características, propiedad y qué pasa si surgen problemas.',
       aliases: [
         'desarrollo de app móvil',
         'contrato de desarrollo de software',

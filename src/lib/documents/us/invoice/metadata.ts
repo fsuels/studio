@@ -28,7 +28,7 @@ export const invoiceMeta: LegalDocument = {
     },
     es: {
       name: 'Factura',
-      description: 'Solicitar pago por bienes o servicios prestados.',
+      description: 'Cobra a clientes por bienes o servicios que has proporcionado. Formato profesional de factura para recibir pago más rápido.',
     },
   },
 };

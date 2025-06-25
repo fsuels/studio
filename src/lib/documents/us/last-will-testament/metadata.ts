@@ -23,7 +23,7 @@ export const metadata = {
     es: {
       name: 'Última Voluntad y Testamento',
       description:
-        'Especificar cómo deben distribuirse sus bienes después de la muerte.',
+        'Controla quién obtiene tu propiedad y posesiones después de que mueras. Documento esencial para proteger el futuro de tu familia.',
       aliases: ['testamento', 'herencia', 'distribuir bienes'],
     },
   },

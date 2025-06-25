@@ -35,7 +35,7 @@ export const employmentContractMeta: LegalDocument = {
     es: {
       name: 'Contrato de Empleo',
       description:
-        'Crea un contrato de empleo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Contrata empleados con términos claros sobre salario, beneficios, responsabilidades y expectativas. Protege tanto al empleador como al empleado.',
       aliases: ['acuerdo de empleo', 'contrato laboral', 'acuerdo de trabajo'],
     },
   },

@@ -36,7 +36,7 @@ export const powerOfAttorneyMeta: LegalDocument = {
     es: {
       name: 'Poder Notarial General',
       description:
-        'Autorizar a alguien para actuar en su nombre en asuntos financieros o generales.',
+        'Da a alguien autoridad para manejar tus asuntos legales y financieros cuando no puedas. Esencial para emergencias y viajes.',
       aliases: [
         'representarme',
         'actuar en mi nombre',

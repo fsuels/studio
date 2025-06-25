@@ -35,7 +35,7 @@ export const corporateBylawsMeta: Omit<LegalDocument, 'schema' | 'questions'> =
       es: {
         name: 'Estatutos Corporativos',
         description:
-          'Establecer reglas de gobierno y procedimientos para su corporación.',
+          'Define las reglas internas de tu empresa corporativa. Cubre juntas directivas, votaciones, roles de ejecutivos y procedimientos operativos.',
         aliases: [
           'estatutos de la empresa',
           'gobierno corporativo',

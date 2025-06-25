@@ -35,7 +35,7 @@ export const agriculturalAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo Agrícola',
       description:
-        'Acuerdo para agricultura, servicios agrícolas y arreglos de participación de cultivos.',
+        'Asociaciones agrícolas, participación de cultivos o acuerdos de uso de tierras. Cubre operaciones agrícolas, costos y participación de ganancias.',
       aliases: ['acuerdo de agricultura', 'contrato de servicios agrícolas'],
     },
   },

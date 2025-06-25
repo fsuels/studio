@@ -29,7 +29,7 @@ export const metadata = {
     es: {
       name: 'Poder Notarial Médico',
       description:
-        'Autorizar a alguien para tomar decisiones médicas integrales en su nombre cuando usted no pueda hacerlo.',
+        'Nombra a alguien para tomar todas tus decisiones de atención médica si no puedes comunicar tus deseos.',
       aliases: [
         'poder médico',
         'agente de salud',

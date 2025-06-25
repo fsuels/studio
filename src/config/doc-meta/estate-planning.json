@@ -4,7 +4,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Codicil To Will.",
+    "description": "Make changes to your existing will without creating a completely new one. Simple way to update beneficiaries or terms.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Durable Power Of Attorney.",
+    "description": "Give someone authority to handle your finances if you become incapacitated. Remains valid even if you can't make decisions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Joint Living Trust.",
+    "description": "Married couples can avoid probate and protect assets together. Transfers property to beneficiaries without court involvement.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -34,7 +34,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Last Will Testament.",
+    "description": "Control who gets your property and possessions after you die. Essential document for protecting your family's future.",
     "popular": true,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -44,7 +44,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Living Trust.",
+    "description": "Avoid probate court and keep your estate private. Transfer assets to beneficiaries faster and with less expense.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -54,7 +54,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Living Trust Amendment.",
+    "description": "Update your living trust when circumstances change. Add or remove beneficiaries, change trustees, or modify terms.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -64,7 +64,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Pour Over Will.",
+    "description": "Catch any assets you forgot to put in your living trust. Works with your trust to ensure nothing is left out.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Power Of Attorney.",
+    "description": "Give someone authority to handle your legal and financial matters when you can't. Essential for emergencies and travel.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Revocation Of Power Of Attorney.",
+    "description": "Cancel someone's authority to act on your behalf. Important when relationships change or circumstances shift.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Simple Will.",
+    "description": "Basic will for straightforward situations. Perfect if you have simple assets and clear wishes for your beneficiaries."
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18

@@ -35,7 +35,7 @@ export const articlesOfIncorporationMeta: LegalDocument = {
     es: {
       name: 'Acta Constitutiva',
       description:
-        'Crea un acta constitutiva legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Registra oficialmente tu corporación con el estado. Requerido para formar legalmente una corporación comercial y proteger tus bienes personales.',
       aliases: [
         'incorporación de negocio',
         'estatutos corporativos',

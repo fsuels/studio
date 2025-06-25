@@ -35,7 +35,7 @@ export const copyrightAssignmentMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Asignación de Derechos de Autor',
       description:
-        'Crea un Acuerdo de Asignación de Derechos de Autor legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Transfiere ownership de contenido creativo (arte, música, escritos, software) a otra persona o empresa. Especifica qué derechos se transfieren.',
       aliases: [
         'contrato de asignación de derechos de autor',
         'transferencia de derechos de autor',

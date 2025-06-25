@@ -36,7 +36,7 @@ export const affidavitGeneralMeta: LegalDocument = {
     es: {
       name: 'Declaración Jurada (General)',
       description:
-        'Una declaración escrita jurada confirmada por juramento, a menudo utilizada como prueba.',
+        'Formato general de declaración jurada para varias situaciones legales. Documento flexible para testimonios y declaraciones de hechos.',
       aliases: [
         'declaración jurada',
         'declaración oficial',

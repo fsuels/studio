@@ -35,7 +35,7 @@ export const autoRepairAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Reparación Automotriz',
       description:
-        'Acuerdo entre taller de reparación y cliente para servicios de reparación de vehículos.',
+        'Contrata mecánicos para arreglar tu auto. Cubre costos estimados, garantías de trabajo y qué pasa si se encuentran problemas adicionales.',
       aliases: [
         'acuerdo de reparación de vehículos',
         'contrato de servicio automotriz',

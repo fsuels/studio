@@ -34,7 +34,7 @@ export const arbitrationAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Arbitraje',
       description:
-        'Acuerdo que requiere resolver disputas a través de arbitraje en lugar de litigio judicial.',
+        'Resuelve disputas a través de arbitraje en lugar de corte. Forma más rápida y menos costosa de resolver desacuerdos comerciales.',
       aliases: [
         'acuerdo de arbitraje vinculante',
         'acuerdo de resolución de disputas',

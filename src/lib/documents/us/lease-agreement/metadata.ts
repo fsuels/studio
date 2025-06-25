@@ -23,7 +23,7 @@ export const metadata = {
     es: {
       name: 'Contrato de Arrendamiento Residencial',
       description:
-        'Establecer términos para alquilar una propiedad residencial.',
+        'Alquila tu propiedad o renta un lugar para vivir. Establece la renta mensual, reglas y responsabilidades para ambos propietario e inquilino.',
       aliases: [
         'alquiler de apartamento',
         'inquilino',

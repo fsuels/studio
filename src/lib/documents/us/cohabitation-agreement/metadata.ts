@@ -36,7 +36,7 @@ export const cohabitationAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Cohabitación',
       description:
-        'Crea un acuerdo de cohabitación legalmente válido para parejas no casadas que viven juntas.',
+        'Protege tu relación de pareja sin casarse. Define quién paga qué, cómo se reparten las propiedades y qué pasa si se separan.',
       aliases: [
         'acuerdo de pareja de hecho',
         'acuerdo de convivencia',

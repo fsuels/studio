@@ -36,7 +36,7 @@ export const debtSettlementAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Liquidación de Deuda',
       description:
-        'Liquidar deuda pendiente por menos del monto total adeudado con términos de pago estructurados.',
+        'Negocia pagar menos de lo que debes. Acuerdo legal que reduce tu deuda total a cambio de pagos inmediatos o un plan de pagos.',
       aliases: [
         'compromiso de deuda',
         'acuerdo de liquidación',

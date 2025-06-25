@@ -36,7 +36,7 @@ export const assignmentAgreementMeta: Omit<
     es: {
       name: 'Acuerdo de Cesión',
       description:
-        'Transferir derechos y obligaciones contractuales de una parte a otra.',
+        'Transfiere un contrato existente a otra persona. Útil cuando vendes tu negocio o no puedes cumplir un acuerdo.',
       aliases: [
         'cesión de contrato',
         'cesión de derechos',

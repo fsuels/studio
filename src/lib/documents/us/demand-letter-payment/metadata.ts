@@ -29,7 +29,7 @@ export const demandLetterPaymentMeta: LegalDocument = {
     },
     es: {
       name: 'Carta de Reclamación (Pago)',
-      description: 'Solicitar formalmente un pago atrasado.',
+      description: 'Exige pago por facturas vencidas o deudas. Aviso final claro antes de buscar cobro o acción legal.',
       aliases: ['solicitar pago', 'deber dinero', 'demanda legal'],
     },
   },

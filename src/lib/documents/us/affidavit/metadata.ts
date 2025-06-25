@@ -35,7 +35,7 @@ export const affidavitMeta: LegalDocument = {
     es: {
       name: 'Declaración Jurada General',
       description:
-        'Crea una declaración jurada general legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Jura formalmente que algo es verdad bajo pena de perjurio. Usado en cortes, bancos, seguros y trámites oficiales.',
       aliases: [
         'declaración jurada',
         'declaración bajo juramento',

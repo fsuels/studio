@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Payment Bond.",
+    "description": "Guarantee that contractors and subcontractors get paid for construction work. Protects workers and suppliers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Security Agreement.",
+    "description": "Secure a loan with personal property as collateral. Gives lenders legal claim to assets if payments are missed."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

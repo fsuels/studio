@@ -34,7 +34,7 @@ export const businessPlanMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
     es: {
       name: 'Plan de Negocios',
       description:
-        'Plantilla integral de plan de negocios para empresas nuevas y establecidas.',
+        'Documento profesional que describe tus objetivos comerciales, estrategias y proyecciones financieras. Esencial para obtener préstamos o atraer inversionistas.',
       aliases: [
         'estrategia comercial',
         'plan de inicio',

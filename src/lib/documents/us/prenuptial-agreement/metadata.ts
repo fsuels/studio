@@ -31,7 +31,7 @@ export const prenuptialAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo Prenupcial',
       description:
-        'Acuerdo hecho antes del matrimonio sobre la división de bienes en caso de divorcio.',
+        'Protege tus bienes y define responsabilidades financieras antes de casarte. Previene disputas si la relación termina.',
       aliases: ['prenup', 'contrato matrimonial', 'acuerdo prematrimonial'],
     },
   },

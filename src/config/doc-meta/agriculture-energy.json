@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Agricultural Agreement.",
+    "description": "Farm partnerships, crop sharing, or land use agreements. Covers farming operations, costs, and profit sharing.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Farm Lease Agreement.",
+    "description": "Rent farmland for crops or livestock. Sets rental terms, land use restrictions, and maintenance responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Crop Sharing Agreement.",
+    "description": "Split crop profits between landowner and farmer. Fair way to share costs, work, and income from farming.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Livestock Purchase Agreement.",
+    "description": "Buy or sell cattle, horses, or other farm animals safely. Covers health guarantees, delivery, and payment terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Timber Sale Agreement.",
+    "description": "Sell trees from your property to lumber companies. Protects your land while getting fair value for timber.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Oil Gas Lease.",
+    "description": "Lease your land to oil or gas companies for drilling. Covers royalty payments and land protection requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Oil Gas Lease Agreement.",
+    "description": "Detailed agreement for oil and gas exploration on your property. Ensures fair compensation and environmental protection.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Water Rights Agreement.",
+    "description": "Buy, sell, or share water rights for irrigation or other uses. Important for farming and property development.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Mining Agreement.",
+    "description": "Allow mining on your property while protecting your interests. Covers compensation, environmental restoration, and access.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Mining Lease Agreement.",
+    "description": "Lease land for mining operations with detailed terms. Protects property owners and ensures proper land restoration.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Tuition Agreement.",
+    "description": "Set payment terms for private school or college tuition. Protects both families and educational institutions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Tutoring Agreement.",
+    "description": "Hire tutors for academic help with clear expectations. Covers subjects, schedules, payment, and learning goals.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Athletic Scholarship Agreement.",
+    "description": "Formalize athletic scholarship terms between students and schools. Covers performance expectations and academic requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Research Agreement.",
+    "description": "Collaborate on research projects with clear ownership of results. Important for academic and commercial research partnerships.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Template for Education Trust.",
+    "description": "Set aside money for children's education expenses. Tax-advantaged way to save for future college costs.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Travel Insurance Agreement.",
+    "description": "Protect yourself from travel emergencies and cancellations. Covers medical expenses, trip interruptions, and lost luggage.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Aviation Charter Agreement.",
+    "description": "Charter private aircraft for business or personal travel. Sets flight terms, costs, and safety responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Maritime Charter Agreement.",
+    "description": "Charter boats or ships for transportation or recreation. Covers crew, insurance, and maritime safety requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Hunting Lease Agreement.",
+    "description": "Lease hunting rights on private property. Sets seasons, fees, safety rules, and property access restrictions."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

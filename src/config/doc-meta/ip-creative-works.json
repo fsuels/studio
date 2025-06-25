@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Model Release.",
+    "description": "Get permission to use someone's likeness in photos, videos, or advertising. Protects against privacy lawsuits.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Photo Release Form.",
+    "description": "Simple permission form to use someone's photo commercially. Required for marketing, websites, and publications.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Template for Photography Release.",
+    "description": "Comprehensive release for professional photography projects. Covers usage rights, compensation, and image ownership."
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

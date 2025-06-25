@@ -36,7 +36,7 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Confidencialidad (NDA)',
       description:
-        'Crea un Acuerdo de Confidencialidad (NDA) legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Protege secretos comerciales e información confidencial al contratar empleados o socios. Previene compartir secretos con competidores.',
       aliases: [
         'acuerdo de no divulgación',
         'contrato de confidencialidad',

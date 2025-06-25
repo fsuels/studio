@@ -35,7 +35,7 @@ export const childSupportAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Manutención Infantil',
       description:
-        'Acuerdo integral que establece términos de pago y responsabilidades de manutención infantil.',
+        'Define cuánto dinero se pagará mensualmente para gastos del hijo. Cubre educación, salud, vivienda y gastos extras.',
       aliases: ['contrato de manutención', 'acuerdo de apoyo financiero'],
     },
   },

@@ -37,7 +37,7 @@ export const billOfSaleGeneralMeta: Omit<
     es: {
       name: 'Factura de Venta General',
       description:
-        'Documento legal que transfiere la propiedad de bienes personales del vendedor al comprador.',
+        'Vende cualquier cosa legalmente (muebles, electrónicos, joyas, etc.). Transfiere ownership y protege tanto vendedor como comprador.',
       aliases: [
         'factura de venta',
         'recibo de venta',

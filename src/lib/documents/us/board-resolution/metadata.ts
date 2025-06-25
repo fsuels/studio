@@ -31,7 +31,7 @@ export const boardResolutionMeta: Omit<LegalDocument, 'schema' | 'questions'> =
       es: {
         name: 'Resolución de Junta Directiva',
         description:
-          'Documento formal que registra las decisiones tomadas por la junta directiva de una corporación en una reunión.',
+          'Documenta decisiones importantes de la empresa tomadas por tu junta directiva, como aprobar presupuestos, contratar ejecutivos o cambios comerciales importantes.',
         aliases: [
           'Resolución de junta',
           'Resolución de directores',

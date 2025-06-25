@@ -35,7 +35,7 @@ export const purchaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo General de Compra',
       description:
-        'Crea un Acuerdo General de Compra legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Compra o vende cualquier propiedad con términos claros. Protege tanto al comprador como al vendedor definiendo precio, condiciones y detalles de cierre.',
       aliases: [
         'contrato general de compra',
         'contrato de compra',

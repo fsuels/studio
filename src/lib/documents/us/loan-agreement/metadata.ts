@@ -35,7 +35,7 @@ export const loanAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Préstamo',
       description:
-        'Crea un acuerdo de préstamo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Presta o pide dinero prestado con términos claros de pago. Protege tanto al prestamista como al prestatario con un acuerdo escrito.',
       aliases: [
         'contrato de préstamo',
         'préstamo personal',

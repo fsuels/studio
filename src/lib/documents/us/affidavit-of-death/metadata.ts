@@ -35,7 +35,7 @@ export const affidavitOfDeathMeta: Omit<LegalDocument, 'schema' | 'questions'> =
       es: {
         name: 'Declaración Jurada de Muerte',
         description:
-          'Documento legal que certifica la muerte de una persona cuando no está disponible un certificado de defunción o como prueba adicional de muerte.',
+          'Certifica legalmente la muerte de alguien para propósitos de herencia y seguros. Requerido para transferir bienes y cobrar beneficios.',
         aliases: [
           'declaración jurada de defunción',
           'declaración jurada certificando muerte',

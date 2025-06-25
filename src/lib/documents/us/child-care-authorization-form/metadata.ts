@@ -31,7 +31,7 @@ export const childCareAuthorizationFormMeta: LegalDocument = {
     es: {
       name: 'Formulario de Autorización de Cuidado Infantil',
       description:
-        'Formulario de autorización para cuidado temporal y decisiones de emergencia.',
+        'Autoriza a alguien más (abuela, niñera, etc.) a tomar decisiones médicas de emergencia por tu hijo cuando no estés presente.',
       aliases: [
         'autorización de cuidado infantil',
         'formulario de custodia temporal',

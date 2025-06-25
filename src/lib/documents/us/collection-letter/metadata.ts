@@ -36,7 +36,7 @@ export const collectionLetterMeta: LegalDocument = {
     es: {
       name: 'Carta de Cobranza',
       description:
-        'Enviar cartas profesionales de cobranza de deudas para recuperar pagos pendientes con cumplimiento legal.',
+        'Cobra dinero que te deben de manera profesional. Carta formal que presiona por pago sin ser agresiva o violar leyes de cobranza.',
       aliases: [
         'carta de cobranza de deuda',
         'demanda de pago',

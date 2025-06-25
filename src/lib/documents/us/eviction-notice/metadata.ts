@@ -30,7 +30,7 @@ export const evictionNoticeMeta: LegalDocument = {
     es: {
       name: 'Aviso de Desalojo',
       description:
-        'Notificación formal a un inquilino para desalojar la propiedad.',
+        'Notifica legalmente a los inquilinos que deben abandonar tu propiedad. Primer paso requerido antes de presentar desalojo en corte.',
       aliases: [
         'desalojar inquilino',
         'renta atrasada',

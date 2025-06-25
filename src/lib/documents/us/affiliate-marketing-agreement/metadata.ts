@@ -35,7 +35,7 @@ export const affiliateMarketingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Marketing de Afiliados',
       description:
-        'Acuerdo para asociaciones de marketing de afiliados y promociones basadas en comisiones.',
+        'Establece términos de comisión y protege tu negocio al trabajar con afiliados que promocionan tus productos por un porcentaje de las ventas.',
       aliases: ['acuerdo de programa de afiliados', 'acuerdo de comisiones'],
     },
   },

@@ -35,7 +35,7 @@ export const constructionContractMeta: LegalDocument = {
     es: {
       name: 'Contrato de Construcción',
       description:
-        'Contrato integral para proyectos de construcción incluyendo nuevas construcciones y renovaciones importantes.',
+        'Contrata contratistas para proyectos de construcción o renovación. Te protege de sobrecostos, retrasos y trabajo de mala calidad.',
       aliases: ['contrato de construcción', 'acuerdo de contratista general'],
     },
   },

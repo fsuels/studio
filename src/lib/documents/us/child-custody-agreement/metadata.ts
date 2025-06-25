@@ -31,7 +31,7 @@ export const childCustodyAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Custodia de Menores',
       description:
-        'Esbozar la custodia legal/física, horario de visitas para los hijos.',
+        'Define quién tiene custodia de los hijos después del divorcio. Establece horarios de visita, vacaciones y cómo tomar decisiones importantes.',
       aliases: ['custodia de hijos', 'batalla por custodia', 'plan de crianza'],
     },
   },

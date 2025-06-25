@@ -32,7 +32,7 @@ export const promissoryNoteMeta: LegalDocument = {
     es: {
       name: 'Pagaré',
       description:
-        'Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.',
+        'Presta dinero a familia, amigos o clientes con protección legal. Define cantidad, interés y cuándo se pagará de vuelta.',
       aliases: ['pagaré', 'documento de préstamo', 'promesa de pago'],
     },
   },

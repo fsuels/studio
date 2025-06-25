@@ -30,7 +30,7 @@ export const serviceAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Servicios',
       description:
-        'Esbozar términos para proporcionar o recibir servicios continuos.',
+        'Contrata a alguien para proporcionar servicios para tu negocio. Define claramente qué trabajo se hará, cuándo y por cuánto.',
       aliases: [
         'contratar servicios',
         'proveedor de servicios',
