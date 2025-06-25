@@ -61,7 +61,17 @@ export class SemanticAnalysisEngine {
     const { locale, maxResults = 8 } = options;
     const input = userInput.toLowerCase();
 
-    const fuse = new Fuse(documentLibrary, {
+    const indexedDocs = documentLibrary.map(doc => ({
+      doc,
+      name: doc.translations?.[locale]?.name || doc.name || '',
+      description: doc.translations?.[locale]?.description || doc.description || '',
+      keywords: [
+        ...(doc.translations?.[locale]?.aliases || []),
+        ...((doc as any).keywords || (doc as any).seoMetadata?.keywords || [])
+      ],
+    }));
+
+    const fuse = new Fuse(indexedDocs, {
       keys: [
         {
           name: 'name',
@@ -84,7 +94,7 @@ export class SemanticAnalysisEngine {
     const fuseResults = fuse.search(input);
 
     const results: SemanticResult[] = fuseResults.map(result => {
-      const doc = result.item;
+      const doc = result.item.doc as LegalDocument;
       const score = (1 - (result.score || 0)) * 100;
       const reasons: string[] = [`Fuzzy match score: ${score.toFixed(2)}`];
       const confidence = this.calculateConfidence(score);
