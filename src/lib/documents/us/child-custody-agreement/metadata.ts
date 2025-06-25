@@ -25,13 +25,13 @@ export const childCustodyAgreementMeta: LegalDocument = {
     en: {
       name: 'Child Custody Agreement',
       description:
-        'Outline legal/physical custody, visitation schedule for children.',
+        "Protect your children's wellbeing during family transitions. Establish stable custody arrangements that prioritize their needs.",
       aliases: ['child custody', 'custody battle', 'parenting plan'],
     },
     es: {
       name: 'Acuerdo de Custodia de Menores',
       description:
-        'Define quién tiene custodia de los hijos después del divorcio. Establece horarios de visita, vacaciones y cómo tomar decisiones importantes.',
+        'Protege el bienestar de tus hijos y evita conflictos futuros con tu ex pareja. Establece rutinas estables y derechos claros para ambos padres.',
       aliases: ['custodia de hijos', 'batalla por custodia', 'plan de crianza'],
     },
   },

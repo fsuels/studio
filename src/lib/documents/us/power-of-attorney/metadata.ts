@@ -25,7 +25,7 @@ export const powerOfAttorneyMeta: LegalDocument = {
     en: {
       name: 'General Power of Attorney',
       description:
-        'Authorize someone to act on your behalf for financial or general matters.',
+        'Maintain control over your affairs even when unavailable. Ensure trusted agents can act on your behalf in emergencies.',
       aliases: [
         'represent me',
         'act on my behalf',
@@ -36,7 +36,7 @@ export const powerOfAttorneyMeta: LegalDocument = {
     es: {
       name: 'Poder Notarial General',
       description:
-        'Da a alguien autoridad para manejar tus asuntos legales y financieros cuando no puedas. Esencial para emergencias y viajes.',
+        'Asegura que alguien de confianza pueda manejar tus finanzas y asuntos legales si te enfermas o viajas. Evita complicaciones familiares en emergencias.',
       aliases: [
         'representarme',
         'actuar en mi nombre',

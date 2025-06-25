@@ -35,7 +35,7 @@ export const aviationCharterAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Flete Aéreo',
       description:
-        'Renta aviones privados o jets para viajes de negocios o personales. Define costos, rutas, responsabilidades y seguros de vuelo.',
+        'Viaja con comodidad y eficiencia mientras proteges tu inversión. Asegura servicios de aviación premium con términos claros y seguros adecuados.',
       aliases: ['contrato de vuelo charter', 'acuerdo de jet privado'],
     },
   },

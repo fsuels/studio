@@ -17,7 +17,7 @@ export const metadata = {
   translations: {
     en: {
       name: 'Living Will / Advance Directive',
-      description: 'Specify your wishes for end-of-life medical care.',
+      description: 'Control your end-of-life care by documenting specific treatment preferences. Prevent unwanted medical interventions.',
       aliases: [
         'medical wishes',
         'advance directive',

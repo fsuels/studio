@@ -25,7 +25,7 @@ export const operatingAgreementMeta: LegalDocument = {
     en: {
       name: 'Operating Agreement (LLC)',
       description:
-        'Outline the ownership structure and operating procedures for an LLC.',
+        'Protect your LLC investment and prevent partner disputes. Define roles, profit sharing, and decision-making processes clearly.',
       aliases: ['LLC agreement', 'limited liability company'],
     },
     es: {

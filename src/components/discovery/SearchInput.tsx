@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Mic, MicOff, Lightbulb, Zap } from 'lucide-react';
+import '@/styles/animations.css';
 
 interface SearchInputProps {
   value: string;
@@ -22,7 +23,13 @@ export function SearchInput({
   placeholder = "Describe your legal situation...",
   showHelpText = true
 }: SearchInputProps) {
-  
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setHasAnimated(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === ' ' && e.target === e.currentTarget) {
       e.preventDefault();
@@ -59,7 +66,7 @@ export function SearchInput({
               isListening
                 ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 focus-visible:ring-red-500/50 focus-visible:border-red-400 animate-pulse'
                 : isVoiceSupported
-                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-400'
+                ? `bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-400 ${!hasAnimated ? 'animate-subtle-pulse' : ''}`
                 : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed focus-visible:ring-gray-400/50'
             }`}
           >
@@ -92,7 +99,7 @@ export function SearchInput({
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="e.g., Buying a used car"
                 aria-label="Describe your legal situation"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-gray-500"
+                className={`w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-gray-500 ${!hasAnimated ? 'animate-subtle-glow' : ''}`}
               />
             </div>
           </div>

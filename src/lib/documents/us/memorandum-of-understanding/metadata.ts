@@ -25,7 +25,7 @@ export const memorandumOfUnderstandingMeta: LegalDocument = {
     en: {
       name: 'Memorandum of Understanding (MOU)',
       description:
-        'Create a formal MOU to outline mutual understanding and cooperation between parties.',
+        'Build strong partnerships and secure business collaborations before formal contracts. Establish clear expectations and protect your interests in joint ventures.',
       aliases: ['MOU', 'memorandum of understanding', 'cooperation agreement'],
     },
     es: {

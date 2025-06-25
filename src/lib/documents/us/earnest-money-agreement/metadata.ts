@@ -25,7 +25,7 @@ export const earnestMoneyAgreementMeta: LegalDocument = {
     en: {
       name: 'Earnest Money Agreement',
       description:
-        'Agreement for earnest money deposits in real estate transactions',
+        'Secure your real estate purchase by properly handling earnest money deposits with clear refund conditions.',
       aliases: [],
     },
     es: {

@@ -25,7 +25,7 @@ export const elderCareAgreementMeta: LegalDocument = {
     en: {
       name: 'Elder Care Agreement',
       description:
-        'Agreement for providing care services to elderly individuals.',
+        'Ensure quality care for your loved ones with clear agreements that protect both caregiver and family.',
       aliases: [
         'senior care agreement',
         'caregiving agreement',

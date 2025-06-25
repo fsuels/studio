@@ -24,13 +24,13 @@ export const commercialLeaseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Commercial Lease Agreement',
-      description: 'Lease agreement specifically for commercial properties.',
+      description: 'Secure the perfect space for your business with favorable terms. Protect your commercial investment and avoid surprises in operating costs.',
       aliases: [],
     },
     es: {
       name: 'Contrato de Arrendamiento Comercial',
       description:
-        'Renta espacio comercial para tu negocio (oficina, tienda, almacén). Cubre renta, depósitos, reparaciones y reglas de uso.',
+        'Asegura el espacio perfecto para tu negocio con términos favorables. Protege tu inversión comercial y evita sorpresas en costos operativos.',
       aliases: [],
     },
   },

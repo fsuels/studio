@@ -25,7 +25,7 @@ export const mediationAgreementMeta: LegalDocument = {
     en: {
       name: 'Mediation Agreement',
       description:
-        'Agreement to resolve disputes through mediation with the help of a neutral mediator.',
+        'Resolve conflicts peacefully and cost-effectively by working with a neutral mediator instead of going to court.',
       aliases: [
         'dispute mediation agreement',
         'alternative dispute resolution agreement',

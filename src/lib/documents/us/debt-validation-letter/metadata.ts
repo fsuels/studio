@@ -25,7 +25,7 @@ export const debtValidationLetterMeta: LegalDocument = {
     en: {
       name: 'Debt Validation Letter',
       description:
-        'Request debt validation from collectors to verify legitimacy and accuracy of claimed debt.',
+        'Protect yourself from unfair debt collection by demanding proof that claimed debts are legitimate and accurate.',
       aliases: [
         'debt dispute letter',
         'validation request',

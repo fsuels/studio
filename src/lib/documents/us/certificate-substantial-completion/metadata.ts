@@ -35,7 +35,7 @@ export const certificatesubstantialcompletionMeta: LegalDocument = {
     es: {
       name: 'Certificado de Finalización Sustancial',
       description:
-        'Certifica que un proyecto de construcción está prácticamente terminado. Libera pagos finales y inicia períodos de garantía.',
+        'Protege tu inversión en construcción y activa garantías de trabajo. Formaliza la finalización del proyecto para liberar pagos pendientes.',
       aliases: [
         'certificado de finalización sustancial',
         'certificado de finalización',

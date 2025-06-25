@@ -4,7 +4,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Make changes to your existing will without creating a completely new one. Simple way to update beneficiaries or terms.",
+    "description": "Update your will efficiently without starting over. Adapt your estate plan as life circumstances change.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Give someone authority to handle your finances if you become incapacitated. Remains valid even if you can't make decisions.",
+    "description": "Protect your financial future by appointing a trusted agent. Ensure bills are paid and assets are managed if you're unable.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Married couples can avoid probate and protect assets together. Transfers property to beneficiaries without court involvement.",
+    "description": "Protect your family's wealth and avoid expensive probate. Transfer assets quickly to loved ones without court delays.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -34,7 +34,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Control who gets your property and possessions after you die. Essential document for protecting your family's future.",
+    "description": "Secure your family's future by controlling how your assets are distributed. Prevent family conflicts and legal complications.",
     "popular": true,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -44,7 +44,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Avoid probate court and keep your estate private. Transfer assets to beneficiaries faster and with less expense.",
+    "description": "Protect your family's privacy and wealth from expensive probate. Transfer assets quickly while maintaining confidentiality.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -54,7 +54,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Update your living trust when circumstances change. Add or remove beneficiaries, change trustees, or modify terms.",
+    "description": "Keep your estate plan current as life evolves. Adapt your trust to reflect new relationships and changed circumstances.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -64,7 +64,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Catch any assets you forgot to put in your living trust. Works with your trust to ensure nothing is left out.",
+    "description": "Ensure complete asset protection by capturing overlooked property. Guarantee nothing is missed in your estate plan.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Give someone authority to handle your legal and financial matters when you can't. Essential for emergencies and travel.",
+    "description": "Maintain control over your affairs even when unavailable. Ensure trusted agents can act on your behalf in emergencies.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Cancel someone's authority to act on your behalf. Important when relationships change or circumstances shift.",
+    "description": "Regain control by revoking outdated authorizations. Protect yourself when relationships or circumstances change.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Basic will for straightforward situations. Perfect if you have simple assets and clear wishes for your beneficiaries.",
+    "description": "Protect your loved ones with straightforward estate planning. Ensure your wishes are honored without complex arrangements.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18

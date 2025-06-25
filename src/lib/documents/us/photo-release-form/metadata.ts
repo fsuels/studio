@@ -25,7 +25,7 @@ export const photoReleaseFormMeta: LegalDocument = {
     en: {
       name: 'Photo Release Form',
       description:
-        'Permission and release form for photography and image usage rights.',
+        'Use photos safely in your marketing without legal risks. Get proper permission for commercial use and advertising.',
       aliases: [
         'photography release',
         'image release',

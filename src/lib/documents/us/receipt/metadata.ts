@@ -36,7 +36,7 @@ export const receiptMeta: LegalDocument = {
     es: {
       name: 'Recibo',
       description:
-        'Crear un recibo profesional para pagos, servicios o transacciones con registros detallados.',
+        'Comprobante oficial de pago para clientes. Documento profesional que ayuda con contabilidad y declaraciones de impuestos.',
       aliases: [
         'recibo de pago',
         'recibo de factura',

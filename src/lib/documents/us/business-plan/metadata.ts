@@ -23,7 +23,7 @@ export const businessPlanMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
     en: {
       name: 'Business Plan',
       description:
-        'Comprehensive business plan template for startups and established businesses.',
+        'Attract investors and secure funding with a professional business plan. Present your vision convincingly to achieve business success.',
       aliases: [
         'business strategy',
         'startup plan',
@@ -34,7 +34,7 @@ export const businessPlanMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
     es: {
       name: 'Plan de Negocios',
       description:
-        'Documento profesional que describe tus objetivos comerciales, estrategias y proyecciones financieras. Esencial para obtener préstamos o atraer inversionistas.',
+        'Aumenta tus posibilidades de obtener financiamiento y atrae inversionistas. Presenta tu visión de negocio de manera profesional y convincente.',
       aliases: [
         'estrategia comercial',
         'plan de inicio',

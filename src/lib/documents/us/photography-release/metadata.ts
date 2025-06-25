@@ -31,7 +31,7 @@ export const photographyReleaseMeta: LegalDocument = {
     es: {
       name: 'Liberación de Fotografía',
       description:
-        'Formulario de liberación que otorga permiso para usar fotografías e imágenes.',
+        'Da permiso para usar tus fotos en marketing, redes sociales o publicaciones. Protege fotógrafos y modelos al definir cómo se usan imágenes.',
       aliases: ['liberación de foto', 'liberación de imagen'],
     },
   },

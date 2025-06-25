@@ -25,7 +25,7 @@ export const hipaaAuthorizationFormMeta: LegalDocument = {
     en: {
       name: 'HIPAA Authorization Form',
       description:
-        'Form authorizing disclosure of protected health information under HIPAA.',
+        'Grant access to your medical records safely and legally while maintaining privacy control under HIPAA regulations.',
       aliases: [
         'medical records release',
         'health information authorization',

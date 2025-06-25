@@ -25,7 +25,7 @@ export const patentAssignmentMeta: LegalDocument = {
     en: {
       name: 'Patent Assignment Agreement',
       description:
-        'Legal document to transfer patent ownership from one party to another.',
+        'Complete patent transactions safely by ensuring proper ownership transfer with full legal documentation.',
       aliases: [
         'patent transfer',
         'patent ownership transfer',

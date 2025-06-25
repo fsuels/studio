@@ -28,8 +28,8 @@ export const resignationLetterMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Resignation Letter',
-      description: 'Professional resignation letter template',
+      name: 'Carta de Renuncia',
+      description: 'Renuncia a tu trabajo de manera profesional. Mantiene buenas relaciones y protege tu reputación laboral.',
       aliases: [],
     },
   },

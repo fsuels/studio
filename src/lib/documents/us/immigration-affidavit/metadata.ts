@@ -25,7 +25,7 @@ export const immigrationAffidavitMeta: LegalDocument = {
     en: {
       name: 'Immigration Affidavit',
       description:
-        'Sworn statement for immigration proceedings and applications.',
+        'Support your immigration case with a professional sworn statement that strengthens your application.',
       aliases: [
         'affidavit of support',
         'immigration statement',

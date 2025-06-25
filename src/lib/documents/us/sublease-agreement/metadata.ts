@@ -25,7 +25,7 @@ export const subleaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Sublease Agreement',
       description:
-        'Create a legally binding sublease agreement for transferring rental rights with our easy-to-use template.',
+        'Reduce housing costs or generate income through subleasing arrangements. Navigate complex rental situations legally.',
       aliases: [
         'sublet agreement',
         'subletting contract',
@@ -36,7 +36,7 @@ export const subleaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Subarriendo',
       description:
-        'Crea un acuerdo de subarriendo legalmente válido para transferir derechos de alquiler.',
+        'Renta tu apartamento a otra persona mientras sigues siendo responsable del contrato original. Útil cuando te mudas temporalmente.',
       aliases: ['contrato de subarriendo', 'subarriendo', 'subarrendamiento'],
     },
   },

@@ -24,7 +24,7 @@ export const severanceAgreementMeta: LegalDocument = {
     en: {
       name: 'Severance Agreement',
       description:
-        'Create a legally binding severance agreement with our easy-to-use template. State-specific requirements included.',
+        'Protect your business from wrongful termination lawsuits and ensure smooth employee separations. Provide fair compensation while preventing future legal claims.',
       aliases: [
         'severance contract',
         'separation agreement',

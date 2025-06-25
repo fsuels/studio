@@ -25,7 +25,7 @@ export const roomRentalAgreementMeta: LegalDocument = {
     en: {
       name: 'Room Rental Agreement',
       description:
-        'Create a legally binding room rental agreement for shared living spaces with our easy-to-use template.',
+        'Generate additional income by renting rooms in your home. Establish clear boundaries for shared living spaces.',
       aliases: [
         'room lease',
         'bedroom rental',
@@ -36,7 +36,7 @@ export const roomRentalAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Alquiler de Habitación',
       description:
-        'Crea un acuerdo de alquiler de habitación legalmente válido para espacios de vida compartidos.',
+        'Genera ingresos adicionales alquilando habitaciones en tu hogar. Establece límites claros para espacios de vida compartidos.',
       aliases: [
         'arrendamiento de habitación',
         'alquiler de dormitorio',

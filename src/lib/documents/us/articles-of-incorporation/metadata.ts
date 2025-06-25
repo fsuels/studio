@@ -24,7 +24,7 @@ export const articlesOfIncorporationMeta: LegalDocument = {
     en: {
       name: 'Articles of Incorporation',
       description:
-        'Create legally binding articles of incorporation with our easy-to-use template. State-specific requirements included.',
+        'Protect your personal wealth from business liabilities and gain credibility with customers. Open doors to business financing and tax advantages.',
       aliases: [
         'business incorporation',
         'corporate charter',
@@ -35,7 +35,7 @@ export const articlesOfIncorporationMeta: LegalDocument = {
     es: {
       name: 'Acta Constitutiva',
       description:
-        'Registra oficialmente tu corporación con el estado. Requerido para formar legalmente una corporación comercial y proteger tus bienes personales.',
+        'Protege tu patrimonio personal de demandas comerciales y obtén credibilidad empresarial. Abre puertas a financiamiento y beneficios fiscales.',
       aliases: [
         'incorporación de negocio',
         'estatutos corporativos',

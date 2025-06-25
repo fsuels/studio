@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Get permission to use someone's likeness in photos, videos, or advertising. Protects against privacy lawsuits.",
+    "description": "Use people's images safely in your marketing and content. Protect your business from expensive privacy lawsuits.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Simple permission form to use someone's photo commercially. Required for marketing, websites, and publications.",
+    "description": "Use photos safely in your marketing without legal risks. Get proper permission for commercial use and advertising.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Comprehensive release for professional photography projects. Covers usage rights, compensation, and image ownership.",
+    "description": "Protect your photography business with comprehensive usage rights. Establish clear ownership and compensation terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

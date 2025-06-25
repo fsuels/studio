@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Stop someone from harmful actions like harassment, copyright infringement, or trademark violations. Legal warning letter.",
+    "description": "Stop harmful actions and protect your rights with professional legal warnings. Resolve disputes before expensive litigation.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Notify someone they've broken contract terms. Required first step before taking legal action for contract violations.",
+    "description": "Protect your contractual rights by documenting violations. Motivate compliance before pursuing costly legal action.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Formally complain about poor service, defective products, or unprofessional behavior. Gets better results than phone calls.",
+    "description": "Get better results from complaints with professional documentation. Escalate issues effectively to achieve resolution.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Resolve disputes through arbitration instead of court. Faster and less expensive way to settle business disagreements.",
+    "description": "Resolve business conflicts quickly and affordably through arbitration. Avoid costly court battles while getting fair decisions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Use a neutral mediator to resolve conflicts peacefully. Avoid costly court battles while finding mutually acceptable solutions.",
+    "description": "Find win-win solutions to conflicts with professional mediation. Preserve relationships while resolving disagreements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "End legal disputes with negotiated settlement terms. Avoid trial costs while resolving claims and conflicts.",
+    "description": "Resolve legal disputes efficiently with negotiated settlements. Control outcomes while avoiding unpredictable trial costs.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Organize your case for small claims court. Helps you prepare evidence and arguments for disputes under $10,000.",
+    "description": "Win small claims cases by organizing evidence and arguments effectively. Recover money owed with court action.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Properly format legal documents for court submission. Ensures your paperwork meets court requirements and deadlines.",
+    "description": "Succeed in court with properly formatted legal documents. Meet court requirements and protect your case.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "End business relationships, employment, or contracts professionally. Provides clear notice and protects against legal issues.",
+    "description": "End business relationships professionally while protecting against legal claims. Maintain reputation during transitions.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -94,7 +94,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Cancel contracts legally with proper notice. Protects you from breach of contract claims when ending agreements.",
+    "description": "Exit contracts legally while protecting against breach claims. End business relationships on professional terms.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -104,7 +104,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Notify banks, employers, and agencies about your legal name change. Required to update all official records and accounts.",
+    "description": "Complete your name change process by updating all official records. Ensure legal recognition of your new identity.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -114,7 +114,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Invoke force majeure clause when natural disasters or emergencies prevent contract performance. Legal protection from penalties.",
+    "description": "Protect yourself from contract penalties during emergencies or disasters. Use legal protections for unforeseeable circumstances.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Request notary services for documents requiring official verification. Ensures legal validity for important agreements.",
+    "description": "Ensure legal validity of important documents with professional notarization. Meet requirements for binding agreements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Make formal business inquiries with professional format. Better response rates for information requests and proposals.",
+    "description": "Get better responses to business inquiries with professional formatting. Improve success rates for proposals and requests.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Make sworn statements under oath for legal proceedings. Required for many court cases and official documentation.",
+    "description": "Provide legally binding testimony for court cases and official proceedings. Strengthen your case with sworn statements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "General sworn statement format for various legal situations. Flexible document for testimony and fact declarations.",
+    "description": "Document facts legally with flexible sworn statements. Provide credible testimony for various legal situations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Legally certify someone's death for estate and insurance purposes. Required to transfer assets and collect benefits.",
+    "description": "Facilitate estate settlement and insurance claims with official death certification. Access inheritances and benefits.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Establish who inherits property when someone dies without a will. Proves family relationships for asset transfer.",
+    "description": "Secure your inheritance rights when loved ones die without wills. Prove family relationships for asset transfers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Prove your identity for legal proceedings when official ID is lost or questioned. Sworn statement of who you are.",
+    "description": "Establish your identity legally when documentation is unavailable. Resolve identity questions with sworn statements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Transfer jointly-owned property to surviving owner after death. Avoids probate for property held in joint tenancy.",
+    "description": "Transfer property ownership quickly after a co-owner's death. Avoid probate delays and expenses with simple documentation.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Support immigration applications with sworn statements about relationships, employment, or financial support.",
+    "description": "Strengthen immigration applications with credible sworn testimony. Support loved ones' path to legal residency.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Transfer small estates without full probate proceedings. Faster and cheaper way to distribute modest inheritances.",
+    "description": "Access small inheritances quickly without expensive probate. Simplify estate settlement for modest assets.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -224,7 +224,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Document workplace accidents, property damage, or security incidents. Creates official record for insurance and legal protection.",
+    "description": "Protect your business with professional incident documentation. Create legal records for insurance claims and liability protection.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -234,7 +234,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Record details of vehicle accidents, injuries, or property damage. Essential for insurance claims and legal proceedings.",
+    "description": "Protect your interests after accidents with detailed documentation. Strengthen insurance claims and legal protection.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -244,7 +244,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Screen employees and visitors for COVID-19 symptoms. Workplace safety tool to prevent virus spread.",
+    "description": "Maintain workplace safety and reduce liability with health screening protocols. Protect employees and customers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -254,7 +254,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "File insurance claims for damages, theft, or covered losses. Proper documentation helps get claims approved faster.",
+    "description": "Maximize insurance claim success with proper documentation. Get faster approval and full compensation for losses.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -264,7 +264,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Submit competitive bids for contracts and projects. Professional format increases chances of winning business.",
+    "description": "Win more contracts with professional bid presentations. Stand out from competitors and secure profitable projects.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3

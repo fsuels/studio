@@ -5,7 +5,7 @@ export const indemnityAgreementMetadata: DocumentMetadata = {
   title: 'Indemnity Agreement',
   slug: 'indemnity-agreement',
   description:
-    'Create a legally binding agreement where one party agrees to compensate another for specified losses, damages, or liabilities.',
+    'Secure financial protection against business losses and unexpected liabilities. Ensure compensation when things go wrong.',
   longDescription:
     'An Indemnity Agreement is a contractual obligation where one party (the indemnitor) agrees to compensate another party (the indemnitee) for losses or damages that may occur. This comprehensive document is commonly used in business transactions, construction projects, service agreements, and situations where financial protection against potential liabilities is needed.',
   category: 'Risk & Liability',

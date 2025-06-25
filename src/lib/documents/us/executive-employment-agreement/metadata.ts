@@ -25,7 +25,7 @@ export const executiveEmploymentAgreementMeta: LegalDocument = {
     en: {
       name: 'Executive Employment Agreement',
       description:
-        'Comprehensive employment contract for executive-level positions with enhanced terms, benefits, and protections.',
+        'Attract top executive talent with comprehensive contracts that offer competitive benefits, clear expectations, and strong protections.',
       aliases: [
         'executive contract',
         'C-level agreement',

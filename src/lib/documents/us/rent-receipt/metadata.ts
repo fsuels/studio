@@ -29,9 +29,9 @@ export const rentReceiptMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Rent Receipt', // TODO: Add Spanish translation
+      name: 'Recibo de Renta',
       description:
-        'Generate official rent payment receipts for landlords and tenants', // TODO: Add Spanish translation
+        'Comprobante oficial de pago de renta para propietarios e inquilinos. Documento importante para registros financieros y declaraciones de impuestos.',
       aliases: [],
     },
   },

@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire an architect to design your building or renovation project. Sets design scope, fees, timeline, and what happens if plans need changes.",
+    "description": "Bring your vision to life with professional architectural design. Protect your investment with clear timelines and design control.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Officially document that a construction project is essentially finished and ready for use, even if minor work remains.",
+    "description": "Take possession of your construction project once it's substantially complete. Trigger final payments and warranty periods.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Modify an existing construction contract when project scope, materials, or costs need to change. Prevents disputes about extra work.",
+    "description": "Control construction costs and scope by documenting all project changes. Prevent surprise charges for additional work.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent office, retail, or industrial space for your business. More complex than residential leases with specific business terms.",
+    "description": "Secure the perfect business location with terms that protect your commercial interests. Focus on growth, not lease disputes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent commercial space with the right to buy it later. Combines leasing and purchasing into one flexible agreement.",
+    "description": "Test commercial locations before committing to purchase. Lock in today's price while building your business.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Get competitive bids from contractors for your construction project. Ensures all contractors bid on the same scope of work.",
+    "description": "Get the best construction value by standardizing contractor bids. Compare prices fairly across qualified contractors.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire contractors for building or renovation projects. Protects you from cost overruns, delays, and poor workmanship.",
+    "description": "Complete your construction project on time and budget. Protect against shoddy work with performance guarantees.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire a construction manager to oversee your building project. They coordinate contractors, materials, and schedules for you.",
+    "description": "Ensure construction success with professional project management. Stay on schedule and budget while avoiding costly mistakes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Show you're serious about buying property by putting money in escrow. Protects both buyer and seller during negotiations.",
+    "description": "Secure your dream property purchase by demonstrating financial commitment. Protect your deposit during negotiations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Legally notify tenants they must leave your property. Required first step before filing eviction in court.",
+    "description": "Reclaim your property from problem tenants legally and efficiently. Start the eviction process with proper documentation.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire a main contractor to manage your entire construction project. They handle all subcontractors, permits, and scheduling.",
+    "description": "Simplify your construction project with one point of contact. Let professionals handle permits, scheduling, and quality control.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire contractors to renovate your home. Covers timeline, materials, costs, and what happens if work isn't done properly.",
+    "description": "Transform your home with professional renovations that increase value. Protect your investment with quality guarantees.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire landscapers for yard work, garden design, or ongoing maintenance. Covers plants, materials, and seasonal services.",
+    "description": "Create beautiful outdoor spaces that boost property value. Maintain stunning landscapes with professional care.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Formally notify tenants their rent is overdue. Documents late payment and potential consequences like fees or eviction.",
+    "description": "Collect overdue rent professionally while maintaining tenant relationships. Document payment issues for legal protection.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Add new rules or modify existing lease terms without creating a completely new lease agreement.",
+    "description": "Update rental terms efficiently without renegotiating entire leases. Adapt to changing circumstances while protecting rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent out your property or rent a place to live. Sets monthly rent, rules, and responsibilities for both landlord and tenant.",
+    "description": "Generate rental income or secure housing with clear terms that protect both parties. Prevent costly disputes.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Officially change specific terms in an existing lease, like rent amount, lease duration, or house rules.",
+    "description": "Modify lease terms to reflect changing circumstances. Maintain good tenant relationships while protecting your interests.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Extend your current lease for another term. May include updated rent, terms, or conditions for the new period.",
+    "description": "Keep good tenants longer with lease renewals that benefit both parties. Maintain steady rental income.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "End a lease early or give proper notice you're moving out. Protects your security deposit and avoids legal issues.",
+    "description": "Exit your lease properly while protecting your security deposit. Maintain good landlord relationships for future references.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Secure payment for construction work by claiming a legal interest in the property. Forces property owner to pay before selling.",
+    "description": "Guarantee payment for your construction work with legal property claims. Protect contractors from non-paying property owners.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Release your right to file a mechanics lien once you've been paid for construction work. Required for final payments.",
+    "description": "Complete construction projects by releasing payment claims once you're paid. Clear property titles for final transactions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Formal loan agreement for buying real estate. The property serves as collateral until the loan is fully paid off.",
+    "description": "Achieve homeownership with structured financing backed by real estate. Build equity while securing your family's future.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -224,7 +224,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Formally notify tenants they've broken lease rules. Required first step before eviction and gives them chance to fix the problem.",
+    "description": "Address tenant violations professionally while giving them opportunity to comply. Protect your property investment.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -234,7 +234,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Give tenants proper legal notice before entering their rental unit for inspections, repairs, or showings.",
+    "description": "Maintain your rental property professionally while respecting tenant privacy. Avoid legal issues with proper notices.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -244,7 +244,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Give tenants final warning to pay overdue rent or face eviction. Required legal step before filing eviction lawsuit.",
+    "description": "Collect overdue rent or reclaim your property through legal channels. Protect your rental income investment.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -254,7 +254,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Officially authorize a contractor to start work on your project. Establishes the start date and work schedule.",
+    "description": "Launch your construction project with official authorization. Establish clear timelines and performance expectations.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -264,7 +264,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent office space for your business with terms specific to commercial use, including common areas and business hours.",
+    "description": "Establish your business presence in professional office space. Secure favorable terms that support your company's growth.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -274,7 +274,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent parking spaces separately from property rental. Common in cities where parking is scarce and valuable.",
+    "description": "Secure convenient parking in high-demand areas. Generate additional income from valuable parking assets.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -284,7 +284,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Transfer ownership of real estate from one person to another. Required to legally change who owns the property.",
+    "description": "Complete property ownership transfers with legally binding documentation. Secure clear title for your real estate investment.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -294,7 +294,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire someone to manage your rental properties. They handle tenants, maintenance, and rent collection for a percentage fee.",
+    "description": "Generate passive rental income while professionals handle day-to-day property management. Focus on growth, not maintenance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -304,7 +304,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Buy or sell any property with clear terms. Protects both buyer and seller by defining price, conditions, and closing details.",
+    "description": "Complete property transactions with confidence and legal protection. Secure the best terms for buying or selling real estate.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -314,7 +314,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Give up your ownership interest in property to someone else. Common in divorces or transferring property to family.",
+    "description": "Transfer property ownership quickly for family or divorce situations. Simplify property transfers without title warranties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -324,7 +324,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Buy or sell a house with professional terms. Includes inspections, financing contingencies, and closing procedures.",
+    "description": "Navigate home buying or selling with comprehensive protection. Secure financing and inspection contingencies.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -334,7 +334,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire contractors to renovate specific areas of your home. Covers materials, timeline, permits, and cleanup requirements.",
+    "description": "Increase your home's value with targeted renovations. Ensure quality work with clear timelines and material specifications.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -344,7 +344,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Notify tenants about rent increases with proper legal notice. Must follow state and local laws about timing and amounts.",
+    "description": "Maximize rental income with legally compliant rent increases. Maintain good tenant relationships while boosting profits.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -354,7 +354,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Provide tenants with proof they paid rent on time. Protects both landlord and tenant from payment disputes.",
+    "description": "Maintain clear rental payment records that protect both parties. Prevent disputes with professional documentation.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -364,7 +364,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Month-to-month rental arrangement with flexible terms. Easier to modify than long-term leases but less stability.",
+    "description": "Maintain rental flexibility with month-to-month arrangements. Adapt quickly to changing market conditions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -374,7 +374,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent a house or apartment with terms that protect both tenant and landlord. Covers rent, security deposits, and house rules.",
+    "description": "Secure quality housing or generate reliable rental income. Establish clear expectations that protect everyone's interests.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -384,7 +384,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Screen potential tenants by collecting their income, employment, and rental history. Helps you choose reliable renters.",
+    "description": "Protect your rental investment by selecting quality tenants. Reduce vacancy and damage risks with thorough screening.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -394,7 +394,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Document property condition before tenants move in or out. Protects security deposits and prevents damage disputes.",
+    "description": "Protect your security deposits and property value with detailed condition reports. Prevent costly damage disputes.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -404,7 +404,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent commercial space for your store or restaurant. Includes foot traffic considerations and signage rights.",
+    "description": "Secure prime retail location that drives customer traffic to your business. Maximize visibility with signage rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -414,7 +414,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire roofers to repair or replace your roof. Covers materials, labor, warranties, and cleanup responsibilities.",
+    "description": "Protect your home investment with professional roofing services. Ensure quality work with comprehensive warranties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -424,7 +424,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent out individual rooms in your house while you still live there. Covers shared spaces and house rules.",
+    "description": "Generate additional income by renting rooms in your home. Establish clear boundaries for shared living spaces.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -434,7 +434,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Share living space with roommates while avoiding conflicts. Covers rent splitting, chores, guests, and house rules.",
+    "description": "Live affordably with roommates while preventing conflicts. Establish fair arrangements for expenses and responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -444,7 +444,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent storage units for personal belongings or business inventory. Covers access hours, security, and insurance.",
+    "description": "Secure additional space for belongings or inventory. Protect valuable items with professional storage solutions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -454,7 +454,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire specialized workers for specific parts of your construction project. Defines their scope within the larger job.",
+    "description": "Complete construction projects efficiently with specialized expertise. Control costs by defining specific work scope.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -464,7 +464,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent out part of your lease to someone else, or rent from someone who's already renting. Requires original landlord approval.",
+    "description": "Reduce housing costs or generate income through subleasing arrangements. Navigate complex rental situations legally.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -474,7 +474,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Let tenants formally request repairs or maintenance. Creates a paper trail for landlord response times and responsibilities.",
+    "description": "Maintain property value with organized maintenance systems. Document repair requests for legal protection.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -484,7 +484,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Commercial lease where tenant pays rent plus all property expenses including taxes, insurance, and maintenance.",
+    "description": "Generate predictable rental income while transferring operating costs to tenants. Simplify commercial property management.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -494,7 +494,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent your property to short-term guests for vacations. Covers check-in procedures, house rules, and damage policies.",
+    "description": "Maximize property income with vacation rental opportunities. Protect your investment while hosting guests.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -504,7 +504,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent warehouse space for storing inventory or equipment. Includes loading dock access and security requirements.",
+    "description": "Expand your business operations with professional warehouse space. Secure inventory storage with convenient access.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -514,7 +514,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Transfer property ownership with guarantee that the title is clear and free of legal problems. Strongest form of deed.",
+    "description": "Complete property transfers with maximum legal protection. Guarantee clear title and prevent future ownership disputes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

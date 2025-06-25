@@ -5,7 +5,7 @@ export const liabilityWaiverMetadata: DocumentMetadata = {
   title: 'Liability Waiver',
   slug: 'liability-waiver',
   description:
-    'Create a comprehensive liability waiver to protect your business from legal claims related to injuries, damages, or losses.',
+    'Protect your business from costly lawsuits and legal claims. Shield yourself from liability while enabling customers to enjoy your services.',
   longDescription:
     'A Liability Waiver, also known as a release form or disclaimer, is a legal document that participants sign to acknowledge the risks involved in an activity and agree not to hold the organizer liable for injuries or damages. This document is essential for businesses offering potentially risky activities, sports facilities, event organizers, and service providers.',
   category: 'Risk & Liability',

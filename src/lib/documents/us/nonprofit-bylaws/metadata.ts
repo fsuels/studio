@@ -25,7 +25,7 @@ export const nonprofitBylawsMeta: LegalDocument = {
     en: {
       name: 'Nonprofit Bylaws',
       description:
-        'Governing bylaws for nonprofit organizations and charitable entities.',
+        'Establish strong governance for your nonprofit organization with bylaws that ensure proper operations and compliance.',
       aliases: ['501c3 bylaws', 'charity bylaws', 'nonprofit constitution'],
     },
     es: {

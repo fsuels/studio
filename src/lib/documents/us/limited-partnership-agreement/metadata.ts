@@ -25,7 +25,7 @@ export const limitedPartnershipAgreementMeta: LegalDocument = {
     en: {
       name: 'Limited Partnership Agreement',
       description:
-        'Agreement establishing a limited partnership with general and limited partners.',
+        'Structure your business partnership with clear roles, limited liability protection, and defined profit-sharing arrangements.',
       aliases: ['LP agreement', 'limited partnership', 'partnership formation'],
     },
     es: {

@@ -24,7 +24,7 @@ export const employmentContractMeta: LegalDocument = {
     en: {
       name: 'Employment Contract',
       description:
-        'Create a legally binding employment contract with our easy-to-use template. State-specific requirements included.',
+        'Protect your business and establish clear expectations with new employees. Avoid misunderstandings about salary, benefits, and job responsibilities.',
       aliases: [
         'employment agreement',
         'job contract',
@@ -35,7 +35,7 @@ export const employmentContractMeta: LegalDocument = {
     es: {
       name: 'Contrato de Empleo',
       description:
-        'Contrata empleados con términos claros sobre salario, beneficios, responsabilidades y expectativas. Protege tanto al empleador como al empleado.',
+        'Protege tu negocio y establece expectativas claras con nuevos empleados. Evita malentendidos sobre salario, beneficios y responsabilidades laborales.',
       aliases: ['acuerdo de empleo', 'contrato laboral', 'acuerdo de trabajo'],
     },
   },

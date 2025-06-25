@@ -26,13 +26,13 @@ export const promissoryNoteMeta: LegalDocument = {
     en: {
       name: 'Promissory Note',
       description:
-        'Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.',
+        'Create legally enforceable payment obligations with simple documentation. Protect yourself when lending money informally.',
       aliases: ['iou', 'loan paper', 'promise to pay', 'loan document'],
     },
     es: {
       name: 'Pagaré',
       description:
-        'Presta dinero a familia, amigos o clientes con protección legal. Define cantidad, interés y cuándo se pagará de vuelta.',
+        'Protege tu préstamo personal y asegura el reembolso. Establece términos claros de pago, interés y consecuencias por incumplimiento.',
       aliases: ['pagaré', 'documento de préstamo', 'promesa de pago'],
     },
   },

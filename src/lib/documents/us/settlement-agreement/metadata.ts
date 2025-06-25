@@ -25,7 +25,7 @@ export const settlementAgreementMeta: LegalDocument = {
     en: {
       name: 'Settlement Agreement',
       description:
-        'Comprehensive agreement to resolve disputes and settle claims between parties.',
+        'Resolve disputes quickly and avoid expensive court battles while protecting your interests. Save time and money by settling claims professionally.',
       aliases: [
         'dispute settlement agreement',
         'claim settlement agreement',

@@ -25,7 +25,7 @@ export const affiliateMarketingAgreementMeta: LegalDocument = {
     en: {
       name: 'Affiliate Marketing Agreement',
       description:
-        'Agreement for affiliate marketing partnerships and commission-based promotions.',
+        'Expand your marketing reach and boost sales without upfront costs. Attract motivated partners who only earn when they deliver results.',
       aliases: [
         'affiliate program agreement',
         'commission agreement',

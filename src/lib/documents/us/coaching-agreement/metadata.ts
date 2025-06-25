@@ -31,7 +31,7 @@ export const coachingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Coaching',
       description:
-        'Contrata un coach personal o empresarial. Define metas, sesiónes, honorarios y expectativas del proceso de coaching.',
+        'Acelera tu crecimiento personal o profesional con mentoría estructurada. Establece metas claras y mide progreso hacia el éxito.',
       aliases: ['coaching de vida', 'coaching empresarial'],
     },
   },

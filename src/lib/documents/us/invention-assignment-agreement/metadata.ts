@@ -25,7 +25,7 @@ export const inventionAssignmentAgreementMeta: LegalDocument = {
     en: {
       name: 'Invention Assignment Agreement',
       description:
-        'Agreement assigning employee or contractor inventions to the company.',
+        'Protect your company\'s innovations by ensuring all employee inventions and intellectual property belong to your business.',
       aliases: [
         'employee invention assignment',
         'contractor invention agreement',

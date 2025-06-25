@@ -25,7 +25,7 @@ export const jointVentureAgreementMeta: LegalDocument = {
     en: {
       name: 'Joint Venture Agreement',
       description:
-        'Agreement between parties to collaborate on a specific business project or venture.',
+        'Partner with another business on a specific project. Share costs, profits, and responsibilities while protecting both companies.',
       aliases: [
         'business collaboration',
         'joint venture',

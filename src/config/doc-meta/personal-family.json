@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Give caregivers permission to make decisions for your child when you're not available. Required for babysitters, schools, and daycares.",
+    "description": "Ensure your child receives proper care when you're unavailable. Give caregivers essential authority for emergencies.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire a nanny, babysitter, or daycare provider with clear terms about care, payment, and responsibilities.",
+    "description": "Secure quality childcare with professional agreements that protect your family. Establish clear care expectations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Decide where children will live and when they'll spend time with each parent after separation or divorce.",
+    "description": "Protect your children's wellbeing during family transitions. Establish stable custody arrangements that prioritize their needs.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Allow others to make medical decisions for your child in emergencies when you can't be reached.",
+    "description": "Ensure your child receives prompt medical care in emergencies. Give trusted caregivers essential healthcare authority.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set fair financial support payments for children after parents separate or divorce. Covers basic needs and expenses.",
+    "description": "Secure your children's financial future after family changes. Ensure adequate support for their needs and opportunities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Give permission for your child to travel with the other parent, relatives, or on school trips.",
+    "description": "Enable your child's travel opportunities while maintaining legal protection. Provide clear authorization for safe adventures.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Live together as a couple without marriage while protecting your individual assets and defining responsibilities.",
+    "description": "Enjoy committed relationships while protecting individual financial interests. Clarify expectations before complications arise.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Divide assets, debts, and responsibilities when ending a marriage. Covers property, custody, and support payments.",
+    "description": "Secure your future and formalize divorce terms, including equitable property division, spousal support, and child custody arrangements.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Breed your dog with someone else's while protecting both parties. Covers stud fees, puppy rights, and health guarantees.",
+    "description": "Generate income from quality breeding while protecting your investment. Ensure healthy offspring with clear agreements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Arrange care for elderly family members. Covers caregiving responsibilities, living arrangements, and financial support.",
+    "description": "Ensure quality care for aging loved ones while managing family responsibilities. Coordinate support and preserve dignity.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Appoint someone to care for your children if something happens to you. Essential for single parents and families.",
+    "description": "Protect your children's future by appointing trusted guardians. Ensure continuity of care if you become unavailable.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Board your horse at a stable with clear terms about care, feeding, riding privileges, and monthly costs.",
+    "description": "Ensure quality care for your horse while managing boarding costs. Access professional facilities and expert care.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Separate from your spouse while remaining legally married. Covers living arrangements, finances, and children.",
+    "description": "Define clear terms for living apart, covering property, support, and custody, providing a roadmap for your separation.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Detailed plan for raising children after divorce or separation. Covers schedules, decisions, holidays, and communication.",
+    "description": "Provide stability for your children during family transitions. Create comprehensive plans that prioritize their wellbeing.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire someone to provide personal care services for yourself or a family member. Covers daily living assistance.",
+    "description": "Maintain independence and dignity with professional personal care services. Ensure quality assistance for daily needs.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Add pet rules to your lease agreement. Covers pet deposits, restrictions, and tenant responsibilities for damages.",
+    "description": "Allow pets in rental properties while protecting your investment. Establish clear rules and damage protection.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set rules and responsibilities for pet ownership in shared living situations or rental properties.",
+    "description": "Enjoy pet ownership while respecting property and roommate needs. Establish clear responsibilities and boundaries.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Decide who gets the pets when a couple separates or divorces. Covers visitation, expenses, and care responsibilities.",
+    "description": "Protect your beloved pets during relationship changes. Ensure continued care and visitation arrangements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Protect assets and define financial responsibilities after you're already married. Similar to prenup but signed during marriage.",
+    "description": "Strengthen your marriage by clarifying financial responsibilities. Protect assets acquired during marriage.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Give someone legal authority to make decisions for your minor child when you're unavailable or incapacitated.",
+    "description": "Protect your child's interests when you're unavailable. Provide legal authority for trusted caregivers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Protect your assets and define financial responsibilities before getting married. Prevents disputes if relationship ends.",
+    "description": "Start marriage with financial clarity and protection. Preserve individual assets while building shared wealth.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Legally separate from your spouse while working out divorce details. Covers temporary arrangements for children and finances.",
+    "description": "Streamline your separation with a comprehensive agreement that clearly divides assets and responsibilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

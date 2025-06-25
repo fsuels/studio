@@ -25,7 +25,7 @@ export const demandLetterMeta: LegalDocument = {
     en: {
       name: 'Demand Letter for Payment',
       description:
-        'Create a legally binding Demand Letter for Payment with our easy-to-use template. State-specific requirements included.',
+        'Get paid faster and avoid costly legal fees by demanding payment professionally. Show you are serious about collecting debts before involving courts.',
       aliases: [
         'payment demand letter',
         'collection letter',

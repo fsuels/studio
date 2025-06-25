@@ -31,7 +31,7 @@ export const resignationLetterPersonalMeta: LegalDocument = {
     es: {
       name: 'Carta de Renuncia (Personal)',
       description:
-        'Carta profesional para renunciar formalmente al empleo por razones personales.',
+        'Renuncia por motivos personales (familia, salud, mudanza). Mantiene relaciones profesionales y deja la puerta abierta para el futuro.',
       aliases: ['carta de renuncia personal', 'carta de renuncia laboral'],
     },
   },

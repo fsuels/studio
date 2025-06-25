@@ -18,13 +18,13 @@ export const metadata = {
     en: {
       name: 'Independent Contractor Agreement',
       description:
-        'Define terms for hiring a freelancer or independent contractor.',
+        'Protect your business when hiring freelancers and avoid IRS problems. Clearly establish they are contractors, not employees, to prevent tax issues.',
       aliases: ['freelance', 'contractor', 'gig work', '1099 job'],
     },
     es: {
       name: 'Contrato de Contratista Independiente',
       description:
-        'Contrata freelancers y contratistas legalmente. Protege tu negocio y asegura que el trabajador no sea clasificado como empleado.',
+        'Protege tu negocio al contratar freelancers y evita problemas con el IRS. Establece claramente que son contratistas independientes, no empleados.',
       aliases: ['freelance', 'contratista', 'trabajo gig', 'trabajo 1099'],
     },
   },

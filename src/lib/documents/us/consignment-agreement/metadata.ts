@@ -25,7 +25,7 @@ export const consignmentAgreementMeta: LegalDocument = {
     en: {
       name: 'Consignment Agreement',
       description:
-        'Create a legally binding Consignment Agreement with our easy-to-use template. State-specific requirements included.',
+        'Expand your sales reach without upfront costs. Sell products through other retailers while maintaining control over pricing and returns.',
       aliases: ['consignment contract', 'consignment deal', 'sales agreement'],
     },
     es: {

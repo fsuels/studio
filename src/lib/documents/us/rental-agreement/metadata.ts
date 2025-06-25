@@ -24,7 +24,7 @@ export const rentalAgreementMeta: LegalDocument = {
     en: {
       name: 'Rental Agreement',
       description:
-        'Create a legally binding rental agreement with our easy-to-use template. State-specific requirements included.',
+        'Generate steady rental income or secure quality housing with clear terms that protect both parties. Prevent costly tenant disputes and legal issues.',
       aliases: [
         'rental contract',
         'property rental',

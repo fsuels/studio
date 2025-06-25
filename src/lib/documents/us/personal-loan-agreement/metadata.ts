@@ -25,7 +25,7 @@ export const personalLoanAgreementMeta: LegalDocument = {
     en: {
       name: 'Personal Loan Agreement',
       description:
-        'Comprehensive agreement for personal loans with detailed repayment terms and protections.',
+        'Protect your money when lending to friends or family and avoid damaged relationships. Ensure clear repayment terms and legal recourse if needed.',
       aliases: ['loan contract', 'lending agreement', 'borrower agreement'],
     },
     es: {

@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire an independent consultant for specialized expertise. Clearly defines project scope, deadlines, and payment terms.",
+    "description": "Access specialized expertise without the cost of full-time employees. Define project scope and protect your interests with clear terms.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -80,7 +80,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Extend a job offer with all the important details. Makes your offer official and gives candidates time to consider.",
+    "description": "Secure top talent with professional job offers that stand out. Make your offer official while giving candidates confidence in your organization.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -90,7 +90,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "End an employee's job professionally and legally. Documents the reason and final details like last paycheck and benefits.",
+    "description": "Protect your business from wrongful termination claims. End employment relationships professionally while maintaining legal compliance.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -100,7 +100,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Confirm someone's employment history for their new job, loan application, or background check. Simple verification document.",
+    "description": "Help employees secure loans, rentals, and new opportunities. Provide official employment verification that meets lender requirements.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -120,7 +120,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire senior executives and C-level employees. More detailed than regular employment contracts with specific compensation packages.",
+    "description": "Attract and retain top executive talent with comprehensive agreements. Secure leadership commitment while protecting your business interests.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -140,7 +140,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Bring on interns with clear expectations about learning goals, responsibilities, and whether it's paid or unpaid.",
+    "description": "Develop future talent while protecting your business. Set clear expectations for intern programs that benefit both parties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -160,7 +160,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Standardized form for job candidates to provide their information, experience, and qualifications. Makes hiring more organized.",
+    "description": "Streamline your hiring process and ensure consistent candidate evaluation. Collect all necessary information to make informed hiring decisions.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -170,7 +170,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Let employees formally request time off for medical, family, or personal reasons. Documents the request and approval process.",
+    "description": "Manage employee leave requests professionally while maintaining productivity. Ensure legal compliance with family and medical leave laws.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -190,7 +190,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Simple job offer document with basic terms. Less formal than an employment contract but makes the offer official.",
+    "description": "Make job offers quickly and professionally. Secure candidate acceptance with clear terms that protect both parties.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -210,7 +210,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Provide official documentation of someone's salary and employment for loans, rentals, or other financial applications.",
+    "description": "Support employees' financial goals with official income documentation. Meet lender requirements for mortgages, loans, and credit applications.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -220,7 +220,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Quit your job professionally with proper notice. Maintains good relationships and documents your last working day.",
+    "description": "Leave your job on good terms while protecting future opportunities. Maintain professional relationships and secure positive references.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -230,7 +230,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Quit your job due to personal reasons with a respectful explanation. Keeps things professional while protecting your privacy.",
+    "description": "Resign professionally while maintaining privacy about personal matters. Preserve relationships and reputation during career transitions.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -240,7 +240,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Confirm an employee's salary for their mortgage, rental application, or other financial needs. Official income verification.",
+    "description": "Help employees achieve their financial goals with official salary verification. Meet strict lender requirements for major purchases.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -250,7 +250,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Provide laid-off employees with compensation packages. Protects both sides and often includes agreement not to sue the company.",
+    "description": "Handle layoffs professionally while protecting your business from legal claims. Provide fair compensation that maintains your company's reputation.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -260,7 +260,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set rules for employees working remotely. Covers expectations, communication, equipment, and performance standards.",
+    "description": "Maximize remote work productivity while maintaining team cohesion. Establish clear expectations that ensure business continuity.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -270,7 +270,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Standard resignation letter giving employer two weeks to find your replacement. Professional way to leave any job.",
+    "description": "Transition out of your role professionally while maintaining industry relationships. Give employers time to plan your replacement.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -280,7 +280,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Allow employees to work from home with clear guidelines. Covers productivity expectations, communication, and equipment.",
+    "description": "Expand your talent pool and reduce office costs with remote work options. Maintain productivity standards while offering flexibility.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

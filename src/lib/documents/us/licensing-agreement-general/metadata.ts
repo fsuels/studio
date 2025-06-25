@@ -25,7 +25,7 @@ export const licensingAgreementGeneralMeta: LegalDocument = {
     en: {
       name: 'General Licensing Agreement',
       description:
-        'Comprehensive licensing agreement for various types of intellectual property.',
+        'Turn your intellectual property into profit by licensing it to others while maintaining ownership and control.',
       aliases: [
         'general license agreement',
         'IP licensing contract',

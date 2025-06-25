@@ -26,7 +26,7 @@ export const billOfSaleGeneralMeta: Omit<
     en: {
       name: 'General Bill of Sale',
       description:
-        'Legal document transferring ownership of personal property from seller to buyer.',
+        'Protect your valuable sales and prevent future disputes when selling personal property. Provide legal proof of ownership transfer.',
       aliases: [
         'bill of sale',
         'sales receipt',
@@ -37,7 +37,7 @@ export const billOfSaleGeneralMeta: Omit<
     es: {
       name: 'Factura de Venta General',
       description:
-        'Vende cualquier cosa legalmente (muebles, electrónicos, joyas, etc.). Transfiere ownership y protege tanto vendedor como comprador.',
+        'Protege tu venta y evita disputas futuras al vender objetos valiosos. Proporciona prueba legal de ownership y términos de la transacción.',
       aliases: [
         'factura de venta',
         'recibo de venta',

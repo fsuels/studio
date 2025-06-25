@@ -25,7 +25,7 @@ export const medicalConsentMeta: LegalDocument = {
     en: {
       name: 'General Medical Consent Form',
       description:
-        'Create a legally binding Child Medical Consent Form with our easy-to-use template. State-specific requirements included.',
+        'Ensure your children receive prompt medical care in emergencies. Authorize treatment when you can't be present.',
       aliases: [
         'medical consent',
         'child medical form',

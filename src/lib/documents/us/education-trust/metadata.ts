@@ -18,7 +18,7 @@ export const metadata = {
     en: {
       name: 'Education Trust',
       description:
-        'A specialized trust designed to fund educational expenses for beneficiaries with tax advantages.',
+        'Secure your children\'s educational future while saving on taxes with a dedicated trust fund for school expenses.',
       aliases: [
         'educational trust',
         'tuition trust',

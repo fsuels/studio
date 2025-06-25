@@ -35,7 +35,7 @@ export const brandAmbassadorAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Embajador de Marca',
       description:
-        'Asocia con alguien para representar tu marca en eventos o redes sociales. Establece expectativas sobre cómo promocionarán tu negocio.',
+        'Expande tu alcance de marketing y construye credibilidad de marca. Establece relaciones de largo plazo que impulsen ventas y reconocimiento.',
       aliases: ['acuerdo de asociación de marca', 'contrato de embajador'],
     },
   },

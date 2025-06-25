@@ -29,7 +29,7 @@ export const ndaMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Confidencialidad (NDA)',
-      description: 'Evita que alguien revele tus secretos comerciales, ideas de negocio o información privada que les compartiste.',
+      description: 'Protege tus ideas de negocio y secretos comerciales. Evita que empleados, socios o contratistas compartan tu información confidencial con competidores.',
       aliases: ['confidencial', 'nda', 'proteger idea', 'secreto'],
     },
   },

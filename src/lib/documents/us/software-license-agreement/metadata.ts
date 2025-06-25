@@ -25,7 +25,7 @@ export const softwareLicenseAgreementMeta: LegalDocument = {
     en: {
       name: 'Software License Agreement',
       description:
-        'Agreement governing the use and licensing of software applications.',
+        'Generate revenue from your software while protecting intellectual property. Control usage and prevent unauthorized distribution.',
       aliases: [
         'software licensing agreement',
         'end user license agreement',

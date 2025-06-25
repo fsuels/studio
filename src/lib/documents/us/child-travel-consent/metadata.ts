@@ -35,7 +35,7 @@ export const childTravelConsentMeta: LegalDocument = {
     es: {
       name: 'Consentimiento de Viaje de Menor',
       description:
-        'Permite que tu hijo viaje con un solo padre, abuelos o en viajes escolares. Evita problemas en aeropuertos y fronteras.',
+        'Evita problemas en aeropuertos y fronteras cuando tu hijo viaja sin ambos padres. Garantiza viajes seguros y sin complicaciones legales.',
       aliases: [
         'consentimiento de viaje menor',
         'autorización de viaje infantil',

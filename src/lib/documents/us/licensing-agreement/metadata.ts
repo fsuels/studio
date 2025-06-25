@@ -25,7 +25,7 @@ export const licensingAgreementMeta: LegalDocument = {
     en: {
       name: 'Licensing Agreement',
       description:
-        'Create a legally binding Licensing Agreement with our easy-to-use template. State-specific requirements included.',
+        'Generate revenue from your intellectual property without selling it. Allow others to use your brand, product, or technology for royalties.',
       aliases: [
         'licensing contract',
         'license agreement',

@@ -25,7 +25,7 @@ export const businessContractMeta: LegalDocument = {
     en: {
       name: 'Business Contract',
       description:
-        'Create a comprehensive business contract for goods, services, or partnerships.',
+        'Protect your business and avoid costly misunderstandings in commercial transactions. Establish clear terms that benefit both parties in your deals.',
       aliases: [
         'commercial contract',
         'business agreement',
@@ -35,7 +35,7 @@ export const businessContractMeta: LegalDocument = {
     es: {
       name: 'Contrato Comercial',
       description:
-        'Acuerdo comercial general para ventas, servicios o asociaciones de negocio. Protege ambas partes con términos claros.',
+        'Protege tu negocio y evita malentendidos costosos en transacciones comerciales. Establece términos que beneficien a ambas partes.',
       aliases: ['contrato de negocios', 'acuerdo comercial'],
     },
   },

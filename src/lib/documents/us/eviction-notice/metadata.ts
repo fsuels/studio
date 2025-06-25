@@ -24,7 +24,7 @@ export const evictionNoticeMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Eviction Notice',
-      description: 'Formal notice to a tenant to vacate the property.',
+      description: 'Protect your rental income and remove problem tenants legally. Required first step before filing eviction in court.',
       aliases: ['remove tenant', 'late rent', 'kick out', 'notice to quit'],
     },
     es: {

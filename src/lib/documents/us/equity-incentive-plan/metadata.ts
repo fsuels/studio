@@ -24,7 +24,7 @@ export const equityIncentivePlanMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Equity Incentive Plan',
-      description: 'Comprehensive stock option and equity compensation plan',
+      description: 'Motivate and retain top employees by offering ownership stakes through stock options and equity rewards.',
       aliases: [],
     },
     es: {

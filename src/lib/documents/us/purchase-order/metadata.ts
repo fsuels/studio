@@ -23,7 +23,7 @@ export const purchaseOrderMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
     en: {
       name: 'Purchase Order',
       description:
-        'Formal document to request goods or services from a supplier.',
+        'Streamline your business operations and avoid supply chain disputes with professional purchase orders. Ensure suppliers deliver exactly what you need on time.',
       aliases: ['PO', 'purchase request', 'procurement order'],
     },
     es: {

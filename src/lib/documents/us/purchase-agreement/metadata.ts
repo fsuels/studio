@@ -25,7 +25,7 @@ export const purchaseAgreementMeta: LegalDocument = {
     en: {
       name: 'General Purchase Agreement',
       description:
-        'Create a legally binding General Purchase Agreement with our easy-to-use template. State-specific requirements included.',
+        'Complete property transactions with confidence and legal protection. Secure the best terms for buying or selling real estate.',
       aliases: [
         'general purchase contract',
         'purchase contract',

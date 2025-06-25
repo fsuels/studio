@@ -25,7 +25,7 @@ export const equipmentRentalAgreementMeta: LegalDocument = {
     en: {
       name: 'Equipment Rental Agreement',
       description:
-        'Create a comprehensive equipment rental agreement for machinery, tools, or other equipment with clear terms and liability protections.',
+        'Access expensive equipment without the huge investment of buying. Protect your rental business with damage deposits and liability terms.',
       aliases: [
         'equipment lease',
         'machinery rental',

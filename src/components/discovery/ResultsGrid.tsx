@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FileText, Zap, Star } from 'lucide-react';
+import { FileText, Zap, Star, Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
 
@@ -64,12 +65,16 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
           const translatedDoc = getDocTranslation(result.doc, locale);
           const { confidence } = result;
           
+          const isBestMatch = confidence.level === 'excellent';
+
           return (
             <Link
               key={result.doc.id}
               href={`/${locale}/docs/${result.doc.id}`}
               onClick={() => onDocumentClick(result.doc.id)}
-              className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6"
+              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 ${
+                isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
+              }`}
               style={{
                 animationDelay: `${index * 100}ms`
               }}
@@ -108,7 +113,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                 {/* Match percentage badge - right aligned */}
                 <div className="flex-shrink-0 flex flex-col items-end gap-1">
                   {/* Excellence indicator */}
-                  {confidence.level === 'excellent' && (
+                  {isBestMatch && (
                     <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
                       <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                       <span>Best match</span>
@@ -116,8 +121,21 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                   )}
                   
                   {/* Percentage badge */}
-                  <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#D1FAE5] border border-emerald-200 text-[#111827]">
+                  <div 
+                    className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#D1FAE5] border border-emerald-200 text-[#111827]"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <span>{confidence.score}%</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info className="h-4 w-4 text-gray-500 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Based on keywords and legal intent.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </div>
               </div>

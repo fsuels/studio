@@ -4,7 +4,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Allow automatic bank withdrawals for bills, rent, or loan payments. Convenient way to set up recurring payments.",
+    "description": "Never miss a payment again with automated bank transfers. Improve your credit score and avoid late fees.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -14,7 +14,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Professionally demand payment from someone who owes you money. First step before taking legal action for unpaid debts.",
+    "description": "Recover money owed to you without damaging business relationships. Motivate immediate payment before costly legal action.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set terms for credit card use in business or personal situations. Covers credit limits, interest rates, and payment terms.",
+    "description": "Establish clear credit terms that protect your financial interests. Prevent disputes about spending limits and payment obligations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Settle debts for less than you owe. Negotiate with creditors to pay a reduced amount and close the account.",
+    "description": "Escape overwhelming debt by negotiating reduced payments. Start fresh financially while avoiding bankruptcy consequences.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Force debt collectors to prove you actually owe the money they're trying to collect. Your legal right under federal law.",
+    "description": "Protect yourself from invalid debt collection attempts. Exercise your legal rights to verify debt legitimacy.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -54,7 +54,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Formally demand payment, action, or resolution before taking legal action. Often required before filing a lawsuit.",
+    "description": "Resolve disputes without expensive litigation. Give the other party one final chance to make things right.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -64,7 +64,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Demand payment for overdue invoices or debts. Clear final notice before pursuing collection or legal action.",
+    "description": "Get paid faster with professional payment demands that motivate immediate action. Recover overdue money efficiently.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -74,7 +74,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set up direct deposit for payroll or other regular payments. Faster and more secure than paper checks.",
+    "description": "Get paid faster and more securely than traditional checks. Eliminate trips to the bank and payment delays.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -84,7 +84,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Bill customers for goods or services you've provided. Professional invoice format for getting paid faster.",
+    "description": "Get paid faster with professional invoices that customers take seriously. Improve cash flow with clear payment terms.",
     "popular": true,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lend or borrow money with clear repayment terms. Protects both lender and borrower with written agreement.",
+    "description": "Access or provide funding with confidence and legal protection. Establish clear terms that prevent future disputes.",
     "popular": true,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Change the terms of an existing loan when payments become difficult. Avoid default by modifying payment schedule.",
+    "description": "Avoid foreclosure or default by negotiating affordable payment terms. Protect your credit while managing financial hardship.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Request changes to your loan terms due to financial hardship. Start the process of modifying payment amounts or schedule.",
+    "description": "Take control of financial difficulties by requesting loan modifications. Prevent default while getting back on track.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -124,7 +124,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Break large debts into manageable monthly payments. Avoid collections and maintain good relationships with creditors.",
+    "description": "Make overwhelming debt manageable with structured payment plans. Protect your credit and avoid collection harassment.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lend money to friends or family members safely. Prevents relationship damage by making terms clear upfront.",
+    "description": "Protect personal relationships when lending money to loved ones. Establish clear terms to prevent family conflicts.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Simple IOU document promising to repay borrowed money. Legal proof of debt with payment terms and due date.",
+    "description": "Create legally enforceable payment obligations with simple documentation. Protect yourself when lending money informally.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Borrow money with small payments followed by one large final payment. Useful when expecting large income later.",
+    "description": "Access funding now with minimal payments until your big payday arrives. Perfect for seasonal businesses or commission workers.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Repay borrowed money in equal monthly installments over time. Most common type of loan repayment structure.",
+    "description": "Make borrowing affordable with predictable monthly payments. Budget effectively with consistent payment amounts.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Officially order goods or services from suppliers. Creates binding commitment and tracks business purchases.",
+    "description": "Secure favorable pricing and delivery terms from suppliers. Create binding commitments that protect your business needs.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -184,7 +184,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Provide proof of payment for goods or services. Required for returns, warranties, and business expense records.",
+    "description": "Protect your purchase rights and enable warranty claims. Document business expenses for tax deductions.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -194,7 +194,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set up credit line that can be used repeatedly up to a limit. Similar to credit card but for business purposes.",
+    "description": "Access flexible business funding when opportunities arise. Pay interest only on what you use with revolving credit.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -204,7 +204,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Show customer's payment history, current balance, and account activity. Regular statement for ongoing business relationships.",
+    "description": "Maintain transparent customer relationships with detailed account tracking. Prevent disputes with clear payment records.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Privately lend money for education expenses with specific terms for students. Alternative to federal student loans.",
+    "description": "Invest in education when federal loans aren't enough. Provide funding that helps students achieve their academic goals.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

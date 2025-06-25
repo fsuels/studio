@@ -25,7 +25,7 @@ export const contractAmendmentMeta: LegalDocument = {
     en: {
       name: 'Contract Amendment',
       description:
-        'Create a formal amendment to modify existing contract terms and conditions.',
+        'Update contracts efficiently without renegotiating everything. Adapt agreements to changing business needs while maintaining legal validity.',
       aliases: ['contract amendment', 'contract modification', 'addendum'],
     },
     es: {

@@ -25,7 +25,7 @@ export const marriageSeparationAgreementMeta: LegalDocument = {
     en: {
       name: 'Marriage Separation Agreement',
       description:
-        'Agreement between spouses living apart covering property, support, and custody.',
+        'Navigate separation with clarity by establishing fair arrangements for property, support, and children.',
       aliases: ['legal separation agreement', 'marital separation contract'],
     },
     es: {

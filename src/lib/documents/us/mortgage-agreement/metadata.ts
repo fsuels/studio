@@ -25,7 +25,7 @@ export const mortgageAgreementMeta: LegalDocument = {
     en: {
       name: 'Mortgage Agreement',
       description:
-        'Legal agreement for home mortgage loan terms and conditions.',
+        "Achieve homeownership with structured financing backed by real estate. Build equity while securing your family's future.",
       aliases: ['mortgage contract', 'home loan agreement', 'mortgage note'],
     },
     es: {

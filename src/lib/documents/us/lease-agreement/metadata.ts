@@ -17,13 +17,13 @@ export const metadata = {
   translations: {
     en: {
       name: 'Residential Lease Agreement',
-      description: 'Set terms for renting a residential property.',
+      description: 'Generate rental income or secure quality housing with clear terms that protect both parties. Prevent costly disputes.',
       aliases: ['rent apartment', 'tenant', 'lease form', 'landlord agreement'],
     },
     es: {
       name: 'Contrato de Arrendamiento Residencial',
       description:
-        'Alquila tu propiedad o renta un lugar para vivir. Establece la renta mensual, reglas y responsabilidades para ambos propietario e inquilino.',
+        'Protege tus derechos como propietario o inquilino. Establece expectativas claras sobre renta, depósitos, reparaciones y reglas de la propiedad.',
       aliases: [
         'alquiler de apartamento',
         'inquilino',

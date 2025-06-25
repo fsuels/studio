@@ -17,7 +17,7 @@ export const metadata = {
   translations: {
     en: {
       name: 'Last Will and Testament',
-      description: 'Specify how your assets should be distributed after death.',
+      description: "Secure your family's future by controlling how your assets are distributed. Prevent family conflicts and legal complications.",
       aliases: ['will', 'inheritance', 'distribute assets'],
     },
     es: {

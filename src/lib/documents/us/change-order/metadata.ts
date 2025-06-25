@@ -31,7 +31,7 @@ export const changeOrderMeta: LegalDocument = {
     es: {
       name: 'Orden de Cambio',
       description:
-        'Cambia oficialmente detalles de un proyecto en progreso. Ajusta costos, fechas o trabajo adicional con aprobación por escrito.',
+        'Adaptá proyectos a nuevas necesidades sin perder control del presupuesto. Documenta cambios para evitar disputas y sobrecostos inesperados.',
       aliases: [
         'orden de cambio',
         'solicitud de cambio de proyecto',

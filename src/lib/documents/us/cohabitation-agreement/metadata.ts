@@ -36,7 +36,7 @@ export const cohabitationAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Cohabitación',
       description:
-        'Protege tu relación de pareja sin casarse. Define quién paga qué, cómo se reparten las propiedades y qué pasa si se separan.',
+        'Protege tu futuro financiero y evita disputas costosas si tu relación termina. Establece derechos claros sobre propiedades y responsabilidades financieras.',
       aliases: [
         'acuerdo de pareja de hecho',
         'acuerdo de convivencia',

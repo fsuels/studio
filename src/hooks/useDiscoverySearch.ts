@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { SemanticAnalysisEngine, type SemanticResult } from '@/lib/semantic-analysis-engine';
+import { SemanticAnalysisEngine, type SemanticResult, type DidYouMeanResult } from '@/lib/semantic-analysis-engine';
 import type { LegalDocument } from '@/lib/document-library';
 
 export interface UseDiscoverySearchOptions {
@@ -11,6 +11,7 @@ export interface UseDiscoverySearchReturn {
   searchInput: string;
   setSearchInput: (input: string) => void;
   results: SemanticResult[];
+  suggestion: DidYouMeanResult | null;
   isSearching: boolean;
   performSearch: (query: string) => void;
   clearResults: () => void;
@@ -19,6 +20,7 @@ export interface UseDiscoverySearchReturn {
 export function useDiscoverySearch({ locale, maxResults = 8 }: UseDiscoverySearchOptions): UseDiscoverySearchReturn {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState<SemanticResult[]>([]);
+  const [suggestion, setSuggestion] = useState<DidYouMeanResult | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
   const semanticEngine = useMemo(() => new SemanticAnalysisEngine(), []);
@@ -57,6 +59,13 @@ export function useDiscoverySearch({ locale, maxResults = 8 }: UseDiscoverySearc
         locale,
         maxResults
       });
+
+      if (searchResults.length === 0) {
+        const newSuggestion = semanticEngine.suggest(query);
+        setSuggestion(newSuggestion);
+      } else {
+        setSuggestion(null);
+      }
       
       console.log('✅ Search completed, results:', searchResults.length);
       setResults(searchResults);
@@ -77,6 +86,7 @@ export function useDiscoverySearch({ locale, maxResults = 8 }: UseDiscoverySearc
     searchInput,
     setSearchInput,
     results,
+    suggestion,
     isSearching,
     performSearch,
     clearResults

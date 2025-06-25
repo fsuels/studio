@@ -35,7 +35,7 @@ export const architectContractMeta: LegalDocument = {
     es: {
       name: 'Contrato de Servicios de Arquitecto',
       description:
-        'Contrata un arquitecto para diseñar tu proyecto de construcción o renovación. Establece alcance del diseño, honorarios, cronograma y qué pasa si los planos necesitan cambios.',
+        'Asegura un diseño profesional que cumpla tus expectativas y presupuesto. Protege tu inversión con términos claros sobre cambios y responsabilidades.',
       aliases: [
         'acuerdo de servicios arquitectónicos',
         'contrato de profesional de diseño',

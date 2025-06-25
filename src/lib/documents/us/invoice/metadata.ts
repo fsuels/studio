@@ -24,7 +24,7 @@ export const invoiceMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Invoice',
-      description: 'Request payment for goods or services rendered.',
+      description: 'Get paid faster with professional invoices that customers take seriously. Improve cash flow with clear payment terms.',
     },
     es: {
       name: 'Factura',

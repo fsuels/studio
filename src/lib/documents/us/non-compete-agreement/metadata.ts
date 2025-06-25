@@ -18,7 +18,7 @@ export const metadata = {
     en: {
       name: 'Non-Compete Agreement',
       description:
-        'Restrict an employee or contractor from competing after termination.',
+        'Protect your business secrets and customer relationships by preventing employees from becoming competitors.',
       aliases: ['restrict competition', 'former employee', 'noncompete'],
     },
     es: {

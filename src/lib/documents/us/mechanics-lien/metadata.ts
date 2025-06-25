@@ -25,7 +25,7 @@ export const mechanicsLienMeta: LegalDocument = {
     en: {
       name: 'Mechanics Lien',
       description:
-        'Legal claim against property for unpaid work or materials provided for construction improvements.',
+        'Secure payment for your construction work by filing a legal claim against the property you improved.',
       aliases: ['construction lien', 'materialman lien', 'contractor lien'],
     },
     es: {

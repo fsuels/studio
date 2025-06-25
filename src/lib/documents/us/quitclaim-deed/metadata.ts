@@ -24,13 +24,13 @@ export const quitclaimDeedMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Quitclaim Deed',
-      description: 'Transfer property interest without warranty of title.',
+      description: 'Transfer property ownership quickly for family or divorce situations. Simplify property transfers without title warranties.',
       aliases: ['property transfer', 'quit claim deed', 'transfer ownership'],
     },
     es: {
       name: 'Escritura de Finiquito',
       description:
-        'Transferir interés en una propiedad sin garantía de título.',
+        'Transfiere tu parte de una propiedad rápidamente. Común en divorcios o transferencias familiares, pero no garantiza que no hay problemas legales.',
       aliases: [
         'transferencia de propiedad',
         'escritura de finiquito',

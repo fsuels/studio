@@ -25,7 +25,7 @@ export const oilGasLeaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Oil and Gas Lease Agreement',
       description:
-        'Agreement for leasing mineral rights for oil and gas exploration and production.',
+        'Maximize income from your land by leasing mineral rights for oil and gas exploration with fair terms and royalties.',
       aliases: [
         'petroleum lease',
         'drilling rights agreement',

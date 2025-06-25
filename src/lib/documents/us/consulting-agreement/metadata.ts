@@ -25,7 +25,7 @@ export const consultingAgreementMeta: LegalDocument = {
     en: {
       name: 'Consulting Agreement',
       description:
-        'Establish terms for professional consulting services with clear scope and compensation.',
+        'Access specialized expertise without the cost of full-time employees. Define project scope and protect your interests with clear terms.',
       aliases: [
         'consultant contract',
         'advisory agreement',
@@ -35,7 +35,7 @@ export const consultingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Consultoría',
       description:
-        'Contrata a un consultor independiente para experiencia especializada. Define claramente el alcance del proyecto, fechas límite y términos de pago.',
+        'Obten experiencia especializada sin contratar empleados de tiempo completo. Establece objetivos claros y protege la propiedad intelectual de tu empresa.',
       aliases: ['contrato de consultor', 'acuerdo de asesoría'],
     },
   },

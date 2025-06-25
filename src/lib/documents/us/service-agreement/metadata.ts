@@ -24,13 +24,13 @@ export const serviceAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Service Agreement',
-      description: 'Outline terms for providing or receiving ongoing services.',
+      description: 'Ensure service quality and prevent misunderstandings with providers. Establish clear expectations for deliverables, timelines, and payments.',
       aliases: ['hire services', 'service provider', 'payment terms'],
     },
     es: {
       name: 'Acuerdo de Servicios',
       description:
-        'Contrata a alguien para proporcionar servicios para tu negocio. Define claramente qué trabajo se hará, cuándo y por cuánto.',
+        'Asegura la calidad del servicio y evita malentendidos con proveedores. Establece expectativas claras sobre entregables, cronogramas y pagos.',
       aliases: [
         'contratar servicios',
         'proveedor de servicios',

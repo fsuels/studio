@@ -1,0 +1,32 @@
+@keyframes subtle-glow {
+  0%, 100% { box-shadow: 0 0 0px theme('colors.emerald.200'); }
+  50% { box-shadow: 0 0 10px theme('colors.emerald.300'); }
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-subtle-glow {
+  animation: subtle-glow 2s ease-in-out 1;
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 1.5s ease-in-out 1;
+}
+
+.scroll-fade-out::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4rem;
+  background: linear-gradient(to top, rgba(249, 250, 251, 1), transparent);
+  pointer-events: none;
+}
+
+.dark .scroll-fade-out::after {
+    background: linear-gradient(to top, rgba(31, 41, 55, 1), transparent);
+}

@@ -5,6 +5,8 @@ import { Search, MessageSquare, Lightbulb, ArrowRight } from 'lucide-react';
 
 interface NoResultsProps {
   searchQuery: string;
+  suggestion: { suggestion: string } | null;
+  onSuggestionClick: (text: string) => void;
 }
 
 const SUGGESTION_EXAMPLES = [
@@ -46,7 +48,7 @@ const SUGGESTION_EXAMPLES = [
   }
 ];
 
-export function NoResults({ searchQuery }: NoResultsProps) {
+export function NoResults({ searchQuery, suggestion, onSuggestionClick }: NoResultsProps) {
   return (
     <div className="py-16">
       <div className="text-center max-w-2xl mx-auto space-y-8">
@@ -66,6 +68,15 @@ export function NoResults({ searchQuery }: NoResultsProps) {
           <p className="text-gray-600 dark:text-gray-300">
             We couldn't find documents matching "{searchQuery}". Try being more specific or use different terms.
           </p>
+          {suggestion && (
+            <p className="text-gray-600 dark:text-gray-300">
+              Did you mean:{" "}
+              <button onClick={() => onSuggestionClick(suggestion.suggestion)} className="text-blue-500 hover:underline">
+                {suggestion.suggestion}
+              </button>
+              ?
+            </p>
+          )}
         </div>
 
         {/* Enhanced Suggestions */}

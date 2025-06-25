@@ -25,7 +25,7 @@ export const prenuptialAgreementMeta: LegalDocument = {
     en: {
       name: 'Prenuptial Agreement',
       description:
-        'Agreement made before marriage regarding asset division if divorced.',
+        'Start marriage with financial clarity and protection. Preserve individual assets while building shared wealth.',
       aliases: ['prenup', 'marriage contract', 'before marriage agreement'],
     },
     es: {

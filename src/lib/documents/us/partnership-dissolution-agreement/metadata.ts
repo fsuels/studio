@@ -25,7 +25,7 @@ export const partnershipDissolutionAgreementMeta: LegalDocument = {
     en: {
       name: 'Partnership Dissolution Agreement',
       description:
-        'Agreement to formally dissolve a partnership and distribute assets.',
+        'End your business partnership fairly by properly dividing assets and closing operations without disputes.',
       aliases: [
         'partnership termination',
         'business dissolution',

@@ -24,7 +24,7 @@ export const corporateBylawsMeta: Omit<LegalDocument, 'schema' | 'questions'> =
       en: {
         name: 'Corporate Bylaws',
         description:
-          'Establish governance rules and procedures for your corporation.',
+          'Establish professional governance that attracts investors and ensures compliance. Run your corporation smoothly with clear operational rules.',
         aliases: [
           'company bylaws',
           'corporate governance',

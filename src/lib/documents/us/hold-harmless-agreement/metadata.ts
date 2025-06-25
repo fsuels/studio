@@ -5,7 +5,7 @@ export const holdHarmlessAgreementMetadata: DocumentMetadata = {
   title: 'Hold Harmless Agreement',
   slug: 'hold-harmless-agreement',
   description:
-    'Create a legally binding agreement where one party agrees not to hold another party liable for damages, injuries, or losses.',
+    'Protect your business from costly lawsuits and liability claims. Essential protection for high-risk activities and business operations.',
   longDescription:
     'A Hold Harmless Agreement, also known as an indemnity agreement or release of liability, is a legal contract where one party agrees not to hold another party responsible for any damages, injuries, or losses that may occur. This document is commonly used in business transactions, construction projects, event planning, and various activities where risk is involved.',
   category: 'Risk & Liability',

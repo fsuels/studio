@@ -26,7 +26,7 @@ export const contractTerminationLetterMeta: Omit<
     en: {
       name: 'Contract Termination Letter',
       description:
-        'Formally terminate a contract with proper notice and documentation.',
+        'End business relationships professionally and avoid legal disputes when terminating contracts. Protect yourself with proper notice and documentation.',
       aliases: [
         'termination notice',
         'contract cancellation',

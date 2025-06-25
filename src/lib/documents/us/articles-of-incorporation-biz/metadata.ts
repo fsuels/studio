@@ -35,7 +35,7 @@ export const articlesOfIncorporationBizMeta: LegalDocument = {
     es: {
       name: 'Acta Constitutiva (Empresarial)',
       description:
-        'Forma oficialmente tu corporación para proteger tus bienes personales de problemas del negocio. Requerido por el estado.',
+        'Separa legalmente tu negocio de tus finanzas personales y reduce riesgos. Obten protección legal y credibilidad ante clientes e inversionistas.',
       aliases: [
         'formar corporación',
         'incorporar negocio',

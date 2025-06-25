@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Tell doctors your medical wishes if you can't speak for yourself. Covers life support, feeding tubes, and end-of-life care.",
+    "description": "Ensure your medical wishes are respected when you can't communicate them. Prevent family conflicts about life support decisions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Cancel your previous advance directive when your medical wishes change. Important to keep documents current.",
+    "description": "Update your medical preferences to reflect your current values. Ensure healthcare decisions align with your evolving wishes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Participate in medical research studies safely. Understand risks, benefits, and your rights as a research participant.",
+    "description": "Access cutting-edge treatments while protecting your rights in medical research. Understand all risks before participating.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire a life coach, business coach, or wellness coach. Sets expectations, goals, and payment terms for coaching services.",
+    "description": "Transform your life with professional coaching that delivers real results. Set clear goals and track progress effectively.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Protect your gym or fitness business from injury lawsuits. Required legal protection for personal trainers and fitness centers.",
+    "description": "Protect your fitness business from costly injury lawsuits. Essential legal shield for gyms, trainers, and sports facilities.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Document your healthcare preferences for serious medical situations. Guides family and doctors when you can't decide.",
+    "description": "Guide your family through difficult medical decisions when you're unable to speak. Prevent confusion during health crises.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Choose someone to make medical decisions for you if you can't. Essential backup for emergencies and serious illness.",
+    "description": "Protect your healthcare choices by appointing a trusted advocate. Ensure medical decisions align with your values.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Allow someone to access your medical records and talk to doctors. Required for family members to get health information.",
+    "description": "Give loved ones access to your medical information when you need support. Essential for coordinated healthcare.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -84,7 +84,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Tell doctors exactly what medical treatments you want or don't want if you're dying or permanently unconscious.",
+    "description": "Control your end-of-life care by documenting specific treatment preferences. Prevent unwanted medical interventions.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Give permission for medical treatment for yourself or your children. Required for most medical procedures and surgeries.",
+    "description": "Ensure your children receive prompt medical care in emergencies. Authorize treatment when you can't be present.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Simple form to authorize medical treatment. Perfect for schools, camps, and caregivers who might need emergency care.",
+    "description": "Keep your children safe during activities by authorizing emergency medical care. Perfect for schools and camps.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Appoint someone to make all your healthcare decisions if you become unable to communicate your wishes.",
+    "description": "Ensure quality healthcare decisions when you're unable to communicate. Appoint someone who understands your values.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire a personal trainer with clear expectations about workouts, goals, and safety. Protects both trainer and client.",
+    "description": "Achieve your fitness goals with professional training that delivers results. Establish clear expectations for success.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Get medical care through video calls and online consultations. Sets expectations for remote healthcare services.",
+    "description": "Access convenient healthcare from home with telemedicine services. Get quality medical care without travel time.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

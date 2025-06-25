@@ -24,7 +24,7 @@ export const affidavitMeta: LegalDocument = {
     en: {
       name: 'General Affidavit',
       description:
-        'Create a legally binding general affidavit with our easy-to-use template. State-specific requirements included.',
+        'Provide legally binding testimony for court cases and official proceedings. Strengthen your case with sworn statements.',
       aliases: [
         'sworn statement',
         'sworn declaration',
@@ -35,7 +35,7 @@ export const affidavitMeta: LegalDocument = {
     es: {
       name: 'Declaración Jurada General',
       description:
-        'Jura formalmente que algo es verdad bajo pena de perjurio. Usado en cortes, bancos, seguros y trámites oficiales.',
+        'Acelera trámites legales y burocráticos con declaraciones juradas oficiales. Evita comparecencias innecesarias en cortes y oficinas gubernamentales.',
       aliases: [
         'declaración jurada',
         'declaración bajo juramento',

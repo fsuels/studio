@@ -25,7 +25,7 @@ export const buySellAgreementMeta: LegalDocument = {
     en: {
       name: 'Buy-Sell Agreement',
       description:
-        'Agreement governing the transfer of business ownership interests upon triggering events.',
+        'Plan for your business future by establishing how ownership transfers when partners retire, die, or leave the company.',
       aliases: [
         'buyout agreement',
         'business succession',

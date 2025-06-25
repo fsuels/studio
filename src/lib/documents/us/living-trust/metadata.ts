@@ -18,13 +18,13 @@ export const metadata = {
     en: {
       name: 'Living Trust (Revocable)',
       description:
-        'Manage assets during life and distribute after death, potentially avoiding probate.',
+        "Protect your family's privacy and wealth from expensive probate. Transfer assets quickly while maintaining confidentiality.",
       aliases: ['revocable trust', 'estate planning', 'avoid probate'],
     },
     es: {
       name: 'Fideicomiso en Vida (Revocable)',
       description:
-        'Administra tu propiedad mientras vives y la transfiere a herederos sin pasar por corte sucesorio. Ahorra tiempo y dinero.',
+        'Asegura que tu familia reciba tu herencia rápidamente y sin complicaciones legales. Evita el costoso proceso de corte sucesorio y protege tu privacidad.',
       aliases: [
         'fideicomiso revocable',
         'planificación patrimonial',

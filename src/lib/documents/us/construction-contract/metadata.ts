@@ -25,7 +25,7 @@ export const constructionContractMeta: LegalDocument = {
     en: {
       name: 'Construction Contract',
       description:
-        'Comprehensive contract for construction projects including new builds and major renovations.',
+        'Complete your construction project on time and budget. Protect against shoddy work with performance guarantees and clear expectations.',
       aliases: [
         'building contract',
         'general contractor agreement',
@@ -35,7 +35,7 @@ export const constructionContractMeta: LegalDocument = {
     es: {
       name: 'Contrato de Construcción',
       description:
-        'Contrata contratistas para proyectos de construcción o renovación. Te protege de sobrecostos, retrasos y trabajo de mala calidad.',
+        'Protege tu inversión en construcción y evita sobrecostos inesperados. Asegura trabajo de calidad con cronogramas claros y responsabilidades definidas.',
       aliases: ['contrato de construcción', 'acuerdo de contratista general'],
     },
   },

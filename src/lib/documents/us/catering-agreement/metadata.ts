@@ -30,7 +30,7 @@ export const cateringAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Catering',
       description:
-        'Contrata servicio de comida para bodas, fiestas o eventos. Define menús, precios, horarios y qué pasa si se cancelan.',
+        'Garantiza el éxito de tu evento y evita sorpresas desagradables con el catering. Protege tu inversión con términos claros de servicio.',
       aliases: ['contrato de catering', 'acuerdo de servicio de comida'],
     },
   },

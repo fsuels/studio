@@ -25,7 +25,7 @@ export const investmentAgreementMeta: LegalDocument = {
     en: {
       name: 'Investment Agreement',
       description:
-        'Agreement outlining terms for investment transactions and partnerships.',
+        'Secure your financial future by clearly defining investment terms, returns, and responsibilities for all parties.',
       aliases: ['investor agreement', 'investment contract'],
     },
     es: {

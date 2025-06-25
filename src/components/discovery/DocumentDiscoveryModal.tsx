@@ -26,6 +26,8 @@ export default function DocumentDiscoveryModal() {
   const params = useParams();
   const locale = (params!.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const {
     showDiscoveryModal,
@@ -38,6 +40,7 @@ export default function DocumentDiscoveryModal() {
     searchInput,
     setSearchInput,
     results,
+    suggestion,
     isSearching,
     performSearch,
     clearResults
@@ -117,6 +120,18 @@ export default function DocumentDiscoveryModal() {
     }
   }, [showDiscoveryModal]);
 
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const checkOverflow = () => {
+        setIsOverflowing(container.scrollHeight > container.clientHeight);
+      };
+      checkOverflow();
+      window.addEventListener('resize', checkOverflow);
+      return () => window.removeEventListener('resize', checkOverflow);
+    }
+  }, [results]);
+
 
   const handleDocumentClick = (docId: string) => {
     setShowDiscoveryModal(false);
@@ -135,7 +150,7 @@ export default function DocumentDiscoveryModal() {
   }
 
   return (
-    <Dialog open={showDiscoveryModal} onOpenChange={() => {}}>
+    <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
       <DialogContent 
         className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 [&>button:last-child]:hidden"
       >
@@ -177,7 +192,7 @@ export default function DocumentDiscoveryModal() {
         
         {/* Content Container */}
         <div className="flex-1 flex flex-col bg-gray-50/50 dark:bg-gray-800/50 overflow-hidden">
-          <div className="flex-shrink-0 px-6 py-4 pb-3">
+          <div className="flex-shrink-0 px-6 py-4 pb-3 sticky top-0 bg-gray-50/50 dark:bg-gray-800/50 z-10 border-b border-gray-200 dark:border-gray-700">
             <SearchInput
               value={searchInput}
               onChange={setSearchInput}
@@ -271,7 +286,10 @@ export default function DocumentDiscoveryModal() {
 
           {/* Scrollable Results */}
           <div 
-            className="flex-1 overflow-y-auto px-6"
+            ref={scrollContainerRef}
+            className={`flex-1 overflow-y-auto px-6 relative ${
+              isOverflowing ? 'scroll-fade-out' : ''
+            }`}
             aria-live="polite"
             aria-label="Search results"
           >
@@ -299,6 +317,11 @@ export default function DocumentDiscoveryModal() {
             ) : searchInput ? (
               <NoResults
                 searchQuery={searchInput}
+                suggestion={suggestion}
+                onSuggestionClick={(text) => {
+                  setSearchInput(text);
+                  performSearch(text);
+                }}
               />
             ) : null}
           </div>

@@ -25,7 +25,7 @@ export const guardianshipAgreementMeta: LegalDocument = {
     en: {
       name: 'Guardianship Agreement',
       description:
-        'Legal agreement establishing guardianship responsibilities and authority.',
+        'Protect and care for a loved one by establishing your legal guardianship responsibilities and decision-making authority.',
       aliases: [
         'guardian appointment',
         'custody agreement',

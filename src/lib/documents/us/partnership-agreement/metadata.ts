@@ -25,13 +25,13 @@ export const partnershipAgreementMeta: LegalDocument = {
     en: {
       name: 'Partnership Agreement',
       description:
-        'Define the terms, responsibilities, and profit sharing for business partners.',
+        'Start a business with partners and avoid future conflicts. Define ownership, responsibilities, and what happens if someone leaves.',
       aliases: ['business partners', 'joint venture', 'partner terms'],
     },
     es: {
       name: 'Acuerdo de Sociedad',
       description:
-        'Inicia un negocio con socios. Define quién aporta qué, cómo se reparten ganancias y quién toma qué decisiones.',
+        'Evita conflictos y protege tu inversión al iniciar un negocio con socios. Define claramente responsabilidades, aportaciones y reparto de ganancias.',
       aliases: ['socios de negocios', 'empresa conjunta', 'términos de socios'],
     },
   },

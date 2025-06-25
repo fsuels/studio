@@ -4,7 +4,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Farm partnerships, crop sharing, or land use agreements. Covers farming operations, costs, and profit sharing.",
+    "description": "Maximize your agricultural profits and minimize risks through strategic partnerships. Establish fair terms that benefit all parties.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Rent farmland for crops or livestock. Sets rental terms, land use restrictions, and maintenance responsibilities.",
+    "description": "Access prime agricultural land without the huge investment of buying. Generate steady income from your property investment.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -24,7 +24,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Split crop profits between landowner and farmer. Fair way to share costs, work, and income from farming.",
+    "description": "Generate passive income from your land while farmers do the work. Share in agricultural success without hands-on farming.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -34,7 +34,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Buy or sell cattle, horses, or other farm animals safely. Covers health guarantees, delivery, and payment terms.",
+    "description": "Protect your investment in valuable livestock with guaranteed health and delivery terms. Avoid costly disputes over animal purchases.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -44,7 +44,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Sell trees from your property to lumber companies. Protects your land while getting fair value for timber.",
+    "description": "Turn your forest into cash while protecting your land for future harvests. Maximize timber value without environmental damage.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -54,7 +54,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lease your land to oil or gas companies for drilling. Covers royalty payments and land protection requirements.",
+    "description": "Generate substantial passive income from oil and gas rights. Protect your property while earning royalties from energy companies.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -64,7 +64,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Detailed agreement for oil and gas exploration on your property. Ensures fair compensation and environmental protection.",
+    "description": "Maximize your energy lease income while safeguarding your property. Secure fair compensation and environmental protections.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -74,7 +74,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Buy, sell, or share water rights for irrigation or other uses. Important for farming and property development.",
+    "description": "Secure the water access your agricultural or development projects need. Protect this valuable resource for long-term success.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -84,7 +84,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Allow mining on your property while protecting your interests. Covers compensation, environmental restoration, and access.",
+    "description": "Profit from your property's mineral wealth while ensuring land restoration. Secure fair compensation for mining rights.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -94,7 +94,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lease land for mining operations with detailed terms. Protects property owners and ensures proper land restoration.",
+    "description": "Generate income from mineral extraction while protecting your property's future value. Ensure complete restoration after mining.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -104,7 +104,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Set payment terms for private school or college tuition. Protects both families and educational institutions.",
+    "description": "Make quality education affordable with flexible payment arrangements. Protect your family's educational investment.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -114,7 +114,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire tutors for academic help with clear expectations. Covers subjects, schedules, payment, and learning goals.",
+    "description": "Give your child the academic advantage they need to succeed. Ensure results with clear learning goals and expectations.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -124,7 +124,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Formalize athletic scholarship terms between students and schools. Covers performance expectations and academic requirements.",
+    "description": "Secure your athletic scholarship while understanding all requirements. Protect your educational opportunities and athletic career.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Collaborate on research projects with clear ownership of results. Important for academic and commercial research partnerships.",
+    "description": "Advance knowledge while protecting your intellectual property rights. Establish clear ownership of valuable research outcomes.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -144,7 +144,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Set aside money for children's education expenses. Tax-advantaged way to save for future college costs.",
+    "description": "Secure your child's educational future while reducing your tax burden. Build wealth specifically for education expenses.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18
@@ -154,7 +154,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Protect yourself from travel emergencies and cancellations. Covers medical expenses, trip interruptions, and lost luggage.",
+    "description": "Travel with confidence knowing you're protected from unexpected costs. Recover money from cancelled trips and medical emergencies.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -164,7 +164,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Charter private aircraft for business or personal travel. Sets flight terms, costs, and safety responsibilities.",
+    "description": "Travel on your schedule while ensuring safety and cost transparency. Access private aviation with complete peace of mind.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -174,7 +174,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Charter boats or ships for transportation or recreation. Covers crew, insurance, and maritime safety requirements.",
+    "description": "Enjoy maritime adventures with professional safety standards. Charter vessels with confidence in crew qualifications and insurance.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lease hunting rights on private property. Sets seasons, fees, safety rules, and property access restrictions.",
+    "description": "Access premium hunting locations while respecting property rights. Generate income from your land through hunting leases.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

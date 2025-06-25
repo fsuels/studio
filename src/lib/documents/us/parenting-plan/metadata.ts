@@ -25,7 +25,7 @@ export const parentingPlanMeta: LegalDocument = {
     en: {
       name: 'Parenting Plan',
       description:
-        'Comprehensive plan for child custody, visitation, and parental responsibilities.',
+        'Put your children first with a detailed plan that ensures their well-being through custody and visitation schedules.',
       aliases: [
         'custody agreement',
         'visitation schedule',

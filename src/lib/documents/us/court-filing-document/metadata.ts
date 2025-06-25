@@ -25,7 +25,7 @@ export const courtFilingDocumentMeta: LegalDocument = {
     en: {
       name: 'Court Filing Document',
       description:
-        'General template for court filing documents and legal pleadings.',
+        'Present your case professionally with properly formatted court documents that meet legal requirements.',
       aliases: ['legal pleading', 'court document', 'legal filing'],
     },
     es: {

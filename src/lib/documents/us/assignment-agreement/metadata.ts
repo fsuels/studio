@@ -26,7 +26,7 @@ export const assignmentAgreementMeta: Omit<
     en: {
       name: 'Assignment Agreement',
       description:
-        'Transfer contract rights and obligations from one party to another.',
+        'Transfer contractual responsibilities legally while protecting your reputation. Exit commitments you can't fulfill without penalties.',
       aliases: [
         'contract assignment',
         'right assignment',
@@ -36,7 +36,7 @@ export const assignmentAgreementMeta: Omit<
     es: {
       name: 'Acuerdo de Cesión',
       description:
-        'Transfiere un contrato existente a otra persona. Útil cuando vendes tu negocio o no puedes cumplir un acuerdo.',
+        'Transfiere responsabilidades contractuales legalmente y evita penalizaciones. Protege tu reputación cuando no puedes cumplir compromisos.',
       aliases: [
         'cesión de contrato',
         'cesión de derechos',

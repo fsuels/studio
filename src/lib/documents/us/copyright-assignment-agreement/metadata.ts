@@ -25,7 +25,7 @@ export const copyrightAssignmentAgreementMeta: LegalDocument = {
     en: {
       name: 'Copyright Assignment Agreement',
       description:
-        'Comprehensive agreement for transferring copyright ownership of creative works.',
+        'Secure your creative business deals by properly transferring copyright ownership with full legal protection.',
       aliases: [
         'copyright transfer',
         'copyright conveyance',

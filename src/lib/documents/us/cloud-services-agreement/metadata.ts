@@ -30,7 +30,7 @@ export const cloudServicesAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Servicios en la Nube',
       description:
-        'Contrata servicios de almacenamiento y software en la nube. Define seguridad, disponibilidad y qué pasa con tus datos.',
+        'Protege tus datos empresariales y asegura servicios confiables en la nube. Obten garantías de disponibilidad y seguridad para tu negocio.',
       aliases: ['hospedaje en la nube', 'acuerdo SaaS'],
     },
   },

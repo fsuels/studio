@@ -24,7 +24,7 @@ export const advanceDirectiveRevocationMeta: Omit<
     en: {
       name: 'Advance Directive Revocation',
       description:
-        'Legal document to revoke or cancel a previously executed advance healthcare directive.',
+        'Take back control over your healthcare decisions by officially canceling your previous medical directive.',
       aliases: [
         'revocation of advance directive',
         'advance healthcare directive revocation',

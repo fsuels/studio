@@ -25,7 +25,7 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
     en: {
       name: 'Confidentiality Agreement (NDA)',
       description:
-        'Create a legally binding Non-Disclosure Agreement (NDA) with our easy-to-use template. State-specific requirements included.',
+        'Protect your business secrets and confidential information when hiring employees or partners. Prevent competitors from stealing your valuable ideas.',
       aliases: [
         'non-disclosure contract (nda)',
         'business document',

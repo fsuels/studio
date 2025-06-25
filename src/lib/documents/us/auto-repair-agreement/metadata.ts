@@ -35,7 +35,7 @@ export const autoRepairAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Reparación Automotriz',
       description:
-        'Contrata mecánicos para arreglar tu auto. Cubre costos estimados, garantías de trabajo y qué pasa si se encuentran problemas adicionales.',
+        'Protege tu inversión en reparaciones automotrices y evita sobrecostos inesperados. Asegura garantías de trabajo y transparencia en precios.',
       aliases: [
         'acuerdo de reparación de vehículos',
         'contrato de servicio automotriz',
