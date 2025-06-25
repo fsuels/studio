@@ -1374,10 +1374,454 @@ export const blogArticles: BlogArticle[] = [
       'Explore the legal eviction process and how to avoid common pitfalls as a landlord or tenant.',
     summary_es:
       'Explora el proceso legal de desalojo y cómo evitar errores comunes como propietario o inquilino.',
-    content_en:
-      "<p>Eviction is a legal process landlords must follow to remove a tenant. Key steps and rights:</p><ul><li><strong>Valid Reason:</strong> Typically non-payment of rent, lease violations, or illegal activity.</li><li><strong>Notice:</strong> Landlord must provide proper written notice (e.g., 3-day notice to pay or quit, 30-day notice to vacate). State laws vary significantly.</li><li><strong>Court Filing:</strong> If the tenant doesn't comply, the landlord files an unlawful detainer lawsuit.</li><li><strong>Tenant Response:</strong> Tenant has a specific timeframe to respond to the court summons.</li><li><strong>Hearing:</strong> A judge hears the case and issues a ruling.</li><li><strong>Writ of Possession:</strong> If the landlord wins, law enforcement executes the eviction.</li></ul><p>Both landlords and tenants should understand their state's specific laws and seek legal advice if unsure.</p>",
-    content_es:
-      '<p>El desalojo es un proceso legal que los propietarios deben seguir para retirar a un inquilino. Pasos y derechos clave:</p><ul><li><strong>Razón Válida:</strong> Típicamente falta de pago de alquiler, violaciones del contrato de arrendamiento o actividad ilegal.</li><li><strong>Notificación:</strong> El propietario debe proporcionar una notificación escrita adecuada (p. ej., aviso de 3 días para pagar o desalojar, aviso de 30 días para desalojar). Las leyes estatales varían significativamente.</li><li><strong>Presentación Judicial:</strong> Si el inquilino no cumple, el propietario presenta una demanda de desalojo ilegal.</li><li><strong>Respuesta del Inquilino:</strong> El inquilino tiene un plazo específico para responder a la citación judicial.</li><li><strong>Audiencia:</strong> Un juez escucha el caso y emite un fallo.</li><li><strong>Orden de Posesión:</strong> Si el propietario gana, las fuerzas del orden ejecutan el desalojo.</li></ul><p>Tanto propietarios como inquilinos deben comprender las leyes específicas de su estado y buscar asesoramiento legal si no están seguros.</p>',
+    content_en: `
+      <p>The eviction process is one of the most complex and emotionally charged areas of landlord-tenant law. Whether you're a property owner facing non-paying tenants or a renter dealing with potential eviction, understanding your rights and the legal process is crucial for protecting your interests and avoiding costly mistakes.</p>
+
+      <h2>What is the Legal Eviction Process?</h2>
+      <p>Eviction is a formal legal procedure that landlords must follow to remove tenants from rental property. This court-supervised process exists to protect both parties' rights and ensure that tenants aren't illegally removed from their homes without proper cause and due process.</p>
+
+      <div class="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+          ⚠️ Critical Warning for Landlords
+        </h3>
+        <p class="text-red-800 dark:text-red-200">
+          <strong>Never attempt "self-help" evictions.</strong> Changing locks, shutting off utilities, removing tenant belongings, or physically forcing tenants out is illegal in all states and can result in significant legal liability, including damages for wrongful eviction.
+        </p>
+      </div>
+
+      <h2>Valid Grounds for Eviction</h2>
+      <p>Landlords cannot evict tenants for any reason. State laws specify valid grounds for eviction, which typically include:</p>
+
+      <h3>1. Non-Payment of Rent</h3>
+      <p>The most common reason for eviction. However, landlords must follow specific notice requirements and cannot immediately file for eviction the day after rent is due.</p>
+
+      <h3>2. Lease Violations</h3>
+      <ul>
+        <li>Unauthorized pets or occupants</li>
+        <li>Excessive noise or disturbing neighbors</li>
+        <li>Damage to the property beyond normal wear and tear</li>
+        <li>Using the property for illegal purposes</li>
+        <li>Violating no-smoking policies</li>
+      </ul>
+
+      <h3>3. Holdover Tenancy</h3>
+      <p>When tenants remain in the property after their lease expires without the landlord's consent.</p>
+
+      <h3>4. Illegal Activities</h3>
+      <p>Drug-related crimes, violence, or other criminal activities on the premises may justify immediate eviction in many states.</p>
+
+      <h2>The Step-by-Step Eviction Process</h2>
+
+      <h3>Step 1: Proper Notice Requirements</h3>
+      <p>Before filing any court action, landlords must provide tenants with written notice. Notice requirements vary significantly by state and situation:</p>
+
+      <ul>
+        <li><strong>Pay or Quit Notice:</strong> Usually 3-5 days for non-payment of rent</li>
+        <li><strong>Cure or Quit Notice:</strong> 3-30 days for lease violations that can be fixed</li>
+        <li><strong>Unconditional Quit Notice:</strong> 3-30 days for serious violations or illegal activities</li>
+        <li><strong>No-Cause Termination:</strong> 30-60 days for month-to-month tenancies (where allowed)</li>
+      </ul>
+
+      <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+          📋 Notice Must Include:
+        </h3>
+        <ul class="text-blue-800 dark:text-blue-200 space-y-2">
+          <li>• Tenant's name and property address</li>
+          <li>• Specific reason for eviction</li>
+          <li>• Amount owed (if applicable)</li>
+          <li>• Deadline to comply or vacate</li>
+          <li>• Statement of consequences for non-compliance</li>
+          <li>• Landlord's signature and date</li>
+        </ul>
+      </div>
+
+      <h3>Step 2: Filing the Eviction Lawsuit</h3>
+      <p>If tenants don't comply with the notice, landlords can file an unlawful detainer (UD) lawsuit in the appropriate court. This typically requires:</p>
+
+      <ul>
+        <li>Completed court forms and filing fees</li>
+        <li>Copy of the lease agreement</li>
+        <li>Proof of proper notice service</li>
+        <li>Documentation of lease violations or unpaid rent</li>
+      </ul>
+
+      <h3>Step 3: Serving the Summons and Complaint</h3>
+      <p>The court issues a summons that must be properly served on the tenant, usually by a sheriff or process server. Tenants typically have 5-30 days to respond, depending on state law.</p>
+
+      <h3>Step 4: Tenant's Response Options</h3>
+      <p>Tenants can respond to eviction lawsuits by:</p>
+      <ul>
+        <li><strong>Paying owed rent:</strong> In some states, tenants can stop eviction by paying all owed amounts</li>
+        <li><strong>Filing an answer:</strong> Disputing the landlord's claims in court</li>
+        <li><strong>Raising defenses:</strong> Such as uninhabitable conditions or discriminatory eviction</li>
+        <li><strong>Filing a counterclaim:</strong> For landlord's violations of tenant rights</li>
+      </ul>
+
+      <h3>Step 5: Court Hearing</h3>
+      <p>If the tenant responds, both parties present their case to a judge. Common tenant defenses include:</p>
+      <ul>
+        <li>Improper notice or service</li>
+        <li>Rent was actually paid</li>
+        <li>Uninhabitable living conditions</li>
+        <li>Retaliatory or discriminatory eviction</li>
+        <li>Landlord accepted rent after giving notice</li>
+      </ul>
+
+      <h3>Step 6: Judgment and Writ of Possession</h3>
+      <p>If the landlord wins, the court issues a judgment for possession and may award monetary damages. The landlord then obtains a writ of possession, which authorizes law enforcement to remove the tenant.</p>
+
+      <h2>State-Specific Eviction Laws and Timelines</h2>
+
+      <h3>California</h3>
+      <ul>
+        <li>3-day notice for non-payment of rent</li>
+        <li>Strong tenant protections and rent control laws</li>
+        <li>COVID-19 eviction moratorium extensions</li>
+        <li>Just cause eviction requirements in many cities</li>
+      </ul>
+
+      <h3>Texas</h3>
+      <ul>
+        <li>3-day notice for non-payment</li>
+        <li>Fast-track eviction process (can be completed in 3-4 weeks)</li>
+        <li>Limited tenant protections</li>
+        <li>Landlord-friendly eviction laws</li>
+      </ul>
+
+      <h3>New York</h3>
+      <ul>
+        <li>14-day notice for non-payment (increased from 3 days)</li>
+        <li>Strong tenant protections and right to counsel</li>
+        <li>Good cause eviction laws</li>
+        <li>Extended notice periods for month-to-month tenancies</li>
+      </ul>
+
+      <h3>Florida</h3>
+      <ul>
+        <li>3-day notice for non-payment</li>
+        <li>Streamlined eviction process</li>
+        <li>Limited rent control (prohibited in most cases)</li>
+        <li>Landlord-friendly laws with some tenant protections</li>
+      </ul>
+
+      <h2>Tenant Rights and Defenses</h2>
+
+      <h3>Right to Habitable Housing</h3>
+      <p>Tenants have the right to live in safe, habitable conditions. Landlords who fail to maintain the property may face successful tenant defenses in eviction cases.</p>
+
+      <h3>Protection from Retaliation</h3>
+      <p>Landlords cannot evict tenants for:</p>
+      <ul>
+        <li>Complaining about housing conditions</li>
+        <li>Contacting health or building inspectors</li>
+        <li>Joining tenant organizations</li>
+        <li>Exercising legal rights</li>
+      </ul>
+
+      <h3>Anti-Discrimination Laws</h3>
+      <p>Evictions based on race, religion, national origin, disability, familial status, or other protected characteristics violate federal and state fair housing laws.</p>
+
+      <h2>Avoiding Eviction: Options for Tenants</h2>
+
+      <h3>Communication with Landlord</h3>
+      <p>Open communication about financial difficulties or other issues can often prevent eviction. Many landlords prefer working out payment plans rather than going through the costly eviction process.</p>
+
+      <h3>Emergency Rental Assistance</h3>
+      <p>Federal, state, and local programs may provide financial assistance for rent and utilities. Research available programs in your area.</p>
+
+      <h3>Legal Aid and Tenant Rights Organizations</h3>
+      <p>Free or low-cost legal assistance is available in many areas to help tenants understand their rights and defend against eviction.</p>
+
+      <h2>Costs and Consequences of Eviction</h2>
+
+      <h3>For Landlords</h3>
+      <ul>
+        <li>Court filing fees: $50-$400</li>
+        <li>Attorney fees: $500-$2,500+</li>
+        <li>Lost rental income during process</li>
+        <li>Property damage and cleanup costs</li>
+        <li>Marketing and re-renting expenses</li>
+      </ul>
+
+      <h3>For Tenants</h3>
+      <ul>
+        <li>Eviction record on credit reports</li>
+        <li>Difficulty finding future housing</li>
+        <li>Potential wage garnishment for unpaid rent</li>
+        <li>Forced relocation and moving costs</li>
+        <li>Emotional stress and family disruption</li>
+      </ul>
+
+      <h2>Best Practices for Landlords</h2>
+
+      <ul>
+        <li><strong>Screen tenants thoroughly:</strong> Check credit, employment, and rental history</li>
+        <li><strong>Use clear lease agreements:</strong> Specify all rules and expectations upfront</li>
+        <li><strong>Document everything:</strong> Keep records of all communications and notices</li>
+        <li><strong>Follow proper procedures:</strong> Adhere strictly to state and local laws</li>
+        <li><strong>Consider alternatives:</strong> Payment plans, cash for keys, or early termination agreements</li>
+        <li><strong>Maintain the property:</strong> Address habitability issues promptly</li>
+      </ul>
+
+      <h2>Alternative Dispute Resolution</h2>
+      <p>Many jurisdictions offer mediation programs that can help landlords and tenants resolve disputes without going to court. These programs can save time, money, and preserve relationships.</p>
+
+      <h2>COVID-19 Impact on Evictions</h2>
+      <p>The pandemic significantly impacted eviction laws, with many states implementing moratoriums, requiring additional notices, and expanding tenant protections. While federal moratoriums have ended, some local protections remain in effect.</p>
+
+      <h2>When to Seek Legal Help</h2>
+      <p>Both landlords and tenants should consider consulting with attorneys when:</p>
+      <ul>
+        <li>Dealing with complex lease terms or disputes</li>
+        <li>Facing potential discrimination claims</li>
+        <li>Handling properties in rent-controlled areas</li>
+        <li>Encountering unusual circumstances or defenses</li>
+        <li>Needing assistance with court procedures</li>
+      </ul>
+
+      <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
+          ✅ Key Takeaways
+        </h3>
+        <ul class="text-green-800 dark:text-green-200 space-y-2">
+          <li>• Eviction is a legal process that must follow specific state requirements</li>
+          <li>• Proper notice is always required before filing court action</li>
+          <li>• Both parties have important rights that must be respected</li>
+          <li>• Early communication and negotiation can often prevent eviction</li>
+          <li>• Professional legal advice is valuable for complex situations</li>
+        </ul>
+      </div>
+
+      <h2>Conclusion</h2>
+      <p>The eviction process is complex and varies significantly by state and local jurisdiction. Understanding the legal requirements, rights, and potential consequences is essential for both landlords and tenants. When in doubt, consulting with qualified legal professionals can help ensure that all parties' rights are protected and that the process proceeds according to law.</p>
+
+      <p>Remember that eviction should always be a last resort. Open communication, understanding of rights and responsibilities, and willingness to work together can often resolve disputes without the need for court intervention.</p>
+    `,
+    content_es: `
+      <p>El proceso de desalojo es una de las áreas más complejas y emocionalmente cargadas del derecho de propietarios e inquilinos. Ya seas un dueño de propiedad enfrentando inquilinos que no pagan o un arrendatario lidiando con un posible desalojo, entender tus derechos y el proceso legal es crucial para proteger tus intereses y evitar errores costosos.</p>
+
+      <h2>¿Qué es el Proceso Legal de Desalojo?</h2>
+      <p>El desalojo es un procedimiento legal formal que los propietarios deben seguir para retirar inquilinos de la propiedad de alquiler. Este proceso supervisado por la corte existe para proteger los derechos de ambas partes y asegurar que los inquilinos no sean removidos ilegalmente de sus hogares sin causa apropiada y debido proceso.</p>
+
+      <div class="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+          ⚠️ Advertencia Crítica para Propietarios
+        </h3>
+        <p class="text-red-800 dark:text-red-200">
+          <strong>Nunca intentes desalojos de "auto-ayuda".</strong> Cambiar cerraduras, cortar servicios públicos, remover pertenencias del inquilino, o forzar físicamente a los inquilinos a salir es ilegal en todos los estados y puede resultar en responsabilidad legal significativa, incluyendo daños por desalojo ilegal.
+        </p>
+      </div>
+
+      <h2>Motivos Válidos para Desalojo</h2>
+      <p>Los propietarios no pueden desalojar inquilinos por cualquier razón. Las leyes estatales especifican motivos válidos para desalojo, que típicamente incluyen:</p>
+
+      <h3>1. Falta de Pago de Alquiler</h3>
+      <p>La razón más común para desalojo. Sin embargo, los propietarios deben seguir requisitos específicos de notificación y no pueden inmediatamente solicitar desalojo el día después de que vence el alquiler.</p>
+
+      <h3>2. Violaciones del Contrato de Arrendamiento</h3>
+      <ul>
+        <li>Mascotas u ocupantes no autorizados</li>
+        <li>Ruido excesivo o molestar a vecinos</li>
+        <li>Daño a la propiedad más allá del desgaste normal</li>
+        <li>Usar la propiedad para propósitos ilegales</li>
+        <li>Violar políticas de no fumar</li>
+      </ul>
+
+      <h3>3. Inquilino Remanente</h3>
+      <p>Cuando los inquilinos permanecen en la propiedad después de que expira su contrato sin el consentimiento del propietario.</p>
+
+      <h3>4. Actividades Ilegales</h3>
+      <p>Crímenes relacionados con drogas, violencia, u otras actividades criminales en las instalaciones pueden justificar desalojo inmediato en muchos estados.</p>
+
+      <h2>El Proceso de Desalojo Paso a Paso</h2>
+
+      <h3>Paso 1: Requisitos de Notificación Apropiada</h3>
+      <p>Antes de presentar cualquier acción judicial, los propietarios deben proporcionar a los inquilinos notificación escrita. Los requisitos de notificación varían significativamente por estado y situación:</p>
+
+      <ul>
+        <li><strong>Aviso de Pagar o Desalojar:</strong> Usualmente 3-5 días por falta de pago de alquiler</li>
+        <li><strong>Aviso de Corregir o Desalojar:</strong> 3-30 días por violaciones del contrato que pueden arreglarse</li>
+        <li><strong>Aviso de Desalojo Incondicional:</strong> 3-30 días por violaciones serias o actividades ilegales</li>
+        <li><strong>Terminación Sin Causa:</strong> 30-60 días para contratos mes a mes (donde se permita)</li>
+      </ul>
+
+      <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+          📋 El Aviso Debe Incluir:
+        </h3>
+        <ul class="text-blue-800 dark:text-blue-200 space-y-2">
+          <li>• Nombre del inquilino y dirección de la propiedad</li>
+          <li>• Razón específica para el desalojo</li>
+          <li>• Cantidad adeudada (si aplica)</li>
+          <li>• Fecha límite para cumplir o desalojar</li>
+          <li>• Declaración de consecuencias por incumplimiento</li>
+          <li>• Firma y fecha del propietario</li>
+        </ul>
+      </div>
+
+      <h3>Paso 2: Presentar la Demanda de Desalojo</h3>
+      <p>Si los inquilinos no cumplen con el aviso, los propietarios pueden presentar una demanda de retención ilegal (UD) en la corte apropiada. Esto típicamente requiere:</p>
+
+      <ul>
+        <li>Formularios de corte completados y tarifas de presentación</li>
+        <li>Copia del contrato de arrendamiento</li>
+        <li>Prueba del servicio apropiado del aviso</li>
+        <li>Documentación de violaciones del contrato o alquiler no pagado</li>
+      </ul>
+
+      <h3>Paso 3: Servir la Citación y Demanda</h3>
+      <p>La corte emite una citación que debe ser apropiadamente servida al inquilino, usualmente por un alguacil o servidor de procesos. Los inquilinos típicamente tienen 5-30 días para responder, dependiendo de la ley estatal.</p>
+
+      <h3>Paso 4: Opciones de Respuesta del Inquilino</h3>
+      <p>Los inquilinos pueden responder a demandas de desalojo:</p>
+      <ul>
+        <li><strong>Pagando alquiler adeudado:</strong> En algunos estados, los inquilinos pueden detener el desalojo pagando todas las cantidades adeudadas</li>
+        <li><strong>Presentando una respuesta:</strong> Disputando las reclamaciones del propietario en corte</li>
+        <li><strong>Planteando defensas:</strong> Como condiciones inhabitables o desalojo discriminatorio</li>
+        <li><strong>Presentando una contrademanda:</strong> Por violaciones del propietario a los derechos del inquilino</li>
+      </ul>
+
+      <h3>Paso 5: Audiencia Judicial</h3>
+      <p>Si el inquilino responde, ambas partes presentan su caso a un juez. Defensas comunes del inquilino incluyen:</p>
+      <ul>
+        <li>Aviso o servicio inapropiado</li>
+        <li>El alquiler fue realmente pagado</li>
+        <li>Condiciones de vida inhabitables</li>
+        <li>Desalojo retaliatorio o discriminatorio</li>
+        <li>El propietario aceptó alquiler después de dar aviso</li>
+      </ul>
+
+      <h3>Paso 6: Juicio y Orden de Posesión</h3>
+      <p>Si el propietario gana, la corte emite un juicio por posesión y puede otorgar daños monetarios. El propietario entonces obtiene una orden de posesión, que autoriza a las fuerzas del orden a remover al inquilino.</p>
+
+      <h2>Leyes de Desalojo Específicas por Estado y Cronogramas</h2>
+
+      <h3>California</h3>
+      <ul>
+        <li>Aviso de 3 días por falta de pago de alquiler</li>
+        <li>Fuertes protecciones para inquilinos y leyes de control de alquiler</li>
+        <li>Extensiones de moratoria de desalojo por COVID-19</li>
+        <li>Requisitos de causa justa para desalojo en muchas ciudades</li>
+      </ul>
+
+      <h3>Texas</h3>
+      <ul>
+        <li>Aviso de 3 días por falta de pago</li>
+        <li>Proceso de desalojo rápido (puede completarse en 3-4 semanas)</li>
+        <li>Protecciones limitadas para inquilinos</li>
+        <li>Leyes de desalojo favorables al propietario</li>
+      </ul>
+
+      <h3>Nueva York</h3>
+      <ul>
+        <li>Aviso de 14 días por falta de pago (aumentado de 3 días)</li>
+        <li>Fuertes protecciones para inquilinos y derecho a consejo legal</li>
+        <li>Leyes de desalojo por causa justa</li>
+        <li>Períodos de aviso extendidos para contratos mes a mes</li>
+      </ul>
+
+      <h3>Florida</h3>
+      <ul>
+        <li>Aviso de 3 días por falta de pago</li>
+        <li>Proceso de desalojo simplificado</li>
+        <li>Control de alquiler limitado (prohibido en la mayoría de casos)</li>
+        <li>Leyes favorables al propietario con algunas protecciones para inquilinos</li>
+      </ul>
+
+      <h2>Derechos y Defensas del Inquilino</h2>
+
+      <h3>Derecho a Vivienda Habitable</h3>
+      <p>Los inquilinos tienen derecho a vivir en condiciones seguras y habitables. Los propietarios que no mantienen la propiedad pueden enfrentar defensas exitosas del inquilino en casos de desalojo.</p>
+
+      <h3>Protección contra Represalias</h3>
+      <p>Los propietarios no pueden desalojar inquilinos por:</p>
+      <ul>
+        <li>Quejarse sobre condiciones de vivienda</li>
+        <li>Contactar inspectores de salud o construcción</li>
+        <li>Unirse a organizaciones de inquilinos</li>
+        <li>Ejercer derechos legales</li>
+      </ul>
+
+      <h3>Leyes Anti-Discriminación</h3>
+      <p>Desalojos basados en raza, religión, origen nacional, discapacidad, estado familiar, u otras características protegidas violan las leyes federales y estatales de vivienda justa.</p>
+
+      <h2>Evitando el Desalojo: Opciones para Inquilinos</h2>
+
+      <h3>Comunicación con el Propietario</h3>
+      <p>La comunicación abierta sobre dificultades financieras u otros problemas a menudo puede prevenir el desalojo. Muchos propietarios prefieren establecer planes de pago en lugar de pasar por el costoso proceso de desalojo.</p>
+
+      <h3>Asistencia de Alquiler de Emergencia</h3>
+      <p>Los programas federales, estatales y locales pueden proporcionar asistencia financiera para alquiler y servicios públicos. Investiga programas disponibles en tu área.</p>
+
+      <h3>Asistencia Legal y Organizaciones de Derechos de Inquilinos</h3>
+      <p>Asistencia legal gratuita o de bajo costo está disponible en muchas áreas para ayudar a los inquilinos a entender sus derechos y defenderse contra el desalojo.</p>
+
+      <h2>Costos y Consecuencias del Desalojo</h2>
+
+      <h3>Para Propietarios</h3>
+      <ul>
+        <li>Tarifas de presentación en corte: $50-$400</li>
+        <li>Honorarios de abogado: $500-$2,500+</li>
+        <li>Pérdida de ingresos de alquiler durante el proceso</li>
+        <li>Costos de daños a la propiedad y limpieza</li>
+        <li>Gastos de mercadeo y re-alquiler</li>
+      </ul>
+
+      <h3>Para Inquilinos</h3>
+      <ul>
+        <li>Registro de desalojo en reportes de crédito</li>
+        <li>Dificultad para encontrar vivienda futura</li>
+        <li>Posible embargo de salario por alquiler no pagado</li>
+        <li>Reubicación forzada y costos de mudanza</li>
+        <li>Estrés emocional y disrupción familiar</li>
+      </ul>
+
+      <h2>Mejores Prácticas para Propietarios</h2>
+
+      <ul>
+        <li><strong>Examinar inquilinos minuciosamente:</strong> Verificar crédito, empleo e historial de alquiler</li>
+        <li><strong>Usar contratos de arrendamiento claros:</strong> Especificar todas las reglas y expectativas por adelantado</li>
+        <li><strong>Documentar todo:</strong> Mantener registros de todas las comunicaciones y avisos</li>
+        <li><strong>Seguir procedimientos apropiados:</strong> Adherirse estrictamente a las leyes estatales y locales</li>
+        <li><strong>Considerar alternativas:</strong> Planes de pago, dinero por llaves, o acuerdos de terminación temprana</li>
+        <li><strong>Mantener la propiedad:</strong> Abordar problemas de habitabilidad prontamente</li>
+      </ul>
+
+      <h2>Resolución Alternativa de Disputas</h2>
+      <p>Muchas jurisdicciones ofrecen programas de mediación que pueden ayudar a propietarios e inquilinos a resolver disputas sin ir a corte. Estos programas pueden ahorrar tiempo, dinero y preservar relaciones.</p>
+
+      <h2>Impacto del COVID-19 en Desalojos</h2>
+      <p>La pandemia impactó significativamente las leyes de desalojo, con muchos estados implementando moratorias, requiriendo avisos adicionales, y expandiendo protecciones para inquilinos. Mientras que las moratorias federales han terminado, algunas protecciones locales permanecen en efecto.</p>
+
+      <h2>Cuándo Buscar Ayuda Legal</h2>
+      <p>Tanto propietarios como inquilinos deben considerar consultar con abogados cuando:</p>
+      <ul>
+        <li>Lidiando con términos de contrato complejos o disputas</li>
+        <li>Enfrentando posibles reclamaciones de discriminación</li>
+        <li>Manejando propiedades en áreas con control de alquiler</li>
+        <li>Encontrando circunstancias o defensas inusuales</li>
+        <li>Necesitando asistencia con procedimientos de corte</li>
+      </ul>
+
+      <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
+          ✅ Puntos Clave
+        </h3>
+        <ul class="text-green-800 dark:text-green-200 space-y-2">
+          <li>• El desalojo es un proceso legal que debe seguir requisitos estatales específicos</li>
+          <li>• Siempre se requiere aviso apropiado antes de presentar acción judicial</li>
+          <li>• Ambas partes tienen derechos importantes que deben ser respetados</li>
+          <li>• La comunicación temprana y negociación a menudo pueden prevenir el desalojo</li>
+          <li>• El consejo legal profesional es valioso para situaciones complejas</li>
+        </ul>
+      </div>
+
+      <h2>Conclusión</h2>
+      <p>El proceso de desalojo es complejo y varía significativamente por estado y jurisdicción local. Entender los requisitos legales, derechos y consecuencias potenciales es esencial tanto para propietarios como inquilinos. Cuando hay dudas, consultar con profesionales legales calificados puede ayudar a asegurar que los derechos de todas las partes estén protegidos y que el proceso proceda según la ley.</p>
+
+      <p>Recuerda que el desalojo siempre debe ser un último recurso. La comunicación abierta, entendimiento de derechos y responsabilidades, y disposición para trabajar juntos a menudo puede resolver disputas sin la necesidad de intervención judicial.</p>
+    `,
     prev: 'ndas-how-to-use',
     next: 'power-of-attorney-basics',
   },
@@ -3855,6 +4299,265 @@ export const blogArticles: BlogArticle[] = [
     `,
     content_es: `
       <p>Inmigrar a los Estados Unidos involucra requisitos extensos de documentación que pueden determinar tu capacidad de trabajar, viajar y establecer residencia permanente. Ya sea que busques autorización de empleo, solicites reunificación familiar o busques residencia permanente, tener los documentos legales correctos preparados adecuadamente es crucial para resultados de inmigración exitosos.</p>
+
+      <h2>Por Qué la Documentación Legal Importa para Inmigrantes</h2>
+      <p>La ley de inmigración requiere documentación precisa en cada paso. Los documentos faltantes o incorrectos pueden resultar en retrasos en la aplicación, denegaciones o incluso procedimientos de deportación. A diferencia de otras áreas legales donde los acuerdos informales podrían ser suficientes, la inmigración requiere formularios oficiales del gobierno y documentos de apoyo que cumplan con requisitos federales estrictos.</p>
+
+      <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 my-8">
+        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+          ⚠️ Requisitos Críticos de Documentos de Inmigración
+        </h3>
+        <ul class="text-blue-800 dark:text-blue-200 space-y-2">
+          <li>• Todos los documentos deben estar en inglés o acompañados de traducciones certificadas</li>
+          <li>• Los formularios gubernamentales deben usar versiones actuales de USCIS, DOS o agencias relevantes</li>
+          <li>• Los documentos de apoyo a menudo requieren notarización o certificación de apostilla</li>
+          <li>• Las fechas límite son estrictas—presentaciones tardías pueden invalidar aplicaciones completas</li>
+          <li>• Errores u omisiones pueden desencadenar investigaciones de fraude</li>
+        </ul>
+      </div>
+
+      <h2>Documentos Esenciales para Nuevos Inmigrantes en EE.UU.</h2>
+
+      <h3>1. Aplicación de Documento de Autorización de Empleo (EAD)</h3>
+      <p><strong>Formulario I-765</strong> es requerido para la mayoría de inmigrantes que buscan autorización de trabajo en Estados Unidos.</p>
+      
+      <h4>Quién Necesita el Formulario I-765:</h4>
+      <ul>
+        <li><strong>Solicitantes de asilo:</strong> Después de 150 días de presentar la solicitud de asilo</li>
+        <li><strong>Solicitantes de ajuste de estatus:</strong> Mientras esperan el procesamiento de la tarjeta verde</li>
+        <li><strong>Estudiantes F-1:</strong> Para Entrenamiento Práctico Opcional (OPT) o dificultades económicas de emergencia</li>
+        <li><strong>Dependientes H-4:</strong> Cónyuges de trabajadores H-1B en ciertas circunstancias</li>
+        <li><strong>Beneficiarios de TPS:</strong> Aquellos otorgados Estatus de Protección Temporal</li>
+      </ul>
+
+      <h4>Documentos de Apoyo Requeridos:</h4>
+      <ul>
+        <li>Copia del registro de llegada/salida I-94</li>
+        <li>Fotografías estilo pasaporte (2)</li>
+        <li>Copia del documento de estatus migratorio actual</li>
+        <li>Tarifa de presentación ($410 a partir de 2024) o solicitud de exención de tarifa</li>
+        <li>Evidencia específica de categoría (varía según la base de elegibilidad)</li>
+      </ul>
+
+      <h3>2. Declaración Jurada de Apoyo (Formulario I-864)</h3>
+      <p>Requerida para la mayoría de solicitudes de inmigración basadas en familia para demostrar que el inmigrante no se convertirá en una carga pública.</p>
+
+      <h4>Responsabilidades del Patrocinador:</h4>
+      <ul>
+        <li><strong>Requisitos de ingresos:</strong> Debe ganar al menos 125% de las Pautas Federales de Pobreza</li>
+        <li><strong>Obligación legal:</strong> Compromiso financieramente vinculante hasta por 10 años</li>
+        <li><strong>Evidencia requerida:</strong> Declaraciones de impuestos, talones de pago, evidencia de empleo</li>
+        <li><strong>Co-patrocinadores:</strong> Pueden ser necesarios si los ingresos son insuficientes</li>
+      </ul>
+
+      <h4>Documentos de Apoyo Financiero:</h4>
+      <ul>
+        <li>Declaraciones de impuestos de los últimos 3 años</li>
+        <li>Formularios W-2 y 1099 más recientes</li>
+        <li>Cartas de empleo verificando ingresos actuales</li>
+        <li>Estados de cuenta bancarios (últimos 6 meses)</li>
+        <li>Evidencia de activos (propiedades, inversiones)</li>
+      </ul>
+
+      <h3>3. Evidencia de Relación Familiar</h3>
+      <p>Para peticiones basadas en familia, establecer relaciones auténticas es crucial para la aprobación.</p>
+
+      <h4>Documentos de Matrimonio:</h4>
+      <ul>
+        <li><strong>Certificado de matrimonio:</strong> Documento oficial del gobierno</li>
+        <li><strong>Evidencia de matrimonio de buena fe:</strong> Demuestra relación auténtica, no solo para inmigración</li>
+        <li><strong>Declaraciones de impuestos conjuntas:</strong> Evidencia de vida financiera compartida</li>
+        <li><strong>Arrendamientos conjuntos:</strong> Prueba de residencia compartida</li>
+        <li><strong>Cuentas bancarias conjuntas:</strong> Finanzas entrelazadas</li>
+        <li><strong>Pólizas de seguro:</strong> Nombramiento mutuo como beneficiarios</li>
+        <li><strong>Fotografías:</strong> Documentando relación a lo largo del tiempo</li>
+      </ul>
+
+      <h4>Documentos de Relación Padre-Hijo:</h4>
+      <ul>
+        <li><strong>Certificados de nacimiento:</strong> Mostrando relación biológica</li>
+        <li><strong>Documentos de adopción:</strong> Para niños adoptados</li>
+        <li><strong>Pruebas de ADN:</strong> Cuando se cuestiona la paternidad</li>
+        <li><strong>Evidencia de apoyo:</strong> Registros de manutención infantil, documentos médicos</li>
+      </ul>
+
+      <h3>4. Documentos Civiles de Países Extranjeros</h3>
+      <p>Muchas aplicaciones requieren documentos oficiales del país de origen del solicitante.</p>
+
+      <h4>Documentos Comúnmente Requeridos:</h4>
+      <ul>
+        <li><strong>Certificado de nacimiento:</strong> Del registro civil del país de nacimiento</li>
+        <li><strong>Certificado de matrimonio:</strong> Si se casó en el extranjero</li>
+        <li><strong>Registros de divorcio:</strong> Evidencia de terminación de matrimonios previos</li>
+        <li><strong>Certificados de defunción:</strong> Para cónyuges fallecidos</li>
+        <li><strong>Registros policiales:</strong> Verificación de antecedentes penales</li>
+        <li><strong>Registros militares:</strong> Evidencia de servicio militar</li>
+      </ul>
+
+      <h4>Requisitos de Autenticación:</h4>
+      <ul>
+        <li><strong>Apostilla:</strong> Autenticación bajo la Convención de La Haya</li>
+        <li><strong>Certificación consular:</strong> Verificación de embajada o consulado</li>
+        <li><strong>Traducciones certificadas:</strong> Documentos en idioma extranjero deben ser traducidos</li>
+        <li><strong>Copias originales:</strong> Deben obtenerse directamente de agencias emisoras</li>
+      </ul>
+
+      <h3>5. Examen Médico y Documentación de Vacunas</h3>
+      <p>La mayoría de inmigrantes deben someterse a exámenes médicos realizados por cirujanos civiles designados por USCIS.</p>
+
+      <h4>Componentes del Examen Médico:</h4>
+      <ul>
+        <li><strong>Formulario I-693:</strong> Reporte de Examen Médico y Registro de Vacunas</li>
+        <li><strong>Examen físico:</strong> Salud general y condiciones inadmisibles</li>
+        <li><strong>Pruebas de enfermedades transmisibles:</strong> Tuberculosis, sífilis, gonorrea</li>
+        <li><strong>Evaluación de salud mental:</strong> Desórdenes de comportamiento o abuso de sustancias</li>
+        <li><strong>Historial de vacunas:</strong> Todas las vacunas requeridas por edad</li>
+      </ul>
+
+      <h4>Vacunas Requeridas:</h4>
+      <ul>
+        <li>Hepatitis A y B</li>
+        <li>Varicela</li>
+        <li>Influenza (si es temporada de gripe)</li>
+        <li>Sarampión, paperas, rubéola (MMR)</li>
+        <li>Polio</li>
+        <li>Tétanos, difteria, tos ferina</li>
+        <li>COVID-19 (según los requisitos actuales)</li>
+      </ul>
+
+      <h2>Documentos Adicionales por Categoría</h2>
+
+      <h3>Documentos de Empleo y Educación</h3>
+      <h4>Para Inmigrantes Basados en Empleo:</h4>
+      <ul>
+        <li><strong>Diplomas educativos:</strong> Títulos universitarios o certificados técnicos</li>
+        <li><strong>Transcripciones:</strong> Registros académicos detallados</li>
+        <li><strong>Evaluaciones de credenciales:</strong> Evaluación de educación extranjera por agencias aprobadas</li>
+        <li><strong>Cartas de experiencia laboral:</strong> Empleadores previos verificando habilidades</li>
+        <li><strong>Certificaciones profesionales:</strong> Licencias o certificaciones específicas de la industria</li>
+      </ul>
+
+      <h3>Documentos de Inscripción Educativa</h3>
+      <ul>
+        <li><strong>Declaraciones juradas de inscripción escolar:</strong> Para niños sin documentación tradicional</li>
+        <li><strong>Registros de vacunas:</strong> A menudo requieren traducción y verificación médica</li>
+        <li><strong>Autorización de tutor:</strong> Cuando los niños viven con parientes o patrocinadores</li>
+        <li><strong>Evaluaciones de educación especial:</strong> Documentación de evaluación de idioma</li>
+      </ul>
+
+      <h2>Documentos de Protección Financiera y Legal</h2>
+
+      <h3>Documentación de Cumplimiento Fiscal</h3>
+      <p>Mantener el cumplimiento fiscal es crucial para futuros beneficios de inmigración y naturalización.</p>
+
+      <h4>Número de Identificación Individual del Contribuyente (ITIN):</h4>
+      <ul>
+        <li><strong>Formulario W-7:</strong> Aplicación para ITIN cuando no es elegible para número de Seguro Social</li>
+        <li><strong>Documentación requerida:</strong> Pasaporte, ID nacional u otros documentos aprobados por IRS</li>
+        <li><strong>Requisito de presentación anual:</strong> Debe presentar declaraciones de impuestos para mantener validez del ITIN</li>
+        <li><strong>Beneficios futuros:</strong> Demuestra cumplimiento fiscal para ajuste de estatus</li>
+      </ul>
+
+      <h3>Documentos de Acceso a Atención Médica</h3>
+      <ul>
+        <li><strong>Autorización de contacto de emergencia:</strong> Designa a alguien para tomar decisiones médicas</li>
+        <li><strong>Poder notarial médico:</strong> Nombramiento formal de representante de atención médica</li>
+        <li><strong>Formularios de beneficiarios de seguro:</strong> Elecciones de seguro de salud del lugar de trabajo o mercado</li>
+        <li><strong>Autorización HIPAA:</strong> Permite a miembros de la familia acceder a información médica</li>
+      </ul>
+
+      <h3>Acceso a Instituciones Financieras</h3>
+      <h4>Requisitos para Abrir Cuenta Bancaria:</h4>
+      <ul>
+        <li><strong>Identificación:</strong> Pasaporte, ID consular o licencia de conducir</li>
+        <li><strong>Verificación de dirección:</strong> Facturas de servicios públicos o contratos de alquiler</li>
+        <li><strong>Identificación fiscal:</strong> Número de Seguro Social o ITIN</li>
+        <li><strong>Estatus migratorio:</strong> Algunos bancos requieren autorización de trabajo</li>
+      </ul>
+
+      <h2>Mejores Prácticas para Preparación de Documentos</h2>
+
+      <h3>Requisitos de Traducción</h3>
+      <ul>
+        <li><strong>Traducciones certificadas:</strong> Deben incluir certificación de precisión y competencia del traductor</li>
+        <li><strong>Traducciones completas:</strong> No se puede traducir solo porciones de documentos</li>
+        <li><strong>Retención del idioma original:</strong> Mantener originales con traducciones</li>
+        <li><strong>Traductores profesionales:</strong> Usar servicios de traducción certificados para documentos críticos</li>
+      </ul>
+
+      <h3>Notarización y Autenticación</h3>
+      <ul>
+        <li><strong>Notarización:</strong> Requerida para declaraciones juradas y declaraciones bajo juramento</li>
+        <li><strong>Apostilla:</strong> Autenticación para documentos usados internacionalmente</li>
+        <li><strong>Certificación consular:</strong> Verificación de embajada o consulado de documentos extranjeros</li>
+        <li><strong>Autenticación estatal:</strong> Certificación del Secretario de Estado para algunos documentos</li>
+      </ul>
+
+      <h3>Almacenamiento y Copias de Documentos</h3>
+      <ul>
+        <li><strong>Protección de originales:</strong> Almacenar originales en ubicación segura y resistente al fuego</li>
+        <li><strong>Múltiples copias:</strong> Hacer copias certificadas para presentaciones</li>
+        <li><strong>Respaldos digitales:</strong> Escanear todos los documentos con almacenamiento seguro en la nube</li>
+        <li><strong>Actualizaciones regulares:</strong> Reemplazar documentos vencidos prontamente</li>
+      </ul>
+
+      <h2>Errores Comunes de Documentos de Inmigración</h2>
+
+      <h3>Errores de Aplicación que Causan Retrasos</h3>
+      <ul>
+        <li><strong>Información inconsistente:</strong> Nombres, fechas o direcciones que no coinciden entre documentos</li>
+        <li><strong>Formularios desactualizados:</strong> Usar versiones antiguas de formularios gubernamentales</li>
+        <li><strong>Firmas faltantes:</strong> Formularios sin firmar o iniciales requeridas faltantes</li>
+        <li><strong>Tarifas incorrectas:</strong> Cantidades o métodos de pago incorrectos</li>
+        <li><strong>Evidencia insuficiente:</strong> No proporcionar suficiente documentación de apoyo</li>
+      </ul>
+
+      <h3>Violaciones de Estatus a Evitar</h3>
+      <ul>
+        <li><strong>Empleo no autorizado:</strong> Trabajar sin autorización apropiada</li>
+        <li><strong>Exceder permanencia de estatus:</strong> Permanecer más allá del período autorizado</li>
+        <li><strong>Problemas criminales:</strong> Cualquier arresto o condena afecta el estatus migratorio</li>
+        <li><strong>Cambios de dirección:</strong> No reportar cambios de dirección dentro de 10 días</li>
+      </ul>
+
+      <h2>Cuándo Buscar Ayuda Profesional</h2>
+
+      <h3>Casos Complejos que Requieren Asistencia de Abogado:</h3>
+      <ul>
+        <li><strong>Historial criminal:</strong> Cualquier arresto, cargo o condena</li>
+        <li><strong>Violaciones de inmigración previas:</strong> Excesos de permanencia, presencia ilegal o procedimientos de remoción</li>
+        <li><strong>Complejidad familiar:</strong> Múltiples matrimonios, niños adoptados o problemas de custodia</li>
+        <li><strong>Problemas de empleo:</strong> Requisitos de certificación laboral u ocupaciones especializadas</li>
+        <li><strong>Inadmisibilidad médica:</strong> Condiciones de salud que requieren exenciones</li>
+      </ul>
+
+      <h3>Servicios de Preparación de Documentos:</h3>
+      <ul>
+        <li><strong>Abogados de inmigración:</strong> Representación completa y consejo legal</li>
+        <li><strong>Representantes acreditados:</strong> Ayudantes reconocidos por la Junta de Apelaciones de Inmigración</li>
+        <li><strong>Servicios de traducción certificados:</strong> Traducción profesional de documentos</li>
+        <li><strong>Servicios de notario:</strong> Autenticación de documentos y verificación de identidad</li>
+      </ul>
+
+      <h2>Costo de Documentación de Inmigración</h2>
+      <p>El costo de la documentación de inmigración varía significativamente según el tipo de aplicación y los servicios profesionales necesarios:</p>
+
+      <h3>Tarifas Gubernamentales (2024):</h3>
+      <ul>
+        <li><strong>Formulario I-765 (EAD):</strong> $410</li>
+        <li><strong>Formulario I-485 (Ajuste de Estatus):</strong> $1,225-$1,760</li>
+        <li><strong>Formulario I-130 (Petición de Pariente):</strong> $535</li>
+        <li><strong>Formulario N-400 (Naturalización):</strong> $725</li>
+        <li><strong>Examen médico:</strong> $200-$500</li>
+      </ul>
+
+      <h3>Servicios Profesionales:</h3>
+      <ul>
+        <li><strong>Traducción certificada:</strong> $20-$50 por página</li>
+        <li><strong>Representación de abogado:</strong> $150-$500 por hora</li>
+        <li><strong>Preparación de documentos:</strong> $500-$3,000 por caso</li>
+        <li><strong>Apostilla/autenticación:</strong> $50-$200 por documento</li>
+      </ul>
 
       <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
         <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
