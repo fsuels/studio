@@ -35,7 +35,7 @@ export const licensingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Licencia',
       description:
-        'Crea un Acuerdo de Licencia legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Permite que otros usen tu marca, producto o tecnología a cambio de regalías. Define términos de uso y pagos.',
       aliases: ['contrato de licencia', 'licencia de propiedad intelectual'],
     },
   },

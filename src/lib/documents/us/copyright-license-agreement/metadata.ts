@@ -28,8 +28,8 @@ export const copyrightlicenseagreementMeta: LegalDocument = {
       aliases: ['copyright license agreement'],
     },
     es: {
-      name: 'Copyright License Agreement en Español',
-      description: 'Documento profesional de copyright license agreement.',
+      name: 'Acuerdo de Licencia de Derechos de Autor',
+      description: 'Permite que otros usen tu contenido creativo (música, arte, escritos) bajo condiciones específicas que tú estableces.',
       aliases: ['copyright license agreement'],
     },
   },

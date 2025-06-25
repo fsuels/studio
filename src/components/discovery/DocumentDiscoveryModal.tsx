@@ -14,8 +14,12 @@ import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { SearchInput } from './SearchInput';
-import { ResultsGrid } from './ResultsGrid';
 import { NoResults } from './NoResults';
+import { ResultCardSkeleton } from './ResultCardSkeleton';
+
+const ResultsGrid = React.lazy(() => 
+  import('./ResultsGrid').then(module => ({ default: module.ResultsGrid }))
+);
 
 export default function DocumentDiscoveryModal() {
   const { t } = useTranslation('common');
@@ -271,19 +275,27 @@ export default function DocumentDiscoveryModal() {
             aria-live="polite"
             aria-label="Search results"
           >
-            {isSearching ? (
-              <div className="flex items-center justify-center py-16">
-                <div className="flex items-center gap-3">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
-                  <p className="text-gray-600 dark:text-gray-300">Analyzing your request...</p>
+            {isSearching || !results ? (
+              <div className="space-y-4 pb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {[...Array(4)].map((_, i) => <ResultCardSkeleton key={i} />)}
                 </div>
               </div>
             ) : results.length > 0 ? (
-              <ResultsGrid
-                results={results}
-                locale={locale}
-                onDocumentClick={handleDocumentClick}
-              />
+              <React.Suspense fallback={
+                <div className="space-y-4 pb-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {[...Array(4)].map((_, i) => <ResultCardSkeleton key={i} />)}
+                  </div>
+                </div>
+              }>
+                <ResultsGrid
+                  results={results}
+                  locale={locale}
+                  onDocumentClick={handleDocumentClick}
+                  isLoading={isSearching}
+                />
+              </React.Suspense>
             ) : searchInput ? (
               <NoResults
                 searchQuery={searchInput}

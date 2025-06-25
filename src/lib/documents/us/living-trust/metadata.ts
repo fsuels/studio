@@ -24,7 +24,7 @@ export const metadata = {
     es: {
       name: 'Fideicomiso en Vida (Revocable)',
       description:
-        'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
+        'Administra tu propiedad mientras vives y la transfiere a herederos sin pasar por corte sucesorio. Ahorra tiempo y dinero.',
       aliases: [
         'fideicomiso revocable',
         'planificación patrimonial',

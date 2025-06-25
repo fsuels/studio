@@ -31,7 +31,7 @@ export const dataProcessingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Procesamiento de Datos',
       description:
-        'Acuerdo que rige el procesamiento y manejo de datos personales e información.',
+        'Protege la privacidad de datos de clientes cuando trabajas con terceros. Define cómo se manejan y protegen datos personales.',
       aliases: ['DPA', 'acuerdo de manejo de datos'],
     },
   },

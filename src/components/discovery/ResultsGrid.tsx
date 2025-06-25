@@ -6,13 +6,26 @@ import { FileText, Zap, Star } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
 
+import { ResultCardSkeleton } from './ResultCardSkeleton';
+
 interface ResultsGridProps {
   results: SemanticResult[];
   locale: 'en' | 'es';
   onDocumentClick: (docId: string) => void;
+  isLoading: boolean;
 }
 
-export function ResultsGrid({ results, locale, onDocumentClick }: ResultsGridProps) {
+export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: ResultsGridProps) {
+  if (isLoading) {
+    return (
+      <div className="space-y-4 pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {[...Array(4)].map((_, i) => <ResultCardSkeleton key={i} />)}
+        </div>
+      </div>
+    );
+  }
+
   if (results.length === 0) {
     return null;
   }

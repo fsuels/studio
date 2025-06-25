@@ -35,7 +35,7 @@ export const jointVentureAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Empresa Conjunta',
       description:
-        'Acuerdo entre partes para colaborar en un proyecto comercial o empresa específica.',
+        'Une fuerzas con otro negocio para un proyecto específico. Define responsabilidades, inversión y cómo se dividen ganancias y pérdidas.',
       aliases: [
         'colaboración empresarial',
         'empresa conjunta',

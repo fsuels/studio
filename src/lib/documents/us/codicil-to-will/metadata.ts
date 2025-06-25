@@ -31,7 +31,7 @@ export const codicilToWillMeta: LegalDocument = {
     es: {
       name: 'Codicilo al Testamento',
       description:
-        'Haz enmiendas a tu testamento existente sin reescribir todo el documento.',
+        'Actualiza tu testamento sin reescribir todo. Cambia beneficiarios, propiedades o instrucciones de manera rápida y legal.',
       aliases: ['enmienda al testamento', 'modificación de testamento'],
     },
   },
