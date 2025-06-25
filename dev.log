@@ -1,0 +1,97 @@
+
+> nextn@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://172.20.96.107:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Unrecognized key(s) in object: 'turbo'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Compiled instrumentation Node.js in 117ms
+ ✓ Compiled instrumentation Edge in 106ms
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 648ms
+ ✓ Ready in 19.1s
+ ⚠ Webpack is configured while Turbopack is not, which may cause problems.
+ ⚠ See instructions if you need to configure Turbopack:
+  https://nextjs.org/docs/app/api-reference/next-config-js/turbo
+
+ ○ Compiling / ...
+ ✓ Compiled / in 50.8s
+🔥 Firebase initialized successfully
+ GET / 307 in 52854ms
+ ○ Compiling /[locale] ...
+ GET / 307 in 3168ms
+ GET / 307 in 1030ms
+ ✓ Compiled /[locale] in 30.9s
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+[0m [90m 2023 |[39m[0m
+[0m [90m 2024 |[39m   [36mreturn[39m ([0m
+[0m[31m[1m>[22m[39m[90m 2025 |[39m     [33m<[39m[33mDialog[39m open[33m=[39m{showDiscoveryModal} onOpenChange[33m=[39m{setShowDiscoveryModal}[33m>[39m[0m
+[0m [90m      |[39m      [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+[0m [90m 2026 |[39m       [33m<[39m[33mDialogContent[39m className[33m=[39m[32m"max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900"[39m[33m>[39m[0m
+[0m [90m 2027 |[39m         {[90m/* Enhanced Header with Gradient Background */[39m}[0m
+[0m [90m 2028 |[39m         [33m<[39m[33mdiv[39m className[33m=[39m[32m"relative overflow-hidden rounded-t-lg"[39m[33m>[39m[0m
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+[0m [90m 2023 |[39m[0m
+[0m [90m 2024 |[39m   [36mreturn[39m ([0m
+[0m[31m[1m>[22m[39m[90m 2025 |[39m     [33m<[39m[33mDialog[39m open[33m=[39m{showDiscoveryModal} onOpenChange[33m=[39m{setShowDiscoveryModal}[33m>[39m[0m
+[0m [90m      |[39m      [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+[0m [90m 2026 |[39m       [33m<[39m[33mDialogContent[39m className[33m=[39m[32m"max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900"[39m[33m>[39m[0m
+[0m [90m 2027 |[39m         {[90m/* Enhanced Header with Gradient Background */[39m}[0m
+[0m [90m 2028 |[39m         [33m<[39m[33mdiv[39m className[33m=[39m[32m"relative overflow-hidden rounded-t-lg"[39m[33m>[39m[0m
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+[0m [90m 2023 |[39m[0m
+[0m [90m 2024 |[39m   [36mreturn[39m ([0m
+[0m[31m[1m>[22m[39m[90m 2025 |[39m     [33m<[39m[33mDialog[39m open[33m=[39m{showDiscoveryModal} onOpenChange[33m=[39m{setShowDiscoveryModal}[33m>[39m[0m
+[0m [90m      |[39m      [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+[0m [90m 2026 |[39m       [33m<[39m[33mDialogContent[39m className[33m=[39m[32m"max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900"[39m[33m>[39m[0m
+[0m [90m 2027 |[39m         {[90m/* Enhanced Header with Gradient Background */[39m}[0m
+[0m [90m 2028 |[39m         [33m<[39m[33mdiv[39m className[33m=[39m[32m"relative overflow-hidden rounded-t-lg"[39m[33m>[39m[0m
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.8s
+ GET /en 500 in 18110ms
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+[0m [90m 2023 |[39m[0m
+[0m [90m 2024 |[39m   [36mreturn[39m ([0m
+[0m[31m[1m>[22m[39m[90m 2025 |[39m     [33m<[39m[33mDialog[39m open[33m=[39m{showDiscoveryModal} onOpenChange[33m=[39m{setShowDiscoveryModal}[33m>[39m[0m
+[0m [90m      |[39m      [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+[0m [90m 2026 |[39m       [33m<[39m[33mDialogContent[39m className[33m=[39m[32m"max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900"[39m[33m>[39m[0m
+[0m [90m 2027 |[39m         {[90m/* Enhanced Header with Gradient Background */[39m}[0m
+[0m [90m 2028 |[39m         [33m<[39m[33mdiv[39m className[33m=[39m[32m"relative overflow-hidden rounded-t-lg"[39m[33m>[39m[0m
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ GET /en 500 in 823ms
+ GET / 500 in 1075ms
+ GET / 500 in 1092ms
+ GET / 500 in 1075ms
+ GET / 500 in 1071ms
+ GET / 500 in 1082ms
+ GET / 500 in 1083ms
+ GET / 500 in 971ms
+ GET / 500 in 1125ms
+ GET / 500 in 1154ms
+ GET / 500 in 1029ms
+ GET / 500 in 1017ms

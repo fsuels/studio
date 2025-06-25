@@ -4,7 +4,8 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import * as DialogComponents from '@/components/ui/dialog';
+const { Dialog, DialogContent, DialogHeader, DialogTitle } = DialogComponents;
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { useToast } from '@/hooks/use-toast';
 import { documentLibrary } from '@/lib/document-library';
@@ -125,7 +126,10 @@ export default function DocumentDiscoveryModal() {
       );
       
       if (hasVetoKeyword) {
-        console.log(`🚫 VETO: "${docName}" blocked for ${intent} query (contains: ${vetoKeywords.find(v => docName.includes(v) || docDesc.includes(v) || docCategory.includes(v))})`);
+        const matchedKeyword = vetoKeywords.find(v => 
+          docName.includes(v) || docDesc.includes(v) || docCategory.includes(v)
+        );
+        console.log(`🚫 VETO: "${docName}" blocked for ${intent} query (contains: ${matchedKeyword})`);
         return false;
       }
       
@@ -133,11 +137,49 @@ export default function DocumentDiscoveryModal() {
     });
   };
 
+  // CLUSTER CHIPS - Handle generic queries with category suggestions
+  const handleGenericQuery = (query: string) => {
+    const genericTerms = ['contract', 'agreement', 'document', 'form', 'template', 'legal document', 'paperwork'];
+    const q = query.toLowerCase().trim();
+    
+    const isGeneric = genericTerms.some(term => 
+      q === term || 
+      q === `${term}s` || 
+      q === `legal ${term}` || 
+      q === `a ${term}`
+    );
+    
+    if (isGeneric) {
+      return {
+        type: 'cluster_chips',
+        message: 'What type of document do you need?',
+        chips: [
+          { label: '💼 Business', query: 'business agreement', icon: '💼' },
+          { label: '👥 Employment', query: 'employment contract', icon: '👥' },
+          { label: '🏠 Real Estate', query: 'real estate contract', icon: '🏠' },
+          { label: '💕 Family', query: 'family legal document', icon: '💕' },
+          { label: '🚗 Vehicle', query: 'vehicle document', icon: '🚗' },
+          { label: '📋 Service', query: 'service agreement', icon: '📋' },
+          { label: '⚖️ Legal Action', query: 'legal notice', icon: '⚖️' },
+          { label: '🔒 Confidential', query: 'non-disclosure agreement', icon: '🔒' }
+        ]
+      };
+    }
+    
+    return null;
+  };
+
   // AI-powered document discovery with advanced semantic understanding
   const discoverDocuments = useMemo(() => {
     if (!discoveryInput.trim()) return [];
     
     const query = discoveryInput.toLowerCase();
+    
+    // Check for generic queries first
+    const genericResponse = handleGenericQuery(query);
+    if (genericResponse) {
+      return [{ type: 'generic_chips', data: genericResponse }];
+    }
     
     // PHASE 3B: State/Location Analysis - Global scope for entire discovery process
     const globalLocationAnalysis = (() => {
@@ -1629,8 +1671,12 @@ export default function DocumentDiscoveryModal() {
         });
       }
       
+      // APPLY CATEGORY VETO RULES - Block obviously wrong documents
+      const vetoFilteredResults = applyVetoRules(query, results);
+      console.log(`🔍 Query: "${query}" | Original: ${results.length} results | After Veto: ${vetoFilteredResults.length} results`);
+
       // Sort by AI confidence score (prioritize high confidence even with lower raw scores)
-      return results
+      return vetoFilteredResults
         .sort((a, b) => {
           // First sort by confidence level priority
           const confidencePriority = {
@@ -1975,6 +2021,10 @@ export default function DocumentDiscoveryModal() {
     }
   }, [isHydrated, locale, setDiscoveryInput, setDiscoveryResults, setIsListening, toast]);
 
+  if (!isHydrated) {
+    return null;
+  }
+
   return (
     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
       <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900">
@@ -2257,7 +2307,45 @@ export default function DocumentDiscoveryModal() {
                   </div>
                 )}
                 
+                {/* Cluster Chips for Generic Queries */}
+                {discoveryResults.length > 0 && discoveryResults[0].type === 'generic_chips' && (
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-700">
+                    <div className="text-center mb-4">
+                      <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                        {discoveryResults[0].data.message}
+                      </h3>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        Click a category to find exactly what you need:
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {discoveryResults[0].data.chips.map((chip: any, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setDiscoveryInput(chip.query);
+                          }}
+                          className="group flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-800 rounded-lg border border-blue-200 dark:border-blue-600 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all duration-200 hover:scale-105"
+                        >
+                          <span className="text-2xl">{chip.icon}</span>
+                          <span className="text-sm font-medium text-blue-900 dark:text-blue-100 text-center">
+                            {chip.label.replace(/^[^\s]+ /, '')} {/* Remove emoji from label */}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-4 text-center">
+                      <p className="text-xs text-blue-600 dark:text-blue-400">
+                        💡 Or try being more specific: "I need to hire an employee" or "I'm buying a house"
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Results Grid */}
+                {discoveryResults.length > 0 && discoveryResults[0].type !== 'generic_chips' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {discoveryResults.map((doc: any, index) => {
                     const translatedDoc = getDocTranslation(doc, locale);
@@ -2343,8 +2431,7 @@ export default function DocumentDiscoveryModal() {
                     );
                   })}
                 </div>
-              </div>
-            )}
+                )}
 
             {/* Enhanced No Results Section */}
             {discoveryInput && discoveryResults.length === 0 && (
