@@ -36,8 +36,7 @@ export function SearchInput({
           <div className="flex items-center gap-2">
             <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
             <p className="text-sm leading-snug text-blue-800 dark:text-blue-200">
-              Describe your legal goal for instant, tailored templates.<br/>
-              Our tools aren't legal advice—edit them or ask a licensed attorney.
+              Describe your legal goal for instant, tailored templates.
             </p>
           </div>
         </div>
@@ -54,18 +53,22 @@ export function SearchInput({
             onClick={onVoiceToggle}
             onKeyDown={handleKeyDown}
             disabled={!isVoiceSupported}
-            aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+            aria-label={isListening ? 'Stop voice input (Shift+⌘+S)' : 'Start voice input (Shift+⌘+S)'}
+            aria-describedby="voice-shortcut-hint"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 ${
               isListening
-                ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 focus-visible:ring-red-500'
+                ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 focus-visible:ring-red-500/50 focus-visible:border-red-400 animate-pulse'
                 : isVoiceSupported
-                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500'
-                : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed focus-visible:ring-gray-400'
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-400'
+                : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed focus-visible:ring-gray-400/50'
             }`}
           >
             {isListening ? (
               <>
-                <MicOff className="h-4 w-4" />
+                <div className="relative">
+                  <MicOff className="h-4 w-4" />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
+                </div>
                 <span className="text-sm font-medium">Stop Listening</span>
               </>
             ) : (
@@ -87,7 +90,7 @@ export function SearchInput({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none placeholder:text-[#6B7280]"
                 rows={2}
               />
             </div>

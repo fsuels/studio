@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FileText, Zap } from 'lucide-react';
+import { FileText, Zap, Star } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
 
@@ -78,34 +78,32 @@ export function ResultsGrid({ results, locale, onDocumentClick }: ResultsGridPro
                     {translatedDoc.name}
                   </h4>
                   
-                  {/* Excellence indicator only */}
-                  {confidence.level === 'excellent' && (
-                    <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 mb-3">
-                      <span>✨</span>
-                      <span>Perfect match!</span>
-                    </div>
-                  )}
-                  
                   {/* Description */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
                     {translatedDoc.description}
                   </p>
                   
-                  {/* Confidence message */}
-                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                    {confidence.message}
-                  </p>
-                  
-                  {/* Primary CTA with accent color */}
-                  <div className="flex items-center gap-1 mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors duration-300">
-                    <span>Create document</span>
-                    <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+                  {/* Primary CTA - Prominent Button */}
+                  <div className="mt-4">
+                    <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                      <span>Create Document Now</span>
+                      <span className="text-emerald-100 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Match percentage badge - right aligned */}
-                <div className="flex-shrink-0">
-                  <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400">
+                <div className="flex-shrink-0 flex flex-col items-end gap-1">
+                  {/* Excellence indicator */}
+                  {confidence.level === 'excellent' && (
+                    <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
+                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                      <span>Best match</span>
+                    </div>
+                  )}
+                  
+                  {/* Percentage badge */}
+                  <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#D1FAE5] border border-emerald-200 text-[#111827]">
                     <span>{confidence.score}%</span>
                   </div>
                 </div>
