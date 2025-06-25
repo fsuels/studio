@@ -35,7 +35,7 @@ export const businessContractMeta: LegalDocument = {
     es: {
       name: 'Contrato Comercial',
       description:
-        'Crea un contrato comercial integral para bienes, servicios o asociaciones.',
+        'Acuerdo comercial general para ventas, servicios o asociaciones de negocio. Protege ambas partes con términos claros.',
       aliases: ['contrato de negocios', 'acuerdo comercial'],
     },
   },

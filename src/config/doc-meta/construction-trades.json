@@ -14,7 +14,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Secure a loan with personal property as collateral. Gives lenders legal claim to assets if payments are missed."
+    "description": "Secure a loan with personal property as collateral. Gives lenders legal claim to assets if payments are missed.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

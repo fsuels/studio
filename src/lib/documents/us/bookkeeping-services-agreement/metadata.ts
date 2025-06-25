@@ -35,7 +35,7 @@ export const bookkeepingServicesAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Servicios de Contabilidad',
       description:
-        'Acuerdo profesional para servicios de contabilidad y teneduría de libros entre proveedor y cliente.',
+        'Contrata un contador para manejar la contabilidad de tu negocio. Define servicios, honorarios y responsabilidades financieras.',
       aliases: [
         'contrato de servicios contables',
         'acuerdo de servicios financieros',

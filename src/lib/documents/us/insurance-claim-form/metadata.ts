@@ -31,7 +31,7 @@ export const insuranceClaimFormMeta: LegalDocument = {
     es: {
       name: 'Formulario de Reclamo de Seguro',
       description:
-        'Formulario para presentar reclamos de seguro para varios tipos de cobertura.',
+        'Reclama dinero de tu seguro por daños, accidentes o pérdidas. Formato profesional que aumenta posibilidades de aprobación.',
       aliases: ['formulario de reclamo', 'solicitud de seguro'],
     },
   },

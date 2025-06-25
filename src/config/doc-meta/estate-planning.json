@@ -94,7 +94,7 @@
     "complexity": "advanced",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign", "notary"],
-    "description": "Basic will for straightforward situations. Perfect if you have simple assets and clear wishes for your beneficiaries."
+    "description": "Basic will for straightforward situations. Perfect if you have simple assets and clear wishes for your beneficiaries.",
     "popular": false,
     "fieldCount": 30,
     "avgCompletionTime": 18

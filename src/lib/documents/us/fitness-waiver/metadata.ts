@@ -31,7 +31,7 @@ export const fitnessWaiverMeta: LegalDocument = {
     es: {
       name: 'Exención de Fitness',
       description:
-        'Exención de responsabilidad para actividades de fitness, gimnasios y entrenamiento personal.',
+        'Protege tu gimnasio o estudio de fitness de demandas si alguien se lastima durante ejercicios o entrenamiento.',
       aliases: [
         'exención de gimnasio',
         'renuncia de responsabilidad de ejercicio',

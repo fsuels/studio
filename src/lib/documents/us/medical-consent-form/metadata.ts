@@ -35,7 +35,7 @@ export const medicalConsentFormMeta: LegalDocument = {
     es: {
       name: 'Formulario de Consentimiento Médico',
       description:
-        'Formulario que otorga permiso para tratamiento o procedimientos médicos.',
+        'Da permiso para que doctores realicen tratamientos, operaciones o procedimientos médicos. Usado en hospitales y clínicas.',
       aliases: [
         'formulario de autorización médica',
         'consentimiento de tratamiento',

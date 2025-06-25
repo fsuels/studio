@@ -29,7 +29,7 @@ export const cybersecurityAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Ciberseguridad',
-      description: 'Acuerdo para servicios de ciberseguridad y protección.',
+      description: 'Contrata servicios para proteger tu negocio de hackers y ataques cibernéticos. Define responsabilidades y protocolos de seguridad.',
       aliases: ['acuerdo de seguridad IT', 'contrato de seguridad informática'],
     },
   },

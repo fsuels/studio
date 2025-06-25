@@ -334,7 +334,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Hire contractors to renovate specific areas of your home. Covers materials, timeline, permits, and cleanup requirements."
+    "description": "Hire contractors to renovate specific areas of your home. Covers materials, timeline, permits, and cleanup requirements.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

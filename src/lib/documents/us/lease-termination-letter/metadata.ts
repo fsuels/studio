@@ -31,7 +31,7 @@ export const leaseTerminationLetterMeta: LegalDocument = {
     es: {
       name: 'Carta de Terminación de Arrendamiento',
       description:
-        'Notifica formalmente a tu arrendador o inquilino sobre la terminación del arrendamiento.',
+        'Termina tu contrato de renta legalmente. Avisa con anticipación adecuada para evitar problemas y recuperar depósitos.',
       aliases: ['aviso de terminación', 'carta de fin de contrato'],
     },
   },

@@ -29,7 +29,7 @@ export const barAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Bar',
-      description: 'Acuerdo para operaciones, asociaciones o gestión de bares.',
+      description: 'Administra un bar o cantina con socios. Define responsabilidades, reparto de ganancias y reglas operativas del negocio.',
       aliases: ['sociedad de bar', 'acuerdo de taberna'],
     },
   },

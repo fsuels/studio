@@ -31,7 +31,7 @@ export const mortgageAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Hipoteca',
       description:
-        'Acuerdo legal para términos y condiciones de préstamo hipotecario.',
+        'Formaliza el préstamo para comprar una casa. Establece pagos mensuales, tasa de interés y qué pasa si no puedes pagar.',
       aliases: ['contrato de hipoteca', 'acuerdo de préstamo'],
     },
   },

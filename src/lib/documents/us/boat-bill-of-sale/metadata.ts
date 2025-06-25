@@ -35,7 +35,7 @@ export const boatBillOfSaleMeta: LegalDocument = {
     es: {
       name: 'Contrato de Compraventa de Embarcación',
       description:
-        'Crea un contrato de compraventa de embarcación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Compra o vende barcos, yates o lanchas legalmente. Transfiere ownership y protege tanto vendedor como comprador en la transacción.',
       aliases: [
         'venta de barco',
         'compraventa de embarcación',

@@ -28,8 +28,8 @@ export const commercialLeaseWithOptionToPurchaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Commercial Lease with Option to Purchase', // TODO: Add Spanish translation
-      description: 'Commercial lease with option to buy the property', // TODO: Add Spanish translation
+      name: 'Arrendamiento Comercial con Opción de Compra',
+      description: 'Renta espacio comercial con derecho a comprarlo después. Perfecto para probar ubicación antes de comprar la propiedad.',
       aliases: [],
     },
   },

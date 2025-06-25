@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Get medical care through video calls and online consultations. Sets expectations for remote healthcare services."
+    "description": "Get medical care through video calls and online consultations. Sets expectations for remote healthcare services.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

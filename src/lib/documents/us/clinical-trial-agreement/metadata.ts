@@ -35,7 +35,7 @@ export const clinicalTrialAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Ensayo Clínico',
       description:
-        'Acuerdo para realizar ensayos clínicos y estudios de investigación médica.',
+        'Participa en estudios médicos de manera segura. Define riesgos, beneficios, compensación y derechos de los participantes.',
       aliases: [
         'contrato de investigación clínica',
         'acuerdo de estudio médico',

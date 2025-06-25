@@ -35,7 +35,7 @@ export const medicalConsentMeta: LegalDocument = {
     es: {
       name: 'Formulario de Consentimiento Médico General',
       description:
-        'Crea un Formulario de Consentimiento Médico Infantil legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+        'Autoriza a alguien más a tomar decisiones médicas importantes por ti o tu familia en emergencias cuando no puedas decidir.',
       aliases: [
         'consentimiento médico',
         'formulario médico infantil',

@@ -31,7 +31,7 @@ export const generalLiabilityWaiverMeta: LegalDocument = {
     es: {
       name: 'Exención de Responsabilidad General',
       description:
-        'Formulario integral de exención y liberación de responsabilidad para actividades y servicios.',
+        'Protege tu negocio de demandas por accidentes en eventos, talleres o actividades peligrosas. Exención completa de responsabilidad.',
       aliases: ['liberación de responsabilidad', 'exención de responsabilidad'],
     },
   },

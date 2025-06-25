@@ -36,7 +36,7 @@ export const contractTerminationLetterMeta: Omit<
     es: {
       name: 'Carta de Terminación de Contrato',
       description:
-        'Terminar formalmente un contrato con aviso y documentación adecuados.',
+        'Cancela un contrato existente de manera legal y profesional. Evita problemas legales al terminar acuerdos comerciales.',
       aliases: [
         'aviso de terminación',
         'cancelación de contrato',

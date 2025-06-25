@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Privately lend money for education expenses with specific terms for students. Alternative to federal student loans."
+    "description": "Privately lend money for education expenses with specific terms for students. Alternative to federal student loans.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

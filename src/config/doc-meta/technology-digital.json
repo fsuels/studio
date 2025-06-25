@@ -134,7 +134,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Get permission to use someone's image in videos or films. Protects you from privacy lawsuits and usage claims."
+    "description": "Get permission to use someone's image in videos or films. Protects you from privacy lawsuits and usage claims.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

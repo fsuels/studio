@@ -264,7 +264,7 @@
     "complexity": "easy",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Submit competitive bids for contracts and projects. Professional format increases chances of winning business."
+    "description": "Submit competitive bids for contracts and projects. Professional format increases chances of winning business.",
     "popular": false,
     "fieldCount": 5,
     "avgCompletionTime": 3

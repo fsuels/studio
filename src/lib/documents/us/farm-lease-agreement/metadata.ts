@@ -35,7 +35,7 @@ export const farmLeaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Arrendamiento de Granja',
       description:
-        'Acuerdo para arrendar tierras agrícolas y operaciones agrícolas.',
+        'Renta tierra para cultivar o criar ganado. Cubre términos de arrendamiento, responsabilidades y cómo se dividen las ganancias de las cosechas.',
       aliases: ['arrendamiento agrícola', 'acuerdo de alquiler de tierras'],
     },
   },

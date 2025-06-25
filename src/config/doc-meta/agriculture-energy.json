@@ -184,7 +184,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Lease hunting rights on private property. Sets seasons, fees, safety rules, and property access restrictions."
+    "description": "Lease hunting rights on private property. Sets seasons, fees, safety rules, and property access restrictions.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9

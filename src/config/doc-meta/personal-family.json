@@ -214,7 +214,7 @@
     "complexity": "medium",
     "jurisdiction": ["US-ALL"],
     "sign_method": ["e-sign"],
-    "description": "Legally separate from your spouse while working out divorce details. Covers temporary arrangements for children and finances."
+    "description": "Legally separate from your spouse while working out divorce details. Covers temporary arrangements for children and finances.",
     "popular": false,
     "fieldCount": 15,
     "avgCompletionTime": 9
