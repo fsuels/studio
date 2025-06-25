@@ -20,7 +20,6 @@ export { copyrightAssignment } from './copyright-assignment';
 export { copyrightAssignmentAgreementMeta as copyrightAssignmentAgreement } from './copyright-assignment-agreement';
 export { demandLetter } from './demand-letter';
 export { demandLetterPayment } from './demand-letter-payment';
-export { divorceSettlement } from './divorce-settlement';
 export { divorceSettlementAgreement } from './divorce-settlement-agreement';
 export { durablePowerOfAttorneyMeta as durablePowerOfAttorney } from './durable-power-of-attorney';
 export { educationTrust } from './education-trust';
@@ -255,4 +254,4 @@ export { partnershipDissolutionAgreement } from './partnership-dissolution-agree
 export { jointVentureAgreement } from './joint-venture-agreement';
 
 // Export count for verification
-export const US_DOCUMENT_COUNT = 245;
+export const US_DOCUMENT_COUNT = 244;

@@ -4,6 +4,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
 import Image from 'next/image';
@@ -185,6 +186,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
 const TrustAndTestimonialsSection = React.memo(
   function TrustAndTestimonialsSection() {
     const { t, i18n, ready } = useTranslation('common');
+    const { setShowDiscoveryModal } = useDiscoveryModal();
     const tSimple = React.useCallback(
       (key: string, fallback?: string | object): string =>
         typeof fallback === 'string'
@@ -257,11 +259,8 @@ const TrustAndTestimonialsSection = React.memo(
       ? docCount.toLocaleString(i18n.language)
       : placeholderText;
 
-    const scrollToWorkflow = () => {
-      const workflowSection = document.getElementById('workflow-start');
-      if (workflowSection) {
-        workflowSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    const handleExploreTemplates = () => {
+      setShowDiscoveryModal(true);
     };
 
     return (
@@ -383,7 +382,7 @@ const TrustAndTestimonialsSection = React.memo(
             <Button
               size="lg"
               className="h-14 px-12 text-lg bg-gradient-to-r from-[#006EFF] to-[#00C3A3] text-white transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
-              onClick={scrollToWorkflow}
+              onClick={handleExploreTemplates}
               disabled={!isHydrated}
             >
               {isHydrated

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import dynamic from 'next/dynamic';
 import type { DocumentDetailProps } from '@/components/document/DocumentDetail';
 import {
@@ -102,6 +103,7 @@ export default function DocPageClient({
   markdownContent,
 }: DocPageClientProps) {
   const { t, i18n } = useTranslation('common');
+  const { setShowDiscoveryModal } = useDiscoveryModal();
   const aiHighlightTitle = t(
     'docDetail.aiHighlightTitle',
     'AI Highlight: This section will be auto-customized based on your answers.',
@@ -318,12 +320,12 @@ export default function DocPageClient({
             {t('Start For Free', { defaultValue: 'Start For Free' })}
           </Button>
           <div className="mt-4">
-            <Link
-              href={`/${currentLocale}#workflow-start`}
-              className="text-sm text-primary underline"
+            <button
+              onClick={() => setShowDiscoveryModal(true)}
+              className="text-sm text-primary underline hover:text-primary/80 transition-colors"
             >
               {t('Browse Templates', { defaultValue: 'Browse Templates' })}
-            </Link>
+            </button>
           </div>
         </div>
 

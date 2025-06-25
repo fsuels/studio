@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { enhancedSearch } from '@/lib/enhanced-search';
@@ -415,6 +416,7 @@ interface ModernMegaMenuContentProps {
 
 const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, onLinkClick }) => {
   const { t } = useTranslation('common');
+  const { setShowDiscoveryModal } = useDiscoveryModal();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all'>('all');
   const [isClient, setIsClient] = useState(false);
@@ -962,13 +964,15 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-500 mb-1">Can't find what you need?</p>
-              <Link
-                href={`/${locale}/templates`}
-                onClick={onLinkClick}
+              <button
+                onClick={() => {
+                  setShowDiscoveryModal(true);
+                  onLinkClick?.();
+                }}
                 className="text-blue-600 hover:text-blue-700 font-medium text-sm"
               >
                 Browse All Templates →
-              </Link>
+              </button>
             </div>
           </div>
         </div>

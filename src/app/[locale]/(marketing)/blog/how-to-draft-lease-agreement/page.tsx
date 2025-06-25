@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Clock, User, Calendar } from 'lucide-react';
 import { CategoryDocumentsWidget, BlogFooterLinks } from '@/components/blog/InternalLinkWidget';
+import BrowseTemplatesButton from '@/components/blog/BrowseTemplatesButton';
 
 // Metadata will be generated dynamically based on locale
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -488,12 +489,9 @@ export default function LeaseAgreementBlogPost({ params }: PageProps) {
               <p className="text-green-800 dark:text-green-200 text-sm mb-4">
                 {t.needHelpDesc}
               </p>
-              <Link
-                href={`/${locale}/templates`}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-              >
+              <BrowseTemplatesButton className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
                 {t.browseTemplates}
-              </Link>
+              </BrowseTemplatesButton>
             </div>
           </aside>
         </div>

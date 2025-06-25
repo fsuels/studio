@@ -83,17 +83,17 @@ export function ResultsGrid({ results, locale, onDocumentClick }: ResultsGridPro
                   {/* Confidence Indicator */}
                   <div className="flex items-center gap-2 mb-3">
                     <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
-                      confidence.level === 'excellent' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200' :
-                      confidence.level === 'good' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200' :
-                      confidence.level === 'fair' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200' :
-                      confidence.level === 'weak' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-200' :
-                      'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
+                      confidence.level === 'excellent' ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100' :
+                      confidence.level === 'good' ? 'bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-100' :
+                      confidence.level === 'fair' ? 'bg-yellow-200 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-100' :
+                      confidence.level === 'weak' ? 'bg-orange-200 text-orange-900 dark:bg-orange-800 dark:text-orange-100' :
+                      'bg-red-200 text-red-900 dark:bg-red-800 dark:text-red-100'
                     }`}>
                       <span className="text-xs">{confidence.icon}</span>
                       <span>{confidence.score}% match</span>
                     </div>
                     {confidence.level === 'excellent' && (
-                      <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
+                      <div className="flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-300">
                         <span>✨</span>
                         <span>Perfect match!</span>
                       </div>
@@ -112,7 +112,7 @@ export function ResultsGrid({ results, locale, onDocumentClick }: ResultsGridPro
                   
                   {/* Click indicator */}
                   <div className="flex items-center gap-1 mt-3 text-xs text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors duration-300">
-                    <span>Click to create this document</span>
+                    <span>Create document</span>
                     <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
                   </div>
                 </div>

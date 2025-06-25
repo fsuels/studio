@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Mic, MicOff, Lightbulb } from 'lucide-react';
+import { Search, Mic, MicOff, Lightbulb, Zap } from 'lucide-react';
 
 interface SearchInputProps {
   value: string;
@@ -22,14 +22,22 @@ export function SearchInput({
   placeholder = "Describe your legal situation...",
   showHelpText = true
 }: SearchInputProps) {
+  
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === ' ' && e.target === e.currentTarget) {
+      e.preventDefault();
+      onVoiceToggle();
+    }
+  };
   return (
     <div className="space-y-3">
       {showHelpText && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200/60 dark:border-blue-800/40 rounded-lg p-3">
           <div className="flex items-center gap-2">
             <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              Tell us your legal goal for instant, tailored templates. Draft confidently with our self-serve tools—they're not legal advice, so customize as needed or consult a licensed attorney.
+            <p className="text-sm leading-snug text-blue-800 dark:text-blue-200">
+              Describe your legal goal for instant, tailored templates.<br/>
+              Our tools aren't legal advice—edit them or ask a licensed attorney.
             </p>
           </div>
         </div>
@@ -37,20 +45,22 @@ export function SearchInput({
 
       <div className="space-y-2">
         <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          <span className="text-emerald-500">✨</span>
+          <Zap className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           Start typing to see results instantly
         </h3>
         
         <div className="flex gap-2">
           <button
             onClick={onVoiceToggle}
+            onKeyDown={handleKeyDown}
             disabled={!isVoiceSupported}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
+            aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
               isListening
-                ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
+                ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 focus-visible:ring-red-500'
                 : isVoiceSupported
-                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
-                : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500'
+                : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed focus-visible:ring-gray-400'
             }`}
           >
             {isListening ? (
@@ -77,7 +87,7 @@ export function SearchInput({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
                 rows={2}
               />
             </div>

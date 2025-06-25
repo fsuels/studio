@@ -69,16 +69,6 @@
     "fieldCount": 15,
     "avgCompletionTime": 9
   },
-  "divorce-settlement": {
-    "title": "Divorce Settlement",
-    "complexity": "medium",
-    "jurisdiction": ["US-ALL"],
-    "sign_method": ["e-sign"],
-    "description": "Template for Divorce Settlement.",
-    "popular": false,
-    "fieldCount": 15,
-    "avgCompletionTime": 9
-  },
   "divorce-settlement-agreement": {
     "title": "Divorce Settlement Agreement",
     "complexity": "medium",

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { ArrowLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React from 'react';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 
 interface BlogPostClientContentProps {
   locale: 'en' | 'es';
@@ -129,6 +130,7 @@ export default function BlogPostClientContent({
   slug,
 }: BlogPostClientContentProps) {
   const { t, i18n } = useTranslation('common');
+  const { setShowDiscoveryModal } = useDiscoveryModal();
   const [isHydrated, setIsHydrated] = useState(false);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [article, setArticle] = useState<BlogArticle | undefined>(undefined);
@@ -276,13 +278,13 @@ export default function BlogPostClientContent({
               ))}
             </div>
             <div className="mt-6 text-center">
-              <Link
-                href={`/${locale}/docs`}
+              <button
+                onClick={() => setShowDiscoveryModal(true)}
                 className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
               >
                 {locale === 'es' ? 'Ver Todas las Plantillas' : 'Browse All Templates'}
                 <ArrowLeft className="h-4 w-4 rotate-180" />
-              </Link>
+              </button>
             </div>
           </div>
         </section>
