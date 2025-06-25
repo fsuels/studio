@@ -14,6 +14,47 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   offerRecordingHelp: false,
   basePrice: 19.95,
   states: 'all', // Indicates available in all US states unless overridden
+  // Comprehensive search keywords for intelligent discovery
+  keywords: [
+    // Primary vehicle terms
+    'car', 'cars', 'vehicle', 'vehicles', 'auto', 'autos', 'automobile', 'automobiles', 'motor vehicle',
+    // Vehicle types
+    'sedan', 'coupe', 'suv', 'truck', 'pickup', 'van', 'minivan', 'hatchback', 'convertible', 'crossover',
+    // Actions/intentions
+    'buy', 'buying', 'purchase', 'purchasing', 'sell', 'selling', 'sale', 'transfer', 'ownership', 'title',
+    // Conditions
+    'used', 'new', 'pre-owned', 'certified', 'rebuilt', 'salvage', 'lemon',
+    // Use cases
+    'buying a car', 'selling a car', 'buying a used car', 'selling my car', 'car sale', 'auto sale',
+    'vehicle purchase', 'vehicle transfer', 'car ownership', 'auto ownership', 'title transfer',
+    // Legal terms
+    'bill of sale', 'sales contract', 'purchase agreement', 'transfer document', 'proof of sale',
+    'as-is sale', 'warranty', 'lien', 'lienholder', 'financing', 'trade-in',
+    // Documentation
+    'dmv', 'registration', 'pink slip', 'certificate of title', 'odometer', 'mileage', 'vin',
+    // Transaction types
+    'private party', 'dealer', 'trade', 'gift', 'inheritance', 'family transfer'
+  ],
+  keywords_es: [
+    // Términos primarios de vehículos
+    'carro', 'carros', 'coche', 'coches', 'vehículo', 'vehículos', 'automóvil', 'automóviles', 'auto', 'autos',
+    // Tipos de vehículos
+    'sedán', 'cupé', 'suv', 'camioneta', 'furgoneta', 'hatchback', 'convertible', 'crossover',
+    // Acciones/intenciones
+    'comprar', 'comprando', 'compra', 'vender', 'vendiendo', 'venta', 'transferir', 'propiedad', 'título',
+    // Condiciones
+    'usado', 'nueva', 'nuevo', 'seminuevo', 'certificado', 'reconstruido', 'siniestrado',
+    // Casos de uso
+    'comprando un carro', 'vendiendo un carro', 'comprando un auto usado', 'vendiendo mi carro', 'venta de carro',
+    'venta de auto', 'compra de vehículo', 'transferencia de vehículo', 'propiedad de carro', 'transferencia de título',
+    // Términos legales
+    'contrato de compraventa', 'contrato de venta', 'acuerdo de compra', 'documento de transferencia', 'prueba de venta',
+    'venta como está', 'garantía', 'gravamen', 'financiamiento', 'intercambio',
+    // Documentación
+    'registro', 'certificado de título', 'odómetro', 'millaje', 'vin', 'número de serie',
+    // Tipos de transacción
+    'particular', 'concesionario', 'comercio', 'regalo', 'herencia', 'transferencia familiar'
+  ],
   // Standardized template paths
   templatePaths: {
     en: '/templates/en/vehicle-bill-of-sale.md',

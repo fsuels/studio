@@ -1,6 +1,53 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { SemanticAnalysisEngine, type SemanticResult, type DidYouMeanResult } from '@/lib/semantic-analysis-engine';
+import { findMatchingDocuments } from '@/lib/document-library';
+import { preprocessQuery } from '@/lib/search/comprehensive-synonym-map';
 import type { LegalDocument } from '@/lib/document-library';
+
+// Helper function to calculate confidence - matches SemanticAnalysisEngine logic
+function calculateConfidence(score: number): SemanticResult['confidence'] {
+  if (score >= 80) {
+    return {
+      score: Math.min(98, 85 + Math.floor(score / 20)),
+      level: 'excellent',
+      color: 'emerald',
+      icon: '🎯',
+      message: 'Excellent match for your needs'
+    };
+  } else if (score >= 60) {
+    return {
+      score: Math.min(84, 70 + Math.floor(score / 10)),
+      level: 'good',
+      color: 'blue',
+      icon: '👍',
+      message: 'Good match for your situation'
+    };
+  } else if (score >= 40) {
+    return {
+      score: Math.min(69, 55 + Math.floor(score / 5)),
+      level: 'fair',
+      color: 'yellow',
+      icon: '⚡',
+      message: 'May be relevant to your needs'
+    };
+  } else if (score >= 20) {
+    return {
+      score: Math.min(54, 35 + score),
+      level: 'weak',
+      color: 'orange',
+      icon: '💡',
+      message: 'Potential match worth considering'
+    };
+  } else {
+    return {
+      score: Math.max(15, score + 10),
+      level: 'poor',
+      color: 'red',
+      icon: '❓',
+      message: 'Limited relevance detected'
+    };
+  }
+}
 
 export interface UseDiscoverySearchOptions {
   locale: 'en' | 'es';
@@ -47,18 +94,39 @@ export function useDiscoverySearch({ locale, maxResults = 8 }: UseDiscoverySearc
       return;
     }
 
-    console.log('⏳ Starting search...');
+    console.log('⏳ Starting enhanced search...');
     setIsSearching(true);
     
     try {
       // Add small delay to show loading state
       await new Promise(resolve => setTimeout(resolve, 100));
       
-      console.log('🧠 Calling semantic engine...');
-      const searchResults = semanticEngine.analyze(query, {
-        locale,
-        maxResults
+      console.log('🧠 Using enhanced document library search...');
+      // Use the new enhanced search from document library
+      const documents = findMatchingDocuments(query, locale);
+      
+      // Convert to SemanticResult format for compatibility
+      const searchResults: SemanticResult[] = documents.slice(0, maxResults).map((doc, index) => {
+        const baseScore = Math.max(20, 95 - (index * 15)); // Score decreases with position
+        const confidence = calculateConfidence(baseScore);
+        
+        return {
+          doc: doc,
+          score: baseScore / 100,
+          reasons: [`Found via intelligent keyword matching`],
+          confidence
+        };
       });
+
+      // Fallback to semantic engine if no results from enhanced search
+      if (searchResults.length === 0) {
+        console.log('🔄 No results from enhanced search, trying semantic engine...');
+        const semanticResults = semanticEngine.analyze(query, {
+          locale,
+          maxResults
+        });
+        searchResults.push(...semanticResults);
+      }
 
       if (searchResults.length === 0) {
         const newSuggestion = semanticEngine.suggest(query);
@@ -68,6 +136,7 @@ export function useDiscoverySearch({ locale, maxResults = 8 }: UseDiscoverySearc
       }
       
       console.log('✅ Search completed, results:', searchResults.length);
+      console.log('📝 Expanded query tokens:', preprocessQuery(query, locale));
       setResults(searchResults);
     } catch (error) {
       console.error('❌ Search error:', error);

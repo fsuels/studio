@@ -17,6 +17,41 @@ export const boatBillOfSale: LegalDocument = {
   name: 'Boat Bill of Sale',
   category: 'Transportation',
   schema,
+  // Comprehensive search keywords for boat sales
+  keywords: [
+    // Primary marine terms
+    'boat', 'boats', 'vessel', 'vessels', 'watercraft', 'marine', 'nautical',
+    // Boat types
+    'yacht', 'sailboat', 'motorboat', 'fishing boat', 'pontoon', 'jet ski', 'kayak', 'canoe',
+    'speedboat', 'cabin cruiser', 'catamaran', 'trimaran', 'dinghy', 'skiff', 'trawler',
+    // Actions
+    'buy', 'buying', 'purchase', 'purchasing', 'sell', 'selling', 'sale', 'transfer',
+    // Use cases
+    'buying a boat', 'selling a boat', 'boat sale', 'vessel transfer', 'marine sale',
+    'watercraft purchase', 'yacht sale', 'sailboat sale', 'used boat', 'new boat',
+    // Legal terms
+    'bill of sale', 'marine title', 'vessel registration', 'coast guard', 'hull number',
+    'boat documentation', 'maritime law', 'admiralty', 'marine survey', 'sea trial',
+    // Documentation
+    'registration', 'title', 'certificate', 'hull id', 'state registration', 'federal documentation'
+  ],
+  keywords_es: [
+    // Términos marinos primarios
+    'barco', 'barcos', 'embarcación', 'embarcaciones', 'nave', 'naves', 'navío', 'marítimo',
+    // Tipos de embarcaciones
+    'yate', 'velero', 'lancha', 'bote de pesca', 'pontón', 'moto acuática', 'kayak', 'canoa',
+    'lancha rápida', 'crucero', 'catamarán', 'trimarán', 'bote auxiliar', 'esquife', 'pesquero',
+    // Acciones
+    'comprar', 'comprando', 'compra', 'vender', 'vendiendo', 'venta', 'transferir',
+    // Casos de uso
+    'comprando un barco', 'vendiendo un barco', 'venta de barco', 'transferencia de embarcación',
+    'venta marina', 'compra de embarcación', 'venta de yate', 'venta de velero', 'barco usado', 'barco nuevo',
+    // Términos legales
+    'contrato de compraventa', 'título marino', 'registro de embarcación', 'guardia costera',
+    'número de casco', 'documentación de barco', 'ley marítima', 'almirantazgo', 'inspección marina',
+    // Documentación
+    'registro', 'título', 'certificado', 'identificación de casco', 'registro estatal', 'documentación federal'
+  ],
   questions: [
     {
       id: 'name',

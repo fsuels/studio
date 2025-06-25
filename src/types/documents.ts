@@ -63,6 +63,11 @@ export type LegalDocument = {
   aliases?: string[]; // Deprecated in favor of translations object
   aliases_es?: string[]; // Deprecated in favor of translations object
 
+  // Search keywords for intelligent document discovery
+  keywords?: string[]; // Comprehensive keywords in English
+  keywords_es?: string[]; // Comprehensive keywords in Spanish
+  searchTerms?: string[]; // Additional search terms and phrases
+
   translations?: {
     [lang: string]: LocalizedText;
   };

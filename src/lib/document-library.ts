@@ -4,6 +4,7 @@ import { documentLibraryAdditions } from './document-library-additions';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
 import * as us_docs_barrel from './documents/us';
 import * as ca_docs_barrel from './documents/ca';
+import { preprocessQuery, calculateRelevanceScore } from './search/comprehensive-synonym-map';
 // …other countries…
 
 /**
@@ -119,7 +120,7 @@ allDocuments.forEach((doc) => {
 });
 
 /**
- * Simple search across name, description, aliases, and optional state filter.
+ * Intelligent search with comprehensive keyword matching, synonyms, and ranking.
  */
 export function findMatchingDocuments(
   query: string,
@@ -130,29 +131,97 @@ export function findMatchingDocuments(
     return allDocuments.filter((d) => d.id !== 'general-inquiry');
   }
 
-  const q = query.toLowerCase();
-  return allDocuments.filter((d) => {
-    if (d.id === 'general-inquiry') return false;
+  const originalTokens = query.toLowerCase().split(/\s+/).filter(t => t.length > 1);
+  const expandedTokens = preprocessQuery(query, lang);
+  
+  const results: Array<{ document: LegalDocument; score: number }> = [];
 
-    const t = d.translations?.[lang] || d.translations.en;
-    const name = t.name.toLowerCase();
-    const desc = t.description.toLowerCase();
-    const aliases = t.aliases.map((a) => a.toLowerCase());
+  allDocuments.forEach((d) => {
+    if (d.id === 'general-inquiry') return;
 
-    const matchesQuery =
-      !query ||
-      name.includes(q) ||
-      desc.includes(q) ||
-      aliases.some((a) => a.includes(q));
+    const t = d.translations?.[lang] || d.translations?.en;
+    if (!t) return;
 
+    // Collect all searchable text
+    const searchableFields = [
+      t.name?.toLowerCase() || '',
+      t.description?.toLowerCase() || '',
+      ...(t.aliases || []).map(a => a.toLowerCase()),
+      ...(d.keywords || []).map(k => k.toLowerCase()),
+      ...(lang === 'es' ? (d.keywords_es || []) : []).map(k => k.toLowerCase()),
+      ...(d.searchTerms || []).map(s => s.toLowerCase()),
+      d.category.toLowerCase(),
+      d.id.toLowerCase().replace(/-/g, ' ')
+    ].filter(Boolean);
+
+    // Check state filter
     const matchesState =
       !state ||
       state === 'all' ||
       d.states === 'all' ||
       (Array.isArray(d.states) && d.states.includes(state));
 
-    return matchesQuery && matchesState;
+    if (!matchesState) return;
+
+    // Calculate relevance score
+    let score = 0;
+    let hasMatch = false;
+
+    // Exact phrase match (highest priority)
+    const fullQuery = query.toLowerCase();
+    if (searchableFields.some(field => field.includes(fullQuery))) {
+      score += 50;
+      hasMatch = true;
+    }
+
+    // Original token matches (high priority)
+    originalTokens.forEach(token => {
+      if (searchableFields.some(field => field.includes(token))) {
+        score += 10;
+        hasMatch = true;
+      }
+    });
+
+    // Expanded synonym matches (medium priority)
+    expandedTokens.forEach(token => {
+      if (searchableFields.some(field => field.includes(token))) {
+        score += 3;
+        hasMatch = true;
+      }
+    });
+
+    // Partial word matches (low priority)
+    expandedTokens.forEach(token => {
+      searchableFields.forEach(field => {
+        const words = field.split(/\s+/);
+        words.forEach(word => {
+          if (word.startsWith(token) || word.endsWith(token)) {
+            score += 1;
+            hasMatch = true;
+          }
+        });
+      });
+    });
+
+    // Boost score for category matches
+    if (d.category.toLowerCase().includes(fullQuery)) {
+      score += 20;
+    }
+
+    // Boost for exact ID matches
+    if (d.id.toLowerCase().replace(/-/g, ' ').includes(fullQuery)) {
+      score += 15;
+    }
+
+    if (hasMatch && score > 0) {
+      results.push({ document: d, score });
+    }
   });
+
+  // Sort by relevance score (descending)
+  results.sort((a, b) => b.score - a.score);
+  
+  return results.map(r => r.document);
 }
 
 export function search(

@@ -21,6 +21,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
+    keywords: [
+      'nda', 'non-disclosure', 'confidentiality', 'confidential', 'secret', 'secrets', 'privacy', 'private', 'information', 'data', 'proprietary', 'trade secrets', 'business secrets', 'protect information', 'confidential agreement', 'secrecy agreement', 'mutual nda', 'one-way nda', 'bilateral nda', 'unilateral nda', 'employee confidentiality', 'contractor confidentiality', 'business partnership', 'joint venture', 'merger', 'acquisition', 'due diligence', 'intellectual property', 'source code', 'customer list', 'business plan', 'financial information', 'technical data'
+    ],
+    keywords_es: [
+      'acuerdo de confidencialidad', 'confidencialidad', 'confidencial', 'secreto', 'secretos', 'privacidad', 'privado', 'información', 'datos', 'propietario', 'secretos comerciales', 'secretos de negocio', 'proteger información', 'acuerdo confidencial', 'acuerdo de secreto', 'nda mutuo', 'nda unidireccional', 'nda bilateral', 'nda unilateral', 'confidencialidad empleado', 'confidencialidad contratista', 'sociedad comercial', 'empresa conjunta', 'fusión', 'adquisición', 'diligencia debida', 'propiedad intelectual', 'código fuente', 'lista de clientes', 'plan de negocios', 'información financiera', 'datos técnicos'
+    ],
     schema: z.object({
       party1Name: z.string().min(1),
       party1Address: z.string().min(1),
@@ -101,6 +107,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 7,
     states: 'all',
+    keywords: [
+      'partnership', 'partner', 'partners', 'business partnership', 'general partnership', 'limited partnership', 'joint venture', 'collaboration', 'business collaboration', 'co-owner', 'co-owners', 'business owner', 'business owners', 'equity split', 'profit sharing', 'loss sharing', 'capital contribution', 'management roles', 'decision making', 'voting rights', 'partnership dissolution', 'exit strategy', 'buyout', 'business agreement', 'startup partnership', 'small business partnership', 'professional partnership', 'creative partnership', 'partnership terms', 'partnership contract'
+    ],
+    keywords_es: [
+      'sociedad', 'socio', 'socios', 'sociedad comercial', 'sociedad general', 'sociedad limitada', 'empresa conjunta', 'colaboración', 'colaboración comercial', 'copropietario', 'copropietarios', 'dueño de negocio', 'dueños de negocio', 'división de capital', 'reparto de ganancias', 'reparto de pérdidas', 'contribución de capital', 'roles de gestión', 'toma de decisiones', 'derechos de voto', 'disolución de sociedad', 'estrategia de salida', 'compra', 'acuerdo comercial', 'sociedad startup', 'sociedad pequeña empresa', 'sociedad profesional', 'sociedad creativa', 'términos de sociedad', 'contrato de sociedad'
+    ],
     schema: z.object({
       partner1Name: z.string().min(1),
       partner1Address: z.string().min(1),
@@ -220,6 +232,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
+    keywords: [
+      'employment', 'employee', 'employer', 'job', 'work', 'hire', 'hiring', 'employment contract', 'work agreement', 'job contract', 'employee agreement', 'employment terms', 'job offer', 'new hire', 'staff', 'personnel', 'worker', 'full-time', 'part-time', 'salary', 'wage', 'hourly', 'benefits', 'vacation', 'sick leave', 'health insurance', 'job description', 'duties', 'responsibilities', 'start date', 'probation', 'termination', 'at-will employment', 'employment law', 'labor contract', 'work contract'
+    ],
+    keywords_es: [
+      'empleo', 'empleado', 'empleador', 'trabajo', 'trabajar', 'contratar', 'contratación', 'contrato de empleo', 'acuerdo de trabajo', 'contrato laboral', 'acuerdo de empleado', 'términos de empleo', 'oferta de trabajo', 'nueva contratación', 'personal', 'trabajador', 'tiempo completo', 'tiempo parcial', 'salario', 'sueldo', 'por horas', 'beneficios', 'vacaciones', 'licencia por enfermedad', 'seguro médico', 'descripción del trabajo', 'deberes', 'responsabilidades', 'fecha de inicio', 'período de prueba', 'terminación', 'empleo a voluntad', 'ley laboral', 'contrato laboral', 'contrato de trabajo'
+    ],
     schema: z.object({
       employeeName: z.string().min(1),
       employerName: z.string().min(1),
@@ -269,6 +287,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
+    keywords: [
+      'lease', 'rental', 'rent', 'apartment', 'house', 'home', 'residential', 'tenant', 'landlord', 'property manager', 'rental agreement', 'lease agreement', 'monthly rent', 'security deposit', 'rental property', 'residential property', 'housing', 'dwelling', 'residence', 'unit', 'flat', 'condo', 'condominium', 'townhouse', 'rental contract', 'lease terms', 'rent due', 'late fees', 'utilities', 'pets allowed', 'lease renewal', 'eviction', 'move-in', 'move-out', 'inspection', 'maintenance', 'repairs'
+    ],
+    keywords_es: [
+      'arrendamiento', 'alquiler', 'rentar', 'apartamento', 'casa', 'hogar', 'residencial', 'inquilino', 'arrendador', 'administrador de propiedad', 'acuerdo de alquiler', 'contrato de arrendamiento', 'renta mensual', 'depósito de seguridad', 'propiedad de alquiler', 'propiedad residencial', 'vivienda', 'morada', 'residencia', 'unidad', 'piso', 'condominio', 'casa adosada', 'contrato de alquiler', 'términos de arrendamiento', 'renta vencida', 'cargos por retraso', 'servicios públicos', 'mascotas permitidas', 'renovación de arrendamiento', 'desalojo', 'mudanza', 'inspección', 'mantenimiento', 'reparaciones'
+    ],
     schema: z
       .object({
         landlord_name: z.string().min(1),
@@ -405,25 +429,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 7,
     states: 'all',
-    schema: z.object({}), // Placeholder for schema
-    questions: [
-      /* Placeholder questions */
+    keywords: [
+      'commercial lease', 'commercial rental', 'business lease', 'office lease', 'retail lease', 'warehouse lease', 'commercial property', 'business property', 'office space', 'retail space', 'warehouse space', 'commercial tenant', 'business tenant', 'commercial landlord', 'triple net lease', 'gross lease', 'modified gross lease', 'cam charges', 'common area maintenance', 'base rent', 'percentage rent', 'lease escalation', 'tenant improvements', 'build-out', 'commercial real estate', 'business location', 'storefront', 'plaza', 'shopping center', 'office building'
     ],
-  },
-  {
-    id: 'purchase-agreement-real-estate-add',
-    name: 'Real Estate Purchase Agreement',
-    name_es: 'Contrato de Compraventa de Bienes Raíces',
-    category: 'Real Estate',
-    description: 'Formalize the purchase of a real estate property.',
-    description_es: 'Formalice la compra de una propiedad inmobiliaria.',
-    languageSupport: ['en', 'es'],
-    requiresNotarization: true,
-    canBeRecorded: true,
-    offerNotarization: true,
-    offerRecordingHelp: true,
-    basePrice: 7,
-    states: 'all',
+    keywords_es: [
+      'arrendamiento comercial', 'alquiler comercial', 'arrendamiento de negocio', 'arrendamiento de oficina', 'arrendamiento retail', 'arrendamiento de almacén', 'propiedad comercial', 'propiedad de negocio', 'espacio de oficina', 'espacio retail', 'espacio de almacén', 'inquilino comercial', 'inquilino de negocio', 'arrendador comercial', 'arrendamiento triple neto', 'arrendamiento bruto', 'arrendamiento bruto modificado', 'cargos cam', 'mantenimiento área común', 'renta base', 'renta porcentual', 'escalación de arrendamiento', 'mejoras inquilino', 'remodelación', 'bienes raíces comerciales', 'ubicación negocio', 'local comercial', 'plaza', 'centro comercial', 'edificio oficinas'
+    ],
     schema: z.object({}), // Placeholder for schema
     questions: [
       /* Placeholder questions */
