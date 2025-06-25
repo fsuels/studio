@@ -226,6 +226,7 @@ export default function ConsolidatedMegaMenuContent({
   const [searchQuery, setSearchQuery] = useState('');
   const [activePanel, setActivePanel] = useState(activeCategory || 'agreements-contracts');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+  const [hoveredDocument, setHoveredDocument] = useState<string | null>(null);
 
   // Create a map of document IDs to documents for quick lookup
   const documentMap = useMemo(() => {
@@ -381,19 +382,28 @@ export default function ConsolidatedMegaMenuContent({
                     <ul className="space-y-2 ml-7">
                       {docs.map(doc => {
                         const translatedDoc = getDocTranslation(doc, currentLocale);
+                        const isHovered = hoveredDocument === doc.id;
                         return (
                           <li key={doc.id}>
                             <Link
                               href={`/${currentLocale}/docs/${doc.id}`}
                               onClick={handleDocumentClick}
-                              className="block text-sm hover:text-primary hover:underline"
+                              onMouseEnter={() => setHoveredDocument(doc.id)}
+                              onMouseLeave={() => setHoveredDocument(null)}
+                              className="block text-sm hover:text-primary hover:underline transition-all duration-200"
                             >
                               <div className="font-medium">{translatedDoc.name}</div>
-                              {translatedDoc.description && (
-                                <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                  {translatedDoc.description}
-                                </div>
-                              )}
+                              {/* Reserve space for description to prevent layout shift */}
+                              <div className="h-8 mt-1">
+                                {translatedDoc.description && (
+                                  <div className={cn(
+                                    "text-xs text-muted-foreground line-clamp-2 transition-opacity duration-200",
+                                    isHovered ? "opacity-100" : "opacity-0"
+                                  )}>
+                                    {translatedDoc.description}
+                                  </div>
+                                )}
+                              </div>
                             </Link>
                           </li>
                         );
@@ -436,17 +446,33 @@ export default function ConsolidatedMegaMenuContent({
                             if (!doc) return null;
                             
                             const translatedDoc = getDocTranslation(doc, currentLocale);
+                            const isHovered = hoveredDocument === doc.id;
                             return (
                               <li key={docId}>
                                 <Link
                                   href={`/${currentLocale}/docs/${doc.id}`}
                                   onClick={handleDocumentClick}
-                                  className="flex items-center justify-between group hover:bg-muted p-2 -mx-2 rounded-md transition-colors"
+                                  onMouseEnter={() => setHoveredDocument(doc.id)}
+                                  onMouseLeave={() => setHoveredDocument(null)}
+                                  className="block group hover:bg-muted p-2 -mx-2 rounded-md transition-all duration-200"
                                 >
-                                  <span className="text-sm group-hover:text-primary">
-                                    {translatedDoc.name}
-                                  </span>
-                                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-sm group-hover:text-primary font-medium">
+                                      {translatedDoc.name}
+                                    </span>
+                                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary flex-shrink-0" />
+                                  </div>
+                                  {/* Reserve space for description to prevent layout shift */}
+                                  <div className="h-8 mt-1">
+                                    {translatedDoc.description && (
+                                      <div className={cn(
+                                        "text-xs text-muted-foreground line-clamp-2 transition-opacity duration-200",
+                                        isHovered ? "opacity-100" : "opacity-0"
+                                      )}>
+                                        {translatedDoc.description}
+                                      </div>
+                                    )}
+                                  </div>
                                 </Link>
                               </li>
                             );

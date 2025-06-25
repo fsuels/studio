@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake } from 'lucide-react';
 import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
@@ -266,6 +266,78 @@ const categoryContent: Record<string, CategoryContent> = {
   }
 };
 
+// Function to get section icons
+const getSectionIcon = (sectionId: string) => {
+  const iconProps = { className: "h-5 w-5 text-blue-600 dark:text-blue-400" };
+  
+  switch (sectionId) {
+    // Business & Commercial
+    case 'business-operations':
+      return <Briefcase {...iconProps} />;
+    case 'business-formation':
+      return <Building {...iconProps} />;
+    case 'intellectual-property':
+      return <Shield {...iconProps} />;
+    case 'partnerships':
+      return <Handshake {...iconProps} />;
+    
+    // Employment & HR
+    case 'employment-hr':
+      return <UserCheck {...iconProps} />;
+    case 'employment-hr-letters':
+      return <Clipboard {...iconProps} />;
+    
+    // Financial & Legal
+    case 'payment-debt':
+      return <Banknote {...iconProps} />;
+    case 'legal-affidavits':
+      return <Gavel {...iconProps} />;
+    case 'legal-business':
+      return <Scale {...iconProps} />;
+    
+    // Healthcare & Personal
+    case 'powers-attorney-directives':
+      return <FileText {...iconProps} />;
+    case 'medical-healthcare':
+      return <Heart {...iconProps} />;
+    
+    // Family & Estate
+    case 'estate-planning':
+      return <Shield {...iconProps} />;
+    case 'marriage-relationships':
+      return <HeartHandshake {...iconProps} />;
+    case 'children-family':
+      return <Users {...iconProps} />;
+    case 'personal-recreation':
+      return <Star {...iconProps} />;
+    
+    // Real Estate & Property
+    case 'commercial-real-estate':
+      return <Building {...iconProps} />;
+    case 'property-transactions':
+      return <Home {...iconProps} />;
+    case 'property-tenancy':
+      return <Home {...iconProps} />;
+    case 'financial-authorizations':
+      return <Banknote {...iconProps} />;
+    
+    // Industry Specific
+    case 'industry-specialized':
+      return <Briefcase {...iconProps} />;
+    case 'technology-digital':
+      return <Globe {...iconProps} />;
+    case 'agriculture-energy':
+      return <Layers {...iconProps} />;
+    case 'entertainment-media':
+      return <Star {...iconProps} />;
+    case 'travel-hospitality':
+      return <Plane {...iconProps} />;
+    
+    default:
+      return <FileText {...iconProps} />;
+  }
+};
+
 export default function CategoryDropdown({
   locale,
   activeCategory,
@@ -275,6 +347,7 @@ export default function CategoryDropdown({
   const { t } = useTranslation('common');
   const documents = getDocumentsForCountry('us');
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
+  const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const toggleSection = (sectionId: string) => {
@@ -397,22 +470,26 @@ export default function CategoryDropdown({
               });
               
             return (
-            <div key={section.id} className="flex flex-col h-full bg-card/50 rounded-lg p-4 border border-border/30 hover:border-border/50 transition-colors">
-              <div className="flex items-center justify-between border-b border-border pb-2 mb-4">
-                <h3 className="font-semibold text-base text-foreground">
-                  {section.label}
-                </h3>
-                {sortedDocuments.length > 4 && (
-                  <span className="text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
-                    {sortedDocuments.length} total
-                  </span>
-                )}
+            <div key={section.id} className="flex flex-col h-full bg-card/50 rounded-lg border border-border/30 hover:border-border/50 transition-colors overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 px-4 py-3 -mx-[1px] -mt-[1px] border-b border-blue-200/60 dark:border-blue-800/40 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="w-1 h-4 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
+                    {getSectionIcon(section.id)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-base text-blue-900 dark:text-blue-100 leading-tight">
+                      {section.label}
+                    </h3>
+                    <span className="text-xs text-blue-700 dark:text-blue-300 mt-0.5 inline-block font-medium">
+                      {sortedDocuments.length} {sortedDocuments.length === 1 ? 'document' : 'documents'}
+                    </span>
+                  </div>
+                </div>
               </div>
+              <div className="p-4 pt-3">
               <div className="relative flex-1 min-h-0">
-                <div className={cn(
-                  "transition-all duration-300 ease-in-out scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent",
-                  expandedSections[section.id] ? "max-h-[400px] overflow-y-auto pr-2" : "max-h-none"
-                )}>
+                <div className="transition-all duration-300 ease-in-out">
                 <ul className="space-y-2">
                   {sortedDocuments
                     .slice(0, expandedSections[section.id] ? sortedDocuments.length : 4) // Show 4 or all documents
@@ -424,6 +501,7 @@ export default function CategoryDropdown({
                       const isNew = newDocuments.has(docId);
                       const isExpanded = expandedSections[section.id];
                       const isNewlyVisible = isExpanded && index >= 4;
+                      const isHovered = hoveredDocument === doc.id;
                       
                       return (
                         <li 
@@ -436,6 +514,8 @@ export default function CategoryDropdown({
                           <Link
                             href={`/${locale}/docs/${doc.id}`}
                             onClick={onLinkClick}
+                            onMouseEnter={() => setHoveredDocument(doc.id)}
+                            onMouseLeave={() => setHoveredDocument(null)}
                             className={cn(
                               "group flex items-start justify-between p-2 rounded-md transition-all duration-200 hover:shadow-sm",
                               isBestSeller ? "hover:bg-blue-50/70 ring-1 ring-blue-100/50" : "hover:bg-slate-50 dark:hover:bg-slate-700/50"
@@ -448,31 +528,25 @@ export default function CategoryDropdown({
                                   {translatedDoc.name}
                                 </div>
                                 <div className="flex gap-1 flex-wrap">
-                                  {isBestSeller && index < 4 && (
-                                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200 rounded-full shrink-0">
-                                      <TrendingUp className="h-2.5 w-2.5" />
-                                      <span className="text-xs">Popular</span>
-                                    </span>
-                                  )}
                                   {isNew && index < 4 && (
                                     <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full shrink-0">
                                       <Sparkles className="h-2.5 w-2.5" />
                                       <span className="text-xs">New</span>
                                     </span>
                                   )}
-                                  {isHighValue && index < 4 && !isBestSeller && !isNew && (
-                                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200 rounded-full shrink-0">
-                                      <TrendingUp className="h-2.5 w-2.5" />
-                                      <span className="text-xs">Popular</span>
-                                    </span>
-                                  )}
                                 </div>
                               </div>
-                              {translatedDoc.description && (
-                                <div className="text-xs text-slate-700 dark:text-slate-200 mt-1 line-clamp-2">
-                                  {translatedDoc.description}
-                                </div>
-                              )}
+                              {/* Reserve space for description to prevent layout shift */}
+                              <div className="h-8 mt-1">
+                                {translatedDoc.description && (
+                                  <div className={cn(
+                                    "text-xs text-slate-700 dark:text-slate-200 line-clamp-2 transition-opacity duration-200",
+                                    isHovered ? "opacity-100" : "opacity-0"
+                                  )}>
+                                    {translatedDoc.description}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                             <ChevronRight className="h-4 w-4 text-slate-500 dark:text-slate-400 group-hover:text-primary ml-2 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
                           </Link>
@@ -481,9 +555,6 @@ export default function CategoryDropdown({
                     })}
                 </ul>
                 </div>
-                {sortedDocuments.length > 4 && !expandedSections[section.id] && (
-                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none" />
-                )}
                 {sortedDocuments.length > 4 && (
                   <div className={cn(
                     "mt-3 relative z-10 transition-all duration-300",
@@ -502,10 +573,9 @@ export default function CategoryDropdown({
                       aria-label={
                         expandedSections[section.id]
                           ? t('categoryDropdown.showFewer', { defaultValue: 'Show fewer' })
-                          : t('categoryDropdown.viewAllInSection', {
-                              count: sortedDocuments.length,
-                              section: section.label,
-                              defaultValue: `View all ${sortedDocuments.length} in ${section.label}`,
+                          : t('categoryDropdown.viewAll', { 
+                              count: sortedDocuments.length - 4,
+                              defaultValue: `View all ${sortedDocuments.length - 4} more`,
                             })
                       }
                       title="Expand list here in this menu"
@@ -516,12 +586,8 @@ export default function CategoryDropdown({
                           ? t('categoryDropdown.showFewer', { defaultValue: 'Show fewer' })
                           : (
                               <>
-                                {t('categoryDropdown.viewAllInSection', {
-                                  count: sortedDocuments.length,
-                                  section: section.label,
-                                  defaultValue: `View all ${sortedDocuments.length} in ${section.label}`,
-                                })}
-                                <span className="text-xs text-slate-700 dark:text-slate-200 ml-1">(+{sortedDocuments.length - 4})</span>
+                                {t('categoryDropdown.viewAll', { defaultValue: 'View all' })}
+                                <span className="text-xs text-slate-700 dark:text-slate-200">(+{sortedDocuments.length - 4})</span>
                               </>
                             )}
                       </span>
@@ -534,6 +600,7 @@ export default function CategoryDropdown({
                     </button>
                   </div>
                 )}
+              </div>
               </div>
             </div>
             );
