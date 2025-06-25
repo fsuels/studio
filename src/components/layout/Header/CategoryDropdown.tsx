@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight } from 'lucide-react';
 import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
@@ -418,8 +418,8 @@ export default function CategoryDropdown({
                       '✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time',
                   })}
                 </p>
-                <p className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-full animate-pulse">
-                  {t('categoryDropdown.aiFinder', { defaultValue: 'Try our AI finder →' })}
+                <p className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-full animate-pulse">
+                  {t('categoryDropdown.aiFinder', { defaultValue: 'AI Powered ✨' })}
                 </p>
               </div>
             </div>
@@ -429,16 +429,37 @@ export default function CategoryDropdown({
                   setShowDiscoveryModal(true);
                   onLinkClick(); // Close the dropdown
                 }}
-                className="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
-                title="🤖 Try our AI-powered document finder - just describe what you need!"
+                className="group relative overflow-hidden inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5"
+                title="AI-powered document finder - describe what you need in plain English!"
               >
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  <span>🤖 AI Document Finder</span>
+                {/* Animated background effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300"></div>
+                
+                {/* Main content */}
+                <div className="relative flex items-center gap-3">
+                  {/* AI Brain Icon with glow effect */}
+                  <div className="relative">
+                    <Brain className="w-5 h-5 text-white drop-shadow-lg" />
+                    <div className="absolute inset-0 bg-white/30 rounded-full blur-md animate-pulse"></div>
+                  </div>
+                  
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm font-bold leading-none">AI Document Finder</span>
+                    <span className="text-xs text-emerald-100 leading-none mt-0.5">Find exactly what you need</span>
+                  </div>
+                  
+                  {/* Arrow with movement animation */}
+                  <ArrowRight className="w-4 h-4 text-white/90 group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                
+                {/* Sparkle indicators */}
+                <div className="absolute -top-1 -right-1 flex gap-1">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                  <div className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse delay-100"></div>
+                </div>
+                
+                {/* Bottom highlight */}
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
               </button>
             </div>
           </div>
