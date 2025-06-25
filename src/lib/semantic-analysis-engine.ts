@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js';
-import { documentLibrary } from '@/lib/document-library';
+import { allDocuments } from '@/lib/document-library';
 import type { LegalDocument } from '@/lib/document-library';
+import { taxonomy } from '@/config/taxonomy';
 
 export interface SemanticResult {
   doc: LegalDocument;
@@ -15,12 +16,32 @@ export interface SemanticResult {
   };
 }
 
+export interface DidYouMeanResult {
+  suggestion: string;
+}
+
 export interface SemanticAnalysisOptions {
   locale: 'en' | 'es';
   maxResults?: number;
 }
 
 export class SemanticAnalysisEngine {
+  private expandQuery(query: string): string[] {
+    const expanded = new Set([query.toLowerCase()]);
+
+    Object.entries(taxonomy.synonyms || {}).forEach(([syn, targets]) => {
+      if (query.toLowerCase().includes(syn.toLowerCase())) {
+        targets.forEach(t => expanded.add(String(t).toLowerCase()));
+      }
+      targets.forEach(t => {
+        if (query.toLowerCase().includes(String(t).toLowerCase())) {
+          expanded.add(syn.toLowerCase());
+        }
+      });
+    });
+
+    return Array.from(expanded);
+  }
   private calculateConfidence(score: number): SemanticResult['confidence'] {
     if (score >= 80) {
       return {
@@ -59,29 +80,31 @@ export class SemanticAnalysisEngine {
 
   public analyze(userInput: string, options: SemanticAnalysisOptions): SemanticResult[] {
     const { locale, maxResults = 8 } = options;
-    const input = userInput.toLowerCase();
+    const expandedQueries = this.expandQuery(userInput);
 
-    const fuse = new Fuse(documentLibrary, {
+    const fuse = new Fuse(allDocuments, {
       keys: [
-        {
-          name: 'name',
-          weight: 0.6
-        },
-        {
-          name: 'description',
-          weight: 0.3
-        },
-        {
-          name: 'keywords',
-          weight: 0.1
-        }
+        { name: `translations.${locale}.name`, weight: 0.6 },
+        { name: `translations.${locale}.description`, weight: 0.3 },
+        { name: `translations.${locale}.aliases`, weight: 0.2 },
+        { name: 'seoMetadata.keywords', weight: 0.1 }
       ],
       includeScore: true,
       threshold: 0.4,
       ignoreLocation: true,
     });
 
-    const fuseResults = fuse.search(input);
+    const fuseMap = new Map<string, Fuse.FuseResult<LegalDocument>>();
+    for (const q of expandedQueries) {
+      for (const res of fuse.search(q)) {
+        const existing = fuseMap.get(res.item.id);
+        if (!existing || (res.score || 0) < (existing.score || 0)) {
+          fuseMap.set(res.item.id, res);
+        }
+      }
+    }
+
+    const fuseResults = Array.from(fuseMap.values());
 
     const results: SemanticResult[] = fuseResults.map(result => {
       const doc = result.item;
@@ -105,7 +128,13 @@ export class SemanticAnalysisEngine {
     return filteredResults;
   }
 
-  public suggest(userInput: string): null {
-      return null;
+  public suggest(userInput: string): DidYouMeanResult | null {
+    const query = userInput.toLowerCase();
+    for (const [syn, targets] of Object.entries(taxonomy.synonyms || {})) {
+      if (targets.some(t => query.includes(String(t).toLowerCase()))) {
+        return { suggestion: syn };
+      }
+    }
+    return null;
   }
 }

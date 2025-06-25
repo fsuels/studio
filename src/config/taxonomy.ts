@@ -870,6 +870,16 @@ export const taxonomy = {
     contract: ['agreement', 'document', 'form'],
     divorce: ['separation', 'dissolution'],
     freelance: ['independent-contractor', '1099', 'consultant'],
+    'buy car': ['vehicle-bill-of-sale'],
+    'buy a car': ['vehicle-bill-of-sale'],
+    'car purchase': ['vehicle-bill-of-sale'],
+    'vehicle purchase': ['vehicle-bill-of-sale'],
+    'buy house': ['real-estate-purchase-agreement', 'property-deed'],
+    'buy a house': ['real-estate-purchase-agreement', 'property-deed'],
+    'house purchase': ['real-estate-purchase-agreement', 'property-deed'],
+    'home purchase': ['real-estate-purchase-agreement'],
+    'buy home': ['real-estate-purchase-agreement'],
+    'get a divorce': ['divorce-settlement-agreement', 'marriage-separation-agreement'],
   },
   roles: {
     landlord: {
