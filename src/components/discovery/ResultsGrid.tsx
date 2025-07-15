@@ -2,15 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FileText, Zap, Star, Info } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { FileText, Zap, Star } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
-
+import type { DiscoveryResult } from '@/types/discovery';
+import { ConfidenceBadge } from './ConfidenceBadge';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
 
 interface ResultsGridProps {
-  results: SemanticResult[];
+  results: (SemanticResult | DiscoveryResult)[];
   locale: 'en' | 'es';
   onDocumentClick: (docId: string) => void;
   isLoading: boolean;
@@ -62,16 +62,31 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
       {/* Results Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {results.map((result, index) => {
-          const translatedDoc = getDocTranslation(result.doc, locale);
-          const { confidence } = result;
+          // Handle both SemanticResult and DiscoveryResult types
+          const isSemanticResult = 'doc' in result;
+          const doc = isSemanticResult ? result.doc : null;
+          const translatedDoc = doc ? getDocTranslation(doc, locale) : null;
           
-          const isBestMatch = confidence.level === 'excellent';
+          // Extract confidence and reason
+          const confidence = isSemanticResult 
+            ? result.confidence.score 
+            : (result as DiscoveryResult).confidence * 100;
+          const reason = isSemanticResult 
+            ? 'semantic' as const
+            : (result as DiscoveryResult).reason;
+          
+          const isBestMatch = confidence >= 85;
+          
+          // For DiscoveryResult, use the result properties directly
+          const title = translatedDoc?.name || (result as DiscoveryResult).title || 'Untitled Document';
+          const description = translatedDoc?.description || (result as DiscoveryResult).description || 'No description available';
+          const docId = isSemanticResult ? result.doc.id : result.id;
 
           return (
             <Link
-              key={result.doc.id}
-              href={`/${locale}/docs/${result.doc.id}`}
-              onClick={() => onDocumentClick(result.doc.id)}
+              key={docId}
+              href={`/${locale}/docs/${docId}`}
+              onClick={() => onDocumentClick(docId)}
               className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 ${
                 isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
               }`}
@@ -93,12 +108,12 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                 <div className="flex-1 min-w-0">
                   {/* Title */}
                   <h4 className="font-bold text-lg text-gray-900 dark:text-gray-100 leading-tight mb-2">
-                    {translatedDoc.name}
+                    {title}
                   </h4>
                   
                   {/* Description */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                    {translatedDoc.description}
+                    {description}
                   </p>
                   
                   {/* Primary CTA - Prominent Button */}
@@ -120,23 +135,11 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                     </div>
                   )}
                   
-                  {/* Percentage badge */}
-                  <div 
-                    className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#D1FAE5] border border-emerald-200 text-[#111827]"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>{confidence.score}%</span>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="h-4 w-4 text-gray-500 cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Based on keywords and legal intent.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
+                  {/* Enhanced confidence badge with reason tooltip */}
+                  <ConfidenceBadge 
+                    confidence={confidence / 100} 
+                    reason={reason}
+                  />
                 </div>
               </div>
             </Link>

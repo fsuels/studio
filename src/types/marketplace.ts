@@ -114,6 +114,7 @@ export interface MarketplaceTemplate {
   // Template metadata
   category: string;
   tags: string[];
+  keywords: string[]; // Search keywords for template discovery
   jurisdiction: string;
   states?: string[] | 'all';
   languageSupport: string[];
@@ -416,6 +417,28 @@ export interface TemplateCollection {
   // Timestamps
   createdAt: Timestamp;
   updatedAt: Timestamp;
+}
+
+// ===================================================================
+// EXTENDED INTERFACES WITH KEYWORDS
+// ===================================================================
+
+/**
+ * Extended interface for templates with keywords field
+ * This interface guarantees that the keywords field is present
+ */
+export interface TemplateWithKeywords extends MarketplaceTemplate {
+  keywords: string[]; // Required keywords field for search and discovery
+}
+
+/**
+ * Extended interface for template versions with keywords field
+ * This interface guarantees that the document contains keywords
+ */
+export interface TemplateVersionWithKeywords extends TemplateVersion {
+  document: LegalDocument & {
+    keywords: string[]; // Required keywords field in the document
+  };
 }
 
 // ===================================================================

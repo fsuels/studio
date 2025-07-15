@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
+import type { DiscoveryResult } from '@/types/discovery';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
@@ -37,14 +38,28 @@ export default function DocumentDiscoveryModal() {
   } = useDiscoveryModal();
 
   const {
-    searchInput,
-    setSearchInput,
+    tokens,
     results,
-    suggestion,
-    isSearching,
-    performSearch,
-    clearResults
-  } = useDiscoverySearch({ locale, maxResults: 8 });
+    loading: isSearching,
+    error,
+    searchFirestore,
+    hybridSearch,
+    resetMetrics
+  } = useDiscoverySearch();
+  
+  const [searchInput, setSearchInput] = useState('');
+  const [suggestion] = useState('');
+  
+  const performSearch = async (query: string) => {
+    if (query.trim()) {
+      await searchFirestore(query);
+    }
+  };
+  
+  const clearResults = () => {
+    resetMetrics();
+    setSearchInput('');
+  };
 
   const {
     isListening,
@@ -308,7 +323,7 @@ export default function DocumentDiscoveryModal() {
                 </div>
               }>
                 <ResultsGrid
-                  results={results}
+                  results={results as DiscoveryResult[]}
                   locale={locale}
                   onDocumentClick={handleDocumentClick}
                   isLoading={isSearching}

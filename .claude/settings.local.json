@@ -87,7 +87,8 @@
       "WebFetch(domain:transportation.wv.gov)",
       "Bash(true)",
       "Bash(fuser:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(npx playwright test:*)"
     ],
     "deny": []
   }
