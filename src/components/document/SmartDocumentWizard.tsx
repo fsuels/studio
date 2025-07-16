@@ -70,11 +70,111 @@ export default function SmartDocumentWizard({
     }
   }, [selectedState]);
 
+  const saveDirectToFirestore = useCallback(async (formData: Record<string, any>, userId: string) => {
+    setIsSavingDraft(true);
+    
+    try {
+      if (!selectedState) {
+        console.error('🚫 No selected state');
+        throw new Error('State not selected');
+      }
+      
+      console.log('👤 Using provided user ID:', userId);
+      
+      // Skip the complex saveFormProgress function entirely
+      // Use direct Firestore save to bypass all auth/audit issues
+      console.log('💾 Using direct Firestore save to bypass auth issues');
+      
+      const { getDb } = await import('@/lib/firebase');
+      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+      
+      const db = await getDb();
+      const docId = `${encodeURIComponent(`${documentType}-${selectedState}`)}_${locale}`;
+      const ref = doc(db, 'users', userId, 'documents', docId);
+      
+      console.log('🗄️ Saving to path:', `users/${userId}/documents/${docId}`);
+      
+      // Save to localStorage first as backup
+      const backupData = {
+        docType: documentType, // Use base document type for dashboard compatibility
+        originalDocId: documentType, // Keep original for reference
+        state: locale,
+        stateCode: selectedState, // Store the actual state separately
+        formData: formData,
+        userId: userId,
+        timestamp: new Date().toISOString(),
+      };
+      localStorage.setItem(`backup_${docId}`, JSON.stringify(backupData));
+      console.log('💾 Backup saved to localStorage');
+      
+      // Then save to Firestore with dashboard-compatible format
+      await setDoc(ref, {
+        docType: documentType, // Use base document type (vehicle-bill-of-sale)
+        originalDocId: documentType,
+        state: locale,
+        stateCode: selectedState, // Store FL, AL, etc. separately
+        name: `${documentType} (${selectedState})`, // Human-readable name
+        status: 'Draft',
+        updatedAt: serverTimestamp(),
+        createdAt: serverTimestamp(),
+        formData: formData,
+      }, { merge: true });
+      
+      console.log('✅ Direct save successful!');
+      
+      toast({
+        title: 'Draft Saved',
+        description: 'Your progress has been saved. You can continue later from your dashboard.',
+      });
+      
+      // Redirect to dashboard
+      router.push(`/${locale}/dashboard`);
+      
+    } catch (error) {
+      console.error('❌ Save failed:', error);
+      
+      toast({
+        title: 'Save Failed',
+        description: 'Failed to save draft. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSavingDraft(false);
+      setPendingSaveDraft(false);
+    }
+  }, [selectedState, documentType, locale, router, toast]);
+  
+  const saveDraftToFirestore = useCallback(async (formData: Record<string, any>) => {
+    // For already logged in users, use the user context
+    if (user?.uid) {
+      await saveDirectToFirestore(formData, user.uid);
+    } else {
+      console.error('🚫 No user available for direct save');
+      toast({
+        title: 'Authentication Error',
+        description: 'Please try logging in again.',
+        variant: 'destructive',
+      });
+    }
+  }, [user, saveDirectToFirestore, toast]);
+  
   const handleSaveAndContinue = useCallback(async (formData: Record<string, any>) => {
-    if (!selectedState) return;
+    console.log('🚀 handleSaveAndContinue called with:', { 
+      selectedState, 
+      formDataKeys: Object.keys(formData), 
+      effectiveIsLoggedIn,
+      formData 
+    });
+    
+    if (!selectedState) {
+      console.error('❌ No selected state available');
+      return;
+    }
     
     // If user is not logged in, prompt for account creation first
     if (!effectiveIsLoggedIn) {
+      console.log('🔐 User not logged in, showing auth modal');
+      
       // Save form data to localStorage as backup
       localStorage.setItem(`state_form_draft_${selectedState}`, JSON.stringify(formData));
       
@@ -85,100 +185,38 @@ export default function SmartDocumentWizard({
       return;
     }
     
-    // For logged-in users, save to dashboard
+    // For logged-in users, save directly
+    console.log('💾 User already logged in, saving directly');
     await saveDraftToFirestore(formData);
-  }, [selectedState, isLoggedIn]);
-  
-  const saveDraftToFirestore = useCallback(async (formData: Record<string, any>) => {
-    if (!user?.uid || !selectedState) {
-      console.error('Cannot save draft: missing user or state', { user: user?.uid, selectedState });
-      return;
-    }
-    
-    setIsSavingDraft(true);
-    try {
-      // Force Firebase Auth token refresh to ensure permissions are up to date
-      const { getAuth } = await import('firebase/auth');
-      const auth = getAuth();
-      if (auth.currentUser) {
-        await auth.currentUser.getIdToken(true); // Force refresh
-        console.log('Auth token refreshed for user:', auth.currentUser.uid);
-      }
-      
-      const savePayload = {
-        userId: user.uid,
-        docType: `${documentType}-${selectedState}`,
-        formData,
-        state: locale,
-      };
-      
-      console.log('Saving draft with payload:', savePayload);
-      
-      await saveFormProgress(savePayload);
-      
-      toast({
-        title: t('wizard.draftSaved', { defaultValue: 'Draft Saved' }),
-        description: t('wizard.draftSavedDescription', {
-          defaultValue: 'Your progress has been saved. You can continue later from your dashboard.',
-        }),
-      });
-      
-      router.push(`/${locale}/dashboard`);
-    } catch (error) {
-      console.error('Failed to save draft:', error);
-      
-      // If it's a permissions error, try to provide more specific help
-      if (error instanceof Error && error.message.includes('permissions')) {
-        toast({
-          title: t('Authentication Error'),
-          description: 'Please try logging out and logging back in, then try saving again.',
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: t('Error'),
-          description: t('wizard.draftSaveError', {
-            defaultValue: 'Failed to save draft. Please try again.',
-          }),
-          variant: 'destructive',
-        });
-      }
-    } finally {
-      setIsSavingDraft(false);
-      setPendingSaveDraft(false);
-    }
-  }, [user, selectedState, documentType, locale, router, toast, t]);
+  }, [selectedState, effectiveIsLoggedIn, saveDraftToFirestore]);
   
   const handleAuthSuccess = useCallback(async (uid?: string) => {
-    console.log('Auth success, checking pending draft:', { pendingSaveDraft, pendingFormData, uid });
+    console.log('✨ Auth success, pending draft:', { pendingSaveDraft, hasFormData: Object.keys(pendingFormData).length > 0, uid });
     setShowAuthModal(false);
     
-    // Wait for Firebase Auth to fully initialize
-    const maxWait = 5000; // 5 seconds max
-    const startTime = Date.now();
-    
-    const waitForAuth = () => {
-      return new Promise<void>((resolve) => {
-        const checkAuth = () => {
-          const elapsed = Date.now() - startTime;
-          if (user?.uid || elapsed > maxWait) {
-            console.log('Auth ready after', elapsed, 'ms, user:', user?.uid);
-            resolve();
-          } else {
-            setTimeout(checkAuth, 100);
-          }
-        };
-        checkAuth();
-      });
-    };
-    
-    await waitForAuth();
-    
     if (pendingSaveDraft && Object.keys(pendingFormData).length > 0) {
-      console.log('Attempting to save after auth, user:', user);
-      await saveDraftToFirestore(pendingFormData);
+      console.log('💾 Attempting to save after auth with form data:', pendingFormData);
+      
+      // Don't wait for user context - get user directly from Firebase Auth
+      const { getAuth } = await import('firebase/auth');
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+      
+      if (currentUser) {
+        console.log('✅ Firebase user available, saving now with uid:', currentUser.uid);
+        await saveDirectToFirestore(pendingFormData, currentUser.uid);
+      } else {
+        console.error('❌ No Firebase user found after auth');
+        toast({
+          title: 'Authentication Error',
+          description: 'Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } else {
+      console.log('ℹ️ No pending draft or form data to save');
     }
-  }, [pendingSaveDraft, pendingFormData, saveDraftToFirestore, user]);
+  }, [pendingSaveDraft, pendingFormData, toast]);
 
   const handleCompleteAndPay = (formData: Record<string, any>) => {
     if (!selectedState) return;

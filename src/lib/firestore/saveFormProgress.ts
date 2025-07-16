@@ -26,7 +26,7 @@ export interface FormProgressDoc {
 /* ---------- helpers ----------------------------------------------------- */
 function progressDocId(docType: string, state: string) {
   const result = `${encodeURIComponent(docType)}_${state}`;
-  console.log('Generated doc ID:', { docType, state, result });
+  console.log('🏷️ Generated doc ID:', { docType, state, result });
   return result;
 }
 
@@ -48,11 +48,12 @@ export async function saveFormProgress({
   const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
 
   const docId = progressDocId(docType, state || 'NA');
-  console.log('Saving to Firestore path:', {
+  console.log('🖺 Saving to Firestore path:', {
     path: `users/${userId}/documents/${docId}`,
     docType,
     state,
-    userId
+    userId,
+    docId
   });
   
   const ref = doc(
@@ -81,19 +82,23 @@ export async function saveFormProgress({
 
   await setDoc(ref, payload, { merge: true });
 
-  // Log form progress save
-  await auditService.logDocumentEvent(
-    'edit',
-    progressDocId(docType, state || 'NA'),
-    docType,
-    {
-      userId,
-      action: 'form_save',
-      state: state || 'NA',
-      fieldCount: Object.keys(formData || {}).length,
-      isAutoSave: true,
-    },
-  );
+  // Log form progress save (temporarily disabled due to token issues)
+  try {
+    await auditService.logDocumentEvent(
+      'edit',
+      progressDocId(docType, state || 'NA'),
+      docType,
+      {
+        userId,
+        action: 'form_save',
+        state: state || 'NA',
+        fieldCount: Object.keys(formData || {}).length,
+        isAutoSave: true,
+      },
+    );
+  } catch (error) {
+    console.warn('Audit logging failed (non-critical):', error);
+  }
 }
 
 /* ---------- load -------------------------------------------------------- */

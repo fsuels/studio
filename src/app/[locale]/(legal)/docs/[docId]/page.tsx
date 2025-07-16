@@ -59,7 +59,7 @@ export default async function DocPage({ params }: DocPageProps) {
 
   const markdownContent = await getMarkdown(locale, docId);
 
-  return <DocPageClient params={params} markdownContent={markdownContent} />;
+  return <DocPageClient params={{ locale, docId }} markdownContent={markdownContent} />;
 }
 
 // 🔑 Mark Head async, await params, and use your NEXT_PUBLIC_SITE_URL env var
