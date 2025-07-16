@@ -2,7 +2,10 @@
 // Negative tokens & phrase parsing utility for advanced query processing
 
 import { sanitize } from '../services/searchUtils';
-import escapeStringRegexp from 'escape-string-regexp';
+// Simple escape function to avoid ESM import issues
+function escapeStringRegexp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 export interface ParsedQuery {
   positive: string[];

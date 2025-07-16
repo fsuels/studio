@@ -88,7 +88,8 @@
       "Bash(true)",
       "Bash(fuser:*)",
       "Bash(awk:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(NODE_ENV=development node -e \"console.log('Testing require...');\")"
     ],
     "deny": []
   }

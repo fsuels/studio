@@ -29,6 +29,27 @@ const nextConfig = {
 
   /* Bundle analysis configuration */
   webpack: (config, { dev, isServer }) => {
+    // Add fallbacks for Node.js modules that shouldn't be in client bundle
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        dns: false,
+        child_process: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+      };
+    }
+
     // Bundle analyzer in development
     if (dev && !isServer && process.env.ANALYZE === 'true') {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');

@@ -6,6 +6,8 @@ import { useDiscoverySearch } from '../useDiscoverySearch';
 import type { MarketplaceTemplate } from '../../types/marketplace';
 import type { DiscoveryResult } from '../../types/discovery';
 import { getDocs, collection, query, where, limit } from 'firebase/firestore';
+import { vectorSearch } from '../../services/vectorSearch';
+import { rankDiscoveryResults } from '../../utils/rankDiscoveryResults';
 
 // Mock the search config
 jest.mock('../../config/search', () => ({

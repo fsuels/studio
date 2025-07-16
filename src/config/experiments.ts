@@ -137,6 +137,8 @@ function getCurrentUserId(): string {
  * Uses deterministic bucketing based on CRC32(uid + flagName)
  */
 function isUserInExperimentBucket(userId: string, flagName: string, percentage: number): boolean {
+  // Handle edge cases
+  if (!userId || !flagName) return false;
   if (percentage <= 0) return false;
   if (percentage >= 100) return true;
   

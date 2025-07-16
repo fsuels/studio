@@ -4,8 +4,57 @@
 import { useState, useCallback, useEffect } from 'react';
 import { collection, query, where, getDocs, limit, type QuerySnapshot, type DocumentData } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { sanitize, tokenize, expand } from '../services/searchUtils';
+import { sanitize, tokenize, expand, recordMetric } from '../services/searchUtils';
+import { RANK_WEIGHTS } from '../config/search';
 import { vectorSearch, type VectorSearchResult } from '../services/vectorSearch';
+import { parseQuery, matchesParsedQuery, type ParsedQuery } from '../utils/parseQuery';
+import { useExperimentSync, preloadExperiments } from '../config/experiments';
+import type { MarketplaceTemplate } from '../types/marketplace';
+import type { DiscoveryResult } from '../types/discovery';
+
+// Prometheus metrics for search monitoring
+let promClient: any;
+let searchLatencyHistogram: any;
+let searchHitRateCounter: any;
+let searchQueryCounter: any;
+let searchResultsHistogram: any;
+
+// Initialize Prometheus metrics if available
+if (typeof window === 'undefined') {
+  try {
+    promClient = require('prom-client');
+    
+    searchLatencyHistogram = new promClient.Histogram({
+      name: 'search_query_duration_seconds',
+      help: 'Duration of search queries in seconds',
+      labelNames: ['search_type', 'status'],
+      buckets: [0.1, 0.25, 0.5, 1, 2.5, 5, 10]
+    });
+    
+    searchHitRateCounter = new promClient.Counter({
+      name: 'search_hit_rate_total',
+      help: 'Total number of searches with hits vs no results',
+      labelNames: ['has_results']
+    });
+    
+    searchQueryCounter = new promClient.Counter({
+      name: 'search_queries_total',
+      help: 'Total number of search queries',
+      labelNames: ['search_type', 'experiment_enabled']
+    });
+    
+    searchResultsHistogram = new promClient.Histogram({
+      name: 'search_results_count',
+      help: 'Number of results returned per search',
+      labelNames: ['search_type'],
+      buckets: [0, 1, 5, 10, 20, 50, 100]
+    });
+  } catch (error) {
+    // prom-client not available, metrics disabled
+    console.debug('[Discovery Search] Prometheus metrics not available');
+  }
+}
+
 // Simple ranking function for marketplace templates
 function rankMarketplaceTemplates(templates: MarketplaceTemplate[], query: string): (MarketplaceTemplate & { score: number })[] {
   const queryTokens = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -32,11 +81,6 @@ function rankMarketplaceTemplates(templates: MarketplaceTemplate[], query: strin
     return { ...template, score };
   }).sort((a, b) => b.score - a.score);
 }
-import { parseQuery, matchesParsedQuery, validateParsedQuery, type ParsedQuery } from '../utils/parseQuery';
-import { RANK_WEIGHTS } from '../config/search';
-import { useExperimentSync, preloadExperiments } from '../config/experiments';
-import type { MarketplaceTemplate } from '../types/marketplace';
-import type { DiscoveryResult } from '../types/discovery';
 
 interface SearchMetrics {
   firestoreReads: number;
@@ -95,20 +139,24 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
   const processQuery = useCallback((rawQuery: string): SearchTokens => {
     const startTime = performance.now();
     
-    // Step 1: Sanitize the raw query
+    // Step 1: Sanitize the raw query using shared utility
     const clean = sanitize(rawQuery);
     
     // Step 2: Parse query for negatives and phrases
     const parsedQuery = parseQuery(clean);
     
-    // Step 3: Tokenize the clean query
+    // Step 3: Tokenize the clean query using shared utility
     const originalTokens = tokenize(clean);
     
-    // Step 4: Expand tokens with synonyms
+    // Step 4: Expand tokens with synonyms using shared utility
     const expandedTokens = expand(originalTokens);
     
     const endTime = performance.now();
     const processingTime = endTime - startTime;
+    
+    // Record metrics using shared utility
+    recordMetric('query_processing_duration_ms', processingTime);
+    recordMetric('query_processing_operations_total', 1);
     
     const result: SearchTokens = {
       originalTokens,
@@ -144,10 +192,16 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
    * @param rawQuery - Raw search input from user
    */
   const searchFirestore = useCallback(async (rawQuery: string): Promise<void> => {
+    const startTime = Date.now();
     setLoading(true);
     setError(null);
     
     try {
+      // Track query counter
+      if (searchQueryCounter) {
+        searchQueryCounter.inc({ search_type: 'keyword', experiment_enabled: 'false' });
+      }
+      
       // Process the query to get expanded tokens
       const { expandedTokens } = processQuery(rawQuery);
       
@@ -205,10 +259,28 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         firestoreReads: querySnapshot.size,
       });
       
+      // Track metrics
+      const duration = (Date.now() - startTime) / 1000;
+      if (searchLatencyHistogram) {
+        searchLatencyHistogram.observe({ search_type: 'keyword', status: 'success' }, duration);
+      }
+      if (searchHitRateCounter) {
+        searchHitRateCounter.inc({ has_results: discoveryResults.length > 0 ? 'true' : 'false' });
+      }
+      if (searchResultsHistogram) {
+        searchResultsHistogram.observe({ search_type: 'keyword' }, discoveryResults.length);
+      }
+      
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       console.error('[Discovery Search] Firestore search failed:', err);
+      
+      // Track error metrics
+      const duration = (Date.now() - startTime) / 1000;
+      if (searchLatencyHistogram) {
+        searchLatencyHistogram.observe({ search_type: 'keyword', status: 'error' }, duration);
+      }
     } finally {
       setLoading(false);
     }
@@ -262,13 +334,22 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
    * @param rawQuery - Raw search input from user
    * @param queryEmbedding - Optional pre-computed query embedding
    */
+  // Check experiment status outside of callback
+  const isHybridEnabled = useExperimentSync('hybridSearch');
+
   const hybridSearch = useCallback(async (rawQuery: string, queryEmbedding?: Float32Array): Promise<void> => {
+    const startTime = Date.now();
     setLoading(true);
     setError(null);
     
     try {
-      // Check if hybrid search experiment is enabled via Remote Config
-      const isHybridEnabled = useExperimentSync('hybridSearch');
+      // Track query counter
+      if (searchQueryCounter) {
+        searchQueryCounter.inc({ 
+          search_type: 'hybrid', 
+          experiment_enabled: isHybridEnabled ? 'true' : 'false' 
+        });
+      }
       
       console.log('[Discovery Search] Hybrid search experiment status:', {
         enabled: isHybridEnabled,
@@ -352,7 +433,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       });
       
       // Process vector results
-      vectorResults.forEach(result => {
+      vectorResults.forEach((result: VectorSearchResult) => {
         vectorMap.set(result.id, {
           score: result.score,
         });
@@ -382,8 +463,8 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
           reason = 'hybrid';
         } else if (keywordData) {
           // Check if this was a synonym match vs direct keyword match
-          const hasDirectMatch = tokens.originalTokens.some(token => 
-            keywordData.template.keywords?.some(keyword => 
+          const hasDirectMatch = tokens.originalTokens.some((token: string) => 
+            keywordData.template.keywords?.some((keyword: string) => 
               keyword.toLowerCase().includes(token.toLowerCase())
             )
           );
@@ -394,7 +475,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         
         // For semantic-only results, we need to fetch the template
         // In a real implementation, you'd have a template lookup service
-        let template = keywordData?.template;
+        const template = keywordData?.template;
         if (!template && vectorData) {
           // Skip semantic-only results for now since we don't have template lookup
           continue;
@@ -434,14 +515,32 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         })),
       });
       
+      // Track metrics
+      const duration = (Date.now() - startTime) / 1000;
+      if (searchLatencyHistogram) {
+        searchLatencyHistogram.observe({ search_type: 'hybrid', status: 'success' }, duration);
+      }
+      if (searchHitRateCounter) {
+        searchHitRateCounter.inc({ has_results: hybridResults.length > 0 ? 'true' : 'false' });
+      }
+      if (searchResultsHistogram) {
+        searchResultsHistogram.observe({ search_type: 'hybrid' }, hybridResults.length);
+      }
+      
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       console.error('[Discovery Search] Hybrid search failed:', err);
+      
+      // Track error metrics
+      const duration = (Date.now() - startTime) / 1000;
+      if (searchLatencyHistogram) {
+        searchLatencyHistogram.observe({ search_type: 'hybrid', status: 'error' }, duration);
+      }
     } finally {
       setLoading(false);
     }
-  }, [processQuery, searchFirestore, tokens, logFirestoreRead]);
+  }, [processQuery, searchFirestore, tokens, logFirestoreRead, isHybridEnabled]);
 
   return {
     tokens,

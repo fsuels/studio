@@ -1,8 +1,19 @@
 // src/services/vectorSearch.ts
 // Vector index query helper with Redis caching, latency fallback, and HTTP endpoint integration
 
-import * as crypto from 'crypto';
-import Redis from 'ioredis';
+// Conditional imports for server-side only
+let crypto: any = null;
+let Redis: any = null;
+
+// Initialize server-side modules only when running on server
+if (typeof window === 'undefined') {
+  try {
+    crypto = require('crypto');
+    Redis = require('ioredis').default || require('ioredis');
+  } catch (error) {
+    console.warn('[Vector Search] Server-side modules not available:', error);
+  }
+}
 
 // Logger interface - adapt to your logging system
 interface Logger {
@@ -30,13 +41,18 @@ const CACHE_TTL_SECONDS = 24 * 60 * 60; // 24 hours in seconds for Redis
 const HTTP_TIMEOUT_MS = 300; // 300ms timeout for vector endpoint
 
 // Redis and fallback cache instances
-let redisClient: Redis | null = null;
+let redisClient: any = null;
 let fallbackCache: any = null;
 
 /**
- * Initialize Redis client
+ * Initialize Redis client (server-side only)
  */
-async function getRedisClient(): Promise<Redis | null> {
+async function getRedisClient(): Promise<any | null> {
+  // Return null if we're on the client side or Redis is not available
+  if (typeof window !== 'undefined' || !Redis) {
+    return null;
+  }
+  
   if (redisClient === null) {
     const redisUrl = process.env.REDIS_URL;
     
@@ -130,11 +146,29 @@ async function getFallbackCache() {
 }
 
 /**
- * Generate cache key from query embedding using MD5 hash
+ * Generate cache key from query embedding using MD5 hash (or fallback)
  */
 function generateCacheKey(queryEmbedding: Float32Array, k: number): string {
-  const buffer = Buffer.from(queryEmbedding.buffer);
-  const embeddingHash = crypto.createHash('md5').update(buffer).digest('hex');
+  // Use crypto hash if available (server-side)
+  if (crypto && typeof Buffer !== 'undefined') {
+    try {
+      const buffer = Buffer.from(queryEmbedding.buffer);
+      const embeddingHash = crypto.createHash('md5').update(buffer).digest('hex');
+      return `vector:${embeddingHash}:k${k}`;
+    } catch (error) {
+      logger.warn('Failed to generate crypto hash, using fallback', { error });
+    }
+  }
+  
+  // Fallback: simple string hash for client-side
+  const embeddingStr = Array.from(queryEmbedding).join(',');
+  let hash = 0;
+  for (let i = 0; i < embeddingStr.length; i++) {
+    const char = embeddingStr.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  const embeddingHash = Math.abs(hash).toString(16);
   return `vector:${embeddingHash}:k${k}`;
 }
 

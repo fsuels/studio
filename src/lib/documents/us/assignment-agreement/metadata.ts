@@ -26,7 +26,7 @@ export const assignmentAgreementMeta: Omit<
     en: {
       name: 'Assignment Agreement',
       description:
-        'Transfer contractual responsibilities legally while protecting your reputation. Exit commitments you can't fulfill without penalties.',
+        'Transfer contractual responsibilities legally while protecting your reputation. Exit commitments you can fulfill without penalties.',
       aliases: [
         'contract assignment',
         'right assignment',
