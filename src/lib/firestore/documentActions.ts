@@ -96,7 +96,7 @@ export async function softDeleteDocument(
   const db = await getDb();
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, {
-    deletedAt: Date.now(),
+    deletedAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
 

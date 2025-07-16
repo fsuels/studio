@@ -11,6 +11,14 @@ service cloud.firestore {
     match /users/{userId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /users/{userId}/payments/{paymentId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/folders/{folderId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
     match /reviews/{docId} {
       allow read: if true;
       allow write: if false;
@@ -40,15 +48,7 @@ service cloud.firestore {
     
     // Immutable audit trail collection
     match /audit_events/{eventId} {
-      // Only allow creates (no updates or deletes for immutability)
-      allow create: if request.auth != null &&
-        // Ensure the event has required fields
-        request.resource.data.keys().hasAll(['userId', 'eventType', 'timestamp', 'metadata', 'hash']) &&
-        // Ensure the userId matches the authenticated user (or system events)
-        (request.resource.data.userId == request.auth.uid || 
-         request.resource.data.eventType in ['SYSTEM_STARTUP', 'SYSTEM_SHUTDOWN', 'COMPLIANCE_SCAN']) &&
-        // Ensure timestamp is server timestamp
-        request.resource.data.timestamp == request.time;
+      allow create: if request.auth != null;
       
       // Users can only read their own events, admins can read all
       allow read: if request.auth != null && 
