@@ -80,7 +80,22 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
           
           // For DiscoveryResult, use the result properties directly
           const title = translatedDoc?.name || (result as DiscoveryResult).title || 'Untitled Document';
-          const description = translatedDoc?.description || (result as DiscoveryResult).description || '';
+          
+          // Enhanced description fallback with better debugging
+          const discoveryDescription = (result as DiscoveryResult).description;
+          const description = translatedDoc?.description || discoveryDescription || '';
+          
+          // Debug logging for empty descriptions (remove in production)
+          if (!description || description.trim() === '') {
+            console.warn(`[Results Grid] Empty description for document:`, {
+              docId: isSemanticResult ? result.doc.id : result.id,
+              hasTranslatedDoc: !!translatedDoc,
+              translatedDocDesc: translatedDoc?.description,
+              discoveryResultDesc: discoveryDescription,
+              resultType: isSemanticResult ? 'semantic' : 'discovery'
+            });
+          }
+          
           const docId = isSemanticResult ? result.doc.id : result.id;
 
           return (
@@ -114,12 +129,15 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                   
                   {/* Description */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                    {description ? (
+                    {description && description.trim() ? (
                       <>
                         <span className="font-medium text-emerald-600 dark:text-emerald-400">Use for:</span> {description}
                       </>
                     ) : (
-                      'No description available'
+                      <>
+                        <span className="font-medium text-emerald-600 dark:text-emerald-400">Use for:</span> 
+                        <span className="italic"> Professional legal document for {title.toLowerCase()} needs</span>
+                      </>
                     )}
                   </p>
                   

@@ -66,13 +66,31 @@ export default function DocumentDiscoveryModal() {
       console.log('[Discovery Modal] Local search found:', localDocs.length, 'documents');
       
       // Convert to DiscoveryResult format
-      const convertedResults: DiscoveryResult[] = localDocs.slice(0, 10).map((doc, index) => ({
-        id: doc.id,
-        title: doc.translations?.[locale]?.name || doc.name || doc.id,
-        description: doc.translations?.[locale]?.description || doc.description || '',
-        confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
-        reason: 'keyword' as const,
-        template: {
+      const convertedResults: DiscoveryResult[] = localDocs.slice(0, 10).map((doc, index) => {
+        // Enhanced fallback for description to handle both old and new document formats
+        const description = doc.translations?.[locale]?.description || 
+                          doc.translations?.en?.description || 
+                          doc.description || 
+                          `Legal document for ${doc.category.toLowerCase()} matters`;
+        
+        // Debug logging (remove in production)
+        if (!description || description.trim() === '') {
+          console.warn(`[Discovery Modal] No description found for document: ${doc.id}`, {
+            hasTranslations: !!doc.translations,
+            hasLocaleDesc: !!doc.translations?.[locale]?.description,
+            hasEnDesc: !!doc.translations?.en?.description,
+            hasDirectDesc: !!doc.description,
+            locale
+          });
+        }
+        
+        return {
+          id: doc.id,
+          title: doc.translations?.[locale]?.name || doc.name || doc.id,
+          description,
+          confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
+          reason: 'keyword' as const,
+          template: {
           id: doc.id,
           name: doc.translations?.[locale]?.name || doc.name || doc.id,
           description: doc.translations?.[locale]?.description || doc.description || '',
@@ -137,7 +155,8 @@ export default function DocumentDiscoveryModal() {
           verified: true,
           moderationStatus: 'approved' as const,
         }
-      }));
+      };
+      });
       
       // Set local results immediately
       setLocalResults(convertedResults);
