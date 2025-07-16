@@ -25,7 +25,9 @@ export interface FormProgressDoc {
 
 /* ---------- helpers ----------------------------------------------------- */
 function progressDocId(docType: string, state: string) {
-  return `${encodeURIComponent(docType)}_${state}`;
+  const result = `${encodeURIComponent(docType)}_${state}`;
+  console.log('Generated doc ID:', { docType, state, result });
+  return result;
 }
 
 /* ---------- save -------------------------------------------------------- */
@@ -45,12 +47,20 @@ export async function saveFormProgress({
   const db = await getDb(); // already cached singleton
   const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
 
+  const docId = progressDocId(docType, state || 'NA');
+  console.log('Saving to Firestore path:', {
+    path: `users/${userId}/documents/${docId}`,
+    docType,
+    state,
+    userId
+  });
+  
   const ref = doc(
     db,
     'users',
     userId,
     'documents',
-    progressDocId(docType, state || 'NA'),
+    docId,
   );
 
   const payload: Partial<FormProgressDoc> = {

@@ -314,6 +314,7 @@ export default function StartWizardPageClient({
             onComplete={handleDocumentComplete}
             initialFormData={formData}
             isLoggedIn={isLoggedIn}
+            locale={locale}
           />
         </div>
       </main>

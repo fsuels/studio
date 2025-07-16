@@ -1,12 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertCircle, FileText, Shield, Clock } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import dynamic from 'next/dynamic';
 import InteractivePDFFormFiller from './InteractivePDFFormFiller';
 import { floridaFormConfig } from '@/lib/state-forms/florida-vehicle-bill-of-sale';
+import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
+
+const AuthModal = dynamic(() => import('@/components/shared/AuthModal'));
 
 interface SmartDocumentWizardProps {
   documentType: 'vehicle-bill-of-sale';
@@ -15,6 +23,7 @@ interface SmartDocumentWizardProps {
   onComplete: (document: ArrayBuffer) => void;
   initialFormData?: Record<string, any>;
   isLoggedIn?: boolean;
+  locale?: 'en' | 'es';
 }
 
 // States that have mandatory official forms
@@ -37,10 +46,23 @@ export default function SmartDocumentWizard({
   onPaymentRequired,
   onComplete,
   initialFormData = {},
-  isLoggedIn = false
+  isLoggedIn = false,
+  locale = 'en'
 }: SmartDocumentWizardProps) {
   const [loading, setLoading] = useState(!selectedState);
   const [error, setError] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<Record<string, any>>({});
+  
+  const router = useRouter();
+  const { toast } = useToast();
+  const { user, isLoggedIn: authIsLoggedIn } = useAuth();
+  const { t } = useTranslation('common');
+  
+  // Use auth context login status instead of prop for real-time updates
+  const effectiveIsLoggedIn = authIsLoggedIn || isLoggedIn;
 
   useEffect(() => {
     if (selectedState) {
@@ -48,24 +70,115 @@ export default function SmartDocumentWizard({
     }
   }, [selectedState]);
 
-  const handleSaveAndContinue = (formData: Record<string, any>) => {
+  const handleSaveAndContinue = useCallback(async (formData: Record<string, any>) => {
     if (!selectedState) return;
     
     // If user is not logged in, prompt for account creation first
-    if (!isLoggedIn) {
+    if (!effectiveIsLoggedIn) {
       // Save form data to localStorage as backup
       localStorage.setItem(`state_form_draft_${selectedState}`, JSON.stringify(formData));
       
-      // Redirect to registration/login with return path
-      const returnPath = window.location.pathname;
-      window.location.href = `/register?return=${encodeURIComponent(returnPath)}&save_draft=true`;
+      // Store pending form data and show auth modal
+      setPendingFormData(formData);
+      setPendingSaveDraft(true);
+      setShowAuthModal(true);
       return;
     }
     
-    // For logged-in users, save to dashboard and show success message
-    // This would integrate with your existing dashboard save system
-    alert('Progress saved! You can continue later from your dashboard.');
-  };
+    // For logged-in users, save to dashboard
+    await saveDraftToFirestore(formData);
+  }, [selectedState, isLoggedIn]);
+  
+  const saveDraftToFirestore = useCallback(async (formData: Record<string, any>) => {
+    if (!user?.uid || !selectedState) {
+      console.error('Cannot save draft: missing user or state', { user: user?.uid, selectedState });
+      return;
+    }
+    
+    setIsSavingDraft(true);
+    try {
+      // Force Firebase Auth token refresh to ensure permissions are up to date
+      const { getAuth } = await import('firebase/auth');
+      const auth = getAuth();
+      if (auth.currentUser) {
+        await auth.currentUser.getIdToken(true); // Force refresh
+        console.log('Auth token refreshed for user:', auth.currentUser.uid);
+      }
+      
+      const savePayload = {
+        userId: user.uid,
+        docType: `${documentType}-${selectedState}`,
+        formData,
+        state: locale,
+      };
+      
+      console.log('Saving draft with payload:', savePayload);
+      
+      await saveFormProgress(savePayload);
+      
+      toast({
+        title: t('wizard.draftSaved', { defaultValue: 'Draft Saved' }),
+        description: t('wizard.draftSavedDescription', {
+          defaultValue: 'Your progress has been saved. You can continue later from your dashboard.',
+        }),
+      });
+      
+      router.push(`/${locale}/dashboard`);
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+      
+      // If it's a permissions error, try to provide more specific help
+      if (error instanceof Error && error.message.includes('permissions')) {
+        toast({
+          title: t('Authentication Error'),
+          description: 'Please try logging out and logging back in, then try saving again.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: t('Error'),
+          description: t('wizard.draftSaveError', {
+            defaultValue: 'Failed to save draft. Please try again.',
+          }),
+          variant: 'destructive',
+        });
+      }
+    } finally {
+      setIsSavingDraft(false);
+      setPendingSaveDraft(false);
+    }
+  }, [user, selectedState, documentType, locale, router, toast, t]);
+  
+  const handleAuthSuccess = useCallback(async (uid?: string) => {
+    console.log('Auth success, checking pending draft:', { pendingSaveDraft, pendingFormData, uid });
+    setShowAuthModal(false);
+    
+    // Wait for Firebase Auth to fully initialize
+    const maxWait = 5000; // 5 seconds max
+    const startTime = Date.now();
+    
+    const waitForAuth = () => {
+      return new Promise<void>((resolve) => {
+        const checkAuth = () => {
+          const elapsed = Date.now() - startTime;
+          if (user?.uid || elapsed > maxWait) {
+            console.log('Auth ready after', elapsed, 'ms, user:', user?.uid);
+            resolve();
+          } else {
+            setTimeout(checkAuth, 100);
+          }
+        };
+        checkAuth();
+      });
+    };
+    
+    await waitForAuth();
+    
+    if (pendingSaveDraft && Object.keys(pendingFormData).length > 0) {
+      console.log('Attempting to save after auth, user:', user);
+      await saveDraftToFirestore(pendingFormData);
+    }
+  }, [pendingSaveDraft, pendingFormData, saveDraftToFirestore, user]);
 
   const handleCompleteAndPay = (formData: Record<string, any>) => {
     if (!selectedState) return;
@@ -134,52 +247,76 @@ export default function SmartDocumentWizard({
     if (selectedState === 'FL') {
       // Florida - fully configured
       return (
-        <InteractivePDFFormFiller
-          state={floridaFormConfig.state}
-          formName={floridaFormConfig.formName}
-          pdfUrl={floridaFormConfig.pdfUrl}
-          requiresNotary={floridaFormConfig.requiresNotary}
-          basePrice={floridaFormConfig.basePrice}
-          onSaveAndContinue={handleSaveAndContinue}
-          onCompleteAndPay={handleCompleteAndPay}
-          initialFormData={initialFormData}
-          isLoggedIn={isLoggedIn}
-        />
+        <>
+          <InteractivePDFFormFiller
+            state={floridaFormConfig.state}
+            formName={floridaFormConfig.formName}
+            pdfUrl={floridaFormConfig.pdfUrl}
+            requiresNotary={floridaFormConfig.requiresNotary}
+            basePrice={floridaFormConfig.basePrice}
+            onSaveAndContinue={handleSaveAndContinue}
+            onCompleteAndPay={handleCompleteAndPay}
+            initialFormData={initialFormData}
+            isLoggedIn={isLoggedIn}
+          />
+          
+          <AuthModal
+            isOpen={showAuthModal}
+            onClose={() => {
+              setShowAuthModal(false);
+              setPendingSaveDraft(false);
+              setPendingFormData({});
+            }}
+            onAuthSuccess={handleAuthSuccess}
+          />
+        </>
       );
     } else {
       // Other states with official forms (to be configured)
       return (
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
-              {selectedState} Official Form
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Alert>
-              <FileText className="h-4 w-4" />
-              <AlertDescription>
-                <div className="space-y-2">
-                  <p>
-                    <strong>{selectedState} requires an official form ({stateInfo?.formName}).</strong>
-                  </p>
-                  <p>
-                    We're currently configuring the direct form filling interface for {selectedState}. 
-                    This will allow you to fill out the official state form directly with the same 
-                    intuitive experience as Florida.
-                  </p>
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-sm text-muted-foreground">
-                      Form: {stateInfo?.formName} • Price: ${stateInfo?.price}
-                    </span>
-                    <Badge variant="outline">Coming Soon</Badge>
+        <>
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                {selectedState} Official Form
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Alert>
+                <FileText className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="space-y-2">
+                    <p>
+                      <strong>{selectedState} requires an official form ({stateInfo?.formName}).</strong>
+                    </p>
+                    <p>
+                      We're currently configuring the direct form filling interface for {selectedState}. 
+                      This will allow you to fill out the official state form directly with the same 
+                      intuitive experience as Florida.
+                    </p>
+                    <div className="flex items-center justify-between mt-4">
+                      <span className="text-sm text-muted-foreground">
+                        Form: {stateInfo?.formName} • Price: ${stateInfo?.price}
+                      </span>
+                      <Badge variant="outline">Coming Soon</Badge>
+                    </div>
                   </div>
-                </div>
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+          
+          <AuthModal
+            isOpen={showAuthModal}
+            onClose={() => {
+              setShowAuthModal(false);
+              setPendingSaveDraft(false);
+              setPendingFormData({});
+            }}
+            onAuthSuccess={handleAuthSuccess}
+          />
+        </>
       );
     }
   } else {

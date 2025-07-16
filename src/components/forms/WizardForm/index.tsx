@@ -202,7 +202,17 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       setIsSavingDraft(true);
       try {
         const formData = getValues();
-        await saveFormProgress(doc.id, formData, locale);
+        // Check if user is logged in before saving
+        if (!user?.uid) {
+          console.error('User not logged in, cannot save progress');
+          return;
+        }
+        await saveFormProgress({
+          userId: user.uid,
+          docType: doc.id,
+          formData,
+          state: locale,
+        });
 
         toast({
           title: t('wizard.draftSaved', { defaultValue: 'Draft Saved' }),
