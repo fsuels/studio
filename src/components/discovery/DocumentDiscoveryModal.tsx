@@ -69,6 +69,7 @@ export default function DocumentDiscoveryModal() {
       const convertedResults: DiscoveryResult[] = localDocs.slice(0, 10).map((doc, index) => ({
         id: doc.id,
         title: doc.translations?.[locale]?.name || doc.name || doc.id,
+        description: doc.translations?.[locale]?.description || doc.description || '',
         confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
         reason: 'keyword' as const,
         template: {

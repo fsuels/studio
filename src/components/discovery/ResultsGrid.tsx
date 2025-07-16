@@ -17,6 +17,7 @@ interface ResultsGridProps {
 }
 
 export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: ResultsGridProps) {
+
   if (isLoading) {
     return (
       <div className="space-y-4 pb-8">
@@ -79,7 +80,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
           
           // For DiscoveryResult, use the result properties directly
           const title = translatedDoc?.name || (result as DiscoveryResult).title || 'Untitled Document';
-          const description = translatedDoc?.description || (result as DiscoveryResult).description || 'No description available';
+          const description = translatedDoc?.description || (result as DiscoveryResult).description || '';
           const docId = isSemanticResult ? result.doc.id : result.id;
 
           return (
@@ -87,7 +88,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
               key={docId}
               href={`/${locale}/docs/${docId}`}
               onClick={() => onDocumentClick(docId)}
-              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 ${
+              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 block ${
                 isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
               }`}
               style={{
@@ -113,7 +114,13 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                   
                   {/* Description */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                    {description}
+                    {description ? (
+                      <>
+                        <span className="font-medium text-emerald-600 dark:text-emerald-400">Use for:</span> {description}
+                      </>
+                    ) : (
+                      'No description available'
+                    )}
                   </p>
                   
                   {/* Primary CTA - Prominent Button */}
