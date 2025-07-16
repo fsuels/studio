@@ -89,7 +89,8 @@
       "Bash(fuser:*)",
       "Bash(awk:*)",
       "Bash(npx playwright test:*)",
-      "Bash(NODE_ENV=development node -e \"console.log('Testing require...');\")"
+      "Bash(NODE_ENV=development node -e \"console.log('Testing require...');\")",
+      "Bash(firebase deploy:*)"
     ],
     "deny": []
   }

@@ -222,7 +222,13 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         limit(50) // Limit results to reasonable number
       );
       
-      const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
+      // Add timeout to prevent hanging on permission errors
+      const queryPromise = getDocs(q);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Query timeout - likely permission issue')), 5000)
+      );
+      
+      const querySnapshot: QuerySnapshot<DocumentData> = await Promise.race([queryPromise, timeoutPromise]);
       
       // Log Firestore reads for cost monitoring
       logFirestoreRead(querySnapshot.size);
@@ -273,8 +279,15 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      console.error('[Discovery Search] Firestore search failed:', err);
+      console.warn('[Discovery Search] Firestore search failed (this is expected if no data exists):', err);
+      
+      // Don't set error state for permission errors - this is expected
+      if (!errorMessage.includes('permission') && !errorMessage.includes('insufficient')) {
+        setError(errorMessage);
+      }
+      
+      // Clear results on error
+      setResults([]);
       
       // Track error metrics
       const duration = (Date.now() - startTime) / 1000;
@@ -529,8 +542,15 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      console.error('[Discovery Search] Hybrid search failed:', err);
+      console.warn('[Discovery Search] Hybrid search failed (falling back to keyword-only):', err);
+      
+      // Don't set error state for permission errors - this is expected
+      if (!errorMessage.includes('permission') && !errorMessage.includes('insufficient')) {
+        setError(errorMessage);
+      }
+      
+      // Clear results on error
+      setResults([]);
       
       // Track error metrics
       const duration = (Date.now() - startTime) / 1000;

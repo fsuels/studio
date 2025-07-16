@@ -16,9 +16,9 @@ service cloud.firestore {
       allow write: if false;
     }
     
-    // Template marketplace collections
+    // Template marketplace collections - allow public read, restricted write
     match /marketplace-templates/{templateId} {
-      allow read: if true;
+      allow read: if true; // Public read access for search functionality
       allow write: if request.auth != null && (
         request.auth.uid == resource.data.createdBy ||
         request.auth.uid in resource.data.maintainers ||
@@ -26,7 +26,7 @@ service cloud.firestore {
       );
       allow create: if request.auth != null && 
         request.resource.data.keys().hasAll(['name', 'category', 'tags', 'keywords', 'jurisdiction', 'createdBy']) &&
-        request.resource.data.createdBy == request.auth.uid;
+        (request.resource.data.createdBy == request.auth.uid || request.auth.token.admin == true);
       
       match /versions/{versionId} {
         allow read: if true;

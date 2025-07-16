@@ -30,6 +30,7 @@
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
     "seed:reviews": "node scripts/seed-reviews.ts",
+    "seed:marketplace": "tsx scripts/seedMarketplaceTemplates.ts",
     "generate:doc": "tsx scripts/generate-doc.ts",
     "seed:user": "tsx scripts/seedUser.ts",
     "preview": "npm run build && npm run export && firebase hosting:channel:deploy dev",
