@@ -1,8 +1,105 @@
-# Firebase Studio
+# 123LegalDoc
 
-This is a NextJS starter in Firebase Studio.
+[![Test Coverage](https://github.com/yourusername/123legaldoc/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/yourusername/123legaldoc/actions/workflows/test-coverage.yml)
+[![codecov](https://codecov.io/gh/yourusername/123legaldoc/branch/master/graph/badge.svg)](https://codecov.io/gh/yourusername/123legaldoc)
+[![Coverage Status](https://coveralls.io/repos/github/yourusername/123legaldoc/badge.svg?branch=master)](https://coveralls.io/github/yourusername/123legaldoc?branch=master)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](package.json)
 
-To get started, take a look at src/app/page.tsx.
+A comprehensive legal document generation platform that creates state-specific compliant legal forms with 100% legal compliance and an excellent user experience.
+
+## ✨ Features
+
+- 🏛️ **State-Specific Compliance** - Automatic compliance checking for all 50 US states
+- 📄 **Smart PDF Generation** - Intelligent form filling with official state forms
+- 🌐 **Multi-language Support** - English and Spanish translations
+- 🔍 **Live Preview** - Real-time document preview as users type
+- ✅ **Visual Compliance Indicators** - Clear guidance on legal requirements
+- 🔒 **Secure Document Handling** - Enterprise-grade security for sensitive legal data
+
+## 🧪 Code Coverage
+
+This project maintains high code coverage standards:
+
+- **Lines**: 80%+ target
+- **Functions**: 80%+ target  
+- **Branches**: 75%+ target
+- **Statements**: 80%+ target
+
+Coverage reports are automatically generated on every PR and push to main branches.
+
+### Running Tests and Coverage
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+
+# Generate detailed coverage report
+npm run coverage:report:detailed
+
+# Open coverage report in browser
+npm run coverage:open
+
+# Generate JSON coverage data
+npm run coverage:report:json
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or 20.x
+- npm or yarn
+- Firebase account (for deployment)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/123legaldoc.git
+cd 123legaldoc
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+# Edit .env.local with your configuration
+```
+
+4. Run the development server:
+```bash
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+## 🏗️ Development
+
+### Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run format` - Format code with Prettier
+
+### Testing
+
+- `npm test` - Run Jest unit tests
+- `npm run e2e` - Run Playwright E2E tests
+- `npm run accessibility:test` - Run accessibility tests
 
 ## Firebase configuration
 

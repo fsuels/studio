@@ -14,6 +14,7 @@ import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
 import type { DiscoveryResult } from '@/types/discovery';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { findMatchingDocuments } from '@/lib/document-library';
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
@@ -39,7 +40,7 @@ export default function DocumentDiscoveryModal() {
 
   const {
     tokens,
-    results,
+    results: firestoreResults,
     loading: isSearching,
     error,
     searchFirestore,
@@ -49,16 +50,113 @@ export default function DocumentDiscoveryModal() {
   
   const [searchInput, setSearchInput] = useState('');
   const [suggestion] = useState('');
+  const [localResults, setLocalResults] = useState<DiscoveryResult[]>([]);
+  const [isUsingLocalFallback, setIsUsingLocalFallback] = useState(false);
   
   const performSearch = async (query: string) => {
     if (query.trim()) {
+      // First try Firestore search
       await searchFirestore(query);
+      
+      // If Firestore returns no results, fall back to local document library
+      setTimeout(() => {
+        if (firestoreResults.length === 0) {
+          console.log('[Discovery Modal] Firestore search returned no results, falling back to local search');
+          
+          // Search local document library
+          const localDocs = findMatchingDocuments(query.trim(), locale);
+          
+          // Convert to DiscoveryResult format
+          const convertedResults: DiscoveryResult[] = localDocs.slice(0, 10).map((doc, index) => ({
+            id: doc.id,
+            title: doc.translations?.[locale]?.name || doc.name || doc.id,
+            confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
+            reason: 'keyword' as const,
+            template: {
+              id: doc.id,
+              name: doc.translations?.[locale]?.name || doc.name || doc.id,
+              description: doc.translations?.[locale]?.description || doc.description || '',
+              keywords: doc.translations?.[locale]?.aliases || [],
+              category: doc.category,
+              slug: doc.id,
+              createdBy: 'system',
+              creatorProfile: {
+                userId: 'system',
+                displayName: '123LegalDoc',
+                verified: true,
+                badges: [],
+                totalTemplates: 0,
+                totalDownloads: 0,
+                totalRevenue: 0,
+                averageRating: 5.0,
+              },
+              maintainers: [],
+              tags: [doc.category.toLowerCase()],
+              jurisdiction: doc.jurisdiction || 'US',
+              states: doc.states || 'all',
+              languageSupport: doc.languageSupport || ['en'],
+              visibility: 'public' as const,
+              pricing: {
+                type: 'one-time' as const,
+                basePrice: doc.basePrice || 2500,
+                currency: 'USD',
+                creatorShare: 0,
+                platformFee: 100,
+              },
+              licenseType: 'premium' as const,
+              currentVersion: '1.0.0',
+              latestVersionId: 'v1',
+              versions: ['v1'],
+              stats: {
+                totalDownloads: 0,
+                totalInstalls: 0,
+                totalRevenue: 0,
+                uniqueUsers: 0,
+                downloadsThisMonth: 0,
+                downloadsThisWeek: 0,
+                revenueThisMonth: 0,
+                totalRatings: 0,
+                averageRating: 5.0,
+                completionRate: 95,
+                forkCount: 0,
+                favoriteCount: 0,
+                reportCount: 0,
+                versionCount: 1,
+                lastVersionDate: new Date() as any,
+                updateFrequency: 365,
+              },
+              ratings: {
+                averageRating: 5.0,
+                totalRatings: 0,
+                ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+                recentTrend: 'stable' as const,
+                trendChange: 0,
+              },
+              lastUpdated: new Date() as any,
+              featured: false,
+              verified: true,
+              moderationStatus: 'approved' as const,
+            }
+          }));
+          
+          setLocalResults(convertedResults);
+          setIsUsingLocalFallback(true);
+        } else {
+          setLocalResults([]);
+          setIsUsingLocalFallback(false);
+        }
+      }, 100); // Small delay to ensure Firestore search has completed
     }
   };
+  
+  // Combined results - use local fallback if Firestore is empty
+  const results = isUsingLocalFallback ? localResults : firestoreResults;
   
   const clearResults = () => {
     resetMetrics();
     setSearchInput('');
+    setLocalResults([]);
+    setIsUsingLocalFallback(false);
   };
 
   const {
@@ -322,12 +420,22 @@ export default function DocumentDiscoveryModal() {
                   </div>
                 </div>
               }>
-                <ResultsGrid
-                  results={results as DiscoveryResult[]}
-                  locale={locale}
-                  onDocumentClick={handleDocumentClick}
-                  isLoading={isSearching}
-                />
+                <div className="space-y-4 pb-8">
+                  {isUsingLocalFallback && (
+                    <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        <Brain className="inline-block w-4 h-4 mr-2" />
+                        Showing results from local document library
+                      </p>
+                    </div>
+                  )}
+                  <ResultsGrid
+                    results={results as DiscoveryResult[]}
+                    locale={locale}
+                    onDocumentClick={handleDocumentClick}
+                    isLoading={isSearching}
+                  />
+                </div>
               </React.Suspense>
             ) : searchInput ? (
               <NoResults

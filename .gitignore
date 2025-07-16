@@ -23,3 +23,12 @@ Thumbs.db
 
 # prototyper
 /context_backup
+
+# testing
+/coverage
+/test-results
+/playwright-report
+*.lcov
+
+# coverage badges
+/badges
