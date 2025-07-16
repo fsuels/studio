@@ -37,6 +37,10 @@ const PreviewPane = dynamic(() => import('@/components/document/PreviewPane'), {
   loading: () => <Loading />,
 });
 
+const SmartDocumentWizard = dynamic(() => import('@/components/document/SmartDocumentWizard'), {
+  loading: () => <Loading />,
+});
+
 interface StartWizardPageClientProps {
   locale: 'en' | 'es';
   docId: string;
@@ -62,6 +66,8 @@ export default function StartWizardPageClient({
   const [wizardFormRef, setWizardFormRef] = useState<{
     navigateToField: (fieldId: string) => void;
   } | null>(null);
+  const [selectedState, setSelectedState] = useState<string>('');
+  const [useDirectFormFilling, setUseDirectFormFilling] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -77,6 +83,35 @@ export default function StartWizardPageClient({
     resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
   });
   const { reset, watch } = methods;
+
+  // States with mandatory official forms
+  const STATES_WITH_OFFICIAL_FORMS = ['AL', 'CO', 'FL', 'GA', 'ID', 'KS', 'MD', 'MT', 'ND', 'WV'];
+
+  // Watch for state selection in form data - IMMEDIATE SWITCH
+  const formData = watch();
+  useEffect(() => {
+    if (formData?.state && formData.state !== selectedState) {
+      console.log('🎯 State selected:', formData.state);
+      setSelectedState(formData.state);
+      
+      // IMMEDIATE SWITCH: If state has official form, switch to direct form filling RIGHT NOW
+      if (docConfig?.id === 'vehicle-bill-of-sale' && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
+        console.log('🚀 Switching to direct form filling for state:', formData.state);
+        setUseDirectFormFilling(true);
+      } else {
+        console.log('📝 Continuing with question wizard for state:', formData.state);
+        setUseDirectFormFilling(false);
+      }
+    }
+  }, [formData?.state, selectedState, docConfig?.id]);
+
+  // ALSO watch for immediate state detection from URL or initial load
+  useEffect(() => {
+    if (docConfig?.id === 'vehicle-bill-of-sale' && formData?.state && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
+      setUseDirectFormFilling(true);
+      setSelectedState(formData.state);
+    }
+  }, [formData?.state, docConfig?.id]);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -213,6 +248,19 @@ export default function StartWizardPageClient({
     [wizardFormRef],
   );
 
+  const handlePaymentRequired = useCallback((formData: Record<string, any>, price: number, state: string) => {
+    // Integrate with your existing payment system
+    const paymentUrl = `/${locale}/checkout?amount=${price}&state=${state}&document=${docConfig?.id}&formData=${encodeURIComponent(JSON.stringify(formData))}`;
+    router.push(paymentUrl);
+  }, [locale, docConfig?.id, router]);
+
+  const handleDocumentComplete = useCallback((document: ArrayBuffer) => {
+    // Handle successful document generation
+    // This could trigger download or redirect to completion page
+    const completionUrl = `/${locale}/docs/${docConfig?.id}/complete`;
+    router.push(completionUrl);
+  }, [locale, docConfig?.id, router]);
+
   if (!isMounted || !draftLoaded) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
@@ -243,6 +291,36 @@ export default function StartWizardPageClient({
       ? docConfig.translations.es.name
       : docConfig.translations?.en?.name || docConfig.name || docConfig.id;
 
+  // If we should use direct form filling for this state + document combination
+  if (useDirectFormFilling && selectedState) {
+    return (
+      <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: t('breadcrumb.home'), href: `/${locale}` },
+            {
+              label: documentDisplayName,
+              href: `/${locale}/docs/${docConfig.id}`,
+            },
+            { label: t('breadcrumb.start') },
+          ]}
+        />
+        
+        <div className="mt-6">
+          <SmartDocumentWizard
+            documentType={docConfig.id as 'vehicle-bill-of-sale'}
+            selectedState={selectedState}
+            onPaymentRequired={handlePaymentRequired}
+            onComplete={handleDocumentComplete}
+            initialFormData={formData}
+            isLoggedIn={isLoggedIn}
+          />
+        </div>
+      </main>
+    );
+  }
+
+  // Default: Use existing question wizard system
   return (
     <FormProvider {...methods}>
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
