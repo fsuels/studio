@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { Button } from '@/components/ui/button';
-import StatePDFPreview from '@/components/document/StatePDFPreview';
+import EnhancedStatePDFPreview from '@/components/document/EnhancedStatePDFPreview';
 import { hasOfficialForm } from '@/lib/pdf/state-form-manager';
 
 interface PreviewPaneProps {
@@ -354,10 +354,11 @@ export default function PreviewPane({
   // If we should show state PDF, render that instead
   if (shouldShowStatePDF && !error) {
     return (
-      <StatePDFPreview
+      <EnhancedStatePDFPreview
         state={selectedState}
         formData={currentFormData}
         documentType="vehicle-bill-of-sale"
+        showLivePreview={true}
       />
     );
   }

@@ -35,9 +35,23 @@ export default function SimplePDFViewer({
     try {
       setLoading(true);
       setError(null);
-      console.log('SimplePDFViewer: Loading PDF from:', pdfUrl);
+      
+      // Ensure URL is absolute
+      const absoluteUrl = pdfUrl.startsWith('http') ? pdfUrl : 
+                         pdfUrl.startsWith('/') ? pdfUrl : 
+                         `/${pdfUrl}`;
+      
+      console.log('SimplePDFViewer: Loading PDF from:', absoluteUrl);
 
-      const response = await fetch(pdfUrl);
+      const response = await fetch(absoluteUrl);
+      console.log('SimplePDFViewer: Fetch response:', {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        url: response.url
+      });
+      
       if (!response.ok) {
         throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
       }

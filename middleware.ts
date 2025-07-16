@@ -58,7 +58,8 @@ export async function middleware(request: NextRequest) {
     "font-src 'self' fonts.gstatic.com",
     "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
     "connect-src 'self' *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
-    "frame-src 'self' *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
+    "frame-src 'self' blob: *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
+    "object-src 'self' blob:",
   ].join('; ');
 
   // Only apply CSP in production or when explicitly enabled (and not explicitly disabled for dev)
@@ -80,8 +81,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public (public files)
+     * - forms (PDF forms)
+     * - images (image files)
+     * - templates (template files)
+     * Files with extensions are also handled by tenant middleware
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|forms|images|templates).*)',
   ],
 };
