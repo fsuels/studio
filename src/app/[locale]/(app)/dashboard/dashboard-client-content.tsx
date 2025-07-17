@@ -81,7 +81,7 @@ import type {
   DashboardFolder,
 } from '@/lib/firestore/dashboardData';
 import { getUserDocuments } from '@/lib/firestore/dashboardData';
-import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
@@ -330,25 +330,14 @@ export default function DashboardClientContent({
     const ids = selectedIds;
     setSelectedIds([]);
     const key = ['dashboardDocuments', user!.uid] as const;
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
     
-    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
-    
-    queryClient.setQueryData<InfiniteData<PageData>>(
+    queryClient.setQueryData<DashboardDocument[]>(
       key,
-      (old) => {
-        if (!old?.pages) return old;
-        
-        return {
-          ...old,
-          pages: old.pages.map(page => ({
-            ...page,
-            documents: page.documents.map((d) =>
-              ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d
-            )
-          }))
-        };
-      }
+      (old) =>
+        old?.map((d) =>
+          ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d,
+        ) || [],
     );
     
     try {
@@ -367,24 +356,12 @@ export default function DashboardClientContent({
     const count = ids.length;
     setSelectedIds([]);
     const key = ['dashboardDocuments', user!.uid] as const;
-    
-    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
     
     // Optimistic update - remove from UI immediately
-    queryClient.setQueryData<InfiniteData<PageData>>(
+    queryClient.setQueryData<DashboardDocument[]>(
       key,
-      (old) => {
-        if (!old?.pages) return old;
-        
-        return {
-          ...old,
-          pages: old.pages.map(page => ({
-            ...page,
-            documents: page.documents.filter((d) => !ids.includes(d.id))
-          }))
-        };
-      }
+      (old) => old?.filter((d) => !ids.includes(d.id)) || [],
     );
     
     try {
@@ -408,25 +385,14 @@ export default function DashboardClientContent({
 
   const handleMove = async (docId: string, folderId: string | null) => {
     const key = ['dashboardDocuments', user!.uid] as const;
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
     
-    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
-    
-    queryClient.setQueryData<InfiniteData<PageData>>(
+    queryClient.setQueryData<DashboardDocument[]>(
       key,
-      (old) => {
-        if (!old?.pages) return old;
-        
-        return {
-          ...old,
-          pages: old.pages.map(page => ({
-            ...page,
-            documents: page.documents.map((d) =>
-              d.id === docId ? { ...d, folderId: folderId || undefined } : d
-            )
-          }))
-        };
-      }
+      (old) =>
+        old?.map((d) =>
+          d.id === docId ? { ...d, folderId: folderId || undefined } : d,
+        ) || [],
     );
     
     try {
