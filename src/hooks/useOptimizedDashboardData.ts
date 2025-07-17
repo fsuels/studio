@@ -27,7 +27,6 @@ export function useOptimizedDashboardData(
   const documentsQuery = useInfiniteQuery({
     queryKey: ['dashboardDocuments', userId],
     queryFn: async ({ pageParam }) => {
-      console.log('Query function called with pageParam:', pageParam, 'userId:', userId);
       
       if (!userId) {
         console.warn('No userId provided to query function');
@@ -36,10 +35,8 @@ export function useOptimizedDashboardData(
 
       try {
         const size = pageParam === undefined ? initialPageSize : pageSize;
-        console.log('Fetching documents with size:', size, 'startAfter:', pageParam);
         const result = await getUserDocumentsPaginated(userId, size, pageParam);
         
-        console.log('getUserDocumentsPaginated result:', result);
 
         // Ensure the result has the expected shape
         if (!result || typeof result !== 'object') {
@@ -67,7 +64,6 @@ export function useOptimizedDashboardData(
           lastDocId: result.lastDocId || undefined,
         };
         
-        console.log('Normalized result:', normalizedResult);
         return normalizedResult;
       } catch (error) {
         console.error('Error in getUserDocumentsPaginated:', error);
@@ -75,40 +71,45 @@ export function useOptimizedDashboardData(
       }
     },
     getNextPageParam: (lastPage, allPages) => {
-      // Extra defensive checks
-      if (!lastPage) {
-        console.warn('getNextPageParam: lastPage is null/undefined');
+      try {
+        // Extra defensive checks
+        if (!lastPage) {
+          console.warn('getNextPageParam: lastPage is null/undefined');
+          return undefined;
+        }
+
+        // If lastPage is somehow an array (shouldn't happen with our queryFn)
+        if (Array.isArray(lastPage)) {
+          console.warn('getNextPageParam received array instead of object');
+          return undefined;
+        }
+
+        // Check for expected shape
+        if (
+          typeof lastPage !== 'object' ||
+          lastPage === null ||
+          !('hasMore' in lastPage)
+        ) {
+          console.warn('getNextPageParam: invalid lastPage structure:', lastPage);
+          return undefined;
+        }
+
+        // Additional safety check for hasMore property
+        if (typeof lastPage.hasMore !== 'boolean') {
+          console.warn(
+            'getNextPageParam: hasMore is not a boolean:',
+            lastPage.hasMore,
+          );
+          return undefined;
+        }
+
+        return lastPage.hasMore ? lastPage.lastDocId : undefined;
+      } catch (error) {
+        console.error('Error in getNextPageParam:', error);
         return undefined;
       }
-
-      // If lastPage is somehow an array (shouldn't happen with our queryFn)
-      if (Array.isArray(lastPage)) {
-        console.warn('getNextPageParam received array instead of object');
-        return undefined;
-      }
-
-      // Check for expected shape
-      if (
-        typeof lastPage !== 'object' ||
-        lastPage === null ||
-        !('hasMore' in lastPage)
-      ) {
-        console.warn('getNextPageParam: invalid lastPage structure:', lastPage);
-        return undefined;
-      }
-
-      // Additional safety check for hasMore property
-      if (typeof lastPage.hasMore !== 'boolean') {
-        console.warn(
-          'getNextPageParam: hasMore is not a boolean:',
-          lastPage.hasMore,
-        );
-        return undefined;
-      }
-
-      return lastPage.hasMore ? lastPage.lastDocId : undefined;
     },
-    enabled: queryEnabled,
+    enabled: queryEnabled && typeof userId === 'string' && userId.length > 0,
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -116,10 +117,10 @@ export function useOptimizedDashboardData(
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
     initialPageParam: undefined,
     getPreviousPageParam: () => undefined,
-    placeholderData: {
+    placeholderData: queryEnabled ? {
       pages: [{ documents: [], hasMore: false, lastDocId: undefined }],
       pageParams: [undefined],
-    },
+    } : undefined,
   });
 
   const foldersQuery = useQuery({
@@ -143,11 +144,9 @@ export function useOptimizedDashboardData(
   });
 
   const documents = useMemo(() => {
-    console.log('Documents useMemo called with data:', documentsQuery.data);
     
     // Return empty array if no data
     if (!documentsQuery.data) {
-      console.log('No documentsQuery.data, returning empty array');
       return [];
     }
 
@@ -193,11 +192,9 @@ export function useOptimizedDashboardData(
       })
       .flatMap((page) => {
         const docs = page.documents || [];
-        console.log('Processing page with', docs.length, 'documents');
         return docs;
       });
       
-    console.log('Final documents result:', result.length, 'documents');
     return result;
   }, [documentsQuery.data]);
 

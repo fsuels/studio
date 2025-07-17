@@ -59,6 +59,9 @@ export default function PreviewPane({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const previewRef = useRef<HTMLDivElement>(null);
+  
+  // Add a state to track if form context is ready
+  const [formContextReady, setFormContextReady] = useState(false);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d) => d.id === docId),
@@ -80,6 +83,13 @@ export default function PreviewPane({
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+  
+  // Check if form context is ready
+  useEffect(() => {
+    if (formContext && watch) {
+      setFormContextReady(true);
+    }
+  }, [formContext, watch]);
 
   // Auto-scroll to highlighted field
   useEffect(() => {
@@ -263,7 +273,7 @@ export default function PreviewPane({
   );
 
   useEffect(() => {
-    if (!watch || !isHydrated || isLoading) {
+    if (!formContextReady || !watch || !isHydrated || isLoading) {
       if (rawMarkdown && !isLoading)
         setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
       return;
@@ -288,6 +298,7 @@ export default function PreviewPane({
       debouncedUpdatePreview.cancel();
     };
   }, [
+    formContextReady,
     watch,
     rawMarkdown,
     isLoading,
@@ -341,12 +352,13 @@ export default function PreviewPane({
   }
 
   // Check if this is a vehicle bill of sale with a state selected that has an official form
-  const selectedState = watch?.('state');
-  const currentFormData = watch?.() || {};
+  const selectedState = formContextReady && watch ? watch('state') : null;
+  const currentFormData = formContextReady && watch ? watch() : {};
   const isVehicleBillOfSale = docId === 'vehicle-bill-of-sale';
   const shouldShowStatePDF = isVehicleBillOfSale && selectedState && hasOfficialForm(selectedState);
   
   // Debug form data
+  console.log('PreviewPane: formContextReady =', formContextReady);
   console.log('PreviewPane: selectedState =', selectedState);
   console.log('PreviewPane: currentFormData =', currentFormData);
   console.log('PreviewPane: shouldShowStatePDF =', shouldShowStatePDF);
