@@ -4,6 +4,7 @@ import { getDocMeta } from '@/config/doc-meta';
 import slugMap from '@/config/doc-meta/slug-category-map.json';
 import type { LegalDocument } from '@/lib/document-library';
 import { search as originalSearch } from '@/lib/document-library';
+import { getDocumentTitle } from '@/lib/format-utils';
 
 interface SearchResult {
   slug: string;
@@ -156,7 +157,7 @@ export async function enhancedSearch(
       .slice(0, maxResults)
       .map((doc) => ({
         slug: doc.id,
-        title: doc.translations?.[locale]?.name || doc.name || doc.id,
+        title: getDocumentTitle(doc, locale),
         description: doc.translations?.[locale]?.description || doc.description || '',
         complexity: 'medium',
         popular: false,

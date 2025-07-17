@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Brain, Check, X } from 'lucide-react';
+import { getDocumentTitle } from '@/lib/format-utils';
 import {
   Dialog,
   DialogContent,
@@ -86,13 +87,13 @@ export default function DocumentDiscoveryModal() {
         
         return {
           id: doc.id,
-          title: doc.translations?.[locale]?.name || doc.name || doc.id,
+          title: getDocumentTitle(doc, locale),
           description,
           confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
           reason: 'keyword' as const,
           template: {
           id: doc.id,
-          name: doc.translations?.[locale]?.name || doc.name || doc.id,
+          name: getDocumentTitle(doc, locale),
           description: doc.translations?.[locale]?.description || doc.description || '',
           keywords: doc.translations?.[locale]?.aliases || [],
           category: doc.category,

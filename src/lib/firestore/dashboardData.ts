@@ -121,54 +121,68 @@ export async function getUserDocumentsPaginated(
   hasMore: boolean;
   lastDocId?: string;
 }> {
-  const db = await getDb();
-  const col = collection(db, 'users', userId, 'documents');
+  try {
+    const db = await getDb();
+    const col = collection(db, 'users', userId, 'documents');
 
-  let startSnap;
-  if (lastDocId) {
-    const docRef = doc(db, 'users', userId, 'documents', lastDocId);
-    startSnap = await getDoc(docRef);
-  }
+    let startSnap;
+    if (lastDocId) {
+      const docRef = doc(db, 'users', userId, 'documents', lastDocId);
+      startSnap = await getDoc(docRef);
+    }
 
-  const q = startSnap
-    ? query(
-        col,
-        orderBy('updatedAt', 'desc'),
-        startAfter(startSnap),
-        limit(max + 1),
-      )
-    : query(col, orderBy('updatedAt', 'desc'), limit(max + 1));
+    const q = startSnap
+      ? query(
+          col,
+          orderBy('updatedAt', 'desc'),
+          startAfter(startSnap),
+          limit(max + 1),
+        )
+      : query(col, orderBy('updatedAt', 'desc'), limit(max + 1));
 
-  const snap = await getDocs(q);
-  const docs = snap.docs
-    .filter((d) => {
-      const data = d.data() as { deletedAt?: unknown };
-      return !data.deletedAt;
-    })
-    .map((d) => {
-      const data = d.data() as Record<string, unknown> & {
-        updatedAt?: Timestamp | Date | string;
-        createdAt?: Timestamp | Date | string;
-      };
-      const docType = (data.originalDocId || data.docType || d.id) as string;
-      const docConfig = documentLibrary.find((doc) => doc.id === docType);
-      return {
-        id: d.id,
-        name:
-          (data.name as string) ||
-          docConfig?.name ||
-          docConfig?.translations?.en?.name ||
+    const snap = await getDocs(q);
+    const docs = snap.docs
+      .filter((d) => {
+        const data = d.data() as { deletedAt?: unknown };
+        return !data.deletedAt;
+      })
+      .map((d) => {
+        const data = d.data() as Record<string, unknown> & {
+          updatedAt?: Timestamp | Date | string;
+          createdAt?: Timestamp | Date | string;
+        };
+        const docType = (data.originalDocId || data.docType || d.id) as string;
+        const docConfig = documentLibrary.find((doc) => doc.id === docType);
+        return {
+          id: d.id,
+          name:
+            (data.name as string) ||
+            docConfig?.name ||
+            docConfig?.translations?.en?.name ||
+            docType,
+          date: data.updatedAt || data.createdAt || new Date(),
+          status: (data.status as string) || 'Draft',
           docType,
-        date: data.updatedAt || data.createdAt || new Date(),
-        status: (data.status as string) || 'Draft',
-        docType,
-        folderId: data.folderId as string | undefined,
-      } as DashboardDocument;
-    });
+          folderId: data.folderId as string | undefined,
+        } as DashboardDocument;
+      });
 
-  const hasMore = docs.length > max;
-  const trimmed = docs.slice(0, max);
-  const last = snap.docs[docs.length - 1];
+    const hasMore = docs.length > max;
+    const trimmed = docs.slice(0, max);
+    const last = trimmed[trimmed.length - 1];
 
-  return { documents: trimmed, hasMore, lastDocId: last?.id };
+    return { 
+      documents: trimmed, 
+      hasMore, 
+      lastDocId: hasMore && last ? last.id : undefined 
+    };
+  } catch (error) {
+    console.error('Error in getUserDocumentsPaginated:', error);
+    // Always return a valid structure even on error
+    return {
+      documents: [],
+      hasMore: false,
+      lastDocId: undefined,
+    };
+  }
 }

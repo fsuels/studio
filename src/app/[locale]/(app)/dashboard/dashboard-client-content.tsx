@@ -74,13 +74,14 @@ import {
   softDeleteDocument,
   updateDocumentFolder,
   bulkMoveDocuments,
+  bulkSoftDeleteDocuments,
 } from '@/lib/firestore/documentActions';
 import type {
   DashboardDocument,
   DashboardFolder,
 } from '@/lib/firestore/dashboardData';
 import { getUserDocuments } from '@/lib/firestore/dashboardData';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
@@ -239,10 +240,30 @@ export default function DashboardClientContent({
       status: 'Uploading',
       docType: 'uploaded',
     };
-    queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
-      ...old,
-      optimistic,
-    ]);
+    
+    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+    queryClient.setQueryData<InfiniteData<PageData>>(
+      key, 
+      (old) => {
+        if (!old?.pages || old.pages.length === 0) {
+          return {
+            pages: [{ documents: [optimistic], hasMore: false, lastDocId: undefined }],
+            pageParams: [undefined],
+          };
+        }
+        
+        return {
+          ...old,
+          pages: [
+            {
+              ...old.pages[0],
+              documents: [optimistic, ...old.pages[0].documents]
+            },
+            ...old.pages.slice(1)
+          ]
+        };
+      }
+    );
     try {
       const storage = getStorage();
       const db = getFirestore();
@@ -309,14 +330,27 @@ export default function DashboardClientContent({
     const ids = selectedIds;
     setSelectedIds([]);
     const key = ['dashboardDocuments', user!.uid] as const;
-    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-    queryClient.setQueryData<DashboardDocument[]>(
+    
+    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+    
+    queryClient.setQueryData<InfiniteData<PageData>>(
       key,
-      (old) =>
-        old?.map((d) =>
-          ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d,
-        ) || [],
+      (old) => {
+        if (!old?.pages) return old;
+        
+        return {
+          ...old,
+          pages: old.pages.map(page => ({
+            ...page,
+            documents: page.documents.map((d) =>
+              ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d
+            )
+          }))
+        };
+      }
     );
+    
     try {
       await bulkMoveDocuments(user!.uid, ids, folderId);
       toast({ title: t('Document moved') });
@@ -328,16 +362,73 @@ export default function DashboardClientContent({
     }
   };
 
+  const handleBulkDelete = async () => {
+    const ids = selectedIds;
+    const count = ids.length;
+    setSelectedIds([]);
+    const key = ['dashboardDocuments', user!.uid] as const;
+    
+    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+    
+    // Optimistic update - remove from UI immediately
+    queryClient.setQueryData<InfiniteData<PageData>>(
+      key,
+      (old) => {
+        if (!old?.pages) return old;
+        
+        return {
+          ...old,
+          pages: old.pages.map(page => ({
+            ...page,
+            documents: page.documents.filter((d) => !ids.includes(d.id))
+          }))
+        };
+      }
+    );
+    
+    try {
+      await bulkSoftDeleteDocuments(user!.uid, ids);
+      toast({ 
+        title: t('Documents deleted', { count }), 
+        description: `${count} ${count === 1 ? t('document') : t('documents')} ${t('deleted successfully')}`
+      });
+    } catch {
+      // Rollback on error
+      if (previous) queryClient.setQueryData(key, previous);
+      toast({
+        title: t('Error deleting documents'),
+        description: t('Some documents could not be deleted'),
+        variant: 'destructive',
+      });
+    } finally {
+      queryClient.invalidateQueries({ queryKey: key });
+    }
+  };
+
   const handleMove = async (docId: string, folderId: string | null) => {
     const key = ['dashboardDocuments', user!.uid] as const;
-    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-    queryClient.setQueryData<DashboardDocument[]>(
+    
+    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+    const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+    
+    queryClient.setQueryData<InfiniteData<PageData>>(
       key,
-      (old) =>
-        old?.map((d) =>
-          d.id === docId ? { ...d, folderId: folderId || undefined } : d,
-        ) || [],
+      (old) => {
+        if (!old?.pages) return old;
+        
+        return {
+          ...old,
+          pages: old.pages.map(page => ({
+            ...page,
+            documents: page.documents.map((d) =>
+              d.id === docId ? { ...d, folderId: folderId || undefined } : d
+            )
+          }))
+        };
+      }
     );
+    
     try {
       await updateDocumentFolder(user!.uid, docId, folderId);
       toast({ title: t('Document moved') });
@@ -552,6 +643,13 @@ export default function DashboardClientContent({
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+                <Button 
+                  size="sm" 
+                  variant="destructive"
+                  onClick={handleBulkDelete}
+                >
+                  {t('Delete')}
+                </Button>
                 <span className="text-sm text-muted-foreground">
                   {selectedIds.length} {t('selected')}
                 </span>
@@ -713,22 +811,35 @@ export default function DashboardClientContent({
                                   'dashboardDocuments',
                                   user!.uid,
                                 ] as const;
-                                const previous =
-                                  queryClient.getQueryData<DashboardDocument[]>(
-                                    key,
-                                  );
+                                
+                                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+                                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
                                 const tempId = `copy-${Date.now()}`;
-                                queryClient.setQueryData<DashboardDocument[]>(
+                                
+                                queryClient.setQueryData<InfiniteData<PageData>>(
                                   key,
-                                  (old = []) => [
-                                    ...old,
-                                    {
+                                  (old) => {
+                                    if (!old?.pages || old.pages.length === 0) return old;
+                                    
+                                    const newDoc = {
                                       ...(item as DashboardDocument),
                                       id: tempId,
                                       name: `${item.name} (Copy)`,
-                                    },
-                                  ],
+                                    };
+                                    
+                                    return {
+                                      ...old,
+                                      pages: [
+                                        {
+                                          ...old.pages[0],
+                                          documents: [newDoc, ...old.pages[0].documents]
+                                        },
+                                        ...old.pages.slice(1)
+                                      ]
+                                    };
+                                  }
                                 );
+                                
                                 try {
                                   await duplicateDocument(user!.uid, item.id);
                                   toast({ title: t('Document duplicated') });
@@ -759,15 +870,25 @@ export default function DashboardClientContent({
                                   'dashboardDocuments',
                                   user!.uid,
                                 ] as const;
-                                const previous =
-                                  queryClient.getQueryData<DashboardDocument[]>(
-                                    key,
-                                  );
-                                queryClient.setQueryData<DashboardDocument[]>(
+                                
+                                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+                                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+                                
+                                queryClient.setQueryData<InfiniteData<PageData>>(
                                   key,
-                                  (old) =>
-                                    old?.filter((d) => d.id !== item.id) || [],
+                                  (old) => {
+                                    if (!old?.pages) return old;
+                                    
+                                    return {
+                                      ...old,
+                                      pages: old.pages.map(page => ({
+                                        ...page,
+                                        documents: page.documents.filter((d) => d.id !== item.id)
+                                      }))
+                                    };
+                                  }
                                 );
+                                
                                 try {
                                   await softDeleteDocument(user!.uid, item.id);
                                   toast({ title: t('Document deleted') });
@@ -815,15 +936,27 @@ export default function DashboardClientContent({
               onRename={async (name) => {
                 if (!renameDoc) return;
                 const key = ['dashboardDocuments', user!.uid] as const;
-                const previous =
-                  queryClient.getQueryData<DashboardDocument[]>(key);
-                queryClient.setQueryData<DashboardDocument[]>(
+                
+                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
+                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+                
+                queryClient.setQueryData<InfiniteData<PageData>>(
                   key,
-                  (old) =>
-                    old?.map((d) =>
-                      d.id === renameDoc.id ? { ...d, name } : d,
-                    ) || [],
+                  (old) => {
+                    if (!old?.pages) return old;
+                    
+                    return {
+                      ...old,
+                      pages: old.pages.map(page => ({
+                        ...page,
+                        documents: page.documents.map((d) =>
+                          d.id === renameDoc.id ? { ...d, name } : d
+                        )
+                      }))
+                    };
+                  }
                 );
+                
                 try {
                   await renameDocument(user!.uid, renameDoc.id, name);
                   toast({ title: t('Document renamed') });

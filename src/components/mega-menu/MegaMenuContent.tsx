@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { documentLibrary } from '@/lib/document-library';
+import { getDocumentTitle } from '@/lib/format-utils';
 import type { LegalDocument } from '@/types/documents';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import {
@@ -231,7 +232,7 @@ const MemoizedDocLink = React.memo(function DocLink({
   const docName =
     locale === 'es' && doc.translations?.es?.name
       ? doc.translations.es.name
-      : doc.translations?.en?.name || doc.name || doc.id;
+      : getDocumentTitle(doc, 'en');
 
   const docHref = `/${locale}/docs/${doc.id}`;
 

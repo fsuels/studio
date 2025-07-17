@@ -4,6 +4,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import { getDocumentTitle } from '@/lib/format-utils';
 import { useRouter } from 'next/navigation';
 import {
   FileText,
@@ -114,7 +115,7 @@ export default function CategoryPageClient({ locale, category }: CategoryPageCli
     
     const query = searchQuery.toLowerCase();
     return categoryDocuments.filter(doc => {
-      const name = (doc.translations?.[locale]?.name || doc.name || doc.id).toLowerCase();
+      const name = getDocumentTitle(doc, locale).toLowerCase();
       const description = (doc.translations?.[locale]?.description || doc.description || '').toLowerCase();
       const aliases = doc.translations?.[locale]?.aliases || [];
       

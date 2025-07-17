@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getDocumentsForCountry, usStates } from '@/lib/document-library';
+import { getDocumentTitle } from '@/lib/format-utils';
 import { MetaTags, generateDocumentMetaTags } from '@/components/seo/MetaTags';
 import {
   Breadcrumbs,
@@ -159,7 +160,7 @@ export default function StatePage({ params }: StatePageProps) {
       <StateSpecificLegalSchema
         state={stateName}
         documentTypes={stateDocuments.map(
-          (doc) => doc.translations?.[locale]?.name || doc.name || doc.id,
+          (doc) => getDocumentTitle(doc, locale),
         )}
         locale={locale}
       />

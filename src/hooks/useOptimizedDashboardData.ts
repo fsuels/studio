@@ -27,13 +27,19 @@ export function useOptimizedDashboardData(
   const documentsQuery = useInfiniteQuery({
     queryKey: ['dashboardDocuments', userId],
     queryFn: async ({ pageParam }) => {
+      console.log('Query function called with pageParam:', pageParam, 'userId:', userId);
+      
       if (!userId) {
+        console.warn('No userId provided to query function');
         return { documents: [], hasMore: false, lastDocId: undefined };
       }
 
       try {
         const size = pageParam === undefined ? initialPageSize : pageSize;
+        console.log('Fetching documents with size:', size, 'startAfter:', pageParam);
         const result = await getUserDocumentsPaginated(userId, size, pageParam);
+        
+        console.log('getUserDocumentsPaginated result:', result);
 
         // Ensure the result has the expected shape
         if (!result || typeof result !== 'object') {
@@ -46,6 +52,7 @@ export function useOptimizedDashboardData(
 
         // If result is an array, wrap it in the expected object structure
         if (Array.isArray(result)) {
+          console.warn('Result is an array, wrapping in object structure');
           return {
             documents: result,
             hasMore: false,
@@ -53,12 +60,15 @@ export function useOptimizedDashboardData(
           };
         }
 
-        // Ensure result has required properties
-        return {
-          documents: result.documents || [],
-          hasMore: result.hasMore || false,
+        // Ensure result has required properties with explicit validation
+        const normalizedResult = {
+          documents: Array.isArray(result.documents) ? result.documents : [],
+          hasMore: Boolean(result.hasMore),
           lastDocId: result.lastDocId || undefined,
         };
+        
+        console.log('Normalized result:', normalizedResult);
+        return normalizedResult;
       } catch (error) {
         console.error('Error in getUserDocumentsPaginated:', error);
         return { documents: [], hasMore: false, lastDocId: undefined };
@@ -67,6 +77,7 @@ export function useOptimizedDashboardData(
     getNextPageParam: (lastPage, allPages) => {
       // Extra defensive checks
       if (!lastPage) {
+        console.warn('getNextPageParam: lastPage is null/undefined');
         return undefined;
       }
 
@@ -104,6 +115,11 @@ export function useOptimizedDashboardData(
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
     initialPageParam: undefined,
+    getPreviousPageParam: () => undefined,
+    placeholderData: {
+      pages: [{ documents: [], hasMore: false, lastDocId: undefined }],
+      pageParams: [undefined],
+    },
   });
 
   const foldersQuery = useQuery({
@@ -127,10 +143,15 @@ export function useOptimizedDashboardData(
   });
 
   const documents = useMemo(() => {
+    console.log('Documents useMemo called with data:', documentsQuery.data);
+    
+    // Return empty array if no data
     if (!documentsQuery.data) {
+      console.log('No documentsQuery.data, returning empty array');
       return [];
     }
 
+    // Check if pages exist and is an array
     if (
       !documentsQuery.data.pages ||
       !Array.isArray(documentsQuery.data.pages)
@@ -142,9 +163,13 @@ export function useOptimizedDashboardData(
       return [];
     }
 
-    return documentsQuery.data.pages
+    // Safely process pages
+    const result = documentsQuery.data.pages
       .filter((page): page is NonNullable<typeof page> => {
-        if (!page) return false;
+        if (!page) {
+          console.warn('Found null/undefined page');
+          return false;
+        }
 
         // Handle if page is an array (backward compatibility)
         if (Array.isArray(page)) {
@@ -154,13 +179,26 @@ export function useOptimizedDashboardData(
           return false;
         }
 
-        return (
+        const isValid = (
           typeof page === 'object' &&
           'documents' in page &&
           Array.isArray(page.documents)
         );
+        
+        if (!isValid) {
+          console.warn('Invalid page structure:', page);
+        }
+        
+        return isValid;
       })
-      .flatMap((page) => page.documents || []);
+      .flatMap((page) => {
+        const docs = page.documents || [];
+        console.log('Processing page with', docs.length, 'documents');
+        return docs;
+      });
+      
+    console.log('Final documents result:', result.length, 'documents');
+    return result;
   }, [documentsQuery.data]);
 
   const isInitialLoading = documentsQuery.isLoading;

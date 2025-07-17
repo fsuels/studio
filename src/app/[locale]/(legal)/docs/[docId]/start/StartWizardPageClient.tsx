@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
 import { documentLibrary } from '@/lib/document-library';
+import { getDocumentTitle } from '@/lib/format-utils';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
@@ -289,7 +290,7 @@ export default function StartWizardPageClient({
   const documentDisplayName =
     locale === 'es' && docConfig.translations?.es?.name
       ? docConfig.translations.es.name
-      : docConfig.translations?.en?.name || docConfig.name || docConfig.id;
+      : getDocumentTitle(docConfig, 'en');
 
   // If we should use direct form filling for this state + document combination
   if (useDirectFormFilling && selectedState) {

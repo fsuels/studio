@@ -107,6 +107,31 @@ export async function softDeleteDocument(
   });
 }
 
+/**
+ * Bulk soft-delete multiple user documents by setting deletedAt timestamp.
+ */
+export async function bulkSoftDeleteDocuments(
+  userId: string,
+  docIds: string[],
+): Promise<void> {
+  const db = await getDb();
+  const promises = docIds.map(async (docId) => {
+    const ref = doc(db, 'users', userId, 'documents', docId);
+    await updateDoc(ref, {
+      deletedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    // Log document deletion
+    await auditService.logDocumentEvent('delete', docId, 'document', {
+      userId,
+      action: 'bulk_soft_delete',
+    });
+  });
+
+  await Promise.all(promises);
+}
+
 export async function updateDocumentFolder(
   userId: string,
   docId: string,

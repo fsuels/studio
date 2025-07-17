@@ -5,6 +5,7 @@ import {
   usStates,
   allDocuments,
 } from '@/lib/document-library';
+import { getDocumentTitle } from '@/lib/format-utils';
 import { MetaTags, generateDocumentMetaTags } from '@/components/seo/MetaTags';
 import {
   Breadcrumbs,
@@ -69,8 +70,7 @@ export async function generateMetadata({
   }
 
   const stateName = stateObj.label;
-  const documentName =
-    document.translations?.[localeTyped]?.name || document.name || document.id;
+  const documentName = getDocumentTitle(document, localeTyped);
   const documentDesc =
     document.translations?.[localeTyped]?.description || document.description || '';
   const isSpanish = localeTyped === 'es';
@@ -140,8 +140,7 @@ export default async function StateDocumentPage({ params }: StateDocumentPagePro
   }
 
   const stateName = stateObj.label;
-  const documentName =
-    document.translations?.[localeTyped]?.name || document.name || document.id;
+  const documentName = getDocumentTitle(document, localeTyped);
   const documentDesc =
     document.translations?.[localeTyped]?.description || document.description || '';
   const isSpanish = localeTyped === 'es';

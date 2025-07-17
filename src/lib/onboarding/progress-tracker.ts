@@ -59,8 +59,8 @@ export class OnboardingProgressTracker {
     this.locale = locale;
   }
 
-  private get progressDocRef() {
-    const db = getDb();
+  private async getProgressDocRef() {
+    const db = await getDb();
     return doc(db, 'user_progress', this.userId);
   }
 
@@ -77,19 +77,31 @@ export class OnboardingProgressTracker {
       milestones: {},
     };
 
-    await setDoc(this.progressDocRef, progress, { merge: true });
+    const docRef = await this.getProgressDocRef();
+    await setDoc(docRef, progress, { merge: true });
   }
 
   async getProgress(): Promise<OnboardingProgress | null> {
     try {
-      const snap = await getDoc(this.progressDocRef);
+      const docRef = await this.getProgressDocRef();
+      const snap = await getDoc(docRef);
       if (snap.exists()) {
         return snap.data() as OnboardingProgress;
       }
       return null;
     } catch (error) {
       console.error('Error fetching onboarding progress:', error);
-      return null;
+      // Return a default empty progress instead of null to prevent undefined errors
+      return {
+        userId: this.userId,
+        currentStep: 0,
+        totalSteps: 0,
+        completedSteps: [],
+        startedAt: Timestamp.now(),
+        lastActiveAt: Timestamp.now(),
+        isCompleted: false,
+        milestones: {},
+      };
     }
   }
 
@@ -109,7 +121,8 @@ export class OnboardingProgressTracker {
       ...(isCompleted && { completedAt: serverTimestamp() as Timestamp }),
     };
 
-    await setDoc(this.progressDocRef, update, { merge: true });
+    const docRef = await this.getProgressDocRef();
+    await setDoc(docRef, update, { merge: true });
   }
 
   async markMilestone(
@@ -120,7 +133,8 @@ export class OnboardingProgressTracker {
       lastActiveAt: serverTimestamp(),
     };
 
-    await setDoc(this.progressDocRef, update, { merge: true });
+    const docRef = await this.getProgressDocRef();
+    await setDoc(docRef, update, { merge: true });
 
     // Trigger milestone email if user email is available
     if (this.userEmail) {
@@ -139,8 +153,9 @@ export class OnboardingProgressTracker {
   }
 
   async resetProgress(): Promise<void> {
+    const docRef = await this.getProgressDocRef();
     await setDoc(
-      this.progressDocRef,
+      docRef,
       {
         currentStep: 0,
         completedSteps: [],

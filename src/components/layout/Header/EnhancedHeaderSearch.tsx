@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { getDocumentTitle } from '@/lib/format-utils';
 import {
   enhancedSearch,
   getSearchSuggestions,
@@ -106,8 +107,7 @@ export default function EnhancedHeaderSearch({
             .slice(0, 8)
             .map((doc) => ({
               slug: doc.id,
-              title:
-                doc.translations?.[clientLocale]?.name || doc.name || doc.id,
+              title: getDocumentTitle(doc, clientLocale),
               description:
                 doc.translations?.[clientLocale]?.description ||
                 doc.description ||
