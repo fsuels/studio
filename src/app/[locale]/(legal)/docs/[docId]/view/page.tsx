@@ -3,12 +3,18 @@ import React from 'react';
 import ViewDocumentView from './view-document-view';
 
 interface ViewDocumentPageProps {
-  params: {
+  params: Promise<{
     locale: 'en' | 'es';
     docId: string;
-  };
+  }>;
 }
 
-export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
-  return <ViewDocumentView locale={params.locale} docId={params.docId} />;
+export default async function ViewDocumentPage({ params }: ViewDocumentPageProps) {
+  // Await params for Next.js 15 compatibility
+  const { locale, docId } = await params;
+  
+  // Debug logging to understand the routing
+  console.log('🔍 ViewDocumentPage received params:', { locale, docId });
+  
+  return <ViewDocumentView locale={locale} docId={docId} />;
 }

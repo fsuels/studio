@@ -90,7 +90,8 @@
       "Bash(awk:*)",
       "Bash(npx playwright test:*)",
       "Bash(NODE_ENV=development node -e \"console.log('Testing require...');\")",
-      "Bash(firebase deploy:*)"
+      "Bash(firebase deploy:*)",
+      "Bash(npx firebase-tools:*)"
     ],
     "deny": []
   }

@@ -24,6 +24,25 @@ service cloud.firestore {
     match /user_progress/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+    
+    // User onboarding progress (alternative collection name)
+    match /onboarding/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Audit logs
+    match /audit/{auditId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        request.auth.uid == resource.data.userId ||
+        request.auth.token.admin == true
+      );
+    }
+    
+    // User-specific audit logs
+    match /users/{userId}/audit/{auditId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
     match /reviews/{docId} {
       allow read: if true;
       allow write: if false;

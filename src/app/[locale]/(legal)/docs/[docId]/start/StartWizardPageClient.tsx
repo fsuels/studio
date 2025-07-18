@@ -1,7 +1,7 @@
 // src/app/[locale]/docs/[docId]/start/StartWizardPageClient.tsx
 'use client';
 
-import { useParams, notFound, useRouter } from 'next/navigation';
+import { useParams, notFound, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,7 +53,12 @@ export default function StartWizardPageClient({
 }: StartWizardPageClientProps) {
   const { t, ready } = useTranslation('common');
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
+  
+  // Get resume parameters from URL
+  const resumeId = searchParams.get('resumeId');
+  const stateFromUrl = searchParams.get('state');
 
   const docIdFromPath = docId;
 
@@ -134,7 +139,31 @@ export default function StartWizardPageClient({
     async function loadDraft() {
       let draftData: Record<string, unknown> = {};
       try {
-        if (isLoggedIn && user?.uid) {
+        if (resumeId && isLoggedIn && user?.uid) {
+          // Load specific saved document for editing
+          console.log('📋 Loading saved document for editing:', resumeId);
+          const { getDb } = await import('@/lib/firebase');
+          const { doc, getDoc } = await import('firebase/firestore');
+          
+          const db = await getDb();
+          const docRef = doc(db, 'users', user.uid, 'documents', resumeId);
+          const snap = await getDoc(docRef);
+          
+          if (snap.exists()) {
+            const data = snap.data();
+            draftData = data.formData || data.data || {};
+            console.log('✅ Loaded saved document data:', Object.keys(draftData));
+            
+            // Set state if provided in URL
+            if (stateFromUrl) {
+              setSelectedState(stateFromUrl.toUpperCase());
+              draftData.state = stateFromUrl.toUpperCase();
+            }
+          } else {
+            console.warn('❌ Saved document not found:', resumeId);
+          }
+        } else if (isLoggedIn && user?.uid) {
+          // Load regular draft
           draftData = await loadFormProgress({
             userId: user.uid,
             docType: docConfig.id,
@@ -163,7 +192,7 @@ export default function StartWizardPageClient({
     if (ready) {
       void loadDraft();
     }
-  }, [authIsLoading, isLoadingConfig, isLoggedIn, user, locale, ready, reset]);
+  }, [authIsLoading, isLoadingConfig, isLoggedIn, user, locale, ready, reset, resumeId, stateFromUrl]);
 
   const debouncedSave = useMemo(
     () =>

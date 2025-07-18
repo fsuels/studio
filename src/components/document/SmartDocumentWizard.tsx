@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import InteractivePDFFormFiller from './InteractivePDFFormFiller';
 import { floridaFormConfig } from '@/lib/state-forms/florida-vehicle-bill-of-sale';
@@ -40,6 +41,23 @@ const STATES_WITH_OFFICIAL_FORMS = {
   'WV': { formName: 'DMV-7-TR', price: 19.95 }
 };
 
+// Convert state code to state name for consistency
+const getStateName = (stateCode: string): string => {
+  const stateMap: Record<string, string> = {
+    'FL': 'florida',
+    'AL': 'alabama', 
+    'CO': 'colorado',
+    'GA': 'georgia',
+    'ID': 'idaho',
+    'KS': 'kansas',
+    'MD': 'maryland',
+    'MT': 'montana',
+    'ND': 'north-dakota',
+    'WV': 'west-virginia'
+  };
+  return stateMap[stateCode.toUpperCase()] || stateCode.toLowerCase();
+};
+
 export default function SmartDocumentWizard({
   documentType,
   selectedState,
@@ -60,6 +78,7 @@ export default function SmartDocumentWizard({
   const { toast } = useToast();
   const { user, isLoggedIn: authIsLoggedIn } = useAuth();
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
   
   // Use auth context login status instead of prop for real-time updates
   const effectiveIsLoggedIn = authIsLoggedIn || isLoggedIn;
@@ -86,20 +105,21 @@ export default function SmartDocumentWizard({
       console.log('💾 Using direct Firestore save to bypass auth issues');
       
       const { getDb } = await import('@/lib/firebase');
-      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+      const { doc, setDoc } = await import('firebase/firestore');
       
       const db = await getDb();
-      const docId = `${encodeURIComponent(`${documentType}-${selectedState}`)}_${locale}`;
+      // Create a consistent document ID that works for both saving and dashboard
+      const docId = `${documentType}_${selectedState.toLowerCase()}_${Date.now()}`;
       const ref = doc(db, 'users', userId, 'documents', docId);
       
       console.log('🗄️ Saving to path:', `users/${userId}/documents/${docId}`);
       
       // Save to localStorage first as backup
       const backupData = {
-        docType: documentType, // Use base document type for dashboard compatibility
-        originalDocId: documentType, // Keep original for reference
-        state: locale,
-        stateCode: selectedState, // Store the actual state separately
+        docType: documentType,
+        originalDocId: documentType,
+        state: getStateName(selectedState), // Store actual state name (florida, alabama, etc.)
+        stateCode: selectedState, // Store state code (FL, AL, etc.)
         formData: formData,
         userId: userId,
         timestamp: new Date().toISOString(),
@@ -108,19 +128,43 @@ export default function SmartDocumentWizard({
       console.log('💾 Backup saved to localStorage');
       
       // Then save to Firestore with dashboard-compatible format
-      await setDoc(ref, {
+      const saveData = {
         docType: documentType, // Use base document type (vehicle-bill-of-sale)
-        originalDocId: documentType,
-        state: locale,
-        stateCode: selectedState, // Store FL, AL, etc. separately
-        name: `${documentType} (${selectedState})`, // Human-readable name
+        originalDocId: documentType, // Keep for dashboard compatibility
+        state: getStateName(selectedState), // Store actual state name (florida, alabama, etc.)
+        stateCode: selectedState, // Store state code (FL) 
+        name: `Vehicle Bill of Sale - ${selectedState} (${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})`, // Unique name with timestamp
         status: 'Draft',
-        updatedAt: serverTimestamp(),
-        createdAt: serverTimestamp(),
+        updatedAt: new Date(),
+        createdAt: new Date(),
         formData: formData,
-      }, { merge: true });
+        // Add fields needed for document viewing
+        contentMarkdown: null, // Will be generated when viewed
+        data: formData, // Legacy field name for compatibility
+      };
+      
+      console.log('💾 About to save document with data:', {
+        docId,
+        userId,
+        selectedState,
+        stateName: getStateName(selectedState),
+        formDataKeys: Object.keys(formData),
+        saveData: { ...saveData, formData: 'FORM_DATA_OBJECT' }
+      });
+      
+      await setDoc(ref, saveData, { merge: true });
       
       console.log('✅ Direct save successful!');
+      
+      // CRITICAL: Invalidate React Query cache so dashboard updates immediately
+      try {
+        await queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', userId] });
+        await queryClient.invalidateQueries({ queryKey: ['dashboardDocuments'] }); // Invalidate all dashboard queries
+        console.log('🔄 Dashboard cache invalidated - new document should appear immediately');
+      } catch (cacheError) {
+        console.warn('⚠️ Could not invalidate cache:', cacheError);
+        // Don't fail the save because of cache issues
+      }
       
       toast({
         title: 'Draft Saved',
@@ -142,7 +186,7 @@ export default function SmartDocumentWizard({
       setIsSavingDraft(false);
       setPendingSaveDraft(false);
     }
-  }, [selectedState, documentType, locale, router, toast]);
+  }, [selectedState, documentType, locale, router, toast, queryClient]);
   
   const saveDraftToFirestore = useCallback(async (formData: Record<string, any>) => {
     // For already logged in users, use the user context
@@ -165,6 +209,17 @@ export default function SmartDocumentWizard({
       effectiveIsLoggedIn,
       formData 
     });
+    
+    // Add basic validation
+    if (!formData || Object.keys(formData).length === 0) {
+      console.error('❌ No form data to save');
+      toast({
+        title: 'Error',
+        description: 'No data to save. Please fill out the form first.',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     if (!selectedState) {
       console.error('❌ No selected state available');

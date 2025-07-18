@@ -241,29 +241,10 @@ export default function DashboardClientContent({
       docType: 'uploaded',
     };
     
-    type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-    queryClient.setQueryData<InfiniteData<PageData>>(
-      key, 
-      (old) => {
-        if (!old?.pages || old.pages.length === 0) {
-          return {
-            pages: [{ documents: [optimistic], hasMore: false, lastDocId: undefined }],
-            pageParams: [undefined],
-          };
-        }
-        
-        return {
-          ...old,
-          pages: [
-            {
-              ...old.pages[0],
-              documents: [optimistic, ...old.pages[0].documents]
-            },
-            ...old.pages.slice(1)
-          ]
-        };
-      }
-    );
+    queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
+      optimistic,
+      ...old,
+    ]);
     try {
       const storage = getStorage();
       const db = getFirestore();
@@ -441,11 +422,31 @@ export default function DashboardClientContent({
     } else {
       return String(dateInput);
     }
-    return dateObj.toLocaleDateString(i18n.language || locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    
+    const now = new Date();
+    const isToday = dateObj.toDateString() === now.toDateString();
+    const isYesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toDateString() === dateObj.toDateString();
+    
+    if (isToday) {
+      // Show time for today's documents
+      return `Today ${dateObj.toLocaleTimeString(i18n.language || locale, {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}`;
+    } else if (isYesterday) {
+      // Show "Yesterday" with time
+      return `Yesterday ${dateObj.toLocaleTimeString(i18n.language || locale, {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}`;
+    } else {
+      // Show full date for older documents
+      return dateObj.toLocaleDateString(i18n.language || locale, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+    }
   };
 
   if (authLoading || !isHydrated) {
@@ -778,32 +779,19 @@ export default function DashboardClientContent({
                                   user!.uid,
                                 ] as const;
                                 
-                                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-                                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
                                 const tempId = `copy-${Date.now()}`;
                                 
-                                queryClient.setQueryData<InfiniteData<PageData>>(
+                                queryClient.setQueryData<DashboardDocument[]>(
                                   key,
-                                  (old) => {
-                                    if (!old?.pages || old.pages.length === 0) return old;
-                                    
-                                    const newDoc = {
+                                  (old = []) => [
+                                    {
                                       ...(item as DashboardDocument),
                                       id: tempId,
                                       name: `${item.name} (Copy)`,
-                                    };
-                                    
-                                    return {
-                                      ...old,
-                                      pages: [
-                                        {
-                                          ...old.pages[0],
-                                          documents: [newDoc, ...old.pages[0].documents]
-                                        },
-                                        ...old.pages.slice(1)
-                                      ]
-                                    };
-                                  }
+                                    },
+                                    ...old,
+                                  ],
                                 );
                                 
                                 try {
@@ -837,22 +825,11 @@ export default function DashboardClientContent({
                                   user!.uid,
                                 ] as const;
                                 
-                                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-                                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
+                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
                                 
-                                queryClient.setQueryData<InfiniteData<PageData>>(
+                                queryClient.setQueryData<DashboardDocument[]>(
                                   key,
-                                  (old) => {
-                                    if (!old?.pages) return old;
-                                    
-                                    return {
-                                      ...old,
-                                      pages: old.pages.map(page => ({
-                                        ...page,
-                                        documents: page.documents.filter((d) => d.id !== item.id)
-                                      }))
-                                    };
-                                  }
+                                  (old) => old?.filter((d) => d.id !== item.id) || [],
                                 );
                                 
                                 try {
@@ -902,25 +879,14 @@ export default function DashboardClientContent({
               onRename={async (name) => {
                 if (!renameDoc) return;
                 const key = ['dashboardDocuments', user!.uid] as const;
+                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
                 
-                type PageData = { documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string };
-                const previous = queryClient.getQueryData<InfiniteData<PageData>>(key);
-                
-                queryClient.setQueryData<InfiniteData<PageData>>(
+                queryClient.setQueryData<DashboardDocument[]>(
                   key,
-                  (old) => {
-                    if (!old?.pages) return old;
-                    
-                    return {
-                      ...old,
-                      pages: old.pages.map(page => ({
-                        ...page,
-                        documents: page.documents.map((d) =>
-                          d.id === renameDoc.id ? { ...d, name } : d
-                        )
-                      }))
-                    };
-                  }
+                  (old) =>
+                    old?.map((d) =>
+                      d.id === renameDoc.id ? { ...d, name } : d,
+                    ) || [],
                 );
                 
                 try {

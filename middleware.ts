@@ -50,24 +50,36 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 
   // CSP header (adjust based on your needs)
-  // More permissive CSP for Firebase Auth compatibility
+  // More permissive CSP for Firebase Auth and PDF.js compatibility
   const cspHeader = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io *.googleapis.com *.gstatic.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io *.googleapis.com *.gstatic.com",
     "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
-    "font-src 'self' fonts.gstatic.com",
+    "font-src 'self' fonts.gstatic.com data:",
     "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
-    "connect-src 'self' *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
-    "frame-src 'self' blob: *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
-    "object-src 'self' blob:",
+    "connect-src 'self' blob: data: *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
+    "frame-src 'self' blob: data: *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
+    "object-src 'self' blob: data:",
+    "worker-src 'self' blob: data:",
   ].join('; ');
 
   // Only apply CSP in production or when explicitly enabled (and not explicitly disabled for dev)
-  const shouldApplyCSP = (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') && 
-                         process.env.DISABLE_CSP_DEV !== 'true';
+  // TEMPORARY: Disable CSP for PDF rendering compatibility
+  const shouldApplyCSP = false; // Disable CSP temporarily for PDF.js compatibility
+  // const shouldApplyCSP = (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') && 
+  //                        process.env.DISABLE_CSP_DEV !== 'true';
+  
+  console.log('🔒 CSP Middleware:', { 
+    path: request.nextUrl.pathname, 
+    shouldApplyCSP, 
+    nodeEnv: process.env.NODE_ENV 
+  });
   
   if (shouldApplyCSP) {
     response.headers.set('Content-Security-Policy', cspHeader);
+    console.log('🔒 CSP Header applied');
+  } else {
+    console.log('🔓 CSP Header NOT applied (disabled for PDF compatibility)');
   }
 
   return response;

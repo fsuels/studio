@@ -39,6 +39,20 @@ export async function getUserDocuments(
   console.info(
     `[dashboardData] fetched ${snap.size} docs for ${userId} in ${Date.now() - start}ms`,
   );
+  
+  // Debug: Log all documents found
+  snap.docs.forEach((d, index) => {
+    const data = d.data();
+    console.log(`📄 Document ${index + 1}:`, {
+      id: d.id,
+      name: data.name,
+      docType: data.docType,
+      originalDocId: data.originalDocId,
+      status: data.status,
+      updatedAt: data.updatedAt,
+      deletedAt: data.deletedAt
+    });
+  });
   return snap.docs
     .filter((d) => {
       const data = d.data() as { deletedAt?: unknown };

@@ -57,7 +57,24 @@ export const useOnboarding = (): UseOnboardingReturn => {
       const currentProgress = await tracker.getProgress();
       setProgress(currentProgress);
     } catch (error) {
-      console.error('Error loading onboarding progress:', error);
+      console.warn('⚠️ Error loading onboarding progress (permissions issue):', error);
+      // Set default progress if permissions fail
+      setProgress({
+        isCompleted: false,
+        currentStep: 0,
+        persona: 'individual',
+        milestones: {
+          firstDocumentCreated: false,
+          firstPaymentMade: false,
+          profileCompleted: false,
+          dashboardExplored: false,
+        },
+        completedSteps: [],
+        totalSteps: 4,
+        completionPercentage: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
     } finally {
       setIsLoading(false);
     }

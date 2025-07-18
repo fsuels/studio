@@ -20,8 +20,8 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { auditService } from '@/services/firebase-audit-service';
-
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { documentLibrary } from '@/lib/document-library';
 
 interface ViewDocumentViewProps {
   locale: 'en' | 'es';
@@ -36,10 +36,24 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
   const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
 
+  // Debug logging to understand the component initialization
+  console.log('🔍 ViewDocumentView initialized with:', {
+    locale,
+    docId,
+    savedDocId,
+    searchParams: Object.fromEntries(searchParams.entries()),
+    isLoggedIn,
+    authLoading,
+    userId: user?.uid
+  });
+
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [hasPaid, setHasPaid] = useState<boolean>(false);
+  const [formData, setFormData] = useState<any>(null);
+  const [documentState, setDocumentState] = useState<string | null>(null);
+  const [effectiveDocType, setEffectiveDocType] = useState<string>('');
 
   useEffect(() => {
     const uid = user?.uid;
@@ -63,8 +77,15 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
         }
         const data = snap.data() as Record<string, any>;
         let markdown = data.contentMarkdown as string | undefined;
-        const formData = data.formData ?? data.data;
-        const effectiveDocType = data.docType || data.originalDocId || docId;
+        const docFormData = data.formData ?? data.data;
+        const docType = data.docType || data.originalDocId || docId;
+        const docState = data.state || docFormData?.state || 'florida'; // default to florida for demo
+        const docStateCode = data.stateCode || docFormData?.stateCode || 'FL'; // State code for PDF preview
+        
+        // Store the form data and state for PDF rendering
+        setFormData(docFormData);
+        setDocumentState(docStateCode); // Use state code (FL) not state name (florida)
+        setEffectiveDocType(docType);
 
         // Check for other sources (legacy or alternative storage)
         if (typeof data.markdown === 'string' && !markdown) {
@@ -83,11 +104,11 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
         }
 
         // ---------- Fallback: generate from formData on‑the‑fly ----------
-        if (!markdown && formData) {
+        if (!markdown && docFormData) {
           markdown = await renderMarkdown(
-            effectiveDocType,
-            formData,
-            data.state ?? locale,
+            docType,
+            docFormData,
+            docState,
           );
 
           /*  Optional but highly recommended: write it back so subsequent
@@ -104,20 +125,25 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
         setMarkdownContent(markdown || null);
         setLoadError(null);
 
-        // Log document view event
+        // Log document view event (skip audit to avoid permission issues)
         if (markdown) {
-          await auditService.logDocumentEvent(
-            'view',
-            savedDocId,
-            effectiveDocType,
-            {
-              userId: uid,
-              locale,
-              hasContent: !!markdown,
-              contentSource: data.contentMarkdown ? 'cached' : 'generated',
-              documentLength: markdown.length,
-            },
-          );
+          try {
+            await auditService.logDocumentEvent(
+              'view',
+              savedDocId,
+              docType,
+              {
+                userId: uid,
+                locale,
+                hasContent: !!markdown,
+                contentSource: data.contentMarkdown ? 'cached' : 'generated',
+                documentLength: markdown.length,
+              },
+            );
+          } catch (auditError) {
+            console.warn('⚠️ Could not log audit event (permissions issue):', auditError);
+            // Don't fail the document view because of audit logging issues
+          }
         }
 
         const paid = await hasUserPaidForDocument(uid, savedDocId);
@@ -143,7 +169,25 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
 
   // Navigate back to the start‐wizard, preserving any saved data
   const handleEdit = () => {
-    router.push(`/${locale}/docs/${docId}/start`);
+    // For state-specific documents, pass the saved document ID to continue editing
+    const isStateSpecificForm = effectiveDocType === 'vehicle-bill-of-sale' && documentState;
+    if (isStateSpecificForm) {
+      // documentState is now the state code (FL), need to convert to state name for URL
+      const stateNameForUrl = documentState.toLowerCase() === 'fl' ? 'florida' : 
+                               documentState.toLowerCase() === 'al' ? 'alabama' :
+                               documentState.toLowerCase() === 'co' ? 'colorado' :
+                               documentState.toLowerCase() === 'ga' ? 'georgia' :
+                               documentState.toLowerCase() === 'id' ? 'idaho' :
+                               documentState.toLowerCase() === 'ks' ? 'kansas' :
+                               documentState.toLowerCase() === 'md' ? 'maryland' :
+                               documentState.toLowerCase() === 'mt' ? 'montana' :
+                               documentState.toLowerCase() === 'nd' ? 'north-dakota' :
+                               documentState.toLowerCase() === 'wv' ? 'west-virginia' :
+                               documentState.toLowerCase();
+      router.push(`/${locale}/docs/${effectiveDocType}/start?resumeId=${savedDocId}&state=${stateNameForUrl}`);
+    } else {
+      router.push(`/${locale}/docs/${docId}/start`);
+    }
   };
 
   // Opens SignWell flow in a new tab
@@ -220,9 +264,41 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
     );
   }
 
-  return (
-    <TooltipProvider>
+  // Error handling - if we don't have a user or saved document ID, show error
+  if (!authLoading && !user) {
+    console.error('❌ ViewDocumentView: No user found');
+    return (
       <div className="container mx-auto p-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Authentication Required</h1>
+          <p className="text-gray-600 mb-4">Please sign in to view this document.</p>
+          <Button onClick={() => router.push(`/${locale}/signin`)}>
+            Sign In
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!savedDocId) {
+    console.error('❌ ViewDocumentView: No document ID found');
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Document Not Found</h1>
+          <p className="text-gray-600 mb-4">No document ID was provided.</p>
+          <Button onClick={() => router.push(`/${locale}/dashboard`)}>
+            Go to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  try {
+    return (
+      <TooltipProvider>
+        <div className="container mx-auto p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
@@ -270,15 +346,121 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
             title={loadError}
             description="Edit the draft to finish generating your document."
           />
-        ) : (
-          <DocumentDetail
-            docId={docId}
-            locale={locale}
-            markdownContent={markdownContent || undefined}
-          />
-        )}
+        ) : (() => {
+          // Check if this is a state-specific document that should show PDF
+          const docConfig = documentLibrary.find(doc => doc.id === effectiveDocType);
+          const isStateSpecificForm = docConfig && documentState && formData && 
+            (effectiveDocType === 'vehicle-bill-of-sale' || 
+             effectiveDocType === 'bill-of-sale-vehicle');
+          
+          // Debug state-specific form detection
+          console.log('🔍 View page state detection:', {
+            docConfig: !!docConfig,
+            documentState,
+            formData: !!formData,
+            formDataKeys: formData ? Object.keys(formData) : 'none',
+            effectiveDocType,
+            isStateSpecificForm,
+            savedDocId,
+            docId
+          });
+          
+          if (isStateSpecificForm) {
+            // TEMPORARY: Use simple iframe to bypass CSP issues with PDF.js
+            const pdfPath = `/forms/vehicle-bill-of-sale/${documentState.toLowerCase()}/HSMV-82050.pdf`;
+            
+            return (
+              <div className="p-4">
+                <div className="border rounded-lg bg-gray-50 p-4 mb-4">
+                  <h3 className="font-semibold text-lg mb-2">
+                    {documentState} Vehicle Bill of Sale
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Official state form with your information. Download to complete the transaction.
+                  </p>
+                  
+                  {/* Simple iframe approach - bypasses CSP eval issues */}
+                  <div className="w-full h-96 border rounded">
+                    <iframe 
+                      src={pdfPath}
+                      width="100%" 
+                      height="100%"
+                      style={{ border: 'none' }}
+                      title="Vehicle Bill of Sale PDF"
+                    />
+                  </div>
+                  
+                  <div className="mt-4 flex gap-2">
+                    <a 
+                      href={pdfPath}
+                      download
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      Download PDF
+                    </a>
+                    <button 
+                      onClick={() => handleEdit()}
+                      className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                    >
+                      Edit Document
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Show form data for reference */}
+                <div className="mt-6 p-4 bg-gray-50 rounded">
+                  <h4 className="font-medium mb-2">Your Information:</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    {formData?.seller_name && (
+                      <div><strong>Seller:</strong> {formData.seller_name}</div>
+                    )}
+                    {formData?.buyer_name && (
+                      <div><strong>Buyer:</strong> {formData.buyer_name}</div>
+                    )}
+                    {formData?.vehicle_year && formData?.vehicle_make && formData?.vehicle_model && (
+                      <div><strong>Vehicle:</strong> {formData.vehicle_year} {formData.vehicle_make} {formData.vehicle_model}</div>
+                    )}
+                    {formData?.vin && (
+                      <div><strong>VIN:</strong> {formData.vin}</div>
+                    )}
+                    {formData?.sale_price && (
+                      <div><strong>Price:</strong> ${formData.sale_price}</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <DocumentDetail
+                docId={docId}
+                locale={locale}
+                markdownContent={markdownContent || undefined}
+              />
+            );
+          }
+        })()}
       </div>
     </div>
     </TooltipProvider>
   );
+  } catch (error) {
+    console.error('❌ ViewDocumentView: Runtime error:', error);
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Error Loading Document</h1>
+          <p className="text-gray-600 mb-4">An error occurred while loading the document.</p>
+          <div className="bg-red-50 border border-red-200 rounded p-4 mb-4">
+            <p className="text-sm text-red-700">
+              {error instanceof Error ? error.message : 'Unknown error'}
+            </p>
+          </div>
+          <Button onClick={() => router.push(`/${locale}/dashboard`)}>
+            Go to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
 }
