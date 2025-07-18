@@ -22,17 +22,19 @@ import {
 import { auditService } from '@/services/firebase-audit-service';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { documentLibrary } from '@/lib/document-library';
+import { stateCodeToSlug } from '@/lib/state-utils';
 
 interface ViewDocumentViewProps {
   locale: 'en' | 'es';
   docId: string;
+  actualDocId?: string;
 }
 
-export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProps) {
+export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDocumentViewProps) {
   const searchParams = useSearchParams();
   /* Dashboard passes ?docId=abc123, but direct navigation (or refresh)
      gives you only the route param.  */
-  const savedDocId = searchParams.get('docId') || docId;
+  const savedDocId = actualDocId || searchParams.get('docId') || docId;
   const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
 
@@ -173,17 +175,7 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
     const isStateSpecificForm = effectiveDocType === 'vehicle-bill-of-sale' && documentState;
     if (isStateSpecificForm) {
       // documentState is now the state code (FL), need to convert to state name for URL
-      const stateNameForUrl = documentState.toLowerCase() === 'fl' ? 'florida' : 
-                               documentState.toLowerCase() === 'al' ? 'alabama' :
-                               documentState.toLowerCase() === 'co' ? 'colorado' :
-                               documentState.toLowerCase() === 'ga' ? 'georgia' :
-                               documentState.toLowerCase() === 'id' ? 'idaho' :
-                               documentState.toLowerCase() === 'ks' ? 'kansas' :
-                               documentState.toLowerCase() === 'md' ? 'maryland' :
-                               documentState.toLowerCase() === 'mt' ? 'montana' :
-                               documentState.toLowerCase() === 'nd' ? 'north-dakota' :
-                               documentState.toLowerCase() === 'wv' ? 'west-virginia' :
-                               documentState.toLowerCase();
+      const stateNameForUrl = stateCodeToSlug(documentState) ?? documentState.toLowerCase();
       router.push(`/${locale}/docs/${effectiveDocType}/start?resumeId=${savedDocId}&state=${stateNameForUrl}`);
     } else {
       router.push(`/${locale}/docs/${docId}/start`);
@@ -367,7 +359,15 @@ export default function ViewDocumentView({ locale, docId }: ViewDocumentViewProp
           
           if (isStateSpecificForm) {
             // TEMPORARY: Use simple iframe to bypass CSP issues with PDF.js
-            const pdfPath = `/forms/vehicle-bill-of-sale/${documentState.toLowerCase()}/HSMV-82050.pdf`;
+            const stateSlug = stateCodeToSlug(documentState) ?? documentState.toLowerCase();
+            const pdfPath = `/forms/vehicle-bill-of-sale/${stateSlug}/HSMV-82050.pdf`;
+            
+            console.log('📄 PDF Path Debug:', {
+              documentState,
+              stateSlug,
+              pdfPath,
+              expectedPath: '/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf'
+            });
             
             return (
               <div className="p-4">
