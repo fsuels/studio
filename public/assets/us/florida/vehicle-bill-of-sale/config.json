@@ -125,56 +125,78 @@
   
   "overlayConfig": {
     "pdfPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
-    "fieldMappings": {
+    "coordinates": {
+      "seller_name": { "page": 0, "x": 155, "y": 618, "fontSize": 10 },
+      "seller_address": { "page": 0, "x": 155, "y": 593, "fontSize": 10 },
+      "seller_city": { "page": 0, "x": 155, "y": 568, "fontSize": 10 },
+      "seller_state": { "page": 0, "x": 285, "y": 568, "fontSize": 10 },
+      "seller_zip": { "page": 0, "x": 335, "y": 568, "fontSize": 10 },
+      "seller_phone": { "page": 0, "x": 425, "y": 618, "fontSize": 10 },
+      "buyer_name": { "page": 0, "x": 155, "y": 518, "fontSize": 10 },
+      "buyer_address": { "page": 0, "x": 155, "y": 493, "fontSize": 10 },
+      "buyer_city": { "page": 0, "x": 155, "y": 468, "fontSize": 10 },
+      "buyer_state": { "page": 0, "x": 285, "y": 468, "fontSize": 10 },
+      "buyer_zip": { "page": 0, "x": 335, "y": 468, "fontSize": 10 },
+      "buyer_phone": { "page": 0, "x": 425, "y": 518, "fontSize": 10 },
+      "year": { "page": 0, "x": 105, "y": 418, "fontSize": 10 },
+      "make": { "page": 0, "x": 165, "y": 418, "fontSize": 10 },
+      "model": { "page": 0, "x": 275, "y": 418, "fontSize": 10 },
+      "vin": { "page": 0, "x": 385, "y": 418, "fontSize": 10 },
+      "color": { "page": 0, "x": 105, "y": 393, "fontSize": 10 },
+      "odometer": { "page": 0, "x": 195, "y": 393, "fontSize": 10 },
+      "price": { "page": 0, "x": 155, "y": 343, "fontSize": 10 },
+      "sale_date": { "page": 0, "x": 385, "y": 343, "fontSize": 10 }
+    },
+    "fieldMapping": {
       "seller_name": {
-        "exact": ["seller_name", "SELLER_NAME", "seller", "from_name"]
-      },
-      "seller_address": {
-        "coordinates": {
-          "page": 0,
-          "x": 72,
-          "y": 490
-        }
-      },
-      "seller_phone": {
-        "exact": ["seller_phone", "phone", "seller_telephone"]
+        "exact": ["seller_name", "SELLER_NAME", "seller", "from_name"],
+        "partial": ["seller", "grantor", "from", "owner", "current_owner"],
+        "fuzzy": ["sell", "gran", "vendor", "transferor"]
       },
       "buyer_name": {
-        "exact": ["buyer_name", "BUYER_NAME", "buyer", "to_name", "purchaser_name"]
-      },
-      "buyer_address": {
-        "coordinates": {
-          "page": 0,
-          "x": 72,
-          "y": 430
-        }
-      },
-      "buyer_phone": {
-        "exact": ["buyer_phone", "buyer_telephone", "purchaser_phone"]
+        "exact": ["buyer_name", "BUYER_NAME", "buyer", "to_name", "purchaser_name"],
+        "partial": ["buyer", "grantee", "purchaser", "to", "new_owner"],
+        "fuzzy": ["buy", "purch", "transferee", "acquirer"]
       },
       "year": {
-        "exact": ["year", "model_year", "yr", "vehicle_year"]
+        "exact": ["year", "model_year", "yr", "vehicle_year"],
+        "partial": ["year", "yr"],
+        "fuzzy": ["yr", "model"]
       },
       "make": {
-        "exact": ["make", "manufacturer", "vehicle_make"]
+        "exact": ["make", "manufacturer", "vehicle_make"],
+        "partial": ["make", "mfg", "brand"],
+        "fuzzy": ["make", "manu"]
       },
       "model": {
-        "exact": ["model", "vehicle_model"]
+        "exact": ["model", "vehicle_model"],
+        "partial": ["model"],
+        "fuzzy": ["mod"]
       },
       "vin": {
-        "exact": ["vin", "vehicle_identification_number", "serial_number", "VIN"]
+        "exact": ["vin", "vehicle_identification_number", "serial_number", "VIN"],
+        "partial": ["vin", "serial", "id_number"],
+        "fuzzy": ["vin", "serial", "id"]
       },
       "color": {
-        "exact": ["color", "colour", "vehicle_color"]
+        "exact": ["color", "colour", "vehicle_color"],
+        "partial": ["color", "colour"],
+        "fuzzy": ["col"]
       },
       "odometer": {
-        "exact": ["odometer", "mileage", "miles", "odometer_reading"]
+        "exact": ["odometer", "mileage", "miles", "odometer_reading"],
+        "partial": ["odometer", "mileage", "miles"],
+        "fuzzy": ["odom", "mile", "km"]
       },
       "price": {
-        "exact": ["price", "sale_price", "purchase_price", "amount"]
+        "exact": ["price", "sale_price", "purchase_price", "amount"],
+        "partial": ["price", "amount", "cost", "value"],
+        "fuzzy": ["pric", "amt", "val"]
       },
       "sale_date": {
-        "exact": ["date", "sale_date", "transaction_date", "date_of_sale"]
+        "exact": ["date", "sale_date", "transaction_date", "date_of_sale"],
+        "partial": ["date", "sale_date", "trans_date"],
+        "fuzzy": ["date", "dt"]
       }
     }
   }

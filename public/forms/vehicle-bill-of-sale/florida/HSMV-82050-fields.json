@@ -1,0 +1,305 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
+  "analyzedAt": "2025-07-21T22:59:46.774Z",
+  "pageCount": 1,
+  "fieldCount": 40,
+  "fields": [
+    {
+      "index": 1,
+      "name": "Notice of Sale Seller must complete sections 1  3 The purchasers signature in section 3 is optional",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "Bill of Sale Seller and purchaser must complete sections 1 2 when applicable  3",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "Year",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "MakeManufacturer",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "Body Type",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "Model",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "Color",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "Current Title Issue Date",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "VehicleVessel Identification Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "Print Names of Purchasers",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "Address City State Zip Code",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "Odometer Disclosure Statement Required For a Motor Vehicle",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "5 DIGIT OR",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "6 DIGIT ODOMETER NOW READS",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "undefined_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "Failure to",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "undefined_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "xx",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "undefined_4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "undefined_5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "AND WE HEREBY CERTIFY THAT TO THE BEST OF OUR KNOWLEDGE",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "1 REFLECTS THE ACTUAL MILEAGE",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "2 IS IN EXCESS OF ITS MECHANICAL LIMITS",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "3 IS NOT THE ACTUAL MILEAGE",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "Affidavit When applicableRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "Affidavit When applicableRow2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "Sellers Printed Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "Date",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "Sellers Address City State Zip Code",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 32,
+      "name": "CoSellers Printed Name when applicable",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 33,
+      "name": "Date_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 34,
+      "name": "CoSellers Address when applicable City State Zip Code",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 35,
+      "name": "Purchasers Printed Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 36,
+      "name": "Date_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 37,
+      "name": "CoPurchasers Printed name when applicable",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 38,
+      "name": "Date_4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 39,
+      "name": "Federal and State law requires that you state the mileage in connection with the transfer of ownership",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 40,
+      "name": "Text1",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "Notice of Sale Seller must complete sections 1  3 The purchasers signature in section 3 is optional",
+        "Bill of Sale Seller and purchaser must complete sections 1 2 when applicable  3",
+        "Print Names of Purchasers",
+        "Sellers Printed Name",
+        "Sellers Address City State Zip Code",
+        "CoSellers Printed Name when applicable",
+        "CoSellers Address when applicable City State Zip Code",
+        "Purchasers Printed Name",
+        "CoPurchasers Printed name when applicable"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "Notice of Sale Seller must complete sections 1  3 The purchasers signature in section 3 is optional",
+        "Bill of Sale Seller and purchaser must complete sections 1 2 when applicable  3",
+        "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home",
+        "Print Names of Purchasers",
+        "Odometer Disclosure Statement Required For a Motor Vehicle",
+        "Failure to",
+        "AND WE HEREBY CERTIFY THAT TO THE BEST OF OUR KNOWLEDGE",
+        "Purchasers Printed Name",
+        "CoPurchasers Printed name when applicable"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "Year"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "MakeManufacturer"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "Model"
+      ]
+    },
+    "vin": {
+      "exact": [
+        "VehicleVessel Identification Number"
+      ]
+    },
+    "date": {
+      "exact": [
+        "Current Title Issue Date",
+        "Date",
+        "Date_2",
+        "Date_3",
+        "Date_4"
+      ]
+    }
+  }
+}

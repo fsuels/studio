@@ -93,7 +93,8 @@
       "Bash(firebase deploy:*)",
       "Bash(npx firebase-tools:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }

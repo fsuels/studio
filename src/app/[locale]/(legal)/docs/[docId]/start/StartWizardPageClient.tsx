@@ -100,25 +100,18 @@ export default function StartWizardPageClient({
       console.log('🎯 State selected:', formData.state);
       setSelectedState(formData.state);
       
-      // IMMEDIATE SWITCH: For now, all states use traditional wizard with live overlay
-      // TODO: Re-enable direct form filling when InteractivePDFFormFiller has overlay support
-      if (process.env.USE_DIRECT_PDF_FILLING === 'true' && docConfig?.id === 'vehicle-bill-of-sale' && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
-        console.log('🚀 Switching to direct form filling for state:', formData.state);
-        setUseDirectFormFilling(true);
-      } else {
-        console.log('📝 Using traditional wizard with live overlay for state:', formData.state);
-        setUseDirectFormFilling(false);
-      }
+      // FORCE: All states use traditional wizard with live overlay
+      // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
+      console.log('📝 Using traditional wizard with live overlay for state:', formData.state);
+      setUseDirectFormFilling(false);
     }
   }, [formData?.state, selectedState, docConfig?.id]);
 
   // ALSO watch for immediate state detection from URL or initial load
   useEffect(() => {
     // DISABLED: Use traditional wizard for all states (including those with official forms)
-    if (process.env.USE_DIRECT_PDF_FILLING === 'true' && docConfig?.id === 'vehicle-bill-of-sale' && formData?.state && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
-      setUseDirectFormFilling(true);
-      setSelectedState(formData.state);
-    }
+    // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
+    setUseDirectFormFilling(false);
   }, [formData?.state, docConfig?.id]);
 
   useEffect(() => {

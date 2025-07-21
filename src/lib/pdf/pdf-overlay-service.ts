@@ -541,7 +541,7 @@ async function applyJSONFieldMapping(
     pdfFieldsMap.set(field.getName(), field);
   });
   
-  // Apply field mapping
+  // Apply direct field mapping first
   for (const [questionId, mapping] of Object.entries(fieldMapping)) {
     const value = formData[questionId];
     if (!value) continue;
@@ -574,7 +574,10 @@ async function applyJSONFieldMapping(
     }
   }
   
-  console.log(`📊 FIELD MAPPING RESULTS: ${fieldsMatched}/${fieldsTotal} fields successfully mapped`);
+  // Apply checkbox logic and derived fields
+  fieldsMatched += await applyFloridaSpecificLogic(pdfFieldsMap, formData);
+  
+  console.log(`📊 FIELD MAPPING RESULTS: ${fieldsMatched}/${fieldsTotal + 10} fields successfully mapped`);
   
   // Apply coordinate fallback for unmapped fields
   if (coordinateFallback) {
@@ -604,6 +607,125 @@ async function applyJSONFieldMapping(
   }
   
   return (await pdfDoc.save()).buffer;
+}
+
+// Florida-specific checkbox and derived field logic
+async function applyFloridaSpecificLogic(
+  pdfFieldsMap: Map<string, any>,
+  formData: Record<string, any>
+): Promise<number> {
+  let fieldsApplied = 0;
+  
+  console.log('🏖️ Applying Florida-specific form logic...');
+  
+  try {
+    // Auto-check form type checkboxes
+    const noticeOfSaleCheckbox = pdfFieldsMap.get("Notice of Sale Seller must complete sections 1  3 The purchasers signature in section 3 is optional");
+    if (noticeOfSaleCheckbox) {
+      noticeOfSaleCheckbox.check();
+      console.log('✅ AUTO-CHECKED: Notice of Sale checkbox');
+      fieldsApplied++;
+    }
+    
+    const billOfSaleCheckbox = pdfFieldsMap.get("Bill of Sale Seller and purchaser must complete sections 1 2 when applicable  3");
+    if (billOfSaleCheckbox) {
+      billOfSaleCheckbox.check();
+      console.log('✅ AUTO-CHECKED: Bill of Sale checkbox');
+      fieldsApplied++;
+    }
+    
+    // Odometer digit checkboxes (5 or 6 digit)
+    const odometerValue = formData.odometer;
+    if (odometerValue) {
+      const odometerStr = String(odometerValue);
+      const fiveDigitCheckbox = pdfFieldsMap.get("5 DIGIT OR");
+      const sixDigitCheckbox = pdfFieldsMap.get("6 DIGIT ODOMETER NOW READS");
+      
+      if (odometerStr.length <= 5 && fiveDigitCheckbox) {
+        fiveDigitCheckbox.check();
+        console.log('✅ AUTO-CHECKED: 5 DIGIT odometer checkbox');
+        fieldsApplied++;
+      } else if (odometerStr.length >= 6 && sixDigitCheckbox) {
+        sixDigitCheckbox.check();
+        console.log('✅ AUTO-CHECKED: 6 DIGIT odometer checkbox');
+        fieldsApplied++;
+      }
+    }
+    
+    // Odometer status checkboxes
+    const odoStatus = formData.odo_status;
+    if (odoStatus) {
+      const actualMileageCheckbox = pdfFieldsMap.get("1 REFLECTS THE ACTUAL MILEAGE");
+      const exceedsLimitsCheckbox = pdfFieldsMap.get("2 IS IN EXCESS OF ITS MECHANICAL LIMITS");
+      const notActualCheckbox = pdfFieldsMap.get("3 IS NOT THE ACTUAL MILEAGE");
+      
+      switch (odoStatus) {
+        case 'ACTUAL':
+          if (actualMileageCheckbox) {
+            actualMileageCheckbox.check();
+            console.log('✅ AUTO-CHECKED: Actual mileage checkbox');
+            fieldsApplied++;
+          }
+          break;
+        case 'EXCEEDS':
+          if (exceedsLimitsCheckbox) {
+            exceedsLimitsCheckbox.check();
+            console.log('✅ AUTO-CHECKED: Exceeds limits checkbox');
+            fieldsApplied++;
+          }
+          break;
+        case 'NOT_ACTUAL':
+          if (notActualCheckbox) {
+            notActualCheckbox.check();
+            console.log('✅ AUTO-CHECKED: Not actual mileage checkbox');
+            fieldsApplied++;
+          }
+          break;
+      }
+    }
+    
+    // Derived fields - duplicate sale dates for co-sellers/buyers
+    const saleDate = formData.sale_date;
+    if (saleDate) {
+      const date2Field = pdfFieldsMap.get("Date_2");
+      const date3Field = pdfFieldsMap.get("Date_3");
+      const date4Field = pdfFieldsMap.get("Date_4");
+      
+      if (date2Field) {
+        date2Field.setText(saleDate);
+        console.log('✅ DERIVED: Date_2 from sale_date');
+        fieldsApplied++;
+      }
+      if (date3Field) {
+        date3Field.setText(saleDate);
+        console.log('✅ DERIVED: Date_3 from sale_date');
+        fieldsApplied++;
+      }
+      if (date4Field) {
+        date4Field.setText(saleDate);
+        console.log('✅ DERIVED: Date_4 from sale_date');
+        fieldsApplied++;
+      }
+    }
+    
+    // Populate "Print Names of Purchasers" field with buyer names
+    const buyerName = formData.buyer_name;
+    const buyer2Name = formData.buyer2_name;
+    if (buyerName) {
+      const printNamesField = pdfFieldsMap.get("Print Names of Purchasers");
+      if (printNamesField) {
+        const purchaserNames = buyer2Name ? `${buyerName}, ${buyer2Name}` : buyerName;
+        printNamesField.setText(purchaserNames);
+        console.log('✅ DERIVED: Print Names of Purchasers from buyer names');
+        fieldsApplied++;
+      }
+    }
+    
+  } catch (error) {
+    console.warn('⚠️ Error applying Florida-specific logic:', error);
+  }
+  
+  return fieldsApplied;
 }
 
 export function getOverlayForState(state: string): StateFormOverlay | null {

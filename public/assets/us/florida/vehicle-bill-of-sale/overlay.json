@@ -3,18 +3,6 @@
   "formName": "HSMV-82050",
   "pdfPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
   "fieldMapping": {
-    "seller_name": {
-      "fieldName": "Sellers Printed Name"
-    },
-    "seller_address": {
-      "fieldName": "Sellers Address City State Zip Code"
-    },
-    "buyer_name": {
-      "fieldName": "Purchasers Printed Name"
-    },
-    "buyer_address": {
-      "fieldName": "Address City State Zip Code"
-    },
     "year": {
       "fieldName": "Year"
     },
@@ -24,20 +12,47 @@
     "model": {
       "fieldName": "Model"
     },
+    "body_type": {
+      "fieldName": "Body Type"
+    },
     "color": {
       "fieldName": "Color"
+    },
+    "price": {
+      "fieldName": "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home"
     },
     "vin": {
       "fieldName": "VehicleVessel Identification Number"
     },
+    "buyer_address": {
+      "fieldName": "Address City State Zip Code"
+    },
     "odometer": {
       "fieldName": "undefined_2"
+    },
+    "seller_name": {
+      "fieldName": "Sellers Printed Name"
     },
     "sale_date": {
       "fieldName": "Date"
     },
-    "price": {
-      "fieldName": "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home"
+    "seller_address": {
+      "fieldName": "Sellers Address City State Zip Code"
+    },
+    "seller2_name": {
+      "fieldName": "CoSellers Printed Name when applicable"
+    },
+    "buyer_name": {
+      "fieldName": "Purchasers Printed Name"
+    },
+    "buyer2_name": {
+      "fieldName": "CoPurchasers Printed name when applicable"
+    },
+    "title_number": {
+      "fieldName": "2"
+    },
+    "current_title_date": {
+      "fieldName": "Current Title Issue Date"
     }
   },
   "coordinates": {

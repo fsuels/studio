@@ -10,36 +10,43 @@ export const floridaOverlay: StateFormOverlay = {
     // Seller Information Section
     {
       fieldId: 'seller_name',
-      x: 120,
-      y: 680,
+      x: 155,
+      y: 618,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'seller_address',
-      x: 120,
-      y: 660,
+      x: 155,
+      y: 593,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'seller_city',
-      x: 120,
-      y: 640,
+      x: 155,
+      y: 568,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'seller_state',
-      x: 300,
-      y: 640,
+      x: 285,
+      y: 568,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'seller_zip',
-      x: 400,
-      y: 640,
+      x: 335,
+      y: 568,
+      fontSize: 10,
+      page: 0
+    },
+    {
+      fieldId: 'seller_phone',
+      x: 425,
+      y: 618,
       fontSize: 10,
       page: 0
     },
@@ -47,36 +54,43 @@ export const floridaOverlay: StateFormOverlay = {
     // Buyer Information Section
     {
       fieldId: 'buyer_name',
-      x: 120,
-      y: 580,
+      x: 155,
+      y: 518,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'buyer_address',
-      x: 120,
-      y: 560,
+      x: 155,
+      y: 493,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'buyer_city',
-      x: 120,
-      y: 540,
+      x: 155,
+      y: 468,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'buyer_state',
-      x: 300,
-      y: 540,
+      x: 285,
+      y: 468,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'buyer_zip',
-      x: 400,
-      y: 540,
+      x: 335,
+      y: 468,
+      fontSize: 10,
+      page: 0
+    },
+    {
+      fieldId: 'buyer_phone',
+      x: 425,
+      y: 518,
       fontSize: 10,
       page: 0
     },
@@ -84,43 +98,43 @@ export const floridaOverlay: StateFormOverlay = {
     // Vehicle Information Section
     {
       fieldId: 'year',
-      x: 120,
-      y: 480,
+      x: 105,
+      y: 418,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'make',
-      x: 200,
-      y: 480,
+      x: 165,
+      y: 418,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'model',
-      x: 300,
-      y: 480,
+      x: 275,
+      y: 418,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'vin',
-      x: 120,
-      y: 460,
+      x: 385,
+      y: 418,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'color',
-      x: 120,
-      y: 440,
+      x: 105,
+      y: 393,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'odometer',
-      x: 300,
-      y: 440,
+      x: 195,
+      y: 393,
       fontSize: 10,
       page: 0
     },
@@ -128,15 +142,15 @@ export const floridaOverlay: StateFormOverlay = {
     // Sale Information
     {
       fieldId: 'price',
-      x: 120,
-      y: 380,
+      x: 155,
+      y: 343,
       fontSize: 10,
       page: 0
     },
     {
       fieldId: 'sale_date',
-      x: 300,
-      y: 380,
+      x: 385,
+      y: 343,
       fontSize: 10,
       page: 0
     }

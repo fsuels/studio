@@ -154,6 +154,24 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     tooltip: 'The specific model of the vehicle (e.g., Civic, F-150).',
   },
   {
+    id: 'body_type',
+    label: 'Vehicle Body Type',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'Sedan', label: 'Sedan' },
+      { value: 'SUV', label: 'SUV' },
+      { value: 'Truck', label: 'Truck' },
+      { value: 'Coupe', label: 'Coupe' },
+      { value: 'Convertible', label: 'Convertible' },
+      { value: 'Wagon', label: 'Wagon' },
+      { value: 'Van', label: 'Van' },
+      { value: 'Motorcycle', label: 'Motorcycle' },
+      { value: 'Other', label: 'Other' }
+    ],
+    tooltip: 'The body style/type of the vehicle being sold.',
+  },
+  {
     id: 'color',
     label: 'Vehicle Color',
     type: 'text',
@@ -215,6 +233,21 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     type: 'date',
     required: true,
     tooltip: 'The date the sale is finalized.',
+  },
+  {
+    id: 'title_number',
+    label: 'Certificate of Title Number',
+    type: 'text',
+    required: false,
+    placeholder: 'e.g., 123456789',
+    tooltip: 'The certificate/title number from the current title document.',
+  },
+  {
+    id: 'current_title_date',
+    label: 'Current Title Issue Date',
+    type: 'date',
+    required: false,
+    tooltip: 'The date when the current title was issued (if known).',
   },
   {
     id: 'existing_liens',
