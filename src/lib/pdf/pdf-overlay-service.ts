@@ -1,7 +1,87 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { StateAbbr } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
-import { type DocumentConfig, type OverlayConfig } from '@/lib/config-loader';
+import type { OverlayConfig } from '@/lib/config-loader';
+import type { StateAbbr }    from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
 
+/* ------------------------------------------------------------------ */
+/*  Public entry point                                                */
+/* ------------------------------------------------------------------ */
+export async function overlayFormData(
+  pdfBytes: ArrayBuffer,
+  formData: Record<string, any>,
+  state: string,
+  overlay?: OverlayConfig
+): Promise<ArrayBuffer> {
+  const doc = await PDFDocument.load(pdfBytes);
+
+  // 1️⃣  Smart mode – the PDF actually has form fields
+  if (doc.getForm().getFields().length) {
+    return smartFieldMapping(doc, formData, overlay);
+  }
+
+  // 2️⃣  JSON coordinates fallback
+  if (overlay?.coordinates) {
+    return coordinateOverlay(doc, formData, overlay.coordinates);
+  }
+
+  // 3️⃣  Legacy TypeScript overlay (only if JSON fails)
+  const legacy = await loadLegacyOverlay(state);
+  if (legacy) {
+    return legacyCoordinateOverlay(doc, formData, legacy.fieldMappings);
+  }
+
+  // 4️⃣  Give up – return original PDF
+  return pdfBytes;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Smart AcroForm mapping (priority #1)                              */
+/* ------------------------------------------------------------------ */
+async function smartFieldMapping(
+  doc: PDFDocument,
+  data: Record<string, any>,
+  cfg?: OverlayConfig
+): Promise<ArrayBuffer> {
+  const form      = doc.getForm();
+  const pdfFields = new Map(form.getFields().map(f => [f.getName(), f]));
+  const mapping   = cfg?.fieldMapping ?? {};        // { seller_name: {fieldName:"…"} }
+
+  let matched = 0;
+  for (const [id, { fieldName }] of Object.entries(mapping)) {
+    const val = data[id];
+    const pdf = pdfFields.get(fieldName);
+    if (!val || !pdf) continue;
+
+    if (pdf.constructor.name === 'PDFTextField') pdf.setText(String(val));
+    if (pdf.constructor.name === 'PDFCheckBox')  (val ? pdf.check() : pdf.uncheck());
+    matched++;
+  }
+  console.log(`SMART‑MAPPING: ${matched}/${Object.keys(mapping).length} fields set`);
+  return (await doc.save()).buffer;
+}
+
+/* ------------------------------------------------------------------ */
+/*  JSON coordinate overlay (priority #2)                             */
+/* ------------------------------------------------------------------ */
+async function coordinateOverlay(
+  doc: PDFDocument,
+  data: Record<string, any>,
+  coords: NonNullable<OverlayConfig['coordinates']>
+): Promise<ArrayBuffer> {
+  const font  = await doc.embedFont(StandardFonts.Helvetica);
+  const pages = doc.getPages();
+
+  for (const [id, c] of Object.entries(coords)) {
+    const val = data[id] ?? data[id.replace(/_/g, '')];
+    if (!val) continue;
+    const page = pages[c.page ?? 0];
+    page.drawText(String(val), { x: c.x, y: c.y, size: c.fontSize ?? 10, font, color: rgb(0,0,0) });
+  }
+  return (await doc.save()).buffer;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Legacy TS overlay (priority #3)                                   */
+/* ------------------------------------------------------------------ */
 export interface FieldMapping {
   fieldId: string;
   x: number;
@@ -18,717 +98,31 @@ export interface StateFormOverlay {
   fieldMappings: FieldMapping[];
 }
 
-export async function overlayFormData(
-  pdfBytes: ArrayBuffer,
-  formData: Record<string, any>,
-  state: string,
-  overlayConfig?: OverlayConfig
+interface LegacyPoint { fieldId: string; x: number; y: number; page?: number; fontSize?: number; }
+interface LegacyOverlay { state: StateAbbr; formName: string; fieldMappings: LegacyPoint[]; }
+
+async function loadLegacyOverlay(state: string): Promise<LegacyOverlay | null> {
+  switch (state.toLowerCase()) {
+    case 'fl': return (await import('@/lib/documents/us/vehicle-bill-of-sale/forms/florida/overlay')).floridaOverlay;
+    // … other states
+    default:   return null;
+  }
+}
+
+async function legacyCoordinateOverlay(
+  doc: PDFDocument,
+  data: Record<string, any>,
+  points: LegacyPoint[]
 ): Promise<ArrayBuffer> {
-  try {
-    console.log('🔍 PDF SMART OVERLAY: Starting for state:', state);
-    console.log('📝 Form data:', formData);
-    console.log('🎯 Overlay config:', overlayConfig ? 'JSON provided' : 'Using TypeScript fallback');
-    
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    
-    // STEP 1: Try to detect form fields (this is the SMART approach!)
-    const form = pdfDoc.getForm();
-    const fields = form.getFields();
-    
-    console.log(`🎯 SMART DETECTION: Found ${fields.length} form fields in PDF`);
-    
-    if (fields.length > 0) {
-      // SUCCESS! PDF has fillable fields - use smart mapping
-      console.log('✅ SMART MODE: PDF has fillable fields - using intelligent field mapping');
-      fields.forEach(field => {
-        console.log(`📋 Available field: "${field.getName()}" (${field.constructor.name})`);
-      });
+  const font  = await doc.embedFont(StandardFonts.Helvetica);
+  const pages = doc.getPages();
 
-      return await smartFormFieldMapping(pdfDoc, formData, state, overlayConfig);
-    }
-
-    // FALLBACK: No form fields - apply coordinate-based overlay
-    console.log('⚠️ FALLBACK MODE: No form fields detected - attempting coordinate overlay');
-    console.log('📊 Overlay config provided:', overlayConfig ? 'YES' : 'NO');
-    console.log('📊 Has coordinates:', overlayConfig?.coordinates ? 'YES' : 'NO');
-    const overlaid = await coordinateBasedOverlayWithStateMapping(pdfDoc, formData, state, overlayConfig);
-
-    return overlaid;
-    
-  } catch (error) {
-    console.error('❌ PDF Overlay Error:', error);
-    return pdfBytes;
-  }
-}
-
-// THE SMART APPROACH: Let the PDF tell us what fields it has!
-async function smartFormFieldMapping(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  state: string,
-  overlayConfig?: OverlayConfig
-): Promise<ArrayBuffer> {
-  console.log('🧠 SMART MAPPING: Analyzing PDF form fields...');
-  
-  // Use JSON overlay config if provided, otherwise use TypeScript mapping
-  const fieldMapping = overlayConfig?.fieldMapping || createIntelligentFieldMapping();
-  console.log('🎯 Field mapping source:', overlayConfig ? 'JSON configuration' : 'TypeScript default');
-  
-  const form = pdfDoc.getForm();
-  const fields = form.getFields();
-  
-  // Use the configured field mapping (JSON or TypeScript)
-  
-  let fieldsMatched = 0;
-  let fieldsTotal = fields.length;
-  
-  console.log('🔍 FIELD ANALYSIS: Starting intelligent matching...');
-  
-  fields.forEach(field => {
-    const fieldName = field.getName();
-    const fieldNameLower = fieldName.toLowerCase();
-    const fieldType = field.constructor.name;
-    
-    console.log(`🎯 Analyzing field: "${fieldName}" (${fieldType})`);
-    
-    // Try to match this field to our form data
-    let matched = false;
-    
-    for (const [ourDataKey, possibleMatches] of Object.entries(fieldMapping)) {
-      // Check for exact matches first
-      if (possibleMatches.exact.some(pattern => fieldNameLower === pattern.toLowerCase())) {
-        if (setFieldValue(field, formData[ourDataKey], fieldName, 'EXACT')) {
-          matched = true;
-          fieldsMatched++;
-          break;
-        }
-      }
-      
-      // Then check for partial matches
-      if (!matched && possibleMatches.partial.some(pattern => fieldNameLower.includes(pattern.toLowerCase()))) {
-        if (setFieldValue(field, formData[ourDataKey], fieldName, 'PARTIAL')) {
-          matched = true;
-          fieldsMatched++;
-          break;
-        }
-      }
-      
-      // Finally check for fuzzy matches
-      if (!matched && possibleMatches.fuzzy.some(pattern => 
-        fieldNameLower.includes(pattern.toLowerCase()) || 
-        pattern.toLowerCase().includes(fieldNameLower.substring(0, 4))
-      )) {
-        if (setFieldValue(field, formData[ourDataKey], fieldName, 'FUZZY')) {
-          matched = true;
-          fieldsMatched++;
-          break;
-        }
-      }
-    }
-    
-    if (!matched) {
-      console.log(`❓ UNMATCHED: Field "${fieldName}" - no mapping found`);
-    }
-  });
-  
-  console.log(`📊 SMART MAPPING RESULTS: ${fieldsMatched}/${fieldsTotal} fields successfully mapped`);
-  
-  if (fieldsMatched === 0) {
-    console.log('⚠️ WARNING: No fields were mapped - field names may be unusual');
-    console.log('💡 Consider manual mapping for this state');
-  }
-  
-  return (await pdfDoc.save()).buffer;
-}
-
-function setFieldValue(field: any, value: any, fieldName: string, matchType: string): boolean {
-  if (!value) return false;
-  
-  try {
-    const fieldType = field.constructor.name;
-    
-    if (fieldType === 'PDFTextField') {
-      field.setText(String(value));
-      console.log(`✅ ${matchType} MATCH: "${fieldName}" = "${value}"`);
-      return true;
-    } else if (fieldType === 'PDFCheckBox') {
-      field.check();
-      console.log(`✅ ${matchType} MATCH: Checked "${fieldName}"`);
-      return true;
-    } else if (fieldType === 'PDFDropdown') {
-      // Try to set dropdown value
-      field.select(String(value));
-      console.log(`✅ ${matchType} MATCH: Selected "${value}" in "${fieldName}"`);
-      return true;
-    } else {
-      console.log(`❓ Unknown field type: ${fieldType} for "${fieldName}"`);
-      return false;
-    }
-  } catch (error) {
-    console.warn(`❌ Failed to set "${fieldName}":`, error);
-    return false;
-  }
-}
-
-function createIntelligentFieldMapping() {
-  return {
-    seller_name: {
-      exact: ['seller_name', 'sellerName', 'seller', 'grantor_name', 'from_name'],
-      partial: ['seller', 'grantor', 'from', 'owner', 'current_owner'],
-      fuzzy: ['sell', 'gran', 'vendor', 'transferor']
-    },
-    buyer_name: {
-      exact: ['buyer_name', 'buyerName', 'buyer', 'grantee_name', 'to_name', 'purchaser_name'],
-      partial: ['buyer', 'grantee', 'purchaser', 'to', 'new_owner'],
-      fuzzy: ['buy', 'purch', 'transferee', 'acquirer']
-    },
-    seller_address: {
-      exact: ['seller_address', 'sellerAddress', 'grantor_address', 'from_address'],
-      partial: ['seller_addr', 'grantor_addr', 'owner_address'],
-      fuzzy: ['sell_addr', 'from_addr']
-    },
-    buyer_address: {
-      exact: ['buyer_address', 'buyerAddress', 'grantee_address', 'to_address', 'purchaser_address'],
-      partial: ['buyer_addr', 'grantee_addr', 'purchaser_addr'],
-      fuzzy: ['buy_addr', 'to_addr']
-    },
-    year: {
-      exact: ['year', 'model_year', 'yr', 'vehicle_year'],
-      partial: ['year', 'yr'],
-      fuzzy: ['yr', 'model']
-    },
-    make: {
-      exact: ['make', 'manufacturer', 'vehicle_make'],
-      partial: ['make', 'mfg', 'brand'],
-      fuzzy: ['make', 'manu']
-    },
-    model: {
-      exact: ['model', 'vehicle_model'],
-      partial: ['model'],
-      fuzzy: ['mod']
-    },
-    vin: {
-      exact: ['vin', 'vehicle_id', 'serial_number', 'vehicle_identification_number'],
-      partial: ['vin', 'serial', 'id_number'],
-      fuzzy: ['vin', 'serial', 'id']
-    },
-    color: {
-      exact: ['color', 'colour', 'vehicle_color'],
-      partial: ['color', 'colour'],
-      fuzzy: ['col']
-    },
-    price: {
-      exact: ['price', 'sale_price', 'purchase_price', 'amount', 'cost'],
-      partial: ['price', 'amount', 'cost', 'value'],
-      fuzzy: ['pric', 'amt', 'val']
-    },
-    sale_date: {
-      exact: ['sale_date', 'date', 'transaction_date', 'date_of_sale'],
-      partial: ['date', 'sale_date', 'trans_date'],
-      fuzzy: ['date', 'dt']
-    },
-    odometer: {
-      exact: ['odometer', 'mileage', 'miles', 'odometer_reading'],
-      partial: ['odometer', 'mileage', 'miles'],
-      fuzzy: ['odom', 'mile', 'km']
-    }
-  };
-}
-
-async function addWarningOverlay(pdfDoc: PDFDocument, message: string): Promise<ArrayBuffer> {
-  console.log('⚠️ Adding warning overlay to PDF');
-  
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const pages = pdfDoc.getPages();
-  
-  if (pages.length > 0) {
-    const page = pages[0];
-    const { width, height } = page.getSize();
-    
-    // Add warning message at top of page
-    page.drawText(message, {
-      x: 50,
-      y: height - 30,
-      size: 12,
-      font: helveticaFont,
-      color: rgb(1, 0, 0), // Red color
+  for (const p of points) {
+    const val = data[p.fieldId];
+    if (!val) continue;
+    pages[p.page ?? 0].drawText(String(val), {
+      x: p.x, y: p.y, size: p.fontSize ?? 10, font, color: rgb(0,0,0)
     });
   }
-  
-  return (await pdfDoc.save()).buffer;
-}
-
-// Legacy function - redirects to smart mapping
-async function fillFormFields(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  state: string
-): Promise<ArrayBuffer> {
-  return smartFormFieldMapping(pdfDoc, formData, state);
-}
-
-// DEPRECATED: Old coordinate-based approach
-// We now use smart field detection instead!
-async function coordinateBasedOverlay(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  state: string
-): Promise<ArrayBuffer> {
-  console.log('⚠️ DEPRECATED: coordinate-based overlay should not be used');
-  console.log('💡 The smart approach should handle all cases');
-  
-  // Return original PDF with deprecation warning
-  return await addWarningOverlay(pdfDoc, 'DEPRECATED: Coordinate overlay not supported');
-}
-
-// Smart state-specific field mapping loader
-async function getStateFieldMapping(state: string): Promise<Record<string, string[]> | null> {
-  try {
-    const stateKey = state.toLowerCase().replace(/[\s-]/g, '-');
-    
-    switch (stateKey) {
-      case 'fl':
-      case 'florida':
-        const { floridaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/florida/overlay');
-        return floridaFieldMapping;
-      case 'al':
-      case 'alabama':
-        const { alabamaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/alabama/overlay');
-        return alabamaFieldMapping;
-      case 'co':
-      case 'colorado':
-        const { coloradoFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/colorado/overlay');
-        return coloradoFieldMapping;
-      case 'ga':
-      case 'georgia':
-        const { georgiaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/georgia/overlay');
-        return georgiaFieldMapping;
-      case 'id':
-      case 'idaho':
-        const { idahoFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/idaho/overlay');
-        return idahoFieldMapping;
-      case 'ks':
-      case 'kansas':
-        const { kansasFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/kansas/overlay');
-        return kansasFieldMapping;
-      case 'md':
-      case 'maryland':
-        const { marylandFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/maryland/overlay');
-        return marylandFieldMapping;
-      case 'mt':
-      case 'montana':
-        const { montanaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/montana/overlay');
-        return montanaFieldMapping;
-      case 'nd':
-      case 'north-dakota':
-        const { northDakotaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/north-dakota/overlay');
-        return northDakotaFieldMapping;
-      case 'wv':
-      case 'west-virginia':
-        const { westVirginiaFieldMapping } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/west-virginia/overlay');
-        return westVirginiaFieldMapping;
-      default:
-        console.log(`No state-specific field mapping found for: ${state}`);
-        return null;
-    }
-  } catch (error) {
-    console.warn(`Failed to load state mapping for ${state}:`, error);
-    return null;
-  }
-}
-
-function getGenericFieldMapping(): Record<string, string[]> {
-  return {
-    seller_name: ['seller', 'seller_name', 'sellerName', 'from', 'grantor', 'vendor'],
-    buyer_name: ['buyer', 'buyer_name', 'buyerName', 'to', 'grantee', 'purchaser'],
-    seller_address: ['seller_address', 'sellerAddress', 'from_address', 'grantor_address'],
-    buyer_address: ['buyer_address', 'buyerAddress', 'to_address', 'grantee_address'],
-    year: ['year', 'model_year', 'yr', 'vehicle_year'],
-    make: ['make', 'manufacturer', 'vehicle_make'],
-    model: ['model', 'vehicle_model'],
-    vin: ['vin', 'vehicle_id', 'serial_number', 'vehicle_vin'],
-    color: ['color', 'colour', 'vehicle_color'],
-    price: ['price', 'amount', 'sale_price', 'purchase_price'],
-    sale_date: ['date', 'sale_date', 'transaction_date'],
-    odometer: ['odometer', 'mileage', 'miles', 'odometer_reading'],
-    seller_city: ['seller_city', 'from_city'],
-    seller_state: ['seller_state', 'from_state'],
-    seller_zip: ['seller_zip', 'from_zip'],
-    buyer_city: ['buyer_city', 'to_city'],
-    buyer_state: ['buyer_state', 'to_state'],
-    buyer_zip: ['buyer_zip', 'to_zip']
-  };
-}
-
-// Smart coordinate-based overlay using state-specific configurations
-async function coordinateBasedOverlayWithStateMapping(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  state: string,
-  overlayConfig?: OverlayConfig
-): Promise<ArrayBuffer> {
-  console.log('PDF Overlay: Using coordinate-based overlay with state-specific mappings');
-  
-  // PRIORITY 1: Try JSON field mapping first (use actual PDF form fields)
-  if (overlayConfig?.fieldMapping) {
-    console.log('🎯 Using JSON field mapping (AcroForm fields)');
-    return await applyJSONFieldMapping(pdfDoc, formData, overlayConfig.fieldMapping, overlayConfig.coordinates);
-  }
-  
-  // PRIORITY 2: Try JSON coordinate overlay
-  if (overlayConfig?.coordinates) {
-    console.log('📊 Using JSON coordinate overlay configuration');
-    return await applyJSONCoordinateOverlay(pdfDoc, formData, overlayConfig.coordinates);
-  }
-  
-  // PRIORITY 3: Fallback to TypeScript state overlay
-  const stateOverlay = await getStateOverlay(state);
-  
-  if (stateOverlay) {
-    console.log('📊 Using TypeScript state overlay configuration');
-    return await applyStateOverlay(pdfDoc, formData, stateOverlay);
-  }
-  
-  // Final fallback to generic coordinate overlay
-  return await coordinateBasedOverlay(pdfDoc, formData, state);
-}
-
-async function getStateOverlay(state: string): Promise<StateFormOverlay | null> {
-  try {
-    const stateKey = state.toLowerCase().replace(/[\s-]/g, '-');
-    
-    switch (stateKey) {
-      case 'fl':
-      case 'florida':
-        const { floridaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/florida/overlay');
-        return floridaOverlay;
-      case 'al':
-      case 'alabama':
-        const { alabamaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/alabama/overlay');
-        return alabamaOverlay;
-      case 'co':
-      case 'colorado':
-        const { coloradoOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/colorado/overlay');
-        return coloradoOverlay;
-      case 'ga':
-      case 'georgia':
-        const { georgiaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/georgia/overlay');
-        return georgiaOverlay;
-      case 'id':
-      case 'idaho':
-        const { idahoOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/idaho/overlay');
-        return idahoOverlay;
-      case 'ks':
-      case 'kansas':
-        const { kansasOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/kansas/overlay');
-        return kansasOverlay;
-      case 'md':
-      case 'maryland':
-        const { marylandOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/maryland/overlay');
-        return marylandOverlay;
-      case 'mt':
-      case 'montana':
-        const { montanaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/montana/overlay');
-        return montanaOverlay;
-      case 'nd':
-      case 'north-dakota':
-        const { northDakotaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/north-dakota/overlay');
-        return northDakotaOverlay;
-      case 'wv':
-      case 'west-virginia':
-        const { westVirginiaOverlay } = await import('@/lib/documents/us/vehicle-bill-of-sale/forms/west-virginia/overlay');
-        return westVirginiaOverlay;
-      default:
-        return null;
-    }
-  } catch (error) {
-    console.warn(`Failed to load state overlay for ${state}:`, error);
-    return null;
-  }
-}
-
-async function applyStateOverlay(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  overlay: StateFormOverlay
-): Promise<ArrayBuffer> {
-  console.log(`PDF Overlay: Applying ${overlay.formName} overlay for ${overlay.state}`);
-  
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const pages = pdfDoc.getPages();
-  
-  if (pages.length === 0) {
-    console.warn('PDF has no pages');
-    return (await pdfDoc.save()).buffer;
-  }
-  
-  overlay.fieldMappings.forEach(mapping => {
-    const value = formData[mapping.fieldId];
-    if (value) {
-      const page = pages[mapping.page || 0];
-      if (page) {
-        console.log(`PDF Overlay: Drawing "${value}" at (${mapping.x}, ${mapping.y})`);
-        
-        page.drawText(String(value), {
-          x: mapping.x,
-          y: mapping.y,
-          size: mapping.fontSize || 10,
-          font: helveticaFont,
-          color: rgb(0, 0, 0),
-        });
-      }
-    }
-  });
-  
-  return (await pdfDoc.save()).buffer;
-}
-
-// NEW: Apply JSON-based coordinate overlay
-async function applyJSONCoordinateOverlay(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  coordinates: NonNullable<OverlayConfig['coordinates']>
-): Promise<ArrayBuffer> {
-  console.log('📊 JSON COORDINATE OVERLAY: Applying JSON-based coordinate mapping');
-  
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const pages = pdfDoc.getPages();
-  
-  if (pages.length === 0) {
-    console.warn('PDF has no pages');
-    return (await pdfDoc.save()).buffer;
-  }
-  
-  Object.entries(coordinates).forEach(([fieldId, coord]) => {
-    // Try exact field ID match first, then try without underscores as fallback
-    const value = formData[fieldId] ?? formData[fieldId.replace(/_/g, '')];
-    if (value && coord) {
-      const page = pages[coord.page || 0];
-      if (page) {
-        console.log(`📊 JSON OVERLAY: Drawing "${value}" at (${coord.x}, ${coord.y})`);
-        
-        page.drawText(String(value), {
-          x: coord.x,
-          y: coord.y,
-          size: coord.fontSize || 10,
-          font: helveticaFont,
-          color: rgb(0, 0, 0),
-        });
-      }
-    }
-  });
-  
-  return (await pdfDoc.save()).buffer;
-}
-
-// NEW: Apply JSON-based field mapping (uses actual PDF AcroForm fields)
-async function applyJSONFieldMapping(
-  pdfDoc: PDFDocument,
-  formData: Record<string, any>,
-  fieldMapping: Record<string, { fieldName: string }>,
-  coordinateFallback?: NonNullable<OverlayConfig['coordinates']>
-): Promise<ArrayBuffer> {
-  console.log('🎯 JSON FIELD MAPPING: Using AcroForm field names');
-  
-  const form = pdfDoc.getForm();
-  const fields = form.getFields();
-  let fieldsMatched = 0;
-  let fieldsTotal = Object.keys(fieldMapping).length;
-  
-  // Create a map of PDF field names for quick lookup
-  const pdfFieldsMap = new Map();
-  fields.forEach(field => {
-    pdfFieldsMap.set(field.getName(), field);
-  });
-  
-  // Apply direct field mapping first
-  for (const [questionId, mapping] of Object.entries(fieldMapping)) {
-    const value = formData[questionId];
-    if (!value) continue;
-    
-    const pdfField = pdfFieldsMap.get(mapping.fieldName);
-    if (pdfField) {
-      try {
-        // Set field value based on field type
-        const fieldType = pdfField.constructor.name;
-        if (fieldType === 'PDFTextField') {
-          pdfField.setText(String(value));
-          console.log(`✅ FIELD MAPPED: "${questionId}" = "${value}" → "${mapping.fieldName}"`);
-          fieldsMatched++;
-        } else if (fieldType === 'PDFCheckBox') {
-          if (value === true || value === 'true' || value === '1') {
-            pdfField.check();
-          } else {
-            pdfField.uncheck();
-          }
-          console.log(`✅ CHECKBOX MAPPED: "${questionId}" = ${value} → "${mapping.fieldName}"`);
-          fieldsMatched++;
-        } else {
-          console.log(`❓ UNKNOWN FIELD TYPE: ${fieldType} for "${mapping.fieldName}"`);
-        }
-      } catch (error) {
-        console.warn(`❌ FIELD MAPPING FAILED: "${questionId}" → "${mapping.fieldName}"`, error);
-      }
-    } else {
-      console.warn(`❌ PDF FIELD NOT FOUND: "${mapping.fieldName}" for question "${questionId}"`);
-    }
-  }
-  
-  // Apply checkbox logic and derived fields
-  fieldsMatched += await applyFloridaSpecificLogic(pdfFieldsMap, formData);
-  
-  console.log(`📊 FIELD MAPPING RESULTS: ${fieldsMatched}/${fieldsTotal + 10} fields successfully mapped`);
-  
-  // Apply coordinate fallback for unmapped fields
-  if (coordinateFallback) {
-    console.log('📍 Applying coordinate fallback for unmapped fields...');
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const pages = pdfDoc.getPages();
-    
-    Object.entries(coordinateFallback).forEach(([fieldId, coord]) => {
-      // Only apply coordinate overlay if this field wasn't handled by field mapping
-      if (!fieldMapping[fieldId]) {
-        const value = formData[fieldId] ?? formData[fieldId.replace(/_/g, '')];
-        if (value && coord) {
-          const page = pages[coord.page || 0];
-          if (page) {
-            console.log(`📍 COORDINATE FALLBACK: Drawing "${value}" at (${coord.x}, ${coord.y})`);
-            page.drawText(String(value), {
-              x: coord.x,
-              y: coord.y,
-              size: coord.fontSize || 10,
-              font: helveticaFont,
-              color: rgb(0, 0, 0),
-            });
-          }
-        }
-      }
-    });
-  }
-  
-  return (await pdfDoc.save()).buffer;
-}
-
-// Florida-specific checkbox and derived field logic
-async function applyFloridaSpecificLogic(
-  pdfFieldsMap: Map<string, any>,
-  formData: Record<string, any>
-): Promise<number> {
-  let fieldsApplied = 0;
-  
-  console.log('🏖️ Applying Florida-specific form logic...');
-  
-  try {
-    // Auto-check form type checkboxes
-    const noticeOfSaleCheckbox = pdfFieldsMap.get("Notice of Sale Seller must complete sections 1  3 The purchasers signature in section 3 is optional");
-    if (noticeOfSaleCheckbox) {
-      noticeOfSaleCheckbox.check();
-      console.log('✅ AUTO-CHECKED: Notice of Sale checkbox');
-      fieldsApplied++;
-    }
-    
-    const billOfSaleCheckbox = pdfFieldsMap.get("Bill of Sale Seller and purchaser must complete sections 1 2 when applicable  3");
-    if (billOfSaleCheckbox) {
-      billOfSaleCheckbox.check();
-      console.log('✅ AUTO-CHECKED: Bill of Sale checkbox');
-      fieldsApplied++;
-    }
-    
-    // Odometer digit checkboxes (5 or 6 digit)
-    const odometerValue = formData.odometer;
-    if (odometerValue) {
-      const odometerStr = String(odometerValue);
-      const fiveDigitCheckbox = pdfFieldsMap.get("5 DIGIT OR");
-      const sixDigitCheckbox = pdfFieldsMap.get("6 DIGIT ODOMETER NOW READS");
-      
-      if (odometerStr.length <= 5 && fiveDigitCheckbox) {
-        fiveDigitCheckbox.check();
-        console.log('✅ AUTO-CHECKED: 5 DIGIT odometer checkbox');
-        fieldsApplied++;
-      } else if (odometerStr.length >= 6 && sixDigitCheckbox) {
-        sixDigitCheckbox.check();
-        console.log('✅ AUTO-CHECKED: 6 DIGIT odometer checkbox');
-        fieldsApplied++;
-      }
-    }
-    
-    // Odometer status checkboxes
-    const odoStatus = formData.odo_status;
-    if (odoStatus) {
-      const actualMileageCheckbox = pdfFieldsMap.get("1 REFLECTS THE ACTUAL MILEAGE");
-      const exceedsLimitsCheckbox = pdfFieldsMap.get("2 IS IN EXCESS OF ITS MECHANICAL LIMITS");
-      const notActualCheckbox = pdfFieldsMap.get("3 IS NOT THE ACTUAL MILEAGE");
-      
-      switch (odoStatus) {
-        case 'ACTUAL':
-          if (actualMileageCheckbox) {
-            actualMileageCheckbox.check();
-            console.log('✅ AUTO-CHECKED: Actual mileage checkbox');
-            fieldsApplied++;
-          }
-          break;
-        case 'EXCEEDS':
-          if (exceedsLimitsCheckbox) {
-            exceedsLimitsCheckbox.check();
-            console.log('✅ AUTO-CHECKED: Exceeds limits checkbox');
-            fieldsApplied++;
-          }
-          break;
-        case 'NOT_ACTUAL':
-          if (notActualCheckbox) {
-            notActualCheckbox.check();
-            console.log('✅ AUTO-CHECKED: Not actual mileage checkbox');
-            fieldsApplied++;
-          }
-          break;
-      }
-    }
-    
-    // Derived fields - duplicate sale dates for co-sellers/buyers
-    const saleDate = formData.sale_date;
-    if (saleDate) {
-      const date2Field = pdfFieldsMap.get("Date_2");
-      const date3Field = pdfFieldsMap.get("Date_3");
-      const date4Field = pdfFieldsMap.get("Date_4");
-      
-      if (date2Field) {
-        date2Field.setText(saleDate);
-        console.log('✅ DERIVED: Date_2 from sale_date');
-        fieldsApplied++;
-      }
-      if (date3Field) {
-        date3Field.setText(saleDate);
-        console.log('✅ DERIVED: Date_3 from sale_date');
-        fieldsApplied++;
-      }
-      if (date4Field) {
-        date4Field.setText(saleDate);
-        console.log('✅ DERIVED: Date_4 from sale_date');
-        fieldsApplied++;
-      }
-    }
-    
-    // Populate "Print Names of Purchasers" field with buyer names
-    const buyerName = formData.buyer_name;
-    const buyer2Name = formData.buyer2_name;
-    if (buyerName) {
-      const printNamesField = pdfFieldsMap.get("Print Names of Purchasers");
-      if (printNamesField) {
-        const purchaserNames = buyer2Name ? `${buyerName}, ${buyer2Name}` : buyerName;
-        printNamesField.setText(purchaserNames);
-        console.log('✅ DERIVED: Print Names of Purchasers from buyer names');
-        fieldsApplied++;
-      }
-    }
-    
-  } catch (error) {
-    console.warn('⚠️ Error applying Florida-specific logic:', error);
-  }
-  
-  return fieldsApplied;
-}
-
-export function getOverlayForState(state: string): StateFormOverlay | null {
-  console.log(`Use getStateOverlay() for dynamic loading of state: ${state}`);
-  return null;
+  return (await doc.save()).buffer;
 }
