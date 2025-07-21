@@ -2,56 +2,92 @@
   "state": "FL",
   "formName": "HSMV-82050",
   "pdfPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
-  "fieldMappings": {
-    "seller_full_name": {
-      "exact": ["seller_name", "SELLER_NAME", "seller", "from_name"]
+  "fieldMapping": {
+    "seller_name": {
+      "fieldName": "Sellers Printed Name"
     },
     "seller_address": {
-      "coordinates": {
-        "page": 0,
-        "x": 72,
-        "y": 490
-      }
+      "fieldName": "Sellers Address City State Zip Code"
     },
-    "seller_phone": {
-      "exact": ["seller_phone", "phone", "seller_telephone"]
-    },
-    "buyer_full_name": {
-      "exact": ["buyer_name", "BUYER_NAME", "buyer", "to_name", "purchaser_name"]
+    "buyer_name": {
+      "fieldName": "Purchasers Printed Name"
     },
     "buyer_address": {
-      "coordinates": {
-        "page": 0,
-        "x": 72,
-        "y": 430
-      }
+      "fieldName": "Address City State Zip Code"
     },
-    "buyer_phone": {
-      "exact": ["buyer_phone", "buyer_telephone", "purchaser_phone"]
+    "year": {
+      "fieldName": "Year"
     },
-    "vehicle_year": {
-      "exact": ["year", "model_year", "yr", "vehicle_year"]
+    "make": {
+      "fieldName": "MakeManufacturer"
     },
-    "vehicle_make": {
-      "exact": ["make", "manufacturer", "vehicle_make"]
-    },
-    "vehicle_model": {
-      "exact": ["model", "vehicle_model"]
-    },
-    "vin": {
-      "exact": ["vin", "vehicle_identification_number", "serial_number", "VIN"]
+    "model": {
+      "fieldName": "Model"
     },
     "color": {
-      "exact": ["color", "colour", "vehicle_color"]
+      "fieldName": "Color"
     },
-    "odometer_reading": {
-      "exact": ["odometer", "mileage", "miles", "odometer_reading"]
+    "vin": {
+      "fieldName": "VehicleVessel Identification Number"
     },
-    "sale_price": {
-      "exact": ["price", "sale_price", "purchase_price", "amount"]
+    "odometer": {
+      "fieldName": "undefined_2"
     },
-    "date_of_sale": {
-      "exact": ["date", "sale_date", "transaction_date", "date_of_sale"]
+    "sale_date": {
+      "fieldName": "Date"
+    },
+    "price": {
+      "fieldName": "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home"
+    }
+  },
+  "coordinates": {
+    "seller_phone": {
+      "page": 0,
+      "x": 425,
+      "y": 618,
+      "fontSize": 10
+    },
+    "buyer_phone": {
+      "page": 0,
+      "x": 425,
+      "y": 518,
+      "fontSize": 10
+    },
+    "seller_city": {
+      "page": 0,
+      "x": 155,
+      "y": 568,
+      "fontSize": 10
+    },
+    "seller_state": {
+      "page": 0,
+      "x": 285,
+      "y": 568,
+      "fontSize": 10
+    },
+    "seller_zip": {
+      "page": 0,
+      "x": 335,
+      "y": 568,
+      "fontSize": 10
+    },
+    "buyer_city": {
+      "page": 0,
+      "x": 155,
+      "y": 468,
+      "fontSize": 10
+    },
+    "buyer_state": {
+      "page": 0,
+      "x": 285,
+      "y": 468,
+      "fontSize": 10
+    },
+    "buyer_zip": {
+      "page": 0,
+      "x": 335,
+      "y": 468,
+      "fontSize": 10
     }
   }
 }

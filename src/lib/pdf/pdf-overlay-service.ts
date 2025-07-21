@@ -49,6 +49,8 @@ export async function overlayFormData(
 
     // FALLBACK: No form fields - apply coordinate-based overlay
     console.log('⚠️ FALLBACK MODE: No form fields detected - attempting coordinate overlay');
+    console.log('📊 Overlay config provided:', overlayConfig ? 'YES' : 'NO');
+    console.log('📊 Has coordinates:', overlayConfig?.coordinates ? 'YES' : 'NO');
     const overlaid = await coordinateBasedOverlayWithStateMapping(pdfDoc, formData, state, overlayConfig);
 
     return overlaid;
@@ -367,13 +369,19 @@ async function coordinateBasedOverlayWithStateMapping(
 ): Promise<ArrayBuffer> {
   console.log('PDF Overlay: Using coordinate-based overlay with state-specific mappings');
   
-  // Try JSON overlay config first
+  // PRIORITY 1: Try JSON field mapping first (use actual PDF form fields)
+  if (overlayConfig?.fieldMapping) {
+    console.log('🎯 Using JSON field mapping (AcroForm fields)');
+    return await applyJSONFieldMapping(pdfDoc, formData, overlayConfig.fieldMapping, overlayConfig.coordinates);
+  }
+  
+  // PRIORITY 2: Try JSON coordinate overlay
   if (overlayConfig?.coordinates) {
     console.log('📊 Using JSON coordinate overlay configuration');
     return await applyJSONCoordinateOverlay(pdfDoc, formData, overlayConfig.coordinates);
   }
   
-  // Fallback to TypeScript state overlay
+  // PRIORITY 3: Fallback to TypeScript state overlay
   const stateOverlay = await getStateOverlay(state);
   
   if (stateOverlay) {
@@ -492,7 +500,8 @@ async function applyJSONCoordinateOverlay(
   }
   
   Object.entries(coordinates).forEach(([fieldId, coord]) => {
-    const value = formData[fieldId];
+    // Try exact field ID match first, then try without underscores as fallback
+    const value = formData[fieldId] ?? formData[fieldId.replace(/_/g, '')];
     if (value && coord) {
       const page = pages[coord.page || 0];
       if (page) {
@@ -508,6 +517,91 @@ async function applyJSONCoordinateOverlay(
       }
     }
   });
+  
+  return (await pdfDoc.save()).buffer;
+}
+
+// NEW: Apply JSON-based field mapping (uses actual PDF AcroForm fields)
+async function applyJSONFieldMapping(
+  pdfDoc: PDFDocument,
+  formData: Record<string, any>,
+  fieldMapping: Record<string, { fieldName: string }>,
+  coordinateFallback?: NonNullable<OverlayConfig['coordinates']>
+): Promise<ArrayBuffer> {
+  console.log('🎯 JSON FIELD MAPPING: Using AcroForm field names');
+  
+  const form = pdfDoc.getForm();
+  const fields = form.getFields();
+  let fieldsMatched = 0;
+  let fieldsTotal = Object.keys(fieldMapping).length;
+  
+  // Create a map of PDF field names for quick lookup
+  const pdfFieldsMap = new Map();
+  fields.forEach(field => {
+    pdfFieldsMap.set(field.getName(), field);
+  });
+  
+  // Apply field mapping
+  for (const [questionId, mapping] of Object.entries(fieldMapping)) {
+    const value = formData[questionId];
+    if (!value) continue;
+    
+    const pdfField = pdfFieldsMap.get(mapping.fieldName);
+    if (pdfField) {
+      try {
+        // Set field value based on field type
+        const fieldType = pdfField.constructor.name;
+        if (fieldType === 'PDFTextField') {
+          pdfField.setText(String(value));
+          console.log(`✅ FIELD MAPPED: "${questionId}" = "${value}" → "${mapping.fieldName}"`);
+          fieldsMatched++;
+        } else if (fieldType === 'PDFCheckBox') {
+          if (value === true || value === 'true' || value === '1') {
+            pdfField.check();
+          } else {
+            pdfField.uncheck();
+          }
+          console.log(`✅ CHECKBOX MAPPED: "${questionId}" = ${value} → "${mapping.fieldName}"`);
+          fieldsMatched++;
+        } else {
+          console.log(`❓ UNKNOWN FIELD TYPE: ${fieldType} for "${mapping.fieldName}"`);
+        }
+      } catch (error) {
+        console.warn(`❌ FIELD MAPPING FAILED: "${questionId}" → "${mapping.fieldName}"`, error);
+      }
+    } else {
+      console.warn(`❌ PDF FIELD NOT FOUND: "${mapping.fieldName}" for question "${questionId}"`);
+    }
+  }
+  
+  console.log(`📊 FIELD MAPPING RESULTS: ${fieldsMatched}/${fieldsTotal} fields successfully mapped`);
+  
+  // Apply coordinate fallback for unmapped fields
+  if (coordinateFallback) {
+    console.log('📍 Applying coordinate fallback for unmapped fields...');
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const pages = pdfDoc.getPages();
+    
+    Object.entries(coordinateFallback).forEach(([fieldId, coord]) => {
+      // Only apply coordinate overlay if this field wasn't handled by field mapping
+      if (!fieldMapping[fieldId]) {
+        const value = formData[fieldId] ?? formData[fieldId.replace(/_/g, '')];
+        if (value && coord) {
+          const page = pages[coord.page || 0];
+          if (page) {
+            console.log(`📍 COORDINATE FALLBACK: Drawing "${value}" at (${coord.x}, ${coord.y})`);
+            page.drawText(String(value), {
+              x: coord.x,
+              y: coord.y,
+              size: coord.fontSize || 10,
+              font: helveticaFont,
+              color: rgb(0, 0, 0),
+            });
+          }
+        }
+      }
+    });
+  }
   
   return (await pdfDoc.save()).buffer;
 }

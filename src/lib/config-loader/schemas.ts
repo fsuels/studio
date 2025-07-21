@@ -155,6 +155,19 @@ const FieldMappingSchema = z.object({
     .describe('Font size for text rendering')
 }).describe('Mapping from form field to PDF placement');
 
+// Simple coordinate mapping for direct placement
+const CoordinateMapSchema = z.record(
+  z.string(),
+  z.object({
+    x: z.number(),
+    y: z.number(),
+    page: z.number().optional().default(0),
+    fontSize: z.number().optional().default(10),
+    width: z.number().optional(),
+    height: z.number().optional()
+  }).optional()
+).describe('Map of field IDs to their coordinates');
+
 export const OverlayConfigSchema = z.object({
   pdfPath: z.string()
     .optional()
@@ -162,8 +175,24 @@ export const OverlayConfigSchema = z.object({
   
   fieldMappings: z.array(FieldMappingSchema)
     .min(1, 'At least one field mapping is required')
-    .describe('Array of field-to-PDF mappings')
-}).describe('Configuration for PDF form overlay');
+    .optional()
+    .describe('Array of field-to-PDF mappings'),
+  
+  coordinates: CoordinateMapSchema
+    .optional()
+    .describe('Simple coordinate-based field placement'),
+  
+  fieldMapping: z.record(z.string(), z.object({
+    fieldName: z.string().describe('Exact PDF AcroForm field name'),
+    exact: z.array(z.string()).optional(),
+    partial: z.array(z.string()).optional(),
+    fuzzy: z.array(z.string()).optional()
+  })).optional()
+    .describe('Direct mapping to PDF AcroForm field names')
+}).refine(
+  (data) => data.fieldMappings || data.coordinates || data.fieldMapping,
+  'At least one of fieldMappings, coordinates, or fieldMapping must be provided'
+).describe('Configuration for PDF form overlay');
 
 // Main document configuration schema
 export const DocumentConfigSchema = z.object({
