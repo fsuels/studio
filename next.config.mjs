@@ -228,6 +228,12 @@ const nextConfig = {
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
 
+  /* Headers for CSP - disable strict CSP in development for PDF viewing */
+  // Note: CSP is handled in middleware.ts to avoid conflicts
+  async headers() {
+    return [];
+  },
+
   /* Redirects for Firebase Auth actions */
   async redirects() {
     return [

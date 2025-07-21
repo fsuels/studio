@@ -1,0 +1,197 @@
+{
+  "jurisdiction": "us/generic",
+  "docType": "basic-nda", 
+  "schemaVersion": "1.0",
+  "lastUpdated": "2025-01-18",
+  "questions": [
+    {
+      "id": "disclosing_party_name",
+      "label": "Disclosing Party Name",
+      "type": "text",
+      "required": true,
+      "tooltip": "Enter the full legal name of the party who will be sharing confidential information",
+      "placeholder": "e.g., ABC Corporation"
+    },
+    {
+      "id": "disclosing_party_address",
+      "label": "Disclosing Party Address", 
+      "type": "address",
+      "required": true,
+      "tooltip": "Complete mailing address of the disclosing party",
+      "placeholder": "Street address, City, State, ZIP code"
+    },
+    {
+      "id": "receiving_party_name",
+      "label": "Receiving Party Name",
+      "type": "text", 
+      "required": true,
+      "tooltip": "Enter the full legal name of the party who will be receiving confidential information",
+      "placeholder": "e.g., John Smith or XYZ LLC"
+    },
+    {
+      "id": "receiving_party_address",
+      "label": "Receiving Party Address",
+      "type": "address",
+      "required": true,
+      "tooltip": "Complete mailing address of the receiving party",
+      "placeholder": "Street address, City, State, ZIP code"
+    },
+    {
+      "id": "purpose",
+      "label": "Purpose of Disclosure",
+      "type": "textarea",
+      "required": true,
+      "tooltip": "Describe the specific business purpose for sharing confidential information",
+      "placeholder": "e.g., To evaluate potential business partnership opportunities"
+    },
+    {
+      "id": "information_type",
+      "label": "Type of Confidential Information",
+      "type": "select",
+      "required": true,
+      "tooltip": "Select the primary category of information being shared",
+      "options": [
+        { "value": "business", "label": "Business Plans & Strategies" },
+        { "value": "financial", "label": "Financial Information" },
+        { "value": "technical", "label": "Technical Data & Know-how" },
+        { "value": "customer", "label": "Customer Lists & Data" },
+        { "value": "product", "label": "Product Information & Designs" },
+        { "value": "other", "label": "Other Proprietary Information" }
+      ]
+    },
+    {
+      "id": "effective_date",
+      "label": "Effective Date",
+      "type": "date",
+      "required": true,
+      "tooltip": "The date when this agreement becomes effective"
+    },
+    {
+      "id": "duration_years",
+      "label": "Agreement Duration (Years)",
+      "type": "number",
+      "required": true,
+      "tooltip": "How many years should this agreement remain in effect?",
+      "placeholder": "e.g., 2",
+      "validation": {
+        "min": 1,
+        "max": 10,
+        "message": "Duration must be between 1 and 10 years"
+      }
+    },
+    {
+      "id": "confidentiality_period",
+      "label": "Confidentiality Period (Years)",
+      "type": "number", 
+      "required": true,
+      "tooltip": "How long must the receiving party keep information confidential after disclosure?",
+      "placeholder": "e.g., 5",
+      "validation": {
+        "min": 1,
+        "max": 20,
+        "message": "Confidentiality period must be between 1 and 20 years"
+      }
+    },
+    {
+      "id": "mutual",
+      "label": "Mutual Agreement",
+      "type": "boolean",
+      "required": false,
+      "tooltip": "Check this box if both parties will be sharing confidential information with each other",
+      "placeholder": "Yes, this is a mutual NDA"
+    },
+    {
+      "id": "permitted_disclosure",
+      "label": "Permitted Disclosures",
+      "type": "textarea",
+      "required": false,
+      "tooltip": "Specify any exceptions where the receiving party may disclose information (optional)",
+      "placeholder": "e.g., With prior written consent, to legal advisors under confidentiality, as required by law"
+    },
+    {
+      "id": "return_requirement",
+      "label": "Return of Materials Required",
+      "type": "boolean",
+      "required": false,
+      "tooltip": "Should the receiving party be required to return or destroy confidential materials?",
+      "placeholder": "Yes, require return of materials"
+    },
+    {
+      "id": "governing_law",
+      "label": "Governing Law (State)", 
+      "type": "select",
+      "required": true,
+      "tooltip": "Which state's laws should govern this agreement?",
+      "options": [
+        { "value": "AL", "label": "Alabama" },
+        { "value": "AK", "label": "Alaska" },
+        { "value": "AZ", "label": "Arizona" },
+        { "value": "AR", "label": "Arkansas" },
+        { "value": "CA", "label": "California" },
+        { "value": "CO", "label": "Colorado" },
+        { "value": "CT", "label": "Connecticut" },
+        { "value": "DE", "label": "Delaware" },
+        { "value": "FL", "label": "Florida" },
+        { "value": "GA", "label": "Georgia" },
+        { "value": "HI", "label": "Hawaii" },
+        { "value": "ID", "label": "Idaho" },
+        { "value": "IL", "label": "Illinois" },
+        { "value": "IN", "label": "Indiana" },
+        { "value": "IA", "label": "Iowa" },
+        { "value": "KS", "label": "Kansas" },
+        { "value": "KY", "label": "Kentucky" },
+        { "value": "LA", "label": "Louisiana" },
+        { "value": "ME", "label": "Maine" },
+        { "value": "MD", "label": "Maryland" },
+        { "value": "MA", "label": "Massachusetts" },
+        { "value": "MI", "label": "Michigan" },
+        { "value": "MN", "label": "Minnesota" },
+        { "value": "MS", "label": "Mississippi" },
+        { "value": "MO", "label": "Missouri" },
+        { "value": "MT", "label": "Montana" },
+        { "value": "NE", "label": "Nebraska" },
+        { "value": "NV", "label": "Nevada" },
+        { "value": "NH", "label": "New Hampshire" },
+        { "value": "NJ", "label": "New Jersey" },
+        { "value": "NM", "label": "New Mexico" },
+        { "value": "NY", "label": "New York" },
+        { "value": "NC", "label": "North Carolina" },
+        { "value": "ND", "label": "North Dakota" },
+        { "value": "OH", "label": "Ohio" },
+        { "value": "OK", "label": "Oklahoma" },
+        { "value": "OR", "label": "Oregon" },
+        { "value": "PA", "label": "Pennsylvania" },
+        { "value": "RI", "label": "Rhode Island" },
+        { "value": "SC", "label": "South Carolina" },
+        { "value": "SD", "label": "South Dakota" },
+        { "value": "TN", "label": "Tennessee" },
+        { "value": "TX", "label": "Texas" },
+        { "value": "UT", "label": "Utah" },
+        { "value": "VT", "label": "Vermont" },
+        { "value": "VA", "label": "Virginia" },
+        { "value": "WA", "label": "Washington" },
+        { "value": "WV", "label": "West Virginia" },
+        { "value": "WI", "label": "Wisconsin" },
+        { "value": "WY", "label": "Wyoming" }
+      ]
+    },
+    {
+      "id": "dispute_resolution",
+      "label": "Dispute Resolution Method",
+      "type": "select",
+      "required": true,
+      "tooltip": "How should disputes be resolved?",
+      "options": [
+        { "value": "litigation", "label": "Court Litigation" },
+        { "value": "arbitration", "label": "Binding Arbitration" },
+        { "value": "mediation", "label": "Mediation First, Then Arbitration" }
+      ]
+    }
+  ],
+  "compliance": {
+    "requiresNotary": false,
+    "billOfSaleMandatory": false,
+    "odometerIntegrated": false,
+    "specialNotes": "This is a standard non-disclosure agreement template. Consult with an attorney for complex situations or high-value transactions."
+  }
+}

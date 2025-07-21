@@ -1,5 +1,6 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { StateAbbr } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
+import { type DocumentConfig, type OverlayConfig } from '@/lib/config-loader';
 
 export interface FieldMapping {
   fieldId: string;
@@ -20,11 +21,13 @@ export interface StateFormOverlay {
 export async function overlayFormData(
   pdfBytes: ArrayBuffer,
   formData: Record<string, any>,
-  state: string
+  state: string,
+  overlayConfig?: OverlayConfig
 ): Promise<ArrayBuffer> {
   try {
     console.log('🔍 PDF SMART OVERLAY: Starting for state:', state);
     console.log('📝 Form data:', formData);
+    console.log('🎯 Overlay config:', overlayConfig ? 'JSON provided' : 'Using TypeScript fallback');
     
     const pdfDoc = await PDFDocument.load(pdfBytes);
     
@@ -41,12 +44,12 @@ export async function overlayFormData(
         console.log(`📋 Available field: "${field.getName()}" (${field.constructor.name})`);
       });
 
-      return await smartFormFieldMapping(pdfDoc, formData, state);
+      return await smartFormFieldMapping(pdfDoc, formData, state, overlayConfig);
     }
 
     // FALLBACK: No form fields - apply coordinate-based overlay
     console.log('⚠️ FALLBACK MODE: No form fields detected - attempting coordinate overlay');
-    const overlaid = await coordinateBasedOverlayWithStateMapping(pdfDoc, formData, state);
+    const overlaid = await coordinateBasedOverlayWithStateMapping(pdfDoc, formData, state, overlayConfig);
 
     return overlaid;
     
@@ -60,15 +63,19 @@ export async function overlayFormData(
 async function smartFormFieldMapping(
   pdfDoc: PDFDocument,
   formData: Record<string, any>,
-  state: string
+  state: string,
+  overlayConfig?: OverlayConfig
 ): Promise<ArrayBuffer> {
   console.log('🧠 SMART MAPPING: Analyzing PDF form fields...');
+  
+  // Use JSON overlay config if provided, otherwise use TypeScript mapping
+  const fieldMapping = overlayConfig?.fieldMapping || createIntelligentFieldMapping();
+  console.log('🎯 Field mapping source:', overlayConfig ? 'JSON configuration' : 'TypeScript default');
   
   const form = pdfDoc.getForm();
   const fields = form.getFields();
   
-  // Create a comprehensive field mapping based on common patterns
-  const intelligentMapping = createIntelligentFieldMapping();
+  // Use the configured field mapping (JSON or TypeScript)
   
   let fieldsMatched = 0;
   let fieldsTotal = fields.length;
@@ -85,7 +92,7 @@ async function smartFormFieldMapping(
     // Try to match this field to our form data
     let matched = false;
     
-    for (const [ourDataKey, possibleMatches] of Object.entries(intelligentMapping)) {
+    for (const [ourDataKey, possibleMatches] of Object.entries(fieldMapping)) {
       // Check for exact matches first
       if (possibleMatches.exact.some(pattern => fieldNameLower === pattern.toLowerCase())) {
         if (setFieldValue(field, formData[ourDataKey], fieldName, 'EXACT')) {
@@ -355,17 +362,26 @@ function getGenericFieldMapping(): Record<string, string[]> {
 async function coordinateBasedOverlayWithStateMapping(
   pdfDoc: PDFDocument,
   formData: Record<string, any>,
-  state: string
+  state: string,
+  overlayConfig?: OverlayConfig
 ): Promise<ArrayBuffer> {
   console.log('PDF Overlay: Using coordinate-based overlay with state-specific mappings');
   
+  // Try JSON overlay config first
+  if (overlayConfig?.coordinates) {
+    console.log('📊 Using JSON coordinate overlay configuration');
+    return await applyJSONCoordinateOverlay(pdfDoc, formData, overlayConfig.coordinates);
+  }
+  
+  // Fallback to TypeScript state overlay
   const stateOverlay = await getStateOverlay(state);
   
   if (stateOverlay) {
+    console.log('📊 Using TypeScript state overlay configuration');
     return await applyStateOverlay(pdfDoc, formData, stateOverlay);
   }
   
-  // Fallback to generic coordinate overlay
+  // Final fallback to generic coordinate overlay
   return await coordinateBasedOverlay(pdfDoc, formData, state);
 }
 
@@ -449,6 +465,43 @@ async function applyStateOverlay(
           x: mapping.x,
           y: mapping.y,
           size: mapping.fontSize || 10,
+          font: helveticaFont,
+          color: rgb(0, 0, 0),
+        });
+      }
+    }
+  });
+  
+  return (await pdfDoc.save()).buffer;
+}
+
+// NEW: Apply JSON-based coordinate overlay
+async function applyJSONCoordinateOverlay(
+  pdfDoc: PDFDocument,
+  formData: Record<string, any>,
+  coordinates: NonNullable<OverlayConfig['coordinates']>
+): Promise<ArrayBuffer> {
+  console.log('📊 JSON COORDINATE OVERLAY: Applying JSON-based coordinate mapping');
+  
+  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const pages = pdfDoc.getPages();
+  
+  if (pages.length === 0) {
+    console.warn('PDF has no pages');
+    return (await pdfDoc.save()).buffer;
+  }
+  
+  Object.entries(coordinates).forEach(([fieldId, coord]) => {
+    const value = formData[fieldId];
+    if (value && coord) {
+      const page = pages[coord.page || 0];
+      if (page) {
+        console.log(`📊 JSON OVERLAY: Drawing "${value}" at (${coord.x}, ${coord.y})`);
+        
+        page.drawText(String(value), {
+          x: coord.x,
+          y: coord.y,
+          size: coord.fontSize || 10,
           font: helveticaFont,
           color: rgb(0, 0, 0),
         });

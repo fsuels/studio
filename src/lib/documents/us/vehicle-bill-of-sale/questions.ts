@@ -32,6 +32,10 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     label: "Second Seller's Full Name",
     type: 'text',
     required: false,
+    conditional: {
+      field: 'show_seller2',
+      value: true
+    },
     tooltip:
       'Optional second seller name if more than one person is selling the vehicle.',
   },
@@ -41,6 +45,10 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     type: 'text',
     required: false,
     placeholder: '(XXX) XXX-XXXX',
+    conditional: {
+      field: 'show_seller2',
+      value: true
+    },
     tooltip: 'Phone number for the second seller, if applicable.',
   },
   {
@@ -49,6 +57,18 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     type: 'address',
     required: true,
     tooltip: 'Include street, city, state, and ZIP code.',
+  },
+  {
+    id: 'add_seller2_button',
+    label: '+ Add Second Seller',
+    type: 'button',
+    required: false,
+    buttonAction: 'toggle_show_seller2',
+    conditional: {
+      field: 'show_seller2',
+      value: false
+    },
+    tooltip: 'Click to add a second seller if multiple people are selling the vehicle.',
   },
   {
     id: 'buyer_name',
@@ -66,6 +86,18 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     tooltip: 'Include street, city, state, and ZIP code for the buyer.',
   },
   {
+    id: 'add_buyer2_button',
+    label: '+ Add Second Buyer',
+    type: 'button',
+    required: false,
+    buttonAction: 'toggle_show_buyer2',
+    conditional: {
+      field: 'show_buyer2',
+      value: false
+    },
+    tooltip: 'Click to add a second buyer if multiple people are purchasing the vehicle.',
+  },
+  {
     id: 'buyer_phone',
     label: "Buyer's Phone Number",
     type: 'text',
@@ -78,6 +110,10 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     label: "Second Buyer's Full Name",
     type: 'text',
     required: false,
+    conditional: {
+      field: 'show_buyer2',
+      value: true
+    },
     tooltip:
       'Optional second buyer name if more than one person is purchasing the vehicle.',
   },
@@ -87,6 +123,10 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     type: 'text',
     required: false,
     placeholder: '(XXX) XXX-XXXX',
+    conditional: {
+      field: 'show_buyer2',
+      value: true
+    },
     tooltip: 'Phone number for the second buyer, if applicable.',
   },
   {

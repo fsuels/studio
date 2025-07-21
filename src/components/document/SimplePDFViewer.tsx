@@ -76,11 +76,12 @@ export default function SimplePDFViewer({
       const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
       const blobUrl = URL.createObjectURL(blob);
       
-      if (processedPdfUrl) {
-        URL.revokeObjectURL(processedPdfUrl);
-      }
-      
-      setProcessedPdfUrl(blobUrl);
+      setProcessedPdfUrl(prevUrl => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl);
+        }
+        return blobUrl;
+      });
       console.log('SimplePDFViewer: PDF processed and blob URL created');
 
     } catch (err) {
@@ -89,7 +90,7 @@ export default function SimplePDFViewer({
     } finally {
       setLoading(false);
     }
-  }, [pdfUrl, formData, onOverlay, processedPdfUrl]);
+  }, [pdfUrl, formData, onOverlay]);
 
   useEffect(() => {
     processPDF();

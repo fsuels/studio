@@ -27,8 +27,9 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { Button } from '@/components/ui/button';
-import EnhancedStatePDFPreview from '@/components/document/EnhancedStatePDFPreview';
+import StatePDFPreview from '@/components/document/StatePDFPreview';
 import { hasOfficialForm } from '@/lib/pdf/state-form-manager';
+import { loadComplianceOnly, normalizeJurisdiction } from '@/lib/config-loader';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -62,6 +63,7 @@ export default function PreviewPane({
   
   // Add a state to track if form context is ready
   const [formContextReady, setFormContextReady] = useState(false);
+  const [stateHasOfficialForm, setStateHasOfficialForm] = useState<boolean | null>(null);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d) => d.id === docId),
@@ -88,8 +90,50 @@ export default function PreviewPane({
   useEffect(() => {
     if (formContext && watch) {
       setFormContextReady(true);
+      console.log('✅ PreviewPane: Form context is ready');
+    } else {
+      console.log('❌ PreviewPane: Form context not ready', {
+        hasFormContext: !!formContext,
+        hasWatch: !!watch
+      });
     }
   }, [formContext, watch]);
+
+  // Check if the selected state has an official form using unified loader
+  useEffect(() => {
+    if (!formContextReady || !watch) return;
+
+    const selectedState = watch('state');
+    if (!selectedState || !docId) {
+      setStateHasOfficialForm(null);
+      return;
+    }
+
+    const checkOfficialForm = async () => {
+      console.log('🔍 PreviewPane: Checking official form for state:', selectedState, 'docId:', docId);
+      try {
+        const jurisdiction = normalizeJurisdiction(selectedState);
+        console.log('🔍 PreviewPane: Normalized jurisdiction:', jurisdiction);
+        const compliance = await loadComplianceOnly(docId, jurisdiction);
+        console.log('🔍 PreviewPane: Compliance loaded:', compliance);
+        const hasForm = !!(compliance.officialForm && compliance.localFormPath);
+        setStateHasOfficialForm(hasForm);
+        console.log(`✅ PreviewPane: ${selectedState} has official form:`, hasForm, 'officialForm:', compliance.officialForm, 'localFormPath:', compliance.localFormPath);
+      } catch (error) {
+        console.warn('⚠️ PreviewPane: Failed to check official form, using legacy method', error);
+        // Fallback to legacy method
+        if (docId === 'vehicle-bill-of-sale') {
+          const hasForm = hasOfficialForm(selectedState);
+          setStateHasOfficialForm(hasForm);
+          console.log('✅ PreviewPane: Legacy check - has official form:', hasForm);
+        } else {
+          setStateHasOfficialForm(false);
+        }
+      }
+    };
+
+    checkOfficialForm();
+  }, [formContextReady, watch, docId]);
 
   // Auto-scroll to highlighted field
   useEffect(() => {
@@ -351,26 +395,45 @@ export default function PreviewPane({
     );
   }
 
-  // Check if this is a vehicle bill of sale with a state selected that has an official form
+  // Check if document has a state selected that has an official form
   const selectedState = formContextReady && watch ? watch('state') : null;
   const currentFormData = formContextReady && watch ? watch() : {};
-  const isVehicleBillOfSale = docId === 'vehicle-bill-of-sale';
-  const shouldShowStatePDF = isVehicleBillOfSale && selectedState && hasOfficialForm(selectedState);
+  const shouldShowStatePDF = selectedState && stateHasOfficialForm === true;
+  
+  // Debug form data (moved outside useEffect to avoid hooks order violation)
+  if (formContextReady && watch) {
+    const allFormData = watch();
+    console.log('🔄 PreviewPane: Form data changed:', {
+      selectedState,
+      stateField: allFormData.state,
+      allFields: Object.keys(allFormData),
+      stateHasOfficialForm,
+      shouldShowStatePDF,
+      condition1_selectedState: !!selectedState,
+      condition2_stateHasOfficialFormIsTrue: stateHasOfficialForm === true,
+      FINAL_shouldShowStatePDF: selectedState && stateHasOfficialForm === true
+    });
+  }
   
   // Debug form data
-  console.log('PreviewPane: formContextReady =', formContextReady);
-  console.log('PreviewPane: selectedState =', selectedState);
-  console.log('PreviewPane: currentFormData =', currentFormData);
-  console.log('PreviewPane: shouldShowStatePDF =', shouldShowStatePDF);
+  console.log('🔍 PreviewPane DEBUG:', {
+    formContextReady,
+    selectedState,
+    stateHasOfficialForm,
+    shouldShowStatePDF,
+    docId,
+    watchFunction: !!watch,
+    currentFormData: Object.keys(currentFormData),
+    error
+  });
 
   // If we should show state PDF, render that instead
   if (shouldShowStatePDF && !error) {
     return (
-      <EnhancedStatePDFPreview
+      <StatePDFPreview
         state={selectedState}
         formData={currentFormData}
-        documentType="vehicle-bill-of-sale"
-        showLivePreview={true}
+        documentType={docId as any} // Dynamic document type
       />
     );
   }

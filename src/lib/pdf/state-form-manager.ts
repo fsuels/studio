@@ -11,6 +11,16 @@ export function getStateFormPath(state: string): string | null {
   return compliance?.localFormPath || null;
 }
 
+export function getFormPathWithFallback(state: string): string {
+  const officialFormPath = getStateFormPath(state);
+  if (officialFormPath) {
+    return officialFormPath;
+  }
+  
+  // Fallback to generic form
+  return '/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf';
+}
+
 export function getFormDisplayName(state: string): string | null {
   if (!state || state.length !== 2) {
     return null;

@@ -68,3 +68,33 @@ export function stateSlugToCode(slug?: string | null): string | undefined {
   const s = slug.toLowerCase();
   return STATE_SLUG_TO_CODE[s] ?? s.toUpperCase();
 }
+
+// State name to code mapping for various full state name formats
+export const STATE_NAME_TO_CODE: Record<string, string> = {
+  'florida': 'FL', 'california': 'CA', 'texas': 'TX', 'new york': 'NY',
+  'illinois': 'IL', 'pennsylvania': 'PA', 'ohio': 'OH', 'georgia': 'GA',
+  'north carolina': 'NC', 'michigan': 'MI', 'new jersey': 'NJ', 'virginia': 'VA',
+  'washington': 'WA', 'arizona': 'AZ', 'massachusetts': 'MA', 'tennessee': 'TN',
+  'indiana': 'IN', 'missouri': 'MO', 'maryland': 'MD', 'wisconsin': 'WI',
+  'colorado': 'CO', 'minnesota': 'MN', 'south carolina': 'SC', 'alabama': 'AL',
+  'louisiana': 'LA', 'kentucky': 'KY', 'oregon': 'OR', 'oklahoma': 'OK',
+  'connecticut': 'CT', 'utah': 'UT', 'iowa': 'IA', 'nevada': 'NV',
+  'arkansas': 'AR', 'mississippi': 'MS', 'kansas': 'KS', 'new mexico': 'NM',
+  'nebraska': 'NE', 'west virginia': 'WV', 'idaho': 'ID', 'hawaii': 'HI',
+  'new hampshire': 'NH', 'maine': 'ME', 'montana': 'MT', 'rhode island': 'RI',
+  'delaware': 'DE', 'south dakota': 'SD', 'north dakota': 'ND', 'alaska': 'AK',
+  'vermont': 'VT', 'wyoming': 'WY'
+};
+
+export function stateNameToCode(name?: string | null): string | undefined {
+  if (!name) return;
+  const nameLower = name.toLowerCase().trim();
+  
+  // First check if it's already a 2-letter code
+  if (nameLower.length === 2) {
+    return nameLower.toUpperCase();
+  }
+  
+  // Otherwise, look up the full name
+  return STATE_NAME_TO_CODE[nameLower];
+}

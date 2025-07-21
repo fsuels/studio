@@ -91,7 +91,9 @@
       "Bash(npx playwright test:*)",
       "Bash(NODE_ENV=development node -e \"console.log('Testing require...');\")",
       "Bash(firebase deploy:*)",
-      "Bash(npx firebase-tools:*)"
+      "Bash(npx firebase-tools:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

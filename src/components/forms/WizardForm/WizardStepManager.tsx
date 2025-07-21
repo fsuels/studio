@@ -4,6 +4,7 @@
 import React, { useMemo } from 'react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 import type { LegalDocument } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
 
@@ -25,6 +26,7 @@ interface WizardStepManagerProps {
 
 export function useWizardSteps(doc: LegalDocument) {
   const { t } = useTranslation('common');
+  const { watch } = useFormContext();
 
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
@@ -40,7 +42,22 @@ export function useWizardSteps(doc: LegalDocument) {
 
   const steps = useMemo((): WizardStep[] => {
     if (doc.questions && doc.questions.length > 0) {
-      return doc.questions.map((q) => {
+      const formData = watch ? watch() : {};
+      
+      return doc.questions.filter((q) => {
+        // Filter out conditional fields
+        if (q.conditional) {
+          const conditionFieldValue = formData[q.conditional.field];
+          // Special handling for button fields - show when condition field is false/undefined
+          if (q.type === 'button' && q.conditional.value === false) {
+            return !conditionFieldValue; // Show button when field is false or undefined
+          }
+          return conditionFieldValue === q.conditional.value;
+        }
+        
+        // Don't filter out button fields here - they should be shown based on conditions
+        return true;
+      }).map((q) => {
         const fieldDef = actualSchemaShape?.[q.id]?._def;
         const labelFromDescription =
           fieldDef?.description ?? fieldDef?.schema?._def?.description;
@@ -69,7 +86,7 @@ export function useWizardSteps(doc: LegalDocument) {
       });
     }
     return [];
-  }, [doc.questions, actualSchemaShape, t]);
+  }, [doc.questions, actualSchemaShape, t, watch]);
 
   const totalSteps = steps.length;
 

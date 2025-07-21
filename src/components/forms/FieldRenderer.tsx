@@ -292,6 +292,35 @@ const FieldRenderer = React.memo(function FieldRenderer({
     );
   }
 
+  // Handle button types (like +ADD buttons)
+  if (fieldSchema?.type === 'button') {
+    const handleButtonClick = () => {
+      if (fieldSchema.buttonAction === 'toggle_show_seller2') {
+        setValue('show_seller2', true, { shouldValidate: true, shouldDirty: true });
+      } else if (fieldSchema.buttonAction === 'toggle_show_buyer2') {
+        setValue('show_buyer2', true, { shouldValidate: true, shouldDirty: true });
+      }
+    };
+
+    return (
+      <div className="space-y-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleButtonClick}
+          className="w-full text-left border-dashed border-2 border-primary/30 hover:border-primary/50 text-primary hover:text-primary"
+        >
+          {labelText}
+        </Button>
+        {tooltipText && (
+          <p className="text-sm text-muted-foreground">
+            {tooltipText}
+          </p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-start gap-2">

@@ -5,15 +5,17 @@ import { Loader2, FileText, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { loadComplianceOnly, loadDocumentConfig, normalizeJurisdiction, type ComplianceConfig, type DocumentConfig } from '@/lib/config-loader';
+import { overlayFormData } from '@/lib/pdf/pdf-overlay-service';
+// Keep legacy imports as fallback
 import { getStateFormPath, getFormDisplayName } from '@/lib/pdf/state-form-manager';
 import { getVehicleBillOfSaleCompliance } from '@/lib/compliance-helper';
-import { overlayFormData } from '@/lib/pdf/pdf-overlay-service';
 import SimplePDFViewer from './SimplePDFViewer';
 
 interface StatePDFPreviewProps {
   state: string;
   formData: any;
-  documentType: 'vehicle-bill-of-sale';
+  documentType: 'vehicle-bill-of-sale' | string; // Made more flexible for future document types
 }
 
 export default function StatePDFPreview({ 
@@ -24,6 +26,8 @@ export default function StatePDFPreview({
   const [loading, setLoading] = useState(true);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [compliance, setCompliance] = useState<ComplianceConfig | null>(null);
+  const [documentConfig, setDocumentConfig] = useState<DocumentConfig | null>(null);
 
   useEffect(() => {
     if (!state || state.length !== 2) {
@@ -35,9 +39,54 @@ export default function StatePDFPreview({
       try {
         setLoading(true);
         setError(null);
-        console.log('StatePDFPreview: Loading PDF for state:', state);
+        setCompliance(null);
+        console.log('StatePDFPreview: Loading configuration for state:', state, 'docType:', documentType);
 
-        const formPath = getStateFormPath(state);
+        // Normalize jurisdiction (FL -> us/florida)
+        const jurisdiction = normalizeJurisdiction(state);
+        console.log('StatePDFPreview: Normalized jurisdiction:', jurisdiction);
+
+        // Try to load full document configuration first (includes overlay config)
+        let complianceConfig: ComplianceConfig;
+        let fullDocConfig: DocumentConfig | null = null;
+        
+        try {
+          fullDocConfig = await loadDocumentConfig(documentType, jurisdiction);
+          complianceConfig = fullDocConfig.compliance;
+          setDocumentConfig(fullDocConfig);
+          console.log('✅ StatePDFPreview: Loaded full document config via unified loader');
+        } catch (loaderError) {
+          console.warn('⚠️ StatePDFPreview: Full document config failed, trying compliance only');
+          
+          try {
+            complianceConfig = await loadComplianceOnly(documentType, jurisdiction);
+            console.log('✅ StatePDFPreview: Loaded compliance via unified loader');
+          } catch (complianceError) {
+            console.warn('⚠️ StatePDFPreview: Unified loader failed, falling back to legacy');
+            // Fallback to legacy method for Vehicle Bill of Sale
+            if (documentType === 'vehicle-bill-of-sale') {
+              const legacyCompliance = getVehicleBillOfSaleCompliance(state);
+              if (!legacyCompliance) {
+                throw new Error(`No compliance configuration found for state: ${state}`);
+              }
+              complianceConfig = {
+                requiresNotary: legacyCompliance.requiresNotary,
+                officialForm: legacyCompliance.officialForm,
+                billOfSaleMandatory: legacyCompliance.billOfSaleMandatory,
+                odometerIntegrated: legacyCompliance.odometerIntegrated,
+                specialNotes: legacyCompliance.specialNotes,
+                localFormPath: legacyCompliance.localFormPath
+              };
+            } else {
+              throw complianceError;
+            }
+          }
+        }
+
+        setCompliance(complianceConfig);
+
+        // Check if there's an official form available
+        const formPath = complianceConfig.localFormPath || getStateFormPath(state);
         console.log('StatePDFPreview: Form path:', formPath);
         
         if (!formPath) {
@@ -51,7 +100,7 @@ export default function StatePDFPreview({
         setPdfUrl(formPath);
         
       } catch (err) {
-        setError('Failed to load state form');
+        setError('Failed to load state form configuration');
         console.error('Error loading state PDF:', err);
       } finally {
         setLoading(false);
@@ -59,15 +108,16 @@ export default function StatePDFPreview({
     };
 
     loadStatePDF();
-  }, [state]);
+  }, [state, documentType]);
 
-  const compliance = getVehicleBillOfSaleCompliance(state);
-  const formName = getFormDisplayName(state);
+  // Get form display name from compliance or fallback to legacy
+  const formName = compliance?.officialForm || getFormDisplayName(state);
 
   const handleOverlay = useCallback(async (pdfBytes: ArrayBuffer) => {
     console.log('StatePDFPreview: Applying overlay with form data:', formData);
-    return await overlayFormData(pdfBytes, formData, state);
-  }, [formData, state]);
+    console.log('StatePDFPreview: Using overlay config:', documentConfig?.overlayConfig ? 'JSON' : 'TypeScript fallback');
+    return await overlayFormData(pdfBytes, formData, state, documentConfig?.overlayConfig);
+  }, [formData, state, documentConfig]);
 
   const shouldUseOverlay = true;
 

@@ -13,9 +13,25 @@ A comprehensive legal document generation platform that creates state-specific c
 - 🏛️ **State-Specific Compliance** - Automatic compliance checking for all 50 US states
 - 📄 **Smart PDF Generation** - Intelligent form filling with official state forms
 - 🌐 **Multi-language Support** - English and Spanish translations
-- 🔍 **Live Preview** - Real-time document preview as users type
+- 🔍 **Live Preview** - Real-time document preview as users type with smart overlay
 - ✅ **Visual Compliance Indicators** - Clear guidance on legal requirements
 - 🔒 **Secure Document Handling** - Enterprise-grade security for sensitive legal data
+
+## 🎯 Document Creation Flow
+
+### Official State Forms (e.g., Florida Vehicle Bill of Sale)
+
+All states with mandatory official forms use the **traditional wizard + live overlay** approach:
+
+1. **Wizard Questions** - User fills out step-by-step form fields
+2. **Live PDF Preview** - Official state form (e.g., Florida HSMV-82050) displays in real-time
+3. **Smart Overlay** - Form data automatically overlays onto PDF using intelligent field detection
+4. **Compliance Badges** - Visual indicators show requirements (Notary Required, etc.)
+
+### Feature Flags
+
+- `USE_DIRECT_PDF_FILLING=false` - All states use traditional wizard flow (recommended)
+- `USE_DIRECT_PDF_FILLING=true` - Enables experimental direct PDF form filling (deprecated)
 
 ## 🧪 Code Coverage
 

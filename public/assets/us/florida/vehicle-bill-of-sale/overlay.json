@@ -1,0 +1,57 @@
+{
+  "state": "FL",
+  "formName": "HSMV-82050",
+  "pdfPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
+  "fieldMappings": {
+    "seller_full_name": {
+      "exact": ["seller_name", "SELLER_NAME", "seller", "from_name"]
+    },
+    "seller_address": {
+      "coordinates": {
+        "page": 0,
+        "x": 72,
+        "y": 490
+      }
+    },
+    "seller_phone": {
+      "exact": ["seller_phone", "phone", "seller_telephone"]
+    },
+    "buyer_full_name": {
+      "exact": ["buyer_name", "BUYER_NAME", "buyer", "to_name", "purchaser_name"]
+    },
+    "buyer_address": {
+      "coordinates": {
+        "page": 0,
+        "x": 72,
+        "y": 430
+      }
+    },
+    "buyer_phone": {
+      "exact": ["buyer_phone", "buyer_telephone", "purchaser_phone"]
+    },
+    "vehicle_year": {
+      "exact": ["year", "model_year", "yr", "vehicle_year"]
+    },
+    "vehicle_make": {
+      "exact": ["make", "manufacturer", "vehicle_make"]
+    },
+    "vehicle_model": {
+      "exact": ["model", "vehicle_model"]
+    },
+    "vin": {
+      "exact": ["vin", "vehicle_identification_number", "serial_number", "VIN"]
+    },
+    "color": {
+      "exact": ["color", "colour", "vehicle_color"]
+    },
+    "odometer_reading": {
+      "exact": ["odometer", "mileage", "miles", "odometer_reading"]
+    },
+    "sale_price": {
+      "exact": ["price", "sale_price", "purchase_price", "amount"]
+    },
+    "date_of_sale": {
+      "exact": ["date", "sale_date", "transaction_date", "date_of_sale"]
+    }
+  }
+}

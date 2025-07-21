@@ -11,11 +11,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import InteractivePDFFormFiller from './InteractivePDFFormFiller';
+// DEPRECATED: Only loaded when USE_DIRECT_PDF_FILLING=true
+// import InteractivePDFFormFiller from './InteractivePDFFormFiller';
 import { floridaFormConfig } from '@/lib/state-forms/florida-vehicle-bill-of-sale';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 
 const AuthModal = dynamic(() => import('@/components/shared/AuthModal'));
+
+// Lazy load InteractivePDFFormFiller only when needed
+const InteractivePDFFormFiller = dynamic(() => import('./InteractivePDFFormFiller'), {
+  loading: () => <div>Loading direct form filler...</div>
+});
 
 interface SmartDocumentWizardProps {
   documentType: 'vehicle-bill-of-sale';
@@ -334,8 +340,19 @@ export default function SmartDocumentWizard({
   const hasOfficialForm = selectedState in STATES_WITH_OFFICIAL_FORMS;
   const stateInfo = STATES_WITH_OFFICIAL_FORMS[selectedState as keyof typeof STATES_WITH_OFFICIAL_FORMS];
 
+  // For states with official forms, use the traditional wizard flow
+  // This provides the question-based wizard with live PDF preview overlay
   if (hasOfficialForm) {
-    // Use Direct Form Filling Interface for states with official forms
+    // All states with official forms (including Florida) should use traditional wizard
+    // This provides:
+    // 1. Question-based wizard (vehicleBillOfSaleQuestions)  
+    // 2. Live PDF preview with overlay (EnhancedStatePDFPreview)
+    // 3. Smart field detection and data overlay
+    
+    // Fall through to the traditional wizard flow below...
+  } else if (process.env.USE_DIRECT_PDF_FILLING === 'true') { // Feature flag: Direct PDF form filling
+    // DISABLED: Direct form filling approach
+    // This was showing raw PDFs without overlay
     
     if (selectedState === 'FL') {
       // Florida - fully configured

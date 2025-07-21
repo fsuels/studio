@@ -22,7 +22,8 @@ import {
 import { auditService } from '@/services/firebase-audit-service';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { documentLibrary } from '@/lib/document-library';
-import { stateCodeToSlug } from '@/lib/state-utils';
+import { stateCodeToSlug, stateNameToCode } from '@/lib/state-utils';
+import { getStateFormPath, getFormPathWithFallback } from '@/lib/pdf/state-form-manager';
 import FilledPDFViewer from '@/components/document/FilledPDFViewer';
 
 interface ViewDocumentViewProps {
@@ -79,11 +80,36 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
           return;
         }
         const data = snap.data() as Record<string, any>;
+        console.log('🔍 Document data from Firestore:', data);
+        
         let markdown = data.contentMarkdown as string | undefined;
         const docFormData = data.formData ?? data.data;
         const docType = data.docType || data.originalDocId || docId;
-        const docState = data.state || docFormData?.state || 'florida'; // default to florida for demo
-        const docStateCode = data.stateCode || docFormData?.stateCode || 'FL'; // State code for PDF preview
+        
+        // Extract state from form data - the wizard saves it as 'state' field
+        const savedState = docFormData?.state;
+        const docState = data.state || savedState || 'florida'; // default to florida for demo
+        
+        // Convert state to state code if needed (FL, CA, etc.)
+        let docStateCode = data.stateCode || docFormData?.stateCode;
+        
+        // If we have a state name/value, convert it to state code
+        if (!docStateCode && savedState) {
+          docStateCode = stateNameToCode(savedState) || 'FL';
+        }
+        
+        if (!docStateCode) {
+          docStateCode = 'FL'; // Default fallback
+        }
+        
+        console.log('📋 Extracted form data:', {
+          docFormData,
+          docType,
+          docState,
+          docStateCode,
+          hasFormData: !!docFormData,
+          formDataKeys: docFormData ? Object.keys(docFormData) : []
+        });
         
         // Store the form data and state for PDF rendering
         setFormData(docFormData);
@@ -359,15 +385,17 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
           });
           
           if (isStateSpecificForm) {
-            // TEMPORARY: Use simple iframe to bypass CSP issues with PDF.js
+            // Use getFormPathWithFallback to get the correct PDF (official or generic)
             const stateSlug = stateCodeToSlug(documentState) ?? documentState.toLowerCase();
-            const pdfPath = `/forms/vehicle-bill-of-sale/${stateSlug}/HSMV-82050.pdf`;
+            
+            // Get the appropriate PDF path (official state form or generic fallback)
+            const pdfPath = getFormPathWithFallback(documentState);
             
             console.log('📄 PDF Path Debug:', {
               documentState,
               stateSlug,
               pdfPath,
-              expectedPath: '/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf'
+              hasOfficialForm: !!getStateFormPath(documentState)
             });
             
             return (
@@ -405,14 +433,14 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
                     {formData?.buyer_name && (
                       <div><strong>Buyer:</strong> {formData.buyer_name}</div>
                     )}
-                    {formData?.vehicle_year && formData?.vehicle_make && formData?.vehicle_model && (
-                      <div><strong>Vehicle:</strong> {formData.vehicle_year} {formData.vehicle_make} {formData.vehicle_model}</div>
+                    {formData?.year && formData?.make && formData?.model && (
+                      <div><strong>Vehicle:</strong> {formData.year} {formData.make} {formData.model}</div>
                     )}
                     {formData?.vin && (
                       <div><strong>VIN:</strong> {formData.vin}</div>
                     )}
-                    {formData?.sale_price && (
-                      <div><strong>Price:</strong> ${formData.sale_price}</div>
+                    {formData?.price && (
+                      <div><strong>Price:</strong> ${formData.price}</div>
                     )}
                   </div>
                 </div>

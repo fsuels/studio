@@ -100,12 +100,13 @@ export default function StartWizardPageClient({
       console.log('🎯 State selected:', formData.state);
       setSelectedState(formData.state);
       
-      // IMMEDIATE SWITCH: If state has official form, switch to direct form filling RIGHT NOW
-      if (docConfig?.id === 'vehicle-bill-of-sale' && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
+      // IMMEDIATE SWITCH: For now, all states use traditional wizard with live overlay
+      // TODO: Re-enable direct form filling when InteractivePDFFormFiller has overlay support
+      if (process.env.USE_DIRECT_PDF_FILLING === 'true' && docConfig?.id === 'vehicle-bill-of-sale' && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
         console.log('🚀 Switching to direct form filling for state:', formData.state);
         setUseDirectFormFilling(true);
       } else {
-        console.log('📝 Continuing with question wizard for state:', formData.state);
+        console.log('📝 Using traditional wizard with live overlay for state:', formData.state);
         setUseDirectFormFilling(false);
       }
     }
@@ -113,7 +114,8 @@ export default function StartWizardPageClient({
 
   // ALSO watch for immediate state detection from URL or initial load
   useEffect(() => {
-    if (docConfig?.id === 'vehicle-bill-of-sale' && formData?.state && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
+    // DISABLED: Use traditional wizard for all states (including those with official forms)
+    if (process.env.USE_DIRECT_PDF_FILLING === 'true' && docConfig?.id === 'vehicle-bill-of-sale' && formData?.state && STATES_WITH_OFFICIAL_FORMS.includes(formData.state)) {
       setUseDirectFormFilling(true);
       setSelectedState(formData.state);
     }
@@ -322,6 +324,12 @@ export default function StartWizardPageClient({
       : getDocumentTitle(docConfig, 'en');
 
   // If we should use direct form filling for this state + document combination
+  console.log('🚦 StartWizardPageClient render decision:', {
+    useDirectFormFilling,
+    selectedState,
+    willUseSmartWizard: useDirectFormFilling && selectedState
+  });
+
   if (useDirectFormFilling && selectedState) {
     return (
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">

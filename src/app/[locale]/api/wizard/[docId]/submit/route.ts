@@ -147,8 +147,12 @@ export async function POST(
     try {
       await docRef.set({
         originalDocId: params.docId,
+        docType: params.docId,
         locale: effectiveLocale,
         data: values,
+        formData: values, // Also store as formData for backward compatibility
+        state: values.state, // Store state separately for easy access
+        stateCode: values.state, // Store state code (if it's already a code)
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         status: 'draft',
         pricePaid: docConfig.basePrice || DEFAULT_DOCUMENT_PRICE,

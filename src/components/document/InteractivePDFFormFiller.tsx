@@ -1,3 +1,9 @@
+/**
+ * @deprecated This component is currently disabled in favor of traditional wizard + live overlay.
+ * It showed raw PDFs without overlay functionality. Only loaded when USE_DIRECT_PDF_FILLING=true.
+ * 
+ * TODO: Implement proper overlay support before re-enabling
+ */
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';

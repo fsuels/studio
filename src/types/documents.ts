@@ -15,12 +15,18 @@ export type Question = {
     | 'textarea'
     | 'boolean'
     | 'address'
-    | 'tel';
+    | 'tel'
+    | 'button'; // Add button type for +ADD buttons
   options?: { value: string; label: string }[]; // Labels can be direct strings or i18n keys
   stateSpecific?: string[];
   helperText?: string; // Can be a direct string or an i18n key
   tooltip?: string; // Can be a direct string or an i18n key
   uiType?: 'textarea' | 'switch' | 'radio'; // Optional UI hint for Zod-derived fields
+  conditional?: {
+    field: string;
+    value: any;
+  }; // Conditional rendering based on another field
+  buttonAction?: string; // For button type - what action to perform
 };
 
 // Define structure for upsell clauses with translations

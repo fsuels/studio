@@ -1,0 +1,163 @@
+{
+  "jurisdiction": "us/colorado",
+  "docType": "power-of-attorney",
+  "schemaVersion": "1.0",
+  "lastUpdated": "2025-01-18",
+  "questions": [
+    {
+      "id": "principal_name",
+      "label": "Principal Name",
+      "type": "text",
+      "required": true,
+      "tooltip": "Full legal name of the person granting power of attorney",
+      "placeholder": "e.g., John Smith"
+    },
+    {
+      "id": "principal_address",
+      "label": "Principal Address",
+      "type": "address",
+      "required": true,
+      "tooltip": "Complete mailing address of the principal",
+      "placeholder": "Street address, City, State, ZIP code"
+    },
+    {
+      "id": "agent_name",
+      "label": "Agent/Attorney-in-Fact Name",
+      "type": "text",
+      "required": true,
+      "tooltip": "Full legal name of the person receiving power of attorney",
+      "placeholder": "e.g., Jane Doe"
+    },
+    {
+      "id": "agent_address",
+      "label": "Agent Address",
+      "type": "address",
+      "required": true,
+      "tooltip": "Complete mailing address of the agent",
+      "placeholder": "Street address, City, State, ZIP code"
+    },
+    {
+      "id": "effective_date",
+      "label": "Effective Date",
+      "type": "date",
+      "required": true,
+      "tooltip": "Date when this power of attorney becomes effective"
+    },
+    {
+      "id": "powers_granted",
+      "label": "Powers Granted",
+      "type": "select",
+      "required": true,
+      "tooltip": "What powers are you granting to your agent?",
+      "options": [
+        { "value": "general", "label": "General Powers (All financial and legal matters)" },
+        { "value": "limited", "label": "Limited Powers (Specific tasks only)" },
+        { "value": "durable", "label": "Durable Powers (Continues if incapacitated)" },
+        { "value": "healthcare", "label": "Healthcare Decisions Only" },
+        { "value": "financial", "label": "Financial Decisions Only" }
+      ]
+    },
+    {
+      "id": "specific_powers",
+      "label": "Specific Powers Description",
+      "type": "textarea",
+      "required": false,
+      "tooltip": "If you selected 'Limited Powers', describe the specific powers being granted",
+      "placeholder": "e.g., Authority to sell real estate located at 123 Main St, Denver, CO"
+    },
+    {
+      "id": "durability_clause",
+      "label": "Durable Power of Attorney",
+      "type": "boolean",
+      "required": false,
+      "tooltip": "Should this power of attorney remain valid if you become incapacitated?",
+      "placeholder": "Yes, make this durable"
+    },
+    {
+      "id": "successor_agent_name",
+      "label": "Successor Agent Name",
+      "type": "text",
+      "required": false,
+      "tooltip": "Optional: Name a backup agent if the first agent is unable to serve",
+      "placeholder": "e.g., Robert Johnson"
+    },
+    {
+      "id": "successor_agent_address",
+      "label": "Successor Agent Address",
+      "type": "address",
+      "required": false,
+      "tooltip": "Address of the successor agent",
+      "placeholder": "Street address, City, State, ZIP code"
+    },
+    {
+      "id": "expiration_date",
+      "label": "Expiration Date",
+      "type": "date",
+      "required": false,
+      "tooltip": "Optional: Date when this power of attorney expires (leave blank for indefinite)"
+    },
+    {
+      "id": "witness1_name",
+      "label": "Witness 1 Name",
+      "type": "text",
+      "required": true,
+      "tooltip": "Colorado requires two witnesses for power of attorney documents",
+      "placeholder": "Full name of first witness"
+    },
+    {
+      "id": "witness2_name",
+      "label": "Witness 2 Name", 
+      "type": "text",
+      "required": true,
+      "tooltip": "Colorado requires two witnesses for power of attorney documents",
+      "placeholder": "Full name of second witness"
+    }
+  ],
+  "compliance": {
+    "requiresNotary": true,
+    "billOfSaleMandatory": false,
+    "odometerIntegrated": false,
+    "specialNotes": "Colorado requires notarization and two witnesses for power of attorney documents. This document must comply with Colorado Revised Statutes § 15-14-501 et seq.",
+    "localFormPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf"
+  },
+  "overlayConfig": {
+    "fieldMapping": {
+      "principal_name": {
+        "exact": ["principal_name", "principalName", "grantor", "donor"],
+        "partial": ["principal", "grantor", "person_granting"],
+        "fuzzy": ["prin", "grant", "donor"]
+      },
+      "agent_name": {
+        "exact": ["agent_name", "agentName", "attorney_in_fact", "attorneyInFact"],
+        "partial": ["agent", "attorney", "representative"],
+        "fuzzy": ["agent", "atty", "rep"]
+      },
+      "principal_address": {
+        "exact": ["principal_address", "principalAddress", "grantor_address"],
+        "partial": ["principal_addr", "grantor_addr"],
+        "fuzzy": ["prin_addr", "grant_addr"]
+      },
+      "agent_address": {
+        "exact": ["agent_address", "agentAddress", "attorney_address"],
+        "partial": ["agent_addr", "attorney_addr"],
+        "fuzzy": ["agent_addr", "atty_addr"]
+      },
+      "effective_date": {
+        "exact": ["effective_date", "date", "execution_date"],
+        "partial": ["date", "effective"],
+        "fuzzy": ["date", "eff"]
+      }
+    },
+    "coordinates": {
+      "principal_name": { "x": 150, "y": 650, "fontSize": 12, "page": 0 },
+      "principal_address": { "x": 150, "y": 625, "fontSize": 10, "page": 0 },
+      "agent_name": { "x": 150, "y": 575, "fontSize": 12, "page": 0 },
+      "agent_address": { "x": 150, "y": 550, "fontSize": 10, "page": 0 },
+      "effective_date": { "x": 150, "y": 500, "fontSize": 12, "page": 0 },
+      "powers_granted": { "x": 150, "y": 450, "fontSize": 10, "page": 0 },
+      "specific_powers": { "x": 150, "y": 400, "fontSize": 9, "page": 0 },
+      "witness1_name": { "x": 150, "y": 200, "fontSize": 10, "page": 0 },
+      "witness2_name": { "x": 400, "y": 200, "fontSize": 10, "page": 0 }
+    }
+  }
+}
