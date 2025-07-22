@@ -1,0 +1,17 @@
+{
+  "pdfPath": "/public/forms/vehicle-bill-of-sale/idaho/ITD-3738.pdf",
+  "fieldMapping": {
+    "state": {
+      "fieldName": "State"
+    },
+    "price": {
+      "fieldName": "True Selling Price"
+    },
+    "title_number": {
+      "fieldName": "Title Number"
+    },
+    "existing_liens": {
+      "fieldName": "New Lienholder Name or None"
+    }
+  }
+}

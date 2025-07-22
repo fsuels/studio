@@ -1,0 +1,17 @@
+{
+  "pdfPath": "/public/forms/vehicle-bill-of-sale/montana/MV-24.pdf",
+  "fieldMapping": {
+    "seller_name": {
+      "fieldName": "Sellers_Printed Name"
+    },
+    "year": {
+      "fieldName": "Year"
+    },
+    "model": {
+      "fieldName": "Model"
+    },
+    "sale_date": {
+      "fieldName": "Date"
+    }
+  }
+}

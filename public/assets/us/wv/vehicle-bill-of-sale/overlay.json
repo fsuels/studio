@@ -1,0 +1,20 @@
+{
+  "pdfPath": "/public/forms/vehicle-bill-of-sale/west-virginia/DMV-7-TR.pdf",
+  "fieldMapping": {
+    "year": {
+      "fieldName": "YEAR"
+    },
+    "color": {
+      "fieldName": "COLOR"
+    },
+    "odo_status": {
+      "fieldName": "The odometer reading is NOT the actual mileage  WARNING ODOMETER DISCREPANCY"
+    },
+    "price": {
+      "fieldName": "SELLING PRICE"
+    },
+    "title_number": {
+      "fieldName": "TITLE NUMBER"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "pdfPath": "/public/forms/vehicle-bill-of-sale/maryland/VR-181.pdf",
+  "fieldMapping": {
+    "year": {
+      "fieldName": "year"
+    },
+    "model": {
+      "fieldName": "model"
+    },
+    "price": {
+      "fieldName": "total"
+    }
+  }
+}
