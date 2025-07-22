@@ -28,6 +28,20 @@ All states with mandatory official forms use the **traditional wizard + live ove
 3. **Smart Overlay** - Form data automatically overlays onto PDF using intelligent field detection
 4. **Compliance Badges** - Visual indicators show requirements (Notary Required, etc.)
 
+### Automatic Question Generation
+
+The platform automatically generates wizard questions from overlay.json configurations:
+
+- **Dynamic Questions** - Wizard questions are generated from PDF field mappings, ensuring perfect alignment between the wizard and the PDF form
+- **Smart Type Detection** - Field types (date, number, select) are automatically detected from field names
+- **Label Generation** - Field names like `seller_name` or `vehicleVesselIdentificationNumber` are converted to human-readable labels
+- **State-Specific Adjustments** - Questions adapt based on state requirements (e.g., county becomes required for notarization states)
+
+```typescript
+import { generateQuestions } from '@/lib/question-generator';
+const questions = generateQuestions(overlayConfig);
+```
+
 ### Feature Flags
 
 - `USE_DIRECT_PDF_FILLING=false` - All states use traditional wizard flow (recommended)
