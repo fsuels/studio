@@ -117,6 +117,16 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 - `npm run e2e` - Run Playwright E2E tests
 - `npm run accessibility:test` - Run accessibility tests
 
+### How to finish a stubborn overlay
+
+When auto-generated overlays have low coverage, use the interactive manual mapping tool:
+
+1. Generate initial overlay: `npx tsx scripts/build-overlay.ts <pdf-path> --state <STATE>`
+2. Launch mapping tool: `npx tsx scripts/manual-map.ts <pdf-path> --overlay <overlay-json-path>`
+3. Click on PDF where each field should appear
+4. Save and exit (ESC key)
+5. Coverage goes from ~20% to 100% 🎯
+
 ## Firebase configuration
 
 1. In the Firebase console open **Settings \u2192 Service accounts** and click
