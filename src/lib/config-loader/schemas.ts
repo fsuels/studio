@@ -204,7 +204,8 @@ export const DocumentConfigSchema = z.object({
   
   questions: z.array(QuestionConfigSchema)
     .min(1, 'At least one question is required')
-    .describe('Array of form questions'),
+    .optional()
+    .describe('Array of form questions - auto-generated if not provided'),
   
   compliance: ComplianceConfigSchema,
   
