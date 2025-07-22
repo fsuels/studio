@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import type { LegalDocument } from '@/lib/document-library';
+import type { Question } from '@/types/documents';
 import { prettify } from '@/lib/schema-utils';
 
 interface WizardStep {
@@ -24,7 +25,7 @@ interface WizardStepManagerProps {
   isReviewing: boolean;
 }
 
-export function useWizardSteps(doc: LegalDocument) {
+export function useWizardSteps(doc: LegalDocument, dynamicQuestions?: Question[] | null) {
   const { t } = useTranslation('common');
   const { watch } = useFormContext();
 
@@ -41,10 +42,13 @@ export function useWizardSteps(doc: LegalDocument) {
   }, [doc.schema]);
 
   const steps = useMemo((): WizardStep[] => {
-    if (doc.questions && doc.questions.length > 0) {
+    // Use dynamic questions if provided, otherwise fall back to doc.questions
+    const questionsToUse = dynamicQuestions || doc.questions;
+    
+    if (questionsToUse && questionsToUse.length > 0) {
       const formData = watch ? watch() : {};
       
-      return doc.questions.filter((q) => {
+      return questionsToUse.filter((q) => {
         // Filter out conditional fields
         if (q.conditional) {
           const conditionFieldValue = formData[q.conditional.field];
@@ -86,7 +90,7 @@ export function useWizardSteps(doc: LegalDocument) {
       });
     }
     return [];
-  }, [doc.questions, actualSchemaShape, t, watch]);
+  }, [dynamicQuestions, doc.questions, actualSchemaShape, t, watch]);
 
   const totalSteps = steps.length;
 

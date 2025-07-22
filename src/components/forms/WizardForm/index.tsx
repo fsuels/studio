@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import type { LegalDocument } from '@/lib/document-library';
+import type { Question } from '@/types/documents';
 import { WizardSkeleton } from '@/components/ui/SkeletonVariants';
 
 import { useWizardSteps, calculateProgress } from './WizardStepManager';
@@ -31,6 +32,7 @@ interface WizardFormProps {
   doc: LegalDocument;
   onComplete: (checkoutUrlOrPath: string) => void;
   onFieldFocus?: (fieldId: string | undefined) => void;
+  questions?: Question[] | null; // Dynamic questions from config-loader
 }
 
 export interface WizardFormRef {
@@ -38,7 +40,7 @@ export interface WizardFormRef {
 }
 
 const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
-  function WizardForm({ locale, doc, onComplete, onFieldFocus }, ref) {
+  function WizardForm({ locale, doc, onComplete, onFieldFocus, questions }, ref) {
     const { t } = useTranslation('common');
     const { toast } = useToast();
     const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
@@ -63,7 +65,7 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
     const liveRef = useRef<HTMLDivElement>(null);
 
     // Get steps and progress
-    const { steps, totalSteps } = useWizardSteps(doc);
+    const { steps, totalSteps } = useWizardSteps(doc, questions);
     const progress = calculateProgress(
       currentStepIndex,
       totalSteps,

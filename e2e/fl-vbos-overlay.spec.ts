@@ -26,17 +26,18 @@ test.describe('Florida VBOS PDF Overlay', () => {
     await page.selectOption('select[name="state"]', 'FL');
     await page.waitForTimeout(1000);
 
-    // Fill the form fields
-    await page.fill('input[name="seller_name"]', testData.seller_name);
-    await page.fill('input[name="buyer_name"]', testData.buyer_name);
-    await page.fill('input[name="year"]', testData.year);
-    await page.fill('input[name="make"]', testData.make);
-    await page.fill('input[name="model"]', testData.model);
-    await page.fill('input[name="vin"]', testData.vin);
-    await page.fill('input[name="color"]', testData.color);
-    await page.fill('input[name="odometer"]', testData.odometer);
-    await page.fill('input[name="price"]', testData.price);
-    await page.fill('input[name="sale_date"]', testData.sale_date);
+    // Fill the form fields using dynamic label-based selectors
+    // These should work with both static and dynamically generated questions
+    await page.fill('input[name="seller_name"], label:has-text("Seller Name") input', testData.seller_name);
+    await page.fill('input[name="buyer_name"], label:has-text("Buyer Name") input', testData.buyer_name);
+    await page.fill('input[name="year"], label:has-text("Year") input', testData.year);
+    await page.fill('input[name="make"], label:has-text("Make") input', testData.make);
+    await page.fill('input[name="model"], label:has-text("Model") input', testData.model);
+    await page.fill('input[name="vin"], label:has-text("Vehicle Vessel Identification Number") input, label:has-text("VIN") input', testData.vin);
+    await page.fill('input[name="color"], label:has-text("Color") input', testData.color);
+    await page.fill('input[name="odometer"], label:has-text("Odometer") input', testData.odometer);
+    await page.fill('input[name="price"], label:has-text("Price") input', testData.price);
+    await page.fill('input[name="sale_date"], label:has-text("Sale Date") input', testData.sale_date);
 
     // Wait for preview to update
     await page.waitForTimeout(2000);
@@ -98,7 +99,7 @@ test.describe('Florida VBOS PDF Overlay', () => {
 
     // Select Florida and fill seller name
     await page.selectOption('select[name="state"]', 'FL');
-    await page.fill('input[name="seller_name"]', 'Test Seller Name');
+    await page.fill('input[name="seller_name"], label:has-text("Seller Name") input', 'Test Seller Name');
     
     await page.waitForTimeout(2000);
 
@@ -111,7 +112,7 @@ test.describe('Florida VBOS PDF Overlay', () => {
     });
 
     // Trigger overlay update
-    await page.fill('input[name="buyer_name"]', 'Test Buyer');
+    await page.fill('input[name="buyer_name"], label:has-text("Buyer Name") input', 'Test Buyer');
     await page.waitForTimeout(1000);
 
     // Look for field mapping success logs

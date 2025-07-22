@@ -23,6 +23,8 @@ import TrustBadges from '@/components/shared/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import ReEngagementTools from '@/components/reengagement/ReEngagementTools.client';
+import { loadDocumentConfig } from '@/lib/config-loader';
+import type { Question } from '@/types/documents';
 
 const Loading = () => (
   <div className="flex justify-center items-center h-32">
@@ -74,6 +76,8 @@ export default function StartWizardPageClient({
   } | null>(null);
   const [selectedState, setSelectedState] = useState<string>('');
   const [useDirectFormFilling, setUseDirectFormFilling] = useState(false);
+  const [dynamicQuestions, setDynamicQuestions] = useState<Question[] | null>(null);
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -100,6 +104,9 @@ export default function StartWizardPageClient({
       console.log('🎯 State selected:', formData.state);
       setSelectedState(formData.state);
       
+      // Load dynamic questions when state is selected
+      loadDynamicQuestions(formData.state);
+      
       // FORCE: All states use traditional wizard with live overlay
       // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
       console.log('📝 Using traditional wizard with live overlay for state:', formData.state);
@@ -107,12 +114,45 @@ export default function StartWizardPageClient({
     }
   }, [formData?.state, selectedState, docConfig?.id]);
 
+  // Load dynamic questions from config-loader
+  const loadDynamicQuestions = useCallback(async (state?: string) => {
+    if (!docConfig?.id) return;
+    
+    // Try to load questions from config-loader for states with official forms
+    if (state && STATES_WITH_OFFICIAL_FORMS.includes(state)) {
+      try {
+        console.log(`🔄 Loading dynamic questions for ${docConfig.id} in ${state}`);
+        const jurisdiction = `us/${state.toLowerCase().replace('_', '-')}`;
+        const config = await loadDocumentConfig(docConfig.id, jurisdiction);
+        
+        if (config.questions && config.questions.length > 0) {
+          console.log(`✅ Loaded ${config.questions.length} dynamic questions for ${state}`);
+          setDynamicQuestions(config.questions);
+          setQuestionsLoaded(true);
+          return;
+        }
+      } catch (error) {
+        console.warn(`⚠️ Failed to load dynamic questions for ${docConfig.id}/${state}:`, error);
+      }
+    }
+    
+    // Fallback to static questions from document config
+    console.log(`📋 Using static questions for ${docConfig.id}`);
+    setDynamicQuestions(null);
+    setQuestionsLoaded(true);
+  }, [docConfig?.id, STATES_WITH_OFFICIAL_FORMS]);
+
   // ALSO watch for immediate state detection from URL or initial load
   useEffect(() => {
     // DISABLED: Use traditional wizard for all states (including those with official forms)
     // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
     setUseDirectFormFilling(false);
-  }, [formData?.state, docConfig?.id]);
+    
+    // Load questions initially
+    if (docConfig?.id && !questionsLoaded) {
+      loadDynamicQuestions(selectedState || formData?.state);
+    }
+  }, [formData?.state, docConfig?.id, questionsLoaded, loadDynamicQuestions, selectedState]);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -286,11 +326,15 @@ export default function StartWizardPageClient({
     router.push(completionUrl);
   }, [locale, docConfig?.id, router]);
 
-  if (!isMounted || !draftLoaded) {
+  if (!isMounted || !draftLoaded || !questionsLoaded) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">{t('Loading draft...')}</p>
+        <p className="ml-2 text-muted-foreground">
+          {!isMounted ? t('Loading interface...') : 
+           !draftLoaded ? t('Loading draft...') : 
+           t('Loading questions...')}
+        </p>
       </div>
     );
   }
@@ -395,6 +439,7 @@ export default function StartWizardPageClient({
               onComplete={handleWizardComplete}
               onFieldFocus={setCurrentFieldId}
               ref={setWizardFormRef}
+              questions={dynamicQuestions}
             />
             <div className="mt-6 lg:mt-8">
               <TrustBadges />
