@@ -13,6 +13,7 @@ import {
   type ComplianceConfig,
   type OverlayConfig
 } from './schemas';
+import { generateQuestions } from '@/lib/question-generator';
 
 // Re-export types from schemas for external use
 export type {
@@ -94,6 +95,12 @@ async function loadJSONConfig(
     }
     
     const rawConfig = await response.json();
+    
+    // If questions are missing but overlay is present, generate them
+    if (!rawConfig.questions && rawConfig.overlayConfig) {
+      console.log(`🔧 JSON CONFIG: Auto-generating questions from overlay for ${docType}/${jurisdiction}`);
+      rawConfig.questions = generateQuestions(rawConfig.overlayConfig);
+    }
     
     // Validate JSON configuration with Zod
     const validatedConfig = validateDocumentConfig(rawConfig);
@@ -215,7 +222,7 @@ export async function loadQuestionsOnly(
   jurisdiction: string
 ): Promise<QuestionConfig[]> {
   const config = await loadDocumentConfig(docType, jurisdiction);
-  return config.questions;
+  return config.questions || [];
 }
 
 export async function loadOverlayConfigOnly(
