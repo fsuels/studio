@@ -1,8 +1,0 @@
-{
-  "pdfPath": "/public/forms/vehicle-bill-of-sale/kansas/TR-312.pdf",
-  "fieldMapping": {
-    "price": {
-      "fieldName": "Purchase Price"
-    }
-  }
-}

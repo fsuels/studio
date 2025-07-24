@@ -1,29 +1,31 @@
-// src/app/[locale]/docs/[docId]/start/StartWizardPageClient.tsx
+// src/app/[locale]/(legal)/docs/[docId]/start/StartWizardPageClient.tsx
 'use client';
 
-import { useParams, notFound, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { getDocumentTitle } from '@/lib/format-utils';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
-import {
-  loadFormProgress,
-  saveFormProgress,
-} from '@/lib/firestore/saveFormProgress';
+import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from '@/lib/debounce';
 import TrustBadges from '@/components/shared/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import ReEngagementTools from '@/components/reengagement/ReEngagementTools.client';
-import { loadDocumentConfig } from '@/lib/config-loader';
+import { loadDocumentConfig, normalizeJurisdiction } from '@/lib/config-loader';
 import type { Question } from '@/types/documents';
 
 const Loading = () => (
@@ -40,14 +42,22 @@ const PreviewPane = dynamic(() => import('@/components/document/PreviewPane'), {
   loading: () => <Loading />,
 });
 
-const SmartDocumentWizard = dynamic(() => import('@/components/document/SmartDocumentWizard'), {
-  loading: () => <Loading />,
-});
+const StatePDFPreview = dynamic(
+  () => import('@/components/document/StatePDFPreview'),
+  { loading: () => <Loading /> }
+);
+
+const SmartDocumentWizard = dynamic(
+  () => import('@/components/document/SmartDocumentWizard'),
+  { loading: () => <Loading /> }
+);
 
 interface StartWizardPageClientProps {
   locale: 'en' | 'es';
   docId: string;
 }
+
+const STATES_WITH_OFFICIAL_FORMS = ['AL', 'CO', 'FL', 'GA', 'ID', 'KS', 'MD', 'MT', 'ND', 'WV'];
 
 export default function StartWizardPageClient({
   locale,
@@ -57,112 +67,126 @@ export default function StartWizardPageClient({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
-  
-  // Get resume parameters from URL
-  const resumeId = searchParams.get('resumeId');
-  const stateFromUrl = searchParams.get('state');
 
-  const docIdFromPath = docId;
+  const resumeId = searchParams.get('resumeId');
+  const stateFromUrl = searchParams.get('state')?.toUpperCase();
 
   const [isMounted, setIsMounted] = useState(false);
   const [draftLoaded, setDraftLoaded] = useState(false);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
-  const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>(
-    'form',
-  );
+  const [activeMobileTab, setActiveMobileTab] =
+    useState<'form' | 'preview'>('form');
   const [currentFieldId, setCurrentFieldId] = useState<string | undefined>();
   const [wizardFormRef, setWizardFormRef] = useState<{
     navigateToField: (fieldId: string) => void;
   } | null>(null);
-  const [selectedState, setSelectedState] = useState<string>('');
+  const [selectedState, setSelectedState] = useState<string>(stateFromUrl || '');
   const [useDirectFormFilling, setUseDirectFormFilling] = useState(false);
   const [dynamicQuestions, setDynamicQuestions] = useState<Question[] | null>(null);
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
-  const docConfig = useMemo(() => {
-    return documentLibrary.find((d) => d.id === docIdFromPath);
-  }, [docIdFromPath]);
+  const docConfig = useMemo(
+    () => documentLibrary.find((d) => d.id === docId),
+    [docId]
+  );
+
+  // Guard ASAP so TS can narrow types safely
+  if (!docConfig) {
+    notFound();
+    return null;
+  }
+
+  const docType = docConfig.id;
+  const docStrict = docConfig as LegalDocument;
 
   const methods = useForm<z.infer<z.ZodTypeAny>>({
     defaultValues: {},
     mode: 'onBlur',
-    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
+    resolver: docStrict.schema ? zodResolver(docStrict.schema) : undefined,
   });
+
   const { reset, watch } = methods;
-
-  // States with mandatory official forms
-  const STATES_WITH_OFFICIAL_FORMS = ['AL', 'CO', 'FL', 'GA', 'ID', 'KS', 'MD', 'MT', 'ND', 'WV'];
-
-  // Watch for state selection in form data - IMMEDIATE SWITCH
   const formData = watch();
-  useEffect(() => {
-    if (formData?.state && formData.state !== selectedState) {
-      console.log('🎯 State selected:', formData.state);
-      setSelectedState(formData.state);
-      
-      // Load dynamic questions when state is selected
-      loadDynamicQuestions(formData.state);
-      
-      // FORCE: All states use traditional wizard with live overlay
-      // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
-      console.log('📝 Using traditional wizard with live overlay for state:', formData.state);
-      setUseDirectFormFilling(false);
-    }
-  }, [formData?.state, selectedState, docConfig?.id]);
 
-  // Load dynamic questions from config-loader
-  const loadDynamicQuestions = useCallback(async (state?: string) => {
-    if (!docConfig?.id) return;
-    
-    // Try to load questions from config-loader for states with official forms
-    if (state && STATES_WITH_OFFICIAL_FORMS.includes(state)) {
-      try {
-        console.log(`🔄 Loading dynamic questions for ${docConfig.id} in ${state}`);
-        const jurisdiction = `us/${state.toLowerCase().replace('_', '-')}`;
-        const config = await loadDocumentConfig(docConfig.id, jurisdiction);
-        
-        if (config.questions && config.questions.length > 0) {
-          console.log(`✅ Loaded ${config.questions.length} dynamic questions for ${state}`);
-          setDynamicQuestions(config.questions);
-          setQuestionsLoaded(true);
-          return;
+  // ---- Helpers ----------------------------------------------------
+
+  const loadDynamicQuestions = useCallback(
+    async (state?: string) => {
+      const wantedState = state?.toUpperCase();
+      if (wantedState && STATES_WITH_OFFICIAL_FORMS.includes(wantedState)) {
+        try {
+          const jurisdiction = normalizeJurisdiction(wantedState);
+          const config = await loadDocumentConfig(docType, jurisdiction);
+
+          if (config.questions?.length) {
+            setDynamicQuestions(config.questions);
+            setQuestionsLoaded(true);
+            return;
+          }
+
+          if (config.overlayConfig) {
+          // build from overlay.json
+            const { generateQuestions } = await import('@/lib/question-generator');
+            const generated = generateQuestions(config.overlayConfig);
+            setDynamicQuestions(generated);
+            setQuestionsLoaded(true);
+            return;
+          }
+        } catch (error) {
+          console.warn(
+            `Failed to load dynamic questions for ${docType}/${wantedState}`,
+            error
+          );
         }
-      } catch (error) {
-        console.warn(`⚠️ Failed to load dynamic questions for ${docConfig.id}/${state}:`, error);
       }
-    }
-    
-    // Fallback to static questions from document config
-    console.log(`📋 Using static questions for ${docConfig.id}`);
-    setDynamicQuestions(null);
-    setQuestionsLoaded(true);
-  }, [docConfig?.id, STATES_WITH_OFFICIAL_FORMS]);
 
-  // ALSO watch for immediate state detection from URL or initial load
+      // Fallback to static questions
+      setDynamicQuestions(null);
+      setQuestionsLoaded(true);
+    },
+    [docType]
+  );
+
+  // When the state field inside the form changes, reload the questions
   useEffect(() => {
-    // DISABLED: Use traditional wizard for all states (including those with official forms)
-    // Direct form filling is completely disabled until InteractivePDFFormFiller supports overlays
-    setUseDirectFormFilling(false);
-    
-    // Load questions initially
-    if (docConfig?.id && !questionsLoaded) {
-      loadDynamicQuestions(selectedState || formData?.state);
+    const st: string | undefined = formData?.state?.toUpperCase?.();
+    if (st && st !== selectedState) {
+      setSelectedState(st);
+      // reset so we show the spinner correctly & don't reuse last state's questions
+      setQuestionsLoaded(false);
+      setDynamicQuestions(null);
+      setUseDirectFormFilling(false);
+      void loadDynamicQuestions(st);
     }
-  }, [formData?.state, docConfig?.id, questionsLoaded, loadDynamicQuestions, selectedState]);
+  }, [formData?.state, selectedState, docType, loadDynamicQuestions]);
 
+  // Initial questions loading (once)
+  useEffect(() => {
+    setUseDirectFormFilling(false);
+    if (!questionsLoaded) {
+      const s = selectedState || formData?.state || stateFromUrl;
+      void loadDynamicQuestions(s);
+    }
+  }, [
+    formData?.state,
+    questionsLoaded,
+    loadDynamicQuestions,
+    selectedState,
+    stateFromUrl,
+  ]);
+
+  // Reset form on mount / doc change
   useEffect(() => {
     if (!isMounted) return;
     setIsLoadingConfig(false);
     methods.reset({});
-  }, [docConfig, isMounted, methods]);
+  }, [docStrict, isMounted, methods]);
 
+  // Draft loading
   useEffect(() => {
     if (
-      !docConfig?.id ||
       !isMounted ||
       authIsLoading ||
       isLoadingConfig ||
@@ -175,72 +199,71 @@ export default function StartWizardPageClient({
       let draftData: Record<string, unknown> = {};
       try {
         if (resumeId && isLoggedIn && user?.uid) {
-          // Load specific saved document for editing
-          console.log('📋 Loading saved document for editing:', resumeId);
           const { getDb } = await import('@/lib/firebase');
           const { doc, getDoc } = await import('firebase/firestore');
-          
+
           const db = await getDb();
           const docRef = doc(db, 'users', user.uid, 'documents', resumeId);
           const snap = await getDoc(docRef);
-          
+
           if (snap.exists()) {
             const data = snap.data();
             draftData = data.formData || data.data || {};
-            console.log('✅ Loaded saved document data:', Object.keys(draftData));
-            
-            // Set state if provided in URL
             if (stateFromUrl) {
-              setSelectedState(stateFromUrl.toUpperCase());
-              draftData.state = stateFromUrl.toUpperCase();
+              setSelectedState(stateFromUrl);
+              draftData.state = stateFromUrl;
             }
-          } else {
-            console.warn('❌ Saved document not found:', resumeId);
           }
         } else if (isLoggedIn && user?.uid) {
-          // Load regular draft
           draftData = await loadFormProgress({
             userId: user.uid,
-            docType: docConfig.id,
+            docType: docType,
             state: locale,
           });
         } else {
-          const lsKey = `draft-${docConfig.id}-${locale}`;
+          const lsKey = `draft-${docType}-${locale}`;
           const lsDraft = localStorage.getItem(lsKey);
           if (lsDraft) draftData = JSON.parse(lsDraft);
         }
       } catch (e: any) {
-        // Suppress benign transport errors
         const msg = e?.message || '';
         if (!msg.includes('transport errored')) {
           console.error('[StartWizardPageClient] Draft loading failed:', e);
         }
       }
+
       if (Object.keys(draftData).length > 0) {
         reset(draftData, { keepValues: true });
         setDraftLoaded(true);
       } else {
-        // even an empty draft counts as "loaded"
         setDraftLoaded(true);
       }
     }
+
     if (ready) {
       void loadDraft();
     }
-  }, [authIsLoading, isLoadingConfig, isLoggedIn, user, locale, ready, reset, resumeId, stateFromUrl]);
+  }, [
+    authIsLoading,
+    isLoadingConfig,
+    isLoggedIn,
+    user,
+    locale,
+    ready,
+    reset,
+    resumeId,
+    stateFromUrl,
+    isMounted,
+    docType,
+  ]);
 
+  // Debounced autosave
   const debouncedSave = useMemo(
     () =>
       debounce((data: Record<string, unknown>) => {
         void (async () => {
-          if (
-            !docConfig?.id ||
-            authIsLoading ||
-            !isMounted ||
-            !locale ||
-            !ready
-          )
-            return;
+          if (authIsLoading || !isMounted || !locale || !ready) return;
+
           const relevantData: Record<string, unknown> = {};
           Object.entries(data).forEach(([k, v]) => {
             if (v !== undefined) relevantData[k] = v;
@@ -250,30 +273,23 @@ export default function StartWizardPageClient({
           if (isLoggedIn && user?.uid) {
             await saveFormProgress({
               userId: user.uid,
-              docType: docConfig.id,
+              docType: docType,
               state: locale,
               formData: relevantData,
             });
           } else {
             localStorage.setItem(
-              `draft-${docConfig.id}-${locale}`,
-              JSON.stringify(relevantData),
+              `draft-${docType}-${locale}`,
+              JSON.stringify(relevantData)
             );
           }
         })();
       }, 1000),
-    [docConfig, isMounted, authIsLoading, isLoggedIn, user, locale, ready],
+    [isMounted, authIsLoading, isLoggedIn, user, locale, ready, docType]
   );
 
   useEffect(() => {
-    if (
-      !docConfig?.id ||
-      authIsLoading ||
-      !isMounted ||
-      isLoadingConfig ||
-      !locale ||
-      !ready
-    )
+    if (authIsLoading || !isMounted || isLoadingConfig || !locale || !ready)
       return;
     const sub = watch((values) => {
       debouncedSave(values as Record<string, unknown>);
@@ -282,58 +298,64 @@ export default function StartWizardPageClient({
       sub.unsubscribe();
       debouncedSave.cancel();
     };
-  }, [
-    watch,
-    debouncedSave,
-    authIsLoading,
-    isMounted,
-    isLoadingConfig,
-    locale,
-    ready,
-  ]);
+  }, [watch, debouncedSave, authIsLoading, isMounted, isLoadingConfig, locale, ready]);
 
   const handleWizardComplete = useCallback(
     (redirectUrl: string) => {
       router.push(redirectUrl);
     },
-    [router],
+    [router]
   );
 
   const handleFieldClick = useCallback(
     (fieldId: string) => {
       if (wizardFormRef?.navigateToField) {
         wizardFormRef.navigateToField(fieldId);
-        // Switch to form tab on mobile when navigating to a field
         if (window.innerWidth < 1024) {
-          // lg breakpoint
           setActiveMobileTab('form');
         }
       }
     },
-    [wizardFormRef],
+    [wizardFormRef]
   );
 
-  const handlePaymentRequired = useCallback((formData: Record<string, any>, price: number, state: string) => {
-    // Integrate with your existing payment system
-    const paymentUrl = `/${locale}/checkout?amount=${price}&state=${state}&document=${docConfig?.id}&formData=${encodeURIComponent(JSON.stringify(formData))}`;
-    router.push(paymentUrl);
-  }, [locale, docConfig?.id, router]);
+  const handlePaymentRequired = useCallback(
+    (formData: Record<string, any>, price: number, state: string) => {
+      const paymentUrl = `/${locale}/checkout?amount=${price}&state=${state}&document=${docType}&formData=${encodeURIComponent(
+        JSON.stringify(formData)
+      )}`;
+      router.push(paymentUrl);
+    },
+    [locale, router, docType]
+  );
 
-  const handleDocumentComplete = useCallback((document: ArrayBuffer) => {
-    // Handle successful document generation
-    // This could trigger download or redirect to completion page
-    const completionUrl = `/${locale}/docs/${docConfig?.id}/complete`;
-    router.push(completionUrl);
-  }, [locale, docConfig?.id, router]);
+  const handleDocumentComplete = useCallback(
+    (_document: ArrayBuffer) => {
+      const completionUrl = `/${locale}/docs/${docType}/complete`;
+      router.push(completionUrl);
+    },
+    [locale, router, docType]
+  );
+
+  // Force a re-render of the PDF preview when data/state changes
+  const previewKey = useMemo(() => {
+    // shallow-ish: state + list of keys present
+    const keys = Object.keys(formData || {}).sort().join('|');
+    return `${selectedState}-${keys}`;
+  }, [selectedState, formData]);
+
+  // ---- Render guards ------------------------------------------------
 
   if (!isMounted || !draftLoaded || !questionsLoaded) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">
-          {!isMounted ? t('Loading interface...') : 
-           !draftLoaded ? t('Loading draft...') : 
-           t('Loading questions...')}
+          {!isMounted
+            ? t('Loading interface...')
+            : !draftLoaded
+              ? t('Loading draft...')
+              : t('Loading questions...')}
         </p>
       </div>
     );
@@ -350,22 +372,10 @@ export default function StartWizardPageClient({
     );
   }
 
-  if (!docConfig) {
-    notFound();
-    return null;
-  }
-
   const documentDisplayName =
-    locale === 'es' && docConfig.translations?.es?.name
-      ? docConfig.translations.es.name
-      : getDocumentTitle(docConfig, 'en');
-
-  // If we should use direct form filling for this state + document combination
-  console.log('🚦 StartWizardPageClient render decision:', {
-    useDirectFormFilling,
-    selectedState,
-    willUseSmartWizard: useDirectFormFilling && selectedState
-  });
+    locale === 'es' && docStrict.translations?.es?.name
+      ? docStrict.translations.es.name
+      : getDocumentTitle(docStrict, 'en');
 
   if (useDirectFormFilling && selectedState) {
     return (
@@ -373,17 +383,14 @@ export default function StartWizardPageClient({
         <Breadcrumb
           items={[
             { label: t('breadcrumb.home'), href: `/${locale}` },
-            {
-              label: documentDisplayName,
-              href: `/${locale}/docs/${docConfig.id}`,
-            },
+            { label: documentDisplayName, href: `/${locale}/docs/${docType}` },
             { label: t('breadcrumb.start') },
           ]}
         />
-        
+
         <div className="mt-6">
           <SmartDocumentWizard
-            documentType={docConfig.id as 'vehicle-bill-of-sale'}
+            documentType={docType as 'vehicle-bill-of-sale'}
             selectedState={selectedState}
             onPaymentRequired={handlePaymentRequired}
             onComplete={handleDocumentComplete}
@@ -396,20 +403,20 @@ export default function StartWizardPageClient({
     );
   }
 
-  // Default: Use existing question wizard system
+  const showOfficialFormPreview =
+    !!selectedState && STATES_WITH_OFFICIAL_FORMS.includes(selectedState);
+
   return (
     <FormProvider {...methods}>
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <Breadcrumb
           items={[
             { label: t('breadcrumb.home'), href: `/${locale}` },
-            {
-              label: documentDisplayName,
-              href: `/${locale}/docs/${docConfig.id}`,
-            },
+            { label: documentDisplayName, href: `/${locale}/docs/${docType}` },
             { label: t('breadcrumb.start') },
           ]}
         />
+
         <div className="lg:hidden mb-4 sticky top-14 z-30 bg-background/90 backdrop-blur-sm py-2 -mx-4 px-4 border-b">
           <Tabs
             value={activeMobileTab}
@@ -426,45 +433,58 @@ export default function StartWizardPageClient({
             </TabsList>
           </Tabs>
         </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-2 lg:mt-6">
           <div
             className={cn(
               'lg:col-span-1',
-              activeMobileTab !== 'form' && 'hidden lg:block',
+              activeMobileTab !== 'form' && 'hidden lg:block'
             )}
           >
             <WizardForm
               locale={locale}
-              doc={docConfig}
+              doc={docStrict}
               onComplete={handleWizardComplete}
               onFieldFocus={setCurrentFieldId}
               ref={setWizardFormRef}
-              questions={dynamicQuestions}
+              // Make the wizard strictly use the dynamically loaded / generated questions
+              questions={dynamicQuestions ?? undefined}
             />
             <div className="mt-6 lg:mt-8">
               <TrustBadges />
             </div>
           </div>
+
           <div
             className={cn(
               'lg:col-span-1',
-              activeMobileTab !== 'preview' && 'hidden lg:block',
+              activeMobileTab !== 'preview' && 'hidden lg:block'
             )}
           >
-            <div className="sticky top-32 lg:top-24 h-[calc(100vh-14rem)] lg:h-[calc(100vh-8rem)] overflow-hidden rounded-lg border border-border bg-card">
-              <PreviewPane
-                docId={docConfig.id}
-                locale={locale}
-                currentFieldId={currentFieldId}
-                onFieldClick={handleFieldClick}
-              />
+            <div className="sticky top-32 lg:top-24 h-[calc(100vh-10rem)] lg:h-[calc(100vh-6rem)] overflow-hidden rounded-lg border border-border bg-card">
+              {showOfficialFormPreview ? (
+                <StatePDFPreview
+                  key={previewKey}
+                  state={selectedState}
+                  formData={formData}
+                  documentType={docType}
+                />
+              ) : (
+                <PreviewPane
+                  docId={docType}
+                  locale={locale}
+                  currentFieldId={currentFieldId}
+                  onFieldClick={handleFieldClick}
+                />
+              )}
             </div>
           </div>
         </div>
       </main>
+
       <ReEngagementTools
-        docId={docConfig.id}
-        totalQuestions={docConfig.questions?.length || 0}
+        docId={docType}
+        totalQuestions={docStrict.questions?.length || 0}
         locale={locale}
       />
     </FormProvider>

@@ -94,7 +94,9 @@
       "Bash(npx firebase-tools:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(TURBOPACK=0 npm run dev)",
+      "Bash(ENABLE_CDN=true node test-fix.js)"
     ],
     "deny": []
   }

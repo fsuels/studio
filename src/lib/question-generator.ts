@@ -10,13 +10,47 @@ import type { OverlayConfig } from '@/lib/config-loader/schemas';
 
 /**
  * Convert field name or question ID to human-readable label
+ * Uses state-specific and form-specific labels when possible
  * 
  * Examples:
- * - seller_name → "Seller Name"
+ * - seller_name → "Name of Seller (Print)" for Alabama
+ * - seller_name → "Seller's Printed Name" for Florida  
  * - vehicleVesselIdentificationNumber → "Vehicle Vessel Identification Number"
  * - buyer_phone → "Buyer Phone"
  */
-function generateLabel(fieldId: string): string {
+function generateLabel(fieldId: string, stateCode?: string, pdfPath?: string): string {
+  // State-specific label overrides for common fields
+  const stateSpecificLabels: Record<string, Record<string, string>> = {
+    'AL': {
+      'seller_name': 'Name of Seller (Print)',
+      'seller_address': 'Address of Seller',
+      'buyer_name': 'Name of Buyer (Print)', 
+      'buyer_address': 'Address of Buyer',
+      'year': 'Year',
+      'make': 'Make',
+      'model': 'Model',
+      'vin': 'Vehicle Identification Number (VIN)',
+      'color': 'Color',
+      'price': 'Sale Price',
+      'sale_date': 'Date of Sale'
+    },
+    'FL': {
+      'seller_name': 'Seller\'s Printed Name',
+      'buyer_name': 'Purchaser\'s Printed Name',
+      'vin': 'Vehicle/Vessel Identification Number',
+      'make': 'Make/Manufacturer'
+    },
+    'CO': {
+      'seller_name': 'Seller Name (Print)',
+      'buyer_name': 'Buyer Name (Print)'
+    }
+  };
+
+  // Check for state-specific labels first
+  if (stateCode && stateSpecificLabels[stateCode]?.[fieldId]) {
+    return stateSpecificLabels[stateCode][fieldId];
+  }
+
   // Handle snake_case and camelCase
   const words = fieldId
     // Split on underscores
@@ -231,7 +265,8 @@ export function generateQuestions(overlay: OverlayConfig): Question[] {
   
   // Sort field IDs to ensure consistent ordering
   // Common form order: state, seller info, buyer info, vehicle info, transaction info
-  const fieldOrder = [
+  // Special case: Alabama starts with VIN per user requirement
+  let fieldOrder = [
     'state',
     'seller_name', 'seller_phone', 'seller_address',
     'seller2_name', 'seller2_phone', 'seller2_address',
@@ -243,6 +278,34 @@ export function generateQuestions(overlay: OverlayConfig): Question[] {
     'title_number', 'current_title_date', 'existing_liens',
     'as_is', 'warranty_text', 'county'
   ];
+  
+  // Extract state code from overlay path if available
+  let stateCode: string | undefined;
+  if (overlay.pdfPath?.includes('/')) {
+    const pathParts = overlay.pdfPath.split('/');
+    const stateIndex = pathParts.findIndex(part => ['alabama', 'florida', 'colorado', 'georgia', 'idaho', 'kansas', 'maryland', 'montana', 'north-dakota', 'west-virginia'].includes(part));
+    if (stateIndex !== -1) {
+      const stateName = pathParts[stateIndex];
+      const stateMap: Record<string, string> = {
+        'alabama': 'AL', 'florida': 'FL', 'colorado': 'CO', 'georgia': 'GA',
+        'idaho': 'ID', 'kansas': 'KS', 'maryland': 'MD', 'montana': 'MT',
+        'north-dakota': 'ND', 'west-virginia': 'WV'
+      };
+      stateCode = stateMap[stateName];
+    }
+  }
+  
+  // Alabama specific ordering: VIN first after state
+  if (stateCode === 'AL') {
+    fieldOrder = [
+      'state',
+      'vin', // VIN first for Alabama
+      'seller_name', 'seller_address',
+      'buyer_name', 'buyer_address',
+      'year', 'make', 'model', 'color',
+      'price', 'sale_date'
+    ];
+  }
   
   const sortedFieldIds = fieldIds.sort((a, b) => {
     const aIndex = fieldOrder.indexOf(a);
@@ -273,9 +336,9 @@ export function generateQuestions(overlay: OverlayConfig): Question[] {
     
     // Get field name from mapping if available
     const fieldName = overlay.fieldMapping?.[fieldId]?.fieldName;
-    
+
     // Generate question properties
-    const label = generateLabel(fieldId);
+    const label = generateLabel(fieldId, stateCode, overlay.pdfPath);
     const type = detectInputType(fieldId, fieldName);
     const required = isFieldRequired(fieldId);
     const placeholder = generatePlaceholder(fieldId, type);

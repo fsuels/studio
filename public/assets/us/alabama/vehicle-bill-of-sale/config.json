@@ -1,0 +1,86 @@
+{
+  "jurisdiction": "us/alabama",
+  "docType": "vehicle-bill-of-sale",
+  "schemaVersion": "1.0",
+  "formVersion": "2024.1",
+  "lastUpdated": "2025-01-22",
+  "compliance": {
+    "requiresNotary": true,
+    "officialForm": "MVT 32-13B",
+    "billOfSaleMandatory": true,
+    "odometerIntegrated": false,
+    "specialNotes": "Alabama requires notarization for vehicle bill of sale transactions.",
+    "localFormPath": "/forms/vehicle-bill-of-sale/alabama/MVT-32-13B.pdf"
+  },
+  "overlayConfig": {
+    "pdfPath": "/forms/vehicle-bill-of-sale/alabama/MVT-32-13B.pdf",
+    "coordinates": {
+      "seller_name": {
+        "page": 0,
+        "x": 150,
+        "y": 720,
+        "fontSize": 10
+      },
+      "seller_address": {
+        "page": 0,
+        "x": 150,
+        "y": 700,
+        "fontSize": 10
+      },
+      "buyer_name": {
+        "page": 0,
+        "x": 150,
+        "y": 650,
+        "fontSize": 10
+      },
+      "buyer_address": {
+        "page": 0,
+        "x": 150,
+        "y": 630,
+        "fontSize": 10
+      },
+      "year": {
+        "page": 0,
+        "x": 100,
+        "y": 580,
+        "fontSize": 10
+      },
+      "make": {
+        "page": 0,
+        "x": 200,
+        "y": 580,
+        "fontSize": 10
+      },
+      "model": {
+        "page": 0,
+        "x": 320,
+        "y": 580,
+        "fontSize": 10
+      },
+      "vin": {
+        "page": 0,
+        "x": 150,
+        "y": 560,
+        "fontSize": 10
+      },
+      "color": {
+        "page": 0,
+        "x": 150,
+        "y": 540,
+        "fontSize": 10
+      },
+      "price": {
+        "page": 0,
+        "x": 150,
+        "y": 480,
+        "fontSize": 10
+      },
+      "sale_date": {
+        "page": 0,
+        "x": 300,
+        "y": 480,
+        "fontSize": 10
+      }
+    }
+  }
+}

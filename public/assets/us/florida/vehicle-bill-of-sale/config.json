@@ -1,203 +1,59 @@
 {
   "jurisdiction": "us/florida",
   "docType": "vehicle-bill-of-sale",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0",
   "formVersion": "2024.1",
-  "lastUpdated": "2024-01-15",
-  
-  "questions": [
-    {
-      "id": "state",
-      "label": "State",
-      "type": "select",
-      "required": true,
-      "options": [
-        { "value": "FL", "label": "Florida" }
-      ]
-    },
-    {
-      "id": "seller_name",
-      "label": "Seller Full Name",
-      "type": "text",
-      "required": true,
-      "placeholder": "Enter the seller's full legal name"
-    },
-    {
-      "id": "seller_address",
-      "label": "Seller Address",
-      "type": "text",
-      "required": true,
-      "placeholder": "Street address, city, state, ZIP"
-    },
-    {
-      "id": "seller_phone",
-      "label": "Seller Phone Number",
-      "type": "phone",
-      "required": false,
-      "placeholder": "(555) 123-4567"
-    },
-    {
-      "id": "buyer_name",
-      "label": "Buyer Full Name",
-      "type": "text",
-      "required": true,
-      "placeholder": "Enter the buyer's full legal name"
-    },
-    {
-      "id": "buyer_address",
-      "label": "Buyer Address",
-      "type": "text",
-      "required": true,
-      "placeholder": "Street address, city, state, ZIP"
-    },
-    {
-      "id": "buyer_phone",
-      "label": "Buyer Phone Number",
-      "type": "phone",
-      "required": false,
-      "placeholder": "(555) 123-4567"
-    },
-    {
-      "id": "year",
-      "label": "Vehicle Year",
-      "type": "number",
-      "required": true,
-      "placeholder": "e.g., 2020"
-    },
-    {
-      "id": "make",
-      "label": "Vehicle Make",
-      "type": "text",
-      "required": true,
-      "placeholder": "e.g., Toyota, Honda, Ford"
-    },
-    {
-      "id": "model",
-      "label": "Vehicle Model",
-      "type": "text",
-      "required": true,
-      "placeholder": "e.g., Camry, Civic, F-150"
-    },
-    {
-      "id": "vin",
-      "label": "VIN (Vehicle Identification Number)",
-      "type": "text",
-      "required": true,
-      "placeholder": "17-digit VIN number"
-    },
-    {
-      "id": "color",
-      "label": "Vehicle Color",
-      "type": "text",
-      "required": false,
-      "placeholder": "e.g., White, Black, Silver"
-    },
-    {
-      "id": "odometer",
-      "label": "Odometer Reading",
-      "type": "number",
-      "required": true,
-      "placeholder": "Current mileage"
-    },
-    {
-      "id": "price",
-      "label": "Sale Price",
-      "type": "currency",
-      "required": true,
-      "placeholder": "Enter sale price in USD"
-    },
-    {
-      "id": "sale_date",
-      "label": "Date of Sale",
-      "type": "date",
-      "required": true
-    }
-  ],
-  
+  "lastUpdated": "2025-01-22",
+
   "compliance": {
     "requiresNotary": true,
-    "officialForm": "HSMV-82050",
+    "officialForm": "HSMV 82050",
     "billOfSaleMandatory": true,
-    "odometerIntegrated": false,
-    "specialNotes": "Florida requires notarization of the bill of sale. The HSMV-82050 form must be used.",
+    "odometerIntegrated": true,
+    "specialNotes": "Florida requires notarization and odometer disclosure for vehicle bill of sale transactions.",
     "localFormPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf"
   },
-  
+
   "overlayConfig": {
     "pdfPath": "/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
-    "coordinates": {
-      "seller_name": { "page": 0, "x": 155, "y": 618, "fontSize": 10 },
-      "seller_address": { "page": 0, "x": 155, "y": 593, "fontSize": 10 },
-      "seller_city": { "page": 0, "x": 155, "y": 568, "fontSize": 10 },
-      "seller_state": { "page": 0, "x": 285, "y": 568, "fontSize": 10 },
-      "seller_zip": { "page": 0, "x": 335, "y": 568, "fontSize": 10 },
-      "seller_phone": { "page": 0, "x": 425, "y": 618, "fontSize": 10 },
-      "buyer_name": { "page": 0, "x": 155, "y": 518, "fontSize": 10 },
-      "buyer_address": { "page": 0, "x": 155, "y": 493, "fontSize": 10 },
-      "buyer_city": { "page": 0, "x": 155, "y": 468, "fontSize": 10 },
-      "buyer_state": { "page": 0, "x": 285, "y": 468, "fontSize": 10 },
-      "buyer_zip": { "page": 0, "x": 335, "y": 468, "fontSize": 10 },
-      "buyer_phone": { "page": 0, "x": 425, "y": 518, "fontSize": 10 },
-      "year": { "page": 0, "x": 105, "y": 418, "fontSize": 10 },
-      "make": { "page": 0, "x": 165, "y": 418, "fontSize": 10 },
-      "model": { "page": 0, "x": 275, "y": 418, "fontSize": 10 },
-      "vin": { "page": 0, "x": 385, "y": 418, "fontSize": 10 },
-      "color": { "page": 0, "x": 105, "y": 393, "fontSize": 10 },
-      "odometer": { "page": 0, "x": 195, "y": 393, "fontSize": 10 },
-      "price": { "page": 0, "x": 155, "y": 343, "fontSize": 10 },
-      "sale_date": { "page": 0, "x": 385, "y": 343, "fontSize": 10 }
-    },
+
     "fieldMapping": {
-      "seller_name": {
-        "exact": ["seller_name", "SELLER_NAME", "seller", "from_name"],
-        "partial": ["seller", "grantor", "from", "owner", "current_owner"],
-        "fuzzy": ["sell", "gran", "vendor", "transferor"]
-      },
-      "buyer_name": {
-        "exact": ["buyer_name", "BUYER_NAME", "buyer", "to_name", "purchaser_name"],
-        "partial": ["buyer", "grantee", "purchaser", "to", "new_owner"],
-        "fuzzy": ["buy", "purch", "transferee", "acquirer"]
-      },
-      "year": {
-        "exact": ["year", "model_year", "yr", "vehicle_year"],
-        "partial": ["year", "yr"],
-        "fuzzy": ["yr", "model"]
-      },
-      "make": {
-        "exact": ["make", "manufacturer", "vehicle_make"],
-        "partial": ["make", "mfg", "brand"],
-        "fuzzy": ["make", "manu"]
-      },
-      "model": {
-        "exact": ["model", "vehicle_model"],
-        "partial": ["model"],
-        "fuzzy": ["mod"]
-      },
-      "vin": {
-        "exact": ["vin", "vehicle_identification_number", "serial_number", "VIN"],
-        "partial": ["vin", "serial", "id_number"],
-        "fuzzy": ["vin", "serial", "id"]
-      },
-      "color": {
-        "exact": ["color", "colour", "vehicle_color"],
-        "partial": ["color", "colour"],
-        "fuzzy": ["col"]
-      },
-      "odometer": {
-        "exact": ["odometer", "mileage", "miles", "odometer_reading"],
-        "partial": ["odometer", "mileage", "miles"],
-        "fuzzy": ["odom", "mile", "km"]
-      },
-      "price": {
-        "exact": ["price", "sale_price", "purchase_price", "amount"],
-        "partial": ["price", "amount", "cost", "value"],
-        "fuzzy": ["pric", "amt", "val"]
-      },
-      "sale_date": {
-        "exact": ["date", "sale_date", "transaction_date", "date_of_sale"],
-        "partial": ["date", "sale_date", "trans_date"],
-        "fuzzy": ["date", "dt"]
-      }
+      "seller_name": { "fieldName": "Sellers Printed Name" },
+      "seller_address": { "fieldName": "Sellers Address City State Zip Code" },
+      "seller2_name": { "fieldName": "CoSellers Printed Name when applicable" },
+
+      "buyer_name": { "fieldName": "Purchasers Printed Name" },
+      "buyer_address": { "fieldName": "Address City State Zip Code" },
+      "buyer2_name": { "fieldName": "CoPurchasers Printed name when applicable" },
+
+      "year": { "fieldName": "Year" },
+      "make": { "fieldName": "MakeManufacturer" },
+      "model": { "fieldName": "Model" },
+      "vin": { "fieldName": "VehicleVessel Identification Number" },
+      "color": { "fieldName": "Color" },
+      "body_type": { "fieldName": "Body Type" },
+
+      "price": { "fieldName": "Iwe do hereby sell or have sold and delivered the above described motor vehicle mobile home" },
+      "current_title_date": { "fieldName": "Current Title Issue Date" },
+      "sale_date": { "fieldName": "Date" },
+
+      "odo_mileage": { "fieldName": "undefined_2" },
+      "odo_status_actual":   { "fieldName": "1 REFLECTS THE ACTUAL MILEAGE" },
+      "odo_status_exceeds":  { "fieldName": "2 IS IN EXCESS OF ITS MECHANICAL LIMITS" },
+      "odo_status_not_actual": { "fieldName": "3 IS NOT THE ACTUAL MILEAGE" }
+    },
+
+    "coordinates": {
+      "seller_phone": { "page": 0, "x": 425, "y": 618, "fontSize": 10 },
+      "buyer_phone":  { "page": 0, "x": 425, "y": 518, "fontSize": 10 },
+
+      "seller_city":  { "page": 0, "x": 155, "y": 568, "fontSize": 10 },
+      "seller_state": { "page": 0, "x": 285, "y": 568, "fontSize": 10 },
+      "seller_zip":   { "page": 0, "x": 335, "y": 568, "fontSize": 10 },
+
+      "buyer_city":   { "page": 0, "x": 155, "y": 468, "fontSize": 10 },
+      "buyer_state":  { "page": 0, "x": 285, "y": 468, "fontSize": 10 },
+      "buyer_zip":    { "page": 0, "x": 335, "y": 468, "fontSize": 10 }
     }
   }
 }

@@ -77,11 +77,11 @@ function shouldEnableCDN(): boolean {
     return process.env.ENABLE_CDN === 'true';
   }
   
-  // Auto-enable CDN in production
+  // Auto-enable CDN in production and development (for JSON config testing)
   const nodeEnv = process.env.NODE_ENV;
   const vercelEnv = process.env.VERCEL_ENV;
   
-  return nodeEnv === 'production' || vercelEnv === 'production';
+  return nodeEnv === 'production' || nodeEnv === 'development' || vercelEnv === 'production';
 }
 
 /**
@@ -107,7 +107,7 @@ export function getDeploymentConfig() {
     // CDN Configuration per environment
     development: {
       assetCDN: 'http://localhost:3000/assets',
-      enableCDN: false,
+      enableCDN: true,
       fallbackToTypeScript: true
     },
     preview: {
