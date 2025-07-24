@@ -1,0 +1,349 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/idaho/ITD-3738.pdf",
+  "analyzedAt": "2025-07-24T18:56:19.112Z",
+  "pageCount": 1,
+  "fieldCount": 49,
+  "fields": [
+    {
+      "index": 1,
+      "name": "Title Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "Weight",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "Full Length and Width",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "Vehicle Year",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "Vehicle Make",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "Vehicle Model",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "Description",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "Note Second VIN should be provided for most motor homes and must be entered for doublewide mobile and manufactured homes",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "Rebuilt Salvage",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "Previous Brand",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "Reconstruct",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "Repaired",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "Other",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "Actual Miles",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "Not Actual",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "Exceeds Mechanical Limits",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "Exempt",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "No Odometer",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "Sellers Full Legal Printed Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "Buyers Full Legal Printed Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "Physical Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "Idaho Drivers License Number or SSN  EIN if Business",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "City",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "State",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "Zip Code",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "Physical Address_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "Mailing Address If different than physical address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "City_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "State_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "Zip Code_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "City_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 32,
+      "name": "State_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 33,
+      "name": "Zip Code_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 34,
+      "name": "Mailing Address If different than physical address_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 35,
+      "name": "Daytime Phone Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 36,
+      "name": "City_4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 37,
+      "name": "State_4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 38,
+      "name": "Zip Code_4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 39,
+      "name": "True Selling Price",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 40,
+      "name": "Sale Date",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 41,
+      "name": "Daytime Phone Number_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 42,
+      "name": "New Lienholder Name or None",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 43,
+      "name": "Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 44,
+      "name": "City_5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 45,
+      "name": "State_5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 46,
+      "name": "Zip Code_5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 47,
+      "name": "Odometer Reading",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 48,
+      "name": "Vehicle or Hull Identification Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 49,
+      "name": "Vehicle Identification Number 2nd",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "Sellers Full Legal Printed Name",
+        "Buyers Full Legal Printed Name",
+        "New Lienholder Name or None"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "Note Second VIN should be provided for most motor homes and must be entered for doublewide mobile and manufactured homes",
+        "Buyers Full Legal Printed Name"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "Vehicle Year"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "Vehicle Make"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "Vehicle Model"
+      ]
+    },
+    "vin": {
+      "exact": [
+        "Note Second VIN should be provided for most motor homes and must be entered for doublewide mobile and manufactured homes",
+        "Vehicle or Hull Identification Number",
+        "Vehicle Identification Number 2nd"
+      ]
+    },
+    "price": {
+      "exact": [
+        "True Selling Price"
+      ]
+    },
+    "date": {
+      "exact": [
+        "Sale Date"
+      ]
+    }
+  }
+}

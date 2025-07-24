@@ -22,8 +22,8 @@ async function dumpPDFFields(pdfPath: string) {
     const pdfBytes = await fs.readFile(pdfPath);
     console.log(`📄 PDF size: ${(pdfBytes.length / 1024).toFixed(2)} KB`);
     
-    // Load the PDF document
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    // Load the PDF document (ignore encryption for read-only analysis)
+    const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
     console.log(`📖 Number of pages: ${pdfDoc.getPageCount()}`);
     
     // Get the form (if it exists)

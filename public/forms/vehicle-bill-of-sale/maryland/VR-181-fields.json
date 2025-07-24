@@ -1,0 +1,234 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/maryland/VR-181.pdf",
+  "analyzedAt": "2025-07-24T18:58:03.501Z",
+  "pageCount": 1,
+  "fieldCount": 31,
+  "fields": [
+    {
+      "index": 1,
+      "name": "year",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "make",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "model",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "body_style",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "vin",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "buyers",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "total",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "odometer",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "odo",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "day1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "month1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "year1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "day2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "month2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "year2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "seller1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "seller2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "buyer1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "buyer2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "day3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "month3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "year3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "day4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "month4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "year4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "notary1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "notary_exp1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "notary2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "notary_exp2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "Reason1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "Reason2",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "seller1",
+        "seller2"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "buyers",
+        "total",
+        "buyer1",
+        "buyer2"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "year",
+        "year1",
+        "year2",
+        "year3",
+        "year4"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "make"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "model"
+      ]
+    },
+    "vin": {
+      "exact": [
+        "vin"
+      ]
+    }
+  }
+}

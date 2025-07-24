@@ -1,0 +1,249 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/west-virginia/DMV-7-TR.pdf",
+  "analyzedAt": "2025-07-24T19:00:08.682Z",
+  "pageCount": 1,
+  "fieldCount": 31,
+  "fields": [
+    {
+      "index": 1,
+      "name": "MAKE  MANUFACTURERRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "BODY TYPERow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "MODELRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "VEHICLE IDENTIFICATION  HULL  SERIAL NUMBER",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "PRINTED NAMES OF SELLERSRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "STREET ADDRESSRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "STATERow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "ZIP CODERow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "PRINTED NAMES OF BUYERS 3 Buyers and Sale InformationRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "STREET ADDRESSRow1_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "STATERow1_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "ZIP CODERow1_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "DATE OF SALE",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "SELLING PRICE",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "I",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "the seller state that the odometer reads",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "The mileage stated is in excess of its mechanical limits",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "The odometer reading is NOT the actual mileage  WARNING ODOMETER DISCREPANCY",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "SELLERS PRINTED NAMEX",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "COSELLERS PRINTED NAMEX",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "DATEX",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "BUYERS PRINTED NAMEX",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "DATEX_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "COBUYERS PRINTED NAMEX",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "DATEX_3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "YEAR",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "COLOR",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "TITLE NUMBER",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "Text4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "CITYRow1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "CITYRow2",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "PRINTED NAMES OF SELLERSRow1",
+        "PRINTED NAMES OF BUYERS 3 Buyers and Sale InformationRow1",
+        "the seller state that the odometer reads",
+        "SELLERS PRINTED NAMEX",
+        "COSELLERS PRINTED NAMEX",
+        "BUYERS PRINTED NAMEX",
+        "COBUYERS PRINTED NAMEX"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "PRINTED NAMES OF BUYERS 3 Buyers and Sale InformationRow1",
+        "BUYERS PRINTED NAMEX",
+        "COBUYERS PRINTED NAMEX"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "YEAR",
+        "CITYRow1",
+        "CITYRow2"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "MAKE  MANUFACTURERRow1"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "MODELRow1"
+      ]
+    },
+    "vin": {
+      "exact": [
+        "VEHICLE IDENTIFICATION  HULL  SERIAL NUMBER"
+      ]
+    },
+    "price": {
+      "exact": [
+        "SELLING PRICE"
+      ]
+    },
+    "date": {
+      "exact": [
+        "DATE OF SALE",
+        "DATEX",
+        "DATEX_2",
+        "DATEX_3"
+      ]
+    }
+  }
+}

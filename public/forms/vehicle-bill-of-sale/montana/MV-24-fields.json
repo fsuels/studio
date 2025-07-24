@@ -1,0 +1,156 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/montana/MV-24.pdf",
+  "analyzedAt": "2025-07-24T18:58:52.841Z",
+  "pageCount": 1,
+  "fieldCount": 18,
+  "fields": [
+    {
+      "index": 1,
+      "name": "Year",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "undefined",
+      "type": "PDFRadioGroup",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "Date",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "Date_2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "Sum Received",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "Purchaser_DL/FEIN/Tribal ID/Corp ID",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "Make",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "Model",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "Sellers_Printed Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "Purchaser_Name",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "Purchaser_Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "Vehicle/Hull ID Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "Value of Vehicle or Vessel",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "Purchaser_Signature",
+      "type": "PDFSignature",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "Sellers_Signature",
+      "type": "PDFSignature",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "Seller_DL/FEIN/Tribal ID/Corp ID",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "Sellers_Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "Title Available?",
+      "type": "PDFRadioGroup",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "Sellers_Printed Name",
+        "Purchaser_Name",
+        "Sellers_Signature",
+        "Seller_DL/FEIN/Tribal ID/Corp ID",
+        "Sellers_Address"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "Purchaser_DL/FEIN/Tribal ID/Corp ID",
+        "Purchaser_Name",
+        "Purchaser_Address",
+        "Purchaser_Signature"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "Year"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "Make"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "Model"
+      ]
+    },
+    "date": {
+      "exact": [
+        "Date",
+        "Date_2"
+      ]
+    }
+  }
+}

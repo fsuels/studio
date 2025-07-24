@@ -1,0 +1,141 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/colorado/DR-2116.pdf",
+  "analyzedAt": "2025-07-24T18:52:35.805Z",
+  "pageCount": 2,
+  "fieldCount": 22,
+  "fields": [
+    {
+      "index": 1,
+      "name": "1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "6",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "7",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "8",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "9",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "12",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "10",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "13",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "11",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "14",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "15",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "16",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "17",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "18",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "19",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "20",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "21",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "Purged Colorado Record",
+      "type": "PDFRadioGroup",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {}
+}

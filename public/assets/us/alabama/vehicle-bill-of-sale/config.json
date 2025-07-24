@@ -12,6 +12,20 @@
     "specialNotes": "Alabama requires notarization for vehicle bill of sale transactions.",
     "localFormPath": "/forms/vehicle-bill-of-sale/alabama/MVT-32-13B.pdf"
   },
+  
+  "questions": [
+    { "id": "vin", "label": "Vehicle Identification Number (VIN)", "type": "text", "required": true },
+    { "id": "seller_name", "label": "Name of Seller (Print)", "type": "text", "required": true },
+    { "id": "seller_address", "label": "Address of Seller", "type": "text", "required": true },
+    { "id": "buyer_name", "label": "Name of Buyer (Print)", "type": "text", "required": true },
+    { "id": "buyer_address", "label": "Address of Buyer", "type": "text", "required": true },
+    { "id": "year", "label": "Year", "type": "number", "required": true },
+    { "id": "make", "label": "Make", "type": "text", "required": true },
+    { "id": "model", "label": "Model", "type": "text", "required": true },
+    { "id": "color", "label": "Color", "type": "text", "required": true },
+    { "id": "price", "label": "Sale Price", "type": "number", "required": true },
+    { "id": "sale_date", "label": "Date of Sale", "type": "date", "required": true }
+  ],
   "overlayConfig": {
     "pdfPath": "/forms/vehicle-bill-of-sale/alabama/MVT-32-13B.pdf",
     "coordinates": {

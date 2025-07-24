@@ -1,0 +1,261 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/alabama/MVT-32-13B.pdf",
+  "analyzedAt": "2025-07-24T18:51:35.276Z",
+  "pageCount": 2,
+  "fieldCount": 42,
+  "fields": [
+    {
+      "index": 1,
+      "name": "Text17",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "Text16",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "Text15",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "Text14",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "Text13",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "Text12",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "Text11",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "Text10",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "Text9",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "Text8",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "Text7",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "Text6",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "Text5",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "Text4",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "Text3",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "Text2",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "Text1",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "Text18",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "Text19",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "Text20",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "Text21",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "Text22",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "Text23",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "Text24",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "Text25",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "Text26",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "Check Box27",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "Check Box28",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "Text33",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "Text34",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "Text35",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 32,
+      "name": "Text36",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 33,
+      "name": "Text37",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 34,
+      "name": "Text38",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 35,
+      "name": "Text39",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 36,
+      "name": "Text40",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 37,
+      "name": "Text41",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 38,
+      "name": "Text42",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 39,
+      "name": "Text29",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 40,
+      "name": "Text31",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 41,
+      "name": "Text30",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 42,
+      "name": "Text32",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {}
+}

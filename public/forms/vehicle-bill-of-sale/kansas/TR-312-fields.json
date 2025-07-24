@@ -1,0 +1,183 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/kansas/TR-312.pdf",
+  "analyzedAt": "2025-07-24T18:57:16.420Z",
+  "pageCount": 1,
+  "fieldCount": 21,
+  "fields": [
+    {
+      "index": 1,
+      "name": "PrintedNameSeller",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "Seller Street Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "Seller City",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "Seller State",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "Seller Zip",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "Printed Name Buyer",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "Buyer Street Address",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "Buyer City",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "Buyer State",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "Buyer Zip",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "Vehicle Year",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "Vehicle Make",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "Vehicle ID Number",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "Purchase Price",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "Date of Sale",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "Signature of Buyer",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "Date Signed by Seller",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "Date Signed by Buyer",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "transferring ownership to",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "Signature of Seller",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "Date vehicle sold and delivered",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "PrintedNameSeller",
+        "Seller Street Address",
+        "Seller City",
+        "Seller State",
+        "Seller Zip",
+        "Printed Name Buyer",
+        "Date Signed by Seller",
+        "Signature of Seller"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "Printed Name Buyer",
+        "Buyer Street Address",
+        "Buyer City",
+        "Buyer State",
+        "Buyer Zip",
+        "Signature of Buyer",
+        "Date Signed by Buyer",
+        "transferring ownership to"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "Vehicle Year"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "Vehicle Make"
+      ]
+    },
+    "price": {
+      "exact": [
+        "Purchase Price"
+      ]
+    },
+    "date": {
+      "exact": [
+        "Date of Sale",
+        "Date Signed by Seller",
+        "Date Signed by Buyer",
+        "Date vehicle sold and delivered"
+      ]
+    }
+  }
+}

@@ -3,23 +3,20 @@ import { useMemo } from 'react';
 import type { LegalDocument } from '@/lib/document-library';
 import type { Question } from '@/types/documents';
 
-export interface WizardStep extends Question {} // you might have more fields, keep it simple here
+export type WizardStep = Question & { section?: string };
 
 export function useWizardSteps(
   doc: LegalDocument,
   overrideQuestions?: Question[] | null
 ): { steps: WizardStep[]; totalSteps: number } {
-  // **THIS IS THE FIX** – take overrideQuestions if provided
-  const questions: Question[] =
-    (overrideQuestions && overrideQuestions.length > 0
+  const questions: Question[] = (
+    overrideQuestions && overrideQuestions.length > 0
       ? overrideQuestions
-      : doc.questions) ?? [];
+      : doc.questions ?? []
+  );
 
   const steps = useMemo<WizardStep[]>(
-    () =>
-      questions.map((q) => ({
-        ...q,
-      })),
+    () => questions.map((q) => ({ ...q })),
     [questions]
   );
 

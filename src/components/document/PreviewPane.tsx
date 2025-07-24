@@ -241,13 +241,54 @@ export default function PreviewPane({
         fieldKeys.add(key);
       });
 
+      // Template variable to form field mapping
+      const templateFieldMapping: Record<string, string> = {
+        // Vehicle information
+        vehicle_year: 'year',
+        vehicle_make: 'make', 
+        vehicle_model: 'model',
+        vehicle_body_style: 'body_type',
+        vehicle_color: 'color',
+        vehicle_vin: 'vin',
+        
+        // Pricing and transaction
+        vehicle_price: 'price',
+        sale_price: 'price',
+        purchase_price: 'price',
+        transaction_date: 'sale_date',
+        vehicle_sale_date: 'sale_date',
+        
+        // Seller information
+        vehicle_seller_name: 'seller_name',
+        vehicle_seller_address: 'seller_address',
+        vehicle_seller_phone: 'seller_phone',
+        
+        // Buyer information  
+        vehicle_buyer_name: 'buyer_name',
+        vehicle_buyer_address: 'buyer_address',
+        vehicle_buyer_phone: 'buyer_phone',
+        
+        // Additional fields
+        vehicle_odometer: 'odometer',
+        vehicle_odometer_reading: 'odometer',
+        odometer_reading: 'odometer',
+        vehicle_title_number: 'title_number',
+        existing_liens_description: 'existing_liens',
+        warranty_disclaimer: 'warranty_text',
+        transaction_county: 'county',
+        notary_county: 'county',
+      };
+
       // Process each field
       for (const key of fieldKeys) {
         const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
-        const value = formData[key];
+        
+        // Map template variable to actual form field name
+        const actualFieldName = templateFieldMapping[key] || key;
+        const value = formData[actualFieldName];
 
         // Check if this is the currently edited field
-        const isCurrentField = currentFieldId === key;
+        const isCurrentField = currentFieldId === key || currentFieldId === actualFieldName;
 
         if (isCurrentField && value) {
           // Highlight the current field with a special marker

@@ -43,6 +43,7 @@ const QuestionTypeSchema = z.enum([
   'boolean',
   'textarea',
   'address',
+  'tel',
 ]);
 
 const OptionSchema = z.object({

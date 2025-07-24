@@ -1,0 +1,285 @@
+{
+  "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/north-dakota/SFN-2888.pdf",
+  "analyzedAt": "2025-07-24T18:59:31.350Z",
+  "pageCount": 1,
+  "fieldCount": 36,
+  "fields": [
+    {
+      "index": 1,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerLegalName[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 2,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerAddress[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 3,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerCity[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 4,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerState[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 5,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerZipCode[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 6,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerTelephone[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 7,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].dlCheckBox[0]",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 8,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].feinCheckBox1[0]",
+      "type": "PDFCheckBox",
+      "info": ""
+    },
+    {
+      "index": 9,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].year[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 10,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].make[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 11,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].model[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 12,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].bodyStyle[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 13,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].vin[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 14,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].color[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 15,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].fuelType[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 16,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].weight[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 17,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].saleDate[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 18,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].dollarAmount[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 19,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerLegalName[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 20,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerAddress[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 21,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerCity[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 22,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerState[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 23,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerZipCode[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 24,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerTelephone[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 25,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerComments[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 26,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerWarranty[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 27,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerWarranty[1]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 28,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerReasonCert[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 29,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].name[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 30,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].legalSign[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 31,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].state[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 32,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].county[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 33,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].date[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 34,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].nameNotary[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 35,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].signNotary[0]",
+      "type": "PDFTextField",
+      "info": ""
+    },
+    {
+      "index": 36,
+      "name": "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].expireDate[0]",
+      "type": "PDFTextField",
+      "info": ""
+    }
+  ],
+  "suggestedMappings": {
+    "seller_name": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerLegalName[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerLegalName[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerAddress[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerCity[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerState[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerZipCode[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerTelephone[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerComments[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerWarranty[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerWarranty[1]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[1].sellerReasonCert[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].name[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].nameNotary[0]"
+      ]
+    },
+    "buyer_name": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerLegalName[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerAddress[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerCity[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerState[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerZipCode[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].acknowledgementSubform[0].buyerTelephone[0]"
+      ]
+    },
+    "vehicle_year": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].year[0]"
+      ]
+    },
+    "vehicle_make": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].make[0]"
+      ]
+    },
+    "vehicle_model": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].model[0]"
+      ]
+    },
+    "vin": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].vin[0]"
+      ]
+    },
+    "price": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].dollarAmount[0]"
+      ]
+    },
+    "date": {
+      "exact": [
+        "form1[0].Page1[0].appClaimTaxRefund[0].vehicleDescriptionSubform[0].saleDate[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].date[0]",
+        "form1[0].Page1[0].appClaimTaxRefund[0].MVNotaryPublic[0].expireDate[0]"
+      ]
+    }
+  }
+}

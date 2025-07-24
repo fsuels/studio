@@ -5,6 +5,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import FieldRenderer from '../FieldRenderer';
 import ReviewStep from '@/components/workflow/ReviewStep';
+// If TrustBadges is a default export, change this line accordingly:
+// import TrustBadges from '@/components/shared/TrustBadges';
 import { TrustBadges } from '@/components/shared';
 import type { LegalDocument } from '@/lib/document-library';
 import type { WizardStep } from './WizardStepManager';
@@ -34,7 +36,6 @@ export default function WizardFormContent({
     return <ReviewStep doc={doc} locale={locale} />;
   }
 
-  // Render current step content
   const currentField = steps[currentStepIndex];
 
   const formContent =
@@ -42,9 +43,9 @@ export default function WizardFormContent({
       <div className="space-y-8">
         <div className="text-center mb-6">
           {currentField.section && (
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-              {currentField.section}
-            </div>
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+            {currentField.section}
+          </div>
           )}
         </div>
 
