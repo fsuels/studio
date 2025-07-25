@@ -41,7 +41,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { usStates } from '@/lib/document-library';
 import { vehicleBillOfSaleFaqs } from './faqs';
-import { getVehicleCompliance } from '@/lib/states/vehicle-compliance';
+import { requiresNotaryForVehicleBillOfSale } from '@/lib/compliance-helper';
 import { getDb } from '@/lib/firebase';
 import { collection, doc, getDoc } from 'firebase/firestore';
 
@@ -57,14 +57,13 @@ export default function VehicleBillOfSalePage() {
 
   useEffect(() => {
     if (selectedState) {
-      const compliance = getVehicleCompliance(selectedState);
-      if (compliance) {
-        setComplianceMessage(
-          compliance.notarizationRequired
-            ? `⚠️ Notarization required in ${compliance.state}`
-            : `✔ Valid in ${compliance.state}`,
-        );
-      }
+      const requiresNotary = requiresNotaryForVehicleBillOfSale(selectedState);
+      const stateName = usStates.find(s => s.value === selectedState)?.label || selectedState;
+      setComplianceMessage(
+        requiresNotary
+          ? `⚠️ Notarization required in ${stateName}`
+          : `✔ Valid in ${stateName}`,
+      );
     }
   }, [selectedState]);
 
