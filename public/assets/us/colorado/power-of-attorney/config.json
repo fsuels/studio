@@ -122,31 +122,11 @@
   },
   "overlayConfig": {
     "fieldMapping": {
-      "principal_name": {
-        "exact": ["principal_name", "principalName", "grantor", "donor"],
-        "partial": ["principal", "grantor", "person_granting"],
-        "fuzzy": ["prin", "grant", "donor"]
-      },
-      "agent_name": {
-        "exact": ["agent_name", "agentName", "attorney_in_fact", "attorneyInFact"],
-        "partial": ["agent", "attorney", "representative"],
-        "fuzzy": ["agent", "atty", "rep"]
-      },
-      "principal_address": {
-        "exact": ["principal_address", "principalAddress", "grantor_address"],
-        "partial": ["principal_addr", "grantor_addr"],
-        "fuzzy": ["prin_addr", "grant_addr"]
-      },
-      "agent_address": {
-        "exact": ["agent_address", "agentAddress", "attorney_address"],
-        "partial": ["agent_addr", "attorney_addr"],
-        "fuzzy": ["agent_addr", "atty_addr"]
-      },
-      "effective_date": {
-        "exact": ["effective_date", "date", "execution_date"],
-        "partial": ["date", "effective"],
-        "fuzzy": ["date", "eff"]
-      }
+      "principal_name": { "fieldName": "Principal Name" },
+      "agent_name": { "fieldName": "Agent Name" },
+      "principal_address": { "fieldName": "Principal Address" },
+      "agent_address": { "fieldName": "Agent Address" },
+      "effective_date": { "fieldName": "Effective Date" }
     },
     "coordinates": {
       "principal_name": { "x": 150, "y": 650, "fontSize": 12, "page": 0 },

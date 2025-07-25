@@ -1,6 +1,6 @@
 {
   "jurisdiction": "us/generic",
-  "docType": "basic-nda", 
+  "docType": "non-disclosure-agreement", 
   "schemaVersion": "1.0",
   "lastUpdated": "2025-01-18",
   "questions": [

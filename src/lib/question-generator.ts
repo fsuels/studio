@@ -5,7 +5,7 @@
 import type { Question } from '@/types/documents';
 import type { OverlayConfig } from '@/lib/config-loader/schemas';
 
-type AllowedType = Extract<Question['type'], 'text' | 'select' | 'number' | 'date' | 'boolean' | 'textarea' | 'address' | 'tel'>;
+type AllowedType = Extract<Question['type'], 'text' | 'select' | 'number' | 'date' | 'boolean' | 'textarea' | 'address' | 'tel' | 'button'>;
 
 function generateLabel(fieldId: string, stateCode?: string): string {
   const stateSpecificLabels: Record<string, Record<string, string>> = {
@@ -51,6 +51,7 @@ function generateLabel(fieldId: string, stateCode?: string): string {
 function detectInputType(fieldId: string, fieldName?: string): AllowedType {
   const combinedText = `${fieldId} ${fieldName || ''}`.toLowerCase();
 
+  if (fieldId.includes('_button') || combinedText.includes('add') || combinedText.includes('button')) return 'button';
   if (combinedText.includes('phone') || combinedText.includes('tel')) return 'tel';
   if (combinedText.includes('date')) return 'date';
   if (/price|amount|cost|value|total/.test(combinedText)) return 'number';
@@ -278,6 +279,11 @@ export function generateQuestions(overlay: OverlayConfig): Question[] {
       ...(placeholder && { placeholder }),
       ...(tooltip && { tooltip }),
       ...(options && { options }),
+      ...(finalType === 'button' && {
+        buttonAction: fieldId.includes('seller2') ? 'toggle_show_seller2' : 
+                     fieldId.includes('buyer2') ? 'toggle_show_buyer2' : 
+                     undefined
+      }),
     };
 
     questions.push(q);

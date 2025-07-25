@@ -222,7 +222,7 @@ export function getEnvironmentDebugInfo() {
     // Example URLs
     exampleUrls: {
       vehicleBillOfSale: getConfigUrl('us/florida', 'vehicle-bill-of-sale'),
-      basicNDA: getConfigUrl('us/generic', 'basic-nda'),
+      basicNDA: getConfigUrl('us/generic', 'non-disclosure-agreement'),
       floridaPDF: getPDFUrl('us/florida', 'vehicle-bill-of-sale', 'HSMV-82050.pdf')
     }
   };

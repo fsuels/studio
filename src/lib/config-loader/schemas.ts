@@ -44,6 +44,7 @@ const QuestionTypeSchema = z.enum([
   'textarea',
   'address',
   'tel',
+  'button',
 ]);
 
 const OptionSchema = z.object({
