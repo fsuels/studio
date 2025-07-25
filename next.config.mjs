@@ -6,13 +6,6 @@ import webpack from 'webpack';
 /*  Core Next.js config                                                       */
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
-  turbo: {
-    // Turbopack configuration replaces webpack config
-    rules: {
-      '*.ts': 'typescript',
-      '*.tsx': 'typescript',
-    },
-  },
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
 

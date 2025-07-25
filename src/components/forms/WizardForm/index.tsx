@@ -1,8 +1,7 @@
 // src/components/forms/WizardForm/index.tsx
 'use client';
 
-import React,
-{
+import React, {
   useEffect,
   useState,
   useRef,
@@ -33,8 +32,8 @@ interface WizardFormProps {
   doc: LegalDocument;
   onComplete: (checkoutUrlOrPath: string) => void;
   onFieldFocus?: (fieldId: string | undefined) => void;
-  /** If provided, these override the document’s static questions */
-  questions?: Question[] | null;
+  questions?: Question[] | null;      // still optional legacy prop
+  overrideQuestions?: Question[];     // <-- NEW: the one we pass from StartWizardPageClient
 }
 
 export interface WizardFormRef {
@@ -42,7 +41,7 @@ export interface WizardFormRef {
 }
 
 const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
-  function WizardForm({ locale, doc, onComplete, onFieldFocus, questions }, ref) {
+  function WizardForm({ locale, doc, onComplete, onFieldFocus, questions, overrideQuestions }, ref) {
     const { t } = useTranslation('common');
     const { toast } = useToast();
     const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
@@ -63,41 +62,16 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
     const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
 
     const liveRef = useRef<HTMLDivElement>(null);
-    const prevQuestionsRef = useRef<Question[] | null>(null);
 
-    // Get steps and progress (make sure useWizardSteps re-runs when questions changes)
-    const { steps, totalSteps } = useWizardSteps(doc, questions ?? undefined);
-    const progress = calculateProgress(currentStepIndex, totalSteps, isReviewing);
+    // Get steps and progress (overrideQuestions > questions > doc.questions)
+    const preferredQuestions = overrideQuestions ?? questions ?? doc.questions ?? [];
+    const { steps, totalSteps } = useWizardSteps(doc, preferredQuestions);
+    const progress = calculateProgress(
+      currentStepIndex,
+      totalSteps,
+      isReviewing,
+    );
     const currentField = steps[currentStepIndex];
-
-    // --- NEW: Reset wizard when questions change (state switch, etc.) -------------
-    useEffect(() => {
-      const changed =
-        prevQuestionsRef.current !== questions &&
-        // quick length+ids heuristic to reduce false positives
-        (
-          (prevQuestionsRef.current?.length ?? -1) !== (questions?.length ?? -1) ||
-          JSON.stringify(prevQuestionsRef.current?.map(q => q.id)) !== JSON.stringify(questions?.map(q => q.id))
-        );
-
-      if (changed) {
-        setCurrentStepIndex(0);
-        setIsReviewing(false);
-        // scroll up for a clean restart
-        if (typeof window !== 'undefined') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }
-      prevQuestionsRef.current = questions ?? null;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [questions]);
-
-    // --- NEW: Clamp index if the total number of steps shrinks -------------
-    useEffect(() => {
-      if (currentStepIndex > totalSteps - 1) {
-        setCurrentStepIndex(Math.max(0, totalSteps - 1));
-      }
-    }, [totalSteps, currentStepIndex]);
 
     // Effects
     useEffect(() => {
@@ -120,7 +94,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
         if (fieldIndex !== -1) {
           setCurrentStepIndex(fieldIndex);
           setIsReviewing(false);
-
           if (typeof window !== 'undefined') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
@@ -129,8 +102,13 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       [steps],
     );
 
-    // Expose navigation function through ref
-    useImperativeHandle(ref, () => ({ navigateToField }), [navigateToField]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        navigateToField,
+      }),
+      [navigateToField],
+    );
 
     useEffect(() => {
       if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
@@ -153,8 +131,8 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
 
     const handleNextStep = useCallback(async () => {
       setFormIsSubmitting(true);
+
       try {
-        // Validate current step
         if (currentField) {
           const isValid = await trigger(currentField.id);
           if (!isValid) {
@@ -167,7 +145,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
           }
         }
 
-        // Proceed to next step or review
         if (currentStepIndex < totalSteps - 1) {
           setCurrentStepIndex((prev) => prev + 1);
         } else {
@@ -188,7 +165,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Update screen reader
         if (liveRef.current && currentField) {
           liveRef.current.innerText = `${currentField.label} ${t('updated', { defaultValue: 'updated' })}`;
           setTimeout(() => {
@@ -198,7 +174,15 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       } finally {
         setFormIsSubmitting(false);
       }
-    }, [currentStepIndex, totalSteps, isReviewing, currentField, trigger, toast, t]);
+    }, [
+      currentStepIndex,
+      totalSteps,
+      isReviewing,
+      currentField,
+      trigger,
+      toast,
+      t,
+    ]);
 
     // Draft saving
     const handleSaveAndFinishLater = useCallback(async () => {
@@ -245,7 +229,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       }
     }, [getValues, doc.id, locale, router, toast, t, isLoggedIn, user?.uid]);
 
-    // Auth success handler
     const handleAuthSuccess = useCallback(() => {
       setShowAuthModal(false);
       if (pendingSaveDraft) {
@@ -253,7 +236,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       }
     }, [pendingSaveDraft, handleSaveAndFinishLater]);
 
-    // Payment success handler
     const handlePaymentSuccess = useCallback(() => {
       localStorage.removeItem(`draft-${doc.id}-${locale}`);
       setShowPaymentModal(false);
@@ -261,7 +243,6 @@ const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
       onComplete(`/${locale}/dashboard?paymentSuccess=true&docId=${doc.id}`);
     }, [doc.id, locale, onComplete]);
 
-    // Show skeleton while loading auth or not hydrated
     if (!isHydrated || authIsLoading) {
       return (
         <TooltipProvider>

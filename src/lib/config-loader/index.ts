@@ -10,6 +10,8 @@ import {
 } from './schemas';
 import { generateQuestions } from '@/lib/question-generator';
 import { getEnvironmentConfig, getConfigUrl } from '@/lib/config/environment';
+import { vehicleBillOfSaleCompliance } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
+import { vehicleBillOfSaleQuestions } from '@/lib/documents/us/vehicle-bill-of-sale/questions';
 
 export type {
   DocumentConfig,
@@ -161,12 +163,6 @@ async function loadTypeScriptConfig(
 async function loadVehicleBillOfSaleConfig(
   state: string
 ): Promise<DocumentConfig> {
-  const { vehicleBillOfSaleCompliance } = await import(
-    '@/lib/documents/us/vehicle-bill-of-sale/compliance'
-  );
-  const { vehicleBillOfSaleQuestions } = await import(
-    '@/lib/documents/us/vehicle-bill-of-sale/questions'
-  );
 
   const stateCode = getStateCodeFromName(state);
   if (!stateCode) {

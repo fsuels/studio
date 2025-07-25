@@ -64,8 +64,8 @@ function getAssetCDNUrl(): string {
     return 'https://staging-assets.123legaldoc.com/assets';
   }
   
-  // Development default
-  return 'http://localhost:3000/assets';
+  // Development default - serve via API route with proper CORS headers
+  return 'http://localhost:3000/api/assets';
 }
 
 /**
@@ -106,7 +106,7 @@ export function getDeploymentConfig() {
   return {
     // CDN Configuration per environment
     development: {
-      assetCDN: 'http://localhost:3000/assets',
+      assetCDN: 'http://localhost:3000/api/assets',
       enableCDN: true,
       fallbackToTypeScript: true
     },
@@ -143,12 +143,14 @@ export function getAssetUrl(relativePath: string): string {
     return `${config.assetCDN}/${cleanPath}`;
   }
   
-  // Local development - serve from public directory
-  return `/${cleanPath}`;
+  // Local development - serve via API route with proper CORS headers
+  return `/api/assets/${cleanPath}`;
 }
 
 export function getConfigUrl(jurisdiction: string, docType: string): string {
-  return getAssetUrl(`${jurisdiction}/${docType}/config.json`);
+  // Always serve configs directly from public directory for now
+  // until we have a proper CDN setup for configs
+  return `/configs/${jurisdiction}/${docType}.json`;
 }
 
 export function getPDFUrl(jurisdiction: string, docType: string, filename: string): string {

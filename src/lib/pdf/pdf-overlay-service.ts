@@ -1,7 +1,6 @@
 // src/lib/pdf/pdf-overlay-service.ts
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { OverlayConfig } from '@/lib/config-loader';
-import type { StateAbbr } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
 
 /**
  * Only accept ArrayBuffer | Uint8Array, never ArrayBufferLike.
@@ -32,8 +31,9 @@ function isCheckBox(field: any): field is { check: () => void; uncheck: () => vo
 }
 
 /* ------------------------------------------------------------------ */
-/* Public API                                                          */
+/* Main overlay function                                               */
 /* ------------------------------------------------------------------ */
+
 export async function overlayFormData(
   pdfBytes: BinaryInput,
   formData: Record<string, any>,
@@ -51,156 +51,96 @@ export async function overlayFormData(
     return await smartFieldMapping(doc, formData, overlay);
   }
 
-  // 2) JSON coordinates fallback
+  // 2) Coordinate overlay (manual positioning)
   if (overlay?.coordinates) {
     return await coordinateOverlay(doc, formData, overlay.coordinates);
   }
 
-  // 3) Legacy TypeScript overlay
-  const legacy = await loadLegacyOverlay(state);
-  if (legacy) {
-    return await legacyCoordinateOverlay(doc, formData, legacy.fieldMappings);
-  }
-
-  // 4) Nothing to do → return original bytes
+  // 3) Nothing to do → return original bytes
   return normalized;
 }
 
 /* ------------------------------------------------------------------ */
-/* AcroForm (priority #1)                                              */
+/* Strategy 1: Smart AcroForm field mapping                           */
 /* ------------------------------------------------------------------ */
+
 async function smartFieldMapping(
   doc: PDFDocument,
-  data: Record<string, any>,
-  cfg: OverlayConfig
+  formData: Record<string, any>,
+  overlay: OverlayConfig
 ): Promise<ArrayBuffer> {
   const form = doc.getForm();
-  const pdfFields = new Map(form.getFields().map((f) => [f.getName(), f]));
-  const mapping = cfg.fieldMapping ?? {};
+  const allFields = form.getFields();
 
-  for (const [id, mapObj] of Object.entries(mapping)) {
-    const fieldName = mapObj?.fieldName;
+  console.log(`🔍 PDF has ${allFields.length} form fields`);
+
+  if (!overlay.fieldMapping) {
+    console.warn('⚠️ No fieldMapping provided for AcroForm overlay');
+    return toArrayBuffer(await doc.save());
+  }
+
+  for (const [fieldId, mapping] of Object.entries(overlay.fieldMapping)) {
+    const value = formData[fieldId];
+    if (value == null) continue;
+
+    const fieldName = mapping.fieldName;
     if (!fieldName) continue;
 
-    const value = data[id];
-    const field = pdfFields.get(fieldName);
-    if (value == null || !field) continue;
-
     try {
+      const field = form.getField(fieldName);
+
       if (isTextField(field)) {
         field.setText(String(value));
       } else if (isCheckBox(field)) {
-        const truthy =
-          value === true || value === 'true' || value === 1 || value === '1';
-        truthy ? field.check() : field.uncheck();
+        if (value === true || value === 'true' || value === 1) {
+          field.check();
+        } else {
+          field.uncheck();
+        }
       }
-    } catch (e) {
-      console.warn(`Failed to map "${id}" → "${fieldName}"`, e);
+
+      console.log(`✅ Filled field "${fieldName}" with "${value}"`);
+    } catch (error) {
+      console.warn(`⚠️ Could not find/fill field "${fieldName}":`, error);
     }
   }
 
-  const bytes = await doc.save(); // Uint8Array
+  const bytes = await doc.save();
   return toArrayBuffer(bytes);
 }
 
 /* ------------------------------------------------------------------ */
-/* Coordinates (priority #2)                                           */
+/* Strategy 2: Coordinate overlay (manual positioning)                */
 /* ------------------------------------------------------------------ */
+
 async function coordinateOverlay(
   doc: PDFDocument,
-  data: Record<string, any>,
-  coords: NonNullable<OverlayConfig['coordinates']>
+  formData: Record<string, any>,
+  coordinates: Record<string, any>
 ): Promise<ArrayBuffer> {
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const pages = doc.getPages();
 
-  for (const [id, c] of Object.entries(coords)) {
-    if (!c) continue;
-    const value = data[id] ?? data[id.replace(/_/g, '')];
+  for (const [fieldId, coord] of Object.entries(coordinates)) {
+    const value = formData[fieldId];
     if (value == null) continue;
 
-    const page = pages[c.page ?? 0];
+    if (!coord || typeof coord !== 'object') continue;
+
+    const page = pages[coord.page ?? 0];
     if (!page) continue;
 
     page.drawText(String(value), {
-      x: c.x,
-      y: c.y,
-      size: c.fontSize ?? 10,
+      x: coord.x,
+      y: coord.y,
+      size: coord.fontSize ?? 10,
       font,
       color: rgb(0, 0, 0),
     });
+
+    console.log(`✅ Drew "${value}" at (${coord.x}, ${coord.y}) on page ${coord.page ?? 0}`);
   }
 
-  const bytes = await doc.save(); // Uint8Array
-  return toArrayBuffer(bytes);
-}
-
-/* ------------------------------------------------------------------ */
-/* Legacy overlay (priority #3)                                        */
-/* ------------------------------------------------------------------ */
-export interface FieldMapping {
-  fieldId: string;
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-  fontSize?: number;
-  page?: number;
-}
-
-export interface StateFormOverlay {
-  state: StateAbbr;
-  formName: string;
-  fieldMappings: FieldMapping[];
-}
-
-interface LegacyPoint {
-  fieldId: string;
-  x: number;
-  y: number;
-  page?: number;
-  fontSize?: number;
-}
-interface LegacyOverlay {
-  state: StateAbbr;
-  formName: string;
-  fieldMappings: LegacyPoint[];
-}
-
-async function loadLegacyOverlay(state: string): Promise<LegacyOverlay | null> {
-  switch (state.toLowerCase()) {
-    case 'fl':
-      return (await import('@/lib/documents/us/vehicle-bill-of-sale/forms/florida/overlay'))
-        .floridaOverlay;
-    default:
-      return null;
-  }
-}
-
-async function legacyCoordinateOverlay(
-  doc: PDFDocument,
-  data: Record<string, any>,
-  points: LegacyPoint[]
-): Promise<ArrayBuffer> {
-  const font = await doc.embedFont(StandardFonts.Helvetica);
-  const pages = doc.getPages();
-
-  for (const p of points) {
-    const value = data[p.fieldId];
-    if (value == null) continue;
-
-    const page = pages[p.page ?? 0];
-    if (!page) continue;
-
-    page.drawText(String(value), {
-      x: p.x,
-      y: p.y,
-      size: p.fontSize ?? 10,
-      font,
-      color: rgb(0, 0, 0),
-    });
-  }
-
-  const bytes = await doc.save(); // Uint8Array
+  const bytes = await doc.save();
   return toArrayBuffer(bytes);
 }

@@ -1,0 +1,76 @@
+{
+  "jurisdiction": "us/generic",
+  "docType": "vehicle-bill-of-sale",
+  "schemaVersion": "1.0",
+  "lastUpdated": "2025-01-25",
+  
+  "compliance": {
+    "requiresNotary": false,
+    "billOfSaleMandatory": false,
+    "odometerIntegrated": false,
+    "specialNotes": "Generic vehicle bill of sale form for states without specific requirements.",
+    "localFormPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf"
+  },
+  
+  "questions": [
+    { "id": "state", "label": "State of Sale", "type": "select", "required": true },
+    { "id": "seller_name", "label": "Seller's Full Name", "type": "text", "required": true },
+    { "id": "seller_address", "label": "Seller's Address", "type": "address", "required": true },
+    { "id": "buyer_name", "label": "Buyer's Full Name", "type": "text", "required": true },
+    { "id": "buyer_address", "label": "Buyer's Address", "type": "address", "required": true },
+    { "id": "year", "label": "Vehicle Year", "type": "number", "required": true },
+    { "id": "make", "label": "Vehicle Make", "type": "text", "required": true },
+    { "id": "model", "label": "Vehicle Model", "type": "text", "required": true },
+    { "id": "body_type", "label": "Vehicle Body Type", "type": "select", "required": true, "options": [
+      { "value": "Sedan", "label": "Sedan" },
+      { "value": "SUV", "label": "SUV" },
+      { "value": "Truck", "label": "Truck" },
+      { "value": "Coupe", "label": "Coupe" },
+      { "value": "Convertible", "label": "Convertible" },
+      { "value": "Wagon", "label": "Wagon" },
+      { "value": "Van", "label": "Van" },
+      { "value": "Motorcycle", "label": "Motorcycle" },
+      { "value": "Other", "label": "Other" }
+    ]},
+    { "id": "color", "label": "Vehicle Color", "type": "text", "required": true },
+    { "id": "vin", "label": "Vehicle Identification Number (VIN)", "type": "text", "required": true },
+    { "id": "odometer", "label": "Odometer Reading (miles)", "type": "number", "required": true },
+    { "id": "odo_status", "label": "Odometer Status", "type": "select", "required": true, "options": [
+      { "value": "ACTUAL", "label": "Actual Mileage" },
+      { "value": "EXCEEDS", "label": "Exceeds Mechanical Limits" },
+      { "value": "NOT_ACTUAL", "label": "Not Actual Mileage (Warning)" }
+    ]},
+    { "id": "price", "label": "Sale Price ($)", "type": "number", "required": true },
+    { "id": "payment_method", "label": "Payment Method", "type": "select", "required": false, "options": [
+      { "value": "cash", "label": "Cash" },
+      { "value": "check", "label": "Check" },
+      { "value": "wire", "label": "Wire Transfer" },
+      { "value": "paypal", "label": "PayPal" },
+      { "value": "credit_card", "label": "Credit / Debit Card" }
+    ]},
+    { "id": "sale_date", "label": "Date of Sale", "type": "date", "required": true },
+    { "id": "title_number", "label": "Certificate of Title Number", "type": "text", "required": false },
+    { "id": "existing_liens", "label": "Existing Liens", "type": "text", "required": false },
+    { "id": "as_is", "label": "Is the vehicle sold \"as-is\"?", "type": "boolean", "required": true },
+    { "id": "warranty_text", "label": "Warranty Details", "type": "textarea", "required": false }
+  ],
+  
+  "overlayConfig": {
+    "pdfPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf",
+    "coordinates": {
+      "seller_name": { "page": 0, "x": 150, "y": 720, "fontSize": 10 },
+      "seller_address": { "page": 0, "x": 150, "y": 700, "fontSize": 10 },
+      "buyer_name": { "page": 0, "x": 150, "y": 650, "fontSize": 10 },
+      "buyer_address": { "page": 0, "x": 150, "y": 630, "fontSize": 10 },
+      "year": { "page": 0, "x": 100, "y": 580, "fontSize": 10 },
+      "make": { "page": 0, "x": 200, "y": 580, "fontSize": 10 },
+      "model": { "page": 0, "x": 320, "y": 580, "fontSize": 10 },
+      "body_type": { "page": 0, "x": 450, "y": 580, "fontSize": 10 },
+      "color": { "page": 0, "x": 150, "y": 540, "fontSize": 10 },
+      "vin": { "page": 0, "x": 150, "y": 520, "fontSize": 10 },
+      "odometer": { "page": 0, "x": 150, "y": 500, "fontSize": 10 },
+      "price": { "page": 0, "x": 150, "y": 480, "fontSize": 10 },
+      "sale_date": { "page": 0, "x": 300, "y": 480, "fontSize": 10 }
+    }
+  }
+}

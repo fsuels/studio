@@ -96,7 +96,10 @@
       "Bash(git commit:*)",
       "Bash(git config:*)",
       "Bash(TURBOPACK=0 npm run dev)",
-      "Bash(ENABLE_CDN=true node test-fix.js)"
+      "Bash(ENABLE_CDN=true node test-fix.js)",
+      "Bash(next dev:*)",
+      "Bash(cp:*)",
+      "Bash(if [ -f \"/mnt/c/dev/123legaldoc/public/assets/us/$state/vehicle-bill-of-sale/config.json\" ])"
     ],
     "deny": []
   }

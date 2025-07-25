@@ -26,6 +26,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import ReEngagementTools from '@/components/reengagement/ReEngagementTools.client';
 import { loadDocumentConfig, normalizeJurisdiction } from '@/lib/config-loader';
+import type { OverlayConfig } from '@/lib/config-loader';
+import { generateQuestions } from '@/lib/question-generator';
 import type { Question } from '@/types/documents';
 
 const Loading = () => (
@@ -57,8 +59,6 @@ interface StartWizardPageClientProps {
   docId: string;
 }
 
-const STATES_WITH_OFFICIAL_FORMS = ['AL', 'CO', 'FL', 'GA', 'ID', 'KS', 'MD', 'MT', 'ND', 'WV'];
-
 export default function StartWizardPageClient({
   locale,
   docId,
@@ -84,6 +84,8 @@ export default function StartWizardPageClient({
   const [useDirectFormFilling, setUseDirectFormFilling] = useState(false);
   const [dynamicQuestions, setDynamicQuestions] = useState<Question[] | null>(null);
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
+  const [overlayConfig, setOverlayConfig] = useState<OverlayConfig | null>(null);
+  const [hasOverlay, setHasOverlay] = useState(false);
 
   useEffect(() => setIsMounted(true), []);
 
@@ -114,39 +116,56 @@ export default function StartWizardPageClient({
 
   const loadDynamicQuestions = useCallback(
     async (state?: string) => {
-      const wantedState = state?.toUpperCase();
-      if (wantedState && STATES_WITH_OFFICIAL_FORMS.includes(wantedState)) {
-        try {
-          const jurisdiction = normalizeJurisdiction(wantedState);
-          const config = await loadDocumentConfig(docType, jurisdiction);
+      if (!docConfig?.id) return;
 
-          if (config.questions?.length) {
-            setDynamicQuestions(config.questions);
-            setQuestionsLoaded(true);
-            return;
-          }
-
-          if (config.overlayConfig) {
-          // build from overlay.json
-            const { generateQuestions } = await import('@/lib/question-generator');
-            const generated = generateQuestions(config.overlayConfig);
-            setDynamicQuestions(generated);
-            setQuestionsLoaded(true);
-            return;
-          }
-        } catch (error) {
-          console.warn(
-            `Failed to load dynamic questions for ${docType}/${wantedState}`,
-            error
-          );
-        }
+      const wantedState = (state || '').toUpperCase();
+      if (!wantedState) {
+        setDynamicQuestions(null);
+        setOverlayConfig(null);
+        setHasOverlay(false);
+        setQuestionsLoaded(true);
+        return;
       }
 
-      // Fallback to static questions
-      setDynamicQuestions(null);
-      setQuestionsLoaded(true);
+      try {
+        const jurisdiction = normalizeJurisdiction(wantedState);
+        console.log(`📍 Loading config for ${docConfig.id} in ${jurisdiction}`);
+        const cfg = await loadDocumentConfig(docConfig.id, jurisdiction);
+
+        // Keep overlay in local state for preview
+        setOverlayConfig(cfg.overlayConfig || null);
+        setHasOverlay(!!cfg.overlayConfig);
+
+        // 1) If JSON already provides questions, use them
+        if (cfg.questions?.length) {
+          console.log(`✅ Using ${cfg.questions.length} questions from JSON config`);
+          setDynamicQuestions(cfg.questions);
+          setQuestionsLoaded(true);
+          return;
+        }
+
+        // 2) No questions, but overlay given → generate from overlay
+        if (cfg.overlayConfig) {
+          console.log(`🔧 Generating questions from overlay config`);
+          const generated = generateQuestions(cfg.overlayConfig);
+          setDynamicQuestions(generated);
+          setQuestionsLoaded(true);
+          return;
+        }
+
+        // 3) Neither questions nor overlay → fallback to generic
+        console.log(`⚠️ No questions or overlay found, using generic`);
+        setDynamicQuestions(null);
+        setQuestionsLoaded(true);
+      } catch (e) {
+        console.warn('Failed to load dynamic config/questions:', e);
+        setDynamicQuestions(null);
+        setOverlayConfig(null);
+        setHasOverlay(false);
+        setQuestionsLoaded(true);
+      }
     },
-    [docType]
+    [docConfig?.id]
   );
 
   // When the state field inside the form changes, reload the questions
@@ -266,7 +285,7 @@ export default function StartWizardPageClient({
 
           const relevantData: Record<string, unknown> = {};
           Object.entries(data).forEach(([k, v]) => {
-            if (v !== undefined) relevantData[k] = v;
+          if (v !== undefined) relevantData[k] = v;
           });
           if (Object.keys(relevantData).length === 0) return;
 
@@ -339,7 +358,6 @@ export default function StartWizardPageClient({
 
   // Force a re-render of the PDF preview when data/state changes
   const previewKey = useMemo(() => {
-    // shallow-ish: state + list of keys present
     const keys = Object.keys(formData || {}).sort().join('|');
     return `${selectedState}-${keys}`;
   }, [selectedState, formData]);
@@ -381,13 +399,10 @@ export default function StartWizardPageClient({
     return (
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <Breadcrumb
-          items={[
-            { label: t('breadcrumb.home'), href: `/${locale}` },
+          items={[{ label: t('breadcrumb.home'), href: `/${locale}` },
             { label: documentDisplayName, href: `/${locale}/docs/${docType}` },
-            { label: t('breadcrumb.start') },
-          ]}
+            { label: t('breadcrumb.start') }]}
         />
-
         <div className="mt-6">
           <SmartDocumentWizard
             documentType={docType as 'vehicle-bill-of-sale'}
@@ -403,8 +418,7 @@ export default function StartWizardPageClient({
     );
   }
 
-  const showOfficialFormPreview =
-    !!selectedState && STATES_WITH_OFFICIAL_FORMS.includes(selectedState);
+  const showOfficialFormPreview = hasOverlay;
 
   return (
     <FormProvider {...methods}>
@@ -447,8 +461,7 @@ export default function StartWizardPageClient({
               onComplete={handleWizardComplete}
               onFieldFocus={setCurrentFieldId}
               ref={setWizardFormRef}
-              // Make the wizard strictly use the dynamically loaded / generated questions
-              questions={dynamicQuestions ?? undefined}
+              overrideQuestions={questionsLoaded && dynamicQuestions ? dynamicQuestions : undefined}
             />
             <div className="mt-6 lg:mt-8">
               <TrustBadges />
@@ -468,6 +481,7 @@ export default function StartWizardPageClient({
                   state={selectedState}
                   formData={formData}
                   documentType={docType}
+                  overlayConfig={overlayConfig}
                 />
               ) : (
                 <PreviewPane
