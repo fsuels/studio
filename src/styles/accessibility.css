@@ -17,39 +17,40 @@
 
 /* High contrast mode */
 .high-contrast {
-  filter: contrast(150%);
+  /* Higher contrast without harsh yellow accents */
+  filter: contrast(140%);
 }
 
 .high-contrast .bg-background {
-  background-color: #000000 !important;
-  color: #ffffff !important;
+  background-color: #0b1220 !important; /* deep navy */
+  color: #f8fafc !important; /* near-white */
 }
 
 .high-contrast .bg-card {
-  background-color: #1a1a1a !important;
-  color: #ffffff !important;
+  background-color: #0f172a !important; /* slate-900 */
+  color: #f1f5f9 !important;
 }
 
 .high-contrast .text-muted-foreground {
-  color: #cccccc !important;
+  color: #cbd5e1 !important; /* slate-300 */
 }
 
 .high-contrast .border {
-  border-color: #ffffff !important;
+  border-color: #334155 !important; /* slate-700 */
 }
 
 .high-contrast .text-primary {
-  color: #ffff00 !important;
+  color: #7dd3fc !important; /* sky-300 */
 }
 
 .high-contrast .bg-primary {
-  background-color: #ffff00 !important;
-  color: #000000 !important;
+  background-color: #0ea5e9 !important; /* sky-500 */
+  color: #04121f !important;
 }
 
 .high-contrast .bg-secondary {
-  background-color: #ffffff !important;
-  color: #000000 !important;
+  background-color: #111827 !important; /* gray-900 */
+  color: #e5e7eb !important; /* gray-200 */
 }
 
 /* Reduced motion */

@@ -3,13 +3,11 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FolderOpen, FileQuestion, Lock, Share2 } from 'lucide-react';
 import StepCard from './StepCard';
 
 const steps = [
   {
     number: 1,
-    Icon: FolderOpen,
     titleKey: 'home.steps.step1.titleUpdated',
     descKey: 'home.steps.step1.descUpdated',
     defaultTitle: 'Select a Legal Template',
@@ -18,7 +16,6 @@ const steps = [
   },
   {
     number: 2,
-    Icon: FileQuestion,
     titleKey: 'home.steps.step2.titleUpdated',
     descKey: 'home.steps.step2.descUpdated',
     defaultTitle: 'Answer Quick Prompts',
@@ -27,12 +24,6 @@ const steps = [
   },
   {
     number: 3,
-    Icon: () => (
-      <span className="relative inline-block w-8 h-8">
-        <Lock className="absolute inset-0" />
-        <Share2 className="absolute -right-2 -bottom-2 w-4 h-4" />
-      </span>
-    ),
     titleKey: 'home.steps.step3.title',
     descKey: 'home.steps.step3.descUpdated',
     defaultTitle: 'Securely Download & Share',
@@ -73,7 +64,6 @@ const HowItWorks = React.memo(function HowItWorks() {
                 number={step.number}
                 title={t(step.titleKey, { defaultValue: step.defaultTitle })}
                 desc={t(step.descKey, { defaultValue: step.defaultDesc })}
-                icon={<step.Icon className="w-8 h-8 text-primary" />}
               />
             </div>
           ))}

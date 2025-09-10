@@ -13,15 +13,21 @@ import {
 } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import {
   Loader2,
   FileText,
-  Folder,
   Home,
   Users,
   Clock,
   Zap,
   RefreshCcw,
+  Briefcase,
+  Shield,
+  Building2,
+  BadgeDollarSign,
+  Gavel,
+  Copyright,
   type LucideIcon,
 } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -36,6 +42,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     locale?: string;
   };
   const router = useRouter();
+  const { setShowDiscoveryModal } = useDiscoveryModal();
   const locale = (params.locale as 'en' | 'es') || 'en';
 
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
@@ -65,7 +72,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       label: tCommon('categories.employment', {
         defaultValue: 'Employment & HR',
       }),
-      icon: Users,
+      icon: Briefcase,
     },
     'personal-family': {
       label: tCommon('categories.personalFamily', {
@@ -77,31 +84,31 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       label: tCommon('categories.healthCare', {
         defaultValue: 'Health & Care',
       }),
-      icon: Users,
+      icon: Shield,
     },
     'finance-lending': {
       label: tCommon('categories.finance', {
         defaultValue: 'Finance & Lending',
       }),
-      icon: Folder,
+      icon: BadgeDollarSign,
     },
     'business-startups': {
       label: tCommon('categories.businessStartups', {
         defaultValue: 'Business & Start-ups',
       }),
-      icon: Folder,
+      icon: Building2,
     },
     'ip-creative': {
       label: tCommon('categories.ipCreative', {
         defaultValue: 'IP & Creative Works',
       }),
-      icon: FileText,
+      icon: Copyright,
     },
     'legal-process-disputes': {
       label: tCommon('categories.legalProcessDisputes', {
         defaultValue: 'Legal Process & Disputes',
       }),
-      icon: FileText,
+      icon: Gavel,
     },
     'estate-planning': {
       label: tCommon('categories.estatePlanning', {
@@ -261,7 +268,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   }, [topDocs, selectedCategory]);
 
   const handleExploreAll = () => {
-    router.push(`/${locale}/documents`);
+    setShowDiscoveryModal(true);
   };
 
   if (isLoading && isHydrated) {
@@ -292,7 +299,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
         {/* Phase 1: Show a small, curated category grid first */}
         {!selectedCategory && categories.length > 0 && (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
               {/* Curated set to reduce overwhelm */}
               {[
                 'real-estate-property',
@@ -314,19 +321,19 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                       setSelectedCategory(cat);
                       setShowAllForCategory(false);
                     }}
-                    className="text-left rounded-xl border bg-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/30 hover:bg-muted/50 border-gray-200"
+                    className="text-left rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-sky-300 hover:bg-white/90"
                   >
                     <div className="flex items-start gap-3">
                       {Icon && (
-                        <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <Icon className="h-5 w-5" />
+                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                          <Icon className="h-6 w-6" />
                         </span>
                       )}
                       <div>
-                        <div className="font-medium text-sm text-foreground">
+                        <div className="font-semibold text-[15px] text-slate-900">
                           {categoryMeta[cat]?.label || cat}
                         </div>
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="mt-1 text-[12.5px] leading-5 text-slate-600">
                           {categoryDescriptions[cat] || ''}
                         </p>
                       </div>
