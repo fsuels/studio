@@ -1,7 +1,7 @@
 // src/components/TopDocsChips.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,14 +11,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
 import { useTranslation } from 'react-i18next';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
   Loader2,
   FileText,
@@ -31,7 +25,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
-import { useIsMobile } from '@/hooks/use-mobile';
+// (No need for mobile-only dropdown after redesign)
 
 import { taxonomy } from '@/config/taxonomy';
 
@@ -47,7 +41,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('real-estate-property');
+  // Progressive reveal: start with NO selection (only category cards)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showAllForCategory, setShowAllForCategory] = useState(false);
   const badges: Record<string, 'new' | 'updated'> = {
     powerOfAttorney: 'new',
     leaseAgreement: 'updated',
@@ -55,6 +51,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   
   // Get all categories from taxonomy
   const allCategories = Object.keys(taxonomy.categories);
+  const searchParams = useSearchParams();
   
   // Category display names and icons - using all your categories
   const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = {
@@ -156,9 +153,70 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     },
   };
 
+  // Short descriptions for category cards (shown in the new grid)
+  const categoryDescriptions: Record<string, string> = {
+    'real-estate-property': tCommon('categoryDescriptions.realEstate', {
+      defaultValue: 'Leases, deeds, eviction notices and more.',
+    }),
+    'employment-hr': tCommon('categoryDescriptions.employment', {
+      defaultValue: 'Contracts, policies, termination letters, and more.',
+    }),
+    'personal-family': tCommon('categoryDescriptions.personalFamily', {
+      defaultValue: 'Wills, powers of attorney, prenuptial agreements.',
+    }),
+    'health-care': tCommon('categoryDescriptions.healthCare', {
+      defaultValue: 'Living wills, HIPAA, healthcare proxies, medical forms.',
+    }),
+    'finance-lending': tCommon('categoryDescriptions.finance', {
+      defaultValue: 'Loans, promissory notes, bills of sale.',
+    }),
+    'business-startups': tCommon('categoryDescriptions.businessStartups', {
+      defaultValue: 'NDAs, partnership agreements, operating agreements.',
+    }),
+    'ip-creative': tCommon('categoryDescriptions.ipCreative', {
+      defaultValue: 'Copyright, trademarks, licensing agreements.',
+    }),
+    'legal-process-disputes': tCommon('categoryDescriptions.legalProcessDisputes', {
+      defaultValue: 'Cease & desist, affidavits, demand letters.',
+    }),
+    'estate-planning': tCommon('categoryDescriptions.estatePlanning', {
+      defaultValue: 'Estate plans, trusts, guardianship, beneficiary forms.',
+    }),
+    'construction-trades': tCommon('categoryDescriptions.constructionTrades', {
+      defaultValue: 'Construction contracts, bids, lien waivers.',
+    }),
+    'technology-digital': tCommon('categoryDescriptions.technologyDigital', {
+      defaultValue: 'SaaS, terms, data processing, licensing.',
+    }),
+    'agriculture-energy': tCommon('categoryDescriptions.agricultureEnergy', {
+      defaultValue: 'Farm leases, supply, energy services.',
+    }),
+    'vehicles-equipment': tCommon('categoryDescriptions.vehiclesEquipment', {
+      defaultValue: 'Vehicle sale, title transfer, equipment leases.',
+    }),
+    'general-forms': tCommon('categoryDescriptions.generalForms', {
+      defaultValue: 'General purpose contracts, notices, letters.',
+    }),
+    'ip-creative-works': tCommon('categoryDescriptions.ipCreativeWorksMedia', {
+      defaultValue: 'Media releases, content licenses, collaboration.',
+    }),
+    'assets-gear': tCommon('categoryDescriptions.assetsGear', {
+      defaultValue: 'Purchase, loan, rental and lease forms.',
+    }),
+  };
+
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // If URL contains ?category=<key>, preselect it
+  useEffect(() => {
+    if (!isHydrated) return;
+    const catFromUrl = searchParams?.get('category');
+    if (catFromUrl && allCategories.includes(catFromUrl)) {
+      setSelectedCategory(catFromUrl);
+    }
+  }, [isHydrated, searchParams, allCategories]);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -168,19 +226,11 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     setIsLoading(false);
   }, [isHydrated]);
 
-  const categories = React.useMemo(
+  const categories = useMemo(
     () => allCategories.filter(cat => categoryMeta[cat]),
     [allCategories],
   );
-  const isMobile = useIsMobile();
-  const categoriesToShow = React.useMemo(
-    () => (isMobile ? categories.slice(0, 3) : categories),
-    [isMobile, categories],
-  );
-  const moreCategories = React.useMemo(
-    () => (isMobile ? categories.slice(3) : []),
-    [isMobile, categories],
-  );
+  // After redesign we show the full category grid responsively
   // Create mapping from taxonomy keys to document category names
   const taxonomyToDocCategory: Record<string, string[]> = {
     'real-estate-property': ['Real Estate', 'Property'],
@@ -202,20 +252,16 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   };
 
   // Filter documents by selected category
-  const filteredDocs = React.useMemo(() => {
+  const filteredDocs = useMemo(() => {
+    if (!selectedCategory) return [] as LegalDocument[];
     const validCategories = taxonomyToDocCategory[selectedCategory] || [];
-    return topDocs.filter((doc) => 
+    return topDocs.filter((doc) =>
       validCategories.includes(doc.category) || doc.category === selectedCategory
     );
   }, [topDocs, selectedCategory]);
 
   const handleExploreAll = () => {
-    const workflowStartElement = document.getElementById('workflow-start');
-    if (workflowStartElement) {
-      router.push(`/${locale}/#workflow-start`);
-    } else {
-      router.push(`/${locale}/`); // Fallback to homepage
-    }
+    router.push(`/${locale}/documents`);
   };
 
   if (isLoading && isHydrated) {
@@ -243,125 +289,157 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             defaultValue: 'Popular Legal Documents',
           })}
         </h2>
-        
-        {/* Category Filter Buttons */}
-        {categories.length > 1 && (
-          <div className="mb-6 flex flex-wrap justify-center gap-2">
-            {categoriesToShow.map((cat) => (
-              <Button
-                key={cat}
-                size="sm"
-                variant={selectedCategory === cat ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory(cat)}
-              >
-                {categoryMeta[cat]?.label || cat}
+        {/* Phase 1: Show a small, curated category grid first */}
+        {!selectedCategory && categories.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {/* Curated set to reduce overwhelm */}
+              {[
+                'real-estate-property',
+                'employment-hr',
+                'personal-family',
+                'health-care',
+                'finance-lending',
+                'business-startups',
+                'ip-creative',
+                'legal-process-disputes',
+              ].map((cat) => {
+                if (!categoryMeta[cat]) return null;
+                const Icon = categoryMeta[cat]?.icon || FileText;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setShowAllForCategory(false);
+                    }}
+                    className="text-left rounded-xl border bg-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/30 hover:bg-muted/50 border-gray-200"
+                  >
+                    <div className="flex items-start gap-3">
+                      {Icon && (
+                        <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                      )}
+                      <div>
+                        <div className="font-medium text-sm text-foreground">
+                          {categoryMeta[cat]?.label || cat}
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {categoryDescriptions[cat] || ''}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="text-center mt-2">
+              <Button variant="link" onClick={handleExploreAll} className="text-primary text-sm">
+                {tCommon('stepOne.exploreAllCategoriesButton', {
+                  defaultValue: 'Explore All Document Categories',
+                })} →
               </Button>
-            ))}
-            {isMobile && moreCategories.length > 0 && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm" variant="outline">
-                    {tCommon('more', { defaultValue: 'More' })}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center">
-                  {moreCategories.map((cat) => (
-                    <DropdownMenuItem
-                      key={cat}
-                      onSelect={() => setSelectedCategory(cat)}
-                    >
-                      {categoryMeta[cat]?.label || cat}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-          </div>
+            </div>
+          </>
         )}
 
-        {/* Selected Category Name */}
-        <h3 className="text-lg font-medium text-center mb-4 text-foreground">
-          {categoryMeta[selectedCategory]?.label || selectedCategory}
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredDocs.map((doc) => {
-            const Icon = categoryMeta[doc.category]?.icon || FileText;
-            const badge = badges[doc.id];
-            return (
-              <Link
-                key={doc.id}
-                href={`/${locale}/docs/${doc.id}`}
-                prefetch
-                className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    {React.createElement(Icon, {
-                      className: 'h-4 w-4 text-primary/80',
-                    })}
-                    <span className="text-sm font-medium">
-                      {doc.translations?.[locale as 'en' | 'es']?.name ||
-                        doc.translations?.en?.name ||
-                        doc.name ||
-                        doc.id}
-                    </span>
-                  </div>
-                  {badge && (
+        {/* Phase 2: After a category is selected, show filtered docs only */}
+        {selectedCategory && (
+          <>
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-medium text-foreground" id="popular-docs-selected">
+                {categoryMeta[selectedCategory]?.label || selectedCategory}
+              </h3>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedCategory(null)}>
+                {tCommon('changeCategory', { defaultValue: 'Back to categories' })}
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
+                const Icon = categoryMeta[doc.category]?.icon || FileText;
+                const badge = badges[doc.id];
+                return (
+                  <Link
+                    key={doc.id}
+                    href={`/${locale}/docs/${doc.id}`}
+                    prefetch
+                    className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        {React.createElement(Icon, {
+                          className: 'h-4 w-4 text-primary/80',
+                        })}
+                        <span className="text-sm font-medium">
+                          {doc.translations?.[locale as 'en' | 'es']?.name ||
+                            doc.translations?.en?.name ||
+                            doc.name ||
+                            doc.id}
+                        </span>
+                      </div>
+                      {badge && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge
+                              variant="secondary"
+                              className="flex items-center space-x-1"
+                            >
+                              {badge === 'new' ? (
+                                <Zap className="h-3 w-3" />
+                              ) : (
+                                <RefreshCcw className="h-3 w-3" />
+                              )}
+                              <span className="capitalize">
+                                {tCommon(`TopDocsChips.badge.${badge}`, {
+                                  defaultValue: badge === 'new' ? 'New' : 'Updated',
+                                })}
+                              </span>
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {badge === 'new'
+                              ? tCommon('TopDocsChips.tooltip.new', {
+                                  defaultValue: 'Recently added',
+                                })
+                              : tCommon('TopDocsChips.tooltip.updated', {
+                                  defaultValue: 'Recently refreshed',
+                                })}
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center space-x-1"
-                        >
-                          {badge === 'new' ? (
-                            <Zap className="h-3 w-3" />
-                          ) : (
-                            <RefreshCcw className="h-3 w-3" />
-                          )}
-                          <span className="capitalize">
-                            {tCommon(`TopDocsChips.badge.${badge}`, {
-                              defaultValue: badge === 'new' ? 'New' : 'Updated',
-                            })}
-                          </span>
-                        </Badge>
+                        <span className="mt-2 flex items-center gap-1 text-xs text-slate-700 dark:text-slate-200">
+                          <Clock className="h-3 w-3" />
+                          ~3 min
+                        </span>
                       </TooltipTrigger>
-                      <TooltipContent>
-                        {badge === 'new'
-                          ? tCommon('TopDocsChips.tooltip.new', {
-                              defaultValue: 'Recently added',
-                            })
-                          : tCommon('TopDocsChips.tooltip.updated', {
-                              defaultValue: 'Recently refreshed',
-                            })}
-                      </TooltipContent>
+                      <TooltipContent>Average completion time</TooltipContent>
                     </Tooltip>
-                  )}
-                </div>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="mt-2 flex items-center gap-1 text-xs text-slate-700 dark:text-slate-200">
-                      <Clock className="h-3 w-3" />
-                      ~3 min
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>Average completion time</TooltipContent>
-                </Tooltip>
-              </Link>
-            );
-          })}
-        </div>
-        <div className="text-center mt-6">
-          <Button
-            variant="link"
-            onClick={handleExploreAll}
-            className="text-primary text-sm"
-          >
-            {tCommon('stepOne.exploreAllCategoriesButton', {
-              defaultValue: 'Explore All Document Categories',
-            })}{' '}
-            →
-          </Button>
-        </div>
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="text-center mt-6 space-x-4">
+              {!showAllForCategory && filteredDocs.length > 12 && (
+                <Button variant="secondary" size="sm" onClick={() => setShowAllForCategory(true)}>
+                  {tCommon('showMore', { defaultValue: 'Show more' })}
+                </Button>
+              )}
+              <Button
+                variant="link"
+                onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
+                className="text-primary text-sm"
+              >
+                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })} →
+              </Button>
+            </div>
+          </>
+        )}
+        
       </section>
     </TooltipProvider>
   );
