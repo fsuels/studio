@@ -3,64 +3,106 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { loadAllResources } from './i18nResources';
+import type { Resource } from 'i18next';
 
-/** Guard so the same instance isn’t initialised twice */
-if (!i18n.isInitialized) {
-  const i18nInstance = i18n; // Use a local var for clarity in this block
+let initPromise: Promise<void> | null = null;
 
-  // ── Bridge to react-i18next and LanguageDetector **only in the browser**
-  if (typeof window !== 'undefined') {
-    i18nInstance.use(LanguageDetector).use(initReactI18next);
-  }
+export async function ensureI18nInitialized(): Promise<void> {
+  if (i18n.isInitialized) return;
+  if (initPromise) return initPromise;
 
-  // ── Single initialisation call
-  const resources = await loadAllResources();
+  initPromise = (async () => {
+    try {
+      // Bridge adapters only in the browser
+      if (typeof window !== 'undefined') {
+        i18n.use(LanguageDetector).use(initReactI18next);
+      }
 
-  await i18nInstance
-    .init({
-      lng: 'en', // Default language
-      fallbackLng: 'en',
-      supportedLngs: ['en', 'es'],
-      ns: [
-        'common',
-        'header',
-        'footer',
-        'support',
-        'faq',
-        'documents',
-        'doc_bill_of_sale_vehicle',
-        'doc_promissory_note',
-        'online-notary',
-        'electronic-signature',
-      ],
-      defaultNS: 'common',
-      resources,
-      interpolation: { escapeValue: false }, // React already does escaping
-      react: { useSuspense: false }, // Recommended for Next.js App Router
-      // Detection options, only relevant on client
-      detection:
-        typeof window !== 'undefined'
-          ? {
-              order: [
-                'querystring',
-                'cookie',
-                'localStorage',
-                'navigator',
-                'htmlTag',
-                'path',
-                'subdomain',
-              ],
-              caches: ['localStorage', 'cookie'],
-            }
-          : undefined,
-      saveMissing: false, // Disable auto POST to `/locales/add`
-      returnObjects: false,
-      returnEmptyString: true,
-    })
-    .catch((err) => {
-      console.error('i18n init error', err);
-    });
+      let resources: Resource = {} as Resource;
+      try {
+        resources = await loadAllResources();
+      } catch (err) {
+        console.error(
+          'i18n resource load error; falling back to empty resources',
+          err,
+        );
+        resources = {
+          en: {
+            common: {},
+            header: {},
+            footer: {},
+            support: {},
+            faq: {},
+            documents: {},
+            doc_bill_of_sale_vehicle: {},
+            doc_promissory_note: {},
+            'online-notary': {},
+            'electronic-signature': {},
+          },
+          es: {
+            common: {},
+            header: {},
+            footer: {},
+            support: {},
+            faq: {},
+            documents: {},
+            doc_bill_of_sale_vehicle: {},
+            doc_promissory_note: {},
+            'online-notary': {},
+            'electronic-signature': {},
+          },
+        } as unknown as Resource;
+      }
+
+      await i18n
+        .init({
+          lng: 'en',
+          fallbackLng: 'en',
+          supportedLngs: ['en', 'es'],
+          ns: [
+            'common',
+            'header',
+            'footer',
+            'support',
+            'faq',
+            'documents',
+            'doc_bill_of_sale_vehicle',
+            'doc_promissory_note',
+            'online-notary',
+            'electronic-signature',
+          ],
+          defaultNS: 'common',
+          resources,
+          interpolation: { escapeValue: false },
+          react: { useSuspense: false },
+          detection:
+            typeof window !== 'undefined'
+              ? {
+                  order: [
+                    'querystring',
+                    'cookie',
+                    'localStorage',
+                    'navigator',
+                    'htmlTag',
+                    'path',
+                    'subdomain',
+                  ],
+                  caches: ['localStorage', 'cookie'],
+                }
+              : undefined,
+          saveMissing: false,
+          returnObjects: false,
+          returnEmptyString: true,
+        })
+        .catch((err) => {
+          console.error('i18n init error', err);
+        });
+    } finally {
+      // no-op
+    }
+  })();
+
+  return initPromise;
 }
 
-/** Export the singleton so RootClient can import `default` */
 export default i18n;

@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search, X, ChevronRight, FileText, Mail, FileCheck, Users, Building } from 'lucide-react';
 import type { LegalDocument } from '@/lib/document-library';
@@ -386,7 +387,7 @@ export default function ConsolidatedMegaMenuContent({
                         return (
                           <li key={doc.id}>
                             <Link
-                              href={`/${currentLocale}/docs/${doc.id}`}
+                              href={`/${currentLocale}/docs/${resolveDocSlug(doc.id)}`}
                               onClick={handleDocumentClick}
                               onMouseEnter={() => setHoveredDocument(doc.id)}
                               onMouseLeave={() => setHoveredDocument(null)}
@@ -450,7 +451,7 @@ export default function ConsolidatedMegaMenuContent({
                             return (
                               <li key={docId}>
                                 <Link
-                                  href={`/${currentLocale}/docs/${doc.id}`}
+                                  href={`/${currentLocale}/docs/${resolveDocSlug(doc.id)}`}
                                   onClick={handleDocumentClick}
                                   onMouseEnter={() => setHoveredDocument(doc.id)}
                                   onMouseLeave={() => setHoveredDocument(null)}

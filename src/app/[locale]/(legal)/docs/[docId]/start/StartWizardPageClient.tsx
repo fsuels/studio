@@ -28,6 +28,7 @@ import ReEngagementTools from '@/components/reengagement/ReEngagementTools.clien
 import { loadDocumentConfig, normalizeJurisdiction } from '@/lib/config-loader';
 import type { OverlayConfig } from '@/lib/config-loader';
 import { generateQuestions } from '@/lib/question-generator';
+import { buildOverlayFromAcro } from '@/lib/pdf/acro-introspect';
 import type { Question } from '@/types/documents';
 
 const Loading = () => (
@@ -144,10 +145,24 @@ export default function StartWizardPageClient({
           return;
         }
 
-        // 2) No questions, but overlay given → generate from overlay
+        // 2) No questions; overlay exists → if overlay has few/no mappings, introspect PDF AcroForm
         if (cfg.overlayConfig) {
-          console.log(`🔧 Generating questions from overlay config`);
-          const generated = generateQuestions(cfg.overlayConfig);
+          const hasMappings = !!cfg.overlayConfig.fieldMapping && Object.keys(cfg.overlayConfig.fieldMapping!).length > 8;
+          let overlayToUse: OverlayConfig = cfg.overlayConfig;
+          
+          if (!hasMappings && cfg.overlayConfig.pdfPath) {
+            try {
+              console.log('🧭 Overlay has no/limited mappings; introspecting AcroForm…');
+              overlayToUse = await buildOverlayFromAcro(cfg.overlayConfig.pdfPath);
+              setOverlayConfig(overlayToUse);
+              setHasOverlay(true);
+            } catch (e) {
+              console.warn('Acro introspection failed; falling back to provided overlay config', e);
+            }
+          }
+
+          console.log(`🔧 Generating questions directly from form overlay`);
+          const generated = generateQuestions(overlayToUse);
           setDynamicQuestions(generated);
           setQuestionsLoaded(true);
           return;

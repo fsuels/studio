@@ -86,7 +86,7 @@ export default function VehicleBillOfSaleDisplay({
       name: itemName,
       price: priceCents,
     });
-    router.prefetch(`/${locale}/docs/bill-of-sale-vehicle/start`);
+    router.prefetch(`/${locale}/docs/vehicle-bill-of-sale/start`);
   };
 
   const informationalSections: Section[] = [
@@ -459,11 +459,11 @@ export default function VehicleBillOfSaleDisplay({
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onMouseEnter={() =>
-              router.prefetch(`/${locale}/docs/bill-of-sale-vehicle/start`)
+              router.prefetch(`/${locale}/docs/vehicle-bill-of-sale/start`)
             }
           >
             <Link
-              href={`/${locale}/docs/bill-of-sale-vehicle/start`}
+              href={`/${locale}/docs/vehicle-bill-of-sale/start`}
               onClick={handleStartProcess}
               prefetch
             >
@@ -474,7 +474,7 @@ export default function VehicleBillOfSaleDisplay({
       </div>
       <StickyMobileCTA locale={locale} />
       <StickyGuaranteeBar
-        href={`/${locale}/docs/bill-of-sale-vehicle/start`}
+        href={`/${locale}/docs/vehicle-bill-of-sale/start`}
         label="Create a legally-binding Bill of Sale in 5 min — e-Sign & download"
       />
     </section>

@@ -3,6 +3,7 @@
 
 import React, { useMemo } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -206,7 +207,7 @@ export default function CategoryMegaMenuContent({
                   return (
                     <li key={docId}>
                       <Link
-                        href={`/${locale}/docs/${doc.id}`}
+                        href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
                         onClick={handleDocumentClick}
                         onMouseEnter={() => setHoveredDocument(doc.id)}
                         onMouseLeave={() => setHoveredDocument(null)}
@@ -272,7 +273,7 @@ export default function CategoryMegaMenuContent({
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={`/${locale}/docs/${doc.id}`}
+                          href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
                           onClick={handleDocumentClick}
                           onMouseEnter={() => setHoveredDocument(doc.id)}
                           onMouseLeave={() => setHoveredDocument(null)}

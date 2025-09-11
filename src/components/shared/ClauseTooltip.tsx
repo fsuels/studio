@@ -48,6 +48,7 @@ function ClauseTooltip({
   className,
   importance = 'medium',
 }: ClauseTooltipProps) {
+  const aiEnabled = !!process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   const { preferences } = useAccessibility();
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -72,6 +73,10 @@ function ClauseTooltip({
   }, [preferences.simplifyLegalJargon, text]);
 
   const handleExplain = async () => {
+    if (!aiEnabled) {
+      setContent('AI explanations are disabled in this environment.');
+      return;
+    }
     const cached = getCache(id);
     if (cached) {
       setContent(cached);

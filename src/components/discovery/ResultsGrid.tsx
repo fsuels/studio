@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { FileText, Zap, Star } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
@@ -96,7 +97,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
             });
           }
           
-          const docId = isSemanticResult ? result.doc.id : result.id;
+          const docId = resolveDocSlug(isSemanticResult ? result.doc.id : result.id);
 
           return (
             <Link

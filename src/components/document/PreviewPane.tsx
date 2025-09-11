@@ -78,7 +78,7 @@ export default function PreviewPane({
 
   const watermarkText = t('preview.watermark', {
     ns: 'translation',
-    defaultValue: 'PREVIEW',
+    defaultValue: 'DRAFT',
   });
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
 

@@ -61,6 +61,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Parse body first so we can allow certain public actions without auth
+    const body = await request.json().catch(() => ({} as any));
+    const { action, alertId } = body as { action?: string; alertId?: string };
+
+    // Allow anonymous client telemetry to avoid console errors on public pages
+    if (action === 'client_performance' || action === 'client_error') {
+      await operationalHealth.recordMetric({
+        metricType: action === 'client_error' ? 'error_rate' : 'latency',
+        value: 1,
+        endpoint: '/client',
+        metadata: { ...body, public: true },
+      });
+      return NextResponse.json({ ok: true });
+    }
+
+    // Require admin for other actions
     const authResult = await requireAuth(request);
     if (authResult instanceof Response) return authResult;
 
@@ -74,9 +90,6 @@ export async function POST(request: NextRequest) {
         { status: 403 },
       );
     }
-
-    const body = await request.json();
-    const { action, alertId } = body;
 
     switch (action) {
       case 'resolve_alert':

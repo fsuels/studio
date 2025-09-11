@@ -4,16 +4,20 @@ let openai: OpenAI | null = null;
 
 const initOpenAI = (): OpenAI | null => {
   if (openai) return openai;
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY as
+    | string
+    | undefined;
+  // Gracefully disable when no key is provided in dev
   if (!apiKey) {
-    console.error('[explain-clause] Missing NEXT_PUBLIC_OPENAI_API_KEY');
+    // Use debug to avoid Dev Overlay redbox from console.error
+    console.debug('[explain-clause] OpenAI disabled: missing NEXT_PUBLIC_OPENAI_API_KEY');
     return null;
   }
   try {
     openai = new OpenAI({ apiKey });
     return openai;
   } catch (err) {
-    console.error('[explain-clause] Failed to init OpenAI', err);
+    console.debug('[explain-clause] Failed to init OpenAI', err);
     return null;
   }
 };
@@ -30,7 +34,7 @@ export async function explainClause(text: string): Promise<string> {
     });
     return res.choices[0].message.content?.trim() || '';
   } catch (err) {
-    console.error('[explain-clause] API error', err);
+    console.debug('[explain-clause] API error', err);
     return 'Unable to retrieve explanation.';
   }
 }

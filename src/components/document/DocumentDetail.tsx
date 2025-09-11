@@ -156,7 +156,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
       : docConfig.translations?.en?.name || docConfig.name);
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const fallbackAlt = altText || `${documentDisplayName || docId} preview`;
-  const watermarkText = t('preview.watermark', { defaultValue: 'PREVIEW' });
+  const watermarkText = t('preview.watermark', { defaultValue: 'DRAFT' });
 
   return (
     <div

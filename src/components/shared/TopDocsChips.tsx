@@ -3,6 +3,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -370,7 +371,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                 return (
                   <Link
                     key={doc.id}
-                    href={`/${locale}/docs/${doc.id}`}
+                    href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
                     prefetch
                     className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
                   >

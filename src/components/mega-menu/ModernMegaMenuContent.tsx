@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Badge } from '@/components/ui/badge';
@@ -605,7 +606,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                   return (
                     <Link
                       key={doc.slug}
-                      href={`/${locale}/docs/${doc.slug}`}
+                      href={`/${locale}/docs/${resolveDocSlug(doc.slug)}`}
                       onClick={onLinkClick}
                       className="group p-6 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 bg-white"
                     >
@@ -743,7 +744,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                           {getActiveTabDocuments(goal).map((doc) => (
                             <Link
                               key={doc.slug}
-                              href={`/${locale}/docs/${doc.slug}`}
+                              href={`/${locale}/docs/${resolveDocSlug(doc.slug)}`}
                               onClick={onLinkClick}
                               className={cn(
                                 "group/doc block rounded-lg hover:bg-gray-50 hover:border-pink-200 border border-transparent transition-all duration-200",
@@ -855,7 +856,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                           {goal.documents.map((doc) => (
                             <Link
                               key={doc.slug}
-                              href={`/${locale}/docs/${doc.slug}`}
+                              href={`/${locale}/docs/${resolveDocSlug(doc.slug)}`}
                               onClick={onLinkClick}
                               className={cn(
                                 "group/doc block rounded-lg hover:bg-gray-50 hover:border-blue-200 border border-transparent transition-all duration-200",

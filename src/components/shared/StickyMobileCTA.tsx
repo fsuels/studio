@@ -1,10 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { resolveDocSlug } from '@/lib/slug-alias';
 
 export default function StickyMobileCTA({
   locale,
-  docId = 'bill-of-sale-vehicle',
+  docId = 'vehicle-bill-of-sale',
   price = 19.95,
   ctaText = 'Start Document',
 }: {
@@ -26,7 +27,7 @@ export default function StickyMobileCTA({
         <span className="font-semibold">
           ${price.toFixed(2)} • attorney-drafted
         </span>
-        <Link href={`/${locale}/docs/${docId}/start`} className="btn-primary">
+        <Link href={`/${locale}/docs/${resolveDocSlug(docId)}/start`} className="btn-primary">
           {ctaText}
         </Link>
       </div>

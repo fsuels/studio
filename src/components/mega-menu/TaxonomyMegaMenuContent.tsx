@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { Button } from '@/components/ui/button';
@@ -151,7 +152,7 @@ const TaxonomyMegaMenuContent: React.FC<TaxonomyMegaMenuContentProps> = ({
                 return (
                   <Link
                     key={slug}
-                    href={`/${locale}/docs/${slug}`}
+                    href={`/${locale}/docs/${resolveDocSlug(slug)}`}
                     onClick={onLinkClick}
                     className="flex items-center justify-between p-2 rounded-md hover:bg-primary/10 transition-colors group"
                   >
@@ -261,7 +262,7 @@ const SituationCard: React.FC<{
                 return (
                   <Link
                     key={slug}
-                    href={`/${locale}/docs/${slug}`}
+                    href={`/${locale}/docs/${resolveDocSlug(slug)}`}
                     onClick={onLinkClick}
                     className="flex items-center justify-between text-xs hover:text-primary transition-colors"
                   >

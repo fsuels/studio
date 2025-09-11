@@ -3,6 +3,7 @@
 
 import React, { useMemo } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight } from 'lucide-react';
@@ -533,7 +534,7 @@ export default function CategoryDropdown({
                           )}
                         >
                           <Link
-                            href={`/${locale}/docs/${doc.id}`}
+                            href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
                             onClick={onLinkClick}
                             onMouseEnter={() => setHoveredDocument(doc.id)}
                             onMouseLeave={() => setHoveredDocument(null)}

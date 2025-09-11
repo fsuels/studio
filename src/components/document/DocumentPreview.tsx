@@ -80,8 +80,8 @@ const DocumentPreview = React.memo(function DocumentPreview({
                    text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-widest opacity-10 rotate-[-35deg] text-muted-foreground"
       >
         {locale === 'es'
-          ? t('VISTA PREVIA', 'VISTA PREVIA')
-          : t('PREVIEW', 'PREVIEW')}
+          ? t('BORRADOR', 'BORRADOR')
+          : t('DRAFT', 'DRAFT')}
       </div>
 
       {imgExists ? (

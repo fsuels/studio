@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:webpack": "next dev",
     "dev:alt": "next dev --turbopack -p 9003",
     "dev:collab": "ENABLE_COLLABORATION=true node collaboration-server.mjs",
     "build": "next build",
@@ -39,6 +40,7 @@
     "bundle:size": "npm run build && npx bundlesize",
     "bundle:stats": "npm run build && npx webpack-bundle-analyzer .next/static/chunks/webpack-*.js",
     "verify-templates": "tsx scripts/verify-templates.ts",
+    "dump:acro:fl": "tsx scripts/dump-acrofields.ts public/forms/vehicle-bill-of-sale/florida/HSMV-82050.pdf",
     "monitor-templates": "tsx scripts/template-monitor.ts",
     "fix-templates": "tsx scripts/auto-fix-templates.ts",
     "template-report": "tsx scripts/verify-templates.ts --report-only",

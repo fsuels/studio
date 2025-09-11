@@ -90,7 +90,21 @@ async function smartFieldMapping(
       const field = form.getField(fieldName);
 
       if (isTextField(field)) {
-        field.setText(String(value));
+        let text = String(value ?? '');
+        const lowerId = fieldId.toLowerCase();
+        // Heuristic formatting for common fields
+        if (lowerId.includes('price') || lowerId.includes('amount')) {
+          const n = Number(value);
+          if (!Number.isNaN(n)) text = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+        } else if (lowerId.includes('date')) {
+          try {
+            const d = new Date(value);
+            if (!Number.isNaN(d.getTime())) text = d.toLocaleDateString('en-US');
+          } catch {}
+        } else if (lowerId === 'vin') {
+          text = text.toUpperCase();
+        }
+        field.setText(text);
       } else if (isCheckBox(field)) {
         if (value === true || value === 'true' || value === 1) {
           field.check();
@@ -130,7 +144,21 @@ async function coordinateOverlay(
     const page = pages[coord.page ?? 0];
     if (!page) continue;
 
-    page.drawText(String(value), {
+    let text = String(value ?? '');
+    const lowerId = fieldId.toLowerCase();
+    if (lowerId.includes('price') || lowerId.includes('amount')) {
+      const n = Number(value);
+      if (!Number.isNaN(n)) text = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+    } else if (lowerId.includes('date')) {
+      try {
+        const d = new Date(value);
+        if (!Number.isNaN(d.getTime())) text = d.toLocaleDateString('en-US');
+      } catch {}
+    } else if (lowerId === 'vin') {
+      text = text.toUpperCase();
+    }
+
+    page.drawText(text, {
       x: coord.x,
       y: coord.y,
       size: coord.fontSize ?? 10,

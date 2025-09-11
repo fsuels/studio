@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
@@ -43,7 +44,7 @@ const MemoizedDocLink = React.memo(function DocLink({
 }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
-  const docHref = `/${locale}/docs/${doc.id}`;
+  const docHref = `/${locale}/docs/${resolveDocSlug(doc.id)}`;
 
   return (
     <li className="md:px-0 md:py-0">

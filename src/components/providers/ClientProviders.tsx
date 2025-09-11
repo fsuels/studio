@@ -11,6 +11,7 @@ import { AccessibilityProvider } from '@/contexts/AccessibilityProvider';
 import { DiscoveryModalProvider } from '@/contexts/DiscoveryModalContext';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
+import { usePathname } from 'next/navigation';
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -47,6 +48,7 @@ const AppShell = React.memo(function AppShell({
   children: ReactNode;
 }) {
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -64,7 +66,9 @@ const AppShell = React.memo(function AppShell({
       {/* Global Document Discovery Modal */}
       {isMounted && <DocumentDiscoveryModal />}
       {/* AI Feature Educational Tooltip */}
-      {isMounted && <AIFeatureTooltip />}
+      {isMounted && !/^\/?$|^\/(en|es)\/?$/.test(pathname || '') && (
+        <AIFeatureTooltip />
+      )}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
     </>

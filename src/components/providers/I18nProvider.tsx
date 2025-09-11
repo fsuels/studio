@@ -3,7 +3,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import i18nInstance from '@/lib/i18n'; // Import the server-safe and client-configured instance
+import i18nInstance, { ensureI18nInitialized } from '@/lib/i18n'; // Import the server-safe and client-configured instance
 
 interface I18nProviderProps {
   children: ReactNode;
@@ -20,51 +20,36 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
   // i18nInstance from i18n.ts is already initialized (or being initialized).
   // We just need to ensure the language is correctly set.
   const [isLanguageSynced, setIsLanguageSynced] = useState(false);
-
+  // Safety net: ensure we never block rendering indefinitely
   useEffect(() => {
-    // Ensure the i18n instance is fully initialized before trying to change language.
-    // The `i18n.isInitialized` check in i18n.ts handles the init call.
-    // Here, we primarily focus on setting the correct language.
-    if (i18nInstance.isInitialized) {
-      if (i18nInstance.language !== locale) {
-        i18nInstance
-          .changeLanguage(locale)
-          .then(() => {
-            setIsLanguageSynced(true);
-          })
-          .catch((err) => {
-            console.error(
-              '[I18nClientProvider] Failed to change language:',
-              err,
-            );
-            setIsLanguageSynced(true); // Still allow app to render
-          });
-      } else {
+    const timer = setTimeout(() => {
+      if (!isLanguageSynced) {
+        console.warn('[I18nClientProvider] Timeout waiting for i18n; rendering anyway');
         setIsLanguageSynced(true);
       }
-    } else {
-      // If not initialized yet, wait for the 'initialized' event.
-      const handleInitialized = () => {
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [isLanguageSynced]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const sync = async () => {
+      try {
+        await ensureI18nInitialized();
+        if (cancelled) return;
         if (i18nInstance.language !== locale) {
-          i18nInstance
-            .changeLanguage(locale)
-            .then(() => setIsLanguageSynced(true))
-            .catch((err) => {
-              console.error(
-                '[I18nClientProvider] Failed to change language post-init event:',
-                err,
-              );
-              setIsLanguageSynced(true);
-            });
-        } else {
-          setIsLanguageSynced(true);
+          await i18nInstance.changeLanguage(locale);
         }
-      };
-      i18nInstance.on('initialized', handleInitialized);
-      return () => {
-        i18nInstance.off('initialized', handleInitialized);
-      };
-    }
+      } catch (err) {
+        console.error('[I18nClientProvider] init/changeLanguage error:', err);
+      } finally {
+        if (!cancelled) setIsLanguageSynced(true);
+      }
+    };
+    sync();
+    return () => {
+      cancelled = true;
+    };
   }, [locale]);
 
   if (!isLanguageSynced) {

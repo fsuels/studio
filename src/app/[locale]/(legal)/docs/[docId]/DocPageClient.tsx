@@ -533,67 +533,105 @@ export default function DocPageClient({
         ) : (
           <>
             {/* Generic features & FAQ... */}
-            <section className="mt-16 grid md:grid-cols-3 gap-6">
-              {features.map((f, i) => (
-                <div
-                  key={i}
-                  className="text-center p-4 bg-card border border-border rounded-lg shadow-md"
-                >
-                  <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm font-medium text-card-foreground mb-1">
-                    {t(f.titleKey, f.defaultTitle)}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {t(f.descKey, f.defaultDesc)}
-                  </p>
+            {/* Top features row: circular icons and concise text, on a subtle band */}
+            <section className="mt-16">
+              <div className="rounded-2xl bg-muted/50 p-5 md:p-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {features.map((f, i) => (
+                    <div
+                      key={i}
+                      className="text-center"
+                    >
+                      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-background shadow ring-1 ring-black/5">
+                        <f.icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <p className="text-sm font-medium text-card-foreground">
+                        {t(f.titleKey, f.defaultTitle)}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </section>
 
-            <section className="mt-16 max-w-3xl mx-auto space-y-6">
-              <h2 className="text-2xl font-semibold text-center text-foreground">
-                {t('docDetail.howToUseTitle', 'How to Use This Template')}
+            {/* How to use: centered title with numbered pills */}
+            <section className="mt-14 max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-semibold text-center text-foreground">
+                {t('docDetail.howToUseTitle', 'How To Use This Template')}
               </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>{t('docDetail.howToStep1', 'Answer each question in the guided form.')}</li>
-                <li>{t('docDetail.howToStep2', 'Make any tweaks using the built-in editor.')}</li>
-                <li>{t('docDetail.howToStep3', 'E-sign and download your completed document.')}</li>
-              </ol>
 
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-foreground">
+              <ul className="mt-5 space-y-3">
+                {[1, 2, 3].map((num) => (
+                  <li
+                    key={num}
+                    className="flex items-start gap-3 text-sm text-muted-foreground"
+                  >
+                    <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-semibold ring-1 ring-primary/20">
+                      {num}
+                    </span>
+                    <span>
+                      {num === 1
+                        ? t(
+                            'docDetail.howToStep1',
+                            'Answer each question in the guided form.',
+                          )
+                        : num === 2
+                          ? t(
+                              'docDetail.howToStep2',
+                              'Your document is automatically created.',
+                            )
+                          : t(
+                              'docDetail.howToStep3',
+                              'Sign and download your finished document.',
+                            )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* FAQ block */}
+              <div className="mt-10">
+                <h3 className="text-2xl font-semibold text-center text-foreground">
                   {t('docDetail.faqTitle', 'Frequently Asked Questions')}
                 </h3>
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="q1">
-                    <AccordionTrigger>
-                      {t('docDetail.faq1Question', 'Do I need a notary for this document?')}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {t(
-                        'docDetail.faq1Answer',
-                        'Requirements vary by state, but notarization can add extra authenticity.',
-                      )}
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="q2">
-                    <AccordionTrigger>
-                      {t('docDetail.faq2Question', 'Can I use it for any vehicle type?')}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {t(
-                        'docDetail.faq2Answer',
-                        'Yes, simply describe the vehicle accurately in the form.',
-                      )}
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                <div className="mt-4 space-y-3">
+                  <Accordion type="single" collapsible className="w-full space-y-3">
+                    <AccordionItem value="q1" className="rounded-xl border border-b-0 bg-card px-4 shadow-sm">
+                      <AccordionTrigger className="py-4 text-left text-base hover:no-underline">
+                        {t(
+                          'docDetail.faq1Question',
+                          'Do I need a notary for this document?',
+                        )}
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-0 text-sm text-muted-foreground">
+                        {t(
+                          'docDetail.faq1Answer',
+                          'Requirements vary by state, but notarization can add extra authenticity.',
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="q2" className="rounded-xl border border-b-0 bg-card px-4 shadow-sm">
+                      <AccordionTrigger className="py-4 text-left text-base hover:no-underline">
+                        {t(
+                          'docDetail.faq2Question',
+                          'Can I use it for any vehicle type?',
+                        )}
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-0 text-sm text-muted-foreground">
+                        {t(
+                          'docDetail.faq2Answer',
+                          'Yes, simply describe the vehicle accurately in the form.',
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
                 <div className="mt-4 text-center">
                   <Link
                     href={`/${currentLocale}/faq`}
-                    className="text-sm text-primary underline"
+                    className="text-sm text-primary hover:text-primary/80 underline"
                   >
-                    {t('docDetail.moreQuestions', 'More questions? Visit our FAQ')}
+                    {t('docDetail.moreQuestions', 'Read all our FAQ')}
                   </Link>
                 </div>
               </div>

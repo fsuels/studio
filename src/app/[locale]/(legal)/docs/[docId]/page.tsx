@@ -5,6 +5,8 @@ import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations';
 import { vehicleBillOfSaleFaqs } from '@/app/[locale]/(legal)/documents/bill-of-sale-vehicle/faqs';
+import { resolveDocSlug } from '@/lib/slug-alias';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-static';
 
@@ -50,7 +52,13 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
 
 // 🔑 Mark your Page component async and await params before using them
 export default async function DocPage({ params }: DocPageProps) {
-  const { locale, docId } = await params;
+  let { locale, docId } = await params;
+
+  // Normalize legacy aliases to canonical slug and redirect if needed
+  const canonical = resolveDocSlug(docId);
+  if (canonical !== docId) {
+    redirect(`/${locale}/docs/${canonical}`);
+  }
 
   // optional guard
   if (!documentLibrary.find((d) => d.id === docId)) {
@@ -84,7 +92,7 @@ export async function Head({ params }: { params: DocPageParams }) {
       : docConfig.translations?.en?.description || docConfig.description;
 
   // Use vehicle bill of sale FAQs only for that specific document
-  const shouldIncludeFAQ = docId === 'bill-of-sale-vehicle';
+  const shouldIncludeFAQ = docId === 'vehicle-bill-of-sale' || docId === 'bill-of-sale-vehicle';
   const faqJsonLd = shouldIncludeFAQ
     ? {
         '@context': 'https://schema.org',

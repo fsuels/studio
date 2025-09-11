@@ -2,6 +2,7 @@
 'use client';
 
 import React from 'react';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -242,7 +243,7 @@ const SituationBasedCategoryGroups: React.FC<
                   {group.popularDocs.map((doc) => (
                     <Link
                       key={doc.slug}
-                      href={`/${locale}/docs/${doc.slug}`}
+                      href={`/${locale}/docs/${resolveDocSlug(doc.slug)}`}
                       onClick={() => onDocumentClick?.(doc.slug)}
                       className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors text-sm group/item"
                     >

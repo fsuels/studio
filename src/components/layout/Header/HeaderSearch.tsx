@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, FileText, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -69,7 +70,7 @@ export default function HeaderSearch({
     e.preventDefault();
     if (searchResults.length > 0) {
       const firstResult = searchResults[0];
-      window.location.href = `/${clientLocale}/docs/${firstResult.id}`;
+      window.location.href = `/${clientLocale}/docs/${resolveDocSlug(firstResult.id)}`;
     }
   };
 
@@ -116,7 +117,7 @@ export default function HeaderSearch({
               return (
                 <li key={doc.id}>
                   <Link
-                    href={`/${clientLocale}/docs/${doc.id}`}
+                    href={`/${clientLocale}/docs/${resolveDocSlug(doc.id)}`}
                     className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                     prefetch
                     onClick={() => setShowResults(false)}

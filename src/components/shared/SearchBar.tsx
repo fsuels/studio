@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -86,11 +87,11 @@ const SearchBar = React.memo(function SearchBar() {
     }
   };
 
-  const handleSuggestionClick = (docId: string) => {
+  const handleSuggestionClick = async (docId: string) => {
     if (!isHydrated) return;
     setSearchTerm('');
     setShowSuggestions(false);
-    router.push(`/${locale}/docs/${docId}`);
+    router.push(`/${locale}/docs/${resolveDocSlug(docId)}`);
   };
 
   const placeholderText = isHydrated
