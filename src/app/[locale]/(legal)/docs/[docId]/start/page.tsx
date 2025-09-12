@@ -10,7 +10,7 @@ import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations';
 
 type StartWizardPageProps = {
-  params: { locale: 'en' | 'es'; docId: string };
+  params: Promise<{ locale: 'en' | 'es'; docId: string }>;
 };
 
 // Revalidate every hour so start pages stay fresh without rebuilding

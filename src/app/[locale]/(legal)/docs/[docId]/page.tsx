@@ -19,7 +19,7 @@ export interface DocPageParams {
 }
 
 interface DocPageProps {
-  params: DocPageParams;
+  params: Promise<DocPageParams>;
 }
 
 export async function generateStaticParams(): Promise<DocPageParams[]> {
@@ -89,7 +89,7 @@ export default async function DocPage({ params }: DocPageProps) {
 }
 
 // 🔑 Mark Head async, await params, and use your NEXT_PUBLIC_SITE_URL env var
-export async function Head({ params }: { params: DocPageParams }) {
+export async function Head({ params }: { params: Promise<DocPageParams> }) {
   const { locale, docId } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 

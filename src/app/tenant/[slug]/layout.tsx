@@ -9,18 +9,19 @@ import { TenantFooter } from '@/components/tenant/TenantFooter';
 
 interface TenantLayoutProps {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function TenantLayout({
   children,
   params,
 }: TenantLayoutProps) {
+  const { slug } = await params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
   if (!tenant) {
-    redirect(`/tenant-not-found?slug=${params.slug}`);
+    redirect(`/tenant-not-found?slug=${slug}`);
   }
 
   // Apply tenant-specific styling

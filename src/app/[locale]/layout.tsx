@@ -7,7 +7,7 @@ import MarketingClient from '@/app/marketing-client';
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: { locale?: string };
+  params: Promise<{ locale?: string }>;
 }
 
 export default async function LocaleLayout({

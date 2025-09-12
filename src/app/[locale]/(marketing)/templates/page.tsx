@@ -5,11 +5,11 @@ export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
 }
 
-export default function TemplatesPage({
+export default async function TemplatesPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   return <TemplatesClientContent locale={locale} />;
 }

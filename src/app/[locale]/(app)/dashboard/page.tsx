@@ -2,12 +2,6 @@
 import React from 'react';
 import DashboardView from './dashboard-view';
 
-interface DashboardPageProps {
-  params: {
-    locale: 'en' | 'es';
-  };
-}
-
-export default function DashboardPage({ params }: DashboardPageProps) {
+export default function DashboardPage({ params }: any) {
   return <DashboardView locale={params.locale} />;
 }

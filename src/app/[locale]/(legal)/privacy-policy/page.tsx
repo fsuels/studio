@@ -6,13 +6,13 @@ import { useAuth } from '@/hooks/useAuth';
 import { auditService } from '@/services/firebase-audit-service';
 
 interface PrivacyPolicyPageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
-export default function LocalePrivacyPolicyPage({
+export default async function LocalePrivacyPolicyPage({
   params,
 }: PrivacyPolicyPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
   const { user } = useAuth();
 
   useEffect(() => {
