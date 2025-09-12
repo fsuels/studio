@@ -21,6 +21,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { auditService } from '@/services/firebase-audit-service';
 import { createProgressTracker } from '@/lib/onboarding/progress-tracker';
+import { getAuth } from 'firebase/auth';
+import { app } from '@/lib/firebase';
 
 interface SignUpClientContentProps {
   locale: 'en' | 'es';
@@ -50,11 +52,12 @@ export default function SignUpClientContent({
     }
     if (email && password) {
       try {
-        const userCredential = await signUp(email, password);
+        await signUp(email, password);
+        const uid = getAuth(app).currentUser?.uid;
 
         // Initialize onboarding for new user
-        if (userCredential?.user?.uid) {
-          const tracker = createProgressTracker(userCredential.user.uid);
+        if (uid) {
+          const tracker = createProgressTracker(uid);
           await tracker.initializeProgress(); // Will be set up in onboarding wizard
         }
 

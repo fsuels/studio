@@ -9,6 +9,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import dynamic from 'next/dynamic';
 import type { DocumentDetailProps } from '@/components/document/DocumentDetail';
+import type { UpsellClause } from '@/types/documents';
 import {
   Loader2,
   Star,
@@ -81,6 +82,7 @@ interface DocMetaLite {
   };
   name?: string;
   description?: string;
+  upsellClauses?: UpsellClause[];
 }
 
 interface DocPageClientProps {
@@ -154,10 +156,9 @@ export default function DocPageClient({
   useEffect(() => {
     if (isHydrated) {
       if (docId) {
-        const found = documentLibrary.find((d) => d.id === docId);
-        if (!found) {
+        if (!docConfig || docConfig.id !== docId) {
           console.error(
-            `[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`,
+            `[DocPageClient] Doc config mismatch or not found for ID: ${docId}. Triggering 404.`,
           );
           notFound();
         }
@@ -167,7 +168,7 @@ export default function DocPageClient({
       }
       setIsLoading(false);
     }
-  }, [docId, isHydrated]);
+  }, [docId, docConfig, isHydrated]);
 
   useEffect(() => {
     if (currentLocale && i18n.language !== currentLocale && isHydrated) {

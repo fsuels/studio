@@ -14,6 +14,7 @@ import { Loader2, Share2 } from 'lucide-react';
 import { getDb } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { hasUserPaidForDocument } from '@/lib/firestore/paymentActions';
+import { auditService } from '@/services/firebase-audit-service';
 import {
   getStorage,
   ref as storageRef,
@@ -58,15 +59,20 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
   const [effectiveDocType, setEffectiveDocType] = useState<string>('');
 
   useEffect(() => {
-    const uid = user?.uid;
-    if (!uid || !savedDocId) return;
     let cancelled = false;
     async function fetchContent() {
       setIsLoadingContent(true);
       const timeoutMs = 15000;
       try {
+        const uid = user?.uid;
+        const id = savedDocId;
+        if (!uid || !id) {
+          setLoadError('Missing user or document identifier.');
+          setIsLoadingContent(false);
+          return;
+        }
         const db = await getDb();
-        const docRef = doc(db, 'users', uid, 'documents', savedDocId);
+        const docRef = doc(db, 'users', uid, 'documents', id);
         const snap = await Promise.race([
           getDoc(docRef),
           new Promise<never>((_, reject) =>

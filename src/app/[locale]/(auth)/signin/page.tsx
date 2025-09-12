@@ -65,12 +65,14 @@ export default function SignInPage() {
 
         if (uid) {
           await Promise.all([
-            queryClient.prefetchQuery(['dashboardDocuments', uid], () =>
-              getUserDocuments(uid),
-            ),
-            queryClient.prefetchQuery(['dashboardPayments', uid], () =>
-              getUserPayments(uid),
-            ),
+            queryClient.prefetchQuery({
+              queryKey: ['dashboardDocuments', uid],
+              queryFn: () => getUserDocuments(uid),
+            }),
+            queryClient.prefetchQuery({
+              queryKey: ['dashboardPayments', uid],
+              queryFn: () => getUserPayments(uid),
+            }),
           ]);
         }
         toast({

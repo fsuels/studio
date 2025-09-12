@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { createPaymentRecord } from '@/lib/firestore/paymentActions';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function CheckoutSuccessPage() {
   const { locale } = useParams() as { locale: string };
@@ -11,15 +12,16 @@ export default function CheckoutSuccessPage() {
   const docId = search.get('docId');
   const session_id = search.get('session_id');
   const [paid, setPaid] = useState(false);
+  const { user } = useAuth();
 
   // Record payment in Firestore (simple simulation)
   useEffect(() => {
-    if (docId && session_id) {
-      createPaymentRecord({ docId, session_id }).then(() => {
+    if (docId && session_id && user?.uid) {
+      createPaymentRecord({ userId: user.uid, docId, session_id }).then(() => {
         setPaid(true);
       });
     }
-  }, [docId, session_id]);
+  }, [docId, session_id, user?.uid]);
 
   const downloadPdf = async () => {
     // call your existing PDF endpoint

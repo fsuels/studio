@@ -30,10 +30,7 @@ export async function generateStaticParams(): Promise<
   // derive locales array
   const locales: ('en' | 'es')[] =
     Array.isArray(localizations) && localizations.length > 0
-      ? (localizations.map((l) => (typeof l === 'string' ? l : l.id)) as (
-          | 'en'
-          | 'es'
-        )[])
+      ? (localizations as ('en' | 'es')[])
       : (['en', 'es'] as ('en' | 'es')[]);
 
   const params: Array<{ locale: 'en' | 'es'; docId: string }> = [];
