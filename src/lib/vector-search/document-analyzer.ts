@@ -1,6 +1,5 @@
 // src/lib/vector-search/document-analyzer.ts
 import { getDocMeta } from '@/config/doc-meta';
-import { embeddingService } from './embedding-service';
 import { pineconeService } from './pinecone-service';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
@@ -465,16 +464,16 @@ export class DocumentAnalyzer {
    */
   async needsReprocessing(
     docId: string,
-    locale: 'en' | 'es' = 'en',
+    _locale: 'en' | 'es' = 'en',
   ): Promise<boolean> {
     try {
       // Check if document exists in Pinecone
-      const stats = await pineconeService.getIndexStats();
+      const _stats = await pineconeService.getIndexStats();
 
       // This is a simplified check - in production, you'd compare
       // file modification times, version numbers, etc.
       return true; // For now, always reprocess
-    } catch (error) {
+    } catch (_error) {
       return true; // If we can't check, assume it needs processing
     }
   }

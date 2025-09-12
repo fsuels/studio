@@ -8,8 +8,6 @@ import {
   limit,
   getDocs,
   serverTimestamp,
-  Timestamp,
-  DocumentData,
 } from 'firebase/firestore';
 // Note: Removed ImmutableAuditTrail imports - using simplified audit logging for authentication events
 import { auth } from '@/lib/firebase';
@@ -36,8 +34,8 @@ export interface AuditEvent {
   id?: string;
   eventType: string;
   userId: string;
-  timestamp: any;
-  metadata: Record<string, any>;
+  timestamp: unknown;
+  metadata: Record<string, unknown>;
 }
 
 export class FirebaseAuditService {
@@ -60,7 +58,7 @@ export class FirebaseAuditService {
    */
   async logEvent(
     eventType: string,
-    metadata: Record<string, any>,
+    metadata: Record<string, unknown>,
     userId?: string,
   ): Promise<void> {
     try {
@@ -142,7 +140,12 @@ export class FirebaseAuditService {
   /**
    * Export user data for DSAR/SAR compliance
    */
-  async exportUserData(userId: string): Promise<any> {
+  async exportUserData(userId: string): Promise<{
+    userId: string;
+    exportedAt: string;
+    totalEvents: number;
+    events: AuditEvent[];
+  }> {
     try {
       const events = await this.getUserAuditTrail(userId, 10000); // Get all events
       return {
@@ -176,7 +179,7 @@ export class FirebaseAuditService {
    */
   async logAuthEvent(
     type: 'signin' | 'signup' | 'logout' | 'password_reset',
-    metadata: Record<string, any> = {},
+    metadata: Record<string, unknown> = {},
   ): Promise<void> {
     const eventTypeMap = {
       signin: EventType.USER_LOGIN,
@@ -199,7 +202,7 @@ export class FirebaseAuditService {
     operation: 'create' | 'view' | 'edit' | 'download' | 'delete',
     documentId: string,
     documentType: string,
-    metadata: Record<string, any> = {},
+    metadata: Record<string, unknown> = {},
   ): Promise<void> {
     const eventTypeMap = {
       create: EventType.DOCUMENT_CREATED,
@@ -225,7 +228,7 @@ export class FirebaseAuditService {
       | 'privacy_viewed'
       | 'consent_given'
       | 'consent_withdrawn',
-    metadata: Record<string, any> = {},
+    metadata: Record<string, unknown> = {},
   ): Promise<void> {
     const eventTypeMap = {
       terms_accepted: EventType.POLICY_ACCEPTED,

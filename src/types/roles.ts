@@ -199,7 +199,7 @@ export interface FeatureContext {
   userRole: UserRole;
   teamId?: string;
   environment: 'production' | 'staging' | 'development';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Role management operations
@@ -219,7 +219,7 @@ export interface RoleManagementOperation {
   targetFeature?: string;
   reason: string;
   duration?: number; // For temporary operations like impersonation
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Default role definitions

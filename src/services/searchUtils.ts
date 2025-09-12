@@ -4,8 +4,25 @@
 import { SYN_MAP, STOP_WORDS } from '../config/search';
 
 // Prometheus metrics for search monitoring
-let promClient: any;
-const searchMetricsRegistry: Map<string, any> = new Map();
+let promClient: unknown;
+type PromCounter = { inc: (labels: Record<string, string>, value: number) => void };
+type PromHistogram = { observe: (labels: Record<string, string>, value: number) => void };
+type PromHistogramCtor = new (config: {
+  name: string;
+  help: string;
+  labelNames?: string[];
+  buckets?: number[];
+}) => PromHistogram;
+type PromCounterCtor = new (config: {
+  name: string;
+  help: string;
+  labelNames?: string[];
+}) => PromCounter;
+type PromClientLike = {
+  Histogram: PromHistogramCtor;
+  Counter: PromCounterCtor;
+};
+const searchMetricsRegistry: Map<string, PromCounter | PromHistogram> = new Map();
 
 // Initialize Prometheus metrics if available (server-side only)
 if (typeof window === 'undefined') {
@@ -13,20 +30,21 @@ if (typeof window === 'undefined') {
     promClient = require('prom-client');
     
     // Initialize common search metrics
-    const searchLatencyHistogram = new promClient.Histogram({
+    const pc = promClient as PromClientLike;
+    const searchLatencyHistogram = new pc.Histogram({
       name: 'search_operation_duration_seconds',
       help: 'Duration of search operations in seconds',
       labelNames: ['operation', 'status'],
       buckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5]
     });
     
-    const searchOperationCounter = new promClient.Counter({
+    const searchOperationCounter = new pc.Counter({
       name: 'search_operations_total',
       help: 'Total number of search operations',
       labelNames: ['operation', 'status']
     });
     
-    const searchTokensHistogram = new promClient.Histogram({
+    const searchTokensHistogram = new pc.Histogram({
       name: 'search_tokens_count',
       help: 'Number of tokens processed per operation',
       labelNames: ['operation'],
@@ -38,7 +56,7 @@ if (typeof window === 'undefined') {
     searchMetricsRegistry.set('counter', searchOperationCounter);
     searchMetricsRegistry.set('tokens', searchTokensHistogram);
     
-  } catch (error) {
+  } catch (_error) {
     // prom-client not available, metrics disabled
     console.debug('[Search Utils] Prometheus metrics not available');
   }
@@ -231,13 +249,13 @@ export function recordMetric(name: string, value: number): void {
     try {
       // Determine metric type based on name
       if (name.includes('_total') || name.includes('_operations_total')) {
-        const counter = searchMetricsRegistry.get('counter');
+        const counter = searchMetricsRegistry.get('counter') as PromCounter | undefined;
         if (counter) {
           const operation = name.replace(/_total$|_operations_total$/, '');
           counter.inc({ operation, status: 'success' }, value);
         }
       } else if (name.includes('_duration')) {
-        const histogram = searchMetricsRegistry.get('latency');
+        const histogram = searchMetricsRegistry.get('latency') as PromHistogram | undefined;
         if (histogram) {
           const operation = name.replace(/_duration_.*$/, '');
           // Convert milliseconds to seconds for Prometheus
@@ -245,7 +263,7 @@ export function recordMetric(name: string, value: number): void {
           histogram.observe({ operation, status: 'success' }, valueInSeconds);
         }
       } else if (name.includes('_tokens') || name.includes('_length') || name.includes('_added') || name.includes('_removed')) {
-        const tokensHistogram = searchMetricsRegistry.get('tokens');
+        const tokensHistogram = searchMetricsRegistry.get('tokens') as PromHistogram | undefined;
         if (tokensHistogram) {
           const operation = name.replace(/_(tokens|length|added|removed|input|output).*$/, '');
           tokensHistogram.observe({ operation }, value);
@@ -355,7 +373,7 @@ export function processSearchQuery(query: string): {
  * 
  * @returns Object with current metric values
  */
-export function getSearchMetrics(): Record<string, any> {
+export function getSearchMetrics(): Record<string, unknown> {
   if (!promClient || !searchMetricsRegistry.size) {
     return { metricsAvailable: false };
   }

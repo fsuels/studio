@@ -45,7 +45,7 @@ interface SigningRequest {
     height: number;
     isRequired: boolean;
     defaultValue?: string;
-    validationRules?: any;
+    validationRules?: Record<string, unknown>;
   }>;
   settings: {
     expirationDays: number;
@@ -77,7 +77,7 @@ interface SigningRequest {
     timestamp: string;
     action: string;
     actor: string;
-    details: any;
+    details: Record<string, unknown>;
     ipAddress: string;
     location?: string;
   }>;
@@ -96,7 +96,7 @@ interface NotarizedSigningSession {
   identityVerification: {
     method: 'knowledge_based' | 'document_upload' | 'video_verification';
     status: 'pending' | 'verified' | 'failed';
-    verificationData: any;
+    verificationData: Record<string, unknown>;
   };
   meetingDetails: {
     scheduledTime: string;
@@ -109,7 +109,7 @@ interface NotarizedSigningSession {
     certificateId: string;
     digitalSeal: string;
     timestamp: string;
-    witnessDetails?: any;
+    witnessDetails?: Record<string, unknown>;
   };
 }
 
@@ -155,13 +155,13 @@ export class ESignatureIntegration {
 
   private signingRequests: Map<string, SigningRequest> = new Map();
   private notarySessions: Map<string, NotarizedSigningSession> = new Map();
-  private templates: Map<string, any> = new Map();
+  private templates: Map<string, TemplateDef> = new Map();
 
   // Create new signing request
   async createSigningRequest(
     documentId: string,
-    signers: any[],
-    settings: any,
+    signers: SignerInput[],
+    settings: SettingsInput,
     providerId: string = 'custom_solution',
   ): Promise<SigningRequest> {
     console.log(`📝 Creating signing request for document ${documentId}`);
@@ -180,30 +180,29 @@ export class ESignatureIntegration {
         id: this.generateSignerId(),
         name: signer.name,
         email: signer.email,
-        role: signer.role || 'signer',
-        authenticationMethod: signer.authenticationMethod || 'email',
-        signingOrder: index + 1,
-        isRequired: signer.isRequired !== false,
+        role: signer.role ?? 'signer',
+        authenticationMethod: signer.authenticationMethod ?? 'email',
+        signingOrder: signer.signingOrder ?? index + 1,
+        isRequired: signer.isRequired ?? true,
         customMessage: signer.customMessage,
       })),
       signatureFields: this.generateDefaultSignatureFields(signers.length),
       settings: {
-        expirationDays: settings.expirationDays || 30,
-        reminderFrequency: settings.reminderFrequency || 'weekly',
-        requireAllSigners: settings.requireAllSigners !== false,
-        allowDecline: settings.allowDecline !== false,
-        sequentialSigning: settings.sequentialSigning || false,
-        notarization: settings.notarization || false,
-        witnessRequired: settings.witnessRequired || false,
+        expirationDays: settings.expirationDays ?? 30,
+        reminderFrequency: settings.reminderFrequency ?? 'weekly',
+        requireAllSigners: settings.requireAllSigners ?? true,
+        allowDecline: settings.allowDecline ?? true,
+        sequentialSigning: settings.sequentialSigning ?? false,
+        notarization: settings.notarization ?? false,
+        witnessRequired: settings.witnessRequired ?? false,
         auditTrail: true,
       },
       metadata: {
-        createdBy: settings.createdBy || 'system',
+        createdBy: settings.createdBy ?? 'system',
         createdAt: new Date().toISOString(),
-        jurisdiction: settings.jurisdiction || 'US',
-        documentType: settings.documentType || 'legal-document',
-        businessPurpose:
-          settings.businessPurpose || 'Legal agreement execution',
+        jurisdiction: settings.jurisdiction ?? 'US',
+        documentType: settings.documentType ?? 'legal-document',
+        businessPurpose: settings.businessPurpose ?? 'Legal agreement execution',
       },
       status: 'draft',
       auditTrail: [
@@ -377,7 +376,7 @@ export class ESignatureIntegration {
         expirationDate: '2026-12-31',
       },
       identityVerification: {
-        method: identityVerificationMethod as any,
+        method: identityVerificationMethod as NotarizedSigningSession['identityVerification']['method'],
         status: 'pending',
         verificationData: {},
       },
@@ -415,7 +414,7 @@ export class ESignatureIntegration {
   // Complete notarized signing
   async completeNotarizedSigning(
     sessionId: string,
-    witnessDetails?: any,
+    witnessDetails?: Record<string, unknown>,
   ): Promise<{ certificate: string; digitalSeal: string }> {
     const session = this.notarySessions.get(sessionId);
     if (!session) {
@@ -471,12 +470,12 @@ export class ESignatureIntegration {
   async createTemplate(
     name: string,
     documentType: string,
-    defaultSigners: any[],
-    signatureFields: any[],
+    defaultSigners: SignerInput[],
+    signatureFields: SignatureField[],
   ): Promise<string> {
     const templateId = this.generateTemplateId();
 
-    const template = {
+    const template: TemplateDef = {
       id: templateId,
       name,
       documentType,
@@ -650,7 +649,7 @@ This audit report certifies that the above-mentioned document was electronically
     return `seal_${sessionId}_${Date.now()}_verified`;
   }
 
-  private generateDefaultSignatureFields(signerCount: number): any[] {
+  private generateDefaultSignatureFields(signerCount: number): SignatureField[] {
     const fields = [];
 
     for (let i = 0; i < signerCount; i++) {
@@ -679,7 +678,7 @@ This audit report certifies that the above-mentioned document was electronically
       });
     }
 
-    return fields;
+    return fields as SignatureField[];
   }
 
   private async sendSigningEmails(request: SigningRequest): Promise<void> {
@@ -735,3 +734,40 @@ This audit report certifies that the above-mentioned document was electronically
 
 // Export singleton instance
 export const eSignatureIntegration = new ESignatureIntegration();
+
+// ------- Local helper types -------
+type SignerInput = {
+  name: string;
+  email: string;
+  role?: 'signer' | 'approver' | 'cc' | 'reviewer';
+  authenticationMethod?: 'email' | 'sms' | 'knowledge_based' | 'id_verification';
+  isRequired?: boolean;
+  customMessage?: string;
+  signingOrder?: number;
+};
+
+type SettingsInput = {
+  expirationDays?: number;
+  reminderFrequency?: 'daily' | 'weekly' | 'custom';
+  requireAllSigners?: boolean;
+  allowDecline?: boolean;
+  sequentialSigning?: boolean;
+  notarization?: boolean;
+  witnessRequired?: boolean;
+  createdBy?: string;
+  jurisdiction?: string;
+  documentType?: string;
+  businessPurpose?: string;
+};
+
+type SignatureField = SigningRequest['signatureFields'][number];
+
+type TemplateDef = {
+  id: string;
+  name: string;
+  documentType: string;
+  defaultSigners: SignerInput[];
+  signatureFields: SignatureField[];
+  createdAt: string;
+  usageCount: number;
+};

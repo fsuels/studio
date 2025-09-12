@@ -1,7 +1,7 @@
 // src/services/pdf-generator.ts
 'use server'; // Mark as server-only if intended for server-side use (e.g., Firebase Functions)
 
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'; // Ensure fontkit is installed
 import { FOOTER_NOTE, FOOTER_STYLE, FOOTER_CONFIG } from '../lib/pdf-constants';
 
@@ -55,7 +55,10 @@ export async function generatePdfDocument(
     y -= titleFontSize + 20; // Move down after title
 
     // 2. Add standardized footer disclaimer to every page
-    const addFooter = (currentPage: any, hasNotarySeal = false) => {
+    const addFooter = (
+      currentPage: PDFPage,
+      hasNotarySeal = false,
+    ) => {
       const pageSize = currentPage.getSize();
       let footerY = FOOTER_STYLE.margin.bottom;
 

@@ -41,7 +41,17 @@ const CACHE_TTL_SECONDS = 24 * 60 * 60; // 24 hours in seconds for Redis
 const HTTP_TIMEOUT_MS = 300; // 300ms timeout for vector endpoint
 
 // Redis and fallback cache instances
-let redisClient: any = null;
+type RedisLike = {
+  ping: () => Promise<unknown>;
+  get: (key: string) => Promise<string | null>;
+  setex: (key: string, ttl: number, value: string) => Promise<unknown>;
+  keys: (pattern: string) => Promise<string[]>;
+  del: (...keys: string[]) => Promise<unknown>;
+  info: (section?: string) => Promise<string>;
+  disconnect: () => Promise<void>;
+  on: (event: string, handler: (err: unknown) => void) => void;
+};
+let redisClient: RedisLike | null = null;
 type SimpleCache<T> = {
   get: (key: string) => T | undefined;
   set: (key: string, value: T) => void;
@@ -54,7 +64,7 @@ let fallbackCache: SimpleCache<VectorSearchResult[]> | null = null;
 /**
  * Initialize Redis client (server-side only)
  */
-async function getRedisClient(): Promise<any | null> {
+async function getRedisClient(): Promise<RedisLike | null> {
   // Return null if we're on the client side or Redis is not available
   if (typeof window !== 'undefined' || !Redis) {
     return null;
@@ -69,7 +79,9 @@ async function getRedisClient(): Promise<any | null> {
     }
     
     try {
-      redisClient = new Redis(redisUrl, {
+      // Using dynamic import without runtime types; narrow to RedisLike
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      redisClient = new (Redis as any)(redisUrl, {
         maxRetriesPerRequest: 3,
         connectTimeout: 5000,
         commandTimeout: 2000,
@@ -366,22 +378,23 @@ async function queryVectorEndpoint(
     const results = Array.isArray(responseData) ? responseData : responseData.results;
     
     // Validate and normalize results
-    const normalizedResults: VectorSearchResult[] = results.map((item: any, index: number) => {
-      if (!item || typeof item !== 'object') {
+    const normalizedResults: VectorSearchResult[] = results.map((item: unknown, index: number) => {
+      const obj = item as { id?: unknown; score?: unknown };
+      if (!obj || typeof obj !== 'object') {
         throw new Error(`Invalid result item at index ${index}: expected object`);
       }
       
-      if (!item.id || typeof item.id !== 'string') {
+      if (typeof obj.id !== 'string') {
         throw new Error(`Invalid result item at index ${index}: missing or invalid id`);
       }
       
-      if (typeof item.score !== 'number' || isNaN(item.score)) {
+      if (typeof obj.score !== 'number' || isNaN(obj.score)) {
         throw new Error(`Invalid result item at index ${index}: missing or invalid score`);
       }
       
       return {
-        id: item.id,
-        score: item.score,
+        id: obj.id,
+        score: obj.score,
       };
     });
     
@@ -593,7 +606,7 @@ export async function getVectorSearchCacheStats(): Promise<{
         if (memoryMatch) {
           stats.redis.memoryUsage = memoryMatch[1].trim();
         }
-      } catch (memoryError) {
+      } catch (_memoryError) {
         // Memory info not critical
       }
     }

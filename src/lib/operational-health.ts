@@ -5,8 +5,8 @@ import {
   addDoc,
   query,
   where,
-  orderBy,
-  limit,
+  // orderBy,
+  // limit,
   getDocs,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -23,7 +23,7 @@ export interface HealthMetric {
   value: number;
   endpoint?: string;
   userId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Alert {
@@ -38,7 +38,7 @@ export interface Alert {
   message: string;
   timestamp: number;
   resolved: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface OperationalMetrics {
@@ -317,7 +317,7 @@ class OperationalHealthMonitor {
     type: Alert['type'],
     severity: Alert['severity'],
     message: string,
-    metadata: Record<string, any>,
+    metadata: Record<string, unknown>,
   ): Promise<void> {
     const alert: Alert = {
       id: `alert_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -562,11 +562,13 @@ class OperationalHealthMonitor {
 export function createMonitoringMiddleware() {
   const monitor = OperationalHealthMonitor.getInstance();
 
-  return async (req: any, res: any, next: any) => {
+  type ExpressLikeReq = { path?: string; url?: string };
+  type ExpressLikeRes = { send: (data: unknown) => unknown; statusCode: number } & Record<string, unknown>;
+  return async (req: ExpressLikeReq, res: ExpressLikeRes, next: () => void) => {
     const startTime = Date.now();
     const originalSend = res.send;
 
-    res.send = function (data: any) {
+    res.send = function (data: unknown) {
       const endTime = Date.now();
       const duration = endTime - startTime;
       const success = res.statusCode < 400;

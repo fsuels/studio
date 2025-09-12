@@ -46,7 +46,7 @@ interface ChatMessage {
   followUpActions?: Array<{
     action: string;
     label: string;
-    data: any;
+    data: Record<string, unknown>;
   }>;
 }
 
@@ -267,7 +267,7 @@ export class LegalAIAssistant {
   startChatSession(
     userId: string,
     language: string = 'en',
-    context: any = {},
+    context: Partial<ChatSession['context']> = {},
   ): ChatSession {
     const sessionId = this.generateSessionId();
 
@@ -323,7 +323,7 @@ export class LegalAIAssistant {
     this.addMessage(sessionId, {
       sender: 'user',
       content: userMessage,
-      messageType: messageType as any,
+      messageType: (messageType as ChatMessage['messageType']) || 'text',
     });
 
     // Analyze intent and generate response
@@ -344,7 +344,7 @@ export class LegalAIAssistant {
   private analyzeIntent(message: string): {
     intent: string;
     confidence: number;
-    entities: any;
+    entities: Record<string, string>;
   } {
     const messageLower = message.toLowerCase();
     let bestMatch = { intent: 'general_inquiry', confidence: 0.5 };
@@ -505,7 +505,7 @@ export class LegalAIAssistant {
   }
 
   // Handle legal explanation
-  private handleLegalExplanation(message: string, entities: any): ChatMessage {
+  private handleLegalExplanation(message: string, entities: Record<string, string>): ChatMessage {
     const messageLower = message.toLowerCase();
     let explanation = '';
 
@@ -545,7 +545,7 @@ export class LegalAIAssistant {
   // Handle form assistance
   private handleFormAssistance(
     session: ChatSession,
-    entities: any,
+    entities: Record<string, string>,
   ): ChatMessage {
     let content = "I'm here to help you fill out your form! ";
 
@@ -584,7 +584,7 @@ export class LegalAIAssistant {
   // Handle compliance questions
   private handleComplianceQuestion(
     session: ChatSession,
-    entities: any,
+    entities: Record<string, string>,
   ): ChatMessage {
     let content =
       'Legal compliance requirements vary by state and document type. ';
@@ -626,7 +626,7 @@ export class LegalAIAssistant {
   // Handle pricing questions
   private handlePricingQuestion(
     session: ChatSession,
-    entities: any,
+    _entities: Record<string, string>,
   ): ChatMessage {
     const content = `Our legal documents start at just $29, which is 90% less than hiring an attorney. Here's our pricing:
 
@@ -716,7 +716,7 @@ What would you like help with today?`;
   }
 
   // Get welcome message
-  private getWelcomeMessage(language: string, context: any): string {
+  private getWelcomeMessage(language: string, _context: Partial<ChatSession['context']>): string {
     const welcomeMessages: Record<string, string> = {
       en: `👋 Hi! I'm your Legal AI Assistant. I'm here to help you with legal documents, answer questions about legal terms, and guide you through our document creation process.`,
       es: `👋 ¡Hola! Soy tu Asistente Legal de IA. Estoy aquí para ayudarte con documentos legales, responder preguntas sobre términos legales y guiarte a través de nuestro proceso de creación de documentos.`,

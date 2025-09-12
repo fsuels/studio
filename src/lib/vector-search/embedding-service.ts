@@ -158,7 +158,7 @@ export class EmbeddingService {
    */
   private preprocessContent(content: string): string {
     // Remove excessive whitespace
-    let processed = content.replace(/\s+/g, ' ').trim();
+    const processed = content.replace(/\s+/g, ' ').trim();
 
     // Extract key sections (title, definitions, main clauses)
     const sections = [];

@@ -9,7 +9,7 @@ export interface DiscoveryResult {
   description?: string;
   category?: string;
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface DiscoverySearchMetrics {

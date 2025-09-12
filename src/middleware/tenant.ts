@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Tenant, TenantDomain } from '@/types/tenant';
+import { Tenant } from '@/types/tenant';
 
 // Tenant resolution and routing middleware
 export async function tenantMiddleware(request: NextRequest) {
-  const { pathname, hostname, protocol } = request.nextUrl;
+  const { pathname, hostname } = request.nextUrl;
 
   // Skip middleware for static files, API routes (except tenant API), and internal Next.js routes
   if (
@@ -123,7 +123,7 @@ async function handleSubdomainRequest(
 }
 
 // Mock functions - these would connect to your database
-async function getTenantByCustomDomain(domain: string): Promise<Tenant | null> {
+async function getTenantByCustomDomain(_domain: string): Promise<Tenant | null> {
   // TODO: Implement Firebase query
   // Query Firestore for tenant with matching custom domain
   try {
@@ -145,7 +145,7 @@ async function getTenantByCustomDomain(domain: string): Promise<Tenant | null> {
   }
 }
 
-async function getTenantBySlug(slug: string): Promise<Tenant | null> {
+async function getTenantBySlug(_slug: string): Promise<Tenant | null> {
   // TODO: Implement Firebase query
   // Query Firestore for tenant with matching slug
   try {
@@ -180,11 +180,19 @@ export async function getTenantFromHeaders(
 
   // For now, construct minimal tenant from headers
   // In production, you might want to fetch full tenant data
+  const plan =
+    tenantPlan === 'trial' ||
+    tenantPlan === 'starter' ||
+    tenantPlan === 'professional' ||
+    tenantPlan === 'enterprise'
+      ? tenantPlan
+      : 'trial';
+
   return {
     id: tenantId,
     slug: tenantSlug,
     name: tenantName || tenantSlug,
-    subscription: { plan: tenantPlan as any },
+    subscription: { plan } as unknown as Tenant['subscription'],
   } as Tenant;
 }
 
