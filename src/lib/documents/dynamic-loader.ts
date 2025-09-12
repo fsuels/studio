@@ -9,7 +9,8 @@ type DocumentLoader = () => Promise<{ default: LegalDocument }>;
 
 // Document type mapping for dynamic imports
 const US_DOCUMENT_MAP: Record<string, DocumentLoader> = {
-  'vehicle-bill-of-sale': () => import('./us/vehicle-bill-of-sale').then(m => ({ default: m.vehicleBillOfSale })),
+  // Use explicit index to avoid environments that try appending .ts
+  'vehicle-bill-of-sale': () => import('./us/vehicle-bill-of-sale/index').then(m => ({ default: m.vehicleBillOfSale })),
   'rental-agreement': () => import('./us/rental-agreement').then(m => ({ default: m.rentalAgreement })),
   'employment-contract': () => import('./us/employment-contract').then(m => ({ default: m.employmentContract })),
   'non-disclosure-agreement': () => import('./us/non-disclosure-agreement').then(m => ({ default: m.nonDisclosureAgreement })),

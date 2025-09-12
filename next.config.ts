@@ -16,7 +16,7 @@ const config: NextConfig = {
   // Enable experimental features for better performance
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Disable optimizePackageImports to prevent server vendor-chunk references for icons
     allowedDevOrigins: [
       'https://9000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
     ],

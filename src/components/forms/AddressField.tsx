@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
+import { getPublicGoogleMapsApiKey } from '@/lib/env';
 
 interface AddressFieldProps {
   name: string;
@@ -58,10 +59,8 @@ const AddressField = React.memo(function AddressField({
   const fieldErrorActual = formErrors[name]?.message || error;
 
   // Check if Google Maps API key is available
-  const hasGoogleMapsApiKey =
-    !!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY &&
-    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !==
-      'your_google_maps_api_key_here';
+  const apiKey = getPublicGoogleMapsApiKey();
+  const hasGoogleMapsApiKey = !!apiKey;
 
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
 
@@ -107,7 +106,11 @@ const AddressField = React.memo(function AddressField({
       }
 
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initGoogleMaps`;
+      const key = getPublicGoogleMapsApiKey();
+      if (!key) {
+        setDebugInfo('No Google Maps API key provided');
+      }
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${key ?? ''}&libraries=places&callback=initGoogleMaps`;
       script.async = true;
       script.defer = true;
 
@@ -414,11 +417,13 @@ const AddressField = React.memo(function AddressField({
             {t(String(fieldErrorActual))}
           </p>
         )}
-        <p className="text-xs text-muted-foreground">
-          {t(
-            'Address autocomplete unavailable - Google Maps API key not configured',
-          )}
-        </p>
+        {process.env.NODE_ENV !== 'production' && (
+          <p className="text-xs text-muted-foreground">
+            {t(
+              'Address autocomplete unavailable - Google Maps API key not configured',
+            )}
+          </p>
+        )}
       </div>
     );
   }

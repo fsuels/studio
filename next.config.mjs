@@ -11,13 +11,7 @@ const nextConfig = {
 
   /* Performance budgets and optimization */
   experimental: {
-    optimizePackageImports: [
-      '@radix-ui/react-icons', 
-      'lucide-react',
-      '@tanstack/react-query',
-      'recharts',
-      'react-hook-form'
-    ],
+    // Disable optimizePackageImports to avoid missing vendor-chunk errors in SSR
   },
 
   /* Bundle analysis configuration */

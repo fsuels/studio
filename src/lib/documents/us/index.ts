@@ -85,7 +85,8 @@ export { subcontractorAgreementMeta as subcontractorAgreement } from './subcontr
 export { terminationLetter } from './termination-letter';
 export { trademarkAssignment } from './trademark-assignment';
 export { trademarkLicenseAgreementMeta as trademarkLicenseAgreement } from './trademark-license-agreement';
-export { vehicleBillOfSale } from './vehicle-bill-of-sale';
+// Explicitly target index to avoid resolution to non-existent './vehicle-bill-of-sale.ts'
+export { vehicleBillOfSale } from './vehicle-bill-of-sale/index';
 export { workFromHomeAgreementMeta as workFromHomeAgreement } from './work-from-home-agreement';
 export { generalLiabilityWaiverMeta as generalLiabilityWaiver } from './general-liability-waiver';
 export { productLiabilityWaiverMeta as productLiabilityWaiver } from './product-liability-waiver';

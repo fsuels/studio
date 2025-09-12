@@ -106,15 +106,9 @@ export default [
   {
     files: ['src/lib/documents/**/*.ts'],
     rules: {
-      // Enforce consistent document ID naming (kebab-case)
-      'id-match': [
-        'error',
-        '^[a-z][a-z0-9]*(-[a-z0-9]+)*$',
-        {
-          properties: false,
-          onlyDeclarations: false,
-        },
-      ],
+      // id-match at identifier-level is too strict for TS (types, consts, etc.).
+      // Disable here and enforce kebab-case only for metadata.id values below.
+      'id-match': 'off',
       // Require templatePaths object
       'no-restricted-syntax': [
         'error',
@@ -122,6 +116,12 @@ export default [
           selector: "Property[key.name='templatePath']",
           message:
             'Use templatePaths (plural) object instead of templatePath (singular)',
+        },
+        // Enforce kebab-case for metadata.id property values
+        {
+          selector:
+            "Property[key.name='id'][value.type='Literal']:not([value.value=/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/])",
+          message: 'Document id must be kebab-case (e.g., vehicle-bill-of-sale)',
         },
       ],
     },
