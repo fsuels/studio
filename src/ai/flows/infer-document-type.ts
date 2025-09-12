@@ -78,16 +78,13 @@ Respond with strict JSON matching schema.`,
 });
 
 // Define flow
-export const inferDocumentTypeFlow = ai.defineFlow<
-  typeof InferDocumentTypeInputSchema,
-  typeof InferDocumentTypeOutputSchema
->(
+export const inferDocumentTypeFlow = ai.defineFlow(
   {
     name: 'inferDocumentTypeFlow',
     inputSchema: InferDocumentTypeInputSchema,
     outputSchema: InferDocumentTypeOutputSchema,
   },
-  async (input) => {
+  async (input: InferDocumentTypeInput) => {
     // Allow any type of additional log arguments without using `any`.
     const log = (msg: string, ...args: unknown[]) =>
       console.log(`[inferDocFlow] ${msg}`, ...args);

@@ -26,6 +26,6 @@
       }
     ]
   },
-  "include": ["**/*.ts", "**/*.tsx", "scripts/**/*", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "functions/**"]
 }

@@ -2,10 +2,11 @@ import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-static';
 
-export default function LegacyDocViewRedirect({
+export default async function LegacyDocViewRedirect({
   params,
 }: {
-  params: { docId: string };
+  params: Promise<{ docId: string }>;
 }) {
-  redirect(`/en/docs/${params.docId}/view`);
+  const { docId } = await params;
+  redirect(`/en/docs/${docId}/view`);
 }

@@ -8,8 +8,9 @@ let ordersDB: Order[] = generateMockOrders(150);
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { orderId: string } },
+  context: { params: Promise<{ orderId: string }> },
 ) {
+  const { orderId } = await context.params;
   // Require admin authentication
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
@@ -17,7 +18,6 @@ export async function GET(
   }
 
   try {
-    const orderId = params.orderId;
     const order = ordersDB.find((o) => o.id === orderId);
 
     if (!order) {
@@ -72,15 +72,15 @@ export async function GET(
 // Update specific order
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { orderId: string } },
+  context: { params: Promise<{ orderId: string }> },
 ) {
+  const { orderId } = await context.params;
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
     return adminResult;
   }
 
   try {
-    const orderId = params.orderId;
     const body = await request.json();
     const { action, data } = body;
 

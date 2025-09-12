@@ -7,12 +7,6 @@ import { taxonomy } from '@/config/taxonomy';
 import slugMap from '@/config/doc-meta/slug-category-map.json';
 import { formatDocumentTitle } from '@/lib/format-utils';
 
-interface CategoryPageProps {
-  params: {
-    locale: 'en' | 'es';
-    category: string;
-  };
-}
 
 // Generate static params for all categories
 export async function generateStaticParams() {
@@ -28,8 +22,13 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for each category
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const categoryData = taxonomy.categories[params.category as keyof typeof taxonomy.categories];
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: 'en' | 'es'; category: string }>;
+}): Promise<Metadata> {
+  const { category } = await params;
+  const categoryData = taxonomy.categories[category as keyof typeof taxonomy.categories];
   
   if (!categoryData) {
     return {
@@ -51,22 +50,23 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   };
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const categoryData = taxonomy.categories[params.category as keyof typeof taxonomy.categories];
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ locale: 'en' | 'es'; category: string }>;
+}) {
+  const { locale, category } = await params;
+  const categoryData = taxonomy.categories[category as keyof typeof taxonomy.categories];
   
   if (!categoryData) {
     notFound();
   }
   // Build a lightweight list of docs for this category using slug map
   const docs = Object.keys(slugMap)
-    .filter((slug) => slugMap[slug as keyof typeof slugMap] === params.category)
+    .filter((slug) => slugMap[slug as keyof typeof slugMap] === category)
     .map((slug) => ({ id: slug, name: formatDocumentTitle(slug), description: '' }));
 
   return (
-    <CategoryPageClient
-      locale={params.locale}
-      category={params.category}
-      docs={docs}
-    />
+    <CategoryPageClient locale={locale} category={category} docs={docs} />
   );
 }

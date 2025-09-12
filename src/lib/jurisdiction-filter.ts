@@ -62,8 +62,8 @@ export class JurisdictionFilter {
 
       // 3. Default to US-ALL for now
       this.userJurisdiction = 'US-ALL';
-    } catch (error) {
-      console.warn('Failed to detect jurisdiction:', error);
+    } catch (_error) {
+      console.warn('Failed to detect jurisdiction:', _error);
       this.userJurisdiction = 'US-ALL';
     }
   }
@@ -81,7 +81,7 @@ export class JurisdictionFilter {
       }
 
       return 'INTL';
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -142,9 +142,11 @@ export class JurisdictionFilter {
 
   private async getDocumentsMetadata(
     slugs: string[],
-  ): Promise<Record<string, any>> {
+  ): Promise<Record<string, { jurisdiction: string | string[]; title?: string } | undefined>> {
     const { getCachedDocMetaBatch } = await import('./metadata-cache');
-    return getCachedDocMetaBatch(slugs);
+    return getCachedDocMetaBatch(slugs) as Promise<
+      Record<string, { jurisdiction: string | string[]; title?: string } | undefined>
+    >;
   }
 
   private isLocallyRelevant(
@@ -235,7 +237,7 @@ export class JurisdictionFilter {
       this.userJurisdiction = jurisdiction;
       try {
         localStorage.setItem('userJurisdiction', jurisdiction);
-      } catch (error) {
+      } catch (_error) {
         // localStorage not available
       }
     }

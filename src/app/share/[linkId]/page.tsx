@@ -13,14 +13,12 @@ export async function generateStaticParams() {
   ];
 }
 
-interface SharePageProps {
-  params: {
-    linkId: string;
-  };
-}
-
-export default function SharePage({ params }: SharePageProps) {
-  const { linkId } = params;
+export default async function SharePage({
+  params,
+}: {
+  params: Promise<{ linkId: string }>;
+}) {
+  const { linkId } = await params;
 
   // In a real app, you would fetch the document data associated with linkId
   // and display it, potentially with restricted access controls.

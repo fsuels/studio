@@ -17,10 +17,10 @@ import type { MarketplaceTemplate } from '@/types/marketplace';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } },
+  context: { params: Promise<{ templateId: string }> },
 ) {
   try {
-    const { templateId } = params;
+    const { templateId } = await context.params;
     const url = new URL(request.url);
     const includeVersions = url.searchParams.get('includeVersions') === 'true';
     const includeStats = url.searchParams.get('includeStats') === 'true';
@@ -122,7 +122,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { templateId: string } },
+  context: { params: Promise<{ templateId: string }> },
 ) {
   try {
     // TODO: Add authentication
@@ -131,7 +131,7 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { templateId } = params;
+    const { templateId } = await context.params;
     const body = await request.json();
 
     const db = await getDb();
@@ -224,7 +224,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { templateId: string } },
+  context: { params: Promise<{ templateId: string }> },
 ) {
   try {
     // TODO: Add authentication
@@ -233,7 +233,7 @@ export async function DELETE(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { templateId } = params;
+    const { templateId } = await context.params;
     const url = new URL(request.url);
     const force = url.searchParams.get('force') === 'true';
 

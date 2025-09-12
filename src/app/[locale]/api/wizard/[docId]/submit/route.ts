@@ -25,8 +25,9 @@ const DEFAULT_DOCUMENT_PRICE = 35; // Fallback price in dollars
 
 export async function POST(
   req: Request,
-  { params }: { params: { docId: string; locale: string } },
+  context: { params: Promise<{ docId: string; locale: string }> },
 ) {
+  const params = await context.params;
   const logPrefix = `[API /wizard/${params.docId}/submit]`;
   console.log(`${logPrefix} Received POST request.`);
 

@@ -24,16 +24,17 @@ export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
 }
 
-interface PageProps {
-  params: { locale: 'en' | 'es' };
-}
 
 /* -------------------------------------------------------------------------- */
 /*  Server Component shell — real UI lazy-loads in the client wrapper         */
 /* -------------------------------------------------------------------------- */
-export default async function VehicleBillOfSalePage({ params }: PageProps) {
+export default async function VehicleBillOfSalePage({
+  params,
+}: {
+  params: Promise<{ locale: 'en' | 'es' }>;
+}) {
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { locale } = params; // kept for future enhancement
+  const { locale } = await params; // kept for future enhancement
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   return (

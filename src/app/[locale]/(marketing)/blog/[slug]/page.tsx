@@ -13,15 +13,15 @@ export async function generateStaticParams() {
   return params;
 }
 
-interface BlogPostPageProps {
-  params: {
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{
     locale: 'en' | 'es';
     slug: string;
-  };
-}
-
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const { locale, slug } = params;
+  }>;
+}) {
+  const { locale, slug } = await params;
   const article = blogArticles.find((a) => a.slug === slug);
   return (
     <BlogPostClientContent

@@ -44,7 +44,7 @@ interface RouteParams {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: RouteParams },
+  context: { params: Promise<RouteParams> },
 ) {
   try {
     // Validate authentication
@@ -56,7 +56,7 @@ export async function GET(
       );
     }
 
-    const { webhookId } = params;
+    const { webhookId } = await context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Get webhook details
@@ -100,7 +100,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: RouteParams },
+  context: { params: Promise<RouteParams> },
 ) {
   try {
     // Validate authentication
@@ -112,7 +112,7 @@ export async function PATCH(
       );
     }
 
-    const { webhookId } = params;
+    const { webhookId } = await context.params;
 
     // Parse request body
     const body = await request.json();
@@ -181,7 +181,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: RouteParams },
+  context: { params: Promise<RouteParams> },
 ) {
   try {
     // Validate authentication
@@ -193,7 +193,7 @@ export async function DELETE(
       );
     }
 
-    const { webhookId } = params;
+    const { webhookId } = await context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Delete webhook

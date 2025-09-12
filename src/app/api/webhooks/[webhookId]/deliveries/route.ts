@@ -15,7 +15,7 @@ interface RouteParams {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: RouteParams },
+  context: { params: Promise<RouteParams> },
 ) {
   try {
     // Validate authentication
@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    const { webhookId } = params;
+    const { webhookId } = await context.params;
 
     // Parse query parameters
     const url = new URL(request.url);

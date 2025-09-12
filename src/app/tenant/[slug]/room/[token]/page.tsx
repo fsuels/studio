@@ -5,47 +5,50 @@ import { TenantInviteRoom } from '@/components/tenant/TenantInviteRoom';
 import { redirect } from 'next/navigation';
 import { validateInviteToken } from '@/lib/tenant-invites';
 
-interface TenantRoomPageProps {
-  params: {
-    slug: string;
-    token: string;
-  };
-}
-
-export default async function TenantRoomPage({ params }: TenantRoomPageProps) {
+export default async function TenantRoomPage({
+  params,
+}: {
+  params: Promise<{ slug: string; token: string }>;
+}) {
+  const { slug, token } = await params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
   if (!tenant) {
-    redirect(`/tenant-not-found?slug=${params.slug}`);
+    redirect(`/tenant-not-found?slug=${slug}`);
   }
 
   // Validate the invite token
-  const invitation = await validateInviteToken(params.token, tenant.id);
+  const invitation = await validateInviteToken(token, tenant.id);
 
   if (!invitation) {
-    redirect(`/tenant/${params.slug}/invite-invalid`);
+    redirect(`/tenant/${slug}/invite-invalid`);
   }
 
   if (invitation.status === 'expired') {
-    redirect(`/tenant/${params.slug}/invite-expired`);
+    redirect(`/tenant/${slug}/invite-expired`);
   }
 
   if (invitation.status === 'accepted') {
-    redirect(`/tenant/${params.slug}/invite-already-used`);
+    redirect(`/tenant/${slug}/invite-already-used`);
   }
 
   return (
     <TenantInviteRoom
       tenant={tenant}
       invitation={invitation}
-      token={params.token}
+      token={token}
     />
   );
 }
 
 // Generate metadata for invite rooms
-export async function generateMetadata({ params }: TenantRoomPageProps) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; token: string }>;
+}) {
+  await params; // ensure compatibility with Next.js 15 types
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 

@@ -15,12 +15,6 @@ import {
 import { StateSpecificLegalSchema } from '@/components/seo/LocalBusinessSchema';
 import Link from 'next/link';
 
-interface StatePageProps {
-  params: {
-    locale: string;
-    state: string;
-  };
-}
 
 export async function generateStaticParams() {
   const locales = ['en', 'es'];
@@ -40,9 +34,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: StatePageProps): Promise<Metadata> {
-  const stateSlug = params.state;
-  const locale = params.locale as 'en' | 'es';
+}: {
+  params: Promise<{ locale: string; state: string }>;
+}): Promise<Metadata> {
+  const { state: stateSlug, locale } = await params;
+  const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
@@ -56,7 +52,7 @@ export async function generateMetadata({
   }
 
   const stateName = stateObj.label;
-  const isSpanish = locale === 'es';
+  const isSpanish = localeTyped === 'es';
 
   const title = isSpanish
     ? `Formularios Legales de ${stateName} - Plantillas Gratuitas 2025`
@@ -86,11 +82,11 @@ export async function generateMetadata({
       title,
       description,
       type: 'website',
-      locale: locale,
+      locale: localeTyped,
       siteName: '123LegalDoc',
     },
     alternates: {
-      canonical: `/${locale}/${stateSlug}`,
+      canonical: `/${localeTyped}/${stateSlug}`,
       languages: {
         en: `/en/${stateSlug}`,
         es: `/es/${stateSlug}`,
@@ -99,9 +95,13 @@ export async function generateMetadata({
   };
 }
 
-export default function StatePage({ params }: StatePageProps) {
-  const stateSlug = params.state;
-  const locale = params.locale as 'en' | 'es';
+export default async function StatePage({
+  params,
+}: {
+  params: Promise<{ locale: string; state: string }>;
+}) {
+  const { state: stateSlug, locale } = await params;
+  const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
@@ -112,7 +112,7 @@ export default function StatePage({ params }: StatePageProps) {
   }
 
   const stateName = stateObj.label;
-  const isSpanish = locale === 'es';
+  const isSpanish = localeTyped === 'es';
 
   // Build a lightweight document list from slug/category map
   const allSlugs = Object.keys(slugMap).filter((s) => s !== 'general-inquiry');
@@ -126,10 +126,10 @@ export default function StatePage({ params }: StatePageProps) {
     'Legal Forms',
     stateName,
     undefined,
-    locale,
+    localeTyped,
   );
-  const breadcrumbs = generateStateBreadcrumbs(stateName, undefined, locale);
-  const faqs = generateDocumentFAQs('Legal Forms', stateName, locale);
+  const breadcrumbs = generateStateBreadcrumbs(stateName, undefined, localeTyped);
+  const faqs = generateDocumentFAQs('Legal Forms', stateName, localeTyped);
 
   const documentsByCategory = stateDocuments.reduce(
     (acc, doc) => {

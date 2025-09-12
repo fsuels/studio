@@ -990,7 +990,8 @@ export default function DashboardClientContent({
                         $
                         {payments
                           .filter((p) => {
-                            const paymentDate = new Date(p.date);
+                            const d: any = (p as any).date;
+                            const paymentDate: Date = d?.toDate ? d.toDate() : new Date(d);
                             const now = new Date();
                             return (
                               paymentDate.getMonth() === now.getMonth() &&
@@ -1077,8 +1078,10 @@ export default function DashboardClientContent({
                             parseFloat(
                               String(payment.amount).replace(/[^0-9.]/g, ''),
                             ) || 0;
+                          const d2: any = (payment as any).date;
+                          const paymentDate2: Date = d2?.toDate ? d2.toDate() : new Date(d2);
                           const isRecent =
-                            new Date(payment.date) >
+                            paymentDate2 >
                             new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
                           return (
@@ -1120,13 +1123,16 @@ export default function DashboardClientContent({
                                     {formatDate(payment.date)}
                                   </p>
                                   <p className="text-gray-500 text-xs mt-1">
-                                    {new Date(payment.date).toLocaleTimeString(
-                                      [],
-                                      {
+                                    {(() => {
+                                      const d3: any = (payment as any).date;
+                                      const paymentDate3: Date = d3?.toDate
+                                        ? d3.toDate()
+                                        : new Date(d3);
+                                      return paymentDate3.toLocaleTimeString([], {
                                         hour: '2-digit',
                                         minute: '2-digit',
-                                      },
-                                    )}
+                                      });
+                                    })()}
                                   </p>
                                 </div>
                               </TableCell>

@@ -26,10 +26,10 @@ import type {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } },
+  context: { params: Promise<{ userId: string }> },
 ) {
   try {
-    const { userId } = params;
+    const { userId } = await context.params;
     const url = new URL(request.url);
 
     const includeTemplates =
@@ -116,7 +116,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { userId: string } },
+  context: { params: Promise<{ userId: string }> },
 ) {
   try {
     // TODO: Add authentication
@@ -125,7 +125,7 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { userId } = params;
+    const { userId } = await context.params;
     const body = await request.json();
 
     // Check permissions
@@ -375,7 +375,7 @@ function calculateCategoryBreakdown(templates: MarketplaceTemplate[]) {
 /**
  * Award badge to creator (internal function)
  */
-export async function awardBadge(
+async function awardBadge(
   userId: string,
   badgeId: string,
   badgeName: string,

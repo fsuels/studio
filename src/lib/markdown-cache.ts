@@ -17,8 +17,8 @@ export async function getMarkdown(
   async function tryRead(file: string): Promise<string | null> {
     try {
       return await fs.readFile(file, 'utf-8');
-    } catch (e: any) {
-      if (e?.code !== 'ENOENT') throw e;
+    } catch (e: unknown) {
+      if ((e as NodeJS.ErrnoException)?.code !== 'ENOENT') throw e;
       return null;
     }
   }
@@ -48,8 +48,8 @@ export async function getMarkdown(
         docId,
       )}`,
     );
-    cache.set(key, content);
-    return content;
+    cache.set(key, null);
+    return null;
   } catch (error: unknown) {
     const err = error as NodeJS.ErrnoException;
     if (err.code === 'ENOENT') {

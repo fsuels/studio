@@ -206,42 +206,7 @@ export default function AuditTrailPage() {
     }
   };
 
-  const generateDiffContent = (
-    event: AuditEvent,
-  ): { before: string; after: string } => {
-    const before = event.change.before
-      ? JSON.stringify(event.change.before, null, 2)
-      : '// No previous version';
-
-    const after = event.change.after
-      ? JSON.stringify(event.change.after, null, 2)
-      : '// Document deleted';
-
-    return { before, after };
-  };
-
-  const generateUnifiedDiff = (event: AuditEvent): string => {
-    if (!event.change.diff || event.change.diff.length === 0) {
-      return 'No changes detected';
-    }
-
-    let diff = `--- ${event.source.path} (before)\n`;
-    diff += `+++ ${event.source.path} (after)\n`;
-    diff += `@@ -1,${event.change.diff.length} +1,${event.change.diff.length} @@\n`;
-
-    event.change.diff.forEach((change) => {
-      if (change.changeType === 'deletion') {
-        diff += `- ${change.field}: ${JSON.stringify(change.oldValue)}\n`;
-      } else if (change.changeType === 'addition') {
-        diff += `+ ${change.field}: ${JSON.stringify(change.newValue)}\n`;
-      } else {
-        diff += `- ${change.field}: ${JSON.stringify(change.oldValue)}\n`;
-        diff += `+ ${change.field}: ${JSON.stringify(change.newValue)}\n`;
-      }
-    });
-
-    return diff;
-  };
+  // helpers moved to module scope below
 
   const exportAuditTrail = async () => {
     try {
@@ -535,6 +500,44 @@ export default function AuditTrailPage() {
       </Card>
     </div>
   );
+}
+
+// Helper functions for diff generation (module scope)
+function generateDiffContent(
+  event: AuditEvent,
+): { before: string; after: string } {
+  const before = event.change.before
+    ? JSON.stringify(event.change.before, null, 2)
+    : '// No previous version';
+
+  const after = event.change.after
+    ? JSON.stringify(event.change.after, null, 2)
+    : '// Document deleted';
+
+  return { before, after };
+}
+
+function generateUnifiedDiff(event: AuditEvent): string {
+  if (!event.change.diff || event.change.diff.length === 0) {
+    return 'No changes detected';
+  }
+
+  let diff = `--- ${event.source.path} (before)\n`;
+  diff += `+++ ${event.source.path} (after)\n`;
+  diff += `@@ -1,${event.change.diff.length} +1,${event.change.diff.length} @@\n`;
+
+  event.change.diff.forEach((change) => {
+    if (change.changeType === 'deletion') {
+      diff += `- ${change.field}: ${JSON.stringify(change.oldValue)}\n`;
+    } else if (change.changeType === 'addition') {
+      diff += `+ ${change.field}: ${JSON.stringify(change.newValue)}\n`;
+    } else {
+      diff += `- ${change.field}: ${JSON.stringify(change.oldValue)}\n`;
+      diff += `+ ${change.field}: ${JSON.stringify(change.newValue)}\n`;
+    }
+  });
+
+  return diff;
 }
 
 function AuditEventDetails({

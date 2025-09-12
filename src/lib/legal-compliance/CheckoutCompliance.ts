@@ -79,7 +79,7 @@ class CheckoutComplianceEngine {
     additionalNotices: string[];
   } {
     const config = this.getStateCompliance(state);
-    const isNC = state === 'NC';
+    const _isNC = state === 'NC';
 
     const disclaimerText = this.generateDisclaimerText();
     const warrantyText = config.requiresWarrantyDisclaimer
@@ -325,7 +325,11 @@ export const getStateCompliance = (state: string) =>
 export const generateTermsText = (state: string, documentType: string) =>
   checkoutCompliance.generateTermsText(state, documentType);
 
-export const validateCheckout = (params: any) =>
+export type ValidateCheckoutParams = Parameters<
+  CheckoutComplianceEngine['validateCheckoutCompliance']
+>[0];
+
+export const validateCheckout = (params: ValidateCheckoutParams) =>
   checkoutCompliance.validateCheckoutCompliance(params);
 
 export const getCheckoutCopy = () => checkoutCompliance.getCheckoutCopy();

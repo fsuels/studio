@@ -35,7 +35,7 @@ import { auditService } from '@/services/firebase-audit-service';
 import { useToast } from '@/hooks/use-toast';
 
 interface AuditEvent {
-  id: string;
+  id?: string;
   eventType: string;
   userId: string;
   timestamp: any;
@@ -110,7 +110,9 @@ export default function UserAuditTrailPage() {
 
     try {
       const exportData = await auditService.exportUserData(user.uid);
-      const blob = new Blob([exportData], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(exportData)], {
+        type: 'application/json',
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

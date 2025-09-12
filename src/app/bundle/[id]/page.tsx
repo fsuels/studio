@@ -15,15 +15,16 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartProvider';
 import Link from 'next/link';
 
-interface Props {
-  params: { id: string };
-}
-
-export default async function BundleDetailPage({ params }: Props) {
+export default async function BundleDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   // try Firestore first
-  let bundle = (await loadBundles()).find((b) => b.id === params!.id);
+  let bundle = (await loadBundles()).find((b) => b.id === id);
   if (!bundle) {
-    bundle = bundles.find((b) => b.id === params!.id);
+    bundle = bundles.find((b) => b.id === id);
   }
   if (!bundle) return notFound();
 

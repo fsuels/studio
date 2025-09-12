@@ -9,7 +9,7 @@ interface RouteParams {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: RouteParams },
+  context: { params: Promise<RouteParams> },
 ) {
   try {
     // Validate authentication
@@ -21,7 +21,7 @@ export async function POST(
       );
     }
 
-    const { webhookId } = params;
+    const { webhookId } = await context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Send test webhook

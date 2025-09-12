@@ -8,7 +8,7 @@ import { templateSubmissionWorkflow } from '@/lib/marketplace/template-submissio
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { submissionId: string } },
+  context: { params: Promise<{ submissionId: string }> },
 ) {
   try {
     // TODO: Add authentication and reviewer permission checks
@@ -17,7 +17,7 @@ export async function POST(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { submissionId } = params;
+    const { submissionId } = await context.params;
     const body = await request.json();
     const {
       decision, // 'approved' | 'rejected' | 'needs_changes'
@@ -94,7 +94,7 @@ export async function POST(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { submissionId: string } },
+  context: { params: Promise<{ submissionId: string }> },
 ) {
   try {
     // TODO: Add authentication and admin permission checks
@@ -103,7 +103,7 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { submissionId } = params;
+    const { submissionId } = await context.params;
     const body = await request.json();
     const { reviewerId, priority = 'normal' } = body;
 
