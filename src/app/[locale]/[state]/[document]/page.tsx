@@ -238,11 +238,7 @@ export default async function StateDocumentPage({ params }: StateDocumentPagePro
                       : `A ${documentName} is an important legal document that serves specific purposes under ${stateName} laws.`)}
                 </p>
 
-                {document.category && (
-                  <div className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                    {document.category}
-                  </div>
-                )}
+                {/* Category badge intentionally omitted: no document object in this context */}
               </div>
 
               {/* State-Specific Requirements */}

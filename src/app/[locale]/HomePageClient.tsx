@@ -8,8 +8,7 @@ import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
-import PersonalizationBlock from '@/components/PersonalizationBlock';
-import { AutoImage } from '@/components/shared';
+import { AutoImage, PersonalizationBlock } from '@/components/shared';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
@@ -71,17 +70,14 @@ const SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
 });
 
 const HowItWorks = lazyOnView(
-  () => import('@/components/layout').then((m) => ({ default: m.HowItWorks })),
+  () => import('@/components/layout/landing/HowItWorks'),
   {
     placeholder: <HowItWorksSkeleton />,
   },
 );
 
 const TrustAndTestimonialsSection = lazyOnView(
-  () =>
-    import('@/components/layout').then((m) => ({
-      default: m.TrustAndTestimonialsSection,
-    })),
+  () => import('@/components/layout/landing/TrustAndTestimonialsSection'),
   {
     placeholder: <TestimonialsSkeleton />,
   },
@@ -95,8 +91,7 @@ const TopDocsChips = lazyOnView(
 );
 
 const AnnouncementBar = lazyOnView(
-  () =>
-    import('@/components/shared').then((m) => ({ default: m.AnnouncementBar })),
+  () => import('@/components/shared/engagement/AnnouncementBar'),
   {
     placeholder: null,
   },
