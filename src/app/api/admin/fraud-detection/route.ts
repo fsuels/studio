@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       case 'risk_assessments':
         const assessments = await getFraudAssessments(
           timeframe,
-          riskLevel,
+          riskLevel ?? undefined,
           page,
           limit,
         );
@@ -727,8 +727,16 @@ function generateMockAssessments(count: number): FraudRiskAssessment[] {
   return assessments.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 }
 
-function generateMockRiskFactors() {
-  const allFactors = [
+type RiskFactor = {
+  category: 'velocity' | 'device' | 'geographic' | 'payment' | 'behavioral';
+  factor: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  impact: number;
+  description: string;
+};
+
+function generateMockRiskFactors(): RiskFactor[] {
+  const allFactors: RiskFactor[] = [
     {
       category: 'velocity',
       factor: 'high_email_velocity',

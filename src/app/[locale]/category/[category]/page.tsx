@@ -37,8 +37,12 @@ export async function generateMetadata({
     };
   }
   
-  const title = `${categoryData.displayName || categoryData.name} Legal Documents | 123LegalDoc`;
-  const description = `Browse and create ${categoryData.displayName || categoryData.name} legal documents. Professional templates for all your ${categoryData.name.toLowerCase()} needs.`;
+  const displayTitle = (
+    (categoryData as unknown as { displayName?: string; name?: string })
+      .displayName ?? categoryData.name
+  );
+  const title = `${displayTitle} Legal Documents | 123LegalDoc`;
+  const description = `Browse and create ${displayTitle} legal documents. Professional templates for all your ${categoryData.name.toLowerCase()} needs.`;
   
   return {
     title,

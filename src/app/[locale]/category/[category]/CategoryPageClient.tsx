@@ -100,6 +100,10 @@ export default function CategoryPageClient({ locale, category, docs }: CategoryP
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   const categoryData = taxonomy.categories[category as keyof typeof taxonomy.categories];
+  const displayTitle = (
+    (categoryData as unknown as { displayName?: string; name?: string })
+      ?.displayName ?? categoryData?.name ?? category
+  );
   const meta = categoryMeta[category] || {
     icon: FileText,
     color: 'text-gray-600',
@@ -168,9 +172,7 @@ export default function CategoryPageClient({ locale, category, docs }: CategoryP
                 {t('nav.documents', { defaultValue: 'Documents' })}
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="text-gray-900 font-medium">
-                {categoryData?.displayName || categoryData?.name || category}
-              </span>
+              <span className="text-gray-900 font-medium">{displayTitle}</span>
             </div>
             
             {/* Category Header */}
@@ -182,9 +184,7 @@ export default function CategoryPageClient({ locale, category, docs }: CategoryP
                 <CategoryIcon className="h-8 w-8" />
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {categoryData?.displayName || categoryData?.name || category}
-                </h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{displayTitle}</h1>
                 <p className="text-lg text-gray-600">
                   {t('category.documentCount', {
                     defaultValue: `${categoryDocuments.length} legal documents available`,
@@ -233,7 +233,10 @@ export default function CategoryPageClient({ locale, category, docs }: CategoryP
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
           {Object.entries(documentsBySubcategory).map(([subKey, docs]) => {
-            const subData = categoryData?.subs?.[subKey];
+            const subIndex = categoryData?.subs as
+              | Record<string, { name?: string; displayName?: string; docs?: readonly string[] }>
+              | undefined;
+            const subData = subIndex?.[subKey];
             
             return (
               <div key={subKey} className="mb-12">
