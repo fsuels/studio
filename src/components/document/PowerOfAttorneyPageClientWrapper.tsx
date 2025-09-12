@@ -13,7 +13,7 @@ export default function PowerOfAttorneyPageClientWrapper() {
   const [config, setConfig] = useState<DocumentConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -37,7 +37,7 @@ export default function PowerOfAttorneyPageClientWrapper() {
     loadConfig();
   }, []);
 
-  const handleSave = (data: Record<string, any>) => {
+  const handleSave = (data: Record<string, unknown>) => {
     setFormData(data);
     console.log('PowerOfAttorneyPageClientWrapper: Form data saved:', data);
     
@@ -45,7 +45,7 @@ export default function PowerOfAttorneyPageClientWrapper() {
     localStorage.setItem('power-of-attorney-draft', JSON.stringify(data));
   };
 
-  const handleSubmit = (data: Record<string, any>) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     console.log('PowerOfAttorneyPageClientWrapper: Form submitted:', data);
     setFormData(data);
     

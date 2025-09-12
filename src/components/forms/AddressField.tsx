@@ -115,7 +115,7 @@ const AddressField = React.memo(function AddressField({
       script.defer = true;
 
       // Global callback
-      (window as any).initGoogleMaps = () => {
+      (window as unknown as { initGoogleMaps: () => void }).initGoogleMaps = () => {
         setDebugInfo('Google Maps API loaded successfully');
         isGoogleMapsLoading = false;
         resolve();
@@ -139,7 +139,7 @@ const AddressField = React.memo(function AddressField({
     });
 
     return googleMapsLoadPromise;
-  }, [hasGoogleMapsApiKey]);
+  }, []);
 
   // Initialize Google Places Autocomplete
   useEffect(() => {

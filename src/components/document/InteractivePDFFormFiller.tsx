@@ -7,17 +7,15 @@
 'use client';
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
-  Download, 
   CreditCard, 
   Shield,
   Save,
   Loader2,
-  CheckCircle,
   MousePointer,
   Clock,
   User
@@ -27,11 +25,11 @@ interface InteractivePDFFormFillerProps {
   state: string;
   formName: string;
   pdfUrl: string;
-  onSaveAndContinue: (formData: Record<string, any>) => void;
-  onCompleteAndPay: (formData: Record<string, any>) => void;
+  onSaveAndContinue: (formData: Record<string, unknown>) => void;
+  onCompleteAndPay: (formData: Record<string, unknown>) => void;
   requiresNotary?: boolean;
   basePrice: number;
-  initialFormData?: Record<string, any>;
+  initialFormData?: Record<string, unknown>;
   isLoggedIn?: boolean;
 }
 
@@ -46,7 +44,7 @@ export default function InteractivePDFFormFiller({
   initialFormData = {},
   isLoggedIn = false
 }: InteractivePDFFormFillerProps) {
-  const [formData, setFormData] = useState<Record<string, any>>(initialFormData);
+  const [formData, setFormData] = useState<Record<string, unknown>>(initialFormData);
   const [pdfLoaded, setPdfLoaded] = useState(false);
   const [isInteractive, setIsInteractive] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -100,7 +98,7 @@ export default function InteractivePDFFormFiller({
         // Check if we can access the PDF and if it has form fields
         setIsInteractive(true);
       }
-    } catch (e) {
+    } catch (_e) {
       console.log('PDF is not interactive, will use overlay approach');
       setIsInteractive(false);
     }
@@ -196,6 +194,7 @@ export default function InteractivePDFFormFiller({
               className="w-full h-full border-0"
               title="Interactive PDF Form"
               onLoad={handlePDFLoad}
+              onKeyDown={() => {}}
               style={{ 
                 minHeight: '800px',
                 background: 'white'
@@ -210,7 +209,7 @@ export default function InteractivePDFFormFiller({
                   <div>
                     <p className="font-medium">Interactive Mode</p>
                     <p className="text-xs opacity-90">
-                      This form may require manual completion. Fill out information and we'll overlay it on the final document.
+                      This form may require manual completion. Fill out information and we&apos;ll overlay it on the final document.
                     </p>
                   </div>
                 </div>
@@ -259,7 +258,7 @@ export default function InteractivePDFFormFiller({
           <Shield className="h-4 w-4" />
           <AlertDescription>
             <strong>Important:</strong> This document must be notarized to be legally valid in {state.toUpperCase()}. 
-            After downloading, you'll need to sign it in front of a notary public.
+            After downloading, you&apos;ll need to sign it in front of a notary public.
           </AlertDescription>
         </Alert>
       )}

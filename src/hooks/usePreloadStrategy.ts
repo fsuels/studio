@@ -213,8 +213,8 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
     }
 
     // Cleanup function
+    const snapshot = new Map(interactionListeners.current);
     return () => {
-      const snapshot = new Map(interactionListeners.current);
       snapshot.forEach((listener, path) => {
         const elements = document.querySelectorAll(
           `a[href*="${path}"], button[data-preload="${path}"]`,

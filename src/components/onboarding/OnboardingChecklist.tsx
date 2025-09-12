@@ -41,7 +41,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
   onDismiss,
   compact = false,
 }) => {
-  const { t } = useTranslation('common');
+  const { t: _t } = useTranslation('common');
   const { progress, markMilestone, shouldShowOnboarding } = useOnboarding();
 
   if (!shouldShowOnboarding && !progress) {
@@ -147,7 +147,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
   );
   const progressPercentage =
     (completedItems.length / checklistItems.length) * 100;
-  const totalEstimatedTime = checklistItems.reduce(
+  const _totalEstimatedTime = checklistItems.reduce(
     (acc, item) => acc + item.estimatedMinutes,
     0,
   );
@@ -316,7 +316,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
               Congratulations! 🎉
             </h3>
             <p className="text-sm text-green-700">
-              You've completed the onboarding process. You're ready to create
+              You&apos;ve completed the onboarding process. You&apos;re ready to create
               amazing legal documents!
             </p>
           </div>

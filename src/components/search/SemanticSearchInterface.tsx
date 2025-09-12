@@ -19,13 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -121,7 +115,7 @@ const SemanticSearchInterface: React.FC = () => {
         tags: {},
       });
     }
-  }, [debouncedQuery, filters]);
+  }, [debouncedQuery, filters, performSearch]);
 
   const performSearch = useCallback(async () => {
     if (!debouncedQuery.trim()) return;
@@ -170,7 +164,10 @@ const SemanticSearchInterface: React.FC = () => {
     }
   }, [debouncedQuery, filters]);
 
-  const handleFilterChange = (filterType: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (
+    filterType: keyof SearchFilters,
+    value: number,
+  ) => {
     setFilters((prev) => ({
       ...prev,
       [filterType]: value,
@@ -569,13 +566,13 @@ const SemanticSearchInterface: React.FC = () => {
                     </h3>
                     <p className="text-gray-600">
                       Try adjusting your search query or filters to find what
-                      you're looking for.
+                      you&apos;re looking for.
                     </p>
                   </CardContent>
                 </Card>
               )}
 
-              {results.map((result, index) => (
+              {results.map((result, _index) => (
                 <Card
                   key={result.id}
                   className="hover:shadow-md transition-shadow"
@@ -670,7 +667,7 @@ const SemanticSearchInterface: React.FC = () => {
                         {view.name}
                       </h4>
                       <p className="text-sm text-gray-600 mb-2">
-                        "{view.query}"
+                        &quot;{view.query}&quot;
                       </p>
                       <div className="flex flex-wrap gap-1">
                         {view.filters.category.map((cat) => (

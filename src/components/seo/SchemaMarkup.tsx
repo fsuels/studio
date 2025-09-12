@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
-
 interface FAQItem {
   question: string;
   answer: string;
@@ -56,7 +54,6 @@ interface SchemaMarkupProps {
 }
 
 export function SchemaMarkup({ type, data }: SchemaMarkupProps) {
-  const { i18n } = useTranslation();
 
   const generateSchema = () => {
     const baseContext = 'https://schema.org';
@@ -170,7 +167,7 @@ export function SchemaMarkup({ type, data }: SchemaMarkupProps) {
 export function generateDocumentFAQs(
   documentType: string,
   state?: string,
-  locale = 'en',
+  _locale = 'en',
 ) {
   const faqs: FAQItem[] = [
     {

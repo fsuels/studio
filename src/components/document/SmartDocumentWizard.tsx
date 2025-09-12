@@ -8,9 +8,9 @@ import { AlertCircle } from 'lucide-react';
 type Props = {
   documentType: string;
   selectedState?: string;
-  onPaymentRequired: (formData: Record<string, any>, price: number, state: string) => void;
+  onPaymentRequired: (formData: Record<string, unknown>, price: number, state: string) => void;
   onComplete: (doc: ArrayBuffer) => void;
-  initialFormData?: Record<string, any>;
+  initialFormData?: Record<string, unknown>;
   isLoggedIn?: boolean;
   locale: 'en' | 'es';
   resumeId?: string | null;

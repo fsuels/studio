@@ -13,7 +13,6 @@ import {
   Eye, 
   Download, 
   CreditCard,
-  CheckCircle,
   AlertCircle,
   Shield,
   Clock
@@ -29,7 +28,7 @@ interface UniversalDocumentWizardProps {
   subJurisdiction?: SubJurisdiction;
   language?: string;
   onComplete?: (document: ArrayBuffer) => void;
-  onPaymentRequired?: (strategy: DocumentStrategy, formData: Record<string, any>) => void;
+  onPaymentRequired?: (strategy: DocumentStrategy, formData: Record<string, unknown>) => void;
 }
 
 export default function UniversalDocumentWizard({
@@ -52,7 +51,7 @@ export default function UniversalDocumentWizard({
     defaultValues: {}
   });
 
-  const { watch, setValue, getValues } = methods;
+  const { watch, setValue } = methods;
   const formData = watch();
 
   // Initialize the wizard with the appropriate strategy
@@ -84,7 +83,7 @@ export default function UniversalDocumentWizard({
         setWizard(wizardManager);
 
         // Initialize form with default values
-        const defaultValues: Record<string, any> = {};
+        const defaultValues: Record<string, unknown> = {};
         selectedStrategy.questionFlow.forEach(section => {
           section.fields.forEach(field => {
             if (field.id === 'state' && subJurisdiction) {
@@ -231,7 +230,7 @@ export default function UniversalDocumentWizard({
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">What's included:</p>
+              <p className="text-sm text-muted-foreground">What&apos;s included:</p>
               {strategy.pricing.priceBreakdown?.map((item, index) => (
                 <div key={index} className="text-xs text-muted-foreground">
                   {item.description[language] || item.description.en}

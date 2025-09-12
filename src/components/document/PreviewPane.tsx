@@ -15,7 +15,6 @@ import { useFormContext } from 'react-hook-form';
 import {
   Loader2,
   AlertTriangle,
-  Eye,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -23,7 +22,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { debounce } from '@/lib/debounce';
 import { documentLibrary } from '@/lib/document-library';
-import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { Button } from '@/components/ui/button';
@@ -43,12 +41,12 @@ export default function PreviewPane({
   locale,
   docId,
   currentFieldId,
-  enableInlineEditing = false,
+  enableInlineEditing: _enableInlineEditing = false,
   onFieldClick,
 }: PreviewPaneProps) {
   const { t } = useTranslation('common');
   const formContext = useFormContext();
-  const { watch, setValue } = formContext || {};
+  const { watch } = formContext || {};
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
@@ -56,7 +54,6 @@ export default function PreviewPane({
   const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [highlightedField, setHighlightedField] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -213,7 +210,7 @@ export default function PreviewPane({
     // Only split on explicit page breaks
     const pageBreakPattern =
       /(?:^|\n)(?:---\s*page\s*break\s*---|\*\*\*\s*page\s*break\s*\*\*\*|\\newpage|\f)/gim;
-    let pages = content.split(pageBreakPattern);
+    const pages = content.split(pageBreakPattern);
 
     // If no explicit page breaks, return single page to avoid layout issues
     if (pages.length === 1) {
@@ -474,7 +471,7 @@ export default function PreviewPane({
       <StatePDFPreview
         state={selectedState}
         formData={currentFormData}
-        documentType={docId as any} // Dynamic document type
+        documentType={docId as 'vehicle-bill-of-sale'} // Dynamic document type
       />
     );
   }
@@ -529,6 +526,9 @@ export default function PreviewPane({
           ref={previewRef}
           className="flex-1 overflow-y-auto bg-white"
           onClick={handleFieldClick}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex={0}
         >
           <div className="prose prose-sm max-w-none p-6 md:p-8">
             <style jsx global>{`
@@ -667,7 +667,7 @@ export default function PreviewPane({
               rehypePlugins={[rehypeRaw]}
               components={{
                 p: (props) => <p {...props} className="select-none" />,
-                h1: (props) => <h1 {...props} className="text-center" />,
+                h1: (props) => <h1 {...props} className="text-center">​</h1>,
                 mark: ({ className, children, ...props }) => (
                   <mark className={className} {...props}>
                     {children}

@@ -20,7 +20,7 @@ interface ClientProvidersProps {
 
 // Statically import Footer so it is included in the main bundle.
 // This avoids an additional network request on every navigation.
-import { Footer } from '@/components/layout/Footer';
+import { Footer as _Footer } from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
 
 // Load non-critical widgets lazily

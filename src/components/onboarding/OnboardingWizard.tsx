@@ -3,7 +3,31 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 // import Joyride, { CallBackProps, STATUS, EVENTS, Step } from 'react-joyride';
-type Step = any; // Temporary placeholder
+interface Step {
+  target: string | HTMLElement;
+  content: React.ReactNode;
+  placement?:
+    | 'top'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'auto'
+    | 'center'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left-start'
+    | 'left-end'
+    | 'right-start'
+    | 'right-end';
+  disableBeacon?: boolean;
+  hideCloseButton?: boolean;
+  spotlightClicks?: boolean;
+  styles?: object;
+  title?: React.ReactNode;
+}
+
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -40,18 +64,18 @@ interface PersonaOption {
 
 export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   autoStart = false,
-  onComplete,
+  onComplete: _onComplete,
   onSkip,
 }) => {
-  const { t } = useTranslation('common');
+  const { t: _t } = useTranslation('common');
   const { user } = useAuth();
 
   const [run, setRun] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, _setStepIndex] = useState(0);
   const [showPersonaSelection, setShowPersonaSelection] = useState(true);
-  const [selectedPersona, setSelectedPersona] = useState<string>('');
+  const [_selectedPersona, setSelectedPersona] = useState<string>('');
   const [steps, setSteps] = useState<Step[]>([]);
-  const [progress, setProgress] = useState(0);
+  const [progress, _setProgress] = useState(0);
   const [tracker, setTracker] = useState<ReturnType<
     typeof createProgressTracker
   > | null>(null);
@@ -105,9 +129,9 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     if (autoStart && user?.uid && tracker) {
       initializeOnboarding();
     }
-  }, [autoStart, user?.uid, tracker]);
+  }, [autoStart, user?.uid, tracker, initializeOnboarding]);
 
-  const initializeOnboarding = async () => {
+  const initializeOnboarding = useCallback(async () => {
     if (!tracker) return;
 
     const existingProgress = await tracker.getProgress();
@@ -116,7 +140,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     }
 
     setShowPersonaSelection(true);
-  };
+  }, [tracker]);
 
   const handlePersonaSelect = async (persona: string) => {
     if (!tracker) return;
@@ -222,7 +246,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             Welcome to 123LegalDoc!
           </CardTitle>
           <p className="text-muted-foreground">
-            Let's personalize your experience. What best describes you?
+            Let&apos;s personalize your experience. What best describes you?
           </p>
         </CardHeader>
 

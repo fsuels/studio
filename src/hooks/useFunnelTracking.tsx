@@ -296,7 +296,7 @@ export function useFormTracking(formName: string) {
   );
 
   const trackFieldError = useCallback(
-    (fieldName: string, error: string) => {
+    (fieldName: string, _error: string) => {
       trackFormInteraction(formName, fieldName, 'error');
     },
     [formName, trackFormInteraction],
@@ -304,8 +304,6 @@ export function useFormTracking(formName: string) {
 
   const trackFormCompletion = useCallback(() => {
     setFormState((prev) => ({ ...prev, completed: true }));
-    const timeToComplete = (Date.now() - startTimeRef.current) / 1000;
-
     trackFormInteraction(formName, 'form_complete', 'change');
   }, [formName, trackFormInteraction]);
 

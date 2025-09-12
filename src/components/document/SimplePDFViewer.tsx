@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 interface SimplePDFViewerProps {
   pdfUrl: string;
-  formData?: Record<string, any>;
+  formData?: Record<string, unknown>;
   onOverlay?: (pdfBytes: ArrayBuffer) => Promise<ArrayBuffer>;
   className?: string;
 }
@@ -100,7 +100,7 @@ export default function SimplePDFViewer({
         URL.revokeObjectURL(processedPdfUrl);
       }
     };
-  }, [processPDF]);
+  }, [processPDF, processedPdfUrl]);
 
   const handleDownload = useCallback(async () => {
     if (!originalPdfBytes) return;
@@ -184,6 +184,7 @@ export default function SimplePDFViewer({
         onLoad={() => {
           console.log('SimplePDFViewer: PDF iframe loaded successfully');
         }}
+        onKeyDown={() => {}}
         onError={(e) => {
           console.error('SimplePDFViewer: PDF iframe error:', e);
           setError('Failed to display PDF');

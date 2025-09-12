@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react';
 interface Props {
   state: string;                 // 2-letter code
   documentType: string;
-  formData: Record<string, any>;
+  formData: Record<string, unknown>;
   overlayConfig?: OverlayConfig | null; // passed from parent to avoid re-fetch
 }
 
@@ -59,9 +59,9 @@ export default function StatePDFPreview({
         const url = URL.createObjectURL(blob);
         setPdfUrl(url);
         revoke = url;
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error('[StatePDFPreview] error:', e);
-        setErr(e?.message || 'Failed to render preview');
+        setErr(e instanceof Error ? e.message : 'Failed to render preview');
       } finally {
         setLoading(false);
       }
