@@ -47,7 +47,7 @@ export default function AIFeatureTooltip() {
           Just describe what you need in plain English and let our AI find the perfect legal document for you!
         </p>
         <p className="text-xs text-yellow-200 font-medium">
-          💡 Look for the "AI Finder" button in the header
+          💡 Look for the &quot;AI Finder&quot; button in the header
         </p>
       </div>
     </div>

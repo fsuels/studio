@@ -26,7 +26,6 @@ export default function ProgressSteps({
           {' '}
           {/* Scrollable container for desktop/tablet */}
           <ol
-            role="list"
             className="flex items-start space-x-2 md:space-x-4 min-w-max"
           >
             {' '}

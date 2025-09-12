@@ -24,7 +24,7 @@ const AutoImage: React.FC<AutoImageProps> = ({
   alt = '',
   showSkeleton = true,
   aspectRatio,
-  lazy = true,
+  lazy: _lazy = true,
   className,
   placeholder = 'blur',
   blurDataURL,

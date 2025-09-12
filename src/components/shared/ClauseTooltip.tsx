@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Tooltip,
   TooltipTrigger,
@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { explainClause } from '@/ai/flows/explain-clause';
 import { useAccessibility } from '@/contexts/AccessibilityProvider';
-import { Lightbulb, Volume2, Eye } from 'lucide-react';
+import { Lightbulb, Volume2 } from 'lucide-react';
 
 const memoryCache: Record<string, string> = {};
 
@@ -61,7 +61,7 @@ function ClauseTooltip({
       handleExplain();
       setIsAutoExplained(true);
     }
-  }, [preferences.autoExplainClauses, isAutoExplained, content]);
+  }, [preferences.autoExplainClauses, isAutoExplained, content, handleExplain]);
 
   // Simplify jargon when enabled
   useEffect(() => {
@@ -70,9 +70,9 @@ function ClauseTooltip({
     } else {
       setSimplifiedText('');
     }
-  }, [preferences.simplifyLegalJargon, text]);
+  }, [preferences.simplifyLegalJargon, text, simplifyJargon]);
 
-  const handleExplain = async () => {
+  const handleExplain = useCallback(async () => {
     if (!aiEnabled) {
       setContent('AI explanations are disabled in this environment.');
       return;
@@ -92,9 +92,9 @@ function ClauseTooltip({
       setContent('Unable to explain this clause at the moment.');
     }
     setLoading(false);
-  };
+  }, [aiEnabled, id, text]);
 
-  const simplifyJargon = async () => {
+  const simplifyJargon = useCallback(async () => {
     try {
       const response = await fetch('/api/accessibility/simplify', {
         method: 'POST',
@@ -111,7 +111,7 @@ function ClauseTooltip({
     } catch (error) {
       console.error('Failed to simplify jargon:', error);
     }
-  };
+  }, [text]);
 
   const handleOpenChange = async (open: boolean) => {
     if (!open) return;

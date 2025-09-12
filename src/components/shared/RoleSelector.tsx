@@ -40,7 +40,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
       if (savedRole && taxonomy.roles[savedRole]) {
         setSelectedRole(savedRole);
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn('Could not access localStorage for user role');
     }
   }, []);
@@ -56,7 +56,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
         } else {
           localStorage.removeItem('userRole');
         }
-      } catch (error) {
+      } catch (_error) {
         console.warn('Could not save role to localStorage');
       }
 
@@ -76,8 +76,6 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
       });
   }, []);
 
-  const selectedRoleData = selectedRole ? taxonomy.roles[selectedRole] : null;
-  
   // Helper function to format role key into display name
   const formatRoleKey = (key: string): string => {
     return key

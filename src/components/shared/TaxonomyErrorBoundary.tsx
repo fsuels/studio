@@ -82,7 +82,7 @@ const DefaultErrorFallback: React.FC<{
     </CardHeader>
     <CardContent className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        We're having trouble loading the enhanced features. You can still browse
+        We&apos;re having trouble loading the enhanced features. You can still browse
         documents using the basic navigation.
       </p>
       {process.env.NODE_ENV === 'development' && error && (

@@ -236,7 +236,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   const categories = useMemo(
     () => allCategories.filter(cat => categoryMeta[cat]),
-    [allCategories],
+    [allCategories, categoryMeta],
   );
   // After redesign we show the full category grid responsively
   // Create mapping from taxonomy keys to document category names
@@ -266,7 +266,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     return topDocs.filter((doc) =>
       validCategories.includes(doc.category) || doc.category === selectedCategory
     );
-  }, [topDocs, selectedCategory]);
+  }, [topDocs, selectedCategory, taxonomyToDocCategory]);
 
   const handleExploreAll = () => {
     setShowDiscoveryModal(true);

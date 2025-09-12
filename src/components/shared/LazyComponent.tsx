@@ -4,7 +4,6 @@ import React, { Suspense, lazy, ComponentType } from 'react';
 import { Spinner } from '@/components/ui/Spinner';
 import {
   BaseComponentProps,
-  ClassNameHelpers,
 } from '@/lib/component-standards';
 
 export interface LazyComponentProps extends BaseComponentProps {
@@ -68,7 +67,7 @@ const DefaultLoadingFallback = () => (
 );
 
 // Factory function to create lazy-loaded components
-export function createLazyComponent<T extends ComponentType<any>>(
+export function createLazyComponent<T extends ComponentType<{}>>(
   importFn: () => Promise<{ default: T } | T>,
   options?: {
     fallback?: React.ReactNode;
@@ -85,7 +84,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
   const preload = () => importFn();
 
   // Wrapped component with loading and error handling
-  const WrappedComponent = React.forwardRef<any, React.ComponentProps<T>>(
+  const WrappedComponent = React.forwardRef<unknown, React.ComponentProps<T>>(
     (props, ref) => {
       const content = (
         <Suspense fallback={options?.fallback || <DefaultLoadingFallback />}>
@@ -108,14 +107,14 @@ export function createLazyComponent<T extends ComponentType<any>>(
   WrappedComponent.displayName = `Lazy(${LazyComponent.displayName || 'Component'})`;
 
   // Add preload method
-  (WrappedComponent as any).preload = preload;
+  (WrappedComponent as { preload: typeof preload }).preload = preload;
 
   // Auto-preload if requested
   if (options?.preload) {
     preload();
   }
 
-  return WrappedComponent as T & { preload: () => Promise<any> };
+  return WrappedComponent as T & { preload: () => Promise<{ default: T } | T> };
 }
 
 // Intersection Observer hook for lazy loading on visibility

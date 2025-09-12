@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { getDirAttribute, isRTL, useDirectional } from '@/lib/rtl-utils';
+import { getDirAttribute } from '@/lib/rtl-utils';
 
 // Placeholder FlagUS Component - Replace with your actual SVG component
 const FlagUS = () => (

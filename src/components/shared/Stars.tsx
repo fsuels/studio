@@ -47,7 +47,7 @@ const Stars = React.memo<StarsProps>(function Stars({
   showValue = false,
   allowHalf = false,
   color = 'yellow',
-  variant = 'filled',
+  variant: _variant = 'filled',
   interactive = false,
   onChange,
   className,

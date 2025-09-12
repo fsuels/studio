@@ -74,14 +74,14 @@ const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
     showLocation && review.location ? review.location : null;
 
   return (
-    <article
+    <div
       className={containerClasses}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       id={id}
       data-testid={testId || 'review-card'}
       tabIndex={clickable ? 0 : undefined}
-      role={clickable ? 'button' : undefined}
+      role={clickable ? 'button' : 'article'}
       aria-label={clickable ? `Review by ${reviewerName}` : undefined}
       {...rest}
     >
@@ -98,7 +98,7 @@ const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
 
       {/* Review Quote */}
       <blockquote className="flex-1 my-4 italic leading-relaxed text-gray-800">
-        <p>"{truncatedQuote}"</p>
+        <p>&quot;{truncatedQuote}&quot;</p>
       </blockquote>
 
       {/* Reviewer Information */}
@@ -121,7 +121,7 @@ const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
           </time>
         )}
       </footer>
-    </article>
+    </div>
   );
 });
 

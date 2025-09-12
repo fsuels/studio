@@ -213,7 +213,8 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
     }
 
     // Cleanup function
-    const snapshot = new Map(interactionListeners.current);
+    const listenersRef = interactionListeners.current;
+    const snapshot = new Map(listenersRef);
     return () => {
       snapshot.forEach((listener, path) => {
         const elements = document.querySelectorAll(
@@ -224,7 +225,7 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
           element.removeEventListener('focus', listener);
         });
       });
-      interactionListeners.current.clear();
+      listenersRef.clear();
     };
   }, [config, preload, setupInteractionPreloading, intelligentPreload]);
 

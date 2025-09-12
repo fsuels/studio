@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   ArrowRight,
@@ -87,7 +86,7 @@ const SituationBasedCategoryGroups: React.FC<
 
           // Find documents for this situation's domains
           const relevantSlugs = Object.entries(slugMap).filter(
-            ([slug, categoryKey]) => {
+            ([_slug, categoryKey]) => {
               const category =
                 taxonomy.categories[
                   categoryKey as keyof typeof taxonomy.categories
@@ -155,7 +154,7 @@ const SituationBasedCategoryGroups: React.FC<
 
   const getSituationIcon = (iconEmoji: string) => {
     // Map emoji to Lucide icons for better consistency
-    const iconMap: Record<string, React.ComponentType<any>> = {
+    const iconMap: Record<string, React.ComponentType<{}>> = {
       '🏠': Home,
       '🏢': Briefcase,
       '💼': Briefcase,

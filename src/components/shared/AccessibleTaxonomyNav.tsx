@@ -192,7 +192,7 @@ const AccessibleTaxonomyNav: React.FC<AccessibleTaxonomyNavProps> = ({
         })
       }
       onKeyDown={handleKeyDown}
-      tabIndex={-1}
+      tabIndex={-1} // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions
     >
       {children}
     </div>

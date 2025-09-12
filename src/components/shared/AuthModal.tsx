@@ -23,6 +23,7 @@ import { ArrowLeft, CheckCircle, Mail } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 /* ---------- real Firebase Auth imports -------------------------------- */
+import { FirebaseError } from 'firebase/app';
 import type { UserCredential } from 'firebase/auth';
 import { app } from '@/lib/firebase'; // your initialized Firebase app
 
@@ -43,7 +44,7 @@ export default function AuthModal({
   const { toast } = useToast();
   const { login, resetPassword } = useAuth(); // local auth context
   const params = useParams();
-  const locale = (params?.locale as 'en' | 'es') || 'en';
+  const _locale = (params?.locale as 'en' | 'es') || 'en';
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'reset'>('signin');
   const [emailModal, setEmailModal] = useState('');
@@ -97,11 +98,15 @@ export default function AuthModal({
           }),
         });
       } catch (err: any) {
+        }),
+        });
+      } catch (err) {
+        const firebaseError = err as FirebaseError;
         toast({
           title: t('authModal.resetFailedTitle', {
             defaultValue: 'Reset Failed',
           }),
-          description: err?.message || t('authModal.resetFailedDesc', {
+          description: firebaseError?.message || t('authModal.resetFailedDesc', {
             defaultValue: 'Unable to send password reset email. Please try again.',
           }),
           variant: 'destructive',
@@ -199,18 +204,19 @@ export default function AuthModal({
       } else {
         onAuthSuccess();
       }
-    } catch (err: any) {
-      console.error('[AuthModal] Firebase Auth error:', err);
+    } catch (err) {
+      const firebaseError = err as FirebaseError;
+      console.error('[AuthModal] Firebase Auth error:', firebaseError);
       toast({
         title: t('authModal.errorAuthFailedTitle', {
           defaultValue: 'Authentication Failed',
         }),
         description:
-          err?.code === 'auth/email-already-in-use'
+          firebaseError?.code === 'auth/email-already-in-use'
             ? t('authModal.errorEmailInUse', {
                 defaultValue: 'Email already in use.',
               })
-            : err?.message || 'Unknown error',
+            : firebaseError?.message || 'Unknown error',
         variant: 'destructive',
       });
     } finally {
