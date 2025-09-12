@@ -6,11 +6,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { auditService } from '@/services/firebase-audit-service';
 
 interface TermsPageProps {
-  params: Promise<{ locale: 'en' | 'es' }>;
+  params: { locale: 'en' | 'es' };
 }
 
-export default async function LocaleTermsPage({ params }: TermsPageProps) {
-  const { locale } = await params;
+export default function LocaleTermsPage({ params }: TermsPageProps) {
+  const { locale } = params;
   const { user } = useAuth();
 
   useEffect(() => {

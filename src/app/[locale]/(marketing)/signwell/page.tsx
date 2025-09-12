@@ -44,7 +44,7 @@ const SignWellPageClient = dynamic(() => import('./SignWellPageClient'), {
 });
 
 interface SignWellPageProps {
-  params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
+  params: { locale: 'en' | 'es' } & Record<string, string>;
 }
 
 /* ───────── Static metadata (no i18next on server) ───────── */
@@ -68,14 +68,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: 'en' | 'es' }>;
+  params: { locale: 'en' | 'es' };
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
   const { title, description } = META[locale] ?? META.en;
   return { title, description, openGraph: { title, description } };
 }
 
 export default async function SignWellPage({ params }: SignWellPageProps) {
-  const resolved = await params;
-  return <SignWellPageClient params={resolved} />;
+  return <SignWellPageClient params={params} />;
 }

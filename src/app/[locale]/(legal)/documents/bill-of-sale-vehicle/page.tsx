@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 }
 
 interface PageProps {
-  params: Promise<{ locale: 'en' | 'es' }>;
+  params: { locale: 'en' | 'es' };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -33,7 +33,7 @@ interface PageProps {
 /* -------------------------------------------------------------------------- */
 export default async function VehicleBillOfSalePage({ params }: PageProps) {
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { locale } = await params; // kept for future enhancement
+  const { locale } = params; // kept for future enhancement
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   return (

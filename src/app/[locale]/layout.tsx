@@ -7,15 +7,14 @@ import MarketingClient from '@/app/marketing-client';
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: Promise<{ locale?: string }>;
+  params: { locale?: string };
 }
 
 export default async function LocaleLayout({
   children,
   params,
 }: LocaleLayoutProps) {
-  // Await params before using its properties (Next.js 15 requirement)
-  const { locale: pathLocale } = await params;
+  const { locale: pathLocale } = params;
 
   // Fallback to 'en' if the locale isn’t 'en' or 'es'
   const detectedLocale =

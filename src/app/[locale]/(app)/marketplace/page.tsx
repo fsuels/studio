@@ -15,7 +15,7 @@ import type {
 } from '@/types/marketplace';
 
 interface MarketplacePageProps {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }
 
 export default function MarketplacePage({ params }: MarketplacePageProps) {

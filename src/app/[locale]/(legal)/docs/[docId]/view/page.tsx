@@ -3,17 +3,16 @@ import React from 'react';
 import ViewDocumentPageClient from './ViewDocumentPageClient';
 
 interface ViewDocumentPageProps {
-  params: Promise<{
+  params: {
     locale: 'en' | 'es';
     docId: string;
-  }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default async function ViewDocumentPage({ params, searchParams }: ViewDocumentPageProps) {
-  // Await params for Next.js 15 compatibility
-  const { locale, docId } = await params;
-  const search = await searchParams;
+  const { locale, docId } = params;
+  const search = searchParams;
   
   // Debug logging to understand the routing
   console.log('🔍 ViewDocumentPage received params:', { locale, docId, searchParams: search });
