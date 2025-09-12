@@ -10,7 +10,7 @@ import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations';
 
 type StartWizardPageProps = {
-  params: { locale: 'en' | 'es'; docId: string };
+  params: Promise<{ locale: 'en' | 'es'; docId: string }>;
 };
 
 // Revalidate every hour so start pages stay fresh without rebuilding
@@ -84,7 +84,7 @@ export async function generateStaticParams(): Promise<
 export default async function StartWizardPage({
   params,
 }: StartWizardPageProps) {
-  const { locale, docId } = params;
+  const { locale, docId } = await params;
 
   // Guard: if someone hits /docs/…/start for an unknown docId, 404.
   const docConfig = documentLibrary.find((d) => d.id === docId);
