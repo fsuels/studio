@@ -67,9 +67,11 @@ interface AdaptationExample {
   explanation: string;
 }
 
+type LegalSystemType = 'common_law' | 'civil_law' | 'mixed' | 'religious' | 'socialist';
+
 interface JurisdictionProfile {
   jurisdiction: string;
-  legalSystem: string;
+  legalSystem: LegalSystemType;
   primaryLanguage: string;
   secondaryLanguages: string[];
   documentTypes: string[];
@@ -111,7 +113,7 @@ interface ProcedureType {
 class JurisdictionTermMappingEngine {
   private mappingDatabase: Map<string, JurisdictionMapping> = new Map();
   private jurisdictionProfiles: Map<string, JurisdictionProfile> = new Map();
-  private termDatabase: Map<string, any> = new Map();
+  private termDatabase: Map<string, unknown> = new Map();
   private adaptationRules: Map<string, AdaptationRule[]> = new Map();
 
   constructor() {
@@ -384,7 +386,7 @@ class JurisdictionTermMappingEngine {
   private async generateJurisdictionMapping(
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    documentType?: string,
+    _documentType?: string,
   ): Promise<JurisdictionMapping | null> {
     const sourceProfile = this.jurisdictionProfiles.get(sourceJurisdiction);
     const targetProfile = this.jurisdictionProfiles.get(targetJurisdiction);
@@ -421,7 +423,7 @@ class JurisdictionTermMappingEngine {
     return {
       sourceJurisdiction,
       targetJurisdiction,
-      legalSystem: targetProfile.legalSystem as any,
+      legalSystem: targetProfile.legalSystem,
       compatibility,
       termMappings,
       conflictAreas,
@@ -544,12 +546,12 @@ class JurisdictionTermMappingEngine {
   }
 
   private determineLegalSystemCompatibility(
-    sourceSystem: string,
-    targetSystem: string,
+    sourceSystem: LegalSystemType,
+    targetSystem: LegalSystemType,
   ): 'high' | 'medium' | 'low' | 'incompatible' {
     if (sourceSystem === targetSystem) return 'high';
 
-    const compatibilityMatrix: Record<string, Record<string, string>> = {
+    const compatibilityMatrix: Record<LegalSystemType, Partial<Record<LegalSystemType, 'high' | 'medium' | 'low' | 'incompatible'>>> = {
       common_law: {
         mixed: 'medium',
         civil_law: 'low',
@@ -570,16 +572,14 @@ class JurisdictionTermMappingEngine {
       },
     };
 
-    return (
-      (compatibilityMatrix[sourceSystem]?.[targetSystem] as any) ||
-      'incompatible'
-    );
+    const comp = compatibilityMatrix[sourceSystem]?.[targetSystem];
+    return comp ?? 'incompatible';
   }
 
   private async generateTermMappings(
     sourceProfile: JurisdictionProfile,
     targetProfile: JurisdictionProfile,
-    documentType?: string,
+    _documentType?: string,
   ): Promise<TermMapping[]> {
     const mappings: TermMapping[] = [];
 
@@ -587,7 +587,8 @@ class JurisdictionTermMappingEngine {
     for (const [category, sourceTerms] of Object.entries(
       sourceProfile.legalConcepts,
     )) {
-      const targetTerms = (targetProfile.legalConcepts as any)[category] || [];
+      const targetConcepts = targetProfile.legalConcepts as unknown as Record<string, string[]>;
+      const targetTerms = targetConcepts[category] || [];
 
       for (const sourceTerm of sourceTerms) {
         // Find best match in target terms

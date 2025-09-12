@@ -1,5 +1,5 @@
 // src/lib/legal-translation/LegalTranslationEngine.ts
-import { getCachedDocMeta } from '../metadata-cache';
+// import { getCachedDocMeta } from '../metadata-cache';
 
 interface LegalTerm {
   term: string;
@@ -342,7 +342,7 @@ class LegalTranslationEngine {
       preservedTerms: string[];
     },
     context: TranslationContext,
-    originalTerms: LegalTerm[],
+    _originalTerms: LegalTerm[],
   ): Promise<typeof translation> {
     // Check for legal consistency
     const consistencyWarnings = this.checkLegalConsistency(
@@ -589,7 +589,7 @@ class LegalTranslationEngine {
 
   private determineTranslationMethod(
     legalTermsCount: number,
-    context: TranslationContext,
+    _context: TranslationContext,
   ): 'ai_enhanced' | 'dictionary_lookup' | 'hybrid' {
     if (legalTermsCount === 0) return 'ai_enhanced';
     if (legalTermsCount > 10) return 'hybrid';
@@ -598,7 +598,7 @@ class LegalTranslationEngine {
 
   private async fallbackTranslation(
     text: string,
-    context: TranslationContext,
+    _context: TranslationContext,
   ): Promise<string> {
     // Implement fallback to basic translation service
     // This could be Google Translate, Azure Translator, etc.
@@ -606,16 +606,16 @@ class LegalTranslationEngine {
   }
 
   private checkLegalConsistency(
-    text: string,
-    context: TranslationContext,
+    _text: string,
+    _context: TranslationContext,
   ): TranslationWarning[] {
     // Implement legal consistency checks
     return [];
   }
 
   private validateJurisdictionRequirements(
-    text: string,
-    context: TranslationContext,
+    _text: string,
+    _context: TranslationContext,
   ): TranslationWarning[] {
     // Implement jurisdiction-specific validation
     return [];
@@ -623,15 +623,15 @@ class LegalTranslationEngine {
 
   private async refineByDocumentType(
     text: string,
-    context: TranslationContext,
+    _context: TranslationContext,
   ): Promise<string> {
     // Implement document type-specific refinements
     return text;
   }
 
   private async getAlternativeTranslations(
-    term: string,
-    context: TranslationContext,
+    _term: string,
+    _context: TranslationContext,
   ): Promise<
     Array<{
       term: string;

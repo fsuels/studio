@@ -59,7 +59,7 @@ interface Invoice {
     quantity: number;
     unitAmount: number;
     totalAmount: number;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
   }>;
   tax: {
     amount: number;
@@ -99,7 +99,20 @@ export class PaymentProcessor {
   private invoices: Map<string, Invoice> = new Map();
   private paymentMethods: Map<string, PaymentMethod[]> = new Map();
   private usageRecords: Map<string, UsageRecord[]> = new Map();
-  private billingPlans: Map<string, any> = new Map();
+  private billingPlans: Map<string, {
+    id: string;
+    name: string;
+    price: number;
+    currency: string;
+    interval: 'month' | 'year';
+    features: string[];
+    limits: {
+      documentsPerMonth: number;
+      storageGB: number;
+      aiAnalysis: number;
+      signatures: number;
+    };
+  }> = new Map();
 
   constructor() {
     this.initializeBillingPlans();
@@ -265,7 +278,7 @@ export class PaymentProcessor {
     customerId: string,
     subscriptionId?: string,
     amount?: number,
-    items?: any[],
+    items?: Array<Invoice['items'][number]>,
   ): Promise<Invoice> {
     console.log(`📄 Creating invoice for customer ${customerId}`);
 
@@ -328,7 +341,7 @@ export class PaymentProcessor {
   async processPayment(
     invoiceId: string,
     paymentMethodId: string,
-    metadata?: any,
+    _metadata?: Record<string, unknown>,
   ): Promise<{ success: boolean; transactionId: string; error?: string }> {
     console.log(`💰 Processing payment for invoice ${invoiceId}`);
 
@@ -376,7 +389,7 @@ export class PaymentProcessor {
     customerId: string,
     action: UsageRecord['action'],
     quantity: number = 1,
-    metadata?: any,
+    metadata?: UsageRecord['metadata'],
   ): Promise<void> {
     const subscription = this.getActiveSubscription(customerId);
     if (!subscription) {
@@ -475,7 +488,7 @@ export class PaymentProcessor {
   async addPaymentMethod(
     customerId: string,
     type: PaymentMethod['type'],
-    details: any,
+    details: Partial<{ last4: string; brand: string; expiryMonth: number; expiryYear: number; country: string; funding: string }>,
   ): Promise<PaymentMethod> {
     const paymentMethodId = this.generatePaymentMethodId();
 
@@ -540,16 +553,17 @@ export class PaymentProcessor {
     projectedCosts: number;
   } {
     const now = new Date();
-    let startDate: Date;
+    let startDate: Date = new Date(now);
 
     switch (timeframe) {
       case 'month':
         startDate = new Date(now.getFullYear(), now.getMonth(), 1);
         break;
-      case 'quarter':
+      case 'quarter': {
         const quarterStart = Math.floor(now.getMonth() / 3) * 3;
         startDate = new Date(now.getFullYear(), quarterStart, 1);
         break;
+      }
       case 'year':
         startDate = new Date(now.getFullYear(), 0, 1);
         break;
@@ -622,9 +636,9 @@ export class PaymentProcessor {
 
   // Simulate Stripe payment
   private async simulateStripePayment(
-    amount: number,
-    currency: string,
-    paymentMethodId: string,
+    _amount: number,
+    _currency: string,
+    _paymentMethodId: string,
   ): Promise<{ success: boolean; transactionId: string; error?: string }> {
     // Simulate processing delay
     await new Promise((resolve) => setTimeout(resolve, 1000));

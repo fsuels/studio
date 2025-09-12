@@ -1,7 +1,7 @@
 import React from 'react';
 import { headers } from 'next/headers';
 import { getTenantFromHeaders } from '@/middleware/tenant';
-import dynamic from 'next/dynamic';
+import { TenantDashboardLazy } from '@/components/tenant/TenantDashboard.lazy';
 import { redirect } from 'next/navigation';
 
 interface TenantPageProps {
@@ -16,11 +16,7 @@ export default async function TenantPage({ params }: TenantPageProps) {
     redirect(`/tenant-not-found?slug=${params.slug}`);
   }
 
-  const TenantDashboard = dynamic(
-    () => import('@/components/tenant/TenantDashboard').then(m => m.TenantDashboard),
-    { ssr: false, loading: () => null }
-  );
-  return <TenantDashboard tenant={tenant} />;
+  return <TenantDashboardLazy tenant={tenant} />;
 }
 
 // Generate static params for known tenants (optional optimization)

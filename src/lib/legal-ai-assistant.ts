@@ -380,8 +380,8 @@ export class LegalAIAssistant {
   }
 
   // Extract entities from message
-  private extractEntities(message: string): any {
-    const entities: any = {};
+  private extractEntities(message: string): Record<string, string> {
+    const entities: Record<string, string> = {};
     const messageLower = message.toLowerCase();
 
     // Extract document types
@@ -431,9 +431,9 @@ export class LegalAIAssistant {
   private async generateResponse(
     session: ChatSession,
     userMessage: string,
-    intent: any,
+    intent: { intent: string; confidence: number; entities: Record<string, string> },
   ): Promise<ChatMessage> {
-    const responseId = this.generateMessageId();
+    // responseId not required here; messages include their own ids
 
     switch (intent.intent) {
       case 'document_recommendation':
@@ -459,7 +459,7 @@ export class LegalAIAssistant {
   // Handle document recommendation
   private handleDocumentRecommendation(
     session: ChatSession,
-    entities: any,
+    entities: Record<string, string>,
   ): ChatMessage {
     const recommendations = [];
     let content = "I'd be happy to help you choose the right document! ";
@@ -625,7 +625,7 @@ export class LegalAIAssistant {
 
   // Handle pricing questions
   private handlePricingQuestion(
-    session: ChatSession,
+    _session: ChatSession,
     _entities: Record<string, string>,
   ): ChatMessage {
     const content = `Our legal documents start at just $29, which is 90% less than hiring an attorney. Here's our pricing:
@@ -664,8 +664,8 @@ All documents include:
 
   // Handle general inquiries
   private handleGeneralInquiry(
-    session: ChatSession,
-    message: string,
+    _session: ChatSession,
+    _message: string,
   ): ChatMessage {
     const content = `I'm here to help with your legal document needs! I can assist with:
 
@@ -785,7 +785,16 @@ What would you like help with today?`;
   endSession(
     sessionId: string,
     satisfactionRating?: number,
-  ): { success: boolean; summary: any } {
+  ): {
+    success: boolean;
+    summary: {
+      duration: number;
+      messageCount: number;
+      resolvedIssues: number;
+      escalated: boolean;
+      satisfactionRating?: number;
+    };
+  } {
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new Error(`Session ${sessionId} not found`);
