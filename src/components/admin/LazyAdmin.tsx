@@ -27,69 +27,48 @@ const AdminLoadingFallback = ({ title }: { title?: string }) => (
   </div>
 );
 
-// Factory function for creating lazy admin components
-export const createLazyAdminComponent = (
-  importPath: string,
-  componentName: string,
-  title?: string
-) => {
-  return dynamic(() => import(importPath), {
-    loading: () => <AdminLoadingFallback title={title} />,
-    ssr: false,
-  });
-};
-
-// Pre-configured lazy admin components - Updated to use optimized versions
-export const LazyFraudDetectionDashboard = createLazyAdminComponent(
-  '@/components/admin/fraud-detection/FraudDetectionDashboard',
-  'FraudDetectionDashboard',
-  'Fraud Detection Dashboard'
+// Pre-configured lazy admin components, using literal import paths to avoid webpack context warnings
+export const LazyFraudDetectionDashboard = dynamic(
+  () => import('@/components/admin/fraud-detection/FraudDetectionDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Fraud Detection Dashboard'} />, ssr: false },
 );
 
-export const LazyRevenueIntelligenceDashboard = createLazyAdminComponent(
-  '@/components/admin/revenue-intelligence/RevenueIntelligenceDashboard',
-  'RevenueIntelligenceDashboard',
-  'Revenue Intelligence Dashboard'
+export const LazyRevenueIntelligenceDashboard = dynamic(
+  () => import('@/components/admin/revenue-intelligence/RevenueIntelligenceDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Revenue Intelligence Dashboard'} />, ssr: false },
 );
 
-export const LazyDocumentLifecycleDashboard = createLazyAdminComponent(
-  '@/components/admin/DocumentLifecycleDashboard',
-  'DocumentLifecycleDashboard',
-  'Document Lifecycle Dashboard'
+export const LazyDocumentLifecycleDashboard = dynamic(
+  () => import('@/components/admin/DocumentLifecycleDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Document Lifecycle Dashboard'} />, ssr: false },
 );
 
-export const LazyAIUsageDashboard = createLazyAdminComponent(
-  '@/components/admin/AIUsageDashboard',
-  'AIUsageDashboard',
-  'AI Usage Dashboard'
+export const LazyAIUsageDashboard = dynamic(
+  () => import('@/components/admin/AIUsageDashboard'),
+  { loading: () => <AdminLoadingFallback title={'AI Usage Dashboard'} />, ssr: false },
 );
 
-export const LazySupportToolkitDashboard = createLazyAdminComponent(
-  '@/components/admin/SupportToolkitDashboard',
-  'SupportToolkitDashboard',
-  'Support Toolkit Dashboard'
+export const LazySupportToolkitDashboard = dynamic(
+  () => import('@/components/admin/SupportToolkitDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Support Toolkit Dashboard'} />, ssr: false },
 );
 
-export const LazyFunnelAnalyticsDashboard = createLazyAdminComponent(
-  '@/components/admin/FunnelAnalyticsDashboard',
-  'FunnelAnalyticsDashboard',
-  'Funnel Analytics Dashboard'
+export const LazyFunnelAnalyticsDashboard = dynamic(
+  () => import('@/components/admin/FunnelAnalyticsDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Funnel Analytics Dashboard'} />, ssr: false },
 );
 
-export const LazyMarketingInsightsDashboard = createLazyAdminComponent(
-  '@/components/admin/MarketingInsightsDashboard',
-  'MarketingInsightsDashboard',
-  'Marketing Insights Dashboard'
+export const LazyMarketingInsightsDashboard = dynamic(
+  () => import('@/components/admin/MarketingInsightsDashboard'),
+  { loading: () => <AdminLoadingFallback title={'Marketing Insights Dashboard'} />, ssr: false },
 );
 
-export const LazyEnhancedOrdersTable = createLazyAdminComponent(
-  '@/components/admin/EnhancedOrdersTable',
-  'EnhancedOrdersTable',
-  'Enhanced Orders'
+export const LazyEnhancedOrdersTable = dynamic(
+  () => import('@/components/admin/EnhancedOrdersTable'),
+  { loading: () => <AdminLoadingFallback title={'Enhanced Orders'} />, ssr: false },
 );
 
-export const LazyReportBuilder = createLazyAdminComponent(
-  '@/components/admin/reports/ReportBuilder',
-  'ReportBuilder',
-  'Report Builder'
+export const LazyReportBuilder = dynamic(
+  () => import('@/components/admin/reports/ReportBuilder'),
+  { loading: () => <AdminLoadingFallback title={'Report Builder'} />, ssr: false },
 );

@@ -92,7 +92,7 @@ export const PatentLicensingAgreementSchema = z.object({
   infringementDefense: z.enum(['licensor', 'licensee', 'shared']).default('licensor'),
   litigationCosts: z.enum(['licensor', 'licensee', 'shared']).default('licensor'),
   settlementApproval: z.boolean().default(true),
-  damages Sharing: z.string().optional(),
+  damagesSharing: z.string().optional(),
   
   // Infringement Enforcement
   enforcementRights: z.enum(['licensor', 'licensee', 'both']).default('licensor'),

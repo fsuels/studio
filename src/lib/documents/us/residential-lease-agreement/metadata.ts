@@ -24,7 +24,7 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Residential Rental Agreement',
       description:
-        'Secure quality housing or generate reliable rental income. Establish clear expectations that protect everyone's interests.',
+        "Secure quality housing or generate reliable rental income. Establish clear expectations that protect everyone's interests.",
       aliases: [
         'residential lease contract',
         'apartment lease',
