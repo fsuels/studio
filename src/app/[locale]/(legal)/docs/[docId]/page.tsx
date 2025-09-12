@@ -67,7 +67,25 @@ export default async function DocPage({ params }: DocPageProps) {
 
   const markdownContent = await getMarkdown(locale, docId);
 
-  return <DocPageClient params={{ locale, docId }} markdownContent={markdownContent} />;
+  // Prepare lightweight doc meta for client to avoid bundling full library there
+  const doc = documentLibrary.find((d) => d.id === docId);
+  const docMeta = doc
+    ? {
+        id: doc.id,
+        basePrice: doc.basePrice || 0,
+        translations: doc.translations,
+        name: doc.name,
+        description: doc.description,
+      }
+    : { id: docId, basePrice: 0 };
+
+  return (
+    <DocPageClient
+      params={{ locale, docId }}
+      markdownContent={markdownContent}
+      docMeta={docMeta}
+    />
+  );
 }
 
 // 🔑 Mark Head async, await params, and use your NEXT_PUBLIC_SITE_URL env var

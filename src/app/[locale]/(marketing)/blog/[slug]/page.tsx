@@ -22,5 +22,12 @@ interface BlogPostPageProps {
 
 export default function BlogPostPage({ params }: BlogPostPageProps) {
   const { locale, slug } = params;
-  return <BlogPostClientContent locale={locale} slug={slug} />;
+  const article = blogArticles.find((a) => a.slug === slug);
+  return (
+    <BlogPostClientContent
+      locale={locale}
+      slug={slug}
+      article={article}
+    />
+  );
 }

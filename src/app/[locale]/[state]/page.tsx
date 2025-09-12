@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getDocumentsForCountry, usStates } from '@/lib/document-library';
-import { getDocumentTitle } from '@/lib/format-utils';
+import { usStates } from '@/lib/usStates';
+import { formatDocumentTitle } from '@/lib/format-utils';
+import slugMap from '@/config/doc-meta/slug-category-map.json';
 import { MetaTags, generateDocumentMetaTags } from '@/components/seo/MetaTags';
 import {
   Breadcrumbs,
@@ -112,14 +113,14 @@ export default function StatePage({ params }: StatePageProps) {
 
   const stateName = stateObj.label;
   const isSpanish = locale === 'es';
-  const documents = getDocumentsForCountry('us');
 
-  // Filter documents that are available for this state
-  const stateDocuments = documents.filter(
-    (doc) =>
-      doc.states === 'all' ||
-      (Array.isArray(doc.states) && doc.states.includes(stateObj.value)),
-  );
+  // Build a lightweight document list from slug/category map
+  const allSlugs = Object.keys(slugMap).filter((s) => s !== 'general-inquiry');
+  const stateDocuments = allSlugs.map((slug) => ({
+    id: slug,
+    name: formatDocumentTitle(slug),
+    category: slugMap[slug as keyof typeof slugMap] || 'General',
+  }));
 
   const metaTags = generateDocumentMetaTags(
     'Legal Forms',
@@ -137,7 +138,7 @@ export default function StatePage({ params }: StatePageProps) {
       acc[category].push(doc);
       return acc;
     },
-    {} as Record<string, typeof documents>,
+    {} as Record<string, Array<{ id: string; name: string; category: string }>>,
   );
 
   return (
@@ -159,9 +160,7 @@ export default function StatePage({ params }: StatePageProps) {
 
       <StateSpecificLegalSchema
         state={stateName}
-        documentTypes={stateDocuments.map(
-          (doc) => getDocumentTitle(doc, locale),
-        )}
+        documentTypes={stateDocuments.map((doc) => formatDocumentTitle(doc.id))}
         locale={locale}
       />
 
@@ -193,12 +192,7 @@ export default function StatePage({ params }: StatePageProps) {
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {docs.map((doc) => {
-                    const docName =
-                      doc.translations?.[locale]?.name || doc.name || doc.id;
-                    const docDesc =
-                      doc.translations?.[locale]?.description ||
-                      doc.description ||
-                      '';
+                    const docName = doc.name || formatDocumentTitle(doc.id);
                     const docSlug = doc.id;
 
                     return (
@@ -210,11 +204,7 @@ export default function StatePage({ params }: StatePageProps) {
                         <h3 className="font-semibold text-gray-900 mb-2">
                           {docName}
                         </h3>
-                        {docDesc && (
-                          <p className="text-sm text-gray-600 line-clamp-2">
-                            {docDesc}
-                          </p>
-                        )}
+                        {/* Optional short description could be added here if available */}
                         <div className="mt-2 text-sm text-blue-600 font-medium">
                           {isSpanish
                             ? 'Crear documento →'

@@ -2,7 +2,6 @@
 
 import { notFound, useRouter, useParams } from 'next/navigation';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { documentLibrary } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -73,12 +72,24 @@ const DocumentDetail = dynamic(
   },
 ) as DocumentDetailComponent;
 
+interface DocMetaLite {
+  id: string;
+  basePrice: number;
+  translations?: {
+    en?: { name?: string; description?: string };
+    es?: { name?: string; description?: string };
+  };
+  name?: string;
+  description?: string;
+}
+
 interface DocPageClientProps {
   params: {
     locale: string;
     docId: string;
   };
   markdownContent?: string | null;
+  docMeta: DocMetaLite;
 }
 
 // Placeholder for AI dynamic highlights
@@ -101,6 +112,7 @@ const AiHighlightPlaceholder = ({
 export default function DocPageClient({
   params: routeParams,
   markdownContent,
+  docMeta,
 }: DocPageClientProps) {
   const { t, i18n } = useTranslation('common');
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -120,10 +132,7 @@ export default function DocPageClient({
       ? urlParams.docId[0]
       : urlParams.docId)) as string;
 
-  const docConfig = useMemo(() => {
-    if (!docId) return undefined;
-    return documentLibrary.find((d) => d.id === docId);
-  }, [docId]);
+  const docConfig = useMemo(() => docMeta, [docMeta]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);

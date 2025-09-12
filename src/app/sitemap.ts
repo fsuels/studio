@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
-import { usStates, allDocuments } from '@/lib/document-library';
+import { usStates } from '@/lib/usStates';
+import slugMap from '@/config/doc-meta/slug-category-map.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://123legaldoc.com';
@@ -108,57 +109,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // Add document pages
-  const documents = allDocuments.filter((doc) => doc.id !== 'general-inquiry');
-  documents.forEach((doc) => {
+  // Add document pages using lightweight slug map (avoids importing full document library)
+  const documentSlugs = Object.keys(slugMap).filter(
+    (slug) => slug !== 'general-inquiry',
+  );
+  documentSlugs.forEach((slug) => {
     locales.forEach((locale) => {
       sitemap.push({
-        url: `${baseUrl}/${locale}/docs/${doc.id}`,
+        url: `${baseUrl}/${locale}/docs/${slug}`,
         lastModified: lastWeek,
         changeFrequency: 'monthly',
         priority: 0.7,
         alternates: {
           languages: {
-            en: `${baseUrl}/en/docs/${doc.id}`,
-            es: `${baseUrl}/es/docs/${doc.id}`,
+            en: `${baseUrl}/en/docs/${slug}`,
+            es: `${baseUrl}/es/docs/${slug}`,
           },
         },
       });
     });
   });
 
-  // Add state-specific document pages
-  usStates.forEach((state) => {
-    const stateSlug = state.label.toLowerCase().replace(/\s+/g, '-');
-
-    documents.forEach((doc) => {
-      // Check if document is available for this state
-      if (
-        doc.states === 'all' ||
-        (Array.isArray(doc.states) && doc.states.includes(state.value))
-      ) {
-        locales.forEach((locale) => {
-          sitemap.push({
-            url: `${baseUrl}/${locale}/${stateSlug}/${doc.id}`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.9, // High priority for state-specific pages
-            alternates: {
-              languages: {
-                en: `${baseUrl}/en/${stateSlug}/${doc.id}`,
-                es: `${baseUrl}/es/${stateSlug}/${doc.id}`,
-              },
-            },
-          });
-        });
-      }
-    });
-  });
+  // Note: skip generating every state+document combination here to keep route bundle light.
 
   // Add document category pages
-  const categories = Array.from(
-    new Set(documents.map((doc) => doc.category).filter(Boolean)),
-  );
+  const categories = Array.from(new Set(Object.values(slugMap))).filter(
+    Boolean,
+  ) as string[];
   categories.forEach((category) => {
     const categorySlug = category!.toLowerCase().replace(/\s+/g, '-');
 

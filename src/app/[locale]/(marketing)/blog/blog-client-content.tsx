@@ -3,14 +3,23 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { blogArticles } from '@/data/blogArticles';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
+interface SimpleArticle {
+  slug: string;
+  title_en: string;
+  title_es?: string;
+  summary_en?: string;
+  summary_es?: string;
+  date: string;
+}
+
 interface BlogClientContentProps {
   locale: 'en' | 'es';
+  articles?: SimpleArticle[];
 }
 
 const categories = [
@@ -24,7 +33,7 @@ const categories = [
   { key: 'Privacy', labelKey: 'Privacy' },
 ];
 
-function getCategory(article: (typeof blogArticles)[0]) {
+function getCategory(article: { title_en: string }) {
   const title = article.title_en.toLowerCase();
   if (
     title.includes('freelancer') ||
@@ -73,7 +82,7 @@ function getCategory(article: (typeof blogArticles)[0]) {
   return 'General';
 }
 
-export default function BlogClientContent({ locale }: BlogClientContentProps) {
+export default function BlogClientContent({ locale, articles = [] }: BlogClientContentProps) {
   const { t, i18n } = useTranslation('common');
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
@@ -84,7 +93,7 @@ export default function BlogClientContent({ locale }: BlogClientContentProps) {
     setIsHydrated(true);
   }, []);
 
-  const filtered = blogArticles.filter((a) => {
+  const filtered = articles.filter((a) => {
     const title = locale === 'es' && a.title_es ? a.title_es : a.title_en;
     const matchesQuery = title.toLowerCase().includes(query.toLowerCase());
     const matchesCat = category === 'All' || getCategory(a) === category;

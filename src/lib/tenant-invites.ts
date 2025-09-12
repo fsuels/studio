@@ -96,7 +96,7 @@ export async function acceptInvitation(
     lastName: string;
     password: string;
   },
-): Promise<{ success: boolean; tenantUser?: any; error?: string }> {
+): Promise<{ success: boolean; tenantUser?: TenantUser; error?: string }> {
   try {
     const invitation = await validateInviteToken(token);
 
@@ -224,7 +224,7 @@ export async function revokeInvitation(
 }
 
 export async function getInvitationsByTenant(
-  tenantId: string,
+  _tenantId: string,
 ): Promise<TenantInvite[]> {
   // TODO: Implement database query
   // Query Firestore for invitations by tenant
@@ -232,7 +232,7 @@ export async function getInvitationsByTenant(
 }
 
 export async function getInvitationsByEmail(
-  email: string,
+  _email: string,
 ): Promise<TenantInvite[]> {
   // TODO: Implement database query
   // Query Firestore for invitations by email
@@ -263,14 +263,14 @@ async function saveInvitationToDatabase(
 }
 
 async function updateInvitationStatus(
-  invitationId: string,
-  status: TenantInvite['status'],
+  _invitationId: string,
+  _status: TenantInvite['status'],
 ): Promise<void> {
   // TODO: Implement Firebase update
   // Update invitation status in Firestore
 }
 
-async function incrementInvitationUses(invitationId: string): Promise<void> {
+async function incrementInvitationUses(_invitationId: string): Promise<void> {
   // TODO: Implement Firebase update
   // Increment usesCount in Firestore
 }
@@ -289,24 +289,32 @@ async function createOrUpdateUser(userInfo: {
   };
 }
 
+interface TenantUser {
+  tenantId: string;
+  userId: string;
+  role: TenantUserRole;
+  permissions: TenantPermission[];
+  invitedBy: string;
+}
+
 async function createTenantUser(params: {
   tenantId: string;
   userId: string;
   role: TenantUserRole;
   permissions: TenantPermission[];
   invitedBy: string;
-}): Promise<any> {
+}): Promise<TenantUser> {
   // TODO: Implement tenant user creation
   // Create tenant user relationship in Firestore
   return params;
 }
 
-async function logTenantAuditEvent(event: {
+async function logTenantAuditEvent(_event: {
   tenantId: string;
   userId: string;
   action: string;
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }): Promise<void> {
   // TODO: Implement audit logging
   // Log event to Firestore audit collection

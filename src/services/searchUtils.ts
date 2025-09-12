@@ -5,7 +5,7 @@ import { SYN_MAP, STOP_WORDS } from '../config/search';
 
 // Prometheus metrics for search monitoring
 let promClient: any;
-let searchMetricsRegistry: Map<string, any> = new Map();
+const searchMetricsRegistry: Map<string, any> = new Map();
 
 // Initialize Prometheus metrics if available (server-side only)
 if (typeof window === 'undefined') {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { auditService } from '@/services/firebase-audit-service';
+import dynamic from 'next/dynamic';
 import {
   Card,
   CardContent,
@@ -13,13 +13,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import TrustBadges from '@/components/shared/TrustBadges';
-import { UptimeStatus } from './UptimeStatus';
-import { SecurityCertifications } from './SecurityCertifications';
-import { ComplianceDocuments } from './ComplianceDocuments';
-import { SOC2RequestForm } from './SOC2RequestForm';
-import { DataProcessingAgreement } from './DataProcessingAgreement';
-import { SecurityDetails } from './SecurityDetails';
-import { BugBountyProgram } from './BugBountyProgram';
+// Lazily load heavy trust widgets to keep initial bundle light
+const UptimeStatus = dynamic(() => import('./UptimeStatus').then(m => m.UptimeStatus), { ssr: false, loading: () => null });
+const SecurityCertifications = dynamic(() => import('./SecurityCertifications').then(m => m.SecurityCertifications), { ssr: false, loading: () => null });
+const ComplianceDocuments = dynamic(() => import('./ComplianceDocuments').then(m => m.ComplianceDocuments), { ssr: false, loading: () => null });
+const SOC2RequestForm = dynamic(() => import('./SOC2RequestForm').then(m => m.SOC2RequestForm), { ssr: false, loading: () => null });
+const DataProcessingAgreement = dynamic(() => import('./DataProcessingAgreement').then(m => m.DataProcessingAgreement), { ssr: false, loading: () => null });
+const SecurityDetails = dynamic(() => import('./SecurityDetails').then(m => m.SecurityDetails), { ssr: false, loading: () => null });
+const BugBountyProgram = dynamic(() => import('./BugBountyProgram').then(m => m.BugBountyProgram), { ssr: false, loading: () => null });
 import {
   Shield,
   Lock,
@@ -43,6 +44,7 @@ export function TrustCenter({ locale }: TrustCenterProps) {
   useEffect(() => {
     const logTrustCenterView = async () => {
       try {
+        const { auditService } = await import('@/services/firebase-audit-service');
         await auditService.logComplianceEvent('trust_center_viewed', {
           locale,
           userAgent: navigator.userAgent,

@@ -19,9 +19,7 @@ import {
   ref as storageRef,
   getDownloadURL,
 } from 'firebase/storage';
-import { auditService } from '@/services/firebase-audit-service';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { documentLibrary } from '@/lib/document-library';
 import { stateCodeToSlug, stateNameToCode } from '@/lib/state-utils';
 import { getStateFormPath, getFormPathWithFallback } from '@/lib/pdf/state-form-manager';
 import FilledPDFViewer from '@/components/document/FilledPDFViewer';
@@ -367,14 +365,12 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
           />
         ) : (() => {
           // Check if this is a state-specific document that should show PDF
-          const docConfig = documentLibrary.find(doc => doc.id === effectiveDocType);
-          const isStateSpecificForm = docConfig && documentState && formData && 
-            (effectiveDocType === 'vehicle-bill-of-sale' || 
-             effectiveDocType === 'bill-of-sale-vehicle');
+          const isStateSpecificForm = !!documentState && !!formData &&
+            (effectiveDocType === 'vehicle-bill-of-sale' || effectiveDocType === 'bill-of-sale-vehicle');
           
           // Debug state-specific form detection
           console.log('🔍 View page state detection:', {
-            docConfig: !!docConfig,
+            docConfig: 'omitted',
             documentState,
             formData: !!formData,
             formDataKeys: formData ? Object.keys(formData) : 'none',

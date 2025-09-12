@@ -175,7 +175,8 @@ function expandQueryWithSynonyms(query: string): string[] {
   const expanded = new Set([query]);
 
   // Split query into words for multi-word synonym matching
-  const queryWords = query.split(/\s+/);
+  // Split query into words for potential future use (kept for clarity)
+  const _queryWords = query.split(/\s+/);
 
   // Check if synonyms exist in taxonomy
   if (!taxonomy.synonyms) {

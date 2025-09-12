@@ -1,10 +1,5 @@
 // src/app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { generatePdfDocument } from '@/services/pdf-generator';
-import { auditService } from '@/services/firebase-audit-service';
-import { requireAuth } from '@/lib/server-auth';
-import { withHealthMonitoring } from '@/middleware/health-monitoring';
-import { operationalHealth } from '@/lib/operational-health';
 
 type RequestData = {
   documentType: string;
@@ -27,7 +22,8 @@ export async function POST(request: NextRequest) {
     `${logPrefix} Received request: ${request.method} ${request.url}`,
   );
 
-  // Authenticate user first
+  // Authenticate user first (dynamically import heavy auth only when needed)
+  const { requireAuth } = await import('@/lib/server-auth');
   const authResult = await requireAuth(request);
   if (authResult instanceof Response) {
     console.log(`${logPrefix} Authentication failed`);
@@ -52,11 +48,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Authenticate user
-    const authResult = await requireAuth(request);
-    if (authResult instanceof Response) return authResult;
-    user = authResult;
-
+    // Parse input
+    
     const body: RequestData = await request.json();
     const { answers, state } = body;
     documentType = body.documentType;
@@ -98,6 +91,8 @@ export async function POST(request: NextRequest) {
       `${logPrefix} Calling generatePdfDocument for type: ${documentType}, State: ${state || 'N/A'}`,
     );
 
+    // Dynamically import heavy pdf generator only when needed
+    const { generatePdfDocument } = await import('@/services/pdf-generator');
     const pdfBytes = await generatePdfDocument({ documentType, answers });
 
     if (!pdfBytes || pdfBytes.length === 0) {
@@ -115,6 +110,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Log successful PDF download
+    const { auditService } = await import('@/services/firebase-audit-service');
     await auditService.logDocumentEvent(
       'download',
       `${documentType}-${Date.now()}`,
@@ -192,6 +188,7 @@ export async function POST(request: NextRequest) {
 
     // Log failed PDF generation attempt
     if (user) {
+      const { auditService } = await import('@/services/firebase-audit-service');
       await auditService.logDocumentEvent(
         'download',
         `${documentType}-${Date.now()}`,
@@ -226,68 +223,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Create a monitored version of the POST function
-export const monitoredPOST = withHealthMonitoring(
-  async (request: NextRequest) => {
-    const startTime = performance.now();
-
-    try {
-      // Record queue depth before processing
-      await operationalHealth.recordQueueOperation(
-        'pdf_generation',
-        'depth',
-        getPdfQueueDepth(),
-      );
-
-      const response = await originalPOST(request);
-
-      // Record successful PDF generation metrics
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-
-      await operationalHealth.recordMetric({
-        metricType: 'latency',
-        value: duration,
-        endpoint: '/api/generate-pdf',
-        metadata: {
-          success: response.status < 400,
-          statusCode: response.status,
-          operation: 'pdf_generation',
-        },
-      });
-
-      // Record queue depth after processing
-      await operationalHealth.recordQueueOperation(
-        'pdf_generation',
-        'dequeue',
-        getPdfQueueDepth(),
-      );
-
-      return response;
-    } catch (error) {
-      // Record error metrics
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-
-      await operationalHealth.recordMetric({
-        metricType: 'error_rate',
-        value: 1,
-        endpoint: '/api/generate-pdf',
-        metadata: {
-          error: error instanceof Error ? error.message : String(error),
-          duration,
-          operation: 'pdf_generation',
-        },
-      });
-
-      throw error;
-    }
-  },
-);
-
-// Helper function to get current PDF queue depth (placeholder)
-function getPdfQueueDepth(): number {
-  // In a real implementation, this would check your actual PDF generation queue
-  // For demonstration, return a random number between 0-20
-  return Math.floor(Math.random() * 20);
-}
+// Note: Health monitoring wrapper removed to keep this route lean.

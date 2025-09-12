@@ -6,7 +6,6 @@ import localFont from 'next/font/local';
 import Script from 'next/script';
 import Head from 'next/head';
 import SEOConfig from '../../next-seo.config.ts'; // Changed import
-import RootClient from './root-client';
 
 export const metadata = {
   title: SEOConfig.title, // Use imported config
@@ -104,7 +103,7 @@ export default function RootLayout({
             `
           }}
         />
-        <RootClient>{children}</RootClient>
+        {children}
         {/* global gradient defs */}
         <svg width="0" height="0">
           <linearGradient id="goldGradient" x1="0" x2="0" y1="0" y2="1">

@@ -3,8 +3,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import lazyOnView from '@/components/shared/media/LazyOnView';
-import type { LegalDocument } from '@/lib/document-library';
-import { documentLibrary } from '@/lib/document-library';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
@@ -115,8 +113,7 @@ export default function HomePageClient() {
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
     string | null
   >(null);
-  const [selectedDocument, setSelectedDocument] =
-    useState<LegalDocument | null>(null);
+  // Removed selectedDocument to avoid importing the full document library on client
   const [isHydrated, setIsHydrated] = useState(false);
   const [ctaVariant, setCtaVariant] = useState<'A' | 'B' | 'C'>('A');
   
@@ -176,18 +173,12 @@ export default function HomePageClient() {
       }
     }
 
-    if (docIdFromQuery && !selectedCategoryForFilter && !selectedDocument) {
-      const foundDoc = documentLibrary.find((d) => d.id === docIdFromQuery);
-      if (foundDoc) {
-        setSelectedCategoryForFilter(foundDoc.category);
-        // scrollToWorkflow(); // May not be needed
-      }
-    }
+    // If a docId is provided, we could set a default category via a lightweight map.
+    // Skipping category auto-select to keep homepage bundle lean.
   }, [
     searchParams,
     globalSearchTerm,
     selectedCategoryForFilter,
-    selectedDocument,
     isHydrated,
     scrollToWorkflow,
   ]);

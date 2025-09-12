@@ -3,7 +3,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { blogArticles, type BlogArticle } from '@/data/blogArticles';
+import type { BlogArticle } from '@/data/blogArticles';
 import Link from 'next/link';
 import { ArrowLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 interface BlogPostClientContentProps {
   locale: 'en' | 'es';
   slug: string | undefined;
+  article?: BlogArticle;
 }
 
 interface RelatedDocument {
@@ -128,6 +129,7 @@ function getRelatedDocuments(article: BlogArticle, locale: 'en' | 'es'): Related
 export default function BlogPostClientContent({
   locale,
   slug,
+  article: initialArticle,
 }: BlogPostClientContentProps) {
   const { t, i18n } = useTranslation('common');
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -141,11 +143,11 @@ export default function BlogPostClientContent({
 
   useEffect(() => {
     if (slug) {
-      const foundArticle = blogArticles.find((art) => art.slug === slug);
-      setArticle(foundArticle);
+      setArticle((prev) => prev ?? initialArticle);
 
-      if (foundArticle) {
-        const dateString = foundArticle.date;
+      const art = initialArticle;
+      if (art) {
+        const dateString = art.date;
         if (dateString) {
           try {
             const dateObj = new Date(dateString);
@@ -172,7 +174,7 @@ export default function BlogPostClientContent({
       setArticle(undefined);
       setFormattedDate(null);
     }
-  }, [slug, locale, i18n.language]);
+  }, [slug, locale, i18n.language, props.article]);
 
   const langSuffix = locale === 'es' ? '_es' : '_en';
 

@@ -11,7 +11,7 @@
     "export": "next export apps/web/out",
     "start": "NODE_ENV=production node server.mjs",
     "start:collab": "NODE_ENV=production ENABLE_COLLABORATION=true node collaboration-server.mjs",
-    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts || true",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --no-error-on-unmatched-pattern || true",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "jest",

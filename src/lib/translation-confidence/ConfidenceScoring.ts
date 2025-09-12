@@ -1,4 +1,5 @@
 // src/lib/translation-confidence/ConfidenceScoring.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface ConfidenceMetrics {
   overall: number;
@@ -135,7 +136,6 @@ class TranslationConfidenceScorer {
     context: TranslationContext,
     factors: ConfidenceFactor[],
   ): Promise<number> {
-    let score = 0.8; // Base score
 
     // Grammar and syntax check
     const grammarScore = await this.checkGrammarAndSyntax(
@@ -237,15 +237,12 @@ class TranslationConfidenceScorer {
 
     let totalConfidence = 0;
     let highConfidenceTerms = 0;
-    let criticalTermsMissing = 0;
 
     for (const term of legalTerms) {
       totalConfidence += term.confidence;
 
       if (term.confidence >= 0.9) {
         highConfidenceTerms++;
-      } else if (term.confidence < 0.6) {
-        criticalTermsMissing++;
       }
 
       // Check for jurisdiction-specific term accuracy

@@ -1,10 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-  getDocumentsForCountry,
-  usStates,
-  allDocuments,
-} from '@/lib/document-library';
+import { usStates } from '@/lib/usStates';
 import { getDocumentTitle } from '@/lib/format-utils';
 import { MetaTags, generateDocumentMetaTags } from '@/components/seo/MetaTags';
 import {
@@ -32,21 +28,25 @@ export async function generateStaticParams() {
   const states = usStates.map((state) =>
     state.label.toLowerCase().replace(/\s+/g, '-'),
   );
-  const documents = allDocuments.filter((doc) => doc.id !== 'general-inquiry');
+  const highValueDocuments = [
+    'vehicle-bill-of-sale',
+    'lease-agreement',
+    'employment-contract',
+    'llc-operating-agreement',
+    'last-will-testament',
+    'power-of-attorney',
+    'non-disclosure-agreement',
+    'independent-contractor-agreement',
+  ];
 
-  const params = [];
+  const params: Array<{ locale: string; state: string; document: string }> = [];
   for (const locale of locales) {
     for (const state of states) {
-      for (const doc of documents) {
-        params.push({
-          locale,
-          state,
-          document: doc.id,
-        });
+      for (const doc of highValueDocuments) {
+        params.push({ locale, state, document: doc });
       }
     }
   }
-
   return params;
 }
 
@@ -60,9 +60,7 @@ export async function generateMetadata({
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
   );
 
-  const document = allDocuments.find((d) => d.id === documentSlug);
-
-  if (!stateObj || !document) {
+  if (!stateObj) {
     return {
       title: 'Document Not Found',
       description: 'The requested document was not found.',
@@ -70,9 +68,8 @@ export async function generateMetadata({
   }
 
   const stateName = stateObj.label;
-  const documentName = getDocumentTitle(document, localeTyped);
-  const documentDesc =
-    document.translations?.[localeTyped]?.description || document.description || '';
+  const documentName = getDocumentTitle({ id: documentSlug }, localeTyped);
+  const documentDesc = '';
   const isSpanish = localeTyped === 'es';
 
   const title = isSpanish
@@ -124,25 +121,13 @@ export default async function StateDocumentPage({ params }: StateDocumentPagePro
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
   );
 
-  const document = allDocuments.find((d) => d.id === documentSlug);
-
-  if (!stateObj || !document) {
-    notFound();
-  }
-
-  // Check if document is available for this state
-  if (
-    document.states !== 'all' &&
-    Array.isArray(document.states) &&
-    !document.states.includes(stateObj.value)
-  ) {
+  if (!stateObj) {
     notFound();
   }
 
   const stateName = stateObj.label;
-  const documentName = getDocumentTitle(document, localeTyped);
-  const documentDesc =
-    document.translations?.[localeTyped]?.description || document.description || '';
+  const documentName = getDocumentTitle({ id: documentSlug }, localeTyped);
+  const documentDesc = '';
   const isSpanish = localeTyped === 'es';
 
   const metaTags = generateDocumentMetaTags(

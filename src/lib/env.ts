@@ -9,12 +9,13 @@ const INVALID_PLACEHOLDERS = new Set([
 ]);
 
 export function getPublicGoogleMapsApiKey(): string | undefined {
+  const env = process.env as NodeJS.ProcessEnv;
   const candidates = [
-    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     // Common alternate names we may see in different setups
-    (process.env as any).NEXT_PUBLIC_GMAPS_API_KEY,
-    process.env.GOOGLE_MAPS_API_KEY,
-    (process.env as any).GMAPS_API_KEY,
+    env['NEXT_PUBLIC_GMAPS_API_KEY'],
+    env.GOOGLE_MAPS_API_KEY,
+    env['GMAPS_API_KEY'],
   ].filter(Boolean) as string[];
 
   const key = candidates.find(
@@ -23,4 +24,3 @@ export function getPublicGoogleMapsApiKey(): string | undefined {
 
   return key?.trim() || undefined;
 }
-

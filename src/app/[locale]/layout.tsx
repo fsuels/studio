@@ -1,9 +1,9 @@
 // src/app/[locale]/layout.tsx
 
 import type { ReactNode } from 'react';
-import { ClientProviders } from '@/components/providers/ClientProviders';
 import { Layout } from '@/components/layout/Layout';
 import LanguageSwitch from '@/components/global/LanguageSwitch';
+import MarketingClient from '@/app/marketing-client';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -24,9 +24,9 @@ export default async function LocaleLayout({
       : 'en';
 
   return (
-    <ClientProviders locale={detectedLocale}>
+    <MarketingClient>
       <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
       <Layout>{children}</Layout>
-    </ClientProviders>
+    </MarketingClient>
   );
 }

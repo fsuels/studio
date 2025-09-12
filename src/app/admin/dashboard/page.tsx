@@ -3,12 +3,17 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ComplianceDashboard from '@/components/compliance/ComplianceDashboard';
+// Load non-default tabs lazily to keep initial JS small
+const ComplianceDashboard = dynamic(
+  () => import('@/components/compliance/ComplianceDashboard'),
+  { ssr: false, loading: () => null },
+);
 import {
   LogOut,
   Shield,
@@ -24,9 +29,18 @@ import {
   Globe,
   FileBarChart,
 } from 'lucide-react';
-import MarketingInsightsDashboard from '@/components/admin/MarketingInsightsDashboard';
-import { WebhookDashboard } from '@/components/admin/webhooks/WebhookDashboard';
-import { ReportBuilder } from '@/components/admin/reports/ReportBuilder';
+const MarketingInsightsDashboard = dynamic(
+  () => import('@/components/admin/MarketingInsightsDashboard'),
+  { ssr: false, loading: () => null },
+);
+const WebhookDashboard = dynamic(
+  () => import('@/components/admin/webhooks/WebhookDashboard').then(m => m.WebhookDashboard),
+  { ssr: false, loading: () => null },
+);
+const ReportBuilder = dynamic(
+  () => import('@/components/admin/reports/ReportBuilder').then(m => m.ReportBuilder),
+  { ssr: false, loading: () => null },
+);
 
 interface AdminUser {
   username: string;
