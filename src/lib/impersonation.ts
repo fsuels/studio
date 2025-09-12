@@ -134,7 +134,7 @@ class UserImpersonationService implements ImpersonationService {
 
   async endImpersonation(
     sessionId: string,
-    reason = 'manual_end',
+    reason: NonNullable<ImpersonationSession['endReason']> = 'manual_end',
   ): Promise<void> {
     const session = this.activeSessions.get(sessionId);
     if (!session) {
@@ -148,7 +148,7 @@ class UserImpersonationService implements ImpersonationService {
     // Update session
     session.isActive = false;
     session.endedAt = new Date().toISOString();
-    session.endReason = reason as any;
+    session.endReason = reason;
 
     // Log final action
     await this.logAction(sessionId, {
@@ -309,33 +309,30 @@ class UserImpersonationService implements ImpersonationService {
   }
 
   // Get impersonation context for current user
-  getImpersonationContext(adminId: string): Promise<ImpersonationContext> {
-    return new Promise(async (resolve) => {
-      const session = await this.getCurrentSession(adminId);
+  async getImpersonationContext(adminId: string): Promise<ImpersonationContext> {
+    const session = await this.getCurrentSession(adminId);
 
-      if (!session) {
-        resolve({
-          isImpersonating: false,
-          restrictions: {
-            canAccessFinancialData: false,
-            canModifyUser: false,
-            canMakePayments: false,
-            canDeleteData: false,
-            maxSessionDuration: 0,
-          },
-        });
-        return;
-      }
+    if (!session) {
+      return {
+        isImpersonating: false,
+        restrictions: {
+          canAccessFinancialData: false,
+          canModifyUser: false,
+          canMakePayments: false,
+          canDeleteData: false,
+          maxSessionDuration: 0,
+        },
+      };
+    }
 
-      // Determine restrictions based on admin role
-      const restrictions = this.getImpersonationRestrictions(session);
+    // Determine restrictions based on admin role
+    const restrictions = this.getImpersonationRestrictions(session);
 
-      resolve({
-        isImpersonating: true,
-        session,
-        restrictions,
-      });
-    });
+    return {
+      isImpersonating: true,
+      session,
+      restrictions,
+    };
   }
 
   private getImpersonationRestrictions(session: ImpersonationSession) {
@@ -414,7 +411,7 @@ export function useImpersonationLogger() {
       action: string,
       description: string,
       riskLevel: 'low' | 'medium' | 'high' = 'low',
-      metadata?: Record<string, any>,
+      metadata?: Record<string, unknown>,
     ) => {
       await impersonationService.logAction(sessionId, {
         action,

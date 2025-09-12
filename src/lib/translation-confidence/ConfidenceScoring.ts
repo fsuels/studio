@@ -1,5 +1,4 @@
 // src/lib/translation-confidence/ConfidenceScoring.ts
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface ConfidenceMetrics {
   overall: number;

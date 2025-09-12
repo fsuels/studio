@@ -19,7 +19,7 @@ interface RSSItem {
   content?: string;
   contentSnippet?: string;
   author?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface ParsedFeed {
@@ -30,7 +30,7 @@ interface ParsedFeed {
 }
 
 class LegalUpdateRSSParser {
-  private parser: Parser<{}, RSSItem>;
+  private parser: Parser<Record<string, never>, RSSItem>;
   private readonly maxRetries = 3;
   private readonly timeoutMs = 30000;
 
@@ -360,9 +360,18 @@ class LegalUpdateRSSParser {
     }>;
   }> {
     const sources = await this.fetchAllActiveSources();
-    const results = {
+    const results: {
+      totalUpdates: number;
+      sourceResults: Array<{
+        sourceId: string;
+        sourceName: string;
+        updateCount: number;
+        success: boolean;
+        error?: string;
+      }>;
+    } = {
       totalUpdates: 0,
-      sourceResults: [] as any[],
+      sourceResults: [],
     };
 
     for (const source of sources) {

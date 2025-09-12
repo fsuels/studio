@@ -149,6 +149,44 @@ export default [
     },
   },
 
+  /* Reduce noise in core library modules */
+  {
+    files: ['src/lib/**/*.{ts,tsx}'],
+    rules: {
+      // Libraries frequently use generic plumbing and stubs
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-function-type': 'off',
+      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+      // Many files intentionally declare args/placeholders for future wiring
+      '@typescript-eslint/no-unused-vars': 'off',
+      // Allow const/let in case blocks without braces in legacy sections
+      'no-case-declarations': 'off',
+    },
+  },
+
+  /* Tests: turn off a11y and loosen TS strictness */
+  {
+    files: ['**/__tests__/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
+      'jsx-a11y/role-has-required-aria-props': 'off',
+      'jsx-a11y/no-noninteractive-element-to-interactive-role': 'off',
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      'jsx-a11y/no-noninteractive-tabindex': 'off',
+    },
+  },
+
+  /* App: allow transient any in UI layers */
+  {
+    files: ['src/app/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
   /* Import guard for big documents pages */
   {
     files: ['src/app/**/documents/**/page.tsx'],

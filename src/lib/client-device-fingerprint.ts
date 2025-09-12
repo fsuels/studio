@@ -504,7 +504,7 @@ export function useDeviceFingerprint(options?: {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [options]);
 
   return fingerprint;
 }

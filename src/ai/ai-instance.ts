@@ -3,9 +3,13 @@
 // This placeholder prevents server errors related to missing GOOGLE_GENAI_API_KEY.
 
 // Export a no-op AI object for compatibility. Replace with actual implementation when needed.
-const ai: any = {
+type AIStub = {
+  run: (..._args: unknown[]) => Promise<unknown | null>;
+};
+
+const ai: AIStub = {
   // Example stub method
-  run: async (...args: unknown[]) => {
+  run: async (..._args: unknown[]) => {
     console.warn('AI functionality is currently disabled.');
     return null;
   },

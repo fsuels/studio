@@ -76,8 +76,8 @@ export interface ImmutableAuditEvent {
   // Change tracking
   changes?: {
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
     changeType: 'addition' | 'modification' | 'deletion';
     diff?: string; // Unified diff format
   }[];
@@ -294,8 +294,8 @@ export class ImmutableAuditTrail {
     policyId: string,
     policyName: string,
     version: string,
-    oldContent: any,
-    newContent: any,
+    oldContent: unknown,
+    newContent: unknown,
     actorId: string,
     actorEmail: string,
     approvalId?: string,
@@ -347,8 +347,8 @@ export class ImmutableAuditTrail {
   async logTemplateChange(
     templateId: string,
     templateName: string,
-    oldTemplate: any,
-    newTemplate: any,
+    oldTemplate: unknown,
+    newTemplate: unknown,
     actorId: string,
     actorEmail: string,
   ): Promise<string> {
@@ -450,8 +450,8 @@ export class ImmutableAuditTrail {
   async logConsentChange(
     userId: string,
     consentType: string,
-    oldConsent: any,
-    newConsent: any,
+    oldConsent: unknown,
+    newConsent: unknown,
     method: 'web_form' | 'email' | 'phone' | 'api',
   ): Promise<string> {
     return this.createAuditEvent({
@@ -730,7 +730,7 @@ export class ImmutableAuditTrail {
     return crypto.createHash('sha256').update(eventString).digest('hex');
   }
 
-  private signEvent(event: any, hash: string): string {
+  private signEvent(_event: unknown, hash: string): string {
     const hmac = crypto.createHmac('sha256', this.signingKey);
     hmac.update(hash);
     return hmac.digest('hex');
@@ -767,25 +767,30 @@ export class ImmutableAuditTrail {
     return this.calculateMerkleRoot(nextLevel);
   }
 
-  private calculateChecksum(data: any): string {
+  private calculateChecksum(data: unknown): string {
     const dataString = typeof data === 'string' ? data : JSON.stringify(data);
     return crypto.createHash('sha256').update(dataString).digest('hex');
   }
 
   private generateDiff(
-    oldData: any,
-    newData: any,
+    oldData: unknown,
+    newData: unknown,
   ): ImmutableAuditEvent['changes'] {
     const changes: ImmutableAuditEvent['changes'] = [];
 
     // Simple diff implementation - in production, use a proper diff library
-    const oldKeys = Object.keys(oldData || {});
-    const newKeys = Object.keys(newData || {});
+    const oldObj: Record<string, unknown> =
+      typeof oldData === 'object' && oldData !== null ? (oldData as Record<string, unknown>) : {};
+    const newObj: Record<string, unknown> =
+      typeof newData === 'object' && newData !== null ? (newData as Record<string, unknown>) : {};
+
+    const oldKeys = Object.keys(oldObj);
+    const newKeys = Object.keys(newObj);
     const allKeys = [...new Set([...oldKeys, ...newKeys])];
 
     allKeys.forEach((key) => {
-      const oldValue = oldData?.[key];
-      const newValue = newData?.[key];
+      const oldValue = oldObj[key];
+      const newValue = newObj[key];
 
       if (oldValue !== newValue) {
         let changeType: 'addition' | 'modification' | 'deletion';
@@ -819,11 +824,10 @@ export class ImmutableAuditTrail {
 
     for (const event of events) {
       // Recalculate hash
-      const eventCopy = { ...event };
-      delete (eventCopy as any).currentHash;
-      delete (eventCopy as any).integrity;
-
-      const calculatedHash = this.calculateHash(eventCopy);
+      const { currentHash: _currentHash, integrity: _integrity, ...eventCopy } = event;
+      const calculatedHash = this.calculateHash(
+        eventCopy as Omit<ImmutableAuditEvent, 'currentHash' | 'integrity'>,
+      );
 
       if (calculatedHash !== event.currentHash) {
         errors.push({
