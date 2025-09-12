@@ -26,8 +26,8 @@ export function analyzeContent(content: string): SEOMetrics {
   const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
   
   // Count existing links
-  const internalLinks = (content.match(/href="\/[^"]*"/g) || []).length;
-  const externalLinks = (content.match(/href="https?:\/\/[^"]*"/g) || []).length;
+  const internalLinks = (content.match(new RegExp('href="/[^\"]*"', 'g')) || []).length;
+  const externalLinks = (content.match(new RegExp('href="https?://[^\"]*"', 'g')) || []).length;
   
   // Extract headings
   const headingMatches = content.match(/<h([1-6])[^>]*>([^<]+)<\/h[1-6]>/g) || [];

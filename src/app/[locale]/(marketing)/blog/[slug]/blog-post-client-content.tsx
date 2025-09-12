@@ -174,7 +174,7 @@ export default function BlogPostClientContent({
       setArticle(undefined);
       setFormattedDate(null);
     }
-  }, [slug, locale, i18n.language, props.article]);
+  }, [slug, locale, i18n.language, initialArticle]);
 
   const langSuffix = locale === 'es' ? '_es' : '_en';
 

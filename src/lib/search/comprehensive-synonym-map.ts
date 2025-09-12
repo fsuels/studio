@@ -211,7 +211,7 @@ export function getSynonyms(word: string): string[] {
   const lowerWord = word.toLowerCase();
   
   // Find the group that contains this word
-  for (const [key, group] of Object.entries(COMPREHENSIVE_SYNONYM_MAP)) {
+  for (const [_key, group] of Object.entries(COMPREHENSIVE_SYNONYM_MAP)) {
     if (group.combined.some(synonym => synonym.toLowerCase() === lowerWord)) {
       return group.combined.map(s => s.toLowerCase());
     }
@@ -229,7 +229,7 @@ export const STOP_WORDS = new Set([
 ]);
 
 // Query preprocessing function
-export function preprocessQuery(query: string, language: 'en' | 'es' | 'both' = 'both'): string[] {
+export function preprocessQuery(query: string, _language: 'en' | 'es' | 'both' = 'both'): string[] {
   const tokens = query
     .toLowerCase()
     .replace(/['"]/g, '') // Remove quotes

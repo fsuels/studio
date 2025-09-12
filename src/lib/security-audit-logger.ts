@@ -72,8 +72,8 @@ interface AuditEvent {
   result: 'success' | 'failure' | 'partial' | 'blocked';
   changes?: Array<{
     field: string;
-    oldValue?: any;
-    newValue?: any;
+    oldValue?: unknown;
+    newValue?: unknown;
   }>;
 
   // Additional metadata
@@ -211,7 +211,7 @@ export class SecurityAuditLogger {
     userId?: string,
     userEmail?: string,
     ipAddress?: string,
-    additionalContext?: any,
+    additionalContext?: Record<string, unknown>,
   ): Promise<string> {
     return this.logEvent({
       eventType: 'authentication',
@@ -704,11 +704,13 @@ export class SecurityAuditLogger {
   // Risk assessment functions
   private assessAuthenticationRisk(
     action: string,
-    context: any,
+    context: Record<string, unknown> | undefined,
   ): 'low' | 'medium' | 'high' | 'critical' {
     if (action === 'login_failure') return 'medium';
-    if (context?.unusualLocation) return 'high';
-    if (context?.multipleDevices) return 'medium';
+    if (context && (context as { unusualLocation?: boolean }).unusualLocation)
+      return 'high';
+    if (context && (context as { multipleDevices?: boolean }).multipleDevices)
+      return 'medium';
     return 'low';
   }
 
@@ -722,11 +724,16 @@ export class SecurityAuditLogger {
     return 'low';
   }
 
-  private detectAuthenticationThreats(action: string, context: any): string[] {
-    const threats = [];
+  private detectAuthenticationThreats(
+    action: string,
+    context: Record<string, unknown> | undefined,
+  ): string[] {
+    const threats: string[] = [];
     if (action === 'login_failure') threats.push('potential_brute_force');
-    if (context?.unusualLocation) threats.push('geographic_anomaly');
-    if (context?.newDevice) threats.push('unknown_device');
+    if (context && (context as { unusualLocation?: boolean }).unusualLocation)
+      threats.push('geographic_anomaly');
+    if (context && (context as { newDevice?: boolean }).newDevice)
+      threats.push('unknown_device');
     return threats;
   }
 
@@ -753,7 +760,9 @@ export class SecurityAuditLogger {
     });
   }
 
-  private getUserLocationHistory(userId?: string): any[] {
+  private getUserLocationHistory(
+    userId?: string,
+  ): NonNullable<AuditEvent['actor']['location']>[] {
     if (!userId) return [];
 
     return Array.from(this.auditEvents.values())
@@ -762,7 +771,10 @@ export class SecurityAuditLogger {
       .slice(-10); // Last 10 locations
   }
 
-  private isUnusualLocation(location: any, history: any[]): boolean {
+  private isUnusualLocation(
+    location: NonNullable<AuditEvent['actor']['location']>,
+    history: NonNullable<AuditEvent['actor']['location']>[],
+  ): boolean {
     // Simple check - in production this would be more sophisticated
     return (
       history.length > 0 && !history.some((h) => h.country === location.country)
