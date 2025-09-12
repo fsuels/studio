@@ -220,7 +220,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
                     <li {...props} />
                   </ClauseTooltip>
                 ),
-                h1: (props) => <h1 {...props} className="text-center" />,
+                h1: (props) => <h1 {...props} className="text-center">​</h1>,
                 // FIXED: ensure markdown images include dimensions
                 img: ({
                   src = '',

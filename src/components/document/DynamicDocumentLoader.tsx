@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 interface DynamicDocumentLoaderProps {
   jurisdiction: 'us' | 'ca';
   documentType: string;
-  onDocumentLoad?: (document: any) => void;
+  onDocumentLoad?: (document: unknown) => void;
 }
 
 export function DynamicDocumentLoader({
@@ -56,7 +56,7 @@ export function DynamicDocumentLoader({
     return (
       <Alert>
         <AlertDescription>
-          Document type '{documentType}' not found
+          Document type &apos;{documentType}&apos; not found
         </AlertDescription>
       </Alert>
     );

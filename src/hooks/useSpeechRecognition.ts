@@ -75,9 +75,29 @@ export function useSpeechRecognition({
       return;
     }
 
-    try {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
+  try {
+      type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+      interface SpeechRecognitionEventLike {
+        results: ArrayLike<{ 0: { transcript: string }; isFinal: boolean }>;
+      }
+      interface SpeechRecognitionInstance {
+        continuous: boolean;
+        interimResults: boolean;
+        lang: string;
+        onstart: () => void;
+        onresult: (event: SpeechRecognitionEventLike) => void;
+        onerror: (event: { error: string }) => void;
+        onend: () => void;
+        start: () => void;
+        stop?: () => void;
+      }
+
+      const win = window as unknown as {
+        SpeechRecognition?: SpeechRecognitionConstructor;
+        webkitSpeechRecognition?: SpeechRecognitionConstructor;
+      };
+      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
+      const recognition = new (SpeechRecognition as SpeechRecognitionConstructor)();
       
       recognition.continuous = continuous;
       recognition.interimResults = interimResults;
@@ -92,7 +112,7 @@ export function useSpeechRecognition({
         });
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEventLike) => {
         try {
           const result = event.results[event.results.length - 1];
           const newTranscript = result[0].transcript;
@@ -114,7 +134,7 @@ export function useSpeechRecognition({
         }
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: { error: string }) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
         

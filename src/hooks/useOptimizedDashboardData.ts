@@ -2,12 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
-import {
-  getUserDocuments,
-  getUserPayments,
-  getUserFolders,
-  type DashboardDocument,
-} from '@/lib/firestore/dashboardData';
+import { getUserDocuments, getUserPayments, getUserFolders } from '@/lib/firestore/dashboardData';
 
 interface UseOptimizedDashboardDataOptions {
   enabled?: boolean;
@@ -19,7 +14,7 @@ export function useOptimizedDashboardData(
   userId?: string,
   options: UseOptimizedDashboardDataOptions = {},
 ) {
-  const { enabled = !!userId, initialPageSize = 3, pageSize = 8 } = options;
+  const { enabled = !!userId } = options;
 
   const isOnline = typeof navigator === 'undefined' ? true : navigator.onLine;
   const queryEnabled = enabled && isOnline && !!userId;

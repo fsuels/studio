@@ -2,7 +2,6 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 
 interface PreloadConfig {
   /** Routes to preload when component mounts */
@@ -16,13 +15,13 @@ interface PreloadConfig {
 }
 
 interface PreloadedComponent {
-  component: React.ComponentType<any>;
+  component: React.ComponentType<unknown>;
   path: string;
   preloadedAt: number;
 }
 
 // Global preload cache to avoid duplicate loading
-const preloadCache = new Map<string, Promise<any>>();
+const preloadCache = new Map<string, Promise<unknown>>();
 const componentCache = new Map<string, PreloadedComponent>();
 
 // Common form workflow paths for intelligent preloading
@@ -82,50 +81,56 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
 
     preloadStarted.current.add(path);
 
-    const preloadPromise = new Promise(async (resolve, reject) => {
-      try {
-        // Check if it's a heavy component
-        const componentName = Object.keys(HEAVY_COMPONENTS).find(name => 
-          path.includes(name.toLowerCase()) || path.endsWith(name)
-        );
+    const preloadPromise = new Promise<unknown>((resolve, reject) => {
+      (async () => {
+        try {
+          // Check if it's a heavy component
+          const componentName = Object.keys(HEAVY_COMPONENTS).find(
+            (name) => path.includes(name.toLowerCase()) || path.endsWith(name),
+          );
 
-        if (componentName) {
-          const component = await HEAVY_COMPONENTS[componentName as keyof typeof HEAVY_COMPONENTS]();
-          componentCache.set(path, {
-            component: component.default || component,
-            path,
-            preloadedAt: Date.now(),
-          });
-          resolve(component);
-        } else {
-          // Preload route using Next.js router
-          router.prefetch(path);
-          
-          // Also try to preload any lazy components on that route
-          if (path.includes('/admin/')) {
-            // Preload admin components
-            await Promise.all([
-              import('@/components/admin/fraud-detection/FraudDetectionDashboard'),
-              import('@/components/admin/revenue-intelligence/RevenueIntelligenceDashboard'),
-            ]);
-          } else if (path.includes('/docs/')) {
-            // Preload document-related components
-            await Promise.all([
-              import('@/components/forms/WizardForm'),
-              import('@/components/collaboration/DocumentCollaboration'),
-              import('@/services/pdf-generator'),
-            ]);
-          } else if (path.includes('/signwell')) {
-            // Preload SignWell components
-            await import('@/components/signwell/SignWellIntegration');
+          if (componentName) {
+            const component =
+              await HEAVY_COMPONENTS[
+                componentName as keyof typeof HEAVY_COMPONENTS
+              ]();
+            componentCache.set(path, {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              component: (component as any).default || component,
+              path,
+              preloadedAt: Date.now(),
+            });
+            resolve(component);
+          } else {
+            // Preload route using Next.js router
+            router.prefetch(path);
+
+            // Also try to preload any lazy components on that route
+            if (path.includes('/admin/')) {
+              // Preload admin components
+              await Promise.all([
+                import('@/components/admin/fraud-detection/FraudDetectionDashboard'),
+                import('@/components/admin/revenue-intelligence/RevenueIntelligenceDashboard'),
+              ]);
+            } else if (path.includes('/docs/')) {
+              // Preload document-related components
+              await Promise.all([
+                import('@/components/forms/WizardForm'),
+                import('@/components/collaboration/DocumentCollaboration'),
+                import('@/services/pdf-generator'),
+              ]);
+            } else if (path.includes('/signwell')) {
+              // Preload SignWell components
+              await import('@/components/signwell/SignWellIntegration');
+            }
+
+            resolve(null);
           }
-          
-          resolve(null);
+        } catch (error) {
+          console.warn(`Failed to preload ${path}:`, error);
+          reject(error);
         }
-      } catch (error) {
-        console.warn(`Failed to preload ${path}:`, error);
-        reject(error);
-      }
+      })();
     });
 
     preloadCache.set(path, preloadPromise);
@@ -161,9 +166,11 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
   const setupInteractionPreloading = useCallback(() => {
     if (!config.onInteraction?.length) return;
 
-    config.onInteraction.forEach(path => {
-      const elements = document.querySelectorAll(`a[href*="${path}"], button[data-preload="${path}"]`);
-      elements.forEach(element => {
+    config.onInteraction.forEach((path) => {
+      const elements = document.querySelectorAll(
+        `a[href*="${path}"], button[data-preload="${path}"]`,
+      );
+      elements.forEach((element) => {
         const listener = () => preload(path);
         
         // Clean up previous listener if exists
@@ -207,9 +214,12 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
 
     // Cleanup function
     return () => {
-      interactionListeners.current.forEach((listener, path) => {
-        const elements = document.querySelectorAll(`a[href*="${path}"], button[data-preload="${path}"]`);
-        elements.forEach(element => {
+      const snapshot = new Map(interactionListeners.current);
+      snapshot.forEach((listener, path) => {
+        const elements = document.querySelectorAll(
+          `a[href*="${path}"], button[data-preload="${path}"]`,
+        );
+        elements.forEach((element) => {
           element.removeEventListener('mouseenter', listener);
           element.removeEventListener('focus', listener);
         });
@@ -248,7 +258,7 @@ export function usePreloadStrategy(config: PreloadConfig = {}) {
 }
 
 // Hook for critical component preloading in forms
-export function useFormWorkflowPreload(currentStep: string) {
+export function useFormWorkflowPreload(_currentStep: string) {
   return usePreloadStrategy({
     intelligentPreload: true,
     routeBasedPreload: {

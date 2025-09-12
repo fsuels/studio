@@ -13,18 +13,18 @@ import { cn } from '@/lib/utils';
 
 interface EnhancedStatePDFPreviewProps {
   state: string;
-  formData: any;
+  formData: Record<string, unknown>;
   documentType: 'vehicle-bill-of-sale';
   showLivePreview?: boolean;
-  onFormDataChange?: (data: any) => void;
+  onFormDataChange?: (data: Record<string, unknown>) => void;
 }
 
 export default function EnhancedStatePDFPreview({ 
   state, 
   formData,
-  documentType,
+  documentType: _documentType,
   showLivePreview = true,
-  onFormDataChange
+  onFormDataChange: _onFormDataChange
 }: EnhancedStatePDFPreviewProps) {
   const [loading, setLoading] = useState(true);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -32,7 +32,7 @@ export default function EnhancedStatePDFPreview({
   const [error, setError] = useState<string | null>(null);
   const [pdfBytes, setPdfBytes] = useState<ArrayBuffer | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [lastProcessedData, setLastProcessedData] = useState<any>(null);
+  const [lastProcessedData, setLastProcessedData] = useState<Record<string, unknown> | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
 
@@ -333,6 +333,7 @@ export default function EnhancedStatePDFPreview({
                 onLoad={() => {
                   console.log('Enhanced PDF loaded successfully');
                 }}
+                onKeyDown={() => {}}
                 onError={(e) => {
                   console.error('Enhanced PDF iframe error:', e);
                   setError('Failed to display PDF');

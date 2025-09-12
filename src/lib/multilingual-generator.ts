@@ -626,7 +626,7 @@ export class MultilingualGenerator {
     adaptations: any[],
     targetLanguage: LanguageProfile,
   ): any {
-    let adaptedContent = { ...content };
+    const adaptedContent = { ...content };
 
     adaptations.forEach((adaptation) => {
       switch (adaptation.element) {

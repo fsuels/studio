@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
   funnelAnalytics,
   createFunnelStep,
@@ -14,7 +14,6 @@ import {
 export function useFunnelTracking() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const sessionIdRef = useRef<string | null>(null);
   const stepTimerRef = useRef<number | null>(null);
@@ -99,7 +98,10 @@ export function useEventTracking() {
   const { trackStep, sessionId } = useFunnelTracking();
 
   const trackEvent = useCallback(
-    async (eventName: string, properties: Record<string, any> = {}) => {
+    async (
+      eventName: string,
+      properties: Record<string, unknown> = {},
+    ) => {
       if (!sessionId) return;
 
       // Map events to funnel steps
@@ -145,7 +147,7 @@ export function useEventTracking() {
     (
       errorType: string,
       errorMessage: string,
-      context: Record<string, any> = {},
+      context: Record<string, unknown> = {},
     ) => {
       trackEvent('error_encountered', {
         errorType,
@@ -174,7 +176,6 @@ export function useEventTracking() {
 
 // Hook for real-time abandonment detection
 export function useAbandonmentDetection() {
-  const { sessionId } = useFunnelTracking();
   const { trackAbandonmentIntent } = useEventTracking();
   const [showRetentionOffer, setShowRetentionOffer] = useState(false);
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -275,7 +276,7 @@ export function useFormTracking(formName: string) {
   );
 
   const trackFieldBlur = useCallback(
-    (fieldName: string, value: any) => {
+    (fieldName: string, value: unknown) => {
       trackFormInteraction(formName, fieldName, 'blur');
 
       // Calculate abandonment risk based on time spent and completion
@@ -288,7 +289,7 @@ export function useFormTracking(formName: string) {
   );
 
   const trackFieldChange = useCallback(
-    (fieldName: string, value: any) => {
+    (fieldName: string, _value: unknown) => {
       trackFormInteraction(formName, fieldName, 'change');
     },
     [formName, trackFormInteraction],
@@ -360,8 +361,12 @@ export function usePerformanceTracking() {
       let clsScore = 0;
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (!(entry as any).hadRecentInput) {
-            clsScore += (entry as any).value;
+          const ls = entry as PerformanceEntry & {
+            hadRecentInput?: boolean;
+            value?: number;
+          };
+          if (!ls.hadRecentInput && typeof ls.value === 'number') {
+            clsScore += ls.value;
           }
         }
 
@@ -374,9 +379,10 @@ export function usePerformanceTracking() {
       // First Input Delay
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
+          const evt = entry as PerformanceEventTiming;
           trackEvent('core_web_vitals', {
             metric: 'FID',
-            value: (entry as any).processingStart - entry.startTime,
+            value: evt.processingStart - evt.startTime,
           });
         }
       }).observe({ type: 'first-input', buffered: true });
@@ -407,7 +413,7 @@ function inferStepFromPath(pathname: string): FunnelStep['step'] | null {
 }
 
 function inferDocumentType(pathname: string): string | undefined {
-  const matches = pathname.match(/\/docs\/([^\/]+)/);
+  const matches = pathname.match(/\/docs\/([^/]+)/);
   return matches ? matches[1] : undefined;
 }
 
@@ -525,7 +531,7 @@ function getFormInteractions(): number {
 
 function calculateFormAbandonmentRisk(
   timeSpent: number,
-  currentValue: any,
+  currentValue: unknown,
 ): number {
   let risk = 0;
 
@@ -535,7 +541,7 @@ function calculateFormAbandonmentRisk(
 
   // Completion-based risk
   if (
-    !currentValue ||
+    currentValue == null ||
     (typeof currentValue === 'string' && currentValue.length < 3)
   ) {
     risk += 0.4;
@@ -570,7 +576,7 @@ function getLargestContentfulPaint(): Promise<number | undefined> {
 
 async function sendEventToAnalytics(
   eventName: string,
-  properties: Record<string, any>,
+  properties: Record<string, unknown>,
   sessionId: string,
 ): Promise<void> {
   try {

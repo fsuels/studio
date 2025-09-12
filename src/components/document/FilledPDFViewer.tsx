@@ -6,7 +6,7 @@ import { overlayFormData } from '@/lib/pdf/pdf-overlay-service';
 
 interface FilledPDFViewerProps {
   pdfPath: string;
-  formData: Record<string, any>;
+  formData: Record<string, unknown>;
   state: string;
   title?: string;
 }
@@ -64,7 +64,7 @@ export default function FilledPDFViewer({ pdfPath, formData, state, title }: Fil
         URL.revokeObjectURL(pdfUrl);
       }
     };
-  }, [pdfPath, formData, state]);
+  }, [pdfPath, formData, state, pdfUrl]);
 
   if (isLoading) {
     return (

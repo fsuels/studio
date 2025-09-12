@@ -120,12 +120,6 @@ export const useOnboarding = (): UseOnboardingReturn => {
 
     try {
       await tracker.initializeProgress();
-      const updateData = {
-        isCompleted: true,
-        currentStep: tracker.getStepsForPersona().length,
-        completedAt: new Date(),
-      };
-
       // We'll need to add a method to update progress manually
       await loadProgress();
     } catch (error) {
