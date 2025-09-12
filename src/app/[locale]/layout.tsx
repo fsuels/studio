@@ -7,14 +7,14 @@ import MarketingClient from '@/app/marketing-client';
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: { locale?: string };
+  params: Promise<{ locale?: string }>;
 }
 
 export default async function LocaleLayout({
   children,
   params,
 }: LocaleLayoutProps) {
-  const { locale: pathLocale } = params;
+  const { locale: pathLocale } = await params;
 
   // Fallback to 'en' if the locale isn’t 'en' or 'es'
   const detectedLocale =

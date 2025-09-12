@@ -19,7 +19,7 @@ export interface DocPageParams {
 }
 
 interface DocPageProps {
-  params: DocPageParams;
+  params: Promise<DocPageParams>;
 }
 
 export async function generateStaticParams(): Promise<DocPageParams[]> {
@@ -52,7 +52,7 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
 
 // 🔑 Mark your Page component async and await params before using them
 export default async function DocPage({ params }: DocPageProps) {
-  let { locale, docId } = params;
+  let { locale, docId } = await params;
 
   // Normalize legacy aliases to canonical slug and redirect if needed
   const canonical = resolveDocSlug(docId);
@@ -89,8 +89,8 @@ export default async function DocPage({ params }: DocPageProps) {
 }
 
 // 🔑 Mark Head async, await params, and use your NEXT_PUBLIC_SITE_URL env var
-export async function Head({ params }: { params: DocPageParams }) {
-  const { locale, docId } = params;
+export async function Head({ params }: { params: Promise<DocPageParams> }) {
+  const { locale, docId } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
   // Find the document configuration

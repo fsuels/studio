@@ -8,8 +8,8 @@ export async function generateStaticParams() {
 export default async function TemplatesPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   return <TemplatesClientContent locale={locale} />;
 }

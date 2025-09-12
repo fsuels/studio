@@ -5,11 +5,11 @@ import { TenantDashboardLazy } from '@/components/tenant/TenantDashboard.lazy';
 import { redirect } from 'next/navigation';
 
 interface TenantPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function TenantPage({ params }: TenantPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
@@ -29,6 +29,7 @@ export async function generateStaticParams() {
 
 // Generate metadata based on tenant
 export async function generateMetadata({ params }: TenantPageProps) {
+  await params; // ensure type compatibility with Next.js 15
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 

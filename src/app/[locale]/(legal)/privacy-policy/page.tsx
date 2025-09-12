@@ -2,17 +2,19 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { auditService } from '@/services/firebase-audit-service';
 
 interface PrivacyPolicyPageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
 export default function LocalePrivacyPolicyPage({
   params,
 }: PrivacyPolicyPageProps) {
-  const { locale } = params;
+  // Access locale via useParams on the client; ignore Promise-typed params
+  const locale = (useParams()?.locale as 'en' | 'es') ?? 'en';
   const { user } = useAuth();
 
   useEffect(() => {

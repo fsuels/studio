@@ -26,11 +26,11 @@ export const metadata: Metadata = {
 };
 
 interface TrustPageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
 export default async function TrustPage({ params }: TrustPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   return <TrustCenter locale={locale} />;
 }
