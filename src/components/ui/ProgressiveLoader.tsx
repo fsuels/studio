@@ -3,7 +3,7 @@
 import React, { useState, useEffect, ComponentType } from 'react';
 import { Skeleton } from './skeleton';
 
-interface ProgressiveLoaderProps<T = {}> {
+interface ProgressiveLoaderProps<T = object> {
   component: () => Promise<{ default: ComponentType<T> }>;
   fallback?: React.ReactNode;
   delay?: number;
@@ -11,7 +11,7 @@ interface ProgressiveLoaderProps<T = {}> {
   props?: T;
 }
 
-export function ProgressiveLoader<T = {}>({
+export function ProgressiveLoader<T = object>({
   component,
   fallback,
   delay = 0,
@@ -91,7 +91,7 @@ export function ProgressiveLoader<T = {}>({
 }
 
 // Higher-order component version
-export function withProgressiveLoading<T = {}>(
+export function withProgressiveLoading<T = object>(
   component: () => Promise<{ default: ComponentType<T> }>,
   fallback?: React.ReactNode,
   options?: { delay?: number; timeout?: number },

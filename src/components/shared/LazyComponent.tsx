@@ -67,7 +67,7 @@ const DefaultLoadingFallback = () => (
 );
 
 // Factory function to create lazy-loaded components
-export function createLazyComponent<T extends ComponentType<{}>>(
+export function createLazyComponent<T extends ComponentType<object>>(
   importFn: () => Promise<{ default: T } | T>,
   options?: {
     fallback?: React.ReactNode;

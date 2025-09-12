@@ -2,9 +2,8 @@ import React from 'react';
 import DocumentCard from './DocumentCard';
 import { ViewComponentProps } from './types';
 
-interface SearchResultsViewProps extends ViewComponentProps {
-  // No additional props needed - all handled by base ViewComponentProps
-}
+// Using type alias instead of empty interface
+type SearchResultsViewProps = ViewComponentProps;
 
 const SearchResultsView: React.FC<SearchResultsViewProps> = ({
   isReadOnly,

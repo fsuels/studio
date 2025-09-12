@@ -7,7 +7,7 @@ import { PRICE_LOOKUP, COUPONS } from '@/lib/stripePrices';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // Use the currently supported Stripe API version
-  apiVersion: '2025-04-30.basil',
+  apiVersion: '2025-05-28.basil',
 });
 
 // Alias imported constants for backwards compatibility with the old names

@@ -38,9 +38,9 @@ jest.mock('lucide-react', () => ({
 // Mock UI components
 jest.mock('@/components/ui/input', () => ({
   Input: React.forwardRef<HTMLInputElement, any>(
-    ({ className, ...props }, ref) => (
-      <input ref={ref} className={className} {...props} />
-    ),
+    function MockInput({ className, ...props }, ref) {
+      return <input ref={ref} className={className} {...props} />;
+    }
   ),
 }));
 

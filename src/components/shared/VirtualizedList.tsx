@@ -140,7 +140,7 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
               onClick={() => onItemClick?.(item, virtualRow.index)}
               onKeyDown={(e) => handleKeyDown(e, item, virtualRow.index)}
               tabIndex={onItemClick ? 0 : undefined}
-              role="listitem"
+              role={onItemClick ? "button" : "listitem"}
               aria-posinset={virtualRow.index + 1}
               aria-setsize={items.length}
             >

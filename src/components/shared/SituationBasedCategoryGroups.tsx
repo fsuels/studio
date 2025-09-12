@@ -154,7 +154,7 @@ const SituationBasedCategoryGroups: React.FC<
 
   const getSituationIcon = (iconEmoji: string) => {
     // Map emoji to Lucide icons for better consistency
-    const iconMap: Record<string, React.ComponentType<{}>> = {
+    const iconMap: Record<string, React.ComponentType<object>> = {
       '🏠': Home,
       '🏢': Briefcase,
       '💼': Briefcase,

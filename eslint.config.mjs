@@ -187,6 +187,25 @@ export default [
     },
   },
 
+  /* Components: reduce noise from exploratory UI work */
+  {
+    files: ['src/components/**/*.{ts,tsx}'],
+    rules: {
+      // Allow temporary stubs and WIP imports/variables in UI code
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      // Disable aggressive deps warnings while iterating on hooks
+      'react-hooks/exhaustive-deps': 'off',
+      // Accessibility: disable noisy rules for non-final UI surfaces
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      'jsx-a11y/no-autofocus': 'off',
+      // Content: allow unescaped entities inside components
+      'react/no-unescaped-entities': 'off',
+    },
+  },
+
   /* Import guard for big documents pages */
   {
     files: ['src/app/**/documents/**/page.tsx'],

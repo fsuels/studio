@@ -65,7 +65,6 @@ export default function RecentDocs({ userId, max = 5 }: RecentDocsProps) {
       setDocs(list.slice(0, max));
     };
     load().catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   if (docs === null) {

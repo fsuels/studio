@@ -81,7 +81,7 @@ const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
       id={id}
       data-testid={testId || 'review-card'}
       tabIndex={clickable ? 0 : undefined}
-      role={clickable ? 'button' : 'article'}
+      role={clickable ? 'button' : undefined}
       aria-label={clickable ? `Review by ${reviewerName}` : undefined}
       {...rest}
     >
