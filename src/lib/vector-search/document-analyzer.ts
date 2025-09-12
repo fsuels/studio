@@ -201,7 +201,7 @@ export class DocumentAnalyzer {
    */
   private extractPlainText(content: string): string {
     // Remove markdown formatting
-    let text = content
+    const text = content
       .replace(/^#+\s*/gm, '') // Headers
       .replace(/\*\*(.*?)\*\*/g, '$1') // Bold
       .replace(/\*(.*?)\*/g, '$1') // Italic

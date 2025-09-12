@@ -64,8 +64,8 @@ export class EmbeddingService {
       });
 
       if (response.predictions && response.predictions.length > 0) {
-        const prediction = response.predictions[0] as any;
-        return prediction.embeddings?.values || [];
+        const prediction = response.predictions[0] as { embeddings?: { values?: number[] } } | undefined;
+        return prediction?.embeddings?.values ?? [];
       }
 
       throw new Error('No embeddings returned from Vertex AI');
@@ -96,9 +96,10 @@ export class EmbeddingService {
       });
 
       if (response.predictions && response.predictions.length > 0) {
-        const embeddings = response.predictions.map(
-          (pred: any) => pred.embeddings?.values || [],
-        );
+        const embeddings = response.predictions.map((pred: unknown) => {
+          const p = pred as { embeddings?: { values?: number[] } };
+          return p.embeddings?.values ?? [];
+        });
 
         return {
           embeddings,

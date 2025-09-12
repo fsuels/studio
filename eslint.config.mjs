@@ -157,15 +157,32 @@ export default [
       'no-restricted-syntax': [
         'error',
         {
-          selector: "Property[key.name='templatePath']",
+          selector: "VariableDeclarator > ObjectExpression > Property[key.name='templatePath']",
           message:
             'Use templatePaths (plural) object instead of templatePath (singular)',
         },
         // Enforce kebab-case for metadata.id property values
         {
+          // Only check id values on top-level document objects (variable initializers),
+          // not nested objects like question items inside arrays.
           selector:
-            "Property[key.name='id'][value.type='Literal']:not([value.value=/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/])",
+            "VariableDeclarator > ObjectExpression > Property[key.name='id'][value.type='Literal']:not([value.value=/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/])",
           message: 'Document id must be kebab-case (e.g., vehicle-bill-of-sale)',
+        },
+      ],
+    },
+  },
+
+  // Do not apply document id kebab-case rule inside question definition files
+  {
+    files: ['src/lib/documents/**/questions.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "VariableDeclarator > ObjectExpression > Property[key.name='templatePath']",
+          message:
+            'Use templatePaths (plural) object instead of templatePath (singular)',
         },
       ],
     },

@@ -19,8 +19,8 @@ export interface DiffResult {
 
 export interface DiffChange {
   path: string;
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: unknown;
+  newValue?: unknown;
   type: 'added' | 'removed' | 'modified' | 'unchanged';
   description: string;
   severity: 'breaking' | 'feature' | 'fix' | 'style';
@@ -162,43 +162,47 @@ function compareMetadata(
 ): DiffChange[] {
   const changes: DiffChange[] = [];
 
-  const metadataFields = [
-    { key: 'name', description: 'Template name', severity: 'style' as const },
+  const metadataFields: Array<{
+    key: keyof LegalDocument;
+    description: string;
+    severity: 'breaking' | 'feature' | 'fix' | 'style';
+  }> = [
+    { key: 'name', description: 'Template name', severity: 'style' },
     {
       key: 'description',
       description: 'Template description',
-      severity: 'style' as const,
+      severity: 'style',
     },
     {
       key: 'category',
       description: 'Template category',
-      severity: 'feature' as const,
+      severity: 'feature',
     },
     {
       key: 'jurisdiction',
       description: 'Legal jurisdiction',
-      severity: 'breaking' as const,
+      severity: 'breaking',
     },
     {
       key: 'basePrice',
       description: 'Base price',
-      severity: 'feature' as const,
+      severity: 'feature',
     },
     {
       key: 'requiresNotarization',
       description: 'Notarization requirement',
-      severity: 'breaking' as const,
+      severity: 'breaking',
     },
     {
       key: 'canBeRecorded',
       description: 'Recording capability',
-      severity: 'feature' as const,
+      severity: 'feature',
     },
   ];
 
   for (const field of metadataFields) {
-    const originalValue = (original as any)[field.key];
-    const modifiedValue = (modified as any)[field.key];
+    const originalValue = original[field.key];
+    const modifiedValue = modified[field.key];
 
     if (originalValue !== modifiedValue) {
       if (originalValue === undefined) {
@@ -236,9 +240,20 @@ function compareMetadata(
 /**
  * Compare questions between two documents
  */
+type QuestionLike = {
+  id: string;
+  label?: string;
+  required?: boolean;
+  type?: string;
+  placeholder?: string;
+  helperText?: string;
+  options?: Array<{ value: string; label: string }>;
+  [key: string]: unknown;
+};
+
 function compareQuestions(
-  originalQuestions: any[],
-  modifiedQuestions: any[],
+  originalQuestions: QuestionLike[],
+  modifiedQuestions: QuestionLike[],
 ): DiffChange[] {
   const changes: DiffChange[] = [];
 
@@ -297,7 +312,10 @@ function compareQuestions(
 /**
  * Compare individual question fields
  */
-function compareQuestionFields(original: any, modified: any): DiffChange[] {
+function compareQuestionFields(
+  original: Record<string, unknown>,
+  modified: Record<string, unknown>,
+): DiffChange[] {
   const changes: DiffChange[] = [];
 
   const fieldSeverities: Record<
@@ -448,7 +466,7 @@ function getTemplateContent(document: LegalDocument): string | null {
 /**
  * Format questions for YAML-like diff viewing
  */
-function formatQuestionsForDiff(questions: any[]): string {
+function formatQuestionsForDiff(questions: QuestionLike[]): string {
   return questions
     .map((q) => {
       const lines = [
@@ -462,7 +480,7 @@ function formatQuestionsForDiff(questions: any[]): string {
       if (q.helperText) lines.push(`  helperText: "${q.helperText}"`);
       if (q.options) {
         lines.push('  options:');
-        q.options.forEach((opt: any) => {
+        q.options.forEach((opt: { value: string; label: string }) => {
           lines.push(`    - value: "${opt.value}"`);
           lines.push(`      label: "${opt.label}"`);
         });
@@ -478,7 +496,7 @@ function formatQuestionsForDiff(questions: any[]): string {
  */
 export function generateChangelogFromDiff(
   diff: DiffResult,
-  versionType: 'major' | 'minor' | 'patch',
+  _versionType: 'major' | 'minor' | 'patch',
 ): ChangelogEntry[] {
   const changelog: ChangelogEntry[] = [];
 

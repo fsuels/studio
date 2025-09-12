@@ -239,7 +239,7 @@ export interface TenantAuditEvent {
 
   // Context
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   ipAddress: string;
   userAgent: string;
   timestamp: string;

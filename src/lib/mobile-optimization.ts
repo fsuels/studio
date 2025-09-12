@@ -283,7 +283,7 @@ export function getDynamicImport(
 }
 
 // Image optimization for mobile
-export function getOptimizedImageProps(
+export function useOptimizedImageProps(
   src: string,
   options?: {
     quality?: 'low' | 'medium' | 'high';
@@ -337,7 +337,7 @@ export function inlineCriticalCSS(css: string) {
 }
 
 // Font loading optimization
-export function optimizeFontLoading() {
+export function useOptimizeFontLoading() {
   useEffect(() => {
     // Preload critical fonts
     const link = document.createElement('link');
@@ -369,8 +369,8 @@ export const MobileOptimization = {
   useViewportOptimization,
   usePerformanceMonitoring,
   getDynamicImport,
-  getOptimizedImageProps,
+  useOptimizedImageProps,
   registerServiceWorker,
   inlineCriticalCSS,
-  optimizeFontLoading,
+  useOptimizeFontLoading,
 };

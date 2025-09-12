@@ -160,8 +160,10 @@ export function createHealthMonitoredRoute(
 }
 
 // Higher-order function for wrapping existing API routes
-export function monitorApiRoute(routeHandler: any) {
-  return async (req: NextRequest, context?: any) => {
+export function monitorApiRoute(
+  routeHandler: (req: NextRequest, context?: unknown) => Promise<NextResponse> | NextResponse,
+) {
+  return async (req: NextRequest, context?: unknown) => {
     const wrappedHandler = withHealthMonitoring(async (request) => {
       // Call the original handler
       if (context) {
@@ -176,20 +178,27 @@ export function monitorApiRoute(routeHandler: any) {
 }
 
 // Express-style middleware for API routes
+type ExpressLikeReq = { route?: { path?: string }; path?: string; url?: string };
+type ExpressLikeRes = {
+  send: (data: unknown) => unknown;
+  json: (data: unknown) => unknown;
+  statusCode: number;
+};
+
 export function healthMonitoringMiddleware() {
-  return (req: any, res: any, next: any) => {
+  return (req: ExpressLikeReq, res: ExpressLikeRes, next: () => void) => {
     const startTime = performance.now();
     const originalSend = res.send;
     const originalJson = res.json;
     const route = req.route?.path || req.path || req.url;
 
     // Override response methods to capture metrics
-    res.send = function (data: any) {
+    res.send = function (data: unknown) {
       recordResponseMetrics(route, startTime, this.statusCode);
       return originalSend.call(this, data);
     };
 
-    res.json = function (data: any) {
+    res.json = function (data: unknown) {
       recordResponseMetrics(route, startTime, this.statusCode);
       return originalJson.call(this, data);
     };
@@ -220,7 +229,10 @@ export function withErrorTracking<T extends object>(
   componentName?: string,
 ) {
   return function WrappedComponent(props: T) {
-    const handleError = async (error: Error, errorInfo: any) => {
+    const handleError = async (
+      error: Error,
+      errorInfo: { componentStack: string },
+    ) => {
       try {
         await operationalHealth.recordMetric({
           metricType: 'error_rate',

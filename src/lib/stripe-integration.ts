@@ -64,7 +64,7 @@ export class StripeIntegration {
           mount: (element: string) =>
             console.log(`Mounted ${type} to ${element}`),
           unmount: () => console.log('Element unmounted'),
-          on: (event: string, handler: Function) =>
+          on: (event: string, handler: (...args: unknown[]) => void) =>
             console.log(`Event listener added: ${event}`),
         }),
         getElement: (type: string) => null,

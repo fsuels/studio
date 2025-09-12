@@ -1,6 +1,6 @@
 // src/lib/vector-search/pinecone-service.ts
 import { Pinecone } from '@pinecone-database/pinecone';
-import { embeddingService, type EmbeddingService } from './embedding-service';
+import { embeddingService } from './embedding-service';
 
 interface PineconeMetadata {
   docId: string;
@@ -24,7 +24,7 @@ interface VectorRecord {
   metadata: PineconeMetadata;
 }
 
-interface SearchFilters {
+export interface SearchFilters {
   category?: string[];
   complexity?: string[];
   jurisdiction?: string[];
@@ -37,7 +37,7 @@ interface SearchFilters {
   parties?: string[];
 }
 
-interface SearchResult {
+export interface SearchResult {
   id: string;
   score: number;
   metadata: PineconeMetadata;
@@ -125,7 +125,7 @@ export class PineconeService {
           console.log('Pinecone index is ready');
           return;
         }
-      } catch (error) {
+      } catch (_error) {
         // Index not ready yet
       }
 
@@ -308,10 +308,10 @@ export class PineconeService {
    */
   private buildPineconeFilter(
     filters?: SearchFilters,
-  ): Record<string, any> | undefined {
+  ): Record<string, unknown> | undefined {
     if (!filters) return undefined;
 
-    const pineconeFilter: Record<string, any> = {};
+    const pineconeFilter: Record<string, unknown> = {};
 
     if (filters.category && filters.category.length > 0) {
       pineconeFilter.category = { $in: filters.category };
@@ -503,7 +503,7 @@ export class PineconeService {
   /**
    * Get index statistics
    */
-  async getIndexStats(): Promise<any> {
+  async getIndexStats(): Promise<unknown> {
     try {
       const index = this.getIndex();
       return await index.describeIndexStats();

@@ -2,7 +2,7 @@
 import { stringify } from 'csv-stringify/sync';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { pineconeService } from './pinecone-service';
+import { pineconeService, type SearchFilters, type SearchResult } from './pinecone-service';
 
 interface ExportOptions {
   format: 'csv' | 'json' | 'xlsx';
@@ -20,7 +20,7 @@ interface ExportJob {
   id: string;
   userId: string;
   query: string;
-  filters?: any;
+  filters?: SearchFilters;
   options: ExportOptions;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress: number;
@@ -33,15 +33,15 @@ interface ExportJob {
 }
 
 interface ExportResult {
-  data: any[];
+  data: Array<Record<string, unknown>>;
   metadata: {
     totalResults: number;
     exportedAt: string;
     query: string;
-    filters?: any;
+    filters?: SearchFilters;
     options: ExportOptions;
   };
-  facets?: any;
+  facets?: Record<string, unknown>;
 }
 
 export class ExportService {
@@ -59,7 +59,7 @@ export class ExportService {
   async createExportJob(
     userId: string,
     query: string,
-    filters?: any,
+    filters?: SearchFilters,
     options: ExportOptions = { format: 'csv' },
   ): Promise<ExportJob> {
     const jobId = `export_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -184,13 +184,17 @@ export class ExportService {
   /**
    * Process and transform search results for export
    */
-  private processSearchResults(results: any[], options: ExportOptions): any[] {
-    let processedResults = [...results];
+  private processSearchResults(
+    results: SearchResult[],
+    options: ExportOptions,
+  ): Array<Record<string, unknown>> {
+    const processedResults = [...results];
 
     // Sort results
     if (options.sortBy && options.sortBy !== 'relevance') {
       processedResults.sort((a, b) => {
-        let aValue, bValue;
+        let aValue: number | string;
+        let bValue: number | string;
 
         switch (options.sortBy) {
           case 'date':
@@ -219,7 +223,7 @@ export class ExportService {
 
     // Transform results based on export options
     return processedResults.map((result) => {
-      const exportRow: any = {
+      const exportRow: Record<string, unknown> = {
         'Document ID': result.id,
         'Relevance Score': result.score.toFixed(3),
       };

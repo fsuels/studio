@@ -100,7 +100,9 @@ async function smartFieldMapping(
           try {
             const d = new Date(value);
             if (!Number.isNaN(d.getTime())) text = d.toLocaleDateString('en-US');
-          } catch {}
+          } catch (_err) {
+            // no-op: non-date value
+          }
         } else if (lowerId === 'vin') {
           text = text.toUpperCase();
         }
@@ -153,7 +155,9 @@ async function coordinateOverlay(
       try {
         const d = new Date(value);
         if (!Number.isNaN(d.getTime())) text = d.toLocaleDateString('en-US');
-      } catch {}
+      } catch (_err) {
+        // no-op: non-date value
+      }
     } else if (lowerId === 'vin') {
       text = text.toUpperCase();
     }

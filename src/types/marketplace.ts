@@ -1,5 +1,4 @@
 // src/types/marketplace.ts
-import type { z } from 'zod';
 import type { Timestamp } from 'firebase/firestore';
 import type { LegalDocument, LocalizedText } from './documents';
 
@@ -380,7 +379,7 @@ export interface TemplateFork {
 
   // Customizations made
   changes: ChangelogEntry[];
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 
   // Fork status
   status: 'draft' | 'published' | 'archived';

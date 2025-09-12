@@ -121,7 +121,7 @@ export interface ImpersonationAction {
   action: string;
   description: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   riskLevel: 'low' | 'medium' | 'high';
 }
 
@@ -141,7 +141,7 @@ export interface FeatureToggle {
   endDate?: string;
   owner: string;
   tags: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RoleAuditEvent {
@@ -168,7 +168,7 @@ export interface RoleAuditEvent {
   timestamp: string;
   ipAddress: string;
   userAgent: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   complianceFlags?: string[];
 }
 

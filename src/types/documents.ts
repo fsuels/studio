@@ -24,7 +24,7 @@ export type Question = {
   uiType?: 'textarea' | 'switch' | 'radio'; // Optional UI hint for Zod-derived fields
   conditional?: {
     field: string;
-    value: any;
+    value: unknown;
   }; // Conditional rendering based on another field
   buttonAction?: string; // For button type - what action to perform
 };

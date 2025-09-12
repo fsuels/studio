@@ -2,8 +2,8 @@
 // Vector index query helper with Redis caching, latency fallback, and HTTP endpoint integration
 
 // Conditional imports for server-side only
-let crypto: any = null;
-let Redis: any = null;
+let crypto: unknown = null;
+let Redis: unknown = null;
 
 // Initialize server-side modules only when running on server
 if (typeof window === 'undefined') {
@@ -17,16 +17,16 @@ if (typeof window === 'undefined') {
 
 // Logger interface - adapt to your logging system
 interface Logger {
-  info: (message: string, data?: any) => void;
-  error: (message: string, data?: any) => void;
-  warn: (message: string, data?: any) => void;
+  info: (message: string, data?: unknown) => void;
+  error: (message: string, data?: unknown) => void;
+  warn: (message: string, data?: unknown) => void;
 }
 
 // Default console logger - replace with your app's logger
 const logger: Logger = {
-  info: (message: string, data?: any) => console.log(message, data),
-  error: (message: string, data?: any) => console.error(message, data),
-  warn: (message: string, data?: any) => console.warn(message, data),
+  info: (message: string, data?: unknown) => console.log(message, data),
+  error: (message: string, data?: unknown) => console.error(message, data),
+  warn: (message: string, data?: unknown) => console.warn(message, data),
 };
 
 // Vector search result interface
@@ -42,7 +42,14 @@ const HTTP_TIMEOUT_MS = 300; // 300ms timeout for vector endpoint
 
 // Redis and fallback cache instances
 let redisClient: any = null;
-let fallbackCache: any = null;
+type SimpleCache<T> = {
+  get: (key: string) => T | undefined;
+  set: (key: string, value: T) => void;
+  clear: () => void;
+  delete: (key: string) => void;
+  size: number;
+};
+let fallbackCache: SimpleCache<VectorSearchResult[]> | null = null;
 
 /**
  * Initialize Redis client (server-side only)
@@ -94,11 +101,11 @@ async function getRedisClient(): Promise<any | null> {
 /**
  * Get fallback LRU cache
  */
-async function getFallbackCache() {
+async function getFallbackCache(): Promise<SimpleCache<VectorSearchResult[]>> {
   if (!fallbackCache) {
     try {
       // Use a simple Map-based cache instead of tiny-lru for better compatibility
-      const cache = new Map<string, { value: any; timestamp: number }>();
+      const cache = new Map<string, { value: VectorSearchResult[]; timestamp: number }>();
       fallbackCache = {
         get: (key: string) => {
           const entry = cache.get(key);
@@ -109,7 +116,7 @@ async function getFallbackCache() {
           }
           return entry.value;
         },
-        set: (key: string, value: any) => {
+        set: (key: string, value: VectorSearchResult[]) => {
           cache.set(key, { value, timestamp: Date.now() });
           // Simple cleanup: remove old entries if cache gets too large
           if (cache.size > 1000) {
@@ -251,9 +258,7 @@ async function setCachedResults(cacheKey: string, results: VectorSearchResult[])
     
     // Also cache locally as backup
     const localCache = await getFallbackCache();
-    const resultsWithTimestamp = results.slice();
-    (resultsWithTimestamp as any)._timestamp = Date.now();
-    localCache.set(cacheKey, resultsWithTimestamp);
+    localCache.set(cacheKey, results.slice());
     
   } catch (error) {
     const duration = Date.now() - startTime;
@@ -266,9 +271,7 @@ async function setCachedResults(cacheKey: string, results: VectorSearchResult[])
     // Try local cache as fallback
     try {
       const localCache = await getFallbackCache();
-      const resultsWithTimestamp = results.slice();
-      (resultsWithTimestamp as any)._timestamp = Date.now();
-      localCache.set(cacheKey, resultsWithTimestamp);
+      localCache.set(cacheKey, results.slice());
     } catch (fallbackError) {
       logger.error('Fallback cache set also failed', { fallbackError });
     }

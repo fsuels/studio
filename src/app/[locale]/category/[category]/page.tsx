@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CategoryPageClient from './CategoryPageClient';
 import { taxonomy } from '@/config/taxonomy';
+import slugMap from '@/config/doc-meta/slug-category-map.json';
+import { formatDocumentTitle } from '@/lib/format-utils';
 
 interface CategoryPageProps {
   params: {
@@ -55,6 +57,16 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   if (!categoryData) {
     notFound();
   }
-  
-  return <CategoryPageClient locale={params.locale} category={params.category} />;
+  // Build a lightweight list of docs for this category using slug map
+  const docs = Object.keys(slugMap)
+    .filter((slug) => slugMap[slug as keyof typeof slugMap] === params.category)
+    .map((slug) => ({ id: slug, name: formatDocumentTitle(slug), description: '' }));
+
+  return (
+    <CategoryPageClient
+      locale={params.locale}
+      category={params.category}
+      docs={docs}
+    />
+  );
 }

@@ -4,7 +4,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { getDocumentTitle } from '@/lib/format-utils';
+import { formatDocumentTitle } from '@/lib/format-utils';
 import { useRouter } from 'next/navigation';
 import {
   FileText,
@@ -30,7 +30,6 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { taxonomy } from '@/config/taxonomy';
 // Category metadata with icons and colors
 const categoryMeta: Record<string, { icon: any; color: string; bgColor: string }> = {
@@ -86,12 +85,15 @@ const categoryMeta: Record<string, { icon: any; color: string; bgColor: string }
   },
 };
 
+interface SimpleDoc { id: string; name: string; description?: string }
+
 interface CategoryPageClientProps {
   locale: 'en' | 'es';
   category: string;
+  docs: SimpleDoc[];
 }
 
-export default function CategoryPageClient({ locale, category }: CategoryPageClientProps) {
+export default function CategoryPageClient({ locale, category, docs }: CategoryPageClientProps) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,30 +106,23 @@ export default function CategoryPageClient({ locale, category }: CategoryPageCli
     bgColor: 'bg-gray-50'
   };
   
-  // Get all documents for this category
-  const categoryDocuments = useMemo(() => {
-    return documentLibrary.filter(doc => doc.category === category);
-  }, [category]);
+  // Use provided docs from server (already filtered by category)
+  const categoryDocuments = useMemo(() => docs, [docs]);
   
   // Filter documents based on search
   const filteredDocuments = useMemo(() => {
     if (!searchQuery.trim()) return categoryDocuments;
-    
     const query = searchQuery.toLowerCase();
     return categoryDocuments.filter(doc => {
-      const name = getDocumentTitle(doc, locale).toLowerCase();
-      const description = (doc.translations?.[locale]?.description || doc.description || '').toLowerCase();
-      const aliases = doc.translations?.[locale]?.aliases || [];
-      
-      return name.includes(query) || 
-             description.includes(query) ||
-             aliases.some(alias => alias.toLowerCase().includes(query));
+      const name = (doc.name || formatDocumentTitle(doc.id)).toLowerCase();
+      const description = (doc.description || '').toLowerCase();
+      return name.includes(query) || description.includes(query);
     });
-  }, [categoryDocuments, searchQuery, locale]);
+  }, [categoryDocuments, searchQuery]);
   
   // Group documents by subcategory
   const documentsBySubcategory = useMemo(() => {
-    const grouped: Record<string, LegalDocument[]> = {};
+    const grouped: Record<string, SimpleDoc[]> = {};
     
     if (categoryData?.subs) {
       Object.entries(categoryData.subs).forEach(([subKey, subData]) => {
@@ -252,8 +247,8 @@ export default function CategoryPageClient({ locale, category }: CategoryPageCli
                 {viewMode === 'grid' ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {docs.map((doc) => {
-                      const docName = doc.translations?.[locale]?.name || doc.name || doc.id;
-                      const docDescription = doc.translations?.[locale]?.description || doc.description || '';
+                      const docName = doc.name || formatDocumentTitle(doc.id);
+                      const docDescription = doc.description || '';
                       
                       return (
                         <Card
@@ -283,8 +278,8 @@ export default function CategoryPageClient({ locale, category }: CategoryPageCli
                 ) : (
                   <div className="space-y-3">
                     {docs.map((doc) => {
-                      const docName = doc.translations?.[locale]?.name || doc.name || doc.id;
-                      const docDescription = doc.translations?.[locale]?.description || doc.description || '';
+                      const docName = doc.name || formatDocumentTitle(doc.id);
+                      const docDescription = doc.description || '';
                       
                       return (
                         <Card
