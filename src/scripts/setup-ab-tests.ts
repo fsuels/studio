@@ -220,7 +220,7 @@ async function main() {
       await setupManager.setupQuickWins();
       break;
 
-    case 'create':
+    case 'create': {
       const templateId = args[1];
       if (!templateId) {
         console.error(
@@ -233,6 +233,7 @@ async function main() {
         args.includes('--start'),
       );
       break;
+    }
 
     case 'list':
       setupManager.listAllTemplates();

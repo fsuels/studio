@@ -4,6 +4,11 @@ import { getAdminUser } from '@/lib/admin-auth';
 
 const supportedLocales = ['en', 'es'] as const;
 const defaultLocale = 'en' as const;
+type SupportedLocale = typeof supportedLocales[number];
+
+function isSupportedLocale(locale: string): locale is SupportedLocale {
+  return (supportedLocales as readonly string[]).includes(locale);
+}
 
 function getLocaleFromRequest(request: NextRequest): string {
   // Extract locale from pathname
@@ -28,7 +33,7 @@ function getLocaleFromRequest(request: NextRequest): string {
 
   // Extract locale from path
   const locale = pathname.split('/')[1];
-  return supportedLocales.includes(locale as any) ? locale : defaultLocale;
+  return isSupportedLocale(locale) ? locale : defaultLocale;
 }
 
 export async function middleware(request: NextRequest) {
