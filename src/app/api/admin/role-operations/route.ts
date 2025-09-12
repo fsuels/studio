@@ -60,6 +60,22 @@ const generateMockUsers = (count: number = 100): UserWithRole[] => {
 let mockUsersDB = generateMockUsers(150);
 let auditEventsDB: RoleAuditEvent[] = [];
 
+function getIpAddress(request: NextRequest): string {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim();
+  }
+  const realIp = request.headers.get('x-real-ip');
+  if (realIp) {
+    return realIp.trim();
+  }
+  // For local development
+  if (process.env.NODE_ENV === 'development') {
+      return '127.0.0.1';
+  }
+  return 'unknown';
+}
+
 export async function GET(request: NextRequest) {
   // Require admin authentication
   const adminResult = await requireAdmin(request);
@@ -384,7 +400,7 @@ async function handleRoleAssignment(
     targetRole: newRole,
     description: `Role changed from ${oldRole} to ${newRole} - Reason: ${reason}`,
     timestamp: new Date().toISOString(),
-    ipAddress: request.ip || 'unknown',
+    ipAddress: getIpAddress(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
     metadata: {
       oldRole,
@@ -422,7 +438,7 @@ async function handleFeatureToggle(
     targetFeature: featureKey,
     description: `Feature "${featureKey}" ${enabled ? 'enabled' : 'disabled'}`,
     timestamp: new Date().toISOString(),
-    ipAddress: request.ip || 'unknown',
+    ipAddress: getIpAddress(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
     metadata: {
       featureKey,
@@ -448,7 +464,7 @@ async function handleStartImpersonation(
     adminId: admin.username,
     adminEmail: admin.email || `${admin.username}@123legaldoc.com`,
     adminRole: 'admin',
-    ipAddress: request.ip || 'unknown',
+    ipAddress: getIpAddress(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
   });
 
@@ -458,6 +474,14 @@ async function handleStartImpersonation(
   });
 }
 
+type EndImpersonationReason = "timeout" | "manual_end" | "admin_terminated" | "system_terminated";
+
+const validReasons: EndImpersonationReason[] = ["timeout", "manual_end", "admin_terminated", "system_terminated"];
+
+function isValidReason(reason: string): reason is EndImpersonationReason {
+    return validReasons.includes(reason as EndImpersonationReason);
+}
+
 async function handleEndImpersonation(
   request: NextRequest,
   params: { sessionId: string; reason?: string },
@@ -465,7 +489,11 @@ async function handleEndImpersonation(
 ) {
   const { sessionId, reason } = params;
 
-  await impersonationService.endImpersonation(sessionId, reason);
+  if (reason && !isValidReason(reason)) {
+      return NextResponse.json({ success: false, error: 'Invalid reason' }, { status: 400 });
+  }
+
+  await impersonationService.endImpersonation(sessionId, reason as EndImpersonationReason | undefined);
 
   return NextResponse.json({
     success: true,
@@ -517,7 +545,7 @@ async function handleCreateUser(
     targetRole: role,
     description: `Created new user ${email} with role ${role}`,
     timestamp: new Date().toISOString(),
-    ipAddress: request.ip || 'unknown',
+    ipAddress: getIpAddress(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
     metadata: {
       email,
@@ -562,7 +590,7 @@ async function handleUpdateUser(
     targetUserId: userId,
     description: `Updated user ${oldUser.email}`,
     timestamp: new Date().toISOString(),
-    ipAddress: request.ip || 'unknown',
+    ipAddress: getIpAddress(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
     metadata: {
       updates,

@@ -322,6 +322,7 @@ export default function EnhancedStatePDFPreview({
         <CardContent className="p-4 pt-0">
           {processedPdfUrl ? (
             <div className="relative">
+              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
               <iframe
                 ref={iframeRef}
                 src={processedPdfUrl}

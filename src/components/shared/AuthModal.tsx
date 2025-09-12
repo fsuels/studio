@@ -97,9 +97,6 @@ export default function AuthModal({
             defaultValue: 'Check your email for password reset instructions.',
           }),
         });
-      } catch (err: any) {
-        }),
-        });
       } catch (err) {
         const firebaseError = err as FirebaseError;
         toast({

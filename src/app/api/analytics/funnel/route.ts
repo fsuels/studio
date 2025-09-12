@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const source = url.searchParams.get('source');
 
     switch (type) {
-      case 'overview':
+      case 'overview': {
         const metrics = funnelAnalytics.calculateConversionMetrics(timeframe);
         const abandonment = funnelAnalytics.analyzeAbandonment();
 
@@ -50,46 +50,52 @@ export async function GET(request: NextRequest) {
             topOptimizations: abandonment.uxOptimizations.slice(0, 5),
           },
         });
+      }
 
-      case 'conversion_metrics':
+      case 'conversion_metrics': {
         const conversionMetrics =
           funnelAnalytics.calculateConversionMetrics(timeframe);
         return NextResponse.json({
           success: true,
           data: conversionMetrics,
         });
+      }
 
-      case 'abandonment_analysis':
+      case 'abandonment_analysis': {
         const abandonmentAnalysis = funnelAnalytics.analyzeAbandonment();
         return NextResponse.json({
           success: true,
           data: abandonmentAnalysis,
         });
+      }
 
-      case 'step_details':
+      case 'step_details': {
         const stepDetails = await generateStepDetails(
           timeframe,
-          documentType,
-          source,
+          documentType || undefined,
+          source || undefined,
         );
         return NextResponse.json({
           success: true,
           data: stepDetails,
         });
+      }
 
-      case 'cohort_funnels':
+      case 'cohort_funnels': {
         const cohortFunnels = await generateCohortFunnels(timeframe);
         return NextResponse.json({
           success: true,
           data: cohortFunnels,
         });
+      }
 
-      case 'realtime_sessions':
+      case 'realtime_sessions': {
         const realtimeSessions = await getRealtimeSessions();
         return NextResponse.json({
           success: true,
           data: realtimeSessions,
         });
+      }
 
       default:
         return NextResponse.json(
@@ -164,9 +170,9 @@ export async function POST(request: NextRequest) {
 
 // Helper functions
 async function generateStepDetails(
-  timeframe: string,
-  documentType?: string,
-  source?: string,
+  _timeframe: string,
+  _documentType?: string,
+  _source?: string,
 ) {
   // Generate detailed step-by-step analysis
   return {
@@ -251,7 +257,7 @@ async function generateStepDetails(
   };
 }
 
-async function generateCohortFunnels(timeframe: string) {
+async function generateCohortFunnels(_timeframe: string) {
   // Generate funnel metrics by user cohorts
   return {
     cohorts: [

@@ -5,7 +5,9 @@ import {
   authorizeDocumentAccess,
   checkPermission,
 } from '@/lib/collaboration/auth';
-import { auth } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
+
+const auth = getAdmin().auth();
 
 export async function POST(request: NextRequest) {
   try {
