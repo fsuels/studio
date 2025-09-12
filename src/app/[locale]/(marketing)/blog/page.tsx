@@ -4,7 +4,7 @@ import BlogClientContent from './blog-client-content';
 import { blogArticles } from '@/data/blogArticles';
 
 type BlogPageProps = {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 };
 
 export async function generateStaticParams() {
@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
   // Send a lean list to the client to avoid bundling the entire dataset there
   const articles = blogArticles.map((a) => ({
     slug: a.slug,

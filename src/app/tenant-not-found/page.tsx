@@ -11,13 +11,13 @@ import {
 import { Building, ArrowLeft, HelpCircle, Mail } from 'lucide-react';
 
 interface TenantNotFoundPageProps {
-  searchParams: { slug?: string };
+  searchParams: Promise<{ slug?: string }>;
 }
 
-export default function TenantNotFoundPage({
+export default async function TenantNotFoundPage({
   searchParams,
 }: TenantNotFoundPageProps) {
-  const { slug } = searchParams;
+  const { slug } = await searchParams;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -86,7 +86,8 @@ export default function TenantNotFoundPage({
   );
 }
 
-export function generateMetadata({ searchParams }: TenantNotFoundPageProps) {
+export async function generateMetadata({ searchParams }: TenantNotFoundPageProps) {
+  await searchParams;
   return {
     title: 'Organization Not Found - 123LegalDoc',
     description: 'The requested organization could not be found.',

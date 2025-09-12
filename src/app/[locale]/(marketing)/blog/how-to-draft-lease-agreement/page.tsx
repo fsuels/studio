@@ -8,7 +8,7 @@ import BrowseTemplatesButton from '@/components/blog/BrowseTemplatesButton';
 
 // Metadata will be generated dynamically based on locale
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
   
   const metadata = {
     en: {
@@ -42,11 +42,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 interface PageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
-export default function LeaseAgreementBlogPost({ params }: PageProps) {
-  const { locale } = params;
+export default async function LeaseAgreementBlogPost({ params }: PageProps) {
+  const { locale } = await params;
   
   const content = {
     en: {

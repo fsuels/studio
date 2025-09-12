@@ -24,12 +24,13 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default function CompletePage({
+export default async function CompletePage({
   params,
 }: {
-  params: { locale: 'en' | 'es'; docId: string };
+  params: Promise<{ locale: 'en' | 'es'; docId: string }>;
 }) {
-  const currentDoc = documentLibrary.find((d) => d.id === params.docId);
+  const resolved = await params;
+  const currentDoc = documentLibrary.find((d) => d.id === resolved.docId);
   if (!currentDoc) return null;
 
   const related = documentLibrary
@@ -39,13 +40,13 @@ export default function CompletePage({
     .slice(0, 3);
 
   const getName = (doc: (typeof documentLibrary)[number]) =>
-    doc.translations?.[params.locale]?.name ||
+    doc.translations?.[resolved.locale]?.name ||
     doc.translations?.en?.name ||
     doc.name ||
     doc.id;
 
   const getDesc = (doc: (typeof documentLibrary)[number]) =>
-    doc.translations?.[params.locale]?.description ||
+    doc.translations?.[resolved.locale]?.description ||
     doc.translations?.en?.description ||
     doc.description ||
     '';
@@ -75,7 +76,7 @@ export default function CompletePage({
                 </CardHeader>
                 <CardFooter>
                   <Button asChild className="w-full">
-                    <Link href={`/${params.locale}/docs/${doc.id}/start`}>
+                    <Link href={`/${resolved.locale}/docs/${doc.id}/start`}>
                       Start
                     </Link>
                   </Button>

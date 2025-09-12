@@ -5,11 +5,13 @@ import { join } from 'path';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
+    // Await params (Next.js 15 requirement)
+    const resolvedParams = await params;
     // Reconstruct the file path
-    const filePath = params.path.join('/');
+    const filePath = resolvedParams.path.join('/');
     
     // Validate file path to prevent directory traversal
     if (filePath.includes('..') || filePath.includes('\\')) {

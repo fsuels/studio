@@ -2,7 +2,7 @@
 import React from 'react';
 import FaqClientContent from './faq-client-content';
 interface FaqPageProps {
-  params: { locale: 'en' | 'es' } & Record<string, string>;
+  params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
 }
 
 export async function generateStaticParams() {
@@ -10,6 +10,6 @@ export async function generateStaticParams() {
 }
 
 export default async function FAQPage({ params }: FaqPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
   return <FaqClientContent locale={locale} />;
 }

@@ -6,9 +6,10 @@ export async function generateStaticParams() {
 }
 
 interface OnlineNotaryPageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
-export default function OnlineNotaryPage({ params }: OnlineNotaryPageProps) {
-  return <OnlineNotaryClientContent locale={params.locale} />;
+export default async function OnlineNotaryPage({ params }: OnlineNotaryPageProps) {
+  const { locale } = await params;
+  return <OnlineNotaryClientContent locale={locale} />;
 }
