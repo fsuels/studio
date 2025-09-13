@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb, adminStorage } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import { auditService } from '@/services/firebase-audit-service';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { z } from 'zod';
@@ -209,7 +209,7 @@ async function uploadToFirebaseStorage(
   pdfBuffer: Buffer,
   filename: string,
 ): Promise<string> {
-  const bucket = adminStorage.bucket();
+  const bucket = getAdmin().storage().bucket();
   const file = bucket.file(`dpa-agreements/${filename}`);
 
   await file.save(pdfBuffer, {
@@ -277,7 +277,7 @@ export async function POST(request: NextRequest) {
       status: 'generated',
     };
 
-    const docRef = await adminDb.collection('dpa_agreements').add(dpaRecord);
+    const docRef = await getAdmin().firestore().collection('dpa_agreements').add(dpaRecord);
 
     // Log audit event
     await auditService.logComplianceEvent('dpa_generated', {
@@ -330,7 +330,7 @@ export async function GET(request: NextRequest) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const recentDPAsSnapshot = await adminDb
+    const recentDPAsSnapshot = await getAdmin().firestore()
       .collection('dpa_agreements')
       .where('createdAt', '>=', thirtyDaysAgo)
       .orderBy('createdAt', 'desc')

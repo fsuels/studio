@@ -1,6 +1,6 @@
 // src/lib/collaboration/notifications.ts
 import { getMessaging } from 'firebase-admin/messaging';
-import { firestore } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import { CollaborationUser } from './client';
 
 export interface NotificationPayload {
@@ -248,7 +248,7 @@ export class CollaborationNotificationService {
     userId: string,
   ): Promise<UserNotificationSettings> {
     try {
-      const doc = await firestore.collection('user_settings').doc(userId).get();
+      const doc = await getAdmin().firestore().collection('user_settings').doc(userId).get();
 
       if (!doc.exists) {
         // Return default settings
@@ -305,7 +305,7 @@ export class CollaborationNotificationService {
 
   private async getUserFCMTokens(userId: string): Promise<string[]> {
     try {
-      const doc = await firestore
+      const doc = await getAdmin().firestore()
         .collection('user_fcm_tokens')
         .doc(userId)
         .get();
@@ -327,9 +327,9 @@ export class CollaborationNotificationService {
     tokens: string[],
   ): Promise<void> {
     try {
-      const docRef = firestore.collection('user_fcm_tokens').doc(userId);
+      const docRef = getAdmin().firestore().collection('user_fcm_tokens').doc(userId);
 
-      await firestore.runTransaction(async (transaction) => {
+      await getAdmin().firestore().runTransaction(async (transaction) => {
         const doc = await transaction.get(docRef);
 
         if (doc.exists) {
@@ -349,7 +349,7 @@ export class CollaborationNotificationService {
 
   private async getUnreadCount(userId: string): Promise<number> {
     try {
-      const snapshot = await firestore
+      const snapshot = await getAdmin().firestore()
         .collection('notifications')
         .where('userId', '==', userId)
         .where('read', '==', false)
@@ -370,7 +370,7 @@ export class CollaborationNotificationService {
     content: string,
   ): Promise<void> {
     try {
-      await firestore.collection('mentions').add({
+      await getAdmin().firestore().collection('mentions').add({
         fromUserId: fromUser.id,
         fromUserName: fromUser.name,
         toUserId,
@@ -413,7 +413,7 @@ export class CollaborationNotificationService {
     settings: Partial<UserNotificationSettings>,
   ): Promise<void> {
     try {
-      const docRef = firestore.collection('user_settings').doc(userId);
+      const docRef = getAdmin().firestore().collection('user_settings').doc(userId);
 
       await docRef.set(
         {
@@ -432,7 +432,7 @@ export class CollaborationNotificationService {
     notificationId: string,
   ): Promise<void> {
     try {
-      await firestore
+      await getAdmin().firestore()
         .collection('notifications')
         .doc(notificationId)
         .update({ read: true, readAt: Date.now() });
@@ -443,13 +443,13 @@ export class CollaborationNotificationService {
 
   async markAllNotificationsAsRead(userId: string): Promise<void> {
     try {
-      const snapshot = await firestore
+      const snapshot = await getAdmin().firestore()
         .collection('notifications')
         .where('userId', '==', userId)
         .where('read', '==', false)
         .get();
 
-      const batch = firestore.batch();
+      const batch = getAdmin().firestore().batch();
 
       snapshot.docs.forEach((doc) => {
         batch.update(doc.ref, { read: true, readAt: Date.now() });

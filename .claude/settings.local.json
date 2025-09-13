@@ -103,7 +103,15 @@
       "Bash(diff:*)",
       "Bash(NODE_OPTIONS=--max-old-space-size=8192 timeout 60s npm run build)",
       "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 90s npx next build --no-lint)",
-      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 90s npm run build)"
+      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 90s npm run build)",
+      "Bash(npx madge:*)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 60s npx next build)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 timeout 45s npm run build)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 timeout 120s npm run build)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 timeout 90s npm run build)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 timeout 60s npm run build)",
+      "Bash(DEBUG=*)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 timeout 30s npm run build)"
     ],
     "deny": []
   }

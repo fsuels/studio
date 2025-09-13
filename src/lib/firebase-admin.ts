@@ -58,3 +58,44 @@ export function getAdmin(): typeof admin {
   cachedAdmin = admin;
   return cachedAdmin;
 }
+
+// Provide safe, lazy proxies so importing modules don't eagerly initialize Admin.
+// This avoids build-time crashes when env is missing and keeps API usage unchanged.
+export const auth: admin.auth.Auth = new Proxy({} as admin.auth.Auth, {
+  get(_target, prop: string, _receiver) {
+    // @ts-ignore - dynamic forwarding
+    return (getAdmin().auth() as any)[prop];
+  },
+});
+
+export const adminDb: FirebaseFirestore.Firestore = new Proxy(
+  {} as FirebaseFirestore.Firestore,
+  {
+    get(_target, prop: string, _receiver) {
+      // @ts-ignore - dynamic forwarding
+      return (getAdmin().firestore() as any)[prop];
+    },
+  },
+);
+
+// Direct firestore proxy for code importing { firestore } from this module
+export const firestore: FirebaseFirestore.Firestore = new Proxy(
+  {} as FirebaseFirestore.Firestore,
+  {
+    get(_target, prop: string, _receiver) {
+      // @ts-ignore - dynamic forwarding
+      return (getAdmin().firestore() as any)[prop];
+    },
+  },
+);
+
+// Storage proxy (for code expecting { adminStorage })
+export const adminStorage: admin.storage.Storage = new Proxy(
+  {} as admin.storage.Storage,
+  {
+    get(_target, prop: string, _receiver) {
+      // @ts-ignore - dynamic forwarding
+      return (getAdmin().storage() as any)[prop];
+    },
+  },
+);

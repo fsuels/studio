@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import { auditService } from '@/services/firebase-audit-service';
 import { z } from 'zod';
 
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Store in Firestore
-    const docRef = await adminDb.collection('soc2_requests').add(requestData);
+    const docRef = await getAdmin().firestore().collection('soc2_requests').add(requestData);
 
     // Log audit event
     await auditService.logComplianceEvent('soc2_request_submitted', {
@@ -191,7 +191,7 @@ export async function GET(request: NextRequest) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const recentRequestsSnapshot = await adminDb
+    const recentRequestsSnapshot = await getAdmin().firestore()
       .collection('soc2_requests')
       .where('createdAt', '>=', thirtyDaysAgo)
       .orderBy('createdAt', 'desc')

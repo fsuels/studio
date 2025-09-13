@@ -1,6 +1,4 @@
-// next.config.mjs — Next 15 App Router friendly
-
-import webpack from 'webpack';
+// next.config.mjs — Minimal configuration for stable builds
 
 /* -------------------------------------------------------------------------- */
 /*  Core Next.js config                                                       */
@@ -9,74 +7,28 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
 
-  /* Performance budgets and optimization */
-  experimental: {
-    // Disable optimizePackageImports to avoid missing vendor-chunk errors in SSR
-  },
+  /* Disable experimental features that might cause issues */
+  experimental: {},
 
-  /* Bundle analysis configuration */
-  webpack: (config, { dev, isServer }) => {
-    // Add fallbacks for Node.js modules that shouldn't be in client bundle
+  /* Minimal webpack configuration */
+  webpack: (config, { isServer }) => {
+    // Essential Node.js polyfills for client bundle
     if (!isServer) {
       config.resolve.fallback = {
-        ...config.resolve.fallback,
         fs: false,
         net: false,
-        dns: false,
         child_process: false,
-        tls: false,
-        crypto: false,
-        stream: false,
-        url: false,
-        zlib: false,
-        http: false,
-        https: false,
-        assert: false,
-        os: false,
-        path: false,
       };
     }
 
-    // Bundle analyzer in development
-    if (dev && !isServer && process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: 'server',
-          openAnalyzer: true,
-        }),
-      );
+    // Externalize problematic server-only deps (e.g., handlebars via dotprompt/genkit)
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({ handlebars: 'commonjs2 handlebars' });
     }
 
-    // Simplified code splitting for stable builds
-    if (!isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: {
-              minChunks: 2,
-              priority: -20,
-              reuseExistingChunk: true,
-            },
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              priority: -10,
-              chunks: 'all',
-            },
-          },
-        },
-      };
-    }
-
-    // Performance budgets - temporarily relaxed for build completion
-    config.performance = {
-      maxAssetSize: 5000000, // 5MB - increased temporarily
-      maxEntrypointSize: 5000000, // 5MB - increased temporarily
-      hints: dev ? false : 'warning',
-    };
+    // Disable performance warnings to prevent hanging
+    config.performance = false;
 
     return config;
   },

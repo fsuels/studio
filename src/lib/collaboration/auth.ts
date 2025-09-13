@@ -1,6 +1,5 @@
 // src/lib/collaboration/auth.ts
-import { auth } from '@/lib/firebase-admin';
-import { firestore } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import { CollaboratorInfo } from './yjs-server';
 
 export interface CollaborationToken {
@@ -16,7 +15,7 @@ export async function authenticateCollaborator(
 ): Promise<CollaboratorInfo | null> {
   try {
     // First, try Firebase Auth token
-    const decodedToken = await auth.verifyIdToken(token);
+    const decodedToken = await getAdmin().auth().verifyIdToken(token);
 
     if (decodedToken) {
       const user = await getUserInfo(decodedToken.uid);
@@ -47,7 +46,7 @@ export async function authorizeDocumentAccess(
 ): Promise<boolean> {
   try {
     // Check if user is document owner
-    const docRef = firestore.collection('documents').doc(documentId);
+    const docRef = getAdmin().firestore().collection('documents').doc(documentId);
     const docSnapshot = await docRef.get();
 
     if (!docSnapshot.exists) {
@@ -88,10 +87,10 @@ export async function getUserInfo(
 ): Promise<CollaboratorInfo | null> {
   try {
     // Get user from Firebase Auth
-    const userRecord = await auth.getUser(userId);
+    const userRecord = await getAdmin().auth().getUser(userId);
 
     // Get additional user info from Firestore
-    const userDoc = await firestore.collection('users').doc(userId).get();
+    const userDoc = await getAdmin().firestore().collection('users').doc(userId).get();
     const userData = userDoc.data();
 
     return {
@@ -190,7 +189,7 @@ export async function checkPermission(
 ): Promise<boolean> {
   try {
     // Get user's role for this document
-    const docRef = firestore.collection('documents').doc(documentId);
+    const docRef = getAdmin().firestore().collection('documents').doc(documentId);
     const docSnapshot = await docRef.get();
 
     if (!docSnapshot.exists) {

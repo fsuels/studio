@@ -5,7 +5,7 @@ import './globals.css';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import Head from 'next/head';
-import SEOConfig from '../../next-seo.config.ts'; // Changed import
+import SEOConfig from '../../next-seo.config';
 
 export const metadata = {
   title: SEOConfig.title, // Use imported config

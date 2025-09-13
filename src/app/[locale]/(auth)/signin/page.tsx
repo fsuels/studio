@@ -19,14 +19,7 @@ import { Logo } from '@/components/layout/Logo';
 import { useParams, useRouter } from 'next/navigation'; // Added useRouter
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { useQueryClient } from '@tanstack/react-query';
-import { getAuth } from 'firebase/auth';
-import { app } from '@/lib/firebase';
-import {
-  getUserDocuments,
-  getUserPayments,
-} from '@/lib/firestore/dashboardData';
-import { auditService } from '@/services/firebase-audit-service';
+// Avoid heavy libs in initial bundle: import Firebase + audit lazily on submit
 
 export default function SignInPage() {
   const { t } = useTranslation('common');
@@ -34,7 +27,6 @@ export default function SignInPage() {
   const router = useRouter();
   const { login } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   const locale = params!.locale as 'en' | 'es';
 
   const [email, setEmail] = useState('');
@@ -52,29 +44,38 @@ export default function SignInPage() {
       setIsSubmitting(true);
       try {
         await login(email, password);
-        const uid = getAuth(app).currentUser?.uid;
+        // Lazy-load Firebase Auth to read uid without bundling Firestore
+        const [{ getAuth }, { initializeApp, getApps, getApp }] = await Promise.all([
+          import('firebase/auth'),
+          import('firebase/app'),
+        ]);
+        const config = {
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+          measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+        } as const;
+        const appInst = getApps().length ? getApp() : initializeApp(config as any);
+        const uid = getAuth(appInst).currentUser?.uid;
 
-        // Log successful signin
-        await auditService.logAuthEvent('signin', {
-          email,
-          ipAddress: window.location.hostname,
-          userAgent: navigator.userAgent,
-          locale,
-          success: true,
-        });
-
-        if (uid) {
-          await Promise.all([
-            queryClient.prefetchQuery({
-              queryKey: ['dashboardDocuments', uid],
-              queryFn: () => getUserDocuments(uid),
-            }),
-            queryClient.prefetchQuery({
-              queryKey: ['dashboardPayments', uid],
-              queryFn: () => getUserPayments(uid),
-            }),
-          ]);
+        // Log successful signin (lazy import to avoid bundling Firestore up front)
+        try {
+          const { auditService } = await import('@/services/firebase-audit-service');
+          await auditService.logAuthEvent('signin', {
+            email,
+            ipAddress: window.location.hostname,
+            userAgent: navigator.userAgent,
+            locale,
+            success: true,
+          });
+        } catch {
+          // ignore audit errors
         }
+
+        // Skip client prefetches here to keep bundle small; dashboard will load its own data
         toast({
           title: t('Login Successful!'),
           description: t('Redirecting to your dashboard...'),
@@ -82,14 +83,19 @@ export default function SignInPage() {
         router.push(`/${locale}/dashboard`);
       } catch (err: any) {
         // Log failed signin attempt
-        await auditService.logAuthEvent('signin', {
-          email,
-          ipAddress: window.location.hostname,
-          userAgent: navigator.userAgent,
-          locale,
-          success: false,
-          error: err?.message || 'Authentication error',
-        });
+        try {
+          const { auditService } = await import('@/services/firebase-audit-service');
+          await auditService.logAuthEvent('signin', {
+            email,
+            ipAddress: window.location.hostname,
+            userAgent: navigator.userAgent,
+            locale,
+            success: false,
+            error: err?.message || 'Authentication error',
+          });
+        } catch {
+          // ignore audit errors
+        }
 
         toast({
           title: t('Login Failed'),

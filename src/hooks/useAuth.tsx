@@ -10,17 +10,12 @@ import React, {
   ReactNode,
   useMemo,
 } from 'react';
-import { app } from '@/lib/firebase'; // ← Corrected import path
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  updateProfile,
-  sendPasswordResetEmail,
+// Avoid bundling Firestore by not importing our firebase wrapper here.
+// Import Firebase modules lazily inside functions/effects instead.
+import type {
+  Auth,
+  User as FirebaseUser,
 } from 'firebase/auth';
-import { auditService } from '@/services/firebase-audit-service';
 import type { FirebaseError } from 'firebase/app';
 
 // 1) Define the shape of your auth context
@@ -61,44 +56,75 @@ function useAuthHook(): AuthContextType {
 
   // Sync with Firebase auth state
   useEffect(() => {
-    const auth = getAuth(app);
+    let unsubscribe: (() => void) | undefined;
     setIsLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
-      if (fbUser) {
-        const newUser: User = {
-          uid: fbUser.uid,
-          email: fbUser.email,
-          name: fbUser.displayName || '',
-          phone: '',
-          address: '',
-          twoStep: false,
-          textUpdates: false,
-        };
-        setIsLoggedIn(true);
-        setUser(newUser);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(
-            'mockAuth',
-            JSON.stringify({ isLoggedIn: true, user: newUser }),
-          );
+    (async () => {
+      const [{ getAuth, onAuthStateChanged }, { initializeApp, getApps, getApp }] = await Promise.all([
+        import('firebase/auth'),
+        import('firebase/app'),
+      ]);
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+      } as const;
+      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      const auth = getAuth(appInst);
+      unsubscribe = onAuthStateChanged(auth, (fbUser: FirebaseUser | null) => {
+        if (fbUser) {
+          const newUser: User = {
+            uid: fbUser.uid,
+            email: fbUser.email,
+            name: fbUser.displayName || '',
+            phone: '',
+            address: '',
+            twoStep: false,
+            textUpdates: false,
+          };
+          setIsLoggedIn(true);
+          setUser(newUser);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(
+              'mockAuth',
+              JSON.stringify({ isLoggedIn: true, user: newUser }),
+            );
+          }
+        } else {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('mockAuth');
+          }
+          setIsLoggedIn(false);
+          setUser(null);
         }
-      } else {
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('mockAuth');
-        }
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-      setIsLoading(false);
-    });
-    return () => unsubscribe();
+        setIsLoading(false);
+      });
+    })();
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // login & logout update state + localStorage
   const login = useCallback(
     async (email: string, password?: string, uid?: string, name?: string) => {
       try {
-        const auth = getAuth(app);
+        const [{ getAuth, signInWithEmailAndPassword }, { initializeApp, getApps, getApp }] = await Promise.all([
+          import('firebase/auth'),
+          import('firebase/app'),
+        ]);
+        const config = {
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        } as const;
+        const appInst = getApps().length ? getApp() : initializeApp(config as any);
+        const auth = getAuth(appInst);
         let fbUser = auth.currentUser;
         if (password) {
           const cred = await signInWithEmailAndPassword(auth, email, password);
@@ -133,10 +159,21 @@ function useAuthHook(): AuthContextType {
 
   const signUp = useCallback(
     async (email: string, password: string, name?: string) => {
-      const auth = getAuth(app);
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const [authMod] = await Promise.all([import('firebase/auth')]);
+      const { initializeApp, getApps, getApp } = await import('firebase/app');
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+      } as const;
+      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      const auth = authMod.getAuth(appInst);
+      const cred = await authMod.createUserWithEmailAndPassword(auth, email, password);
       if (name) {
-        await updateProfile(cred.user, { displayName: name });
+        await authMod.updateProfile(cred.user, { displayName: name });
       }
       await login(email, undefined, cred.user.uid, name);
     },
@@ -144,22 +181,38 @@ function useAuthHook(): AuthContextType {
   );
 
   const logout = useCallback(async () => {
-    const auth = getAuth(app);
+    const [{ getAuth, signOut }, { initializeApp, getApps, getApp }] = await Promise.all([
+      import('firebase/auth'),
+      import('firebase/app'),
+    ]);
+    const config = {
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    } as const;
+    const appInst = getApps().length ? getApp() : initializeApp(config as any);
+    const auth = getAuth(appInst);
     const currentUser = auth.currentUser;
 
     try {
       // Log logout event before signing out
       if (currentUser) {
-        await auditService.logAuthEvent('logout', {
-          email: currentUser.email,
-          ipAddress:
-            typeof window !== 'undefined'
-              ? window.location.hostname
-              : 'unknown',
-          userAgent:
-            typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
-          success: true,
-        });
+        try {
+          const { auditService } = await import('@/services/firebase-audit-service');
+          await auditService.logAuthEvent('logout', {
+            email: currentUser.email,
+            ipAddress:
+              typeof window !== 'undefined'
+                ? window.location.hostname
+                : 'unknown',
+            userAgent:
+              typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+            success: true,
+          });
+        } catch {}
       }
 
       await signOut(auth);
@@ -198,7 +251,20 @@ function useAuthHook(): AuthContextType {
 
   const resetPassword = useCallback(async (email: string) => {
     try {
-      const auth = getAuth(app);
+      const [{ getAuth, sendPasswordResetEmail }, { initializeApp, getApps, getApp }] = await Promise.all([
+        import('firebase/auth'),
+        import('firebase/app'),
+      ]);
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+      } as const;
+      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      const auth = getAuth(appInst);
       
       // Add additional error context and retry logic
       console.log('[useAuth] Attempting password reset for:', email);
@@ -246,6 +312,7 @@ function useAuthHook(): AuthContextType {
       
       // Log failed password reset attempt
       try {
+        const { auditService } = await import('@/services/firebase-audit-service');
         await auditService.logAuthEvent('password_reset', {
           email,
           ipAddress:

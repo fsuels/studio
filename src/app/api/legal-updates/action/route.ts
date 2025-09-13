@@ -1,6 +1,6 @@
 // src/app/api/legal-updates/action/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import { auditService } from '@/services/firebase-audit-service';
 import { z } from 'zod';
 
@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
     const interactionId = `${userId}_${updateId}`;
 
     // Get current interaction state
-    const interactionRef = adminDb
+    const interactionRef = getAdmin()
+      .firestore()
       .collection('user_legal_update_interactions')
       .doc(interactionId);
 
@@ -155,7 +156,8 @@ async function logAnalyticsEvent(
       source: 'dashboard',
     };
 
-    await adminDb
+    await getAdmin()
+      .firestore()
       .collection(COLLECTIONS.ANALYTICS)
       .doc(analyticsEvent.id)
       .set(analyticsEvent);
@@ -185,7 +187,8 @@ async function updateNotificationStatus(
       [`notificationStatus.${statusField}At`]: new Date(),
     };
 
-    await adminDb
+    await getAdmin()
+      .firestore()
       .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
       .doc(updateId)
       .update(updateData);
@@ -210,7 +213,8 @@ export async function GET(request: NextRequest) {
 
     if (updateId) {
       // Get specific interaction
-      const interactionRef = adminDb
+      const interactionRef = getAdmin()
+        .firestore()
         .collection('user_legal_update_interactions')
         .doc(`${userId}_${updateId}`);
 
@@ -235,7 +239,8 @@ export async function GET(request: NextRequest) {
       });
     } else {
       // Get user's interaction summary
-      const interactionsSnapshot = await adminDb
+      const interactionsSnapshot = await getAdmin()
+        .firestore()
         .collection('user_legal_update_interactions')
         .where('userId', '==', userId)
         .orderBy('lastInteractionAt', 'desc')

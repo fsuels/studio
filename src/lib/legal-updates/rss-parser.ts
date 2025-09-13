@@ -1,6 +1,6 @@
 // src/lib/legal-updates/rss-parser.ts
 import Parser from 'rss-parser';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import {
   LegalUpdateSource,
   RawLegalUpdate,
@@ -257,7 +257,7 @@ class LegalUpdateRSSParser {
 
   private async shouldProcessUpdate(update: RawLegalUpdate): Promise<boolean> {
     // Check if we already have this update (by URL or title)
-    const existingByUrl = await adminDb
+    const existingByUrl = await getAdmin().firestore()
       .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
       .where('url', '==', update.url)
       .limit(1)
@@ -269,7 +269,7 @@ class LegalUpdateRSSParser {
     }
 
     // Check by title and source (in case URL changes)
-    const existingByTitle = await adminDb
+    const existingByTitle = await getAdmin().firestore()
       .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
       .where('sourceId', '==', update.sourceId)
       .where('title', '==', update.title)
@@ -296,7 +296,7 @@ class LegalUpdateRSSParser {
 
   private async updateSourceLastFetched(sourceId: string): Promise<void> {
     try {
-      await adminDb
+      await getAdmin().firestore()
         .collection(COLLECTIONS.LEGAL_UPDATE_SOURCES)
         .doc(sourceId)
         .update({
@@ -314,10 +314,10 @@ class LegalUpdateRSSParser {
   async saveRawUpdates(updates: RawLegalUpdate[]): Promise<void> {
     if (updates.length === 0) return;
 
-    const batch = adminDb.batch();
+    const batch = getAdmin().firestore().batch();
 
     updates.forEach((update) => {
-      const docRef = adminDb
+      const docRef = getAdmin().firestore()
         .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
         .doc(update.id);
       batch.set(docRef, update);
@@ -334,7 +334,7 @@ class LegalUpdateRSSParser {
 
   async fetchAllActiveSources(): Promise<LegalUpdateSource[]> {
     try {
-      const snapshot = await adminDb
+      const snapshot = await getAdmin().firestore()
         .collection(COLLECTIONS.LEGAL_UPDATE_SOURCES)
         .where('isActive', '==', true)
         .get();

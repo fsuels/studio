@@ -1,7 +1,7 @@
 // src/app/api/collaboration/invite/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { inviteCollaborator, acceptInvitation } from '@/lib/collaboration/auth';
-import { auth } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await auth.verifyIdToken(idToken);
+    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     if (invitationId) {

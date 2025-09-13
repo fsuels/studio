@@ -1,7 +1,6 @@
 // Immutable Audit Trail System
 // Cryptographically secure audit events with blockchain-style integrity
-'use client';
-
+// Note: This module may be imported by server code. Avoid forcing client-only mode.
 import crypto from 'crypto';
 
 export interface ImmutableAuditEvent {
@@ -988,6 +987,27 @@ export class ImmutableAuditTrail {
         'ccpa',
         'hipaa',
       ],
+    };
+  }
+}
+
+// Lightweight manager used by some server routes for quick hash checks
+export class AuditEventManager {
+  createEvent(
+    eventType: string,
+    userId: string,
+    metadata: Record<string, unknown> = {},
+  ) {
+    const payload = JSON.stringify({
+      eventType,
+      userId,
+      metadata,
+      ts: new Date().toISOString(),
+    });
+    const hash = crypto.createHash('sha256').update(payload).digest('hex');
+    return {
+      id: hash.slice(0, 16),
+      hash,
     };
   }
 }

@@ -1,6 +1,6 @@
 // src/app/api/legal-updates/feed/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import {
   ProcessedLegalUpdate,
   UserLegalUpdatePreferences,
@@ -37,7 +37,8 @@ export async function GET(request: NextRequest) {
     // Get user preferences if userId provided
     let userPreferences: UserLegalUpdatePreferences | null = null;
     if (feedRequest.userId && feedRequest.userId !== 'anonymous') {
-      const prefDoc = await adminDb
+      const prefDoc = await getAdmin()
+        .firestore()
         .collection(COLLECTIONS.USER_PREFERENCES)
         .doc(feedRequest.userId)
         .get();
@@ -51,7 +52,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Build query based on preferences and filters
-    let query = adminDb
+    let query = getAdmin()
+      .firestore()
       .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
       .where('status', '==', 'active')
       .orderBy('publishedDate', 'desc');
@@ -161,7 +163,8 @@ export async function GET(request: NextRequest) {
 
 async function getUserInteraction(userId: string, updateId: string) {
   try {
-    const interactionDoc = await adminDb
+    const interactionDoc = await getAdmin()
+      .firestore()
       .collection('user_legal_update_interactions')
       .doc(`${userId}_${updateId}`)
       .get();
@@ -179,20 +182,23 @@ async function getFeedStatistics(_userId?: string) {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const [totalSnapshot, recentSnapshot, urgentSnapshot] = await Promise.all([
-      adminDb
+      getAdmin()
+        .firestore()
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .count()
         .get(),
 
-      adminDb
+      getAdmin()
+        .firestore()
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .where('publishedDate', '>=', sevenDaysAgo)
         .count()
         .get(),
 
-      adminDb
+      getAdmin()
+        .firestore()
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .where('urgency', 'in', ['critical', 'high'])

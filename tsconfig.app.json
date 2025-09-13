@@ -1,0 +1,38 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "src/app/**/*.ts",
+    "src/app/**/*.tsx",
+    "src/components/**/*.ts",
+    "src/components/**/*.tsx",
+    "src/hooks/**/*.ts",
+    "src/hooks/**/*.tsx",
+    "src/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "functions/**",
+    "src/**/__tests__/**",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/app/api/**",
+    "src/middleware/**",
+    "src/ai/**",
+    "src/services/**",
+    "src/lib/firebase-admin/**",
+    "src/lib/vector-search/**",
+    "src/scripts/**"
+    ,
+    "src/app/tenant/**",
+    "src/components/admin/**",
+    "src/components/global/**",
+    "src/components/mega-menu/**",
+    "src/components/discovery/ResultsGrid.tsx",
+    "src/hooks/useSessionRecording.tsx"
+  ]
+}

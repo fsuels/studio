@@ -1,6 +1,6 @@
 // src/lib/legal-updates/email-service.ts
 import sgMail from '@sendgrid/mail';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import {
   ProcessedLegalUpdate,
   UserLegalUpdatePreferences,
@@ -117,7 +117,7 @@ class LegalUpdateEmailService {
   > {
     try {
       // Get users with email notifications enabled and matching frequency
-      const preferencesSnapshot = await adminDb
+      const preferencesSnapshot = await getAdmin().firestore()
         .collection(COLLECTIONS.USER_PREFERENCES)
         .where('emailNotifications', '==', true)
         .where('frequency', '==', frequency)
@@ -132,7 +132,7 @@ class LegalUpdateEmailService {
         } as UserLegalUpdatePreferences;
 
         // Get user profile for email and name
-        const userDoc = await adminDb
+        const userDoc = await getAdmin().firestore()
           .collection('users')
           .doc(preferences.userId)
           .get();
@@ -208,7 +208,7 @@ class LegalUpdateEmailService {
     cutoffDate: Date,
   ): Promise<ProcessedLegalUpdate[]> {
     try {
-      const snapshot = await adminDb
+      const snapshot = await getAdmin().firestore()
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .where('publishedDate', '>=', cutoffDate)
@@ -576,7 +576,7 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
 
   private async updateLastNotified(userId: string): Promise<void> {
     try {
-      await adminDb
+      await getAdmin().firestore()
         .collection(COLLECTIONS.USER_PREFERENCES)
         .doc(userId)
         .update({
@@ -590,10 +590,10 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
 
   private async markUpdatesAsEmailSent(updateIds: string[]): Promise<void> {
     try {
-      const batch = adminDb.batch();
+      const batch = getAdmin().firestore().batch();
 
       updateIds.forEach((updateId) => {
-        const docRef = adminDb
+        const docRef = getAdmin().firestore()
           .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
           .doc(updateId);
 

@@ -1,7 +1,7 @@
 // src/app/api/collaboration/notifications/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { notificationService } from '@/lib/collaboration/notifications';
-import { auth } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await auth.verifyIdToken(idToken);
+    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     switch (action) {
@@ -94,9 +94,9 @@ export async function GET(request: NextRequest) {
     const userId = decodedToken.uid;
 
     // Get notifications from Firestore
-    const { firestore } = require('@/lib/firebase-admin');
+    const adminDb = getAdmin().firestore();
 
-    let query = firestore
+    let query = adminDb
       .collection('notifications')
       .where('userId', '==', userId)
       .orderBy('timestamp', 'desc')
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
     }));
 
     // Get unread count
-    const unreadSnapshot = await firestore
+    const unreadSnapshot = await adminDb
       .collection('notifications')
       .where('userId', '==', userId)
       .where('read', '==', false)
