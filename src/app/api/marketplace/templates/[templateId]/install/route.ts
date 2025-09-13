@@ -11,7 +11,6 @@ import {
   where,
   getDocs,
   serverTimestamp,
-  writeBatch,
 } from 'firebase/firestore';
 import Stripe from 'stripe';
 import type {
@@ -294,7 +293,7 @@ export async function POST(
  */
 function calculatePricingOptions(
   pricing: TemplatePricing,
-  isInstalled: boolean,
+  _isInstalled: boolean,
 ) {
   const options: any = {
     free: pricing.type === 'free',
@@ -388,7 +387,7 @@ async function processPayment(params: {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency: template.pricing.currency || 'usd',
+      currency: String(template.pricing.currency || 'usd').toLowerCase() as any,
       payment_method: paymentMethodId,
       confirm: true,
       metadata: {

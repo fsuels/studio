@@ -27,7 +27,7 @@ export async function GET(
       stable: stableOnly,
     });
 
-    let response: any = {
+    const response: any = {
       versions,
       total: versions.length,
     };

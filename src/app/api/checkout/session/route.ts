@@ -35,13 +35,14 @@ export async function POST(req: NextRequest) {
     const successUrl = `${origin}/${locale}/docs/${docId}/view?payment=success`;
     const cancelUrl = `${origin}/${locale}/docs/${docId}/view?payment=cancel`;
 
-    const session = await stripe.checkout.sessions.create({
-      automatic_payment_methods: { enabled: true },
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       line_items: [
         {
           price_data: {
             currency: userCurrency.toLowerCase(),
-            product_data: { name: doc.name },
+            product_data: {
+              name: doc.translations?.en?.name || doc.name || doc.id,
+            },
             unit_amount: unitAmount,
           },
           quantity: 1,
@@ -50,17 +51,17 @@ export async function POST(req: NextRequest) {
       mode: 'payment',
       success_url: successUrl,
       cancel_url: cancelUrl,
-      // Enable automatic tax collection
       automatic_tax: { enabled: true },
-      // Enable tax ID collection for business customers
-      tax_id_collection: { enabled: pricingSummary.taxInfo.taxRequired },
+      tax_id_collection: { enabled: Boolean(pricingSummary.taxInfo.taxRequired) },
       metadata: {
-        docId,
-        currency: userCurrency,
-        userCountry: pricingSummary.userLocation.countryCode || '',
-        userState: pricingSummary.userLocation.stateCode || '',
+        docId: String(docId),
+        currency: String(userCurrency),
+        userCountry: String(pricingSummary.userLocation.countryCode || ''),
+        userState: String(pricingSummary.userLocation.stateCode || ''),
       },
-    });
+    };
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     return NextResponse.json({ 
       sessionId: session.id,

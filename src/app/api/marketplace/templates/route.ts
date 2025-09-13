@@ -263,7 +263,7 @@ export async function POST(request: NextRequest) {
     // }
 
     const body = await request.json();
-    const { template, initialVersion, submissionNotes } = body;
+    const { template, initialVersion: _initialVersion, submissionNotes: _submissionNotes } = body;
 
     // Validate required fields
     if (!template.name || !template.description || !template.category) {
@@ -279,7 +279,7 @@ export async function POST(request: NextRequest) {
     const templateRef = doc(collection(db, 'marketplace-templates'));
     const templateId = templateRef.id;
 
-    const marketplaceTemplate: Partial<MarketplaceTemplate> = {
+    const _marketplaceTemplate: Partial<MarketplaceTemplate> = {
       id: templateId,
       name: template.name,
       slug: generateSlug(template.name),

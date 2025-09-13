@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
           service: 'legal-updates-processor',
         });
 
-      case 'sources':
+      case 'sources': {
         const sources = await legalUpdateRSSParser.fetchAllActiveSources();
         return NextResponse.json({
           sources: sources.map((s) => ({
@@ -145,15 +145,19 @@ export async function GET(request: NextRequest) {
             lastFetched: s.lastFetched,
           })),
         });
+      }
 
-      case 'stats':
+      case 'stats': {
         // Return processing statistics
         const { adminDb } = await import('@/lib/firebase-admin');
         const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
 
         const [rawCount, processedCount] = await Promise.all([
           adminDb.collection(COLLECTIONS.RAW_LEGAL_UPDATES).count().get(),
-          adminDb.collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES).count().get(),
+          adminDb
+            .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
+            .count()
+            .get(),
         ]);
 
         return NextResponse.json({
@@ -163,6 +167,7 @@ export async function GET(request: NextRequest) {
             timestamp: new Date().toISOString(),
           },
         });
+      }
 
       default:
         return NextResponse.json({

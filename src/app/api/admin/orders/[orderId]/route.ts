@@ -4,7 +4,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { generateMockOrders, type Order } from '@/lib/orders';
 
 // Mock database - in production, use your actual database
-let ordersDB: Order[] = generateMockOrders(150);
+const ordersDB: Order[] = generateMockOrders(150);
 
 export async function GET(
   request: NextRequest,

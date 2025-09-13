@@ -76,7 +76,7 @@ const requestCounts = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT = 10; // requests per hour
 const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
 
-function checkRateLimit(clientId: string): boolean {
+function _checkRateLimit(clientId: string): boolean {
   const now = Date.now();
   const clientData = requestCounts.get(clientId);
 
@@ -97,7 +97,7 @@ function checkRateLimit(clientId: string): boolean {
   return true;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   return NextResponse.json({
     message: 'Document summarization API',
     usage: {

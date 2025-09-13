@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       clientIP: userIP,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: 'Service unavailable' },
       { status: 503 },

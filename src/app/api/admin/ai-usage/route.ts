@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const endpoint = url.searchParams.get('endpoint') as AIEndpoint;
 
     switch (type) {
-      case 'overview':
+      case 'overview': {
         const analytics = aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
           success: true,
@@ -33,8 +33,9 @@ export async function GET(request: NextRequest) {
             criticalAlerts: getCriticalAlerts(analytics),
           },
         });
+      }
 
-      case 'model_analysis':
+      case 'model_analysis': {
         const modelAnalytics =
           aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
@@ -46,8 +47,9 @@ export async function GET(request: NextRequest) {
             modelTrends: modelAnalytics.trends.modelTrends,
           },
         });
+      }
 
-      case 'endpoint_analysis':
+      case 'endpoint_analysis': {
         const endpointAnalytics =
           aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
@@ -57,8 +59,9 @@ export async function GET(request: NextRequest) {
             endpointComparison: getEndpointComparison(endpointAnalytics, model),
           },
         });
+      }
 
-      case 'cost_optimization':
+      case 'cost_optimization': {
         const optimizationData =
           aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
@@ -77,8 +80,9 @@ export async function GET(request: NextRequest) {
               ),
           },
         });
+      }
 
-      case 'budget_monitoring':
+      case 'budget_monitoring': {
         const budgetData = aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
           success: true,
@@ -89,8 +93,9 @@ export async function GET(request: NextRequest) {
             forecastData: generateCostForecast(budgetData.trends.dailyCosts),
           },
         });
+      }
 
-      case 'performance_metrics':
+      case 'performance_metrics': {
         const performanceData =
           aiUsageAnalytics.generateUsageAnalytics(timeframe);
         return NextResponse.json({
@@ -102,20 +107,23 @@ export async function GET(request: NextRequest) {
             performanceAlerts: getPerformanceAlerts(performanceData),
           },
         });
+      }
 
-      case 'realtime_status':
+      case 'realtime_status': {
         const realtimeData = await getRealtimeAIStatus();
         return NextResponse.json({
           success: true,
           data: realtimeData,
         });
+      }
 
-      case 'usage_details':
+      case 'usage_details': {
         const detailsData = await getUsageDetails(timeframe, model, endpoint);
         return NextResponse.json({
           success: true,
           data: detailsData,
         });
+      }
 
       default:
         return NextResponse.json(

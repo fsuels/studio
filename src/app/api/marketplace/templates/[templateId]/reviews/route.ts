@@ -14,7 +14,6 @@ import {
   limit,
   startAfter,
   serverTimestamp,
-  writeBatch,
 } from 'firebase/firestore';
 import type {
   TemplateReview,

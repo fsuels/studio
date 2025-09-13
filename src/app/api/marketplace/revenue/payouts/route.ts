@@ -1,15 +1,7 @@
 // src/app/api/marketplace/revenue/payouts/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import { revenueShareSystem } from '@/lib/marketplace/revenue-sharing-system';
 
 /**
@@ -35,7 +27,7 @@ export async function GET(request: NextRequest) {
     );
 
     // Check permissions
-    const userId = 'user-id'; // TODO: Get from auth
+    const _userId = 'user-id'; // TODO: Get from auth
     // if (creatorId && creatorId !== userId && !user.isAdmin) {
     //   return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     // }

@@ -1,17 +1,7 @@
 // src/app/api/marketplace/submissions/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-} from 'firebase/firestore';
+import { collection, doc, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import { templateSubmissionWorkflow } from '@/lib/marketplace/template-submission-workflow';
 
 /**

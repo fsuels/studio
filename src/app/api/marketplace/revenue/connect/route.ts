@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
  * GET /api/marketplace/revenue/connect
  * Get Stripe Connect account status for creator
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // TODO: Add authentication
     // const user = await getCurrentUser(request);
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
     // Check account status with Stripe
     const stripe = (await import('stripe')).default;
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2022-11-15',
+      apiVersion: '2025-05-28.basil',
     });
 
     try {

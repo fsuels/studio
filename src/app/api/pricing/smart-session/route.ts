@@ -78,10 +78,10 @@ export async function POST(req: NextRequest) {
       automatic_tax: { enabled: true },
       tax_id_collection: { enabled: pricingSummary.taxInfo.taxRequired },
       metadata: {
-        planId,
-        currency: userCurrency,
-        userCountry: pricingSummary.userLocation.countryCode || '',
-        userState: pricingSummary.userLocation.stateCode || '',
+        planId: String(planId),
+        currency: String(userCurrency),
+        userCountry: String(pricingSummary.userLocation.countryCode || ''),
+        userState: String(pricingSummary.userLocation.stateCode || ''),
       },
     });
 

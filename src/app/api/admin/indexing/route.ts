@@ -107,7 +107,7 @@ async function handleStartBulkIndexing(params: any) {
     }
 
     // Filter documents that need processing (if not forcing)
-    let docsToProcess = allDocIds;
+    const docsToProcess = allDocIds;
     if (!force) {
       // In a real implementation, you'd check which docs need reprocessing
       // For now, process all documents

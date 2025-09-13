@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       url.searchParams.get('includeBreakdown') === 'true';
     const reportType = url.searchParams.get('type') || 'summary'; // 'summary', 'detailed', 'analytics'
 
-    const userId = 'user-id'; // TODO: Get from auth
+    const _userId = 'user-id'; // TODO: Get from auth
 
     // Check permissions
     // if (creatorId && creatorId !== userId && !user.isAdmin) {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Format the response based on report type
-    let responseData: any = {
+    const responseData: any = {
       summary: report.summary,
       period: {
         type: period,
@@ -132,12 +132,13 @@ function calculateDateRange(
         endDate: new Date(now.getFullYear(), now.getMonth(), 0),
       };
 
-    case 'quarter':
+    case 'quarter': {
       const quarter = Math.floor(now.getMonth() / 3);
       return {
         startDate: new Date(now.getFullYear(), quarter * 3, 1),
         endDate: new Date(now.getFullYear(), (quarter + 1) * 3, 0),
       };
+    }
 
     case 'year':
       return {
@@ -265,7 +266,7 @@ function calculateGrowthRate(current: number, previous: number): number {
 /**
  * Calculate conversion rate (simplified)
  */
-function calculateConversionRate(summary: any): number {
+function calculateConversionRate(_summary: any): number {
   // This is a simplified calculation
   // In reality, you'd need page view/template view data
   return Math.random() * 5 + 2; // 2-7% mock conversion rate
@@ -274,7 +275,7 @@ function calculateConversionRate(summary: any): number {
 /**
  * Calculate retention rate (simplified)
  */
-function calculateRetentionRate(summary: any): number {
+function calculateRetentionRate(_summary: any): number {
   // Simplified calculation
   return Math.random() * 30 + 60; // 60-90% mock retention rate
 }

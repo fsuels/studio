@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import {
   generateMockCustomer360Data,
-  generateMockOrders,
-  type Customer360Data,
   type CustomerInfo,
 } from '@/lib/orders';
 
@@ -111,11 +109,12 @@ export async function GET(request: NextRequest) {
           aValue = a.lifetimeValue;
           bValue = b.lifetimeValue;
           break;
-        case 'churnRisk':
+        case 'churnRisk': {
           const riskOrder = { low: 1, medium: 2, high: 3 };
           aValue = riskOrder[a.churnRisk as keyof typeof riskOrder];
           bValue = riskOrder[b.churnRisk as keyof typeof riskOrder];
           break;
+        }
         default:
           aValue = new Date(a.lastActivityAt).getTime();
           bValue = new Date(b.lastActivityAt).getTime();

@@ -1,7 +1,7 @@
 // Admin login page
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,9 +33,9 @@ export default function AdminLoginPage() {
   // Check if already authenticated
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, [checkAuthStatus]);
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/auth');
       const data = await response.json();
@@ -46,10 +46,10 @@ export default function AdminLoginPage() {
       } else {
         setIsAuthenticated(false);
       }
-    } catch (error) {
+    } catch (_error) {
       setIsAuthenticated(false);
     }
-  };
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ export default function AdminLoginPage() {
       } else {
         setError(data.error || 'Login failed');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);

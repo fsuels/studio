@@ -375,7 +375,7 @@ function calculateCategoryBreakdown(templates: MarketplaceTemplate[]) {
 /**
  * Award badge to creator (internal function)
  */
-async function awardBadge(
+async function _awardBadge(
   userId: string,
   badgeId: string,
   badgeName: string,

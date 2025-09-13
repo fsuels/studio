@@ -60,7 +60,7 @@ export default function RoleOperationsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              You don't have permission to access Role Operations. This feature
+              You don&apos;t have permission to access Role Operations. This feature
               requires Administrator privileges.
             </p>
             <div className="flex items-center gap-2">
