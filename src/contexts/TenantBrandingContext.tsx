@@ -67,7 +67,7 @@ export function TenantBrandingProvider({
 
       removeCustomCSS();
     };
-  }, [branding]);
+  }, [branding, injectCustomCSS]);
 
   const updateFavicon = (faviconUrl: string) => {
     // Remove existing favicon
@@ -142,7 +142,7 @@ export function useTenantBranding() {
 
 // Convenience hooks for specific branding elements
 export function useBrandedButton() {
-  const { getPrimaryColor, getSecondaryColor } = useTenantBranding();
+  const { getPrimaryColor } = useTenantBranding();
 
   return {
     primaryButtonStyle: {

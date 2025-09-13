@@ -735,12 +735,12 @@ const ReviewStageCard: React.FC<{
       <CardContent>
         {stage.reviewerType !== 'ai' && (
           <div className="space-y-3">
-            <label className="text-sm font-medium">Assign Reviewer</label>
+            <label htmlFor="assign-reviewer" className="text-sm font-medium">Assign Reviewer</label>
             <Select
               value={selectedReviewer || ''}
               onValueChange={onAssignReviewer}
             >
-              <SelectTrigger>
+              <SelectTrigger id="assign-reviewer">
                 <SelectValue placeholder="Select a reviewer" />
               </SelectTrigger>
               <SelectContent>

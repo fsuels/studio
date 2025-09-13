@@ -1,7 +1,7 @@
 // src/config/experiments.ts
 // Remote Config A/B testing framework with deterministic user bucketing
 
-import { getRemoteConfig, getValue, fetchAndActivate } from 'firebase/remote-config';
+import { getRemoteConfig, getValue, fetchAndActivate, type RemoteConfig } from 'firebase/remote-config';
 import { getAuth } from 'firebase/auth';
 import { app } from '../lib/firebase';
 
@@ -43,7 +43,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const GLOBAL_FETCH_INTERVAL_MS = 30 * 1000; // 30 seconds
 
 // Remote Config singleton
-let remoteConfigInstance: any = null;
+let remoteConfigInstance: RemoteConfig | null = null;
 
 function getRemoteConfigInstance() {
   if (!remoteConfigInstance) {

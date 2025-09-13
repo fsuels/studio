@@ -217,9 +217,9 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
           {/* Version Selectors */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Compare from:</label>
+              <label htmlFor="compare-from" className="text-sm font-medium">Compare from:</label>
               <Select value={leftVersion} onValueChange={setLeftVersion}>
-                <SelectTrigger>
+                <SelectTrigger id="compare-from">
                   <SelectValue placeholder="Select version" />
                 </SelectTrigger>
                 <SelectContent>
@@ -239,9 +239,9 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Compare to:</label>
+              <label htmlFor="compare-to" className="text-sm font-medium">Compare to:</label>
               <Select value={rightVersion} onValueChange={setRightVersion}>
-                <SelectTrigger>
+                <SelectTrigger id="compare-to">
                   <SelectValue placeholder="Select version" />
                 </SelectTrigger>
                 <SelectContent>

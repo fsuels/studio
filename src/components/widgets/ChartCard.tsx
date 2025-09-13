@@ -114,9 +114,10 @@ const formatValue = (value: number, format?: string, unit?: string): string => {
     case 'duration':
       return `${value.toFixed(1)}s`;
     case 'number':
-    default:
+    default: {
       const formatted = value.toLocaleString();
       return unit ? `${formatted} ${unit}` : formatted;
+    }
   }
 };
 

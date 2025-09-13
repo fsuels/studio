@@ -303,9 +303,9 @@ const LegalTranslator: React.FC<LegalTranslatorProps> = ({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">To</label>
+              <label htmlFor="target-language" className="text-sm font-medium">To</label>
               <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                <SelectTrigger>
+                <SelectTrigger id="target-language">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -366,9 +366,9 @@ const LegalTranslator: React.FC<LegalTranslatorProps> = ({
             {showAdvanced && (
               <div className="mt-3 space-y-3 p-3 bg-muted/30 rounded-lg">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">User Role</label>
+                  <label htmlFor="user-role" className="text-sm font-medium">User Role</label>
                   <Select value={userRole} onValueChange={setUserRole}>
-                    <SelectTrigger>
+                    <SelectTrigger id="user-role">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -471,8 +471,9 @@ const LegalTranslator: React.FC<LegalTranslatorProps> = ({
           <CardContent className="space-y-4">
             {/* Translated Text */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Translated Text</label>
+              <label htmlFor="translated-text" className="text-sm font-medium">Translated Text</label>
               <Textarea
+                id="translated-text"
                 value={translationResult.translatedText}
                 readOnly
                 rows={Math.min(

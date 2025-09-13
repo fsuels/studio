@@ -413,10 +413,10 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
           <CardContent className="space-y-4">
             {/* Rating */}
             <div>
-              <label className="text-sm font-medium mb-2 block">
+              <span className="text-sm font-medium mb-2 block">
                 Overall Rating
-              </label>
-              <div className="flex">
+              </span>
+              <div className="flex" role="group" aria-label="Overall Rating">
                 {renderStars(newReview.rating, (rating) =>
                   setNewReview((prev) => ({ ...prev, rating })),
                 )}
@@ -425,10 +425,11 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
 
             {/* Title */}
             <div>
-              <label className="text-sm font-medium mb-2 block">
+              <label htmlFor="review-title" className="text-sm font-medium mb-2 block">
                 Review Title (Optional)
               </label>
               <input
+                id="review-title"
                 type="text"
                 className="w-full px-3 py-2 border rounded-md"
                 placeholder="Summarize your experience..."
@@ -441,10 +442,11 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
 
             {/* Comment */}
             <div>
-              <label className="text-sm font-medium mb-2 block">
+              <label htmlFor="review-comment" className="text-sm font-medium mb-2 block">
                 Your Review
               </label>
               <Textarea
+                id="review-comment"
                 placeholder="Share your experience with this template..."
                 value={newReview.comment}
                 onChange={(e) =>

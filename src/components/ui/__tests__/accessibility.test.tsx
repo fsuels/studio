@@ -194,7 +194,7 @@ describe('Component Accessibility Tests', () => {
         <div>
           <img
             src="/test-image.jpg"
-            alt="Description of the test image"
+            alt="A decorative test element"
             width="200"
             height="150"
           />
