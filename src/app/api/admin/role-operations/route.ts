@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import {
   UserRole,
-  Permission,
+  // Permission,
   UserWithRole,
-  RoleManagementOperation,
+  // RoleManagementOperation,
   RoleAuditEvent,
   DEFAULT_ROLES,
 } from '@/types/roles';
@@ -57,7 +57,7 @@ const generateMockUsers = (count: number = 100): UserWithRole[] => {
   return users;
 };
 
-let mockUsersDB = generateMockUsers(150);
+const mockUsersDB = generateMockUsers(150);
 let auditEventsDB: RoleAuditEvent[] = [];
 
 function getIpAddress(request: NextRequest): string {
@@ -167,7 +167,7 @@ async function getUsersData(
   });
 }
 
-async function getFeaturesData(request: NextRequest) {
+async function getFeaturesData(_request: NextRequest) {
   const features = featureToggleService.getAllFeatures();
 
   return NextResponse.json({
@@ -228,7 +228,7 @@ async function getAuditData(
   });
 }
 
-async function getImpersonationData(request: NextRequest) {
+async function getImpersonationData(_request: NextRequest) {
   const activeSessions = await impersonationService.getActiveSessions();
 
   return NextResponse.json({
@@ -246,7 +246,7 @@ async function getImpersonationData(request: NextRequest) {
   });
 }
 
-async function getStatsData(request: NextRequest) {
+async function getStatsData(_request: NextRequest) {
   const totalUsers = mockUsersDB.length;
   const activeUsers = mockUsersDB.filter((u) => u.isActive).length;
   const roleDistribution = mockUsersDB.reduce(
@@ -292,7 +292,7 @@ async function getStatsData(request: NextRequest) {
   });
 }
 
-async function getDashboardData(request: NextRequest) {
+async function getDashboardData(_request: NextRequest) {
   // Return combined dashboard data
   const statsResponse = await getStatsData(request);
   const impersonationResponse = await getImpersonationData(request);
@@ -485,7 +485,7 @@ function isValidReason(reason: string): reason is EndImpersonationReason {
 async function handleEndImpersonation(
   request: NextRequest,
   params: { sessionId: string; reason?: string },
-  admin: any,
+  _admin: any,
 ) {
   const { sessionId, reason } = params;
 

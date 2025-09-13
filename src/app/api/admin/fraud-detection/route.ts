@@ -21,14 +21,15 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(url.searchParams.get('limit') || '50');
 
     switch (type) {
-      case 'overview':
+      case 'overview': {
         const overview = await getFraudOverview(timeframe);
         return NextResponse.json({
           success: true,
           data: overview,
         });
+      }
 
-      case 'risk_assessments':
+      case 'risk_assessments': {
         const assessments = await getFraudAssessments(
           timeframe,
           riskLevel ?? undefined,
@@ -39,41 +40,47 @@ export async function GET(request: NextRequest) {
           success: true,
           data: assessments,
         });
+      }
 
-      case 'velocity_analytics':
+      case 'velocity_analytics': {
         const velocityData = await getVelocityAnalytics(timeframe);
         return NextResponse.json({
           success: true,
           data: velocityData,
         });
+      }
 
-      case 'device_analytics':
+      case 'device_analytics': {
         const deviceData = await getDeviceAnalytics(timeframe);
         return NextResponse.json({
           success: true,
           data: deviceData,
         });
+      }
 
-      case 'chargeback_predictions':
+      case 'chargeback_predictions': {
         const chargebackData = await getChargebackPredictions(timeframe);
         return NextResponse.json({
           success: true,
           data: chargebackData,
         });
+      }
 
-      case 'fraud_trends':
+      case 'fraud_trends': {
         const trendsData = await getFraudTrends(timeframe);
         return NextResponse.json({
           success: true,
           data: trendsData,
         });
+      }
 
-      case 'risk_rules':
+      case 'risk_rules': {
         const rulesData = await getFraudRules();
         return NextResponse.json({
           success: true,
           data: rulesData,
         });
+      }
 
       default:
         return NextResponse.json(
@@ -119,7 +126,7 @@ export async function POST(request: NextRequest) {
     }
 
     switch (action) {
-      case 'assess_risk':
+      case 'assess_risk': {
         if (!orderData) {
           return NextResponse.json(
             {
@@ -140,8 +147,9 @@ export async function POST(request: NextRequest) {
           success: true,
           data: assessment,
         });
+      }
 
-      case 'bulk_assess':
+      case 'bulk_assess': {
         const { orders } = body;
         if (!Array.isArray(orders)) {
           return NextResponse.json(
@@ -184,8 +192,9 @@ export async function POST(request: NextRequest) {
             results: bulkResults,
           },
         });
+      }
 
-      case 'update_feedback':
+      case 'update_feedback': {
         const { assessmentId, actualOutcome, fraudConfirmed } = body;
         if (!assessmentId) {
           return NextResponse.json(
@@ -207,6 +216,7 @@ export async function POST(request: NextRequest) {
           success: true,
           data: { feedbackUpdated: true },
         });
+      }
 
       default:
         return NextResponse.json(
@@ -231,7 +241,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper functions
-async function getFraudOverview(timeframe: string) {
+async function getFraudOverview(_timeframe: string) {
   // In production, fetch from actual database
   const assessments = generateMockAssessments(1000);
 
@@ -375,7 +385,7 @@ async function getFraudAssessments(
   };
 }
 
-async function getVelocityAnalytics(timeframe: string) {
+async function getVelocityAnalytics(_timeframe: string) {
   return {
     emailVelocity: {
       highVelocityEmails: 23,
@@ -442,7 +452,7 @@ async function getVelocityAnalytics(timeframe: string) {
   };
 }
 
-async function getDeviceAnalytics(timeframe: string) {
+async function getDeviceAnalytics(_timeframe: string) {
   return {
     overview: {
       totalDevices: 2847,
@@ -488,7 +498,7 @@ async function getDeviceAnalytics(timeframe: string) {
   };
 }
 
-async function getChargebackPredictions(timeframe: string) {
+async function getChargebackPredictions(_timeframe: string) {
   const predictions = generateMockChargebackPredictions(100);
 
   return {
@@ -538,7 +548,7 @@ async function getChargebackPredictions(timeframe: string) {
   };
 }
 
-async function getFraudTrends(timeframe: string) {
+async function getFraudTrends(_timeframe: string) {
   const days = timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 90;
   const trends = [];
 

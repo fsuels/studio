@@ -134,7 +134,7 @@ export async function PATCH(
         });
         break;
 
-      case 'process_refund':
+      case 'process_refund': {
         const refund = {
           id: crypto.randomUUID(),
           amount: data.amount,
@@ -159,6 +159,7 @@ export async function PATCH(
           },
         });
         break;
+      }
 
       default:
         return NextResponse.json(

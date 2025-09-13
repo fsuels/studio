@@ -5,7 +5,7 @@ import { generateMockOrders } from '@/lib/orders';
 import { generateRevenueIntelligence } from '@/lib/revenue-intelligence';
 
 // Mock database - in production, use your actual database
-let ordersDB = generateMockOrders(500); // Larger dataset for better analytics
+const ordersDB = generateMockOrders(500); // Larger dataset for better analytics
 
 export async function GET(request: NextRequest) {
   // Require admin authentication
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const dataType = url.searchParams.get('type') || 'overview';
     const timeframe = url.searchParams.get('timeframe') || '12months';
-    const cohortPeriod = url.searchParams.get('cohortPeriod') || '6months';
+    const _cohortPeriod = url.searchParams.get('cohortPeriod') || '6months';
 
     // Filter orders based on timeframe
     const filteredOrders = filterOrdersByTimeframe(ordersDB, timeframe);
@@ -197,7 +197,7 @@ function generateMonthlyMRRBreakdown(orders: any[]) {
   );
 }
 
-function analyzeGrowthFactors(orders: any[]) {
+function analyzeGrowthFactors(_orders: any[]) {
   return {
     newCustomerAcquisition: {
       rate: 15.2,
@@ -452,7 +452,7 @@ function identifyRecoveryOpportunities(leakage: any[]) {
   }));
 }
 
-function generateLeakagePreventionPlan(leakage: any[]) {
+function generateLeakagePreventionPlan(_leakage: any[]) {
   return {
     shortTerm: [
       'Implement exit surveys',

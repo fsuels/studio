@@ -234,7 +234,7 @@ async function storeEventLocally(eventData: any): Promise<void> {
 }
 
 // Simulation functions for BigQuery
-async function simulateBigQueryInsert(data: any): Promise<void> {
+async function simulateBigQueryInsert(_data: any): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
       // Simulate network delay
@@ -243,7 +243,7 @@ async function simulateBigQueryInsert(data: any): Promise<void> {
   });
 }
 
-async function simulateBigQueryBatchInsert(events: any[]): Promise<void> {
+async function simulateBigQueryBatchInsert(_events: any[]): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
       // Simulate batch processing delay
