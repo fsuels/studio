@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom';
+import React from 'react';
+// Ensure React is available in tests that reference it directly
+// Some mocks call React.forwardRef without importing React
+globalThis.React = React;
 import { configureAxe } from 'jest-axe';
 
 // Configure axe for jest
@@ -130,6 +134,14 @@ jest.mock('@radix-ui/react-select', () => ({
   Viewport: ({ children, ...props }) => <div data-testid="select-viewport" {...props}>{children}</div>,
   ScrollUpButton: ({ children, ...props }) => <button data-testid="select-scroll-up" {...props}>{children}</button>,
   ScrollDownButton: ({ children, ...props }) => <button data-testid="select-scroll-down" {...props}>{children}</button>,
+}));
+
+// Mock tooltip to avoid provider dependency
+jest.mock('@radix-ui/react-tooltip', () => ({
+  Provider: ({ children }) => <>{children}</>,
+  Root: ({ children }) => <div data-testid="tooltip-root">{children}</div>,
+  Trigger: ({ children, ...props }) => <button data-testid="tooltip-trigger" {...props}>{children}</button>,
+  Content: ({ children, ...props }) => <div data-testid="tooltip-content" {...props}>{children}</div>,
 }));
 
 // Mock embla-carousel

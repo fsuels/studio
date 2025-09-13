@@ -369,62 +369,41 @@ const AddressField = React.memo(function AddressField({
     return (
       <div className={cn('space-y-1', className)}>
         <div className="flex items-center gap-1">
-          <Label
-            htmlFor={name}
-            className={cn(fieldErrorActual && 'text-destructive')}
-          >
-            {t(label)}
-            {required && <span className="text-destructive">*</span>}
+          <Label htmlFor={name} className={cn(fieldErrorActual && 'text-destructive')}>
+            {t(label)} {required && <span className="text-destructive">*</span>}
           </Label>
           {tooltip && (
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  className="h-7 w-7 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500"
-                  aria-label={`Help for ${t(label)}`}
-                >
+                <Button type="button" variant="outline" size="icon" aria-label={`Help for ${t(label)}`}>
                   <Info className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent
-                side="top"
-                align="center"
-                sideOffset={15}
-                className="w-80 max-w-80 text-sm bg-blue-50 text-blue-900 border-blue-200 border shadow-xl rounded-lg p-4"
-                style={{ zIndex: 10000, position: 'fixed' }}
-                avoidCollisions={true}
-              >
+              <TooltipContent side="top" align="center" sideOffset={15}>
                 <p className="leading-relaxed font-medium">{t(tooltip)}</p>
               </TooltipContent>
             </Tooltip>
           )}
         </div>
-        <input
-          type="text"
-          id={name}
-          placeholder={placeholder ? t(placeholder) : t('Enter your address')}
-          onFocus={onFocus}
-          {...restOfRegister}
-          className={cn(
-            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-            fieldErrorActual &&
-              'border-destructive focus-visible:ring-destructive',
-          )}
+        <PlacePicker
+          data-testid="place-picker"
+          placeholder={placeholder || 'Enter address'}
+          country={['us', 'ca', 'mx']}
+          type="address"
+          style={{ width: '100%', height: 40 }}
+          onPlaceChange={(event: any) => {
+            const place = event?.target?.value;
+            if (!place) return;
+            const formattedAddress = place.formattedAddress || place.displayName || '';
+            if (controlledOnChange) {
+              controlledOnChange(formattedAddress, {});
+            } else {
+              rhfSetValue(name, formattedAddress);
+            }
+          }}
         />
         {fieldErrorActual && (
-          <p className="text-xs text-destructive mt-1">
-            {t(String(fieldErrorActual))}
-          </p>
-        )}
-        {process.env.NODE_ENV !== 'production' && (
-          <p className="text-xs text-muted-foreground">
-            {t(
-              'Address autocomplete unavailable - Google Maps API key not configured',
-            )}
-          </p>
+          <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>
         )}
       </div>
     );

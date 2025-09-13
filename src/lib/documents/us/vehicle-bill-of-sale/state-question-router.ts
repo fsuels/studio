@@ -2,6 +2,14 @@ import type { Question } from '@/types/documents';
 import { vehicleBillOfSaleQuestions } from './questions'; // Generic questions
 import { floridaVehicleBillOfSaleQuestions, floridaFieldMapping } from './state-specific/florida-questions';
 import { coloradoVehicleBillOfSaleQuestions, coloradoFieldMapping } from './state-specific/colorado-questions';
+import { alabamaVehicleBillOfSaleQuestions, alabamaFieldMapping } from './state-specific/alabama-questions';
+import { georgiaVehicleBillOfSaleQuestions, georgiaFieldMapping } from './state-specific/georgia-questions';
+import { idahoVehicleBillOfSaleQuestions, idahoFieldMapping } from './state-specific/idaho-questions';
+import { kansasVehicleBillOfSaleQuestions, kansasFieldMapping } from './state-specific/kansas-questions';
+import { marylandVehicleBillOfSaleQuestions, marylandFieldMapping } from './state-specific/maryland-questions';
+import { montanaVehicleBillOfSaleQuestions, montanaFieldMapping } from './state-specific/montana-questions';
+import { northDakotaVehicleBillOfSaleQuestions, northDakotaFieldMapping } from './state-specific/north-dakota-questions';
+import { westVirginiaVehicleBillOfSaleQuestions, westVirginiaFieldMapping } from './state-specific/west-virginia-questions';
 import { getVehicleBillOfSaleCompliance } from '@/lib/compliance-helper';
 
 export interface StateQuestionConfig {
@@ -58,28 +66,68 @@ function getOfficialFormQuestions(state: string, pdfPath: string): StateQuestion
       };
 
     case 'AL':
-      return getAlabamaQuestions(pdfPath);
+      return {
+        questions: alabamaVehicleBillOfSaleQuestions,
+        fieldMapping: alabamaFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'GA':
-      return getGeorgiaQuestions(pdfPath);
+      return {
+        questions: georgiaVehicleBillOfSaleQuestions,
+        fieldMapping: georgiaFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'ID':
-      return getIdahoQuestions(pdfPath);
+      return {
+        questions: idahoVehicleBillOfSaleQuestions,
+        fieldMapping: idahoFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'KS':
-      return getKansasQuestions(pdfPath);
+      return {
+        questions: kansasVehicleBillOfSaleQuestions,
+        fieldMapping: kansasFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'MD':
-      return getMarylandQuestions(pdfPath);
+      return {
+        questions: marylandVehicleBillOfSaleQuestions,
+        fieldMapping: marylandFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'MT':
-      return getMontanaQuestions(pdfPath);
+      return {
+        questions: montanaVehicleBillOfSaleQuestions,
+        fieldMapping: montanaFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'ND':
-      return getNorthDakotaQuestions(pdfPath);
+      return {
+        questions: northDakotaVehicleBillOfSaleQuestions,
+        fieldMapping: northDakotaFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     case 'WV':
-      return getWestVirginiaQuestions(pdfPath);
+      return {
+        questions: westVirginiaVehicleBillOfSaleQuestions,
+        fieldMapping: westVirginiaFieldMapping,
+        pdfPath: pdfPath,
+        requiresSpecialHandling: true
+      };
 
     default:
       // Fallback for other states with official forms

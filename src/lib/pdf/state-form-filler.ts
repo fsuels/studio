@@ -1,6 +1,14 @@
 import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox, PDFRadioGroup } from 'pdf-lib';
 import { floridaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/florida-questions';
 import { coloradoFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/colorado-questions';
+import { alabamaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/alabama-questions';
+import { georgiaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/georgia-questions';
+import { idahoFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/idaho-questions';
+import { kansasFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/kansas-questions';
+import { marylandFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/maryland-questions';
+import { montanaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/montana-questions';
+import { northDakotaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/north-dakota-questions';
+import { westVirginiaFieldMapping } from '@/lib/documents/us/vehicle-bill-of-sale/state-specific/west-virginia-questions';
 
 export interface StateFormData {
   [key: string]: any;
@@ -29,6 +37,30 @@ export async function fillStateOfficialForm(
         break;
       case 'CO':
         await fillColoradoForm(form, formData);
+        break;
+      case 'AL':
+        await fillAlabamaForm(form, formData);
+        break;
+      case 'GA':
+        await fillGeorgiaForm(form, formData);
+        break;
+      case 'ID':
+        await fillIdahoForm(form, formData);
+        break;
+      case 'KS':
+        await fillKansasForm(form, formData);
+        break;
+      case 'MD':
+        await fillMarylandForm(form, formData);
+        break;
+      case 'MT':
+        await fillMontanaForm(form, formData);
+        break;
+      case 'ND':
+        await fillNorthDakotaForm(form, formData);
+        break;
+      case 'WV':
+        await fillWestVirginiaForm(form, formData);
         break;
       default:
         await fillGenericStateForm(form, formData);
@@ -226,6 +258,132 @@ function formatDate(date: Date | string | undefined): string {
   } catch (error) {
     return date.toString();
   }
+}
+
+// Add all the state-specific form filling functions
+async function fillAlabamaForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Alabama MVT 32-13B - uses Text1, Text2, etc. fields
+  Object.entries(alabamaFieldMapping).forEach(([pdfField, dataField]) => {
+    if (pdfField.includes('Check Box')) {
+      // Handle checkboxes
+      if (data[dataField]) {
+        try {
+          const checkbox = form.getCheckBox(pdfField);
+          checkbox?.check();
+        } catch (error) {
+          console.warn(`Could not check box "${pdfField}":`, error);
+        }
+      }
+    } else {
+      // Handle text fields
+      const value = data[dataField];
+      if (value !== undefined) {
+        fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+      }
+    }
+  });
+}
+
+async function fillGeorgiaForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Georgia T-7 form filling
+  Object.entries(georgiaFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
+}
+
+async function fillIdahoForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Idaho ITD-3738 specific form filling
+  Object.entries(idahoFieldMapping).forEach(([pdfField, dataField]) => {
+    if (pdfField.includes('Actual Miles') || pdfField.includes('Not Actual') || pdfField.includes('Exceeds') || pdfField.includes('Exempt') || pdfField.includes('No Odometer')) {
+      // Handle odometer status checkboxes
+      const odometerStatus = data.odometer_status;
+      if ((pdfField.includes('Actual Miles') && odometerStatus === 'actual') ||
+          (pdfField.includes('Not Actual') && odometerStatus === 'not_actual') ||
+          (pdfField.includes('Exceeds') && odometerStatus === 'exceeds') ||
+          (pdfField.includes('Exempt') && odometerStatus === 'exempt') ||
+          (pdfField.includes('No Odometer') && odometerStatus === 'no_odometer')) {
+        try {
+          const checkbox = form.getCheckBox(pdfField);
+          checkbox?.check();
+        } catch (error) {
+          console.warn(`Could not check box "${pdfField}":`, error);
+        }
+      }
+    } else if (pdfField.includes('Rebuilt') || pdfField.includes('Previous') || pdfField.includes('Reconstruct') || pdfField.includes('Repaired')) {
+      // Handle brand status checkboxes
+      const brandStatus = data.vehicle_brand_status;
+      if ((pdfField.includes('Rebuilt') && brandStatus === 'rebuilt_salvage') ||
+          (pdfField.includes('Previous') && brandStatus === 'previous_brand') ||
+          (pdfField.includes('Reconstruct') && brandStatus === 'reconstruct') ||
+          (pdfField.includes('Repaired') && brandStatus === 'repaired')) {
+        try {
+          const checkbox = form.getCheckBox(pdfField);
+          checkbox?.check();
+        } catch (error) {
+          console.warn(`Could not check box "${pdfField}":`, error);
+        }
+      }
+    } else {
+      // Handle text fields
+      const value = data[dataField];
+      if (value !== undefined) {
+        fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+      }
+    }
+  });
+}
+
+async function fillKansasForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Kansas TR-312 form filling
+  Object.entries(kansasFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
+}
+
+async function fillMarylandForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Maryland VR-181 form filling
+  Object.entries(marylandFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
+}
+
+async function fillMontanaForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // Montana MV-24 form filling
+  Object.entries(montanaFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
+}
+
+async function fillNorthDakotaForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // North Dakota SFN-2888 form filling
+  Object.entries(northDakotaFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
+}
+
+async function fillWestVirginiaForm(form: PDFForm, data: StateFormData): Promise<void> {
+  // West Virginia DMV-7-TR form filling
+  Object.entries(westVirginiaFieldMapping).forEach(([pdfField, dataField]) => {
+    const value = data[dataField];
+    if (value !== undefined) {
+      fillTextField(form, pdfField, typeof value === 'object' && value instanceof Date ? formatDate(value) : String(value));
+    }
+  });
 }
 
 export { fillTextField, formatDate };
