@@ -179,7 +179,7 @@ async function exportUserData(
       const documentsSnap = await getDocs(documentsQuery);
 
       exportData.documents = documentsSnap.docs
-        .map((d) => ({ id: d.id, ...d.data() }))
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
         .filter((doc: any) => includeDeleted || !doc?.deletedAt);
     }
 

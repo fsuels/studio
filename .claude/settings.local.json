@@ -5,7 +5,9 @@
       "Bash(npm run typecheck:*)",
       "Bash(find:*)",
       "Bash(npx tsc:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(timeout 60 npm run build:*)",
+      "Bash(sed:*)"
     ],
     "deny": [],
     "ask": []

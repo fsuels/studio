@@ -119,14 +119,15 @@ export async function POST(request: NextRequest) {
           { testData: 'hash_test_' + Date.now() },
         );
 
-        const hasValidHash =
+        const hasValidHash = !!(
           testEvent.hash &&
           typeof testEvent.hash === 'string' &&
-          testEvent.hash.length > 0;
+          testEvent.hash.length > 0
+        );
 
         results.push({
           testName: 'Hash Generation',
-          passed: hasValidHash,
+          passed: Boolean(hasValidHash),
           message: hasValidHash
             ? 'Event hash generated successfully'
             : 'Event hash generation failed',
@@ -151,7 +152,7 @@ export async function POST(request: NextRequest) {
         const exportData = await auditService.exportUserData(user.uid);
 
         const hasData =
-          exportData && typeof exportData === 'string' && exportData.length > 0;
+          exportData && typeof exportData === 'string' && (exportData as string).length > 0;
 
         results.push({
           testName: 'Data Export',
@@ -160,7 +161,7 @@ export async function POST(request: NextRequest) {
             ? 'User data export successful'
             : 'User data export failed or returned empty',
           details: {
-            exportSize: exportData?.length || 0,
+            exportSize: typeof exportData === 'string' ? (exportData as string).length : 0,
             hasContent: hasData,
           },
         });

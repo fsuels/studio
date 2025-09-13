@@ -208,7 +208,7 @@ async function generateDetailedComplianceReport(
     complianceMetrics: analyzeComplianceMetrics(events, reportType),
     auditEvents: events.slice(0, 1000), // Limit for performance
     userData: userData?.slice(0, 100), // Limit for privacy
-    recommendations: [],
+    recommendations: [] as string[],
     certifications: {
       gdpr: analyzeGDPRCompliance(events),
       ccpa: analyzeCCPACompliance(events),
