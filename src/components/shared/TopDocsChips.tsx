@@ -31,10 +31,8 @@ import {
   Copyright,
   type LucideIcon,
 } from 'lucide-react';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 // (No need for mobile-only dropdown after redesign)
-
-import { taxonomy } from '@/config/taxonomy';
 
 const TopDocsChips = React.memo(function TopDocsChips() {
   // Use 'common' namespace for shared UI text
@@ -49,6 +47,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [tax, setTax] = useState<any | null>(null);
   // Progressive reveal: start with NO selection (only category cards)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showAllForCategory, setShowAllForCategory] = useState(false);
@@ -57,12 +56,12 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     leaseAgreement: 'updated',
   };
   
-  // Get all categories from taxonomy
-  const allCategories = Object.keys(taxonomy.categories);
+  // Get all categories from taxonomy (loaded lazily)
+  const allCategories = useMemo(() => Object.keys(tax?.categories || {}), [tax]);
   const searchParams = useSearchParams();
   
   // Category display names and icons - using all your categories
-  const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = {
+  const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = tax ? {
     'real-estate-property': {
       label: tCommon('categories.realEstate', {
         defaultValue: 'Real Estate & Property',
@@ -159,10 +158,10 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       }),
       icon: FileText,
     },
-  };
+  } : {} as any;
 
   // Short descriptions for category cards (shown in the new grid)
-  const categoryDescriptions: Record<string, string> = {
+  const categoryDescriptions: Record<string, string> = tax ? {
     'real-estate-property': tCommon('categoryDescriptions.realEstate', {
       defaultValue: 'Leases, deeds, eviction notices and more.',
     }),
@@ -211,7 +210,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     'assets-gear': tCommon('categoryDescriptions.assetsGear', {
       defaultValue: 'Purchase, loan, rental and lease forms.',
     }),
-  };
+  } : {} as any;
 
   useEffect(() => {
     setIsHydrated(true);
@@ -228,19 +227,34 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   useEffect(() => {
     if (!isHydrated) return;
-
-    // Get all documents from the library
-    setTopDocs(documentLibrary);
-    setIsLoading(false);
+    let cancelled = false;
+    (async () => {
+      try {
+        const [{ documentLibrary }, { taxonomy }] = await Promise.all([
+          import('@/lib/document-library'),
+          import('@/config/taxonomy'),
+        ]);
+        if (!cancelled) {
+          setTopDocs(documentLibrary as LegalDocument[]);
+          setTax(taxonomy);
+          setIsLoading(false);
+        }
+      } catch (e) {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [isHydrated]);
 
   const categories = useMemo(
-    () => allCategories.filter(cat => categoryMeta[cat]),
+    () => allCategories.filter((cat) => categoryMeta[cat]),
     [allCategories, categoryMeta],
   );
   // After redesign we show the full category grid responsively
   // Create mapping from taxonomy keys to document category names
-  const taxonomyToDocCategory: Record<string, string[]> = {
+  const taxonomyToDocCategory: Record<string, string[]> = tax ? {
     'real-estate-property': ['Real Estate', 'Property'],
     'employment-hr': ['Employment', 'HR'],
     'personal-family': ['Personal', 'Family'],
@@ -257,7 +271,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     'general-forms': ['General', 'Forms'],
     'ip-creative-works': ['Creative Works', 'Media'],
     'assets-gear': ['Assets', 'Gear'],
-  };
+  } : {} as any;
 
   // Filter documents by selected category
   const filteredDocs = useMemo(() => {

@@ -2,10 +2,16 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchBar from '@/components/shared/SearchBar';
+import dynamic from 'next/dynamic';
+const SearchBar = dynamic(() => import('@/components/shared/SearchBar'), {
+  ssr: false,
+});
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { Button } from '@/components/ui/button';
-import { TopDocsChips } from '@/components/shared';
+const TopDocsChips = dynamic(() => import('@/components/shared/TopDocsChips'), {
+  ssr: false,
+  loading: () => null,
+});
 import { TrustBadges } from '@/components/shared';
 import { FileText } from 'lucide-react';
 import { AutoImage } from '@/components/shared';

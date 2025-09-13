@@ -4,8 +4,7 @@ import type { ReactNode } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import dynamic from 'next/dynamic';
 const LanguageSwitch = dynamic(
-  () => import('@/components/global/LanguageSwitch'),
-  { ssr: false },
+  () => import('@/components/global/LanguageSwitch')
 );
 import MarketingClient from '@/app/marketing-client';
 
