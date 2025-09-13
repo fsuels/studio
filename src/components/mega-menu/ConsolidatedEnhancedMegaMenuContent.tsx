@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ConsolidatedMegaMenuContent from '@/components/layout/mega-menu/ConsolidatedMegaMenuContent';
 import { trackMegaMenu } from '@/lib/taxonomy-analytics';
-import { getDocumentsForCountry } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { createPortal } from 'react-dom';
 
 interface ConsolidatedEnhancedMegaMenuContentProps {
@@ -20,7 +20,7 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
   activeCategory,
 }) => {
   const [isClient, setIsClient] = React.useState(false);
-  const documents = getDocumentsForCountry('us'); // Default to US documents
+  const [documents, setDocuments] = React.useState<LegalDocument[]>([]);
 
   React.useEffect(() => {
     setIsClient(true);
@@ -32,6 +32,16 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
       panels: 5,
       structure: 'document_type_grouped'
     });
+    // Lazy load documents when menu opens on client
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
+        setDocuments(docs);
+      } catch (_) {
+        setDocuments([]);
+      }
+    })();
   }, [locale]);
 
   const handleLinkClick = React.useCallback(() => {

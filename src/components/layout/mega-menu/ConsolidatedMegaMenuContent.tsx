@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search, X, ChevronRight, FileText, Mail, FileCheck, Users, Building } from 'lucide-react';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

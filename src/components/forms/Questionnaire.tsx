@@ -28,7 +28,7 @@ import {
   ClipboardList as QuestionnaireIcon,
 } from 'lucide-react'; // Updated icons and custom icon
 import { useToast } from '@/hooks/use-toast';
-import { documentLibrary, type Question } from '@/lib/document-library'; // Import library and Question type
+import type { Question } from '@/types/documents';
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
@@ -53,9 +53,26 @@ export function Questionnaire({
   const { toast } = useToast();
 
   // Find the document object based on the name
-  const selectedDocument = documentLibrary.find(
-    (doc) => doc.name === documentType,
-  );
+  const [selectedDocument, setSelectedDocument] = useState<any | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!documentType) {
+        setSelectedDocument(null);
+        return;
+      }
+      try {
+        const mod = await import('@/lib/document-library');
+        const doc = (mod.documentLibrary as any[]).find((d) => d.name === documentType);
+        if (!cancelled) setSelectedDocument(doc || null);
+      } catch (_) {
+        if (!cancelled) setSelectedDocument(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [documentType]);
 
   // Effect to load and filter questions based on documentType and selectedState
   useEffect(() => {
@@ -72,14 +89,33 @@ export function Questionnaire({
       );
     } else if (documentType === 'General Inquiry') {
       // Handle General Inquiry case specifically if needed
-      const generalDoc = documentLibrary.find(
-        (doc) => doc.id === 'general-inquiry',
-      );
-      questionsToLoad = generalDoc?.questions || [];
+      (async () => {
+        try {
+          const mod = await import('@/lib/document-library');
+          const generalDoc = (mod.documentLibrary as any[]).find(
+            (doc) => doc.id === 'general-inquiry',
+          );
+          questionsToLoad = generalDoc?.questions || [];
+          setCurrentQuestions(questionsToLoad);
+        } catch {
+          setCurrentQuestions([]);
+        }
+      })();
+      return;
     } else if (documentType) {
       // Fallback if name doesn't match but type is provided (e.g., use default)
-      const defaultDoc = documentLibrary.find((doc) => doc.id === 'default');
-      questionsToLoad = defaultDoc?.questions || [];
+      (async () => {
+        try {
+          const mod = await import('@/lib/document-library');
+          const defaultDoc = (mod.documentLibrary as any[]).find(
+            (doc) => doc.id === 'default',
+          );
+          setCurrentQuestions(defaultDoc?.questions || []);
+        } catch {
+          setCurrentQuestions([]);
+        }
+      })();
+      return;
     }
 
     setCurrentQuestions(questionsToLoad);

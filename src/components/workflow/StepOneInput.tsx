@@ -4,21 +4,37 @@
 import React from 'react';
 import { File } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { documentLibrary } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 
 interface StepOneInputProps {
   onSelectCategory: (_category: string) => void;
 }
 
 export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
-  // Build unique category list
-  const categories = Array.from(
-    new Set(
-      documentLibrary
-        .filter((doc) => doc.id !== 'general-inquiry') // if you have a “general-inquiry” placeholder
-        .map((doc) => doc.category),
-    ),
-  );
+  const [categories, setCategories] = React.useState<string[]>([]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
+        const cats = Array.from(
+          new Set(
+            docs
+              .filter((doc) => doc.id !== 'general-inquiry')
+              .map((doc) => doc.category),
+          ),
+        );
+        if (!cancelled) setCategories(cats);
+      } catch (_) {
+        if (!cancelled) setCategories([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto py-8 overflow-x-hidden">

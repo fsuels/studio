@@ -3,7 +3,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 
 const PaymentModal = dynamic(() =>
   import('@/components/shared').then((m) => ({ default: m.PaymentModal })),

@@ -8,7 +8,7 @@ import ReviewStep from '@/components/workflow/ReviewStep';
 // If TrustBadges is a default export, change this line accordingly:
 // import TrustBadges from '@/components/shared/TrustBadges';
 import { TrustBadges } from '@/components/shared';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import type { WizardStep } from './WizardStepManager';
 
 interface WizardFormContentProps {

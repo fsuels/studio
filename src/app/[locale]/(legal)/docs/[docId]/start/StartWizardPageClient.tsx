@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { getDocumentTitle } from '@/lib/format-utils';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import dynamic from 'next/dynamic';
@@ -30,6 +30,7 @@ import type { OverlayConfig } from '@/lib/config-loader';
 import { generateQuestions } from '@/lib/question-generator';
 import { buildOverlayFromAcro } from '@/lib/pdf/acro-introspect';
 import type { Question } from '@/types/documents';
+import { loadDocumentDefinition } from '@/lib/document-loader';
 
 const Loading = () => (
   <div className="flex justify-center items-center h-32">
@@ -58,12 +59,20 @@ const SmartDocumentWizard = dynamic(
 interface StartWizardPageClientProps {
   locale: 'en' | 'es';
   docId: string;
+  docMeta?: {
+    id: string;
+    basePrice?: number;
+    category?: string;
+    name?: string;
+    description?: string;
+    translations?: {
+      en?: { name?: string; description?: string };
+      es?: { name?: string; description?: string };
+    };
+  };
 }
 
-export default function StartWizardPageClient({
-  locale,
-  docId,
-}: StartWizardPageClientProps) {
+export default function StartWizardPageClient({ locale, docId, docMeta }: StartWizardPageClientProps) {
   const { t, ready } = useTranslation('common');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -87,24 +96,72 @@ export default function StartWizardPageClient({
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
   const [overlayConfig, setOverlayConfig] = useState<OverlayConfig | null>(null);
   const [hasOverlay, setHasOverlay] = useState(false);
+  const [docDef, setDocDef] = useState<LegalDocument | null>(null);
 
-  const docConfig = useMemo(
-    () => documentLibrary.find((d) => d.id === docId),
-    [docId]
-  );
+  // Load document definition safely using the document loader service
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const result = await loadDocumentDefinition(docId);
+        if (!cancelled && result.document) {
+          setDocDef(result.document);
+          console.log(`📄 Loaded document ${docId} from ${result.source} source`);
+        }
+      } catch (error) {
+        console.warn(`Failed to load document definition for ${docId}:`, error);
+        // Create a minimal fallback document
+        if (!cancelled) {
+          const fallbackDoc: LegalDocument = {
+            id: docId,
+            name: docMeta?.name || docId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            description: docMeta?.description || `Document template for ${docId}`,
+            category: docMeta?.category || 'General',
+            schema: null as any,
+            questions: [],
+            basePrice: docMeta?.basePrice || 0,
+            requiresNotarization: false,
+            canBeRecorded: false,
+            offerNotarization: false,
+            offerRecordingHelp: false,
+            languageSupport: ['en', 'es']
+          };
+          setDocDef(fallbackDoc);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [docId, docMeta]);
 
   // Initialize form methods with default configuration
   const methods = useForm<z.infer<z.ZodTypeAny>>({
     defaultValues: {},
     mode: 'onBlur',
-    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
+    resolver: docDef?.schema ? zodResolver(docDef.schema) : undefined,
   });
 
   const { reset, watch } = methods;
   const formData = watch();
 
-  const docType = docConfig?.id || docId;
-  const docStrict = docConfig as LegalDocument;
+  const docType = docDef?.id || docMeta?.id || docId;
+  // Build a minimal LegalDocument-like object for downstream components
+  const docStrict: LegalDocument = (docDef || {
+    id: docType,
+    category: docMeta?.category || 'general',
+    schema: (z.object({}) as unknown) as any,
+    questions: [],
+    translations: docMeta?.translations,
+    name: docMeta?.name,
+    description: docMeta?.description,
+    basePrice: docMeta?.basePrice || 0,
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    languageSupport: ['en', 'es'],
+  }) as LegalDocument;
 
   // ---- Hooks and Effects ----------------------------------------------
 
@@ -112,7 +169,7 @@ export default function StartWizardPageClient({
 
   const loadDynamicQuestions = useCallback(
     async (state?: string) => {
-      if (!docConfig?.id) return;
+    if (!docType) return;
 
       const wantedState = (state || '').toUpperCase();
       if (!wantedState) {
@@ -125,8 +182,8 @@ export default function StartWizardPageClient({
 
       try {
         const jurisdiction = normalizeJurisdiction(wantedState);
-        console.log(`📍 Loading config for ${docConfig.id} in ${jurisdiction}`);
-        const cfg = await loadDocumentConfig(docConfig.id, jurisdiction);
+        console.log(`📍 Loading config for ${docType} in ${jurisdiction}`);
+        const cfg = await loadDocumentConfig(docType, jurisdiction);
 
         // Keep overlay in local state for preview
         setOverlayConfig(cfg.overlayConfig || null);
@@ -175,7 +232,7 @@ export default function StartWizardPageClient({
         setQuestionsLoaded(true);
       }
     },
-    [docConfig?.id]
+    [docType]
   );
 
   // When the state field inside the form changes, reload the questions
@@ -211,7 +268,7 @@ export default function StartWizardPageClient({
     if (!isMounted) return;
     setIsLoadingConfig(false);
     methods.reset({});
-  }, [docStrict, isMounted, methods]);
+  }, [docStrict.id, isMounted, methods]);
 
   // Draft loading
   useEffect(() => {
@@ -374,7 +431,7 @@ export default function StartWizardPageClient({
 
   // ---- Guards ----------------------------------------------------
 
-  if (!docConfig) {
+  if (!docDef && !docMeta && !docId) {
     notFound();
     return null;
   }
@@ -408,9 +465,12 @@ export default function StartWizardPageClient({
   }
 
   const documentDisplayName =
-    locale === 'es' && docStrict.translations?.es?.name
-      ? docStrict.translations.es.name
-      : getDocumentTitle(docStrict, 'en');
+    (locale === 'es' && (docStrict.translations?.es?.name || docMeta?.translations?.es?.name)) ||
+    docStrict.translations?.en?.name ||
+    docMeta?.translations?.en?.name ||
+    docStrict.name ||
+    docMeta?.name ||
+    getDocumentTitle(docStrict, 'en');
 
   if (useDirectFormFilling && selectedState) {
     return (
@@ -515,7 +575,7 @@ export default function StartWizardPageClient({
 
       <ReEngagementTools
         docId={docType}
-        totalQuestions={docStrict.questions?.length || 0}
+        totalQuestions={(dynamicQuestions?.length || docStrict.questions?.length || 0)}
         locale={locale}
       />
     </FormProvider>

@@ -4,7 +4,6 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary } from '@/lib/document-library';
 import { getDocumentTitle } from '@/lib/format-utils';
 import type { LegalDocument } from '@/types/documents';
 import { ScrollArea } from '@/components/ui/ScrollArea';
@@ -259,6 +258,23 @@ export default function MegaMenuContent({
   onLinkClick,
 }: MegaMenuContentProps) {
   const { t } = useTranslation('common');
+  const [docs, setDocs] = React.useState<LegalDocument[]>([]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const list = (mod.documentLibrary as unknown) as LegalDocument[];
+        if (!cancelled) setDocs(list);
+      } catch (_) {
+        if (!cancelled) setDocs([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Get all documents and categorize them
   const categorizedDocuments = useMemo(() => {
@@ -270,14 +286,12 @@ export default function MegaMenuContent({
     });
 
     // Filter out general inquiry and categorize documents
-    const validDocuments = documentLibrary.filter(
+    const list = (docs || []).filter(
       (doc) =>
-        doc.id !== 'general-inquiry' &&
-        doc.schema &&
-        doc.translations?.en?.name,
+        doc.id !== 'general-inquiry' && doc.schema && doc.translations?.en?.name,
     );
 
-    validDocuments.forEach((doc) => {
+    list.forEach((doc) => {
       // Use explicit mapping first, then fallback to document's category
       let mappedCategory = DOCUMENT_CATEGORY_MAPPING[doc.id];
 
@@ -336,7 +350,24 @@ export default function MegaMenuContent({
     });
 
     return categories;
-  }, [locale]);
+  }, [locale, docs]);
+
+  // Lazy-load the document library and stash it globally for memo to use
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = (mod.documentLibrary || []) as LegalDocument[];
+        if (!cancelled) (globalThis as any).__DOC_LIB__ = docs;
+      } catch (_) {
+        if (!cancelled) (globalThis as any).__DOC_LIB__ = [];
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [openCategories, setOpenCategories] = React.useState<
     Record<string, boolean>

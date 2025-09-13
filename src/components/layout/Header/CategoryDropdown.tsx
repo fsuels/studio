@@ -7,10 +7,9 @@ import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight } from 'lucide-react';
-import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 
 interface CategoryDropdownProps {
   locale: 'en' | 'es';
@@ -346,7 +345,7 @@ export default function CategoryDropdown({
   isOpen
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
-  const documents = getDocumentsForCountry('us');
+  const [documents, setDocuments] = React.useState<LegalDocument[]>([]);
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -371,6 +370,24 @@ export default function CategoryDropdown({
       return () => document.removeEventListener('keydown', handleKeyDown);
     }
   }, [isOpen, onLinkClick]);
+
+  // Lazy-load the document library only when the dropdown is opened
+  React.useEffect(() => {
+    let cancelled = false;
+    if (!isOpen) return;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
+        if (!cancelled) setDocuments(docs);
+      } catch (_) {
+        if (!cancelled) setDocuments([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen]);
 
   // Create document map for quick lookup
   const documentMap = useMemo(() => {

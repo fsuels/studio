@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
-import { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import dynamic from 'next/dynamic';
 
 const PDFPreview = dynamic(

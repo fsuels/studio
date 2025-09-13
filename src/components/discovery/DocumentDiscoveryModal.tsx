@@ -16,7 +16,7 @@ import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
 import { useDebounce } from '@/hooks/use-debounce';
 import type { DiscoveryResult } from '@/types/discovery';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
-import { findMatchingDocuments } from '@/lib/document-library';
+// Local search imported lazily inside performSearch to avoid bundling the library
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
@@ -62,7 +62,8 @@ export default function DocumentDiscoveryModal() {
     if (query.trim()) {
       console.log('[Discovery Modal] Starting search for:', query);
       
-      // Always search local documents first as a reliable fallback
+      // Always search local documents first as a reliable fallback (lazy import)
+      const { findMatchingDocuments } = await import('@/lib/document-library');
       const localDocs = findMatchingDocuments(query.trim(), locale);
       console.log('[Discovery Modal] Local search found:', localDocs.length, 'documents');
       

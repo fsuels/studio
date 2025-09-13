@@ -2,11 +2,8 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import {
-  documentLibrary,
-  LegalDocument,
-  usStates,
-} from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
+import { usStates } from '@/lib/usStates';
 
 interface StepTwoInputProps {
   category: string;
@@ -22,10 +19,23 @@ export function StepTwoInput({
   const [stateCode, setStateCode] = useState<string>('');
 
   // Memoize list of docs in this category
-  const docsInCategory: LegalDocument[] = useMemo(
-    () => documentLibrary.filter((doc) => doc.category === category),
-    [category],
-  );
+  const [docsInCategory, setDocsInCategory] = useState<LegalDocument[]>([]);
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
+        const filtered = docs.filter((doc) => doc.category === category);
+        if (!cancelled) setDocsInCategory(filtered);
+      } catch (_) {
+        if (!cancelled) setDocsInCategory([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [category]);
 
   // Handle state dropdown change
   const handleStateChange = (code: string) => {

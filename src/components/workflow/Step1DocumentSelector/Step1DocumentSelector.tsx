@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -118,13 +118,30 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     );
   }, [isHydrated, i18n.language, t]);
 
+  const [docs, setDocs] = useState<LegalDocument[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const list = (mod.documentLibrary as unknown) as LegalDocument[];
+        if (!cancelled) setDocs(list);
+      } catch (_) {
+        if (!cancelled) setDocs([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const documentsToDisplay = useMemo(() => {
-    let docs = [...documentLibrary];
+    let docsList = [...docs];
     if (!isHydrated) return [];
 
     if (currentView === 'search-results' && globalSearchTerm.trim() !== '') {
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
-      docs = docs.filter(
+      docsList = docsList.filter(
         (doc) =>
           t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
             .toLowerCase()
@@ -156,10 +173,10 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       currentView === 'documents-in-category' &&
       selectedCategoryInternal
     ) {
-      docs = docs.filter((doc) => doc.category === selectedCategoryInternal);
+      docsList = docsList.filter((doc) => doc.category === selectedCategoryInternal);
       if (docSearch.trim() !== '') {
         const lowerDocSearch = docSearch.toLowerCase();
-        docs = docs.filter(
+        docsList = docsList.filter(
           (doc) =>
             t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
               .toLowerCase()
@@ -193,7 +210,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     }
 
     if (globalSelectedState && globalSelectedState !== 'all') {
-      docs = docs.filter(
+      docsList = docsList.filter(
         (doc) =>
           doc.states === 'all' ||
           (Array.isArray(doc.states) &&
@@ -201,7 +218,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       );
     }
 
-    return docs.filter((doc) => doc.id !== 'general-inquiry');
+    return docsList.filter((doc) => doc.id !== 'general-inquiry');
   }, [
     selectedCategoryInternal,
     docSearch,
@@ -210,6 +227,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     currentView,
     t,
     isHydrated,
+    docs,
   ]);
 
   const handleCategoryClick = (key: string) => {
@@ -243,7 +261,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       | Pick<LegalDocument, 'id' | 'category' | 'translations'>,
   ) => {
     if (!isHydrated) return;
-    const fullDoc = documentLibrary.find((d) => d.id === doc.id);
+    const fullDoc = docs.find((d) => d.id === doc.id);
     if (!fullDoc) {
       toast({
         title: 'Error',

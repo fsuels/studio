@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from '@/lib/debounce';
-import { documentLibrary } from '@/lib/document-library';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { Button } from '@/components/ui/button';
@@ -62,16 +61,8 @@ export default function PreviewPane({
   const [formContextReady, setFormContextReady] = useState(false);
   const [stateHasOfficialForm, setStateHasOfficialForm] = useState<boolean | null>(null);
 
-  const docConfig = useMemo(
-    () => documentLibrary.find((d) => d.id === docId),
-    [docId],
-  );
-
-  // Use the new standardized template path structure
-  const templatePath = useMemo(() => {
-    if (!docConfig) return undefined;
-    return `/templates/${locale}/${docId}.md`; // Path relative to public folder
-  }, [docConfig, locale, docId]);
+  // Standardized template path in public folder
+  const templatePath = useMemo(() => `/templates/${locale}/${docId}.md`, [locale, docId]);
 
   const watermarkText = t('preview.watermark', {
     ns: 'translation',
@@ -157,13 +148,7 @@ export default function PreviewPane({
   }, [currentFieldId, processedMarkdown]);
 
   useEffect(() => {
-    if (!isHydrated || !docConfig) {
-      if (!docConfig && isHydrated) {
-        setError(t('Document configuration not found.', { ns: 'translation' }));
-        setIsLoading(false);
-      }
-      return;
-    }
+    if (!isHydrated) return;
 
     async function fetchTemplate() {
       setIsLoading(true);
@@ -202,7 +187,7 @@ export default function PreviewPane({
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, docConfig, isHydrated, t]);
+  }, [docId, locale, templatePath, isHydrated, t]);
 
   // Function to split markdown content into pages
   const splitContentIntoPages = useCallback((content: string) => {

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { FileText, ExternalLink, ArrowRight } from 'lucide-react';
 import { getRelatedDocuments, generateCategoryLinks, type InternalLink } from '@/lib/internal-linking';
-import { documentLibrary } from '@/lib/document-library';
+// Avoid bundling full library; load lazily where needed
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { cn } from '@/lib/utils';
 
@@ -41,35 +41,58 @@ export default function InternalLinkWidget({
   const { setShowDiscoveryModal } = useDiscoveryModal();
 
   // Get relevant documents
+  const [docs, setDocs] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const d = mod.documentLibrary as any[];
+        if (!cancelled) setDocs(d);
+      } catch (_) {
+        if (!cancelled) setDocs([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const getRelevantDocs = React.useMemo(() => {
     if (documentId) {
       return getRelatedDocuments(documentId, maxLinks);
     }
-    
+
     if (category) {
       const categoryLinks = generateCategoryLinks(category, locale);
-      return categoryLinks.slice(0, maxLinks).map(link => {
-        const docId = link.url.split('/').pop() || '';
-        return documentLibrary.find(doc => doc.id === docId);
-      }).filter(Boolean);
+      return categoryLinks
+        .slice(0, maxLinks)
+        .map((link) => {
+          const docId = link.url.split('/').pop() || '';
+          return docs.find((doc) => doc.id === docId);
+        })
+        .filter(Boolean);
     }
-    
+
     // Fallback: search by keywords
     if (keywords.length > 0) {
-      return documentLibrary
-        .filter(doc => {
+      return docs
+        .filter((doc) => {
           const docName = getDocTranslation(doc, locale).name.toLowerCase();
-          const docDesc = getDocTranslation(doc, locale).description?.toLowerCase() || '';
-          return keywords.some(keyword => 
-            docName.includes(keyword.toLowerCase()) || 
-            docDesc.includes(keyword.toLowerCase())
+          const docDesc = (
+            getDocTranslation(doc, locale).description || ''
+          ).toLowerCase();
+          return keywords.some(
+            (keyword) =>
+              docName.includes(keyword.toLowerCase()) ||
+              docDesc.includes(keyword.toLowerCase()),
           );
         })
         .slice(0, maxLinks);
     }
-    
-    return [];
-  }, [documentId, category, keywords, maxLinks, locale]);
+
+    return [] as any[];
+  }, [documentId, category, keywords, maxLinks, locale, docs]);
 
   if (!getRelevantDocs || getRelevantDocs.length === 0) {
     return null;

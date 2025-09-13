@@ -21,11 +21,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
-import {
-  documentLibrary,
-  usStates,
-  findMatchingDocuments,
-} from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
+import { usStates } from '@/lib/usStates';
 
 interface Props {
   onSelect: (_documentId: string) => void; // Now accepts the document ID
@@ -46,16 +43,48 @@ export default function DocumentTypeSelector({
     // Set hydrated state on client
   }, []);
 
-  const categories = useMemo(() => {
-    return [...new Set(documentLibrary.map((doc) => doc.category))];
+  const [categories, setCategories] = useState<string[]>([]);
+  const [filteredDocuments, setFilteredDocuments] = useState<LegalDocument[]>([]);
+
+  // Lazy-load categories from the library when component mounts
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs: LegalDocument[] = (mod.documentLibrary as unknown) as LegalDocument[];
+        if (!cancelled) {
+          setCategories([...new Set(docs.map((d) => d.category))]);
+        }
+      } catch (_) {
+        if (!cancelled) setCategories([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const filteredDocuments = useMemo(() => {
-    return findMatchingDocuments(
-      searchQuery,
-      i18n.language as 'en' | 'es',
-      selectedState,
-    );
+  // Lazy-load search functionality and update results when inputs change
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const find = mod.findMatchingDocuments as (
+          q: string,
+          lang: 'en' | 'es',
+          state?: string,
+        ) => LegalDocument[];
+        const results = find(searchQuery, i18n.language as 'en' | 'es', selectedState);
+        if (!cancelled) setFilteredDocuments(results);
+      } catch (_) {
+        if (!cancelled) setFilteredDocuments([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [searchQuery, selectedState, i18n.language]);
 
   return (

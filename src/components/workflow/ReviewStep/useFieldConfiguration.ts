@@ -2,9 +2,9 @@
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import type { Question } from '@/types/documents';
-import { usStates } from '@/lib/document-library';
+import { usStates } from '@/lib/usStates';
 import { prettify } from '@/lib/schema-utils';
 import { z, type AnyZodObject } from 'zod';
 import type { ReviewField, ZodDefExtras, FormValues } from './types';

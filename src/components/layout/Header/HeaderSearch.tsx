@@ -7,9 +7,8 @@ import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, FileText, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { search } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface HeaderSearchProps {
@@ -37,16 +36,37 @@ export default function HeaderSearch({
 
   // Search functionality
   useEffect(() => {
-    if (searchQuery.trim().length > 1) {
-      console.log('HeaderSearch - Searching for:', searchQuery);
-      const results = search(searchQuery, clientLocale);
-      console.log('HeaderSearch - Results:', results);
-      setSearchResults(results.slice(0, 8));
-      setShowResults(results.length > 0);
-    } else {
-      setSearchResults([]);
-      setShowResults(false);
-    }
+    let cancelled = false;
+    (async () => {
+      if (searchQuery.trim().length > 1) {
+        try {
+          const mod = await import('@/lib/document-library');
+          const fn = mod.search as (
+            q: string,
+            l: 'en' | 'es',
+            s?: string,
+          ) => LegalDocument[];
+          const results = fn(searchQuery, clientLocale);
+          if (!cancelled) {
+            setSearchResults(results.slice(0, 8));
+            setShowResults(results.length > 0);
+          }
+        } catch (_) {
+          if (!cancelled) {
+            setSearchResults([]);
+            setShowResults(false);
+          }
+        }
+      } else {
+        if (!cancelled) {
+          setSearchResults([]);
+          setShowResults(false);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [searchQuery, clientLocale]);
 
   // Click outside to close results

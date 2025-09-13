@@ -28,9 +28,7 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
     if (mounted) {
       try {
         const savedRole = localStorage.getItem('userRole');
-        if (savedRole && taxonomy.roles[savedRole]) {
-          setUserRole(savedRole);
-        }
+        if (savedRole) setUserRole(savedRole);
       } catch (error) {
         // localStorage not available
       }

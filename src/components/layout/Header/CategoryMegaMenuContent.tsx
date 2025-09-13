@@ -9,9 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { X, Search, ChevronRight, FileText } from 'lucide-react';
-import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 
 interface CategoryMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -123,7 +122,7 @@ export default function CategoryMegaMenuContent({
   onSearchChange
 }: CategoryMegaMenuContentProps) {
   const { t } = useTranslation('common');
-  const documents = getDocumentsForCountry('us');
+  const [documents, setDocuments] = React.useState<LegalDocument[]>([]);
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
 
   // Handle global keyboard events
@@ -137,6 +136,23 @@ export default function CategoryMegaMenuContent({
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  // Lazy-load docs when menu content mounts
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
+        if (!cancelled) setDocuments(docs);
+      } catch (_) {
+        if (!cancelled) setDocuments([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Create document map for quick lookup
   const documentMap = useMemo(() => {

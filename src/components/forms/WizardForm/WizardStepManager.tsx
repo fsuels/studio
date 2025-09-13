@@ -1,6 +1,6 @@
 // src/components/forms/WizardForm/WizardStepManager.ts
 import { useMemo } from 'react';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import type { Question } from '@/types/documents';
 
 export type WizardStep = Question & { section?: string };

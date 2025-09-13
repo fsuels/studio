@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import ReviewStepContainer from './ReviewStep/ReviewStepContainer';
 
 interface ReviewStepProps {

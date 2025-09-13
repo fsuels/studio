@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import type { Question } from '@/types/documents';
 import { WizardSkeleton } from '@/components/ui/SkeletonVariants';
 

@@ -58,22 +58,8 @@ export default function EnhancedHeaderSearch({
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
     : 'Search documents...';
 
-  // Load suggestions on mount only if enhanced search is enabled
-  useEffect(() => {
-    if (!mounted) return;
-    (async () => {
-      try {
-        const { taxonomy } = await import('@/config/taxonomy');
-        const useEnhanced = !!taxonomy?.feature_flags?.wizard_v4?.enabled;
-        if (!useEnhanced) return;
-        const { getSearchSuggestions } = await import('@/lib/enhanced-search');
-        const items = await getSearchSuggestions(clientLocale);
-        setSuggestions(items);
-      } catch (e) {
-        // silently ignore if config not available
-      }
-    })();
-  }, [mounted, clientLocale]);
+  // Defer suggestions until focus for better idle performance
+  const suggestionsFetchedRef = useRef(false);
 
   // Enhanced search functionality with debouncing
   const performSearch = useCallback(
@@ -182,7 +168,21 @@ export default function EnhancedHeaderSearch({
     }
   };
 
-  const handleFocus = () => {
+  const handleFocus = async () => {
+    try {
+      if (!suggestionsFetchedRef.current) {
+        const { taxonomy } = await import('@/config/taxonomy');
+        const useEnhanced = !!taxonomy?.feature_flags?.wizard_v4?.enabled;
+        if (useEnhanced) {
+          const { getSearchSuggestions } = await import('@/lib/enhanced-search');
+          const items = await getSearchSuggestions(clientLocale);
+          setSuggestions(items);
+        }
+        suggestionsFetchedRef.current = true;
+      }
+    } catch (_) {
+      // ignore
+    }
     if (searchQuery.trim().length === 0 && suggestions.length > 0) {
       setSearchResults(suggestions);
       setShowResults(true);

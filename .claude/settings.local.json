@@ -100,7 +100,10 @@
       "Bash(next dev:*)",
       "Bash(cp:*)",
       "Bash(if [ -f \"/mnt/c/dev/123legaldoc/public/assets/us/$state/vehicle-bill-of-sale/config.json\" ])",
-      "Bash(diff:*)"
+      "Bash(diff:*)",
+      "Bash(NODE_OPTIONS=--max-old-space-size=8192 timeout 60s npm run build)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 90s npx next build --no-lint)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=8192 timeout 90s npm run build)"
     ],
     "deny": []
   }

@@ -89,6 +89,18 @@ export default async function StartWizardPage({
     notFound();
   }
 
+  // Prepare lightweight meta for the client to avoid bundling full library there
+  const docMeta = docConfig
+    ? {
+        id: docConfig.id,
+        basePrice: docConfig.basePrice,
+        category: docConfig.category,
+        name: docConfig.name,
+        description: docConfig.description,
+        translations: docConfig.translations,
+      }
+    : { id: docId };
+
   // Delegate to the client for the form + preview + autosave logic
-  return <StartWizardPageClient locale={locale} docId={docId} />;
+  return <StartWizardPageClient locale={locale} docId={docId} docMeta={docMeta} />;
 }

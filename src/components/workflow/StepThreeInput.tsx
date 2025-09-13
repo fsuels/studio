@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { documentLibrary } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 import type { FormField } from '@/data/formSchemas';
 
@@ -11,7 +11,23 @@ interface Props {
 }
 
 export function StepThreeInput({ templateId }: Props) {
-  const template = documentLibrary.find((doc) => doc.id === templateId)!;
+  const [template, setTemplate] = useState<LegalDocument | null>(null);
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('@/lib/document-library');
+        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
+        const t = docs.find((doc) => doc.id === templateId) || null;
+        if (!cancelled) setTemplate(t);
+      } catch (_) {
+        if (!cancelled) setTemplate(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [templateId]);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [upsells, setUpsells] = useState({ notarize: false, record: false });
 
@@ -56,9 +72,9 @@ export function StepThreeInput({ templateId }: Props) {
     setLoading(false);
   };
 
-  const allFieldsFilled =
-    template.questions?.every((q) => !q.required || formData[q.id]?.trim()) ??
-    true;
+  const allFieldsFilled = template
+    ? template.questions?.every((q) => !q.required || (formData[q.id] as string)?.trim()) ?? true
+    : true;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -69,7 +85,7 @@ export function StepThreeInput({ templateId }: Props) {
         Fill in the details below and preview your document.
       </p>
 
-      {template.questions?.map((q) => (
+      {template?.questions?.map((q) => (
         <div key={q.id} className="mb-4">
           <label className="block font-medium mb-1">{q.label}</label>
           {q.type === 'textarea' ? (
