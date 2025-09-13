@@ -124,6 +124,7 @@ if (!isTurbopack) {
   const webpack = require('webpack');
   const customWebpackConfig = (
     webpackConfig: WebpackConfiguration,
+    { isServer }: { isServer: boolean }
   ): WebpackConfiguration => {
     webpackConfig.plugins = webpackConfig.plugins || [];
     webpackConfig.plugins.push(
@@ -134,6 +135,59 @@ if (!isTurbopack) {
     webpackConfig.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
     );
+
+    // Optimize bundle splitting
+    if (!isServer) {
+      webpackConfig.optimization = {
+        ...webpackConfig.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            framework: {
+              name: 'framework',
+              chunks: 'all',
+              test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
+              priority: 40,
+              enforce: true,
+            },
+            lib: {
+              test(module: any) {
+                return module.size() > 160000 &&
+                  /node_modules[/\\]/.test(module.identifier());
+              },
+              name(module: any) {
+                const hash = require('crypto').createHash('sha1');
+                hash.update(module.identifier());
+                return hash.digest('hex').substring(0, 8);
+              },
+              priority: 30,
+              minChunks: 1,
+              reuseExistingChunk: true,
+            },
+            commons: {
+              name: 'commons',
+              chunks: 'all',
+              minChunks: 2,
+              priority: 20,
+            },
+            shared: {
+              name(module: any, chunks: any) {
+                return require('crypto')
+                  .createHash('sha1')
+                  .update(chunks.reduce((acc: string, chunk: any) => acc + chunk.name, ''))
+                  .digest('hex');
+              },
+              priority: 10,
+              minChunks: 2,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+
     return webpackConfig;
   };
   // @ts-ignore: relax typing to assign custom webpack config

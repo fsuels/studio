@@ -1,6 +1,5 @@
 // src/app/api/marketplace/revenue/connect/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { revenueShareSystem } from '@/lib/marketplace/revenue-sharing-system';
 
 /**
  * POST /api/marketplace/revenue/connect
@@ -34,6 +33,8 @@ export async function POST(request: NextRequest) {
     const userId = 'user-id'; // TODO: Get from auth
 
     // Set up Stripe Connect account
+    // Dynamically import revenue sharing system
+    const { revenueShareSystem } = await import('@/lib/marketplace/revenue-sharing-system');
     const result = await revenueShareSystem.setupStripeConnect(userId, {
       email,
       businessType,

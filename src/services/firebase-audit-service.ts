@@ -27,6 +27,7 @@ export enum EventType {
   POLICY_VIEWED = 'policy_viewed',
   CONSENT_GIVEN = 'consent_given',
   CONSENT_WITHDRAWN = 'consent_withdrawn',
+  LEGAL_UPDATE_INTERACTION = 'legal_update_interaction',
 }
 
 // Define AuditEvent interface for compatibility
@@ -227,7 +228,8 @@ export class FirebaseAuditService {
       | 'terms_accepted'
       | 'privacy_viewed'
       | 'consent_given'
-      | 'consent_withdrawn',
+      | 'consent_withdrawn'
+      | 'legal_update_interaction',
     metadata: Record<string, unknown> = {},
   ): Promise<void> {
     const eventTypeMap = {
@@ -235,6 +237,7 @@ export class FirebaseAuditService {
       privacy_viewed: EventType.POLICY_VIEWED,
       consent_given: EventType.CONSENT_GIVEN,
       consent_withdrawn: EventType.CONSENT_WITHDRAWN,
+      legal_update_interaction: EventType.LEGAL_UPDATE_INTERACTION,
     };
 
     await this.logEvent(eventTypeMap[type], metadata);

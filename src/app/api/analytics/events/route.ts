@@ -1,7 +1,6 @@
 // Event streaming API for BigQuery and real-time analytics
 // Enhanced with Google Pub/Sub integration for better scalability
 import { NextRequest, NextResponse } from 'next/server';
-import { pubsubAnalytics } from '@/lib/pubsub-analytics';
 
 // BigQuery streaming configuration
 const BIGQUERY_PROJECT_ID =
@@ -81,6 +80,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Stream to Pub/Sub first (if enabled), then BigQuery as fallback
+    const { pubsubAnalytics } = await import('@/lib/pubsub-analytics');
     const pubsubSuccess = await pubsubAnalytics.streamAnalyticsEvent({
       eventName: event,
       sessionId,

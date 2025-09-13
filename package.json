@@ -8,6 +8,7 @@
     "dev:alt": "next dev --turbopack -p 9003",
     "dev:collab": "ENABLE_COLLABORATION=true node collaboration-server.mjs",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 next build",
+    "analyze": "cross-env ANALYZE=true NODE_OPTIONS=--max-old-space-size=8192 next build",
     "export": "next export apps/web/out",
     "start": "cross-env NODE_ENV=production node server.mjs",
     "start:collab": "cross-env NODE_ENV=production ENABLE_COLLABORATION=true node collaboration-server.mjs",

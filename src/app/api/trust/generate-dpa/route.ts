@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdmin } from '@/lib/firebase-admin';
+// Dynamic imports for optimization
 import { auditService } from '@/services/firebase-audit-service';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+// PDF library will be imported dynamically
 import { z } from 'zod';
 
 const dpaRequestSchema = z.object({
@@ -29,6 +29,9 @@ const dataTypeLabels: Record<string, string> = {
 };
 
 async function generateDPAPDF(data: any): Promise<Buffer> {
+  // Dynamically import PDF library
+  const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([612, 792]); // Standard US Letter size
   const { width, height } = page.getSize();
@@ -209,7 +212,9 @@ async function uploadToFirebaseStorage(
   pdfBuffer: Buffer,
   filename: string,
 ): Promise<string> {
-  const bucket = getAdmin().storage().bucket();
+  const { getStorage } = await import('@/lib/firebase-admin-optimized');
+  const storage = await getStorage();
+  const bucket = storage.bucket();
   const file = bucket.file(`dpa-agreements/${filename}`);
 
   await file.save(pdfBuffer, {
@@ -277,7 +282,9 @@ export async function POST(request: NextRequest) {
       status: 'generated',
     };
 
-    const docRef = await getAdmin().firestore().collection('dpa_agreements').add(dpaRecord);
+    const { getFirestore } = await import('@/lib/firebase-admin-optimized');
+    const firestore = await getFirestore();
+    const docRef = await firestore.collection('dpa_agreements').add(dpaRecord);
 
     // Log audit event
     await auditService.logComplianceEvent('dpa_generated', {
@@ -330,7 +337,9 @@ export async function GET(request: NextRequest) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const recentDPAsSnapshot = await getAdmin().firestore()
+    const { getFirestore } = await import('@/lib/firebase-admin-optimized');
+    const firestore = await getFirestore();
+    const recentDPAsSnapshot = await firestore
       .collection('dpa_agreements')
       .where('createdAt', '>=', thirtyDaysAgo)
       .orderBy('createdAt', 'desc')

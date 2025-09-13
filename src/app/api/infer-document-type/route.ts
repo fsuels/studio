@@ -1,12 +1,15 @@
 // src/app/api/infer-document-type/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  inferDocumentTypeFlow,
-  InferDocumentTypeInputSchema,
-  InferDocumentTypeOutput,
-  InferDocumentTypeOutputSchema,
-} from '@/ai/flows/infer-document-type';
 import { z } from 'zod';
+
+// Type definitions (will be imported dynamically at runtime)
+type InferDocumentTypeOutput = {
+  suggestions: Array<{
+    docType: string;
+    confidence: number;
+    reasoning?: string;
+  }>;
+};
 
 type ErrorResponse = {
   error: string;
@@ -43,6 +46,8 @@ export async function POST(request: NextRequest) {
       `${logPrefix} Validating request body. Body received:`,
       JSON.stringify(body),
     );
+    // Dynamically import AI flow to reduce bundle size
+    const { InferDocumentTypeInputSchema } = await import('@/ai/flows/infer-document-type');
     const validationResult = InferDocumentTypeInputSchema.safeParse(body);
     if (!validationResult.success) {
       const validationErrors = validationResult.error.flatten();
@@ -70,6 +75,7 @@ export async function POST(request: NextRequest) {
     );
 
     console.log(`${logPrefix} Calling inferDocumentTypeFlow...`);
+    const { inferDocumentTypeFlow, InferDocumentTypeOutput } = await import('@/ai/flows/infer-document-type');
     const output: InferDocumentTypeOutput = await inferDocumentTypeFlow(input);
 
     if (!output || !output.suggestions || output.suggestions.length === 0) {
@@ -86,6 +92,7 @@ export async function POST(request: NextRequest) {
       }
       // If output exists but suggestions are empty, this might be a valid scenario (e.g., "General Inquiry")
       // But we should ensure the schema is still met.
+      const { InferDocumentTypeOutputSchema } = await import('@/ai/flows/infer-document-type');
       const outputValidation = InferDocumentTypeOutputSchema.safeParse(output);
       if (!outputValidation.success) {
         console.error(

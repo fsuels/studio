@@ -1,7 +1,7 @@
 // src/app/api/collaboration/notifications/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { notificationService } from '@/lib/collaboration/notifications';
-import { getAdmin } from '@/lib/firebase-admin';
+import { getAuth, getFirestore } from '@/lib/firebase-admin-optimized';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
+    const auth = await getAuth();
+    const decodedToken = await auth.verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     switch (action) {
@@ -90,11 +91,12 @@ export async function GET(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
+    const auth = await getAuth();
+    const decodedToken = await auth.verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     // Get notifications from Firestore
-    const adminDb = getAdmin().firestore();
+    const adminDb = await getFirestore();
 
     let query = adminDb
       .collection('notifications')
