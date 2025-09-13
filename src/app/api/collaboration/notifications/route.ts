@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await auth.verifyIdToken(idToken);
+    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     // Get notifications from Firestore

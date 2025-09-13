@@ -179,8 +179,8 @@ async function exportUserData(
       const documentsSnap = await getDocs(documentsQuery);
 
       exportData.documents = documentsSnap.docs
-        .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .filter((doc) => includeDeleted || !doc.deletedAt);
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .filter((doc: any) => includeDeleted || !doc?.deletedAt);
     }
 
     // Export folders

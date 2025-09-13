@@ -102,10 +102,10 @@ export async function GET(request: NextRequest) {
         return getAuditData(request, { page, limit });
 
       case 'impersonation':
-        return getImpersonationData(_request);
+        return getImpersonationData(request);
 
       case 'stats':
-        return getStatsData(_request);
+        return getStatsData(request);
 
       default:
         return getDashboardData(request);

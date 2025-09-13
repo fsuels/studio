@@ -363,6 +363,7 @@ async function handleSimilarDocuments(params: any) {
   }
 
   try {
+    const { pineconeService } = await import('@/lib/vector-search/pinecone-service');
     const similarDocs = await pineconeService.findSimilarDocuments(
       docId,
       topK,
