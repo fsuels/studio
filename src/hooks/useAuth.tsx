@@ -21,6 +21,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auditService } from '@/services/firebase-audit-service';
+import type { FirebaseError } from 'firebase/app';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -186,6 +187,15 @@ function useAuthHook(): AuthContextType {
     [],
   );
 
+  const isFirebaseError = (e: unknown): e is FirebaseError => {
+    return (
+      typeof e === 'object' &&
+      e !== null &&
+      'code' in e &&
+      typeof (e as { code: unknown }).code === 'string'
+    );
+  };
+
   const resetPassword = useCallback(async (email: string) => {
     try {
       const auth = getAuth(app);
@@ -212,24 +222,25 @@ function useAuthHook(): AuthContextType {
       });
     } catch (err: unknown) {
       console.error('[useAuth] resetPassword error details:', {
-        code: (err as any)?.code,
-        message: (err as Error)?.message,
-        stack: (err as Error)?.stack,
+        code: isFirebaseError(err) ? err.code : undefined,
+        message: err instanceof Error ? err.message : undefined,
+        stack: err instanceof Error ? err.stack : undefined,
         email,
         authDomain: app?.options?.authDomain,
         projectId: app?.options?.projectId,
       });
       
       // Provide more specific error messages
-      let userFriendlyMessage = (err as Error)?.message || 'Password reset failed';
+      let userFriendlyMessage =
+        err instanceof Error ? err.message : 'Password reset failed';
       
-      if (err?.code === 'auth/network-request-failed') {
+      if (isFirebaseError(err) && err.code === 'auth/network-request-failed') {
         userFriendlyMessage = 'Network error. Please check your internet connection and try again.';
-      } else if (err?.code === 'auth/user-not-found') {
+      } else if (isFirebaseError(err) && err.code === 'auth/user-not-found') {
         userFriendlyMessage = 'No account found with this email address.';
-      } else if (err?.code === 'auth/invalid-email') {
+      } else if (isFirebaseError(err) && err.code === 'auth/invalid-email') {
         userFriendlyMessage = 'Please enter a valid email address.';
-      } else if (err?.code === 'auth/too-many-requests') {
+      } else if (isFirebaseError(err) && err.code === 'auth/too-many-requests') {
         userFriendlyMessage = 'Too many attempts. Please wait a moment and try again.';
       }
       
@@ -244,8 +255,9 @@ function useAuthHook(): AuthContextType {
           userAgent:
             typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
           success: false,
-          error: err?.code || 'Unknown error',
-          errorMessage: err?.message || 'Password reset failed',
+          error: isFirebaseError(err) ? err.code : 'Unknown error',
+          errorMessage:
+            err instanceof Error ? err.message : 'Password reset failed',
         });
       } catch (auditError) {
         console.error('[useAuth] Failed to log audit event:', auditError);
@@ -253,8 +265,10 @@ function useAuthHook(): AuthContextType {
       
       // Create a new error with user-friendly message but preserve original error code
       const enhancedError = new Error(userFriendlyMessage);
-      (enhancedError as any).code = (err as any)?.code;
-      (enhancedError as any).originalError = err;
+      Object.assign(enhancedError, {
+        code: isFirebaseError(err) ? err.code : undefined,
+        originalError: err,
+      });
       
       throw enhancedError;
     }

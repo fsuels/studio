@@ -167,6 +167,7 @@ export function MobileCheckbox({
           'flex items-start space-x-3 cursor-pointer min-h-[44px] py-2',
           disabled && 'cursor-not-allowed opacity-50',
         )}
+        aria-label={label}
       >
         <div className="relative flex-shrink-0 mt-1">
           <input

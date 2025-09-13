@@ -70,7 +70,7 @@ export function useCollaboration({
   const [isConnected, setIsConnected] = React.useState(false);
   const [isConnecting, setIsConnecting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [authToken, setAuthToken] = React.useState<string | null>(null);
+  const [_authToken, setAuthToken] = React.useState<string | null>(null);
 
   // Real-time data
   const [presence, setPresence] = React.useState<PresenceInfo[]>([]);
@@ -79,7 +79,7 @@ export function useCollaboration({
   const [unreadMentions, setUnreadMentions] = React.useState(0);
 
   // Event callbacks
-  const eventCallbacks = React.useRef<Map<string, Function[]>>(new Map());
+  const eventCallbacks = React.useRef<Map<string, ((...args: unknown[]) => void)[]>>(new Map());
 
   const currentUser: CollaborationUser = React.useMemo(
     () => ({
@@ -201,6 +201,7 @@ export function useCollaboration({
     isConnecting,
     isConnected,
     getAuthToken,
+    emitEvent,
   ]);
 
   // Disconnect from collaboration
@@ -256,14 +257,14 @@ export function useCollaboration({
     setUnreadMentions((prev) => Math.max(0, prev - 1));
   }, []);
 
-  const updatePresence = React.useCallback((data: Record<string, unknown>) => {
+  const updatePresence = React.useCallback((_data: Record<string, unknown>) => {
     // Update local presence data
     // This could be extended to include more presence information
   }, []);
 
   // Event handlers
   const addEventListener = React.useCallback(
-    (event: string, callback: Function): (() => void) => {
+    (event: string, callback: (...args: unknown[]) => void): (() => void) => {
       if (!eventCallbacks.current.has(event)) {
         eventCallbacks.current.set(event, []);
       }

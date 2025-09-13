@@ -30,11 +30,6 @@ export default function AdminLoginPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
 
-  // Check if already authenticated
-  useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
-
   const checkAuthStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/auth');
@@ -50,6 +45,11 @@ export default function AdminLoginPage() {
       setIsAuthenticated(false);
     }
   }, [router]);
+
+  // Check if already authenticated
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

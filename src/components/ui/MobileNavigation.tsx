@@ -106,7 +106,7 @@ export function MobileNavigation({
       )}
 
       {/* Navigation panel */}
-      <nav
+      <div
         className={cn(
           slideClasses.base,
           isOpen ? slideClasses.open : slideClasses.closed,
@@ -122,7 +122,7 @@ export function MobileNavigation({
         aria-label="Mobile navigation"
       >
         {children}
-      </nav>
+      </div>
     </>
   );
 }

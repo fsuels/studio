@@ -125,22 +125,36 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
               ? itemClassName(item, virtualRow.index)
               : itemClassName;
 
+          const commonStyle = {
+            position: 'absolute' as const,
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: `${virtualRow.size}px`,
+            transform: `translateY(${virtualRow.start}px)`,
+          };
+
+          if (onItemClick) {
+            return (
+              <button
+                key={key}
+                type="button"
+                style={commonStyle}
+                className={itemClasses}
+                onClick={() => onItemClick?.(item, virtualRow.index)}
+                onKeyDown={(e) => handleKeyDown(e, item, virtualRow.index)}
+              >
+                {renderItem(item, virtualRow.index)}
+              </button>
+            );
+          }
+
           return (
             <div
               key={key}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`,
-              }}
+              style={commonStyle}
               className={itemClasses}
-              onClick={() => onItemClick?.(item, virtualRow.index)}
-              onKeyDown={(e) => handleKeyDown(e, item, virtualRow.index)}
-              tabIndex={onItemClick ? 0 : undefined}
-              role={onItemClick ? "button" : "listitem"}
+              role="listitem"
               aria-posinset={virtualRow.index + 1}
               aria-setsize={items.length}
             >
@@ -285,18 +299,34 @@ export const VirtualizedGrid = React.memo(function VirtualizedGrid<T>({
                     ? itemClassName(item, itemIndex)
                     : itemClassName;
 
+                if (onItemClick) {
+                  return (
+                    <div
+                      key={key}
+                      role="gridcell"
+                      aria-colindex={colIndex + 1}
+                      aria-rowindex={virtualRow.index + 1}
+                    >
+                      <button
+                        type="button"
+                        className={itemClasses}
+                        onClick={() => onItemClick?.(item, itemIndex)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onItemClick(item, itemIndex);
+                          }
+                        }}
+                      >
+                        {renderItem(item, itemIndex)}
+                      </button>
+                    </div>
+                  );
+                }
                 return (
                   <div
                     key={key}
                     className={itemClasses}
-                    onClick={() => onItemClick?.(item, itemIndex)}
-                    onKeyDown={(e) => {
-                      if (onItemClick && (e.key === 'Enter' || e.key === ' ')) {
-                        e.preventDefault();
-                        onItemClick(item, itemIndex);
-                      }
-                    }}
-                    tabIndex={onItemClick ? 0 : undefined}
                     role="gridcell"
                     aria-colindex={colIndex + 1}
                     aria-rowindex={virtualRow.index + 1}

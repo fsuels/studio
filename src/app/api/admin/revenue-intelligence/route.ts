@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
 // Helper functions
 function filterOrdersByTimeframe(orders: any[], timeframe: string) {
   const now = new Date();
-  let cutoffDate = new Date();
+  const cutoffDate = new Date();
 
   switch (timeframe) {
     case '3months':

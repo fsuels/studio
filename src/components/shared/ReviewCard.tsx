@@ -73,16 +73,63 @@ const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
   const reviewLocation =
     showLocation && review.location ? review.location : null;
 
+  if (clickable) {
+    return (
+      <button
+        type="button"
+        className={containerClasses}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        id={id}
+        data-testid={testId || 'review-card'}
+        aria-label={`Review by ${reviewerName}`}
+        {...rest}
+      >
+        {/* Rating Stars */}
+        {showStars && (
+          <div className="mb-4">
+            <Stars
+              rating={review.rating || 5}
+              size={size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md'}
+              data-testid="review-rating"
+            />
+          </div>
+        )}
+
+        {/* Review Quote */}
+        <blockquote className="flex-1 my-4 italic leading-relaxed text-gray-800">
+          <p>&quot;{truncatedQuote}&quot;</p>
+        </blockquote>
+
+        {/* Reviewer Information */}
+        <footer className="mt-auto">
+          <cite className="font-semibold text-gray-900 not-italic">
+            {reviewerName}
+          </cite>
+
+          {reviewLocation && (
+            <p className="mt-1 text-sm text-gray-500">{reviewLocation}</p>
+          )}
+
+          {/* Review Date if available */}
+          {review.date && (
+            <time
+              dateTime={review.date}
+              className="mt-1 text-xs text-gray-400 block"
+            >
+              {new Date(review.date).toLocaleDateString()}
+            </time>
+          )}
+        </footer>
+      </button>
+    );
+  }
+
   return (
     <div
       className={containerClasses}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
       id={id}
       data-testid={testId || 'review-card'}
-      tabIndex={clickable ? 0 : undefined}
-      role={clickable ? 'button' : undefined}
-      aria-label={clickable ? `Review by ${reviewerName}` : undefined}
       {...rest}
     >
       {/* Rating Stars */}
