@@ -160,7 +160,6 @@ export function BottomTabNavigation({
       )}
       aria-label="Bottom navigation"
     >
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role */}
       <div role="tablist" aria-label="Bottom navigation">
       {items.map((item) => {
         const isActive = activeTab === item.id;

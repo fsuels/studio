@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
         return getUsersData(request, { page, limit, search, roleFilter });
 
       case 'features':
-        return getFeaturesData(_request);
+        return getFeaturesData(request);
 
       case 'audit':
         return getAuditData(request, { page, limit });

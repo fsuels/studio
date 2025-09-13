@@ -8,6 +8,8 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import { localizations } from '@/lib/localizations';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { redirect } from 'next/navigation';
+import { documentLibrary } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library';
 
 export const dynamic = 'force-static';
 
@@ -63,14 +65,14 @@ export default async function DocPage({ params }: DocPageProps) {
   }
 
   // optional guard
-  if (!documentLibrary.find((d) => d.id === docId)) {
+  if (!documentLibrary.find((d: LegalDocument) => d.id === docId)) {
     // throw notFound() here if desired
   }
 
   const markdownContent = await getMarkdown(locale, docId);
 
   // Prepare lightweight doc meta for client to avoid bundling full library there
-  const doc = documentLibrary.find((d) => d.id === docId);
+  const doc = documentLibrary.find((d: LegalDocument) => d.id === docId);
   const docMeta = doc
     ? {
         id: doc.id,

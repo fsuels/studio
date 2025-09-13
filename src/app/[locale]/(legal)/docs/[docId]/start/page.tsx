@@ -8,6 +8,8 @@ import { notFound } from 'next/navigation';
 import StartWizardPageClient from './StartWizardPageClient';
 import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
 import { localizations } from '@/lib/localizations';
+import { documentLibrary } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library';
 
 type StartWizardPageProps = {
   params: Promise<{ locale: 'en' | 'es'; docId: string }>;
@@ -80,7 +82,7 @@ export default async function StartWizardPage({
   const { locale, docId } = await params;
 
   // Guard: if someone hits /docs/…/start for an unknown docId, 404.
-  const docConfig = documentLibrary.find((d) => d.id === docId);
+  const docConfig = documentLibrary.find((d: LegalDocument) => d.id === docId);
   if (!docConfig) {
     notFound();
   }

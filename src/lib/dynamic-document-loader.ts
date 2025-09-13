@@ -188,3 +188,10 @@ export function getAvailableDocumentIds(): string[] {
 export function clearDocumentCache(): void {
   documentCache.clear();
 }
+
+// Re-export metadata functions for convenience
+export {
+  getAllDocumentMetadata,
+  getDocumentMetadata,
+  searchDocumentMetadata
+} from './document-metadata-registry';

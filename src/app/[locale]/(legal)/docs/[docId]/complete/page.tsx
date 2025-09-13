@@ -1,4 +1,5 @@
 import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
+import { getAllDocuments } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -31,22 +32,23 @@ export default async function CompletePage({
   params: Promise<{ locale: 'en' | 'es'; docId: string }>;
 }) {
   const resolved = await params;
-  const currentDoc = documentLibrary.find((d) => d.id === resolved.docId);
+  const allDocuments = await getAllDocuments();
+  const currentDoc = allDocuments.find((d) => d.id === resolved.docId);
   if (!currentDoc) return null;
 
-  const related = documentLibrary
+  const related = allDocuments
     .filter(
       (doc) => doc.category === currentDoc.category && doc.id !== currentDoc.id,
     )
     .slice(0, 3);
 
-  const getName = (doc: (typeof documentLibrary)[number]) =>
+  const getName = (doc: (typeof allDocuments)[number]) =>
     doc.translations?.[resolved.locale]?.name ||
     doc.translations?.en?.name ||
     doc.name ||
     doc.id;
 
-  const getDesc = (doc: (typeof documentLibrary)[number]) =>
+  const getDesc = (doc: (typeof allDocuments)[number]) =>
     doc.translations?.[resolved.locale]?.description ||
     doc.translations?.en?.description ||
     doc.description ||
