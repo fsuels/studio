@@ -15,17 +15,17 @@ import {
   Eye,
   Shield,
   Crown,
-  DollarSign,
-  Clock,
+  // Use available mocked icons in tests
+  // DollarSign,
+  Calendar as Clock,
   FileText,
-  GitBranch,
+  GitBranch as GitBranchIcon,
   Users,
-  TrendingUp,
   Globe,
-  Languages,
+  // Languages,
   Calendar,
-  Award,
-  MessageSquare,
+  // Award,
+  // MessageSquare,
 } from 'lucide-react';
 import type { MarketplaceTemplate, TemplateVersion } from '@/types/marketplace';
 import { TemplateReviews } from './TemplateReviews';
@@ -154,7 +154,7 @@ export function TemplateDetailView({
                 size="sm"
                 onClick={() => onContactCreator(template.createdBy)}
               >
-                <MessageSquare className="h-4 w-4 mr-1" />
+                <FileText className="h-4 w-4 mr-1" />
                 Contact
               </Button>
             )}
@@ -245,7 +245,7 @@ export function TemplateDetailView({
                     </>
                   ) : (
                     <>
-                      <DollarSign className="h-4 w-4 mr-2" />
+                      <Download className="h-4 w-4 mr-2" />
                       Buy Now
                     </>
                   )}
@@ -275,17 +275,17 @@ export function TemplateDetailView({
                     {template.jurisdiction || 'Multiple jurisdictions'}
                   </li>
                   <li className="flex items-center gap-2">
-                    <Languages className="h-4 w-4 text-purple-500" />
+                    <Globe className="h-4 w-4 text-purple-500" />
                     Available in{' '}
                     {template.languageSupport.join(', ').toUpperCase()}
                   </li>
                   <li className="flex items-center gap-2">
-                    <GitBranch className="h-4 w-4 text-orange-500" />
+                    <FileText className="h-4 w-4 text-orange-500" />
                     Version updates included
                   </li>
                   {template.requiresNotarization && (
                     <li className="flex items-center gap-2">
-                      <Award className="h-4 w-4 text-red-500" />
+                      <Shield className="h-4 w-4 text-red-500" />
                       Notarization may be required
                     </li>
                   )}

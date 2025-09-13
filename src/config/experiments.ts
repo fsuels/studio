@@ -257,6 +257,16 @@ export async function useExperiment(flagName: string): Promise<boolean> {
  * Should be called after an initial async call to populate cache
  */
 export function useExperimentSync(flagName: string): boolean {
+  // Allow localStorage override for testing and emergency toggles
+  try {
+    const override = localStorage.getItem(`experiment_${flagName}`);
+    if (override !== null) {
+      return override === 'true';
+    }
+  } catch (_err) {
+    // Ignore if localStorage is unavailable (SSR/tests)
+  }
+
   const cached = experimentCache[flagName];
   
   if (!cached) {

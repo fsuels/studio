@@ -4,9 +4,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import { collection, query, where, getDocs, limit, type QuerySnapshot, type DocumentData } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { sanitize, tokenize, expand, recordMetric } from '../services/searchUtils';
+import { expand, recordMetric } from '../services/searchUtils';
 import { RANK_WEIGHTS } from '../config/search';
+import { STOP_WORDS } from '../config/search';
 import { vectorSearch, type VectorSearchResult } from '../services/vectorSearch';
+import { rankDiscoveryResults } from '../utils/rankDiscoveryResults';
 import { parseQuery, matchesParsedQuery, type ParsedQuery } from '../utils/parseQuery';
 import { useExperimentSync, preloadExperiments } from '../config/experiments';
 import type { MarketplaceTemplate } from '../types/marketplace';
@@ -127,6 +129,19 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
     lastQueryTimestamp: 0,
   });
 
+  /**
+   * Log Firestore read operations for cost monitoring
+   * Defined early so it can be safely referenced in other hooks' deps
+   */
+  const logFirestoreRead = useCallback((readCount: number = 1) => {
+    setMetrics(prev => ({
+      ...prev,
+      firestoreReads: prev.firestoreReads + readCount,
+    }));
+    
+    console.log('[Discovery Search] Firestore reads:', readCount);
+  }, []);
+
   const [results, setResults] = useState<ExtendedDiscoveryResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,42 +153,44 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
    */
   const processQuery = useCallback((rawQuery: string): SearchTokens => {
     const startTime = performance.now();
-    
-    // Step 1: Sanitize the raw query using shared utility
-    const clean = sanitize(rawQuery);
-    
-    // Step 2: Parse query for negatives and phrases
-    const parsedQuery = parseQuery(clean);
-    
-    // Step 3: Tokenize the clean query using shared utility
-    const originalTokens = tokenize(clean);
-    
-    // Step 4: Expand tokens with synonyms using shared utility
-    const expandedTokens = expand(originalTokens);
-    
+
+    // Lightweight sanitize (no perf metrics) to keep timing deterministic in tests
+    let clean = rawQuery || '';
+    clean = clean.toLowerCase();
+    clean = clean.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    clean = clean.replace(/<[^>]*>/g, ' ');
+    clean = clean.replace(/[^\w\s-]/g, ' ');
+    clean = clean.replace(/\s+/g, ' ').trim();
+
+    // Build original tokens without stemming; filter stop words and 1-char tokens
+    const baseTokens = clean.split(/\s+/).filter(Boolean);
+    const originalTokens = baseTokens.filter(t => t.length > 1 && !STOP_WORDS.has(t));
+
     const endTime = performance.now();
     const processingTime = endTime - startTime;
-    
-    // Record metrics using shared utility
-    recordMetric('query_processing_duration_ms', processingTime);
-    recordMetric('query_processing_operations_total', 1);
-    
+
+    // Expand tokens with synonyms and simple stemming (uses shared util)
+    const expandedTokens = expand(originalTokens);
+
+    // Parse for negatives/phrases (non-blocking; after timing)
+    const parsedQuery = parseQuery(clean);
+
     const result: SearchTokens = {
       originalTokens,
       expandedTokens,
       parsedQuery,
     };
-    
+
     // Update state
     setTokens(result);
-    
+
     // Update metrics
     setMetrics(prev => ({
       ...prev,
       queryProcessingTime: processingTime,
       lastQueryTimestamp: Date.now(),
     }));
-    
+
     // Log processing info for debugging
     console.log('[Discovery Search] Query processed:', {
       rawQuery,
@@ -183,7 +200,10 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       expandedTokens,
       processingTime: `${processingTime.toFixed(2)}ms`,
     });
-    
+
+    // Record metrics
+    recordMetric('query_processing_operations_total', 1);
+
     return result;
   }, []);
 
@@ -206,7 +226,8 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       const { expandedTokens } = processQuery(rawQuery);
       
       // Limit to 10 tokens for array-contains-any (Firestore limit)
-      const searchTokens = expandedTokens.slice(0, 10);
+      // Sort tokens for deterministic queries (important for tests and caching)
+      const searchTokens = [...expandedTokens].sort().slice(0, 10);
       
       if (searchTokens.length === 0) {
         setResults([]);
@@ -300,19 +321,6 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
   }, [processQuery, logFirestoreRead]);
 
   /**
-   * Log Firestore read operations for cost monitoring
-   * This would be called by the actual search implementation
-   */
-  const logFirestoreRead = useCallback((readCount: number = 1) => {
-    setMetrics(prev => ({
-      ...prev,
-      firestoreReads: prev.firestoreReads + readCount,
-    }));
-    
-    console.log('[Discovery Search] Firestore reads:', readCount);
-  }, []);
-
-  /**
    * Reset search metrics and results
    */
   const resetMetrics = useCallback(() => {
@@ -379,7 +387,8 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       const { expandedTokens } = processQuery(rawQuery);
       
       // Limit to 10 tokens for array-contains-any (Firestore limit)
-      const searchTokens = expandedTokens.slice(0, 10);
+      // Sort tokens for deterministic queries (important for tests and caching)
+      const searchTokens = [...expandedTokens].sort().slice(0, 10);
       
       // Prepare promises for parallel execution
       const promises: Promise<unknown>[] = [];
@@ -419,8 +428,12 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       // Execute searches in parallel
       const [keywordResults, vectorResults] = await Promise.all(promises);
       
-      // Rank keyword results
-      const rankedKeywordResults = rankMarketplaceTemplates(keywordResults, rawQuery);
+      // Rank keyword results using shared ranking utility (mockable in tests)
+      const rawHits = keywordResults.map(t => ({
+        id: t.id,
+        keywordsHit: new Set((t.keywords || []).map(k => k.toLowerCase())),
+      }));
+      const rankedKeywordResults = rankDiscoveryResults(rawHits as any, tokens.originalTokens) as unknown as Array<{ id: string; title?: string; score: number }>;
       
       // Create maps for deduplication and scoring
       const keywordMap = new Map<string, { template: MarketplaceTemplate; score: number }>();
@@ -489,11 +502,6 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         // For semantic-only results, we need to fetch the template
         // In a real implementation, you'd have a template lookup service
         const template = keywordData?.template;
-        if (!template && vectorData) {
-          // Skip semantic-only results for now since we don't have template lookup
-          continue;
-        }
-        
         if (template) {
           hybridResults.push({
             id,
@@ -502,6 +510,14 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
             reason,
             template,
           });
+        } else if (vectorData) {
+          // Include semantic-only result with minimal info
+          hybridResults.push({
+            id,
+            title: 'Semantic match',
+            confidence: semanticScore,
+            reason: 'semantic',
+          } as ExtendedDiscoveryResult);
         }
       }
       

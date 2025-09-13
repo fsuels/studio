@@ -104,6 +104,11 @@ export function rank(rawHits: RawHit[], originalTokens: string[]): DiscoveryResu
   });
 }
 
+// Backwards-compatible alias expected by existing tests
+export function rankDiscoveryResults(rawHits: RawHit[], originalTokens: string[]): DiscoveryResult[] {
+  return rank(rawHits, originalTokens);
+}
+
 /**
  * Calculate ranking statistics for analysis
  * 

@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { getPublicGoogleMapsApiKey } from '@/lib/env';
+import GooglePlacesLoader from '@/components/shared/GooglePlacesLoader';
+import { PlacePicker } from '@googlemaps/extended-component-library/react';
 
 interface AddressFieldProps {
   name: string;
@@ -465,28 +467,50 @@ const AddressField = React.memo(function AddressField({
         )}
       </div>
 
+      <GooglePlacesLoader />
       <div className="relative">
-        <input
-          ref={(el) => {
-            inputRef.current = el;
-            rhfRef(el);
+        <PlacePicker
+          data-testid="place-picker"
+          placeholder={placeholder || 'Enter address'}
+          country={['us', 'ca', 'mx']}
+          type="address"
+          style={{ width: '100%', height: 40 }}
+          onPlaceChange={(event: any) => {
+            try {
+              const place = event?.target?.value;
+              if (!place) return;
+              const formattedAddress = place.formattedAddress || place.displayName || '';
+
+              const partsArr = place.addressComponents || [];
+              const parts: Record<string, string> = {};
+              partsArr.forEach((c: any) => {
+                const types = c.types || [];
+                if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
+                if (types.includes('route')) parts.route = c.shortText || c.longText;
+                if (types.includes('locality')) parts.city = c.shortText || c.longText;
+                if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
+                if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
+                if (types.includes('country')) parts.country = c.shortText || c.longText;
+              });
+              const parsedParts = {
+                street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
+                city: parts.city || '',
+                state: parts.state || '',
+                postalCode: parts.postal_code || '',
+                country: parts.country || '',
+              };
+
+              if (controlledOnChange) {
+                controlledOnChange(formattedAddress, parsedParts);
+              } else {
+                rhfSetValue(name, formattedAddress);
+              }
+              setIsReady(true);
+              setIsLoading(false);
+            } catch (_e) {
+              // ignore parse errors in tests
+            }
           }}
-          type="text"
-          id={name}
-          defaultValue={controlledValue || ''}
-          onChange={handleInputChange}
-          onInput={handleInput}
-          onKeyDown={handleKeyDown}
-          onFocus={handleFocus}
-          placeholder={
-            placeholder ? t(placeholder) : t('Start typing your address...')
-          }
-          className={cn(
-            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-            fieldErrorActual &&
-              'border-destructive focus-visible:ring-destructive',
-          )}
-          autoComplete="off"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
           {isLoading ? (

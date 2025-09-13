@@ -101,6 +101,10 @@ export const BillOfSaleSchema = z
         message: 'Only letters and spaces allowed for color.',
       })
       .optional(),
+    body_type: z
+      .string()
+      .min(1, { message: 'Vehicle body type is required.' })
+      .optional(),
 
     /* ---------- Sale ---------- */
     sale_date: z.coerce.date({ invalid_type_error: 'Invalid sale date.' }),

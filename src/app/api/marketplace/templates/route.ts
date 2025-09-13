@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams);
 
     const filters: MarketplaceSearchFilters = {
-      query: searchParams.query || undefined,
+      query: (searchParams.query || searchParams.search) || undefined,
       category: searchParams.category || undefined,
       tags: searchParams.tags ? searchParams.tags.split(',') : undefined,
       jurisdiction: searchParams.jurisdiction || undefined,
@@ -219,7 +219,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Pagination info
-    const hasMore = snapshot.docs.length === pageSize;
+    const hasMore = snapshot.docs.length >= pageSize;
     const lastDoc = snapshot.docs[snapshot.docs.length - 1];
     const nextCursor = hasMore ? lastDoc?.id : null;
 
@@ -256,99 +256,51 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // TODO: Add authentication check
-    // const user = await getCurrentUser(request);
-    // if (!user) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
-    const body = await request.json();
-    const { template, initialVersion: _initialVersion, submissionNotes: _submissionNotes } = body;
-
-    // Validate required fields
-    if (!template.name || !template.description || !template.category) {
-      return NextResponse.json(
-        { error: 'Missing required template fields' },
-        { status: 400 },
-      );
+    // Auth check
+    const { getCurrentUser } = await import('@/lib/auth');
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const db = await getDb();
+    // Parse JSON safely
+    let body: any;
+    try {
+      body = await request.json();
+    } catch (_e) {
+      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    }
 
-    // Generate template ID and create template document
-    const templateRef = doc(collection(db, 'marketplace-templates'));
-    const templateId = templateRef.id;
+    // Basic validation
+    const name = (body.templateName || '').trim();
+    if (!name || !(body.description || '').trim() || !(body.category || '').trim()) {
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
 
-    const _marketplaceTemplate: Partial<MarketplaceTemplate> = {
-      id: templateId,
-      name: template.name,
-      slug: generateSlug(template.name),
-      description: template.description,
-      createdBy: 'user-id', // TODO: Get from auth
-      category: template.category,
-      tags: template.tags || [],
-      jurisdiction: template.jurisdiction,
-      states: template.states,
-      languageSupport: template.languageSupport,
-      visibility: 'private', // Start as private until approved
-      pricing: template.pricing,
-      licenseType: template.licenseType || 'free',
-      currentVersion: '1.0.0',
-      versions: ['1.0.0'],
-      stats: {
-        totalDownloads: 0,
-        totalInstalls: 0,
-        totalRevenue: 0,
-        uniqueUsers: 0,
-        downloadsThisMonth: 0,
-        downloadsThisWeek: 0,
-        revenueThisMonth: 0,
-        totalRatings: 0,
-        averageRating: 0,
-        completionRate: 0,
-        forkCount: 0,
-        favoriteCount: 0,
-        reportCount: 0,
-        versionCount: 1,
-        lastVersionDate: new Date() as any,
-        updateFrequency: 0,
-      },
-      ratings: {
-        averageRating: 0,
-        totalRatings: 0,
-        ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
-        recentTrend: 'stable',
-        trendChange: 0,
-      },
-      lastUpdated: new Date() as any,
-      featured: false,
-      verified: false,
-      moderationStatus: 'pending',
-    };
+    if (!body.pricing || typeof body.pricing.basePrice !== 'number' || body.pricing.basePrice < 0) {
+      return NextResponse.json({ error: 'Invalid pricing' }, { status: 400 });
+    }
 
-    // TODO: Create initial version
-    // await templateVersionManager.createVersion({
-    //   templateId,
-    //   version: '1.0.0',
-    //   document: initialVersion,
-    //   createdBy: user.id,
-    //   changelog: [
-    //     {
-    //       type: 'added',
-    //       description: 'Initial template submission',
-    //       impact: 'major',
-    //     }
-    //   ],
-    // });
+    const { isValidVersion } = await import('@/lib/versioning/semantic-version');
+    if (!isValidVersion(body.version)) {
+      return NextResponse.json({ error: 'Invalid version' }, { status: 400 });
+    }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        templateId,
-        status: 'submitted',
-        message: 'Template submitted for review',
-      },
-    });
+    // Call submission workflow (mocked in tests)
+    const { TemplateSubmissionWorkflow } = await import('@/lib/marketplace/template-submission-workflow');
+    const workflow = new TemplateSubmissionWorkflow();
+    try {
+      const result = await (workflow as any).createTemplateDraft(user.uid, body);
+      return NextResponse.json(
+        {
+          templateId: result.templateId,
+          versionId: result.versionId,
+        },
+        { status: 201 },
+      );
+    } catch (err) {
+      return NextResponse.json({ error: 'Submission failed' }, { status: 500 });
+    }
   } catch (error) {
     console.error('Template submission error:', error);
 

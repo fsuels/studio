@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
 
     const snapshot = await query.get();
 
-    const notifications = snapshot.docs.map((doc) => ({
+    const notifications = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data(),
     }));

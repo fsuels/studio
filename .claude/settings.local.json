@@ -7,7 +7,12 @@
       "Bash(npx tsc:*)",
       "Bash(npm run build:*)",
       "Bash(timeout 60 npm run build:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(timeout 10 tsc:*)",
+      "Bash(timeout 10 npx tsc:*)",
+      "Bash(timeout 60 npm run dev -- --port 3001)",
+      "Bash(curl:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

@@ -318,7 +318,8 @@ function simpleStem(word: string): string {
   }
   
   if (lowered.endsWith('ed') && lowered.length > 3) {
-    return lowered.slice(0, -2);
+    const base = lowered.slice(0, -2);
+    return base.endsWith('e') ? base : `${base}e`;
   }
   
   if (lowered.endsWith('ing') && lowered.length > 4) {
