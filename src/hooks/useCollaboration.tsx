@@ -48,14 +48,14 @@ export interface UseCollaborationReturn {
   markMentionAsRead: (mentionId: string) => void;
 
   // Presence actions
-  updatePresence: (data: any) => void;
+  updatePresence: (data: Record<string, unknown>) => void;
 
   // Event handlers
   onUserJoined: (callback: (user: CollaborationUser) => void) => () => void;
   onUserLeft: (callback: (userId: string) => void) => () => void;
   onCommentAdded: (callback: (comment: Comment) => void) => () => void;
   onMentionReceived: (callback: (mention: Mention) => void) => () => void;
-  onDocumentChanged: (callback: (changes: any) => void) => () => void;
+  onDocumentChanged: (callback: (changes: Record<string, unknown>) => void) => () => void;
 }
 
 export function useCollaboration({
@@ -146,18 +146,18 @@ export function useCollaboration({
       );
 
       // Set up event listeners
-      collaborationClient.on('connection_status', (status: any) => {
+      collaborationClient.on('connection_status', (status: string) => {
         setIsConnected(status.status === 'connected');
         if (status.status === 'disconnected') {
           setError('Connection lost');
         }
       });
 
-      collaborationClient.on('presence_changed', (data: any) => {
+      collaborationClient.on('presence_changed', (data: Record<string, unknown>) => {
         setPresence(data.presence);
       });
 
-      collaborationClient.on('comments_changed', (data: any) => {
+      collaborationClient.on('comments_changed', (data: Record<string, unknown>) => {
         setComments(data.comments);
       });
 
@@ -182,7 +182,7 @@ export function useCollaboration({
         emitEvent('user_left', userId);
       });
 
-      collaborationClient.on('document_changed', (changes: any) => {
+      collaborationClient.on('document_changed', (changes: Record<string, unknown>) => {
         emitEvent('document_changed', changes);
       });
 
@@ -256,7 +256,7 @@ export function useCollaboration({
     setUnreadMentions((prev) => Math.max(0, prev - 1));
   }, []);
 
-  const updatePresence = React.useCallback((data: any) => {
+  const updatePresence = React.useCallback((data: Record<string, unknown>) => {
     // Update local presence data
     // This could be extended to include more presence information
   }, []);
@@ -282,7 +282,7 @@ export function useCollaboration({
     [],
   );
 
-  const emitEvent = React.useCallback((event: string, data: any) => {
+  const emitEvent = React.useCallback((event: string, data: Record<string, unknown>) => {
     const callbacks = eventCallbacks.current.get(event);
     if (callbacks) {
       callbacks.forEach((callback) => callback(data));
@@ -318,7 +318,7 @@ export function useCollaboration({
   );
 
   const onDocumentChanged = React.useCallback(
-    (callback: (changes: any) => void) => {
+    (callback: (changes: Record<string, unknown>) => void) => {
       return addEventListener('document_changed', callback);
     },
     [addEventListener],

@@ -150,7 +150,7 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
         </ResponsiveContainer>
       );
 
-    case 'pie':
+    case 'pie': {
       // Group data by category for pie chart
       const pieData = data.reduce((acc, item) => {
         const category = item.category || 'Other';
@@ -197,6 +197,7 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
           </PieChart>
         </ResponsiveContainer>
       );
+    }
 
     default:
       return (

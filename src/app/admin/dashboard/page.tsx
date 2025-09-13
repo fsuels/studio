@@ -1,7 +1,7 @@
 // Admin dashboard page with compliance monitoring
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -55,11 +55,7 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuthentication();
-  }, []);
-
-  const checkAuthentication = async () => {
+  const checkAuthentication = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/auth');
       const data = await response.json();
@@ -69,13 +65,17 @@ export default function AdminDashboardPage() {
       } else {
         router.push('/admin');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to verify authentication');
       router.push('/admin');
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuthentication();
+  }, [checkAuthentication]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
       });
 
       router.push('/admin');
-    } catch (err) {
+    } catch (_err) {
       setError('Logout failed');
     } finally {
       setLoggingOut(false);

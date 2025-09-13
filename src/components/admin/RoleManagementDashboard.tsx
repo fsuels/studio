@@ -700,15 +700,15 @@ export default function RoleManagementDashboard({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <div className="text-sm font-medium text-gray-600">
                     Email
-                  </label>
+                  </div>
                   <p className="text-gray-900">{selectedUser.email}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <div className="text-sm font-medium text-gray-600">
                     Role
-                  </label>
+                  </div>
                   <Badge
                     className={getRoleColor(selectedUser.role)}
                     variant="outline"
@@ -717,9 +717,9 @@ export default function RoleManagementDashboard({
                   </Badge>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <div className="text-sm font-medium text-gray-600">
                     Status
-                  </label>
+                  </div>
                   <p
                     className={
                       selectedUser.isActive ? 'text-green-600' : 'text-red-600'
@@ -729,9 +729,9 @@ export default function RoleManagementDashboard({
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <div className="text-sm font-medium text-gray-600">
                     Last Login
-                  </label>
+                  </div>
                   <p className="text-gray-900">
                     {selectedUser.lastLogin
                       ? formatDate(selectedUser.lastLogin)
@@ -741,9 +741,9 @@ export default function RoleManagementDashboard({
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-600 mb-2 block">
+                <div className="text-sm font-medium text-gray-600 mb-2 block">
                   Permissions
-                </label>
+                </div>
                 <div className="flex flex-wrap gap-1">
                   {selectedUser.permissions.map((permission) => (
                     <Badge
@@ -758,9 +758,9 @@ export default function RoleManagementDashboard({
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-600 mb-2 block">
+                <div className="text-sm font-medium text-gray-600 mb-2 block">
                   Features
-                </label>
+                </div>
                 <div className="flex flex-wrap gap-1">
                   {selectedUser.features.map((feature) => (
                     <Badge

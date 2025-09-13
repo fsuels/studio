@@ -68,10 +68,10 @@ function useAuthHook(): AuthContextType {
           uid: fbUser.uid,
           email: fbUser.email,
           name: fbUser.displayName || '',
-          phone: user?.phone || '',
-          address: user?.address || '',
-          twoStep: user?.twoStep || false,
-          textUpdates: user?.textUpdates || false,
+          phone: '',
+          address: '',
+          twoStep: false,
+          textUpdates: false,
         };
         setIsLoggedIn(true);
         setUser(newUser);
@@ -210,18 +210,18 @@ function useAuthHook(): AuthContextType {
           typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
         success: true,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('[useAuth] resetPassword error details:', {
-        code: err?.code,
-        message: err?.message,
-        stack: err?.stack,
+        code: (err as any)?.code,
+        message: (err as Error)?.message,
+        stack: (err as Error)?.stack,
         email,
         authDomain: app?.options?.authDomain,
         projectId: app?.options?.projectId,
       });
       
       // Provide more specific error messages
-      let userFriendlyMessage = err?.message || 'Password reset failed';
+      let userFriendlyMessage = (err as Error)?.message || 'Password reset failed';
       
       if (err?.code === 'auth/network-request-failed') {
         userFriendlyMessage = 'Network error. Please check your internet connection and try again.';
@@ -253,7 +253,7 @@ function useAuthHook(): AuthContextType {
       
       // Create a new error with user-friendly message but preserve original error code
       const enhancedError = new Error(userFriendlyMessage);
-      (enhancedError as any).code = err?.code;
+      (enhancedError as any).code = (err as any)?.code;
       (enhancedError as any).originalError = err;
       
       throw enhancedError;

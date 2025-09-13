@@ -176,7 +176,6 @@ export default function SimplePDFViewer({
         </Button>
       </div>
       
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <iframe
         ref={iframeRef}
         src={processedPdfUrl}
