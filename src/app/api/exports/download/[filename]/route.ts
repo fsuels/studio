@@ -40,7 +40,7 @@ export async function GET(request: NextRequest, context: RouteParams) {
     try {
       // Check if file exists
       await stat(filepath);
-    } catch (error) {
+    } catch (_error) {
       return NextResponse.json({ error: 'File not found' }, { status: 404 });
     }
 

@@ -2,8 +2,7 @@
 import { taxonomy } from '@/config/taxonomy';
 import { getDocMeta } from '@/config/doc-meta';
 import slugMap from '@/config/doc-meta/slug-category-map.json';
-import type { LegalDocument } from '@/lib/document-library';
-import { search as originalSearch } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { getDocumentTitle } from '@/lib/format-utils';
 
 interface SearchResult {
@@ -152,8 +151,9 @@ export async function enhancedSearch(
       .slice(0, maxResults);
   } catch (error) {
     console.error('Enhanced search error:', error);
-    // Fallback to legacy search if enhanced search fails
-    return legacySearch(query, locale)
+    // Fallback to legacy search if enhanced search fails (dynamic import)
+    const legacyResults = await legacySearch(query, locale);
+    return legacyResults
       .slice(0, maxResults)
       .map((doc) => ({
         slug: doc.id,
@@ -249,12 +249,13 @@ function isDocumentRelevantToSituation(
 /**
  * Fallback to original search for backward compatibility
  */
-export function legacySearch(
+export async function legacySearch(
   query: string,
   locale: 'en' | 'es',
   state?: string,
-): LegalDocument[] {
-  return originalSearch(query, locale, state);
+): Promise<LegalDocument[]> {
+  const mod = await import('@/lib/document-library');
+  return mod.search(query, locale, state);
 }
 
 /**

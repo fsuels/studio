@@ -173,7 +173,7 @@ async function getUserInteraction(userId: string, updateId: string) {
   }
 }
 
-async function getFeedStatistics(userId?: string) {
+async function getFeedStatistics(_userId?: string) {
   try {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);

@@ -118,7 +118,8 @@ export default function AdminAuditTrailsPage() {
 
   useEffect(() => {
     fetchAuditTrails();
-  }, [fetchAuditTrails]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleVerifyIntegrity = async () => {
     setIsVerifying(true);

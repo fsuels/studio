@@ -2,9 +2,13 @@
 'use client';
 
 import React from 'react';
-import { taxonomy } from '@/config/taxonomy';
-import EnhancedHeaderSearch from './EnhancedHeaderSearch';
-import HeaderSearch from './HeaderSearch';
+import dynamic from 'next/dynamic';
+
+// Dynamically load the enhanced search to avoid bundling heavy deps (taxonomy, metadata)
+const EnhancedHeaderSearch = dynamic(() => import('./EnhancedHeaderSearch'), {
+  ssr: false,
+  loading: () => null,
+});
 
 interface SmartHeaderSearchProps {
   clientLocale: 'en' | 'es';
@@ -33,26 +37,13 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
     }
   }, [mounted]);
 
-  // Check if enhanced search features are enabled
-  const useEnhancedSearch = taxonomy.feature_flags?.wizard_v4?.enabled;
-
-  if (useEnhancedSearch) {
-    return (
-      <EnhancedHeaderSearch
-        clientLocale={clientLocale}
-        mounted={mounted}
-        className={className}
-        userRole={userRole}
-      />
-    );
-  }
-
-  // Fallback to original search
+  // Always render the enhanced search shell; it lazy-loads heavy parts only on demand
   return (
-    <HeaderSearch
+    <EnhancedHeaderSearch
       clientLocale={clientLocale}
       mounted={mounted}
       className={className}
+      userRole={userRole}
     />
   );
 };

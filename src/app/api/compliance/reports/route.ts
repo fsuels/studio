@@ -225,7 +225,7 @@ async function generateDetailedComplianceReport(
   return report;
 }
 
-function analyzeComplianceMetrics(events: any[], reportType: string) {
+function analyzeComplianceMetrics(events: any[], _reportType: string) {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);

@@ -2,13 +2,28 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { loadAllResources } from './i18nResources';
+import { loadLocaleResources } from './i18nResources';
 import type { Resource } from 'i18next';
 
 let initPromise: Promise<void> | null = null;
 
-export async function ensureI18nInitialized(): Promise<void> {
-  if (i18n.isInitialized) return;
+type SupportedLocale = 'en' | 'es';
+interface InitOptions {
+  locale?: SupportedLocale;
+  namespaces?: string[];
+}
+
+export async function ensureI18nInitialized(
+  options: InitOptions = {},
+): Promise<void> {
+  // If already initialized, optionally just change language below
+  if (i18n.isInitialized && options.locale) {
+    if (i18n.language !== options.locale) {
+      await i18n.changeLanguage(options.locale);
+    }
+    return;
+  }
+
   if (initPromise) return initPromise;
 
   initPromise = (async () => {
@@ -18,59 +33,54 @@ export async function ensureI18nInitialized(): Promise<void> {
         i18n.use(LanguageDetector).use(initReactI18next);
       }
 
-      let resources: Resource = {} as Resource;
+      const locale: SupportedLocale = options.locale ?? 'en';
+
+      let localeResources: Resource[string] | null = null;
       try {
-        resources = await loadAllResources();
+        // Load only the current locale to reduce bundle size
+        localeResources = await loadLocaleResources(locale);
       } catch (err) {
         console.error(
-          'i18n resource load error; falling back to empty resources',
+          'i18n resource load error; falling back to minimal resources',
           err,
         );
-        resources = {
-          en: {
-            common: {},
-            header: {},
-            footer: {},
-            support: {},
-            faq: {},
-            documents: {},
-            doc_bill_of_sale_vehicle: {},
-            doc_promissory_note: {},
-            'online-notary': {},
-            'electronic-signature': {},
-          },
-          es: {
-            common: {},
-            header: {},
-            footer: {},
-            support: {},
-            faq: {},
-            documents: {},
-            doc_bill_of_sale_vehicle: {},
-            doc_promissory_note: {},
-            'online-notary': {},
-            'electronic-signature': {},
-          },
-        } as unknown as Resource;
+        localeResources = {
+          common: {},
+          header: {},
+          footer: {},
+          support: {},
+          faq: {},
+          documents: {},
+          doc_bill_of_sale_vehicle: {},
+          doc_promissory_note: {},
+          'online-notary': {},
+          'electronic-signature': {},
+        } as unknown as Resource[string];
       }
+
+      const ns = options.namespaces ?? [
+        'common',
+        'header',
+        'footer',
+        'support',
+        'faq',
+        'documents',
+        'doc_bill_of_sale_vehicle',
+        'doc_promissory_note',
+        'online-notary',
+        'electronic-signature',
+      ];
+
+      const resources: Resource = {
+        [locale]: localeResources!,
+      } as Resource;
 
       await i18n
         .init({
-          lng: 'en',
+          lng: locale,
           fallbackLng: 'en',
           supportedLngs: ['en', 'es'],
-          ns: [
-            'common',
-            'header',
-            'footer',
-            'support',
-            'faq',
-            'documents',
-            'doc_bill_of_sale_vehicle',
-            'doc_promissory_note',
-            'online-notary',
-            'electronic-signature',
-          ],
+          ns,
           defaultNS: 'common',
           resources,
           interpolation: { escapeValue: false },

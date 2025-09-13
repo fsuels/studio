@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
           sendgridConfigured: !!process.env.SENDGRID_API_KEY,
         });
 
-      case 'stats':
+      case 'stats': {
         // Return email statistics
         const { adminDb } = await import('@/lib/firebase-admin');
         const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
@@ -138,8 +138,9 @@ export async function GET(request: NextRequest) {
             timestamp: new Date().toISOString(),
           },
         });
+      }
 
-      case 'test':
+      case 'test': {
         // Send test email to admin
         const testEmail = searchParams.get('email');
         if (!testEmail) {
@@ -158,6 +159,7 @@ export async function GET(request: NextRequest) {
           testResult,
           timestamp: new Date().toISOString(),
         });
+      }
 
       default:
         return NextResponse.json({

@@ -1,17 +1,10 @@
 // src/components/DocumentDetail.tsx
-'use client';
+"use client";
 
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  Children,
-  isValidElement,
-} from 'react';
+import React, { useEffect, useState, Children, isValidElement } from 'react';
 // Lazy load react-markdown to reduce initial bundle size
 const ReactMarkdown = React.lazy(() => import('react-markdown'));
 import { useTranslation } from 'react-i18next';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
@@ -31,6 +24,7 @@ export interface DocumentDetailProps {
   locale: 'en' | 'es';
   altText?: string;
   markdownContent?: string | null; // Add this line
+  documentDisplayName?: string; // Lightweight display name provided by server/client parent
 }
 
 const DocumentDetail = React.memo(function DocumentDetail({
@@ -38,18 +32,14 @@ const DocumentDetail = React.memo(function DocumentDetail({
   locale,
   altText,
   markdownContent: initialMarkdown,
+  documentDisplayName,
 }: DocumentDetailProps) {
   const { t } = useTranslation('common');
   const [md, setMd] = useState<string>(initialMarkdown || ''); // Initialize with prop
   const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
-  const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
+  const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<unknown | null>(null);
-
-  const docConfig = useMemo(
-    () => documentLibrary.find((d: LegalDocument) => d.id === docId),
-    [docId],
-  );
 
   // const templatePath = useMemo(() => {
   //   if (!docConfig) return undefined;
@@ -71,53 +61,27 @@ const DocumentDetail = React.memo(function DocumentDetail({
 
   // New useEffect to process initialMarkdown (e.g., title replacement, placeholder replacement)
   useEffect(() => {
-    if (initialMarkdown && docConfig) {
+    if (initialMarkdown) {
       let modifiedMd = initialMarkdown;
-      const documentDisplayNameForTitle =
-        locale === 'es' && docConfig.translations?.es?.name
-          ? docConfig.translations.es.name
-          : docConfig.translations?.en?.name;
-      if (documentDisplayNameForTitle) {
-        modifiedMd = modifiedMd.replace(
-          /^# .*/m,
-          `# ${documentDisplayNameForTitle}`,
-        );
-      } else {
-        const fallbackTitle =
-          locale === 'es'
-            ? docConfig.translations?.es?.name ||
-              docConfig.translations?.en?.name ||
-              docConfig.name
-            : docConfig.translations?.en?.name ||
-              docConfig.name ||
-              docConfig.translations?.es?.name;
-        if (fallbackTitle) {
-          modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
-        }
+      const title = documentDisplayName || docId;
+      if (title) {
+        modifiedMd = modifiedMd.replace(/^# .*/m, `# ${title}`);
       }
       modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
       setMd(modifiedMd);
       setIsLoading(false);
       setError(null);
-    } else if (!initialMarkdown && docConfig) {
-      // No markdown content passed, but we have a docConfig.
-      // This means we should rely on the image preview.
+    } else if (!initialMarkdown) {
+      // No markdown provided; fall back to image preview
       setMd('');
-      setIsLoading(false); // Not loading markdown, but want to show image
-      setError(null); // Not an error, just no markdown
-    } else if (!docConfig && isHydrated) {
-      setError(
-        t('Document configuration not found.', {
-          defaultValue: 'Document configuration not found.',
-        }),
-      );
       setIsLoading(false);
+      setError(null);
     }
-  }, [initialMarkdown, docConfig, locale, t, isHydrated]); // Add dependencies
+  }, [initialMarkdown, documentDisplayName, docId]);
 
   // Initial loading state: Show if not hydrated, or if initialMarkdown is being processed and docConfig isn't ready.
   // isLoading is true if !initialMarkdown at the start, or until initialMarkdown processing is complete.
-  if (!isHydrated || (isLoading && !docConfig && !initialMarkdown)) {
+  if (!isHydrated || (isLoading && !initialMarkdown)) {
     return (
       <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px] aspect-[8.5/11]">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
@@ -130,10 +94,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
     );
   }
 
-  // Error state: If after hydration and loading attempts, docConfig is still not found,
-  // and we don't have initialMarkdown to display.
-  // The error state from useEffect (due to !docConfig) will be shown here.
-  if (isHydrated && !isLoading && !docConfig && !initialMarkdown) {
+  if (isHydrated && !isLoading && !initialMarkdown && error) {
     return (
       <div className="flex flex-col items-center justify-center text-destructive p-4 border rounded-lg bg-destructive/10 min-h-[300px] aspect-[8.5/11]">
         <AlertTriangle className="h-8 w-8 mb-2" />
@@ -148,14 +109,9 @@ const DocumentDetail = React.memo(function DocumentDetail({
     );
   }
 
-  // docConfig might be null here if initialMarkdown IS provided.
-  const documentDisplayName =
-    docConfig &&
-    (locale === 'es' && docConfig.translations?.es?.name
-      ? docConfig.translations.es.name
-      : docConfig.translations?.en?.name || docConfig.name);
+  const displayName = documentDisplayName;
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
-  const fallbackAlt = altText || `${documentDisplayName || docId} preview`;
+  const fallbackAlt = altText || `${displayName || docId} preview`;
   const watermarkText = t('preview.watermark', { defaultValue: 'DRAFT' });
 
   return (

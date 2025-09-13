@@ -1,7 +1,11 @@
 // src/components/layout/Layout.tsx
 import React from 'react';
 import Header from './Header/index'; // Import from Header directory
-import { Footer } from './Footer';
+import dynamic from 'next/dynamic';
+const Footer = dynamic(() => import('./Footer').then(m => m.Footer), {
+  ssr: true,
+  loading: () => null,
+});
 
 interface LayoutProps {
   children: React.ReactNode;

@@ -35,7 +35,7 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
     let cancelled = false;
     const sync = async () => {
       try {
-        await ensureI18nInitialized();
+        await ensureI18nInitialized({ locale });
         if (cancelled) return;
         if (i18nInstance.language !== locale) {
           await i18nInstance.changeLanguage(locale);

@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Building, ArrowLeft, HelpCircle } from 'lucide-react';
+import { Building, ArrowLeft, HelpCircle, Mail as _Mail } from 'lucide-react';
 
 interface TenantNotFoundPageProps {
   searchParams: Promise<{ slug?: string }>;

@@ -137,7 +137,8 @@ export default function AuditTrailPage() {
       loadAuditEvents();
       verifyChainIntegrity();
     }
-  }, [user, loadAuditEvents, verifyChainIntegrity]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const loadAuditEvents = useCallback(async () => {
     setLoading(true);

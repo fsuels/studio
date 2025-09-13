@@ -380,8 +380,8 @@ async function getCustomerLifetimeValue(
 }
 
 async function getDocumentTypesPopularity(
-  period: string,
-  granularity: string,
+  _period: string,
+  _granularity: string,
   _segment?: string,
 ): Promise<MetricResponse> {
   const chartData = [
@@ -434,8 +434,8 @@ async function getDocumentTypesPopularity(
 }
 
 async function getUserRetention(
-  period: string,
-  granularity: string,
+  _period: string,
+  _granularity: string,
   _segment?: string,
 ): Promise<MetricResponse> {
   const retentionRates = [

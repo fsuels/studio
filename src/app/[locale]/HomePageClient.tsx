@@ -12,8 +12,13 @@ import { AutoImage, PersonalizationBlock as _PersonalizationBlock } from '@/comp
 import { Skeleton as _Skeleton } from '@/components/ui/skeleton';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { CategoryDocumentsWidget as _CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
-import { FileText as _FileText, Users as _Users, Building as _Building } from 'lucide-react';
-import Link as _Link from 'next/link';
+import { 
+  FileText as _FileText, 
+  Users as _Users, 
+  Building as _Building 
+} from 'lucide-react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Link from 'next/link';
 
 // Minimal loading spinner without text
 const _MinimalLoadingSpinner = () => (
@@ -65,7 +70,7 @@ const SearchBarSkeleton = () => (
   </div>
 );
 
-const SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
+const _SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
   placeholder: <SearchBarSkeleton />,
 });
 

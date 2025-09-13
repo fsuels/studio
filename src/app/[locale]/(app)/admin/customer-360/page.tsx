@@ -18,7 +18,7 @@ import {
 import {
   Users,
   Search,
-  
+  Filter as _Filter,
   Download,
   UserPlus,
   BarChart3,
@@ -30,7 +30,7 @@ import {
   Eye,
   Mail,
   Phone,
-  
+  Calendar as _Calendar
 } from 'lucide-react';
 import {
   generateMockCustomer360Data,
@@ -38,7 +38,7 @@ import {
 } from '@/lib/orders';
 
 // Mock data for customer list
-const mockCustomers = Array.from({ length: 50 }, (_, _i) => {
+const mockCustomers = Array.from({ length: 50 }, () => {
   const data = generateMockCustomer360Data();
   return {
     id: data.customer.id,

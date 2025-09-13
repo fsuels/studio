@@ -10,11 +10,17 @@ import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { cn } from '@/lib/utils';
 
 import SmartHeaderSearch from './SmartHeaderSearch';
-import HeaderUserMenu from './HeaderUserMenu';
+const HeaderUserMenu = dynamic(() => import('./HeaderUserMenu'), {
+  ssr: false,
+  loading: () => null,
+});
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
 import DirectCategoryNav from './DirectCategoryNav';
-import CategoryDropdown from './CategoryDropdown';
+import dynamic from 'next/dynamic';
+const CategoryDropdown = dynamic(() => import('./CategoryDropdown'), {
+  ssr: false,
+});
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 const Header = React.memo(function Header() {
@@ -190,16 +196,18 @@ const Header = React.memo(function Header() {
       {/* Header spacer to prevent content from going under fixed header */}
       <div className="h-16" aria-hidden="true" />
 
-      {/* Category Dropdown */}
-      <CategoryDropdown
-        locale={clientLocale}
-        activeCategory={activeCategoryId}
-        isOpen={isMegaMenuOpen}
-        onLinkClick={() => {
-          setIsMegaMenuOpen(false);
-          setActiveCategoryId(null);
-        }}
-      />
+      {/* Category Dropdown (lazy-loaded to avoid bundling heavy doc library) */}
+      {isMegaMenuOpen && (
+        <CategoryDropdown
+          locale={clientLocale}
+          activeCategory={activeCategoryId}
+          isOpen={isMegaMenuOpen}
+          onLinkClick={() => {
+            setIsMegaMenuOpen(false);
+            setActiveCategoryId(null);
+          }}
+        />
+      )}
     </>
   );
 });

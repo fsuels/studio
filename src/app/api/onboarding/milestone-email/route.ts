@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 async function _triggerMailchimpJourney(
   email: string,
   milestone: string,
-  persona?: string,
+  _persona?: string,
 ) {
   // Example Mailchimp integration
   const journeyMap: Record<string, string> = {

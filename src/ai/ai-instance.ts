@@ -3,7 +3,7 @@
 // This placeholder prevents server errors related to missing GOOGLE_GENAI_API_KEY.
 
 // Minimal interfaces to satisfy imports across the app without pulling real AI deps.
-type PromptConfig<I = unknown, O = unknown> = {
+type PromptConfig<_I = unknown, _O = unknown> = {
   name: string;
   model?: string;
   input?: { schema?: unknown };
@@ -11,7 +11,7 @@ type PromptConfig<I = unknown, O = unknown> = {
   prompt: string;
 };
 
-type FlowConfig<I = unknown, O = unknown> = {
+type FlowConfig<_I = unknown, _O = unknown> = {
   name: string;
   inputSchema?: unknown;
   outputSchema?: unknown;

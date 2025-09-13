@@ -179,7 +179,7 @@ function generateSessionId(): string {
 }
 
 // Optional: File-based logging fallback
-async function logToFile(logEntry: any): Promise<void> {
+async function _logToFile(logEntry: any): Promise<void> {
   // In production environment, you might want to log to a file
   // This is a placeholder for file-based logging
   console.log('Fallback file logging would save:', logEntry);

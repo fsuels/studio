@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const campaigns = url.searchParams.get('campaigns')?.split(',');
 
     switch (type) {
-      case 'dashboard':
+      case 'dashboard': {
         const dashboardData = await generateMarketingDashboard({
           timeframe: getTimeframeFromString(timeframe),
           channels,
@@ -45,15 +45,17 @@ export async function GET(request: NextRequest) {
             dataQuality: 'high',
           },
         });
+      }
 
-      case 'channels':
+      case 'channels': {
         const channelData = await getChannelROI(timeframe, attribution);
         return NextResponse.json({
           success: true,
           data: channelData,
         });
+      }
 
-      case 'campaigns':
+      case 'campaigns': {
         const campaignData = await getCampaignPerformance(
           timeframe,
           channels,
@@ -63,23 +65,26 @@ export async function GET(request: NextRequest) {
           success: true,
           data: campaignData,
         });
+      }
 
-      case 'discounts':
+      case 'discounts': {
         const discountData = await getDiscountAnalytics(timeframe);
         return NextResponse.json({
           success: true,
           data: discountData,
         });
+      }
 
-      case 'attribution_comparison':
+      case 'attribution_comparison': {
         const attributionComparison =
           await getAttributionModelComparison(timeframe);
         return NextResponse.json({
           success: true,
           data: attributionComparison,
         });
+      }
 
-      case 'conversion_paths':
+      case 'conversion_paths': {
         const conversionPaths = await getTopConversionPaths(
           timeframe,
           attribution,
@@ -88,13 +93,15 @@ export async function GET(request: NextRequest) {
           success: true,
           data: conversionPaths,
         });
+      }
 
-      case 'insights':
+      case 'insights': {
         const insights = await generateMarketingInsights(timeframe);
         return NextResponse.json({
           success: true,
           data: insights,
         });
+      }
 
       default:
         return NextResponse.json(
@@ -275,8 +282,8 @@ async function generateMarketingDashboard(
 }
 
 async function getChannelROI(
-  timeframe: string,
-  attribution: string,
+  _timeframe: string,
+  _attribution: string,
 ): Promise<ChannelROI[]> {
   // In production, calculate from marketing attribution data
   // For demo, return realistic channel performance data
@@ -466,9 +473,9 @@ async function getChannelROI(
 }
 
 async function getCampaignPerformance(
-  timeframe: string,
-  channels?: string[],
-  campaigns?: string[],
+  _timeframe: string,
+  _channels?: string[],
+  _campaigns?: string[],
 ): Promise<CampaignPerformance[]> {
   // In production, query campaign performance data
   // For demo, return realistic campaign data
@@ -629,7 +636,7 @@ async function getCampaignPerformance(
 }
 
 async function getDiscountAnalytics(
-  timeframe: string,
+  _timeframe: string,
 ): Promise<DiscountCodeAnalytics[]> {
   // In production, analyze discount code performance
   // For demo, return realistic discount analytics
@@ -757,7 +764,7 @@ async function getDiscountAnalytics(
 }
 
 async function generateMarketingInsights(
-  timeframe: string,
+  _timeframe: string,
 ): Promise<MarketingInsight[]> {
   // In production, use ML/AI to generate insights from marketing data
   // For demo, return realistic insights
@@ -868,7 +875,7 @@ function getTimeframeFromString(timeframe: string): {
   return { startDate, endDate };
 }
 
-async function getAttributionModelComparison(timeframe: string) {
+async function getAttributionModelComparison(_timeframe: string) {
   // In production, calculate revenue attribution using different models
   return {
     first_touch: { conversions: 856, revenue: 98500 },
@@ -879,7 +886,7 @@ async function getAttributionModelComparison(timeframe: string) {
   };
 }
 
-async function getTopConversionPaths(timeframe: string, attribution: string) {
+async function getTopConversionPaths(_timeframe: string, _attribution: string) {
   // In production, analyze customer journey paths
   return [
     { path: 'Google Ads → Direct', conversions: 145, revenue: 35250 },

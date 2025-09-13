@@ -39,11 +39,27 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import {
-  VehicleBillOfSaleDisplay,
-  PromissoryNoteDisplay,
-} from '@/components/document';
-import { RelatedDocumentsWidget } from '@/components/blog/InternalLinkWidget';
+// Load doc-specific displays on demand to avoid bloating all pages
+const VehicleBillOfSaleDisplay = dynamic(
+  () => import('@/components/document/docs/VehicleBillOfSaleDisplay'),
+  {
+    loading: () => (
+      <div className="flex justify-center items-center h-24">
+        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      </div>
+    ),
+  },
+);
+const PromissoryNoteDisplay = dynamic(
+  () => import('@/components/document/docs/PromissoryNoteDisplay'),
+  {
+    loading: () => (
+      <div className="flex justify-center items-center h-24">
+        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      </div>
+    ),
+  },
+);
 
 // Lazy load template-specific testimonials section
 const TestimonialsCarousel = dynamic(
@@ -92,6 +108,7 @@ interface DocPageClientProps {
   };
   markdownContent?: string | null;
   docMeta: DocMetaLite;
+  relatedDocs?: Array<{ id: string; name: string; description?: string }>;
 }
 
 // Placeholder for AI dynamic highlights
@@ -115,6 +132,7 @@ export default function DocPageClient({
   params: routeParams,
   markdownContent,
   docMeta,
+  relatedDocs = [],
 }: DocPageClientProps) {
   const { t, i18n } = useTranslation('common');
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -370,6 +388,7 @@ export default function DocPageClient({
               docId={docId as string}
               altText={`${documentDisplayName} preview`}
               markdownContent={markdownContent}
+              documentDisplayName={documentDisplayName}
             />
             <p className="text-xs text-muted-foreground mt-2 text-center italic">
               {t('docDetail.aiHighlightPre', 'AI Highlight:')}{' '}
@@ -654,10 +673,33 @@ export default function DocPageClient({
           <TestimonialsCarousel templateId={docConfig.id} />
         </div>
 
-        {/* Related Documents Section */}
-        <section className="mt-16 max-w-4xl mx-auto">
-          <RelatedDocumentsWidget documentId={docConfig.id} maxLinks={4} />
-        </section>
+        {/* Related Documents Section (lightweight, server-provided) */}
+        {relatedDocs.length > 0 && (
+          <section className="mt-16 max-w-4xl mx-auto">
+            <div className="rounded-lg border p-4">
+              <h3 className="text-lg font-semibold mb-3">
+                {t('Related Legal Documents', 'Related Legal Documents')}
+              </h3>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {relatedDocs.map((rd) => (
+                  <li key={rd.id} className="border rounded-md p-3">
+                    <Link
+                      href={`/${currentLocale}/docs/${rd.id}`}
+                      className="text-sm font-medium text-primary hover:underline"
+                    >
+                      {rd.name}
+                    </Link>
+                    {rd.description && (
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {rd.description}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
 
         {/* Mobile CTA */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">

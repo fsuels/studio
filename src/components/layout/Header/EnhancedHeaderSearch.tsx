@@ -18,13 +18,6 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { getDocumentTitle } from '@/lib/format-utils';
-import {
-  enhancedSearch,
-  getSearchSuggestions,
-  legacySearch,
-} from '@/lib/enhanced-search';
-import { taxonomy } from '@/config/taxonomy';
-import type { LegalDocument } from '@/lib/document-library';
 
 interface SearchResult {
   slug: string;
@@ -65,11 +58,21 @@ export default function EnhancedHeaderSearch({
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
     : 'Search documents...';
 
-  // Load suggestions on mount
+  // Load suggestions on mount only if enhanced search is enabled
   useEffect(() => {
-    if (mounted) {
-      getSearchSuggestions(clientLocale).then(setSuggestions);
-    }
+    if (!mounted) return;
+    (async () => {
+      try {
+        const { taxonomy } = await import('@/config/taxonomy');
+        const useEnhanced = !!taxonomy?.feature_flags?.wizard_v4?.enabled;
+        if (!useEnhanced) return;
+        const { getSearchSuggestions } = await import('@/lib/enhanced-search');
+        const items = await getSearchSuggestions(clientLocale);
+        setSuggestions(items);
+      } catch (e) {
+        // silently ignore if config not available
+      }
+    })();
   }, [mounted, clientLocale]);
 
   // Enhanced search functionality with debouncing
@@ -89,10 +92,13 @@ export default function EnhancedHeaderSearch({
 
       try {
         // Check if enhanced search is enabled
-        const useEnhanced = taxonomy.feature_flags?.wizard_v4?.enabled;
+        // Determine feature flag client-side to avoid bundling taxonomy at build
+        const { taxonomy } = await import('@/config/taxonomy');
+        const useEnhanced = !!taxonomy?.feature_flags?.wizard_v4?.enabled;
         console.log('Performing search:', { query, useEnhanced, clientLocale });
 
         if (useEnhanced) {
+          const { enhancedSearch } = await import('@/lib/enhanced-search');
           const results = await enhancedSearch(query, clientLocale, {
             maxResults: 8,
             roleFilter: userRole,
@@ -101,8 +107,9 @@ export default function EnhancedHeaderSearch({
           setSearchResults(results);
           setShowResults(results.length > 0);
         } else {
-          // Fallback to legacy search
-          const legacyResults = legacySearch(query, clientLocale);
+          // Fallback to legacy search (dynamically imports on demand)
+          const { legacySearch } = await import('@/lib/enhanced-search');
+          const legacyResults = await legacySearch(query, clientLocale);
           console.log('Legacy search results:', legacyResults);
           const mappedResults: SearchResult[] = legacyResults
             .slice(0, 8)
