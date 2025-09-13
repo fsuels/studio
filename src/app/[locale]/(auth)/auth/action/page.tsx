@@ -40,7 +40,7 @@ export default function AuthActionPage() {
   // URL parameters
   const mode = searchParams.get('mode');
   const actionCode = searchParams.get('oobCode');
-  const continueUrl = searchParams.get('continueUrl');
+  const _continueUrl = searchParams.get('continueUrl');
 
   // Component state
   const [isLoading, setIsLoading] = useState(true);

@@ -152,7 +152,10 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
               { contentMarkdown: markdown, updatedAt: serverTimestamp() },
               { merge: true },
             );
-          } catch (_) {} // read‑only environments (preview channels) can skip this
+          } catch (error) {
+            // read‑only environments (preview channels) can skip this
+            console.warn('Could not cache markdown content:', error);
+          }
         }
 
         setMarkdownContent(markdown || null);
@@ -196,7 +199,7 @@ export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDoc
     return () => {
       cancelled = true;
     };
-  }, [savedDocId, user]);
+  }, [savedDocId, user, docId, locale]);
 
   const [isSigning, setIsSigning] = useState(false);
 

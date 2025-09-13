@@ -17,9 +17,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import RenameModal from './modals/RenameModal';
@@ -40,13 +37,8 @@ import {
   Filter,
   TrendingUp,
   ShoppingBag,
-  RefreshCw,
-  Stamp,
-  PenTool,
   CheckCircle,
   Eye,
-  ExternalLink,
-  AlertCircle,
   Receipt,
   Plus,
   Info,

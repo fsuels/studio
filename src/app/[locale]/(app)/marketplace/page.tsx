@@ -5,20 +5,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Grid, List, Crown, TrendingUp, Clock, Filter } from 'lucide-react';
+import { Grid, List, Crown, TrendingUp, Filter } from 'lucide-react';
 import { TemplateCard } from '@/components/marketplace/TemplateCard';
 import { MarketplaceSearch } from '@/components/marketplace/MarketplaceSearch';
-import type {
-  MarketplaceTemplate,
-  MarketplaceSearchFilters,
-  MarketplaceSearchResult,
-} from '@/types/marketplace';
+import type { MarketplaceSearchFilters, MarketplaceSearchResult } from '@/types/marketplace';
 
-interface MarketplacePageProps {
-  params: Promise<{ locale: string }>;
-}
-
-export default function MarketplacePage({ params }: MarketplacePageProps) {
+export default function MarketplacePage() {
   const [templates, setTemplates] = useState<MarketplaceSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -140,8 +132,8 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
   );
 
   useEffect(() => {
-    loadTemplates(1, filters);
-  }, [filters]);
+    loadTemplates(1);
+  }, [loadTemplates]);
 
   const handleFiltersChange = useCallback(
     (newFilters: MarketplaceSearchFilters) => {
@@ -200,7 +192,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
             <Crown className="h-5 w-5 text-yellow-500" />
             <h2 className="text-2xl font-bold">Featured Templates</h2>
             <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300">
-              Editor's Choice
+              Editor&apos;s Choice
             </Badge>
           </div>
 

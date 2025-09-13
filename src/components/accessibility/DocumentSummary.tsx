@@ -46,11 +46,6 @@ export function DocumentSummary({
   const [isExpanded, setIsExpanded] = useState(true);
   const [showKeyTerms, setShowKeyTerms] = useState(false);
 
-  // Don't render if plain language mode is disabled
-  if (!preferences.showDocumentSummary && !preferences.plainLanguageMode) {
-    return null;
-  }
-
   useEffect(() => {
     let isMounted = true;
 
@@ -115,6 +110,10 @@ export function DocumentSummary({
     };
   }, [documentText, documentType, preferences.readingLevel]);
 
+  // Don't render if plain language mode is disabled
+  if (!preferences.showDocumentSummary && !preferences.plainLanguageMode) {
+    return null;
+  }
 
   const handleRefresh = () => {
     setIsLoading(true);

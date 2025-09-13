@@ -10,10 +10,10 @@ interface TermsPageProps {
   params: Promise<{ locale: 'en' | 'es' }>;
 }
 
-export default function LocaleTermsPage({ params }: TermsPageProps) {
+export default function LocaleTermsPage({ params: _params }: TermsPageProps) {
   // Access locale via useParams on the client; ignore Promise-typed params
   const locale = (useParams()?.locale as 'en' | 'es') ?? 'en';
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
 
   useEffect(() => {
     // Log terms of service view
@@ -60,7 +60,7 @@ export default function LocaleTermsPage({ params }: TermsPageProps) {
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">Disclaimer</h2>
         <p className="mb-4">
-          The materials on 123LegalDoc are provided on an 'as is' basis.
+          The materials on 123LegalDoc are provided on an &apos;as is&apos; basis.
           123LegalDoc makes no warranties, expressed or implied, and hereby
           disclaims and negates all other warranties.
         </p>
@@ -69,7 +69,7 @@ export default function LocaleTermsPage({ params }: TermsPageProps) {
         <p className="mb-4">
           In no event shall 123LegalDoc or its suppliers be liable for any
           damages arising out of the use or inability to use the materials on
-          123LegalDoc's website.
+          123LegalDoc&apos;s website.
         </p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">

@@ -11,11 +11,11 @@ interface PrivacyPolicyPageProps {
 }
 
 export default function LocalePrivacyPolicyPage({
-  params,
+  params: _params,
 }: PrivacyPolicyPageProps) {
   // Access locale via useParams on the client; ignore Promise-typed params
   const locale = (useParams()?.locale as 'en' | 'es') ?? 'en';
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
 
   useEffect(() => {
     // Log privacy policy view

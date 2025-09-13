@@ -88,32 +88,27 @@ export default function StartWizardPageClient({
   const [overlayConfig, setOverlayConfig] = useState<OverlayConfig | null>(null);
   const [hasOverlay, setHasOverlay] = useState(false);
 
-  useEffect(() => setIsMounted(true), []);
-
   const docConfig = useMemo(
     () => documentLibrary.find((d) => d.id === docId),
     [docId]
   );
 
-  // Guard ASAP so TS can narrow types safely
-  if (!docConfig) {
-    notFound();
-    return null;
-  }
-
-  const docType = docConfig.id;
-  const docStrict = docConfig as LegalDocument;
-
+  // Initialize form methods with default configuration
   const methods = useForm<z.infer<z.ZodTypeAny>>({
     defaultValues: {},
     mode: 'onBlur',
-    resolver: docStrict.schema ? zodResolver(docStrict.schema) : undefined,
+    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
   });
 
   const { reset, watch } = methods;
   const formData = watch();
 
-  // ---- Helpers ----------------------------------------------------
+  const docType = docConfig?.id || docId;
+  const docStrict = docConfig as LegalDocument;
+
+  // ---- Hooks and Effects ----------------------------------------------
+
+  useEffect(() => setIsMounted(true), []);
 
   const loadDynamicQuestions = useCallback(
     async (state?: string) => {
@@ -376,6 +371,13 @@ export default function StartWizardPageClient({
     const keys = Object.keys(formData || {}).sort().join('|');
     return `${selectedState}-${keys}`;
   }, [selectedState, formData]);
+
+  // ---- Guards ----------------------------------------------------
+
+  if (!docConfig) {
+    notFound();
+    return null;
+  }
 
   // ---- Render guards ------------------------------------------------
 

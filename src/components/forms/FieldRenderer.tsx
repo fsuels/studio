@@ -64,9 +64,53 @@ const FieldRenderer = React.memo(function FieldRenderer({
   const [isMounted, setIsMounted] = React.useState(false);
   const [showTooltip, setShowTooltip] = React.useState(false);
 
+  // Move hooks before early returns
+  const formStateCode = watch('state') as string | undefined;
+  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
+
+  const {
+    decode,
+    data: vinData,
+    loading: vinLoading,
+    error: vinError,
+  } = useVinDecoder();
+
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (fieldKey === 'vin' && vinData && setValue) {
+      const currentMake = watch('make');
+      const currentModel = watch('model');
+      const currentYear = watch('year');
+
+      if (vinData.make && (currentMake === undefined || currentMake === '')) {
+        setValue('make', vinData.make, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+      if (
+        vinData.model &&
+        (currentModel === undefined || currentModel === '')
+      ) {
+        setValue('model', vinData.model, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+      if (
+        vinData.year &&
+        (currentYear === undefined || currentYear === '' || currentYear === 0)
+      ) {
+        setValue('year', Number(vinData.year), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+  }, [vinData, fieldKey, setValue, watch]);
 
   if (!doc) {
     console.error('FieldRenderer: doc prop is undefined');
@@ -135,49 +179,6 @@ const FieldRenderer = React.memo(function FieldRenderer({
             (fieldSchemaFromZod._def as ZodDefExtras)?.placeholder || undefined,
         }
       : undefined);
-
-  const formStateCode = watch('state') as string | undefined;
-  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
-
-  const {
-    decode,
-    data: vinData,
-    loading: vinLoading,
-    error: vinError,
-  } = useVinDecoder();
-
-  useEffect(() => {
-    if (fieldKey === 'vin' && vinData && setValue) {
-      const currentMake = watch('make');
-      const currentModel = watch('model');
-      const currentYear = watch('year');
-
-      if (vinData.make && (currentMake === undefined || currentMake === '')) {
-        setValue('make', vinData.make, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      }
-      if (
-        vinData.model &&
-        (currentModel === undefined || currentModel === '')
-      ) {
-        setValue('model', vinData.model, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      }
-      if (
-        vinData.year &&
-        (currentYear === undefined || currentYear === '' || currentYear === 0)
-      ) {
-        setValue('year', Number(vinData.year), {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      }
-    }
-  }, [vinData, fieldKey, setValue, watch]);
 
   if (
     !fieldSchema &&

@@ -363,11 +363,24 @@ export function SocialProofBanner() {
     'homepage_social_proof',
   );
 
+  // Always call hooks at the top level
+  const [count, setCount] = React.useState(127);
+
   React.useEffect(() => {
     if (!isLoading && variant) {
       trackConversion('social_proof_impression');
     }
-  }, [variant, isLoading]);
+  }, [variant, isLoading, trackConversion]);
+
+  React.useEffect(() => {
+    if (variant === 'variant_2') {
+      const interval = setInterval(() => {
+        setCount((c) => c + Math.floor(Math.random() * 3));
+      }, 30000); // Update every 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [variant]);
 
   if (isLoading) {
     return <div className="h-12 bg-gray-100 animate-pulse rounded"></div>;
@@ -391,16 +404,6 @@ export function SocialProofBanner() {
 
   // Recent activity
   if (variant === 'variant_2') {
-    const [count, setCount] = React.useState(127);
-
-    React.useEffect(() => {
-      const interval = setInterval(() => {
-        setCount((c) => c + Math.floor(Math.random() * 3));
-      }, 30000); // Update every 30 seconds
-
-      return () => clearInterval(interval);
-    }, []);
-
     return (
       <div className="text-center py-4">
         <div className="text-sm text-gray-600 flex items-center justify-center gap-2">
@@ -465,10 +468,11 @@ export function ExperimentalSignupForm({
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">
             Email Address *
           </label>
           <input
+            id="signup-email"
             type="email"
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -479,10 +483,11 @@ export function ExperimentalSignupForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 mb-1">
             Full Name *
           </label>
           <input
+            id="signup-name"
             type="text"
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -493,10 +498,11 @@ export function ExperimentalSignupForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="signup-phone" className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number *
           </label>
           <input
+            id="signup-phone"
             type="tel"
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -517,10 +523,11 @@ export function ExperimentalSignupForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="signup-email-simple" className="block text-sm font-medium text-gray-700 mb-1">
           Email Address
         </label>
         <input
+          id="signup-email-simple"
           type="email"
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md"

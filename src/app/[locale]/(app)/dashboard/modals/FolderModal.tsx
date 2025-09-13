@@ -120,7 +120,6 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
           onKeyDown={handleKeyDown}
           placeholder={t('UntitledFolder', 'Untitled Folder')}
           disabled={isCreating}
-          autoFocus
         />
 
         <DialogFooter className="mt-4">

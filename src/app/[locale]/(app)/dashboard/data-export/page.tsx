@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/dashboard/data-export/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -41,11 +41,7 @@ export default function DataExportPage() {
   const [format, setFormat] = useState<'json' | 'csv'>('json');
   const [includeDeleted, setIncludeDeleted] = useState(false);
 
-  useEffect(() => {
-    fetchExportInfo();
-  }, []);
-
-  const fetchExportInfo = async () => {
+  const fetchExportInfo = useCallback(async () => {
     try {
       const response = await fetch('/api/compliance/data-export');
       if (response.ok) {
@@ -64,7 +60,11 @@ export default function DataExportPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchExportInfo();
+  }, [fetchExportInfo]);
 
   const handleExport = async () => {
     if (!user) return;

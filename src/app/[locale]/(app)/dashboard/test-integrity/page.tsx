@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/dashboard/test-integrity/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { Label } from '@/components/ui/label';
 
 interface TestResult {
   testName: string;
@@ -73,11 +74,7 @@ export default function TestIntegrityPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTestType, setSelectedTestType] = useState('full');
 
-  useEffect(() => {
-    fetchTestInfo();
-  }, []);
-
-  const fetchTestInfo = async () => {
+  const fetchTestInfo = useCallback(async () => {
     try {
       const response = await fetch('/api/compliance/test-integrity');
       if (response.ok) {
@@ -96,7 +93,11 @@ export default function TestIntegrityPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchTestInfo();
+  }, [fetchTestInfo]);
 
   const runIntegrityTests = async () => {
     if (!user) return;
@@ -223,12 +224,12 @@ export default function TestIntegrityPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Test Type</label>
+            <Label htmlFor="test-type">Test Type</Label>
             <Select
               value={selectedTestType}
               onValueChange={setSelectedTestType}
             >
-              <SelectTrigger className="w-full md:w-1/2">
+              <SelectTrigger id="test-type" className="w-full md:w-1/2">
                 <SelectValue placeholder="Select test type" />
               </SelectTrigger>
               <SelectContent>

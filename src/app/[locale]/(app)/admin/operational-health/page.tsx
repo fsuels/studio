@@ -104,7 +104,7 @@ export default function OperationalHealthPage() {
       } else {
         throw new Error('Failed to fetch health data');
       }
-    } catch (_error) {
+    } catch (error) {
       console.error('Error fetching health data:', error);
       toast({
         title: 'Error',

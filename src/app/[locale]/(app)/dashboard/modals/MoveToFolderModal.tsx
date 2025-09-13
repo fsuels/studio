@@ -82,7 +82,6 @@ export default function MoveToFolderModal({
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t('Search folders...')}
             className="pl-9"
-            autoFocus
           />
         </div>
 

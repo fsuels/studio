@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
 import {
   Shield,
   Download,
@@ -254,12 +255,12 @@ export default function ComplianceReportsPage() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <span className="text-sm font-medium">Report Type</span>
+              <Label htmlFor="report-type">Report Type</Label>
               <Select
                 value={selectedReportType}
                 onValueChange={setSelectedReportType}
               >
-                <SelectTrigger>
+                <SelectTrigger id="report-type">
                   <SelectValue placeholder="Select report type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -279,9 +280,9 @@ export default function ComplianceReportsPage() {
             </div>
 
             <div className="space-y-2">
-              <span className="text-sm font-medium">Export Format</span>
+              <Label htmlFor="export-format">Export Format</Label>
               <Select value={selectedFormat} onValueChange={setSelectedFormat}>
-                <SelectTrigger>
+                <SelectTrigger id="export-format">
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
                 <SelectContent>
