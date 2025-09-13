@@ -8,15 +8,15 @@ import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
-import { AutoImage, PersonalizationBlock } from '@/components/shared';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AutoImage, PersonalizationBlock as _PersonalizationBlock } from '@/components/shared';
+import { Skeleton as _Skeleton } from '@/components/ui/skeleton';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
-import { CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
-import { FileText, Users, Building } from 'lucide-react';
-import Link from 'next/link';
+import { CategoryDocumentsWidget as _CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
+import { FileText as _FileText, Users as _Users, Building as _Building } from 'lucide-react';
+import Link as _Link from 'next/link';
 
 // Minimal loading spinner without text
-const MinimalLoadingSpinner = () => (
+const _MinimalLoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
   </div>
@@ -100,7 +100,7 @@ const AnnouncementBar = lazyOnView(
 export default function HomePageClient() {
   const { t } = useTranslation('common');
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const _router = useRouter();
   const params = useParams();
   const locale = (params!.locale as 'en' | 'es') || 'en';
 
@@ -149,7 +149,7 @@ export default function HomePageClient() {
   useEffect(() => {
     if (!isHydrated) return;
 
-    const docIdFromQuery = searchParams!.get('docId');
+    const _docIdFromQuery = searchParams!.get('docId');
     const categoryFromQuery = searchParams!.get('category');
     const searchFromQuery = searchParams!.get('search');
 

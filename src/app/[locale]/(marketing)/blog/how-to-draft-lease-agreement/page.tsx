@@ -180,7 +180,7 @@ export default async function LeaseAgreementBlogPost({ params }: PageProps) {
                   <h2>State-Specific Requirements</h2>
                   
                   <p>
-                    Different states have varying requirements for lease agreements. It's crucial to understand 
+                    Different states have varying requirements for lease agreements. It&apos;s crucial to understand 
                     your local laws:
                   </p>
 

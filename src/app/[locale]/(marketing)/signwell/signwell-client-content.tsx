@@ -44,7 +44,7 @@ const AuthModal = dynamic(() => import('@/components/shared/AuthModal'));
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import { createSignWellDocument } from '@/services/signwell';
 
-const SignwellHeroAnimationClient = dynamic(
+const _SignwellHeroAnimationClient = dynamic(
   () => import('@/components/motion/SignwellHeroAnimationClient'),
   { ssr: false },
 );
@@ -159,6 +159,15 @@ const DropzonePlaceholder = ({
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onClick={onClick} // Use the passed onClick handler
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label="Upload file by clicking or dragging"
     >
       <input
         type="file"

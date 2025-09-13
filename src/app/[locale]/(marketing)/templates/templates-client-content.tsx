@@ -18,7 +18,7 @@ interface Props {
 
 export default function TemplatesClientContent({ locale }: Props) {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const _router = useRouter();
 
   const categoryHref = (key: string) =>
     `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;
