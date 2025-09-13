@@ -12,11 +12,8 @@ import React, {
 } from 'react';
 // Avoid bundling Firestore by not importing our firebase wrapper here.
 // Import Firebase modules lazily inside functions/effects instead.
-import type {
-  Auth,
-  User as FirebaseUser,
-} from 'firebase/auth';
-import type { FirebaseError } from 'firebase/app';
+import type { User as FirebaseUser } from 'firebase/auth';
+import type { FirebaseError, FirebaseOptions, FirebaseApp } from 'firebase/app';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -63,15 +60,15 @@ function useAuthHook(): AuthContextType {
         import('firebase/auth'),
         import('firebase/app'),
       ]);
-      const config = {
+      const config: FirebaseOptions = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      } as const;
-      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      };
+      const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
       const auth = getAuth(appInst);
       unsubscribe = onAuthStateChanged(auth, (fbUser: FirebaseUser | null) => {
         if (fbUser) {
@@ -115,15 +112,15 @@ function useAuthHook(): AuthContextType {
           import('firebase/auth'),
           import('firebase/app'),
         ]);
-        const config = {
+        const config: FirebaseOptions = {
           apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
           authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
           storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
           messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
           appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-        } as const;
-        const appInst = getApps().length ? getApp() : initializeApp(config as any);
+        };
+        const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
         const auth = getAuth(appInst);
         let fbUser = auth.currentUser;
         if (password) {
@@ -161,15 +158,15 @@ function useAuthHook(): AuthContextType {
     async (email: string, password: string, name?: string) => {
       const [authMod] = await Promise.all([import('firebase/auth')]);
       const { initializeApp, getApps, getApp } = await import('firebase/app');
-      const config = {
+      const config: FirebaseOptions = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      } as const;
-      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      };
+      const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
       const auth = authMod.getAuth(appInst);
       const cred = await authMod.createUserWithEmailAndPassword(auth, email, password);
       if (name) {
@@ -185,15 +182,15 @@ function useAuthHook(): AuthContextType {
       import('firebase/auth'),
       import('firebase/app'),
     ]);
-    const config = {
+    const config: FirebaseOptions = {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
       messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    } as const;
-    const appInst = getApps().length ? getApp() : initializeApp(config as any);
+    };
+    const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
     const auth = getAuth(appInst);
     const currentUser = auth.currentUser;
 
@@ -212,7 +209,9 @@ function useAuthHook(): AuthContextType {
               typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
             success: true,
           });
-        } catch {}
+        } catch {
+          /* ignore audit errors */
+        }
       }
 
       await signOut(auth);
@@ -255,37 +254,42 @@ function useAuthHook(): AuthContextType {
         import('firebase/auth'),
         import('firebase/app'),
       ]);
-      const config = {
+      const config: FirebaseOptions = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      } as const;
-      const appInst = getApps().length ? getApp() : initializeApp(config as any);
+      };
+      const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
       const auth = getAuth(appInst);
       
       // Add additional error context and retry logic
       console.log('[useAuth] Attempting password reset for:', email);
       console.log('[useAuth] Auth instance:', auth);
-      console.log('[useAuth] Firebase app:', app);
+      console.log('[useAuth] Firebase app:', appInst);
       
       await sendPasswordResetEmail(auth, email);
       
       console.log('[useAuth] Password reset email sent successfully');
       
       // Log password reset attempt
-      await auditService.logAuthEvent('password_reset', {
-        email,
-        ipAddress:
-          typeof window !== 'undefined'
-            ? window.location.hostname
-            : 'unknown',
-        userAgent:
-          typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
-        success: true,
-      });
+      try {
+        const { auditService } = await import('@/services/firebase-audit-service');
+        await auditService.logAuthEvent('password_reset', {
+          email,
+          ipAddress:
+            typeof window !== 'undefined'
+              ? window.location.hostname
+              : 'unknown',
+          userAgent:
+            typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+          success: true,
+        });
+      } catch {
+        /* ignore audit errors */
+      }
     } catch (err: unknown) {
       console.error('[useAuth] resetPassword error details:', {
         code: isFirebaseError(err) ? err.code : undefined,

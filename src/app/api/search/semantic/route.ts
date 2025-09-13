@@ -1,6 +1,5 @@
 // src/app/api/search/semantic/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { pineconeService } from '@/lib/vector-search/pinecone-service';
 import { stringify } from 'csv-stringify/sync';
 
 interface SearchParams {
@@ -77,6 +76,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Perform semantic search
+    const { pineconeService } = await import('@/lib/vector-search/pinecone-service');
     const searchResponse = await pineconeService.semanticSearch(
       params.q,
       Object.keys(filters).length > 0 ? filters : undefined,
@@ -242,6 +242,7 @@ async function handleBulkSearch(params: any) {
     );
   }
 
+  const { pineconeService } = await import('@/lib/vector-search/pinecone-service');
   const results = await Promise.allSettled(
     queries.map(async (query: string) => {
       const searchResponse = await pineconeService.semanticSearch(

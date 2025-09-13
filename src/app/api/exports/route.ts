@@ -1,6 +1,5 @@
 // src/app/api/exports/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { exportService } from '@/lib/vector-search/export-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -111,6 +110,7 @@ async function handleCreateExport(
   };
 
   // Check user export limits (in production, implement proper rate limiting)
+  const { exportService } = await import('@/lib/vector-search/export-service');
   const userJobs = exportService.getUserExportJobs(userId);
   const recentJobs = userJobs.filter((job) => {
     const jobTime = new Date(job.createdAt).getTime();
@@ -145,6 +145,7 @@ async function handleCreateExport(
  * Handle getting export status
  */
 async function handleGetStatus(jobId: string) {
+  const { exportService } = await import('@/lib/vector-search/export-service');
   const job = exportService.getExportJob(jobId);
 
   if (!job) {
@@ -163,6 +164,7 @@ async function handleGetStatus(jobId: string) {
  * Handle listing user exports
  */
 async function handleListExports(userId: string) {
+  const { exportService } = await import('@/lib/vector-search/export-service');
   const jobs = exportService.getUserExportJobs(userId);
 
   return NextResponse.json({
@@ -175,6 +177,7 @@ async function handleListExports(userId: string) {
  * Handle getting export statistics
  */
 async function handleGetStats() {
+  const { exportService } = await import('@/lib/vector-search/export-service');
   const stats = exportService.getExportStats();
 
   return NextResponse.json({

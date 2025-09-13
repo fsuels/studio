@@ -7,11 +7,15 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
 
-  /* Disable experimental features that might cause issues */
-  experimental: {},
+  /* Optimizations for large codebases */
+  experimental: {
+    // Use webpack's persistent cache for faster builds
+    webpackBuildWorker: true,
+  },
 
-  /* Minimal webpack configuration */
-  webpack: (config, { isServer }) => {
+
+  /* Optimized webpack configuration for large codebases */
+  webpack: (config, { isServer, dev }) => {
     // Essential Node.js polyfills for client bundle
     if (!isServer) {
       config.resolve.fallback = {
@@ -21,14 +25,62 @@ const nextConfig = {
       };
     }
 
-    // Externalize problematic server-only deps (e.g., handlebars via dotprompt/genkit)
+    // Externalize problematic server-only deps
     if (isServer) {
       config.externals = config.externals || [];
-      config.externals.push({ handlebars: 'commonjs2 handlebars' });
+      config.externals.push(
+        { handlebars: 'commonjs2 handlebars' },
+        { '@pinecone-database/pinecone': 'commonjs2 @pinecone-database/pinecone' },
+        { openai: 'commonjs2 openai' },
+        { '@google-cloud/aiplatform': 'commonjs2 @google-cloud/aiplatform' }
+      );
     }
 
-    // Disable performance warnings to prevent hanging
-    config.performance = false;
+    // Production-ready bundle splitting
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          minSize: 20000,
+          maxSize: 200000,
+          cacheGroups: {
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              priority: -10,
+              chunks: 'all',
+              maxSize: 150000,
+            },
+            documents: {
+              test: /[\\/]lib[\\/]documents[\\/]/,
+              name: 'documents',
+              priority: 10,
+              chunks: 'async',
+              enforce: true,
+            },
+            firebase: {
+              test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
+              name: 'firebase',
+              priority: 15,
+              chunks: 'all',
+            },
+          },
+        },
+      };
+    }
+
+    // Relax performance constraints
+    config.performance = {
+      hints: dev ? false : 'warning',
+      maxAssetSize: 1000000, // 1MB
+      maxEntrypointSize: 1000000, // 1MB
+    };
 
     return config;
   },

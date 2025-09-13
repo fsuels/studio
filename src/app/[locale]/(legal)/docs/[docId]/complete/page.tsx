@@ -1,4 +1,4 @@
-import { documentLibrary } from '@/lib/document-library';
+import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
 import { localizations } from '@/lib/localizations';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -14,8 +14,9 @@ export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const params: { locale: 'en' | 'es'; docId: string }[] = [];
+  const documentMetadata = getAllDocumentMetadata();
   for (const locale of localizations) {
-    for (const doc of documentLibrary) {
+    for (const doc of documentMetadata) {
       if (doc.id && doc.id !== 'general-inquiry') {
         params.push({ locale, docId: doc.id });
       }

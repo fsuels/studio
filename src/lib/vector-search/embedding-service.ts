@@ -1,5 +1,5 @@
 // src/lib/vector-search/embedding-service.ts
-import { VertexAI } from '@google-cloud/aiplatform';
+import { v1 as aiplatform } from '@google-cloud/aiplatform';
 
 interface EmbeddingResponse {
   embeddings: number[][];
@@ -27,7 +27,7 @@ interface DocumentEmbedding {
 }
 
 export class EmbeddingService {
-  private vertexAI: VertexAI;
+  private client: aiplatform.PredictionServiceClient;
   private project: string;
   private location: string;
 
@@ -39,9 +39,9 @@ export class EmbeddingService {
       throw new Error('GOOGLE_CLOUD_PROJECT environment variable is required');
     }
 
-    this.vertexAI = new VertexAI({
-      project: this.project,
-      location: this.location,
+    // Initialize Vertex AI Prediction client; set apiEndpoint for region
+    this.client = new aiplatform.PredictionServiceClient({
+      apiEndpoint: `${this.location}-aiplatform.googleapis.com`,
     });
   }
 
@@ -58,9 +58,9 @@ export class EmbeddingService {
         ],
       };
 
-      const [response] = await this.vertexAI.prediction.predict({
+      const [response] = await this.client.predict({
         endpoint: `projects/${this.project}/locations/${this.location}/publishers/google/models/textembedding-gecko@003`,
-        instances: [request],
+        instances: [{ content: text.slice(0, 8000) }],
       });
 
       if (response.predictions && response.predictions.length > 0) {
@@ -90,9 +90,9 @@ export class EmbeddingService {
         instances,
       };
 
-      const [response] = await this.vertexAI.prediction.predict({
+      const [response] = await this.client.predict({
         endpoint: `projects/${this.project}/locations/${this.location}/publishers/google/models/textembedding-gecko@003`,
-        instances: request.instances,
+        instances,
       });
 
       if (response.predictions && response.predictions.length > 0) {

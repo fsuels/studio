@@ -2,7 +2,7 @@
 
 import { getMarkdown } from '@/lib/markdown-cache';
 import DocPageClient from './DocPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
 import { getRelatedDocuments } from '@/lib/internal-linking';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { localizations } from '@/lib/localizations';
@@ -33,17 +33,18 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
     ];
   }
 
-  if (!documentLibrary?.length || !localizations?.length) {
+  const documentMetadata = getAllDocumentMetadata();
+  if (!documentMetadata?.length || !localizations?.length) {
     console.warn(
-      '[generateStaticParams /docs] documentLibrary or localizations empty',
+      '[generateStaticParams /docs] documentMetadata or localizations empty',
     );
     return [];
   }
 
   const params: DocPageParams[] = [];
   for (const locale of localizations as Array<'en' | 'es'>) {
-    for (const doc of documentLibrary) {
-      if (doc.id && doc.id !== 'general-inquiry' && doc.schema) {
+    for (const doc of documentMetadata) {
+      if (doc.id && doc.id !== 'general-inquiry') {
         params.push({ locale, docId: doc.id });
       }
     }

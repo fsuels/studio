@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 import React from 'react';
 import { notFound } from 'next/navigation';
 import StartWizardPageClient from './StartWizardPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
 import { localizations } from '@/lib/localizations';
 
 type StartWizardPageProps = {
@@ -35,8 +35,11 @@ export async function generateStaticParams(): Promise<
 
   const params: Array<{ locale: 'en' | 'es'; docId: string }> = [];
 
+  // Use metadata instead of full document library for static generation
+  const documentMetadata = getAllDocumentMetadata();
+
   for (const locale of locales) {
-    for (const doc of documentLibrary) {
+    for (const doc of documentMetadata) {
       if (!doc.id) {
         if (isDev)
           console.warn(
@@ -48,13 +51,6 @@ export async function generateStaticParams(): Promise<
         if (isDev)
           console.warn(
             `[generateStaticParams] Skipping "general-inquiry" doc for locale "${locale}".`,
-          );
-        continue;
-      }
-      if (!doc.schema) {
-        if (isDev)
-          console.warn(
-            `[generateStaticParams] Document "${doc.id}" missing schema for locale "${locale}". Skipping.`,
           );
         continue;
       }

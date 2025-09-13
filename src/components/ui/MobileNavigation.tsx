@@ -158,9 +158,10 @@ export function BottomTabNavigation({
         'safe-area-padding-bottom', // For devices with notches
         className,
       )}
-      role="tablist"
       aria-label="Bottom navigation"
     >
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role */}
+      <div role="tablist" aria-label="Bottom navigation">
       {items.map((item) => {
         const isActive = activeTab === item.id;
         const IconComponent = item.icon;
@@ -206,6 +207,7 @@ export function BottomTabNavigation({
           </button>
         );
       })}
+      </div>
     </nav>
   );
 }

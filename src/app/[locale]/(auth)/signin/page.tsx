@@ -59,7 +59,7 @@ export default function SignInPage() {
           measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
         } as const;
         const appInst = getApps().length ? getApp() : initializeApp(config as any);
-        const uid = getAuth(appInst).currentUser?.uid;
+        const _uid = getAuth(appInst).currentUser?.uid;
 
         // Log successful signin (lazy import to avoid bundling Firestore up front)
         try {

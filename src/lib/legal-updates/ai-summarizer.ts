@@ -1,6 +1,6 @@
 // src/lib/legal-updates/ai-summarizer.ts
 import OpenAI from 'openai';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdmin } from '@/lib/firebase-admin';
 import {
   RawLegalUpdate,
   ProcessedLegalUpdate,
@@ -251,7 +251,7 @@ Guidelines:
     update: ProcessedLegalUpdate,
   ): Promise<void> {
     try {
-      await adminDb
+      await getAdmin().firestore()
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .doc(update.id)
         .set(update);
@@ -266,7 +266,7 @@ Guidelines:
     status: 'processed' | 'failed',
   ): Promise<void> {
     try {
-      await adminDb
+      await getAdmin().firestore()
         .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
         .doc(rawUpdateId)
         .update({ status });
@@ -293,7 +293,7 @@ Guidelines:
 
     try {
       // Get pending raw updates
-      const pendingSnapshot = await adminDb
+      const pendingSnapshot = await getAdmin().firestore()
         .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
         .where('status', '==', 'pending')
         .orderBy('publishedDate', 'desc')
@@ -309,7 +309,7 @@ Guidelines:
 
         try {
           // Get source information
-          const sourceDoc = await adminDb
+          const sourceDoc = await getAdmin().firestore()
             .collection(COLLECTIONS.LEGAL_UPDATE_SOURCES)
             .doc(rawUpdate.sourceId)
             .get();
@@ -373,7 +373,7 @@ Guidelines:
   ): Promise<ProcessedLegalUpdate | null> {
     try {
       // Get the raw update
-      const rawDoc = await adminDb
+      const rawDoc = await getAdmin().firestore()
         .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
         .doc(updateId)
         .get();
@@ -385,7 +385,7 @@ Guidelines:
       const rawUpdate = { id: rawDoc.id, ...rawDoc.data() } as RawLegalUpdate;
 
       // Get source information
-      const sourceDoc = await adminDb
+      const sourceDoc = await getAdmin().firestore()
         .collection(COLLECTIONS.LEGAL_UPDATE_SOURCES)
         .doc(rawUpdate.sourceId)
         .get();

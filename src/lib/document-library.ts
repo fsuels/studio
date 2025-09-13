@@ -1,19 +1,38 @@
-// src/lib/document-library.ts
+// src/lib/document-library.ts - Updated to use dynamic loading system
 import { z } from 'zod';
 import { documentLibraryAdditions } from './document-library-additions';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
 import { preprocessQuery, calculateRelevanceScore } from './search/comprehensive-synonym-map';
-// …other countries…
+import {
+  getAllDocumentMetadata,
+  searchDocumentMetadata,
+  getDocumentsByCategory,
+  type DocumentMetadata
+} from './document-metadata-registry';
+import { loadDocument, loadDocuments } from './dynamic-document-loader';
 
-// Temporarily disable all document imports to test build
+// Fast document loading using metadata-first approach
 const loadUSDocuments = async (): Promise<LegalDocument[]> => {
-  // Return empty array until we can fix the build performance issues
-  console.warn('Document loading disabled for build performance');
-  return [];
+  // Get US document metadata
+  const usMetadata = getAllDocumentMetadata().filter(doc => doc.jurisdiction === 'us');
+
+  // For now, only load documents that have verified implementations
+  const availableDocIds = ['vehicle-bill-of-sale'];
+
+  const results = await loadDocuments(availableDocIds);
+  const documents: LegalDocument[] = [];
+
+  for (const [docId, result] of results) {
+    if (result.document) {
+      documents.push(result.document);
+    }
+  }
+
+  return documents;
 };
 
 const loadCADocuments = async (): Promise<LegalDocument[]> => {
-  // Temporarily return empty array to fix build
+  // Canadian documents not yet implemented in new system
   return [];
 };
 
@@ -294,6 +313,35 @@ export async function search(
   return findMatchingDocuments(query, lang, state);
 }
 
+// Fast metadata-based search (doesn't load full documents)
+export function searchMetadata(
+  query: string,
+  lang: 'en' | 'es' = 'en'
+): DocumentMetadata[] {
+  return searchDocumentMetadata(query, lang);
+}
+
+// Load documents from metadata search results
+export async function searchAndLoadDocuments(
+  query: string,
+  lang: 'en' | 'es' = 'en',
+  maxResults: number = 10
+): Promise<LegalDocument[]> {
+  const metadataResults = searchMetadata(query, lang).slice(0, maxResults);
+  const docIds = metadataResults.map(meta => meta.id);
+
+  const loadResults = await loadDocuments(docIds);
+  const documents: LegalDocument[] = [];
+
+  for (const [docId, result] of loadResults) {
+    if (result.document) {
+      documents.push(result.document);
+    }
+  }
+
+  return documents;
+}
+
 // Backwards compatible synchronous search
 export function searchSync(
   query: string,
@@ -307,10 +355,65 @@ const defaultDocumentLibrary = getDocumentsForCountry('us');
 export default defaultDocumentLibrary;
 export { defaultDocumentLibrary as documentLibrary };
 
+// Category-based document loading
+export async function loadDocumentsByCategory(category: string): Promise<LegalDocument[]> {
+  const metadata = getDocumentsByCategory(category);
+  const docIds = metadata.map(meta => meta.id);
+
+  const loadResults = await loadDocuments(docIds);
+  const documents: LegalDocument[] = [];
+
+  for (const [docId, result] of loadResults) {
+    if (result.document) {
+      documents.push(result.document);
+    }
+  }
+
+  return documents;
+}
+
+// Jurisdiction-based document loading
+export async function getDocumentsByJurisdiction(jurisdiction: string): Promise<LegalDocument[]> {
+  const metadata = getAllDocumentMetadata().filter(doc => doc.jurisdiction === jurisdiction);
+  const docIds = metadata.map(meta => meta.id);
+
+  const loadResults = await loadDocuments(docIds);
+  const documents: LegalDocument[] = [];
+
+  for (const [docId, result] of loadResults) {
+    if (result.document) {
+      documents.push(result.document);
+    }
+  }
+
+  return documents;
+}
+
+// Single document loading
+export async function getSingleDocument(docId: string): Promise<LegalDocument | null> {
+  const result = await loadDocument(docId);
+  return result.document;
+}
+
 // Async version of document library
 export const getDocumentLibrary = async (): Promise<LegalDocument[]> => {
   return getDocumentsByCountry('us');
 };
+
+// Export new functionality
+export {
+  getAllDocumentMetadata,
+  getDocumentMetadata,
+  searchDocumentMetadata,
+  loadDocument,
+  loadDocuments,
+  preloadCommonDocuments
+} from './dynamic-document-loader';
+
+export {
+  getAllDocumentMetadata as getDocumentMetadataRegistry,
+  type DocumentMetadata
+} from './document-metadata-registry';
 
 export type { LegalDocument, LocalizedText };
 export { usStates } from './usStates';

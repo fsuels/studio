@@ -149,15 +149,13 @@ export async function GET(request: NextRequest) {
 
       case 'stats': {
         // Return processing statistics
-        const { adminDb } = await import('@/lib/firebase-admin');
+        const { getAdmin } = await import('@/lib/firebase-admin');
         const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
+        const db = getAdmin().firestore();
 
         const [rawCount, processedCount] = await Promise.all([
-          adminDb.collection(COLLECTIONS.RAW_LEGAL_UPDATES).count().get(),
-          adminDb
-            .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
-            .count()
-            .get(),
+          db.collection(COLLECTIONS.RAW_LEGAL_UPDATES).count().get(),
+          db.collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES).count().get(),
         ]);
 
         return NextResponse.json({

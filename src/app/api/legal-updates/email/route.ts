@@ -107,28 +107,27 @@ export async function GET(request: NextRequest) {
 
       case 'stats': {
         // Return email statistics
-        const { adminDb } = await import('@/lib/firebase-admin');
+        const { getAdmin } = await import('@/lib/firebase-admin');
         const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
+        const db = getAdmin().firestore();
 
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const [totalUsers, emailEnabledUsers, recentEmails] = await Promise.all(
-          [
-            adminDb.collection(COLLECTIONS.USER_PREFERENCES).count().get(),
-            adminDb
-              .collection(COLLECTIONS.USER_PREFERENCES)
-              .where('emailNotifications', '==', true)
-              .count()
-              .get(),
-            adminDb
-              .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
-              .where('notificationStatus.emailSent', '==', true)
-              .where('notificationStatus.emailSentAt', '>=', sevenDaysAgo)
-              .count()
-              .get(),
-          ],
-        );
+        const [totalUsers, emailEnabledUsers, recentEmails] = await Promise.all([
+          db.collection(COLLECTIONS.USER_PREFERENCES).count().get(),
+          db
+            .collection(COLLECTIONS.USER_PREFERENCES)
+            .where('emailNotifications', '==', true)
+            .count()
+            .get(),
+          db
+            .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
+            .where('notificationStatus.emailSent', '==', true)
+            .where('notificationStatus.emailSentAt', '>=', sevenDaysAgo)
+            .count()
+            .get(),
+        ]);
 
         return NextResponse.json({
           statistics: {

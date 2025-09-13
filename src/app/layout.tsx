@@ -104,7 +104,6 @@ export default function RootLayout({
           }}
         />
         {children}
-        {/* global gradient defs */}
         <svg width="0" height="0">
           <linearGradient id="goldGradient" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="#fcd34d" />

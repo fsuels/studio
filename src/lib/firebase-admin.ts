@@ -63,7 +63,7 @@ export function getAdmin(): typeof admin {
 // This avoids build-time crashes when env is missing and keeps API usage unchanged.
 export const auth: admin.auth.Auth = new Proxy({} as admin.auth.Auth, {
   get(_target, prop: string, _receiver) {
-    // @ts-ignore - dynamic forwarding
+    // @ts-expect-error - dynamic forwarding
     return (getAdmin().auth() as any)[prop];
   },
 });
@@ -72,7 +72,7 @@ export const adminDb: FirebaseFirestore.Firestore = new Proxy(
   {} as FirebaseFirestore.Firestore,
   {
     get(_target, prop: string, _receiver) {
-      // @ts-ignore - dynamic forwarding
+      // @ts-expect-error - dynamic forwarding
       return (getAdmin().firestore() as any)[prop];
     },
   },
@@ -83,7 +83,7 @@ export const firestore: FirebaseFirestore.Firestore = new Proxy(
   {} as FirebaseFirestore.Firestore,
   {
     get(_target, prop: string, _receiver) {
-      // @ts-ignore - dynamic forwarding
+      // @ts-expect-error - dynamic forwarding
       return (getAdmin().firestore() as any)[prop];
     },
   },
@@ -94,7 +94,7 @@ export const adminStorage: admin.storage.Storage = new Proxy(
   {} as admin.storage.Storage,
   {
     get(_target, prop: string, _receiver) {
-      // @ts-ignore - dynamic forwarding
+      // @ts-expect-error - dynamic forwarding
       return (getAdmin().storage() as any)[prop];
     },
   },

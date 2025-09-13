@@ -1,5 +1,5 @@
 import React from 'react';
-import { documentLibrary } from '@/lib/document-library';
+import { getDocumentMetadata } from '@/lib/document-metadata-registry';
 import { vehicleBillOfSaleFaqs } from '@/app/[locale]/(legal)/documents/bill-of-sale-vehicle/faqs';
 
 interface DocPageParams {
@@ -15,13 +15,13 @@ export default async function Head({
   const { locale, docId } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
-  const docConfig = documentLibrary.find((d) => d.id === docId);
+  const docConfig = getDocumentMetadata(docId);
   if (!docConfig) return null;
 
   const documentName =
     locale === 'es' && docConfig.translations?.es?.name
       ? docConfig.translations.es.name
-      : docConfig.translations?.en?.name || docConfig.name;
+      : docConfig.translations?.en?.name || docConfig.title;
 
   const documentDescription =
     locale === 'es' && docConfig.translations?.es?.description
@@ -52,7 +52,7 @@ export default async function Head({
     description: documentDescription,
     offers: {
       '@type': 'Offer',
-      price: docConfig.basePrice.toString(),
+      price: '0', // Free for now, will be updated when pricing is implemented
       priceCurrency: 'USD',
       url: `${siteUrl}/${locale}/docs/${docId}`,
     },

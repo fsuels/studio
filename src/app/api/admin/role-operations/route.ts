@@ -96,16 +96,16 @@ export async function GET(request: NextRequest) {
         return getUsersData(request, { page, limit, search, roleFilter });
 
       case 'features':
-        return getFeaturesData(request);
+        return getFeaturesData(_request);
 
       case 'audit':
         return getAuditData(request, { page, limit });
 
       case 'impersonation':
-        return getImpersonationData(request);
+        return getImpersonationData(_request);
 
       case 'stats':
-        return getStatsData(request);
+        return getStatsData(_request);
 
       default:
         return getDashboardData(request);
@@ -294,9 +294,9 @@ async function getStatsData(_request: NextRequest) {
 
 async function getDashboardData(_request: NextRequest) {
   // Return combined dashboard data
-  const statsResponse = await getStatsData(request);
-  const impersonationResponse = await getImpersonationData(request);
-  const featuresResponse = await getFeaturesData(request);
+  const statsResponse = await getStatsData(_request);
+  const impersonationResponse = await getImpersonationData(_request);
+  const featuresResponse = await getFeaturesData(_request);
 
   const statsData = (await statsResponse.json()).data;
   const impersonationData = (await impersonationResponse.json()).data;
