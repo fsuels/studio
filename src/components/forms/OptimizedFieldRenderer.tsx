@@ -229,11 +229,7 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
     } = useFormContext<FormValues>();
     const { t } = useTranslation('common');
 
-    if (!doc) {
-      console.error('OptimizedFieldRenderer: doc prop is undefined');
-      return null;
-    }
-
+    // All hooks must be called before any early returns
     const fieldSchema = useFieldSchema(fieldKey, doc);
     const inputType = useInputType(fieldKey, fieldSchema);
 
@@ -301,6 +297,12 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
         });
       }
     }, [vinData, fieldKey, setValue, watch]);
+
+    // Early return check after all hooks
+    if (!doc) {
+      console.error('OptimizedFieldRenderer: doc prop is undefined');
+      return null;
+    }
 
     // Early return for unknown fields
     if (

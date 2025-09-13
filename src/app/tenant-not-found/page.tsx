@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Building, ArrowLeft, HelpCircle, Mail } from 'lucide-react';
+import { Building, ArrowLeft, HelpCircle } from 'lucide-react';
 
 interface TenantNotFoundPageProps {
   searchParams: Promise<{ slug?: string }>;
@@ -33,7 +33,7 @@ export default async function TenantNotFoundPage({
             <CardDescription>
               {slug ? (
                 <>
-                  The organization "<strong>{slug}</strong>" could not be found
+                  The organization &quot;<strong>{slug}</strong>&quot; could not be found
                   or is no longer active.
                 </>
               ) : (
@@ -47,8 +47,8 @@ export default async function TenantNotFoundPage({
               <ul className="mt-2 space-y-1 text-left list-disc list-inside">
                 <li>The organization link has expired</li>
                 <li>The organization has been deactivated</li>
-                <li>There's a typo in the web address</li>
-                <li>You don't have permission to access this organization</li>
+                <li>There&apos;s a typo in the web address</li>
+                <li>You don&apos;t have permission to access this organization</li>
               </ul>
             </div>
 

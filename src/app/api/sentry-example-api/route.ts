@@ -1,7 +1,5 @@
 // src/app/api/sentry-example-api/route.ts
 
-import { NextResponse } from 'next/server';
-
 export const dynamic = 'force-dynamic';
 
 class ExampleAPIError extends Error {

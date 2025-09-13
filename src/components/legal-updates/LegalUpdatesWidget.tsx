@@ -390,7 +390,7 @@ export function LegalUpdatesWidget({
                       </Button>
                     </div>
                     <Button variant="ghost" size="sm" asChild>
-                      <a href={`/legal-updates/${update.id}`} target="_blank">
+                      <a href={`/legal-updates/${update.id}`} target="_blank" rel="noreferrer">
                         <ExternalLink className="h-3 w-3" />
                         Details
                       </a>

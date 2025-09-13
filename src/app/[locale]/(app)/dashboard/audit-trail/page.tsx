@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/dashboard/audit-trail/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -53,13 +53,7 @@ export default function UserAuditTrailPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [integrityStatus, setIntegrityStatus] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchAuditTrail();
-    }
-  }, [user]);
-
-  const fetchAuditTrail = async () => {
+  const fetchAuditTrail = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -76,7 +70,13 @@ export default function UserAuditTrailPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, toast]);
+
+  useEffect(() => {
+    if (user) {
+      fetchAuditTrail();
+    }
+  }, [user, fetchAuditTrail]);
 
   const handleVerifyIntegrity = async () => {
     if (events.length === 0) return;

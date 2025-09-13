@@ -8,13 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
   Table,
   TableBody,
   TableCell,
@@ -25,7 +18,7 @@ import {
 import {
   Users,
   Search,
-  Filter,
+  
   Download,
   UserPlus,
   BarChart3,
@@ -37,7 +30,7 @@ import {
   Eye,
   Mail,
   Phone,
-  Calendar,
+  
 } from 'lucide-react';
 import {
   generateMockCustomer360Data,
@@ -45,7 +38,7 @@ import {
 } from '@/lib/orders';
 
 // Mock data for customer list
-const mockCustomers = Array.from({ length: 50 }, (_, index) => {
+const mockCustomers = Array.from({ length: 50 }, (_, _i) => {
   const data = generateMockCustomer360Data();
   return {
     id: data.customer.id,

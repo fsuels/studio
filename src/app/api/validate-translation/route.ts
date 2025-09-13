@@ -50,7 +50,7 @@ const LEGAL_TERMS_DB = {
   },
 };
 
-function calculateSimilarity(str1: string, str2: string): number {
+function _calculateSimilarity(str1: string, str2: string): number {
   if (!str1 || !str2) return 0;
 
   const longer = str1.length > str2.length ? str1 : str2;
@@ -96,7 +96,7 @@ function levenshteinDistance(str1: string, str2: string): number {
 function validateTranslation(
   englishText: string,
   spanishText: string,
-  documentId: string,
+  _documentId: string,
 ): ValidationResult {
   const result: ValidationResult = {
     confidence: 0,
@@ -174,7 +174,7 @@ function validateTranslation(
 export async function POST(request: NextRequest) {
   try {
     const body: ValidationRequest = await request.json();
-    const { englishText, spanishText, documentId, region } = body;
+    const { englishText, spanishText, documentId, region: _region } = body;
 
     // Validate inputs
     if (!englishText || !spanishText || !documentId) {

@@ -48,9 +48,6 @@ const CreateWebhookSchema = z.object({
     }),
 });
 
-const ListWebhooksSchema = z.object({
-  organizationId: z.string().optional(),
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -196,7 +193,7 @@ export async function GET(request: NextRequest) {
 }
 
 // Helper function to validate webhook ownership
-async function validateWebhookOwnership(
+async function _validateWebhookOwnership(
   webhookId: string,
   userId: string,
   registry: WebhookRegistry,

@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/dashboard/compliance-reports/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -62,7 +62,7 @@ interface ComplianceReport {
 }
 
 export default function ComplianceReportsPage() {
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const { toast } = useToast();
 
   const [report, setReport] = useState<ComplianceReport | null>(null);
@@ -104,11 +104,7 @@ export default function ComplianceReportsPage() {
     },
   ];
 
-  useEffect(() => {
-    generateReport();
-  }, []);
-
-  const generateReport = async () => {
+  const generateReport = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -130,7 +126,11 @@ export default function ComplianceReportsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedReportType, toast]);
+
+  useEffect(() => {
+    generateReport();
+  }, [generateReport]);
 
   const downloadDetailedReport = async () => {
     setIsGenerating(true);
@@ -254,7 +254,7 @@ export default function ComplianceReportsPage() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Report Type</label>
+              <span className="text-sm font-medium">Report Type</span>
               <Select
                 value={selectedReportType}
                 onValueChange={setSelectedReportType}
@@ -279,7 +279,7 @@ export default function ComplianceReportsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Export Format</label>
+              <span className="text-sm font-medium">Export Format</span>
               <Select value={selectedFormat} onValueChange={setSelectedFormat}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select format" />

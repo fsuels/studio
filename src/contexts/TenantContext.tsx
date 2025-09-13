@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Tenant, TenantUser, TenantPermission } from '@/types/tenant';
 
 interface TenantContextValue {
@@ -37,12 +37,7 @@ export function TenantProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load tenant user data and permissions
-  useEffect(() => {
-    loadTenantUserData();
-  }, [tenant.id]);
-
-  const loadTenantUserData = async () => {
+  const loadTenantUserData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -67,7 +62,12 @@ export function TenantProvider({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [tenant.id]);
+
+  // Load tenant user data and permissions
+  useEffect(() => {
+    loadTenantUserData();
+  }, [loadTenantUserData]);
 
   const hasPermission = (permission: TenantPermission): boolean => {
     if (!tenantUser) return false;
@@ -105,7 +105,7 @@ export function TenantProvider({
       setIsLoading(true);
       setError(null);
 
-      const [tenantResponse, userData] = await Promise.all([
+      const [tenantResponse, _userData] = await Promise.all([
         fetch(`/api/tenants/${tenant.id}`),
         loadTenantUserData(),
       ]);

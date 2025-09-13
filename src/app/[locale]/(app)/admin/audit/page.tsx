@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
   collection,
@@ -118,7 +118,7 @@ export default function AuditTrailPage() {
   const { user } = useAuth();
   const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
+  const [_selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
   const [diffMode, setDiffMode] = useState<'unified' | 'split'>('split');
   const [filters, setFilters] = useState<AuditFilters>({
     eventType: 'all',
@@ -137,9 +137,9 @@ export default function AuditTrailPage() {
       loadAuditEvents();
       verifyChainIntegrity();
     }
-  }, [user, filters]);
+  }, [user, loadAuditEvents, verifyChainIntegrity]);
 
-  const loadAuditEvents = async () => {
+  const loadAuditEvents = useCallback(async () => {
     setLoading(true);
     try {
       let auditQuery = query(
@@ -193,9 +193,9 @@ export default function AuditTrailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
-  const verifyChainIntegrity = async () => {
+  const verifyChainIntegrity = useCallback(async () => {
     setIntegrityStatus('checking');
     try {
       // In a real implementation, this would verify the hash chain
@@ -204,7 +204,7 @@ export default function AuditTrailPage() {
     } catch {
       setIntegrityStatus('failed');
     }
-  };
+  }, []);
 
   // helpers moved to module scope below
 
@@ -316,7 +316,7 @@ export default function AuditTrailPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Search</label>
+              <span className="text-sm font-medium">Search</span>
               <div className="relative">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -334,7 +334,7 @@ export default function AuditTrailPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Event Type</label>
+              <span className="text-sm font-medium">Event Type</span>
               <Select
                 value={filters.eventType}
                 onValueChange={(value) =>
@@ -357,7 +357,7 @@ export default function AuditTrailPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Collection</label>
+              <span className="text-sm font-medium">Collection</span>
               <Select
                 value={filters.collection}
                 onValueChange={(value) =>
@@ -378,7 +378,7 @@ export default function AuditTrailPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Classification</label>
+              <span className="text-sm font-medium">Classification</span>
               <Select
                 value={filters.dataClassification}
                 onValueChange={(value) =>

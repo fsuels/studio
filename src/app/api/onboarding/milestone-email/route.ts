@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
 // Helper functions for specific email service integrations
 
-async function triggerMailchimpJourney(
+async function _triggerMailchimpJourney(
   email: string,
   milestone: string,
   persona?: string,
@@ -90,7 +90,7 @@ async function triggerMailchimpJourney(
   */
 }
 
-function getTemplateForMilestone(milestone: string): string {
+function _getTemplateForMilestone(milestone: string): string {
   const templates: Record<string, string> = {
     welcome_sequence: 'd-welcome123',
     first_document: 'd-firstdoc456',

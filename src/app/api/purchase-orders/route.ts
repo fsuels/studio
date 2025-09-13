@@ -2,7 +2,6 @@
 // Handles B2B purchase order workflows for enterprise customers
 
 import { NextRequest, NextResponse } from 'next/server';
-import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
 export async function POST(req: NextRequest) {
   try {

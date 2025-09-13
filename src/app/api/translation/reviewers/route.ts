@@ -162,7 +162,7 @@ async function getAvailableReviewers(criteria: {
   ];
 
   // Filter reviewers based on criteria
-  let filteredReviewers = allReviewers.filter((reviewer) => {
+  const filteredReviewers = allReviewers.filter((reviewer) => {
     // Check language compatibility
     if (
       criteria.targetLanguage &&

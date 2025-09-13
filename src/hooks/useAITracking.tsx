@@ -52,7 +52,7 @@ export function useAITracking(options: UseAITrackingOptions = {}) {
   }, []);
 
   const callAI = useCallback(
-    async <T = any,>(
+    async <T = unknown>(
       prompt: string,
       endpoint: AIEndpoint,
       model: AIModel = options.defaultModel || 'gpt-3.5-turbo',
@@ -211,7 +211,7 @@ export function useAITracking(options: UseAITrackingOptions = {}) {
 
   const validateForm = useCallback(
     async (
-      formData: Record<string, any>,
+      formData: Record<string, unknown>,
       formType: string,
       model: AIModel = options.defaultModel || 'gpt-3.5-turbo',
       additionalOptions: Partial<AICallOptions> = {},

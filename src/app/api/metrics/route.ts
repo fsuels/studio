@@ -43,6 +43,9 @@ const MetricResponseSchema = z.object({
 
 type MetricResponse = z.infer<typeof MetricResponseSchema>;
 
+// Touch schema at runtime to avoid "used only as a type" warning
+void MetricResponseSchema;
+
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
@@ -144,7 +147,7 @@ export async function GET(request: NextRequest) {
 async function getChurnRate(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   // In production, calculate from actual user data
   const daysCount = parsePeriodToDays(period);
@@ -179,7 +182,7 @@ async function getChurnRate(
 async function getConversionRate(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   // Use existing funnel analytics
   const metrics = funnelAnalytics.calculateConversionMetrics(period);
@@ -214,7 +217,7 @@ async function getConversionRate(
 async function getRevenue(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -249,7 +252,7 @@ async function getRevenue(
 async function getDocumentCompletionRate(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -281,7 +284,7 @@ async function getDocumentCompletionRate(
 async function getUserAcquisition(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -316,7 +319,7 @@ async function getUserAcquisition(
 async function getAvgOrderValue(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -346,9 +349,9 @@ async function getAvgOrderValue(
 }
 
 async function getCustomerLifetimeValue(
-  period: string,
-  granularity: string,
-  segment?: string,
+  _period: string,
+  _granularity: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const current = 156.75 + Math.random() * 50; // $156-206 CLV
   const previous = current + (Math.random() - 0.5) * 25;
@@ -379,7 +382,7 @@ async function getCustomerLifetimeValue(
 async function getDocumentTypesPopularity(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const chartData = [
     {
@@ -433,7 +436,7 @@ async function getDocumentTypesPopularity(
 async function getUserRetention(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const retentionRates = [
     { name: 'Day 1', value: 89.5, date: '2024-06-20' },
@@ -464,7 +467,7 @@ async function getUserRetention(
 async function getPaymentSuccessRate(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -497,7 +500,7 @@ async function getPaymentSuccessRate(
 async function getSessionDuration(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -530,7 +533,7 @@ async function getSessionDuration(
 async function getFraudPreventionSavings(
   period: string,
   granularity: string,
-  segment?: string,
+  _segment?: string,
 ): Promise<MetricResponse> {
   const daysCount = parsePeriodToDays(period);
   const intervals = generateTimeIntervals(daysCount, granularity);
@@ -632,7 +635,7 @@ function formatIntervalLabel(date: Date, granularity: string): string {
         month: 'short',
         day: 'numeric',
       });
-    case 'week':
+    case 'week': {
       const weekStart = new Date(
         date.getTime() - date.getDay() * 24 * 60 * 60 * 1000,
       );
@@ -640,6 +643,7 @@ function formatIntervalLabel(date: Date, granularity: string): string {
         month: 'short',
         day: 'numeric',
       })}`;
+    }
     case 'month':
       return date.toLocaleDateString('en-US', {
         month: 'short',

@@ -174,7 +174,7 @@ describe('HeaderMobileMenu', () => {
   it('applies correct styling classes', () => {
     const { rerender } = render(<HeaderMobileMenu {...defaultProps} />);
 
-    let menuButton = screen.getByRole('button');
+    const menuButton = screen.getByRole('button');
     expect(menuButton).toHaveClass('p-2');
 
     rerender(<HeaderMobileMenu {...defaultProps} isMobileMenuOpen={true} />);

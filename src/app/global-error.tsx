@@ -5,14 +5,14 @@
 import NextError from 'next/error';
 
 export default function GlobalError({
-  error,
+  error: _error,
 }: {
   error: Error & { digest?: string };
 }) {
   // Sentry capture removed
 
   return (
-    <html>
+    <html lang="en">
       <body>
         {/* `NextError` is the default Next.js error page component.
             Its type definition requires a `statusCode` prop.

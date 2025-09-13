@@ -399,37 +399,37 @@ async function isStageSupervisor(
   return userId.includes('supervisor') || userId.includes(stageId);
 }
 
-async function getCurrentTranslation(reviewId: string): Promise<string> {
+async function getCurrentTranslation(_reviewId: string): Promise<string> {
   // Mock implementation
   return 'This is a sample legal document with consideration clause...';
 }
 
 async function updateTranslationText(
-  reviewId: string,
+  _reviewId: string,
   newText: string,
   metadata: any,
 ): Promise<void> {
   console.log('Translation text updated:', { reviewId, metadata });
 }
 
-async function getTotalCommentsCount(reviewId: string): Promise<number> {
+async function getTotalCommentsCount(_reviewId: string): Promise<number> {
   return Math.floor(Math.random() * 20) + 5;
 }
 
-async function getResolvedCommentsCount(reviewId: string): Promise<number> {
+async function getResolvedCommentsCount(_reviewId: string): Promise<number> {
   return Math.floor(Math.random() * 15) + 3;
 }
 
 async function getUnresolvedCriticalComments(
-  reviewId: string,
-  stageId: string,
+  _reviewId: string,
+  _stageId: string,
 ): Promise<number> {
   return Math.floor(Math.random() * 3);
 }
 
 async function getStageProgress(
-  reviewId: string,
-  stageId: string,
+  _reviewId: string,
+  _stageId: string,
 ): Promise<any> {
   return {
     completionPercentage: Math.floor(Math.random() * 30) + 70,
@@ -445,7 +445,7 @@ async function saveResolutionToDatabase(
 }
 
 async function saveReviewProgress(
-  reviewId: string,
+  _reviewId: string,
   progress: any,
 ): Promise<void> {
   console.log('Review progress saved:', { reviewId, progress });

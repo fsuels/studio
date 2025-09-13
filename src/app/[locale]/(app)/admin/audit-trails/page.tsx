@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/admin/audit-trails/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -25,9 +25,7 @@ import {
   Shield,
   Search,
   Download,
-  Calendar,
   Users,
-  FileText,
   AlertCircle,
   CheckCircle,
   BarChart3,
@@ -68,7 +66,7 @@ interface AuditResponse {
 }
 
 export default function AdminAuditTrailsPage() {
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const { toast } = useToast();
 
   const [data, setData] = useState<AuditResponse | null>(null);
@@ -80,11 +78,7 @@ export default function AdminAuditTrailsPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState<any>(null);
 
-  useEffect(() => {
-    fetchAuditTrails();
-  }, []);
-
-  const fetchAuditTrails = async () => {
+  const fetchAuditTrails = useCallback(async () => {
     try {
       setIsLoading(true);
 
@@ -120,7 +114,11 @@ export default function AdminAuditTrailsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [searchUserId, eventTypeFilter, startDate, endDate, toast]);
+
+  useEffect(() => {
+    fetchAuditTrails();
+  }, [fetchAuditTrails]);
 
   const handleVerifyIntegrity = async () => {
     setIsVerifying(true);

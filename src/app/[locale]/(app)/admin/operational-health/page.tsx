@@ -1,7 +1,7 @@
 // src/app/[locale]/(app)/admin/operational-health/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -23,8 +23,7 @@ import {
   TrendingDown,
   Minus,
   Zap,
-  Users,
-  Server,
+  
   Wifi,
   AlertCircle,
   RefreshCw,
@@ -89,20 +88,7 @@ export default function OperationalHealthPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  useEffect(() => {
-    fetchHealthData();
-
-    let interval: NodeJS.Timeout;
-    if (autoRefresh) {
-      interval = setInterval(fetchHealthData, 30000); // Refresh every 30 seconds
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [autoRefresh]);
-
-  const fetchHealthData = async () => {
+  const fetchHealthData = useCallback(async () => {
     try {
       const response = await fetch('/api/health/metrics');
       if (response.ok) {
@@ -118,7 +104,7 @@ export default function OperationalHealthPage() {
       } else {
         throw new Error('Failed to fetch health data');
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching health data:', error);
       toast({
         title: 'Error',
@@ -128,7 +114,21 @@ export default function OperationalHealthPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchHealthData();
+
+    let interval: NodeJS.Timeout;
+    if (autoRefresh) {
+      interval = setInterval(fetchHealthData, 30000); // Refresh every 30 seconds
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [autoRefresh, fetchHealthData]);
+
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -147,7 +147,7 @@ export default function OperationalHealthPage() {
       } else {
         throw new Error('Failed to resolve alert');
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error',
         description: 'Failed to resolve alert',
@@ -174,7 +174,7 @@ export default function OperationalHealthPage() {
       } else {
         throw new Error('Failed to trigger test alert');
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error',
         description: 'Failed to trigger test alert',

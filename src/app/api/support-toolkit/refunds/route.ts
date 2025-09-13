@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const orderId = url.searchParams.get('orderId');
     const userId = url.searchParams.get('userId');
-    const status = url.searchParams.get('status');
+    const _status = url.searchParams.get('status');
     const pending = url.searchParams.get('pending') === 'true';
 
     let refunds;
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     } = body;
 
     switch (action) {
-      case 'create_refund':
+      case 'create_refund': {
         if (!orderId || !amount || !reason) {
           return NextResponse.json(
             {
@@ -137,8 +137,9 @@ export async function POST(request: NextRequest) {
               ? 'Refund auto-approved and processing'
               : 'Refund request created',
         });
+      }
 
-      case 'approve_refund':
+      case 'approve_refund': {
         if (!refundId || !agentId || !agentName) {
           return NextResponse.json(
             {
@@ -160,8 +161,9 @@ export async function POST(request: NextRequest) {
           data: approvedRefund,
           message: 'Refund approved and processed',
         });
+      }
 
-      case 'get_store_credit_balance':
+      case 'get_store_credit_balance': {
         if (!body.userId) {
           return NextResponse.json(
             { success: false, error: 'userId is required' },
@@ -179,8 +181,9 @@ export async function POST(request: NextRequest) {
             formattedBalance: `$${balance.toFixed(2)}`,
           },
         });
+      }
 
-      case 'add_store_credit':
+      case 'add_store_credit': {
         if (!body.userId || !amount || !reason) {
           return NextResponse.json(
             {
@@ -203,6 +206,7 @@ export async function POST(request: NextRequest) {
           data: creditTransaction,
           message: `Store credit of $${amount} added successfully`,
         });
+      }
 
       default:
         return NextResponse.json(

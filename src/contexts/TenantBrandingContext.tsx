@@ -83,7 +83,7 @@ export function TenantBrandingProvider({
     document.head.appendChild(link);
   };
 
-  const injectCustomCSS = (css: string) => {
+  const injectCustomCSS = useCallback((css: string) => {
     // Remove existing custom CSS
     removeCustomCSS();
 
@@ -92,7 +92,7 @@ export function TenantBrandingProvider({
     style.id = 'tenant-custom-css';
     style.textContent = css;
     document.head.appendChild(style);
-  };
+  }, []);
 
   const removeCustomCSS = () => {
     const existingStyle = document.getElementById('tenant-custom-css');

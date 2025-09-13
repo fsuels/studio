@@ -312,18 +312,18 @@ async function checkStageCompletionConditions(
 }
 
 // Helper functions (would normally fetch from database)
-async function getCommentCount(reviewId: string): Promise<number> {
+async function getCommentCount(_reviewId: string): Promise<number> {
   // Mock implementation
   return Math.floor(Math.random() * 10) + 1;
 }
 
-async function getUnresolvedCommentCount(reviewId: string): Promise<number> {
+async function getUnresolvedCommentCount(_reviewId: string): Promise<number> {
   // Mock implementation
   return Math.floor(Math.random() * 5);
 }
 
 async function getSeverityBreakdown(
-  reviewId: string,
+  _reviewId: string,
 ): Promise<Record<string, number>> {
   // Mock implementation
   return {

@@ -347,7 +347,7 @@ export default function ConsolidatedMegaMenuContent({
                 {t('megaMenu.searchResults', {
                   count: searchResults.length,
                   query: searchQuery,
-                  defaultValue: `Found ${searchResults.length} document${searchResults.length !== 1 ? 's' : ''} matching \"${searchQuery}\"`,
+                  defaultValue: `Found ${searchResults.length} document${searchResults.length !== 1 ? 's' : ''} matching "${searchQuery}"`,
                 })}
               </div>
               {searchResults.length > 0 && (
