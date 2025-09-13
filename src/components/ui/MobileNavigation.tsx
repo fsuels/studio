@@ -106,7 +106,8 @@ export function MobileNavigation({
       )}
 
       {/* Navigation panel */}
-      <div
+      <dialog
+        open={isOpen}
         className={cn(
           slideClasses.base,
           isOpen ? slideClasses.open : slideClasses.closed,
@@ -117,12 +118,11 @@ export function MobileNavigation({
           slideDirection === 'bottom' && 'border-t',
           className,
         )}
-        role="dialog"
         aria-modal="true"
         aria-label="Mobile navigation"
       >
         {children}
-      </div>
+      </dialog>
     </>
   );
 }

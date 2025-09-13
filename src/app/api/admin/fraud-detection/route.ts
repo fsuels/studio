@@ -549,7 +549,7 @@ async function getChargebackPredictions(_timeframe: string) {
 }
 
 async function getFraudTrends(_timeframe: string) {
-  const days = timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 90;
+  const days = _timeframe === '7d' ? 7 : _timeframe === '30d' ? 30 : 90;
   const trends = [];
 
   for (let i = days; i >= 0; i--) {
