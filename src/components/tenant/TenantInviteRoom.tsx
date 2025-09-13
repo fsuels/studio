@@ -290,6 +290,7 @@ export function TenantInviteRoom({
                     tenant.branding?.termsUrl || `/tenant/${tenant.slug}/terms`
                   }
                   target="_blank"
+                  rel="noreferrer"
                   className="text-blue-600 hover:underline"
                 >
                   Terms of Service
@@ -301,6 +302,7 @@ export function TenantInviteRoom({
                     `/tenant/${tenant.slug}/privacy`
                   }
                   target="_blank"
+                  rel="noreferrer"
                   className="text-blue-600 hover:underline"
                 >
                   Privacy Policy

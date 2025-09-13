@@ -13,11 +13,11 @@ import type { MarketplaceTemplate } from '../types/marketplace';
 import type { DiscoveryResult } from '../types/discovery';
 
 // Prometheus metrics for search monitoring
-let promClient: any;
-let searchLatencyHistogram: any;
-let searchHitRateCounter: any;
-let searchQueryCounter: any;
-let searchResultsHistogram: any;
+let promClient: unknown;
+let searchLatencyHistogram: unknown;
+let searchHitRateCounter: unknown;
+let searchQueryCounter: unknown;
+let searchResultsHistogram: unknown;
 
 // Initialize Prometheus metrics if available
 if (typeof window === 'undefined') {
@@ -49,7 +49,7 @@ if (typeof window === 'undefined') {
       labelNames: ['search_type'],
       buckets: [0, 1, 5, 10, 20, 50, 100]
     });
-  } catch (error) {
+  } catch (_error) {
     // prom-client not available, metrics disabled
     console.debug('[Discovery Search] Prometheus metrics not available');
   }
@@ -297,7 +297,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
     } finally {
       setLoading(false);
     }
-  }, [processQuery]);
+  }, [processQuery, logFirestoreRead]);
 
   /**
    * Log Firestore read operations for cost monitoring
@@ -328,10 +328,10 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
   // Expose logFirestoreRead for external use
   useEffect(() => {
     // Make logFirestoreRead available globally for search services
-    (window as any).__logFirestoreRead = logFirestoreRead;
+    (window as Record<string, unknown>).__logFirestoreRead = logFirestoreRead;
     
     return () => {
-      delete (window as any).__logFirestoreRead;
+      delete (window as Record<string, unknown>).__logFirestoreRead;
     };
   }, [logFirestoreRead]);
 
@@ -382,7 +382,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       const searchTokens = expandedTokens.slice(0, 10);
       
       // Prepare promises for parallel execution
-      const promises: Promise<any>[] = [];
+      const promises: Promise<unknown>[] = [];
       
       // 1. Keyword search promise
       let keywordSearchPromise: Promise<MarketplaceTemplate[]> = Promise.resolve([]);
@@ -580,7 +580,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
  * Used by search services to track database operations
  */
 export function logFirestoreReads(count: number = 1): void {
-  const logger = (window as any).__logFirestoreRead;
+  const logger = (window as Record<string, unknown>).__logFirestoreRead;
   if (typeof logger === 'function') {
     logger(count);
   } else {

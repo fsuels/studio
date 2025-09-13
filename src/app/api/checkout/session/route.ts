@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const cancelUrl = `${origin}/${locale}/docs/${docId}/view?payment=cancel`;
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      automatic_payment_methods: { enabled: true },
       line_items: [
         {
           price_data: {
@@ -51,21 +51,13 @@ export async function POST(req: NextRequest) {
       success_url: successUrl,
       cancel_url: cancelUrl,
       // Enable automatic tax collection
-      automatic_tax: {
-        enabled: true,
-      },
-      customer_details: {
-        ip_address: pricingSummary.userLocation.ip,
-        country: pricingSummary.userLocation.countryCode,
-      },
+      automatic_tax: { enabled: true },
       // Enable tax ID collection for business customers
-      tax_id_collection: {
-        enabled: pricingSummary.taxInfo.taxRequired,
-      },
+      tax_id_collection: { enabled: pricingSummary.taxInfo.taxRequired },
       metadata: {
         docId,
         currency: userCurrency,
-        userCountry: pricingSummary.userLocation.countryCode,
+        userCountry: pricingSummary.userLocation.countryCode || '',
         userState: pricingSummary.userLocation.stateCode || '',
       },
     });

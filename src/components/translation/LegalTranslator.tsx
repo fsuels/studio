@@ -281,7 +281,7 @@ const LegalTranslator: React.FC<LegalTranslatorProps> = ({
           {/* Language Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">From</label>
+              <label className="text-sm font-medium" htmlFor="source-language">From</label>
               <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
                 <SelectTrigger>
                   <SelectValue />

@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     // Create actual Stripe checkout session with automatic tax
     const stripeSession = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      automatic_payment_methods: { enabled: true },
       line_items: [
         {
           price: plan.stripePriceIds[userCurrency as keyof typeof plan.stripePriceIds],
@@ -75,20 +75,12 @@ export async function POST(req: NextRequest) {
       success_url: successUrl,
       cancel_url: cancelUrl,
       customer_email: customerEmail,
-      automatic_tax: {
-        enabled: true,
-      },
-      customer_details: {
-        ip_address: pricingSummary.userLocation.ip,
-        customer_country: pricingSummary.userLocation.countryCode,
-      },
-      tax_id_collection: {
-        enabled: pricingSummary.taxInfo.taxRequired,
-      },
+      automatic_tax: { enabled: true },
+      tax_id_collection: { enabled: pricingSummary.taxInfo.taxRequired },
       metadata: {
         planId,
         currency: userCurrency,
-        userCountry: pricingSummary.userLocation.countryCode,
+        userCountry: pricingSummary.userLocation.countryCode || '',
         userState: pricingSummary.userLocation.stateCode || '',
       },
     });

@@ -288,10 +288,11 @@ export function MarketplaceSearch({
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
-                <label className="text-sm font-medium">Price Range</label>
+                <label htmlFor="price-range" className="text-sm font-medium">Price Range</label>
               </div>
               <div className="px-3">
                 <Slider
+                  id="price-range"
                   value={priceRange}
                   onValueChange={handlePriceRangeChange}
                   max={10000}
@@ -310,7 +311,7 @@ export function MarketplaceSearch({
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4" />
-                <label className="text-sm font-medium">Minimum Rating</label>
+                <label htmlFor="minimum-rating" className="text-sm font-medium">Minimum Rating</label>
               </div>
               <Select
                 value={filters.rating?.min?.toString() || 'any'}
@@ -323,7 +324,7 @@ export function MarketplaceSearch({
                 }
                 disabled={isLoading}
               >
-                <SelectTrigger>
+                <SelectTrigger id="minimum-rating">
                   <SelectValue placeholder="Any rating" />
                 </SelectTrigger>
                 <SelectContent>
@@ -340,7 +341,7 @@ export function MarketplaceSearch({
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                <label className="text-sm font-medium">Jurisdiction</label>
+                <label htmlFor="jurisdiction" className="text-sm font-medium">Jurisdiction</label>
               </div>
               <Select
                 value={filters.jurisdiction || 'any'}
@@ -352,7 +353,7 @@ export function MarketplaceSearch({
                 }
                 disabled={isLoading}
               >
-                <SelectTrigger>
+                <SelectTrigger id="jurisdiction">
                   <SelectValue placeholder="Any jurisdiction" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,7 +369,7 @@ export function MarketplaceSearch({
 
             {/* Language */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Language</label>
+              <label htmlFor="language-select" className="text-sm font-medium">Language</label>
               <Select
                 value={filters.language || 'any'}
                 onValueChange={(value) =>
@@ -379,7 +380,7 @@ export function MarketplaceSearch({
                 }
                 disabled={isLoading}
               >
-                <SelectTrigger>
+                <SelectTrigger id="language-select">
                   <SelectValue placeholder="Any language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -395,7 +396,7 @@ export function MarketplaceSearch({
 
             {/* Quality Filters */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Quality</label>
+              <span className="text-sm font-medium">Quality</span>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -443,7 +444,7 @@ export function MarketplaceSearch({
 
             {/* Popular Tags */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Popular Tags</label>
+              <span className="text-sm font-medium">Popular Tags</span>
               <div className="flex flex-wrap gap-2">
                 {tags.slice(0, 12).map((tag) => (
                   <Badge
