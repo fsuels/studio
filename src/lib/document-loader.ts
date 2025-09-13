@@ -124,5 +124,5 @@ export function getAllDocuments(): DocumentInfo[] {
  * Check if a document exists in the registry
  */
 export function documentExists(docId: string): boolean {
-  return DOCUMENT_REGISTRY.some(doc => doc.id === docId) || documentLoaders.hasOwnProperty(docId);
+  return DOCUMENT_REGISTRY.some(doc => doc.id === docId) || Object.prototype.hasOwnProperty.call(documentLoaders, docId);
 }

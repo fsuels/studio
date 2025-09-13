@@ -357,7 +357,7 @@ export default function MegaMenuContent({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs = (mod.documentLibrary || []) as LegalDocument[];
         if (!cancelled) (globalThis as any).__DOC_LIB__ = docs;
       } catch (_) {

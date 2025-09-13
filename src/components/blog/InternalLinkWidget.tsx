@@ -46,7 +46,7 @@ export default function InternalLinkWidget({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const d = mod.documentLibrary as any[];
         if (!cancelled) setDocs(d);
       } catch (_) {

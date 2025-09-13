@@ -63,7 +63,7 @@ export default function DocumentDiscoveryModal() {
       console.log('[Discovery Modal] Starting search for:', query);
       
       // Always search local documents first as a reliable fallback (lazy import)
-      const { findMatchingDocuments } = await import('@/lib/document-library');
+      const { findMatchingDocuments } = await import('@/lib/document-library.ts');
       const localDocs = findMatchingDocuments(query.trim(), locale);
       console.log('[Discovery Modal] Local search found:', localDocs.length, 'documents');
       

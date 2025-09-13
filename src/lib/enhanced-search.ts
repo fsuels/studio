@@ -254,7 +254,7 @@ export async function legacySearch(
   locale: 'en' | 'es',
   state?: string,
 ): Promise<LegalDocument[]> {
-  const mod = await import('@/lib/document-library');
+  const mod = await import('@/lib/document-library.ts');
   return mod.search(query, locale, state);
 }
 

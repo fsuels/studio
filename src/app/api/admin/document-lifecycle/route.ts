@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const priority = url.searchParams.get('priority');
 
     switch (type) {
-      case 'overview':
+      case 'overview': {
         const metrics = documentLifecycle.generateWorkflowMetrics(timeframe);
         const stalledAnalysis = documentLifecycle.analyzeStalledDocuments();
 
@@ -39,8 +39,9 @@ export async function GET(request: NextRequest) {
             unblockingOpportunities: stalledAnalysis.unblockingOpportunities,
           },
         });
+      }
 
-      case 'heatmap':
+      case 'heatmap': {
         const heatmapMetrics =
           documentLifecycle.generateWorkflowMetrics(timeframe);
         return NextResponse.json({
@@ -51,23 +52,26 @@ export async function GET(request: NextRequest) {
             trends: heatmapMetrics.trends,
           },
         });
+      }
 
-      case 'stalled_analysis':
+      case 'stalled_analysis': {
         const stalledDocs = documentLifecycle.analyzeStalledDocuments();
         return NextResponse.json({
           success: true,
           data: stalledDocs,
         });
+      }
 
-      case 'workflow_metrics':
+      case 'workflow_metrics': {
         const workflowMetrics =
           documentLifecycle.generateWorkflowMetrics(timeframe);
         return NextResponse.json({
           success: true,
           data: workflowMetrics,
         });
+      }
 
-      case 'documents':
+      case 'documents': {
         const documents = await getDocumentsList(
           status as DocumentStatus,
           priority as DocumentPriority,
@@ -77,13 +81,15 @@ export async function GET(request: NextRequest) {
           success: true,
           data: documents,
         });
+      }
 
-      case 'realtime_status':
+      case 'realtime_status': {
         const realtimeStatus = await getRealtimeStatus();
         return NextResponse.json({
           success: true,
           data: realtimeStatus,
         });
+      }
 
       default:
         return NextResponse.json(
@@ -129,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
     switch (action) {
-      case 'update_status':
+      case 'update_status':{
         if (!newStatus) {
           return NextResponse.json(
             {
@@ -153,7 +159,7 @@ export async function POST(request: NextRequest) {
           data: { documentId, newStatus, updatedAt: new Date().toISOString() },
         });
 
-      case 'auto_unblock':
+      case 'auto_unblock':{
         const unblockResult =
           await documentLifecycle.autoUnblockStalledDocuments();
         return NextResponse.json({
@@ -161,7 +167,7 @@ export async function POST(request: NextRequest) {
           data: unblockResult,
         });
 
-      case 'bulk_update':
+      case 'bulk_update':{
         const { documentIds, bulkStatus, bulkMetadata } = body;
         if (!documentIds || !Array.isArray(documentIds)) {
           return NextResponse.json(
@@ -248,13 +254,13 @@ async function getDocumentsList(
   // Apply timeframe filter
   const cutoffDate = new Date();
   switch (timeframe) {
-    case '7d':
+    case '7d':{
       cutoffDate.setDate(cutoffDate.getDate() - 7);
       break;
-    case '30d':
+    case '30d':{
       cutoffDate.setDate(cutoffDate.getDate() - 30);
       break;
-    case '90d':
+    case '90d':{
       cutoffDate.setDate(cutoffDate.getDate() - 90);
       break;
   }
