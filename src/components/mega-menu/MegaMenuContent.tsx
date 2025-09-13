@@ -264,7 +264,7 @@ export default function MegaMenuContent({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const list = (mod.documentLibrary as unknown) as LegalDocument[];
         if (!cancelled) setDocs(list);
       } catch (_) {

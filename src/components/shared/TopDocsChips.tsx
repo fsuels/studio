@@ -231,7 +231,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     (async () => {
       try {
         const [{ documentLibrary }, { taxonomy }] = await Promise.all([
-          import('@/lib/document-library'),
+          import('@/lib/document-library.ts'),
           import('@/config/taxonomy'),
         ]);
         if (!cancelled) {

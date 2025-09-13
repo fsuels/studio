@@ -62,7 +62,7 @@ export function Questionnaire({
         return;
       }
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const doc = (mod.documentLibrary as any[]).find((d) => d.name === documentType);
         if (!cancelled) setSelectedDocument(doc || null);
       } catch (_) {
@@ -91,7 +91,7 @@ export function Questionnaire({
       // Handle General Inquiry case specifically if needed
       (async () => {
         try {
-          const mod = await import('@/lib/document-library');
+          const mod = await import('@/lib/document-library.ts');
           const generalDoc = (mod.documentLibrary as any[]).find(
             (doc) => doc.id === 'general-inquiry',
           );
@@ -106,7 +106,7 @@ export function Questionnaire({
       // Fallback if name doesn't match but type is provided (e.g., use default)
       (async () => {
         try {
-          const mod = await import('@/lib/document-library');
+          const mod = await import('@/lib/document-library.ts');
           const defaultDoc = (mod.documentLibrary as any[]).find(
             (doc) => doc.id === 'default',
           );

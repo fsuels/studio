@@ -10,7 +10,7 @@ import {
   ShieldQuestion,
   AlertTriangle,
 } from 'lucide-react';
-import { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { CategoryInfo } from './types';
 
 export const CATEGORY_LIST: CategoryInfo[] = [

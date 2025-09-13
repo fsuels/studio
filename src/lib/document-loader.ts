@@ -2,28 +2,11 @@
 import type { LegalDocument } from '@/types/documents';
 import { DOCUMENT_REGISTRY, type DocumentInfo } from '@/lib/document-registry';
 
-// Static imports for known documents - this avoids dynamic import issues
+// Static imports for known documents that actually exist - this avoids dynamic import issues
 const documentLoaders: Record<string, () => Promise<{ default?: LegalDocument; [key: string]: any }>> = {
   'vehicle-bill-of-sale': () => import('@/lib/documents/us/vehicle-bill-of-sale'),
   'bill-of-sale-vehicle': () => import('@/lib/documents/us/vehicle-bill-of-sale'),
-  'basic-nda': () => import('@/lib/documents/us/basic-nda').catch(() => ({ default: null })),
-  'power-of-attorney': () => import('@/lib/documents/us/power-of-attorney').catch(() => ({ default: null })),
-  'employment-agreement': () => import('@/lib/documents/us/employment-agreement').catch(() => ({ default: null })),
-  'rental-agreement': () => import('@/lib/documents/us/rental-agreement').catch(() => ({ default: null })),
-  'business-partnership': () => import('@/lib/documents/us/business-partnership').catch(() => ({ default: null })),
-  'service-agreement': () => import('@/lib/documents/us/service-agreement').catch(() => ({ default: null })),
-  'consulting-agreement': () => import('@/lib/documents/us/consulting-agreement').catch(() => ({ default: null })),
-  'freelance-contract': () => import('@/lib/documents/us/freelance-contract').catch(() => ({ default: null })),
-  'non-compete-agreement': () => import('@/lib/documents/us/non-compete-agreement').catch(() => ({ default: null })),
-  'confidentiality-agreement': () => import('@/lib/documents/us/confidentiality-agreement').catch(() => ({ default: null })),
-  'loan-agreement': () => import('@/lib/documents/us/loan-agreement').catch(() => ({ default: null })),
-  'promissory-note': () => import('@/lib/documents/us/promissory-note').catch(() => ({ default: null })),
-  'lease-agreement': () => import('@/lib/documents/us/lease-agreement').catch(() => ({ default: null })),
-  'purchase-agreement': () => import('@/lib/documents/us/purchase-agreement').catch(() => ({ default: null })),
-  'sales-contract': () => import('@/lib/documents/us/sales-contract').catch(() => ({ default: null })),
-  'vendor-agreement': () => import('@/lib/documents/us/vendor-agreement').catch(() => ({ default: null })),
-  'distribution-agreement': () => import('@/lib/documents/us/distribution-agreement').catch(() => ({ default: null })),
-  'licensing-agreement': () => import('@/lib/documents/us/licensing-agreement').catch(() => ({ default: null })),
+  // Add more entries here only for documents that actually exist in the filesystem
 };
 
 export interface DocumentLoadResult {

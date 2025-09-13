@@ -51,7 +51,7 @@ export default function DocumentTypeSelector({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs: LegalDocument[] = (mod.documentLibrary as unknown) as LegalDocument[];
         if (!cancelled) {
           setCategories([...new Set(docs.map((d) => d.category))]);
@@ -70,7 +70,7 @@ export default function DocumentTypeSelector({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const find = mod.findMatchingDocuments as (
           q: string,
           lang: 'en' | 'es',

@@ -142,7 +142,7 @@ export default function CategoryMegaMenuContent({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
         if (!cancelled) setDocuments(docs);
       } catch (_) {

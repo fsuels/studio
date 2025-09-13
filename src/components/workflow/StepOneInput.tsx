@@ -17,7 +17,7 @@ export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs = (mod.documentLibrary as unknown) as LegalDocument[];
         const cats = Array.from(
           new Set(

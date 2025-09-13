@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 
 // Helper type for a simplified translation function used internally
 export type SimpleT = (

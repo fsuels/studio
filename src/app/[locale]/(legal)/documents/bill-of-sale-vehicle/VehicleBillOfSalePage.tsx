@@ -39,7 +39,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
-import { usStates } from '@/lib/document-library';
+import { usStates } from '@/lib/usStates';
 import { vehicleBillOfSaleFaqs } from './faqs';
 import { requiresNotaryForVehicleBillOfSale } from '@/lib/compliance-helper';
 import { getDb } from '@/lib/firebase';

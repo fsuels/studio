@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import {

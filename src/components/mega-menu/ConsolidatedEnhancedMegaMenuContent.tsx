@@ -35,7 +35,7 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
     // Lazy load documents when menu opens on client
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
         setDocuments(docs);
       } catch (_) {

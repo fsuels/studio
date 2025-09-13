@@ -39,7 +39,7 @@ const SearchBar = React.memo(function SearchBar() {
       if (term.length > 1) {
         const lower = term.toLowerCase();
         try {
-          const mod = await import('@/lib/document-library');
+          const mod = await import('@/lib/document-library.ts');
           const lib: LegalDocument[] = mod.documentLibrary as LegalDocument[];
           const results = lib
             .filter((doc) => {

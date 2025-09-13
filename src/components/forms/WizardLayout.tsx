@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 // WizardForm and PreviewPane are no longer directly rendered by WizardLayout
 // They are now part of the StartWizardPage structure.
 import React from 'react';

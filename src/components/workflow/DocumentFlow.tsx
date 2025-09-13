@@ -34,7 +34,7 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const doc = (mod.documentLibrary as any[]).find((d) => d.id === initialDocId);
         if (doc && !cancelled) setCategory(doc.category);
       } catch (_) {

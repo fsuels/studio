@@ -24,7 +24,7 @@ export function StepTwoInput({
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library');
+        const mod = await import('@/lib/document-library.ts');
         const docs = (mod.documentLibrary as unknown) as LegalDocument[];
         const filtered = docs.filter((doc) => doc.category === category);
         if (!cancelled) setDocsInCategory(filtered);

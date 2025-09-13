@@ -40,7 +40,7 @@ export default function HeaderSearch({
     (async () => {
       if (searchQuery.trim().length > 1) {
         try {
-          const mod = await import('@/lib/document-library');
+          const mod = await import('@/lib/document-library.ts');
           const fn = mod.search as (
             q: string,
             l: 'en' | 'es',
