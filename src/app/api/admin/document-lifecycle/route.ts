@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
     switch (action) {
-      case 'update_status':{
+      case 'update_status': {
         if (!newStatus) {
           return NextResponse.json(
             {
@@ -158,16 +158,18 @@ export async function POST(request: NextRequest) {
           success: true,
           data: { documentId, newStatus, updatedAt: new Date().toISOString() },
         });
+      }
 
-      case 'auto_unblock':{
+      case 'auto_unblock': {
         const unblockResult =
           await documentLifecycle.autoUnblockStalledDocuments();
         return NextResponse.json({
           success: true,
           data: unblockResult,
         });
+      }
 
-      case 'bulk_update':{
+      case 'bulk_update': {
         const { documentIds, bulkStatus, bulkMetadata } = body;
         if (!documentIds || !Array.isArray(documentIds)) {
           return NextResponse.json(
@@ -208,6 +210,7 @@ export async function POST(request: NextRequest) {
             results: bulkResults,
           },
         });
+      }
 
       default:
         return NextResponse.json(
@@ -254,15 +257,18 @@ async function getDocumentsList(
   // Apply timeframe filter
   const cutoffDate = new Date();
   switch (timeframe) {
-    case '7d':{
+    case '7d': {
       cutoffDate.setDate(cutoffDate.getDate() - 7);
       break;
-    case '30d':{
+    }
+    case '30d': {
       cutoffDate.setDate(cutoffDate.getDate() - 30);
       break;
-    case '90d':{
+    }
+    case '90d': {
       cutoffDate.setDate(cutoffDate.getDate() - 90);
       break;
+    }
   }
 
   filtered = filtered.filter((doc) => new Date(doc.createdAt) >= cutoffDate);
