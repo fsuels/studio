@@ -114,10 +114,12 @@
     }
   ],
   "compliance": {
-    "requiresNotary": true,
-    "billOfSaleMandatory": false,
-    "odometerIntegrated": false,
-    "specialNotes": "Colorado requires notarization and two witnesses for power of attorney documents. This document must comply with Colorado Revised Statutes § 15-14-501 et seq.",
+    "requiresNotary": false,
+    "requiresWitnesses": true,
+    "witnessCount": 2,
+    "hasOfficialForm": true,
+    "hasUPOAA": true,
+    "specialNotes": "Colorado follows UPOAA and requires two witnesses (no notary required). This document must comply with Colorado Revised Statutes § 15-14-501 et seq.",
     "localFormPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf"
   },
   "overlayConfig": {

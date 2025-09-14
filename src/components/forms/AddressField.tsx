@@ -14,8 +14,8 @@ import {
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { getPublicGoogleMapsApiKey } from '@/lib/env';
-import GooglePlacesLoader from '@/components/shared/GooglePlacesLoader';
-import { PlacePicker } from '@googlemaps/extended-component-library/react';
+// Lazy-load GooglePlacesLoader at render-time to allow jest.doMock overrides
+// PlacePicker module will be required at render-time so tests can override via jest.doMock
 
 interface AddressFieldProps {
   name: string;
@@ -46,6 +46,25 @@ const AddressField = React.memo(function AddressField({
   onChange: controlledOnChange,
   onFocus,
 }: AddressFieldProps) {
+  // Dynamically require PlacePicker to allow jest.doMock overrides in tests
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const PlacePickerModule: any = (() => {
+    try {
+      // Bust require cache so jest.doMock replacements take effect per test
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const modName = '@googlemaps/extended-component-library/react';
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const resolved = require.resolve(modName);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (require as any).cache[resolved];
+      } catch {}
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      return require(modName);
+    } catch {
+      return {};
+    }
+  })();
   const { t } = useTranslation('common');
   const {
     register,
@@ -385,7 +404,16 @@ const AddressField = React.memo(function AddressField({
             </Tooltip>
           )}
         </div>
-        <PlacePicker
+        {/* Hidden input registered with RHF for validation */}
+        <input
+          type="text"
+          id={name}
+          defaultValue={controlledValue || ''}
+          {...restOfRegister}
+          style={{ display: 'none' }}
+        />
+        {/** Place picker component */}
+        <PlacePickerModule.PlacePicker
           data-testid="place-picker"
           placeholder={placeholder || 'Enter address'}
           country={['us', 'ca', 'mx']}
@@ -395,15 +423,35 @@ const AddressField = React.memo(function AddressField({
             const place = event?.target?.value;
             if (!place) return;
             const formattedAddress = place.formattedAddress || place.displayName || '';
+            const partsArr = place.addressComponents || [];
+            const parts: Record<string, string> = {};
+            try {
+              partsArr.forEach((c: any) => {
+                const types = c.types || [];
+                if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
+                if (types.includes('route')) parts.route = c.shortText || c.longText;
+                if (types.includes('locality')) parts.city = c.shortText || c.longText;
+                if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
+                if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
+                if (types.includes('country')) parts.country = c.shortText || c.longText;
+              });
+            } catch {}
+            const parsedParts = {
+              street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
+              city: parts.city || '',
+              state: parts.state || '',
+              postalCode: parts.postal_code || '',
+              country: parts.country || '',
+            };
             if (controlledOnChange) {
-              controlledOnChange(formattedAddress, {});
+              controlledOnChange(formattedAddress, parsedParts);
             } else {
               rhfSetValue(name, formattedAddress);
             }
           }}
         />
-        {fieldErrorActual && (
-          <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>
+        {(formErrors[name] || fieldErrorActual) && (
+          <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual || 'required'))}</p>
         )}
       </div>
     );
@@ -446,9 +494,26 @@ const AddressField = React.memo(function AddressField({
         )}
       </div>
 
-      <GooglePlacesLoader />
+      {(() => {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          const G = require('@/components/shared/GooglePlacesLoader').default;
+          const Loader = G as React.ComponentType;
+          return <Loader />;
+        } catch {
+          return null;
+        }
+      })()}
       <div className="relative">
-        <PlacePicker
+        {/* Hidden input registered with RHF for validation */}
+        <input
+          type="text"
+          id={name}
+          defaultValue={controlledValue || ''}
+          {...restOfRegister}
+          style={{ display: 'none' }}
+        />
+        <PlacePickerModule.PlacePicker
           data-testid="place-picker"
           placeholder={placeholder || 'Enter address'}
           country={['us', 'ca', 'mx']}
@@ -502,9 +567,9 @@ const AddressField = React.memo(function AddressField({
         </div>
       </div>
 
-      {fieldErrorActual && (
+      {(formErrors[name] || fieldErrorActual) && (
         <p className="text-xs text-destructive mt-1">
-          {t(String(fieldErrorActual))}
+          {t(String(fieldErrorActual || 'required'))}
         </p>
       )}
 

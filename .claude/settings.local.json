@@ -12,7 +12,9 @@
       "Bash(timeout 10 npx tsc:*)",
       "Bash(timeout 60 npm run dev -- --port 3001)",
       "Bash(curl:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "WebSearch",
+      "WebFetch(domain:www.justia.com)"
     ],
     "deny": [],
     "ask": []

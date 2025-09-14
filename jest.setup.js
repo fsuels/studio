@@ -115,26 +115,35 @@ jest.mock('@radix-ui/react-slider', () => ({
   Thumb: () => <div />,
 }));
 
-jest.mock('@radix-ui/react-dropdown-menu', () => ({
-  Root: ({ children }) => <div data-testid="dropdown-root">{children}</div>,
-  Trigger: ({ children, ...props }) => <button data-testid="dropdown-trigger" {...props}>{children}</button>,
-  Content: ({ children, ...props }) => <div data-testid="dropdown-content" {...props}>{children}</div>,
-  Item: ({ children, ...props }) => <div data-testid="dropdown-item" {...props}>{children}</div>,
-  Separator: () => <hr data-testid="dropdown-separator" />,
-  Label: ({ children, ...props }) => <div data-testid="dropdown-label" {...props}>{children}</div>,
-  Group: ({ children, ...props }) => <div data-testid="dropdown-group" {...props}>{children}</div>,
-}));
+jest.mock('@radix-ui/react-dropdown-menu', () => {
+  const Root = ({ children }) => <div data-testid="dropdown-root">{children}</div>;
+  const Trigger = ({ children, ...props }) => <button data-testid="dropdown-trigger" {...props}>{children}</button>;
+  const Content = ({ children, ...props }) => <div data-testid="dropdown-content" {...props}>{children}</div>;
+  const Item = ({ children, ...props }) => <div data-testid="dropdown-item" {...props}>{children}</div>;
+  const Separator = () => <hr data-testid="dropdown-separator" />;
+  const Label = ({ children, ...props }) => <div data-testid="dropdown-label" {...props}>{children}</div>;
+  const Group = ({ children, ...props }) => <div data-testid="dropdown-group" {...props}>{children}</div>;
+  const Sub = ({ children, ...props }) => <div data-testid="dropdown-sub" {...props}>{children}</div>;
+  const SubTrigger = ({ children, ...props }) => <button data-testid="dropdown-sub-trigger" {...props}>{children}</button>;
+  SubTrigger.displayName = 'DropdownMenuSubTrigger';
+  const SubContent = ({ children, ...props }) => <div data-testid="dropdown-sub-content" {...props}>{children}</div>;
+  SubContent.displayName = 'DropdownMenuSubContent';
+  return { Root, Trigger, Content, Item, Separator, Label, Group, Sub, SubTrigger, SubContent };
+});
 
-jest.mock('@radix-ui/react-select', () => ({
-  Root: ({ children, ...props }) => <div data-testid="select-root" {...props}>{children}</div>,
-  Trigger: ({ children, ...props }) => <button data-testid="select-trigger" {...props}>{children}</button>,
-  Content: ({ children, ...props }) => <div data-testid="select-content" {...props}>{children}</div>,
-  Item: ({ children, ...props }) => <div data-testid="select-item" {...props}>{children}</div>,
-  Value: ({ children, ...props }) => <span data-testid="select-value" {...props}>{children}</span>,
-  Viewport: ({ children, ...props }) => <div data-testid="select-viewport" {...props}>{children}</div>,
-  ScrollUpButton: ({ children, ...props }) => <button data-testid="select-scroll-up" {...props}>{children}</button>,
-  ScrollDownButton: ({ children, ...props }) => <button data-testid="select-scroll-down" {...props}>{children}</button>,
-}));
+jest.mock('@radix-ui/react-select', () => {
+  const Root = ({ children, ...props }) => <div data-testid="select-root" {...props}>{children}</div>;
+  const Trigger = ({ children, ...props }) => <button data-testid="select-trigger" {...props}>{children}</button>;
+  const Content = ({ children, ...props }) => <div data-testid="select-content" {...props}>{children}</div>;
+  const Item = ({ children, ...props }) => <div data-testid="select-item" {...props}>{children}</div>;
+  const Value = ({ children, ...props }) => <span data-testid="select-value" {...props}>{children}</span>;
+  const Viewport = ({ children, ...props }) => <div data-testid="select-viewport" {...props}>{children}</div>;
+  const ScrollUpButton = ({ children, ...props }) => <button data-testid="select-scroll-up" {...props}>{children}</button>;
+  const ScrollDownButton = ({ children, ...props }) => <button data-testid="select-scroll-down" {...props}>{children}</button>;
+  const Label = ({ children, ...props }) => <label data-testid="select-label" {...props}>{children}</label>;
+  Label.displayName = 'SelectLabel';
+  return { Root, Trigger, Content, Item, Value, Viewport, ScrollUpButton, ScrollDownButton, Label };
+});
 
 // Mock tooltip to avoid provider dependency
 jest.mock('@radix-ui/react-tooltip', () => ({
