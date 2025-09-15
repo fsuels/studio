@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,32 +9,46 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FileText, Search, Sparkles, Shield, Clock, ArrowRight } from 'lucide-react';
 import { DOCUMENT_REGISTRY, getAllCategories, type DocumentInfo } from '@/lib/document-registry';
+import { VirtualizedDocumentList } from '@/components/optimized/VirtualizedList';
+import { MemoizedDocumentCard } from '@/components/optimized/MemoizedComponents';
 
 export default function DocumentsListingPageClientWrapper() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [configFilter, setConfigFilter] = useState<string>('all');
 
-  // Filter documents based on search and filters
-  const filteredDocuments = DOCUMENT_REGISTRY.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
-    const matchesConfigType = configFilter === 'all' || doc.configType === configFilter;
-    
-    return matchesSearch && matchesCategory && matchesConfigType;
-  });
+  // Memoized expensive calculations
+  const categories = useMemo(() => getAllCategories(), []);
 
-  const categories = getAllCategories();
-  const jsonDocs = DOCUMENT_REGISTRY.filter(doc => doc.configType === 'json');
-  const tsDocs = DOCUMENT_REGISTRY.filter(doc => doc.configType === 'typescript');
+  const jsonDocs = useMemo(() =>
+    DOCUMENT_REGISTRY.filter(doc => doc.configType === 'json'), []
+  );
 
-  const getDocumentIcon = (doc: DocumentInfo) => {
+  const tsDocs = useMemo(() =>
+    DOCUMENT_REGISTRY.filter(doc => doc.configType === 'typescript'), []
+  );
+
+  // Memoized filter function for better performance
+  const filteredDocuments = useMemo(() => {
+    const searchLower = searchTerm.toLowerCase();
+    return DOCUMENT_REGISTRY.filter(doc => {
+      const matchesSearch = searchTerm === '' ||
+        doc.title.toLowerCase().includes(searchLower) ||
+        doc.description.toLowerCase().includes(searchLower);
+      const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
+      const matchesConfigType = configFilter === 'all' || doc.configType === configFilter;
+
+      return matchesSearch && matchesCategory && matchesConfigType;
+    });
+  }, [searchTerm, selectedCategory, configFilter]);
+
+  // Memoized icon renderer to prevent unnecessary re-renders
+  const getDocumentIcon = useCallback((doc: DocumentInfo) => {
     if (doc.configType === 'json') {
       return <Sparkles className="h-5 w-5 text-blue-600" />;
     }
     return <FileText className="h-5 w-5 text-gray-600" />;
-  };
+  }, []);
 
   return (
     <div className="container mx-auto px-4">
@@ -159,68 +173,86 @@ export default function DocumentsListingPageClientWrapper() {
           </CardContent>
         </Card>
 
-        {/* All Documents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDocuments.map(doc => (
-            <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    {getDocumentIcon(doc)}
-                    <CardTitle className="text-lg">{doc.title}</CardTitle>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    {doc.isNew && (
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
-                        NEW
-                      </Badge>
-                    )}
-                    <Badge variant="outline" className="text-xs">
-                      {doc.configType === 'json' ? 'JSON' : 'TypeScript'}
-                    </Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">{doc.description}</p>
-                
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <FileText className="h-3 w-3" />
-                    <span>{doc.category}</span>
-                  </div>
-                  {doc.jurisdiction && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Shield className="h-3 w-3" />
-                      <span>{doc.jurisdiction}</span>
+        {/* All Documents Grid - Virtualized for Performance */}
+        {filteredDocuments.length > 20 ? (
+          <VirtualizedDocumentList
+            documents={filteredDocuments.map(doc => ({
+              id: doc.id,
+              title: doc.title,
+              description: doc.description,
+              type: doc.configType === 'json' ? 'JSON' : 'TypeScript',
+              updatedAt: new Date().toISOString(),
+              status: doc.isNew ? 'published' : 'completed',
+              ...doc
+            }))}
+            onDocumentClick={(doc) => {
+              window.location.href = doc.route;
+            }}
+            className="rounded-lg border"
+          />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDocuments.map(doc => (
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      {getDocumentIcon(doc)}
+                      <CardTitle className="text-lg">{doc.title}</CardTitle>
                     </div>
-                  )}
-                </div>
+                    <div className="flex flex-col gap-1">
+                      {doc.isNew && (
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
+                          NEW
+                        </Badge>
+                      )}
+                      <Badge variant="outline" className="text-xs">
+                        {doc.configType === 'json' ? 'JSON' : 'TypeScript'}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">{doc.description}</p>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-1">
-                    {doc.requiresNotary && (
-                      <Badge variant="outline" className="text-xs">
-                        <Shield className="h-3 w-3 mr-1" />
-                        Notary
-                      </Badge>
-                    )}
-                    {doc.officialForm && (
-                      <Badge variant="outline" className="text-xs">
-                        Official
-                      </Badge>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <FileText className="h-3 w-3" />
+                      <span>{doc.category}</span>
+                    </div>
+                    {doc.jurisdiction && (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Shield className="h-3 w-3" />
+                        <span>{doc.jurisdiction}</span>
+                      </div>
                     )}
                   </div>
-                  <Link href={doc.route}>
-                    <Button size="sm">
-                      Create <ArrowRight className="h-3 w-3 ml-1" />
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-1">
+                      {doc.requiresNotary && (
+                        <Badge variant="outline" className="text-xs">
+                          <Shield className="h-3 w-3 mr-1" />
+                          Notary
+                        </Badge>
+                      )}
+                      {doc.officialForm && (
+                        <Badge variant="outline" className="text-xs">
+                          Official
+                        </Badge>
+                      )}
+                    </div>
+                    <Link href={doc.route}>
+                      <Button size="sm">
+                        Create <ArrowRight className="h-3 w-3 ml-1" />
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {filteredDocuments.length === 0 && (
           <Card>

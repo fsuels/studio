@@ -9,6 +9,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 /*  Core Next.js config                                                       */
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
+  output: 'export', // Enable static export for Firebase hosting
+  trailingSlash: true,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
 
@@ -145,16 +147,197 @@ const nextConfig = {
               chunks: 'async',
               minSize: 20000,
             },
+
+            // ROUTE-BASED CODE SPLITTING - Aggressive optimization
+            // Marketing routes (landing, blog, templates)
+            routeMarketing: {
+              test: /[\\/]app[\\/]\[locale\][\\/]\(marketing\)[\\/]/,
+              name: 'route-marketing',
+              priority: 25,
+              chunks: 'async',
+              enforce: true,
+              maxSize: 150000, // 150KB chunks for marketing
+            },
+
+            // Legal document routes (documents, forms)
+            routeLegal: {
+              test: /[\\/]app[\\/]\[locale\][\\/]\(legal\)[\\/]/,
+              name: 'route-legal',
+              priority: 24,
+              chunks: 'async',
+              enforce: true,
+              maxSize: 200000, // 200KB chunks for legal
+            },
+
+            // Dashboard and admin routes
+            routeApp: {
+              test: /[\\/]app[\\/]\[locale\][\\/]\(app\)[\\/]/,
+              name: 'route-app',
+              priority: 23,
+              chunks: 'async',
+              enforce: true,
+              maxSize: 180000, // 180KB chunks for app
+            },
+
+            // Auth routes (login, signup)
+            routeAuth: {
+              test: /[\\/]app[\\/]\[locale\][\\/]\(auth\)[\\/]/,
+              name: 'route-auth',
+              priority: 22,
+              chunks: 'async',
+              enforce: true,
+              maxSize: 120000, // 120KB chunks for auth
+            },
+
+            // API routes - separate bundles
+            routeAPI: {
+              test: /[\\/]app[\\/]api[\\/]/,
+              name: 'route-api',
+              priority: 21,
+              chunks: 'async',
+              enforce: true,
+              maxSize: 300000, // 300KB chunks for API
+            },
+
+            // Critical vendors - smaller chunks for initial load
+            vendorsCritical: {
+              test: /[\\/]node_modules[\\/](next|react|react-dom)[\\/]/,
+              name: 'vendors-critical',
+              priority: 30,
+              chunks: 'initial',
+              maxSize: 150000, // Keep critical vendors small
+            },
+
+            // UI vendors - lazy loaded
+            vendorsUILazy: {
+              test: /[\\/]node_modules[\\/](@radix-ui|framer-motion|embla-carousel)[\\/]/,
+              name: 'vendors-ui-lazy',
+              priority: 18,
+              chunks: 'async',
+              maxSize: 200000,
+            },
+
+            // Form vendors - only for form routes
+            vendorsForms: {
+              test: /[\\/]node_modules[\\/](react-hook-form|@hookform|zod)[\\/]/,
+              name: 'vendors-forms',
+              priority: 17,
+              chunks: 'async',
+              maxSize: 150000,
+            },
+
+            // PDF vendors - only for document routes
+            vendorsPDFLazy: {
+              test: /[\\/]node_modules[\\/](pdf-lib|@pdf-lib)[\\/]/,
+              name: 'vendors-pdf-lazy',
+              priority: 16,
+              chunks: 'async',
+              maxSize: 250000,
+            },
+
+            // Analytics and monitoring - non-critical
+            vendorsAnalytics: {
+              test: /[\\/]node_modules[\\/](@sentry|@opentelemetry|prom-client)[\\/]/,
+              name: 'vendors-analytics',
+              priority: 5,
+              chunks: 'async',
+              maxSize: 200000,
+            },
+
+            // MICRO-SPLITTING - Granular vendor optimization
+            // Split individual large libraries
+            vendorsLucide: {
+              test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
+              name: 'vendors-lucide',
+              priority: 14,
+              chunks: 'async',
+              maxSize: 150000,
+            },
+
+            vendorsFramer: {
+              test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+              name: 'vendors-framer',
+              priority: 13,
+              chunks: 'async',
+              maxSize: 180000,
+            },
+
+            vendorsDateFns: {
+              test: /[\\/]node_modules[\\/]date-fns[\\/]/,
+              name: 'vendors-date-fns',
+              priority: 12,
+              chunks: 'async',
+              maxSize: 100000,
+            },
+
+            vendorsI18nCore: {
+              test: /[\\/]node_modules[\\/](i18next|react-i18next)[\\/]/,
+              name: 'vendors-i18n-core',
+              priority: 11,
+              chunks: 'async',
+              maxSize: 120000,
+            },
+
+            vendorsUtility: {
+              test: /[\\/]node_modules[\\/](lodash|ramda|clsx|class-variance-authority)[\\/]/,
+              name: 'vendors-utility',
+              priority: 10,
+              chunks: 'async',
+              maxSize: 80000,
+            },
+
+            vendorsCharts: {
+              test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
+              name: 'vendors-charts',
+              priority: 9,
+              chunks: 'async',
+              maxSize: 200000,
+            },
+
+            vendorsMarkdown: {
+              test: /[\\/]node_modules[\\/](react-markdown|remark|rehype)[\\/]/,
+              name: 'vendors-markdown',
+              priority: 8,
+              chunks: 'async',
+              maxSize: 150000,
+            },
+
+            vendorsCarousel: {
+              test: /[\\/]node_modules[\\/]embla-carousel[\\/]/,
+              name: 'vendors-carousel',
+              priority: 7,
+              chunks: 'async',
+              maxSize: 100000,
+            },
+
+            vendorsToast: {
+              test: /[\\/]node_modules[\\/](sonner|react-hot-toast)[\\/]/,
+              name: 'vendors-toast',
+              priority: 6,
+              chunks: 'async',
+              maxSize: 50000,
+            },
           },
         },
       };
     }
 
-    // Set realistic performance constraints for large application
+    // Aggressive performance constraints for route-based optimization
     config.performance = {
-      hints: dev ? false : 'warning',
-      maxAssetSize: 2000000, // 2MB - more realistic for individual assets
-      maxEntrypointSize: 1500000, // 1.5MB - more realistic for entry points
+      hints: dev ? false : 'warning', // Show warnings instead of failing build
+      maxAssetSize: 800000, // 800KB - temporarily relaxed for analysis
+      maxEntrypointSize: 1200000, // 1.2MB - temporarily relaxed to see improvements
+      // Set route-specific budgets
+      assetFilter: function(assetFilename) {
+        // Be more lenient with certain asset types
+        if (assetFilename.endsWith('.woff2') || assetFilename.endsWith('.woff')) {
+          return false; // Skip font files from size checks
+        }
+        if (assetFilename.includes('vendors-firebase') && assetFilename.includes('.js')) {
+          return false; // Firebase chunks can be larger but lazy-loaded
+        }
+        return true;
+      }
     };
 
     return config;
@@ -181,16 +364,10 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     // Image sizes for different viewport widths
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Quality settings for different formats
-    quality: 80, // Default quality
     // Enable placeholder blur for better UX
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // Enable experimental features
-    experimental: {
-      fetchPriority: true,
-    },
   },
 
   /* Add allowedDevOrigins here as instructed */

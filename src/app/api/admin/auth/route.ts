@@ -1,5 +1,7 @@
 // Admin authentication API
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-static';
 import {
   validateAdminCredentials,
   createAdminToken,

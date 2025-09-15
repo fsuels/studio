@@ -261,23 +261,26 @@ export function usePerformanceMonitoring() {
   return metrics;
 }
 
-// Bundle splitting optimization
-export function getDynamicImport(
-  importFunction: () => Promise<any>,
-  options?: {
-    preload?: boolean;
-    chunkName?: string;
-  },
-) {
-  const importPromise = importFunction();
+// Bundle splitting optimization - Static patterns only
+export const DynamicImportPatterns = {
+  // Predefined safe import patterns
+  preloadFirebase: () => import('@/lib/firebase-dynamic'),
+  preloadPDF: () => import('@/lib/pdf/pdf-service'),
+  preloadForms: () => import('@/components/forms/DynamicForm'),
+  preloadSearch: () => import('@/services/vectorSearch'),
 
-  if (options?.preload) {
-    // Preload on page load
-    importFunction();
+  // Conditional preloading based on device capabilities
+  conditionalPreload: async (deviceInfo: DeviceInfo) => {
+    if (!deviceInfo.hasSlowConnection && !deviceInfo.hasLimitedMemory) {
+      // Only preload on capable devices
+      return Promise.all([
+        import('@/lib/firebase-dynamic'),
+        import('@/components/forms/DynamicForm')
+      ]);
+    }
+    return Promise.resolve([]);
   }
-
-  return importPromise;
-}
+};
 
 // Image optimization for mobile
 export function useOptimizedImageProps(
@@ -365,7 +368,7 @@ export const MobileOptimization = {
   useTouchOptimization,
   useViewportOptimization,
   usePerformanceMonitoring,
-  getDynamicImport,
+  DynamicImportPatterns,
   useOptimizedImageProps,
   registerServiceWorker,
   inlineCriticalCSS,

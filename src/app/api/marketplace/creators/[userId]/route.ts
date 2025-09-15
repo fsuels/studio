@@ -1,19 +1,11 @@
 // src/app/api/marketplace/creators/[userId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
+// Use optimized server-side Firebase
 import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  serverTimestamp,
-} from 'firebase/firestore';
+  getServerDocument,
+  queryServerCollection,
+  getServerTimestamp
+} from '@/lib/firebase-server-optimized';
 import type {
   CreatorProfile,
   MarketplaceTemplate,
