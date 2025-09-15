@@ -1,42 +1,18 @@
 // src/app/[locale]/terms-of-service/page.tsx
-'use client';
+// Server component for Terms; logs view with a tiny client child to keep bundle small
 
-import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import { auditService } from '@/services/firebase-audit-service';
-
-interface TermsPageProps {
-  params: Promise<{ locale: 'en' | 'es' }>;
-}
-
-export default function LocaleTermsPage({ params: _params }: TermsPageProps) {
-  // Access locale via useParams on the client; ignore Promise-typed params
-  const locale = (useParams()?.locale as 'en' | 'es') ?? 'en';
-  const { user: _user } = useAuth();
-
-  useEffect(() => {
-    // Log terms of service view
-    const logTermsView = async () => {
-      try {
-        await auditService.logComplianceEvent('privacy_viewed', {
-          policyType: 'terms_of_service',
-          locale,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer,
-          timestamp: new Date().toISOString(),
-          pageUrl: window.location.href,
-        });
-      } catch (error) {
-        console.error('Failed to log terms of service view:', error);
-      }
-    };
-
-    logTermsView();
-  }, [locale]);
+export default function LocaleTermsPage({
+  params,
+}: {
+  params: { locale: 'en' | 'es' };
+}) {
+  const locale = params.locale ?? 'en';
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/** Client-side audit logging */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <PolicyAuditLogger locale={locale} policyType="terms_of_service" />
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
       <div className="prose max-w-none">
         <p className="text-muted-foreground mb-4">
@@ -91,3 +67,4 @@ export default function LocaleTermsPage({ params: _params }: TermsPageProps) {
     </div>
   );
 }
+import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';

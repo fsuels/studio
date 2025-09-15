@@ -1,5 +1,5 @@
 // src/lib/marketplace/revenue-sharing-system.ts
-'use client';
+// This module uses Stripe server-side API and should only run on the server
 
 import { getDb } from '@/lib/firebase';
 import {
@@ -24,9 +24,11 @@ import type {
   CreatorProfile,
 } from '@/types/marketplace';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe only if the secret key is available
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeKey ? new Stripe(stripeKey, {
   apiVersion: '2025-05-28.basil',
-});
+}) : null;
 
 /**
  * Revenue Sharing System for Template Marketplace
@@ -169,6 +171,10 @@ export class RevenueServingSystem {
     const netAmount = params.amount - stripeFee;
 
     try {
+      // Check if Stripe is configured
+      if (!stripe) {
+        throw new Error('Payment system is not configured');
+      }
       // Create Stripe transfer to creator's connected account
       const transfer = await stripe.transfers.create({
         amount: netAmount,
@@ -387,6 +393,10 @@ export class RevenueServingSystem {
     onboardingUrl: string;
   }> {
     try {
+      // Check if Stripe is configured
+      if (!stripe) {
+        throw new Error('Payment system is not configured');
+      }
       // Create Stripe Express account
       const account = await stripe.accounts.create({
         type: 'express',

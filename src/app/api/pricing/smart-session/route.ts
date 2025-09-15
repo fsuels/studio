@@ -5,14 +5,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe only if the secret key is available
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeKey ? new Stripe(stripeKey, {
   apiVersion: '2025-05-28.basil',
-});
+}) : null;
 
 export async function POST(req: NextRequest) {
   try {
-    const { 
-      planId, 
+    // Check if Stripe is configured
+    if (!stripe) {
+      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+      return NextResponse.json(
+        { error: 'Payment system is not configured' },
+        { status: 503 }
+      );
+    }
+
+    const {
+      planId,
       locale = 'en',
       customerEmail,
       allowPurchaseOrder = false,

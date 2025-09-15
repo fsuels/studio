@@ -1,16 +1,20 @@
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs,
-  serverTimestamp,
-} from 'firebase/firestore';
-// Note: Removed ImmutableAuditTrail imports - using simplified audit logging for authentication events
-import { auth } from '@/lib/firebase';
+// Lazy-load Firebase modules to keep client bundles slim
+let fsModulePromise: Promise<typeof import('firebase/firestore')> | null = null;
+async function FS() {
+  if (!fsModulePromise) fsModulePromise = import('firebase/firestore');
+  return fsModulePromise;
+}
+
+async function DB() {
+  const { getDb } = await import('@/lib/firebase');
+  return getDb();
+}
+
+async function AUTH() {
+  // Importing from our firebase wrapper ensures the app is initialized
+  const mod = await import('@/lib/firebase');
+  return mod.auth;
+}
 
 // Define EventType enum for compatibility
 export enum EventType {
@@ -63,7 +67,8 @@ export class FirebaseAuditService {
     userId?: string,
   ): Promise<void> {
     try {
-      const currentUser = auth.currentUser;
+      const auth = await AUTH();
+      const currentUser = auth?.currentUser || null;
       const actualUserId = userId || currentUser?.uid || 'system';
 
       // Create a simple audit event for Firestore
@@ -79,6 +84,10 @@ export class FirebaseAuditService {
       };
 
       // Store in Firestore
+      const db = await DB();
+      const { addDoc, collection, serverTimestamp } = await FS();
+      // Ensure serverTimestamp symbol is preserved in event
+      event.timestamp = serverTimestamp();
       await addDoc(collection(db, this.COLLECTION_NAME), event);
     } catch (error) {
       console.error('Failed to log audit event:', error);
@@ -94,6 +103,9 @@ export class FirebaseAuditService {
     limitCount: number = 100,
   ): Promise<AuditEvent[]> {
     try {
+      const db = await DB();
+      const { query, collection, where, orderBy, limit, getDocs } =
+        await FS();
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('userId', '==', userId),
@@ -120,6 +132,9 @@ export class FirebaseAuditService {
     limitCount: number = 100,
   ): Promise<AuditEvent[]> {
     try {
+      const db = await DB();
+      const { query, collection, where, orderBy, limit, getDocs } =
+        await FS();
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('eventType', '==', eventType),

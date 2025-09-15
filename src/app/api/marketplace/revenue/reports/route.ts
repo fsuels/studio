@@ -1,6 +1,5 @@
 // src/app/api/marketplace/revenue/reports/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { revenueShareSystem } from '@/lib/marketplace/revenue-sharing-system';
 
 /**
  * GET /api/marketplace/revenue/reports
@@ -34,6 +33,9 @@ export async function GET(request: NextRequest) {
     const dateRange = calculateDateRange(period, startDate, endDate);
 
     // Generate revenue report
+    const { revenueShareSystem } = await import(
+      '@/lib/marketplace/revenue-sharing-system'
+    );
     const report = await revenueShareSystem.generateRevenueReport({
       creatorId: creatorId || undefined,
       period: dateRange,
@@ -173,6 +175,9 @@ async function generateAdvancedAnalytics(params: {
   const previousPeriod = calculatePreviousPeriod(params.period);
 
   // Get previous period data for comparison
+  const { revenueShareSystem } = await import(
+    '@/lib/marketplace/revenue-sharing-system'
+  );
   const previousReport = await revenueShareSystem.generateRevenueReport({
     creatorId: params.creatorId || undefined,
     period: previousPeriod,

@@ -1,20 +1,22 @@
 // Automated Refund/Credit System with Audit Trails
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  doc,
-  updateDoc,
-  getDoc,
-} from 'firebase/firestore';
-import Stripe from 'stripe';
+// Lazy-load Firestore and Stripe to keep API route bundles slim
+let fsModulePromise: Promise<typeof import('firebase/firestore')> | null = null;
+async function FS() {
+  if (!fsModulePromise) fsModulePromise = import('firebase/firestore');
+  return fsModulePromise;
+}
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-05-28.basil',
-});
+async function DB() {
+  const { getDb } = await import('@/lib/firebase');
+  return getDb();
+}
+
+async function getStripeClient() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) return null;
+  const { default: Stripe } = await import('stripe');
+  return new Stripe(key, { apiVersion: '2025-05-28.basil' });
+}
 
 export interface RefundRequest {
   id: string;
@@ -136,6 +138,8 @@ export class RefundSystem {
   ): Promise<RefundRequest> {
     try {
       // Validate order exists and get details
+      const db = await DB();
+      const { getDoc, doc } = await FS();
       const orderDoc = await getDoc(doc(db, 'orders', orderId));
       if (!orderDoc.exists()) {
         throw new RefundSystemError('Order not found', 'ORDER_NOT_FOUND');
@@ -222,6 +226,7 @@ export class RefundSystem {
       }
 
       // Save to database
+      const { addDoc, collection } = await FS();
       await addDoc(collection(db, 'refundRequests'), refundRequest);
 
       // If auto-approved, process immediately
@@ -247,6 +252,8 @@ export class RefundSystem {
     notes?: string,
   ): Promise<RefundRequest> {
     try {
+      const db = await DB();
+      const { getDoc, doc, updateDoc } = await FS();
       const refundDoc = await getDoc(doc(db, 'refundRequests', refundId));
       if (!refundDoc.exists()) {
         throw new RefundSystemError(
@@ -311,6 +318,8 @@ export class RefundSystem {
   // Process an approved refund
   static async processRefund(refundId: string): Promise<RefundRequest> {
     try {
+      const db = await DB();
+      const { getDoc, doc, updateDoc } = await FS();
       const refundDoc = await getDoc(doc(db, 'refundRequests', refundId));
       if (!refundDoc.exists()) {
         throw new RefundSystemError(
@@ -360,6 +369,10 @@ export class RefundSystem {
           };
         } else {
           // Process via Stripe
+          const stripe = await getStripeClient();
+          if (!stripe) {
+            throw new Error('Payment system is not configured');
+          }
           const stripeRefund = await stripe.refunds.create({
             payment_intent: refund.metadata.originalPaymentIntent!,
             amount: Math.round(refund.amount * 100), // Convert to cents
@@ -459,11 +472,15 @@ export class RefundSystem {
       metadata: {},
     };
 
+    const db = await DB();
+    const { addDoc, collection } = await FS();
     await addDoc(collection(db, 'storeCreditTransactions'), creditTransaction);
     return creditTransaction;
   }
 
   static async getStoreCreditBalance(userId: string): Promise<number> {
+    const db = await DB();
+    const { query, collection, where, getDocs } = await FS();
     const q = query(
       collection(db, 'storeCreditTransactions'),
       where('userId', '==', userId),
@@ -538,6 +555,8 @@ export class RefundSystem {
 
   // Query methods
   static async getRefundsByOrder(orderId: string): Promise<RefundRequest[]> {
+    const db = await DB();
+    const { query, collection, where, getDocs } = await FS();
     const q = query(
       collection(db, 'refundRequests'),
       where('orderId', '==', orderId),
@@ -550,6 +569,8 @@ export class RefundSystem {
   }
 
   static async getRefundsByUser(userId: string): Promise<RefundRequest[]> {
+    const db = await DB();
+    const { query, collection, where, getDocs } = await FS();
     const q = query(
       collection(db, 'refundRequests'),
       where('userId', '==', userId),
@@ -562,6 +583,8 @@ export class RefundSystem {
   }
 
   static async getPendingRefunds(): Promise<RefundRequest[]> {
+    const db = await DB();
+    const { query, collection, where, getDocs } = await FS();
     const q = query(
       collection(db, 'refundRequests'),
       where('status', '==', 'pending'),

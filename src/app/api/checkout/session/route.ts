@@ -4,12 +4,23 @@ import Stripe from 'stripe';
 import { documentLibrary } from '@/lib/document-library';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe only if the secret key is available
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeKey ? new Stripe(stripeKey, {
   apiVersion: '2025-05-28.basil',
-});
+}) : null;
 
 export async function POST(req: NextRequest) {
   try {
+    // Check if Stripe is configured
+    if (!stripe) {
+      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+      return NextResponse.json(
+        { error: 'Payment system is not configured' },
+        { status: 503 }
+      );
+    }
+
     const { docId, locale } = await req.json();
     const doc = documentLibrary.find((d) => d.id === docId);
     if (!doc) {

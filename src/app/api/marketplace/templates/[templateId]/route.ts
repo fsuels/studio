@@ -1,14 +1,5 @@
 // src/app/api/marketplace/templates/[templateId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { templateVersionManager } from '@/lib/versioning/template-version-manager';
 import type { MarketplaceTemplate } from '@/types/marketplace';
 
 /**
@@ -25,7 +16,10 @@ export async function GET(
     const includeVersions = url.searchParams.get('includeVersions') === 'true';
     const includeStats = url.searchParams.get('includeStats') === 'true';
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { doc, getDoc, updateDoc, serverTimestamp } = await import(
+      'firebase/firestore'
+    );
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
 
@@ -63,6 +57,9 @@ export async function GET(
 
     // Fetch current version details
     if (template.currentVersion) {
+      const { templateVersionManager } = await import(
+        '@/lib/versioning/template-version-manager'
+      );
       const currentVersion = await templateVersionManager.getVersion(
         templateId,
         template.currentVersion,
@@ -72,6 +69,9 @@ export async function GET(
 
     // Optionally include version history
     if (includeVersions) {
+      const { templateVersionManager } = await import(
+        '@/lib/versioning/template-version-manager'
+      );
       const versions = await templateVersionManager.getVersions(templateId, {
         includeStatus: ['published'],
         limit: 10,
@@ -134,7 +134,10 @@ export async function PATCH(
     const { templateId } = await context.params;
     const body = await request.json();
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { doc, getDoc, updateDoc, serverTimestamp } = await import(
+      'firebase/firestore'
+    );
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
 
@@ -237,7 +240,10 @@ export async function DELETE(
     const url = new URL(request.url);
     const force = url.searchParams.get('force') === 'true';
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } = await import(
+      'firebase/firestore'
+    );
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
 

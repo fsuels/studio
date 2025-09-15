@@ -26,8 +26,8 @@ import {
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 import { useToast } from '@/hooks/use-toast';
-import { getAuth, confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
-import { app } from '@/lib/firebase';
+// Avoid pulling our firebase wrapper (which initializes Firestore) into this page.
+// Load only the minimal Firebase modules on demand inside effects/handlers.
 
 export default function AuthActionPage() {
   const { t } = useTranslation('common');
@@ -63,7 +63,20 @@ export default function AuthActionPage() {
       }
 
       try {
-        const auth = getAuth(app);
+        const [{ getAuth, verifyPasswordResetCode }, { initializeApp, getApps, getApp }] = await Promise.all([
+          import('firebase/auth'),
+          import('firebase/app'),
+        ]);
+        const config = {
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        } as const;
+        const appInst = getApps().length ? getApp() : initializeApp(config);
+        const auth = getAuth(appInst);
         const email = await verifyPasswordResetCode(auth, actionCode);
         setEmail(email);
         setIsValidCode(true);
@@ -114,7 +127,20 @@ export default function AuthActionPage() {
     setError('');
 
     try {
-      const auth = getAuth(app);
+      const [{ getAuth, confirmPasswordReset }, { initializeApp, getApps, getApp }] = await Promise.all([
+        import('firebase/auth'),
+        import('firebase/app'),
+      ]);
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+      } as const;
+      const appInst = getApps().length ? getApp() : initializeApp(config);
+      const auth = getAuth(appInst);
       await confirmPasswordReset(auth, actionCode!, newPassword);
       
       setIsSuccess(true);

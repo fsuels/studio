@@ -1,10 +1,9 @@
 // API endpoints for automated refund system
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
-import { RefundSystem } from '@/lib/support-toolkit/refund-system';
 
 export async function GET(request: NextRequest) {
-  // Require admin authentication for refund queries
+  // Require admin authentication for refund queries (lazy import)
+  const { requireAdmin } = await import('@/lib/admin-auth');
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
     return adminResult;
@@ -19,6 +18,9 @@ export async function GET(request: NextRequest) {
 
     let refunds;
 
+    const { RefundSystem } = await import(
+      '@/lib/support-toolkit/refund-system'
+    );
     if (pending) {
       // Get all pending refunds
       refunds = await RefundSystem.getPendingRefunds();
@@ -83,6 +85,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const { requireAdmin } = await import('@/lib/admin-auth');
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
     return adminResult;
@@ -102,6 +105,9 @@ export async function POST(request: NextRequest) {
       metadata = {},
     } = body;
 
+    const { RefundSystem } = await import(
+      '@/lib/support-toolkit/refund-system'
+    );
     switch (action) {
       case 'create_refund': {
         if (!orderId || !amount || !reason) {

@@ -1,43 +1,16 @@
 // src/app/[locale]/privacy-policy/page.tsx
-'use client';
-
-import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import { auditService } from '@/services/firebase-audit-service';
-
-interface PrivacyPolicyPageProps {
-  params: Promise<{ locale: 'en' | 'es' }>;
-}
+// Server component for Privacy Policy; logs view via tiny client child to keep bundle small
 
 export default function LocalePrivacyPolicyPage({
-  params: _params,
-}: PrivacyPolicyPageProps) {
-  // Access locale via useParams on the client; ignore Promise-typed params
-  const locale = (useParams()?.locale as 'en' | 'es') ?? 'en';
-  const { user: _user } = useAuth();
-
-  useEffect(() => {
-    // Log privacy policy view
-    const logPolicyView = async () => {
-      try {
-        await auditService.logComplianceEvent('privacy_viewed', {
-          locale,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer,
-          timestamp: new Date().toISOString(),
-          pageUrl: window.location.href,
-        });
-      } catch (error) {
-        console.error('Failed to log privacy policy view:', error);
-      }
-    };
-
-    logPolicyView();
-  }, [locale]);
+  params,
+}: {
+  params: { locale: 'en' | 'es' };
+}) {
+  const locale = params.locale ?? 'en';
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <PolicyAuditLogger locale={locale} policyType="privacy_policy" />
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
       <div className="prose max-w-none">
         <p className="text-muted-foreground mb-4">
@@ -92,3 +65,4 @@ export default function LocalePrivacyPolicyPage({
     </div>
   );
 }
+import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';

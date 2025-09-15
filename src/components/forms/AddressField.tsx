@@ -34,6 +34,26 @@ interface AddressFieldProps {
 let isGoogleMapsLoading = false;
 let googleMapsLoadPromise: Promise<void> | null = null;
 
+// Helper to obtain PlacePicker at runtime with a static module string.
+// This preserves testability (supports jest.doMock) without triggering
+// webpack's critical dependency warning.
+function getPlacePickerModule(): any {
+  try {
+    // Bust require cache so late jest.doMock calls take effect
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    const resolved = require.resolve(
+      '@googlemaps/extended-component-library/react',
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (require as any).cache?.[resolved];
+    // Load module using a static string literal
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    return require('@googlemaps/extended-component-library/react');
+  } catch {
+    return {};
+  }
+}
+
 const AddressField = React.memo(function AddressField({
   name,
   label,
@@ -46,25 +66,7 @@ const AddressField = React.memo(function AddressField({
   onChange: controlledOnChange,
   onFocus,
 }: AddressFieldProps) {
-  // Dynamically require PlacePicker to allow jest.doMock overrides in tests
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const PlacePickerModule: any = (() => {
-    try {
-      // Bust require cache so jest.doMock replacements take effect per test
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const modName = '@googlemaps/extended-component-library/react';
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const resolved = require.resolve(modName);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        delete (require as any).cache[resolved];
-      } catch {}
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require(modName);
-    } catch {
-      return {};
-    }
-  })();
+  // PlacePicker is loaded dynamically via next/dynamic above
   const { t } = useTranslation('common');
   const {
     register,
@@ -413,43 +415,48 @@ const AddressField = React.memo(function AddressField({
           style={{ display: 'none' }}
         />
         {/** Place picker component */}
-        <PlacePickerModule.PlacePicker
-          data-testid="place-picker"
-          placeholder={placeholder || 'Enter address'}
-          country={['us', 'ca', 'mx']}
-          type="address"
-          style={{ width: '100%', height: 40 }}
-          onPlaceChange={(event: any) => {
-            const place = event?.target?.value;
-            if (!place) return;
-            const formattedAddress = place.formattedAddress || place.displayName || '';
-            const partsArr = place.addressComponents || [];
-            const parts: Record<string, string> = {};
-            try {
-              partsArr.forEach((c: any) => {
-                const types = c.types || [];
-                if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
-                if (types.includes('route')) parts.route = c.shortText || c.longText;
-                if (types.includes('locality')) parts.city = c.shortText || c.longText;
-                if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
-                if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
-                if (types.includes('country')) parts.country = c.shortText || c.longText;
-              });
-            } catch {}
-            const parsedParts = {
-              street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
-              city: parts.city || '',
-              state: parts.state || '',
-              postalCode: parts.postal_code || '',
-              country: parts.country || '',
-            };
-            if (controlledOnChange) {
-              controlledOnChange(formattedAddress, parsedParts);
-            } else {
-              rhfSetValue(name, formattedAddress);
-            }
-          }}
-        />
+        {(() => {
+          const PlacePickerModule = getPlacePickerModule();
+          return (
+            <PlacePickerModule.PlacePicker
+              data-testid="place-picker"
+              placeholder={placeholder || 'Enter address'}
+              country={['us', 'ca', 'mx']}
+              type="address"
+              style={{ width: '100%', height: 40 }}
+              onPlaceChange={(event: any) => {
+                const place = event?.target?.value;
+                if (!place) return;
+                const formattedAddress = place.formattedAddress || place.displayName || '';
+                const partsArr = place.addressComponents || [];
+                const parts: Record<string, string> = {};
+                try {
+                  partsArr.forEach((c: any) => {
+                    const types = c.types || [];
+                    if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
+                    if (types.includes('route')) parts.route = c.shortText || c.longText;
+                    if (types.includes('locality')) parts.city = c.shortText || c.longText;
+                    if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
+                    if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
+                    if (types.includes('country')) parts.country = c.shortText || c.longText;
+                  });
+                } catch {}
+                const parsedParts = {
+                  street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
+                  city: parts.city || '',
+                  state: parts.state || '',
+                  postalCode: parts.postal_code || '',
+                  country: parts.country || '',
+                };
+                if (controlledOnChange) {
+                  controlledOnChange(formattedAddress, parsedParts);
+                } else {
+                  rhfSetValue(name, formattedAddress);
+                }
+              }}
+            />
+          );
+        })()}
         {(formErrors[name] || fieldErrorActual) && (
           <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual || 'required'))}</p>
         )}
@@ -513,49 +520,54 @@ const AddressField = React.memo(function AddressField({
           {...restOfRegister}
           style={{ display: 'none' }}
         />
-        <PlacePickerModule.PlacePicker
-          data-testid="place-picker"
-          placeholder={placeholder || 'Enter address'}
-          country={['us', 'ca', 'mx']}
-          type="address"
-          style={{ width: '100%', height: 40 }}
-          onPlaceChange={(event: any) => {
-            try {
-              const place = event?.target?.value;
-              if (!place) return;
-              const formattedAddress = place.formattedAddress || place.displayName || '';
+        {(() => {
+          const PlacePickerModule = getPlacePickerModule();
+          return (
+            <PlacePickerModule.PlacePicker
+              data-testid="place-picker"
+              placeholder={placeholder || 'Enter address'}
+              country={['us', 'ca', 'mx']}
+              type="address"
+              style={{ width: '100%', height: 40 }}
+              onPlaceChange={(event: any) => {
+                try {
+                  const place = event?.target?.value;
+                  if (!place) return;
+                  const formattedAddress = place.formattedAddress || place.displayName || '';
 
-              const partsArr = place.addressComponents || [];
-              const parts: Record<string, string> = {};
-              partsArr.forEach((c: any) => {
-                const types = c.types || [];
-                if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
-                if (types.includes('route')) parts.route = c.shortText || c.longText;
-                if (types.includes('locality')) parts.city = c.shortText || c.longText;
-                if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
-                if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
-                if (types.includes('country')) parts.country = c.shortText || c.longText;
-              });
-              const parsedParts = {
-                street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
-                city: parts.city || '',
-                state: parts.state || '',
-                postalCode: parts.postal_code || '',
-                country: parts.country || '',
-              };
+                  const partsArr = place.addressComponents || [];
+                  const parts: Record<string, string> = {};
+                  partsArr.forEach((c: any) => {
+                    const types = c.types || [];
+                    if (types.includes('street_number')) parts.street_number = c.shortText || c.longText;
+                    if (types.includes('route')) parts.route = c.shortText || c.longText;
+                    if (types.includes('locality')) parts.city = c.shortText || c.longText;
+                    if (types.includes('administrative_area_level_1')) parts.state = c.shortText || c.longText;
+                    if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
+                    if (types.includes('country')) parts.country = c.shortText || c.longText;
+                  });
+                  const parsedParts = {
+                    street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
+                    city: parts.city || '',
+                    state: parts.state || '',
+                    postalCode: parts.postal_code || '',
+                    country: parts.country || '',
+                  };
 
-              if (controlledOnChange) {
-                controlledOnChange(formattedAddress, parsedParts);
-              } else {
-                rhfSetValue(name, formattedAddress);
-              }
-              setIsReady(true);
-              setIsLoading(false);
-            } catch (_e) {
-              // ignore parse errors in tests
-            }
-          }}
-        />
+                  if (controlledOnChange) {
+                    controlledOnChange(formattedAddress, parsedParts);
+                  } else {
+                    rhfSetValue(name, formattedAddress);
+                  }
+                  setIsReady(true);
+                  setIsLoading(false);
+                } catch (_e) {
+                  // ignore parse errors in tests
+                }
+              }}
+            />
+          );
+        })()}
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
           {isLoading ? (
             <Loader2 className="h-4 w-4 text-muted-foreground animate-spin" />

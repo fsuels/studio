@@ -1,8 +1,5 @@
 // src/app/api/legal-updates/process/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { legalUpdateRSSParser } from '@/lib/legal-updates/rss-parser';
-import { legalUpdateAISummarizer } from '@/lib/legal-updates/ai-summarizer';
-import { auditService } from '@/services/firebase-audit-service';
 
 interface ProcessingResult {
   success: boolean;
@@ -59,23 +56,30 @@ export async function POST(request: NextRequest) {
 
     console.log('Starting legal updates processing...');
 
-    // Step 1: Fetch new updates from RSS feeds
+    // Step 1: Fetch new updates from RSS feeds (lazy import heavy modules)
     console.log('Step 1: Fetching updates from RSS sources...');
+    const { legalUpdateRSSParser } = await import(
+      '@/lib/legal-updates/rss-parser'
+    );
     const rssResults = await legalUpdateRSSParser.processAllSources();
 
     console.log(
       `RSS Processing complete: ${rssResults.totalUpdates} new updates`,
     );
 
-    // Step 2: Process raw updates with AI
+    // Step 2: Process raw updates with AI (lazy import)
     console.log('Step 2: Processing updates with AI...');
+    const { legalUpdateAISummarizer } = await import(
+      '@/lib/legal-updates/ai-summarizer'
+    );
     const aiResults = await legalUpdateAISummarizer.processPendingUpdates();
 
     console.log(
       `AI Processing complete: ${aiResults.processed} processed, ${aiResults.failed} failed`,
     );
 
-    // Step 3: Log audit event
+    // Step 3: Log audit event (lazy import)
+    const { auditService } = await import('@/services/firebase-audit-service');
     await auditService.logComplianceEvent('legal_updates_processed', {
       processingTime: Date.now() - startTime,
       rssUpdates: rssResults.totalUpdates,
@@ -95,7 +99,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Legal updates processing error:', error);
 
-    // Log error event
+    // Log error event (lazy import)
+    const { auditService } = await import('@/services/firebase-audit-service');
     await auditService.logComplianceEvent('legal_updates_error', {
       error: error instanceof Error ? error.message : 'Unknown error',
       processingTime: Date.now() - startTime,
@@ -134,6 +139,9 @@ export async function GET(request: NextRequest) {
         });
 
       case 'sources': {
+        const { legalUpdateRSSParser } = await import(
+          '@/lib/legal-updates/rss-parser'
+        );
         const sources = await legalUpdateRSSParser.fetchAllActiveSources();
         return NextResponse.json({
           sources: sources.map((s) => ({

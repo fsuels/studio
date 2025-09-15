@@ -1,8 +1,5 @@
 // src/app/api/marketplace/revenue/payouts/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
-import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import { revenueShareSystem } from '@/lib/marketplace/revenue-sharing-system';
 
 /**
  * GET /api/marketplace/revenue/payouts
@@ -32,9 +29,12 @@ export async function GET(request: NextRequest) {
     //   return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     // }
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
 
     // Build query for payouts
+    const { collection, getDocs, query, where, orderBy, limit } = await import(
+      'firebase/firestore'
+    );
     let payoutsQuery = query(collection(db, 'creator-payouts'));
 
     // Filter by creator if specified
@@ -75,6 +75,9 @@ export async function GET(request: NextRequest) {
     // Get creator earnings summary if viewing specific creator
     let earningsSummary = null;
     if (creatorId) {
+      const { revenueShareSystem } = await import(
+        '@/lib/marketplace/revenue-sharing-system'
+      );
       earningsSummary = await revenueShareSystem.getCreatorEarnings(creatorId);
     }
 
@@ -144,8 +147,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Get creator's pending earnings
-    const earningsSummary =
-      await revenueShareSystem.getCreatorEarnings(creatorId);
+    const { revenueShareSystem } = await import(
+      '@/lib/marketplace/revenue-sharing-system'
+    );
+    const earningsSummary = await revenueShareSystem.getCreatorEarnings(
+      creatorId,
+    );
 
     const payoutAmount = amount || earningsSummary.pendingEarnings;
     const minimumPayoutThreshold = 5000; // $50.00 in cents
@@ -242,7 +249,10 @@ function calculateDateFilter(period: string) {
 }
 
 async function calculatePendingPayouts(creatorId?: string) {
-  const db = await getDb();
+  const db = await (await import('@/lib/firebase')).getDb();
+  const { collection, getDocs, query, where } = await import(
+    'firebase/firestore'
+  );
 
   // Query pending transactions
   let transactionsQuery = query(
@@ -288,7 +298,10 @@ async function calculatePendingPayouts(creatorId?: string) {
 }
 
 async function getPendingTransactionIds(creatorId: string): Promise<string[]> {
-  const db = await getDb();
+  const db = await (await import('@/lib/firebase')).getDb();
+  const { collection, getDocs, query, where } = await import(
+    'firebase/firestore'
+  );
 
   const transactionsQuery = query(
     collection(db, 'revenue-transactions'),

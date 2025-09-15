@@ -5,10 +5,13 @@ import { track } from '@/lib/analytics';
 // Central price and coupon definitions
 import { PRICE_LOOKUP, COUPONS } from '@/lib/stripePrices';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe only if the secret key is available
+// This prevents build errors when the key is not set
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeKey ? new Stripe(stripeKey, {
   // Use the currently supported Stripe API version
   apiVersion: '2025-05-28.basil',
-});
+}) : null;
 
 // Alias imported constants for backwards compatibility with the old names
 const STRIPE_PRICES = PRICE_LOOKUP;
@@ -16,6 +19,15 @@ const STRIPE_COUPONS = COUPONS;
 
 export async function POST(req: NextRequest) {
   try {
+    // Check if Stripe is configured
+    if (!stripe) {
+      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+      return NextResponse.json(
+        { error: 'Payment system is not configured' },
+        { status: 503 }
+      );
+    }
+
     // Expect { items: [{ id: string; qty?: number }], promo?: string }
     const { items, promo } = (await req.json()) as {
       items: { id: string; qty?: number }[];

@@ -1,7 +1,5 @@
 // src/app/api/legal-updates/email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { legalUpdateEmailService } from '@/lib/legal-updates/email-service';
-import { auditService } from '@/services/firebase-audit-service';
 
 // Authentication helper
 function validateSchedulerRequest(request: NextRequest): boolean {
@@ -37,11 +35,16 @@ export async function POST(request: NextRequest) {
 
     console.log(`Starting ${frequency} legal update email digest...`);
 
-    // Send email digest
-    const results =
-      await legalUpdateEmailService.sendLegalUpdateDigest(frequency);
+    // Send email digest (lazy import heavy email service)
+    const { legalUpdateEmailService } = await import(
+      '@/lib/legal-updates/email-service'
+    );
+    const results = await legalUpdateEmailService.sendLegalUpdateDigest(
+      frequency,
+    );
 
-    // Log audit event
+    // Log audit event (lazy import)
+    const { auditService } = await import('@/services/firebase-audit-service');
     await auditService.logComplianceEvent('legal_update_emails_sent', {
       frequency,
       emailsSent: results.sent,
@@ -68,7 +71,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Legal update email API error:', error);
 
-    // Log error event
+    // Log error event (lazy import)
+    const { auditService } = await import('@/services/firebase-audit-service');
     await auditService.logComplianceEvent('legal_update_email_error', {
       error: error instanceof Error ? error.message : 'Unknown error',
       processingTime: Date.now() - startTime,

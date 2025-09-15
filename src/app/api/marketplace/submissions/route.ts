@@ -1,8 +1,5 @@
 // src/app/api/marketplace/submissions/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
-import { collection, doc, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import { templateSubmissionWorkflow } from '@/lib/marketplace/template-submission-workflow';
 
 /**
  * GET /api/marketplace/submissions
@@ -26,7 +23,9 @@ export async function GET(request: NextRequest) {
       50,
     );
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { collection, doc, getDocs, query, where, orderBy, limit } =
+      await import('firebase/firestore');
 
     // Build query
     let q = query(collection(db, 'template-submissions'));
@@ -159,8 +158,10 @@ export async function POST(request: NextRequest) {
     const userId = 'user-id'; // TODO: Get from auth
 
     // Create template draft
-    const { templateId, versionId } =
-      await templateSubmissionWorkflow.createTemplateDraft({
+    const { templateSubmissionWorkflow } = await import(
+      '@/lib/marketplace/template-submission-workflow'
+    );
+    const { templateId, versionId } = await templateSubmissionWorkflow.createTemplateDraft({
         name,
         description,
         category,
@@ -174,8 +175,7 @@ export async function POST(request: NextRequest) {
       });
 
     // Submit for review
-    const { submissionId, estimatedReviewTime } =
-      await templateSubmissionWorkflow.submitForReview({
+    const { submissionId, estimatedReviewTime } = await templateSubmissionWorkflow.submitForReview({
         templateId,
         submissionNotes,
       });
@@ -209,7 +209,8 @@ export async function POST(request: NextRequest) {
  * Calculate queue statistics for admin dashboard
  */
 async function calculateQueueStatistics() {
-  const db = await getDb();
+  const db = await (await import('@/lib/firebase')).getDb();
+  const { collection, getDocs, query } = await import('firebase/firestore');
 
   const stats = {
     total: 0,

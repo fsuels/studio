@@ -1,17 +1,5 @@
 // src/app/api/marketplace/templates/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-  getDocs,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
 import type {
   MarketplaceTemplate,
   MarketplaceSearchFilters,
@@ -56,7 +44,9 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.page || '1');
     const pageSize = Math.min(parseInt(searchParams.limit || '20'), 50); // Max 50 per page
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { collection, query, where, orderBy, limit, startAfter, getDocs, doc, getDoc } =
+      await import('firebase/firestore');
     const templatesRef = collection(db, 'marketplace-templates');
 
     // Build query based on filters

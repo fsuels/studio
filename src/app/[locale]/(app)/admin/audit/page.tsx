@@ -2,16 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import {
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  where,
-  Timestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import type { Timestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -143,6 +134,12 @@ export default function AuditTrailPage() {
   const loadAuditEvents = useCallback(async () => {
     setLoading(true);
     try {
+      const { collection, query, orderBy, limit, getDocs, where } = await import(
+        'firebase/firestore'
+      );
+      const { getDb } = await import('@/lib/firebase');
+      const db = getDb();
+
       let auditQuery = query(
         collection(db, 'audit_events'),
         orderBy('sequence', 'desc'),

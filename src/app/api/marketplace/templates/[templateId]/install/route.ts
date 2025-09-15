@@ -1,27 +1,18 @@
 // src/app/api/marketplace/templates/[templateId]/install/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/firebase';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  serverTimestamp,
-} from 'firebase/firestore';
-import Stripe from 'stripe';
 import type {
   MarketplaceTemplate,
   TemplateInstallation,
   TemplatePricing,
 } from '@/types/marketplace';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-05-28.basil',
-});
+// Lazy Stripe client to avoid bundling Stripe into this route unless needed
+async function getStripeClient() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) return null;
+  const { default: Stripe } = await import('stripe');
+  return new Stripe(key, { apiVersion: '2025-05-28.basil' });
+}
 
 /**
  * GET /api/marketplace/templates/[templateId]/install
@@ -41,7 +32,10 @@ export async function GET(
     const { templateId } = await context.params;
     const userId = 'user-id'; // TODO: Get from auth
 
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { doc, getDoc, collection, query, where, getDocs } = await import(
+      'firebase/firestore'
+    );
 
     // Get template info
     const templateRef = doc(db, 'marketplace-templates', templateId);
@@ -136,7 +130,9 @@ export async function POST(
     } = body;
 
     const userId = 'user-id'; // TODO: Get from auth
-    const db = await getDb();
+    const db = await (await import('@/lib/firebase')).getDb();
+    const { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, serverTimestamp } =
+      await import('firebase/firestore');
 
     // Get template
     const templateRef = doc(db, 'marketplace-templates', templateId);
@@ -345,7 +341,10 @@ async function createInstallationRecord(params: {
   currency?: string;
   expiresAt?: Date;
 }): Promise<TemplateInstallation> {
-  const db = await getDb();
+  const db = await (await import('@/lib/firebase')).getDb();
+  const { doc, setDoc, collection, serverTimestamp } = await import(
+    'firebase/firestore'
+  );
   const installationRef = doc(
     collection(db, 'users', params.userId, 'template-installations'),
   );
@@ -381,6 +380,12 @@ async function processPayment(params: {
   installationType: string;
 }) {
   try {
+    // Check if Stripe is configured
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      throw new Error('Payment system is not configured');
+    }
+
     const { template, paymentMethodId } = params;
 
     const amount = Math.round(template.pricing.basePrice * 100); // Convert to cents
@@ -420,7 +425,10 @@ async function updateTemplateStats(
   template: MarketplaceTemplate,
   installation: TemplateInstallation,
 ) {
-  const db = await getDb();
+  const db = await (await import('@/lib/firebase')).getDb();
+  const { doc, updateDoc, serverTimestamp } = await import(
+    'firebase/firestore'
+  );
   const templateRef = doc(db, 'marketplace-templates', templateId);
 
   const updates: any = {
