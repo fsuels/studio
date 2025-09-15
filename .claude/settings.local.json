@@ -23,7 +23,11 @@
       "Bash(ls:*)",
       "Bash(git diff:*)",
       "Bash(rm:*)",
-      "Bash(timeout 30 npm run build)"
+      "Bash(timeout 30 npm run build)",
+      "Bash(pkill:*)",
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "Bash(timeout 30 npm run dev)"
     ],
     "deny": [],
     "ask": []

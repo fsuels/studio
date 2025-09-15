@@ -26,21 +26,25 @@ import dynamic from 'next/dynamic';
 // Load non-critical widgets lazily
 const ContactFormButton = dynamic(() =>
   import('@/components/shared').then((m) => ({ default: m.ContactFormButton })),
+  { ssr: false, loading: () => null }
 );
 const ActivityTicker = dynamic(() =>
   import('@/components/shared').then((m) => ({ default: m.ActivityTicker })),
+  { ssr: false, loading: () => null }
 );
 const GlobalKeyboardShortcuts = dynamic(() =>
   import('@/components/accessibility/GlobalKeyboardShortcuts').then((m) => ({
     default: m.GlobalKeyboardShortcuts,
   })),
+  { ssr: false, loading: () => null }
 );
 const DocumentDiscoveryModal = dynamic(
   () => import('@/components/global/DocumentDiscoveryModal'),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const AIFeatureTooltip = dynamic(() =>
   import('@/components/shared/AIFeatureTooltip'),
+  { ssr: false, loading: () => null }
 );
 
 const AppShell = React.memo(function AppShell({
