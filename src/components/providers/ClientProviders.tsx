@@ -35,8 +35,9 @@ const GlobalKeyboardShortcuts = dynamic(() =>
     default: m.GlobalKeyboardShortcuts,
   })),
 );
-const DocumentDiscoveryModal = dynamic(() =>
-  import('@/components/global/DocumentDiscoveryModal'),
+const DocumentDiscoveryModal = dynamic(
+  () => import('@/components/global/DocumentDiscoveryModal'),
+  { ssr: false }
 );
 const AIFeatureTooltip = dynamic(() =>
   import('@/components/shared/AIFeatureTooltip'),

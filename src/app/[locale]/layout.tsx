@@ -3,10 +3,8 @@
 import type { ReactNode } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import dynamic from 'next/dynamic';
-const LanguageSwitch = dynamic(
-  () => import('@/components/global/LanguageSwitch')
-);
-import MarketingClient from '@/app/marketing-client';
+const LanguageSwitch = dynamic(() => import('@/components/global/LanguageSwitch'));
+import { ClientProviders } from '@/components/providers/ClientProviders';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -26,9 +24,9 @@ export default async function LocaleLayout({
       : 'en';
 
   return (
-    <MarketingClient locale={detectedLocale}>
+    <ClientProviders locale={detectedLocale}>
       <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
       <Layout>{children}</Layout>
-    </MarketingClient>
+    </ClientProviders>
   );
 }

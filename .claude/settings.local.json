@@ -18,7 +18,12 @@
       "Bash(tee:*)",
       "Read(//tmp/**)",
       "Bash(git status:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git show:*)",
+      "Bash(ls:*)",
+      "Bash(git diff:*)",
+      "Bash(rm:*)",
+      "Bash(timeout 30 npm run build)"
     ],
     "deny": [],
     "ask": []

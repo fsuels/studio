@@ -26,7 +26,15 @@ app.prepare().then(() => {
     ) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
-    const parsedUrl = parse(req.url, true);
+    const parsedUrl = parse(req.url || '', true);
+    const pathname = parsedUrl.pathname || '';
+
+    // Guard internal Next.js pages that App Router doesn't expose
+    if (pathname === '/_document' || pathname === '/_app') {
+      res.statusCode = 404;
+      res.end('Not Found');
+      return;
+    }
     handle(req, res, parsedUrl);
   });
 
