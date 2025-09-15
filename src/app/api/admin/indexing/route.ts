@@ -1,7 +1,5 @@
 // src/app/api/admin/indexing/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { documentAnalyzer } from '@/lib/vector-search/document-analyzer';
-import { pineconeService } from '@/lib/vector-search/pinecone-service';
 
 interface IndexingJob {
   id: string;
@@ -19,6 +17,27 @@ const activeJobs = new Map<string, IndexingJob>();
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if required environment variables are configured
+    const requiredEnvVars = {
+      PINECONE_API_KEY: process.env.PINECONE_API_KEY,
+      GOOGLE_CLOUD_PROJECT: process.env.GOOGLE_CLOUD_PROJECT,
+    };
+
+    const missingVars = Object.entries(requiredEnvVars)
+      .filter(([_, value]) => !value)
+      .map(([key, _]) => key);
+
+    if (missingVars.length > 0) {
+      console.error(`[admin/indexing] Missing environment variables: ${missingVars.join(', ')}`);
+      return NextResponse.json(
+        {
+          error: 'Vector search indexing service is not configured',
+          missingVariables: missingVars
+        },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { action, ...params } = body;
 
@@ -93,6 +112,9 @@ async function handleStartBulkIndexing(params: any) {
   const { locale = 'en', batchSize = 10, force = false } = params;
 
   try {
+    // Lazy import services
+    const { documentAnalyzer } = await import('@/lib/vector-search/document-analyzer');
+
     // Generate job ID
     const jobId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 

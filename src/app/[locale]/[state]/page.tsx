@@ -3,15 +3,12 @@ import { notFound } from 'next/navigation';
 import { usStates } from '@/lib/usStates';
 import { formatDocumentTitle } from '@/lib/format-utils';
 import slugMap from '@/config/doc-meta/slug-category-map.json';
-import { MetaTags, generateDocumentMetaTags } from '@/components/seo/MetaTags';
-import {
-  Breadcrumbs,
-  generateStateBreadcrumbs,
-} from '@/components/seo/Breadcrumbs';
-import {
-  SchemaMarkup,
-  generateDocumentFAQs,
-} from '@/components/seo/SchemaMarkup';
+import { MetaTags } from '@/components/seo/MetaTags';
+import { generateDocumentMetaTags } from '@/lib/seo/meta';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { generateStateBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { SchemaMarkup } from '@/components/seo/SchemaMarkup';
+import { generateDocumentFAQs } from '@/lib/seo/schema';
 import { StateSpecificLegalSchema } from '@/components/seo/LocalBusinessSchema';
 import Link from 'next/link';
 

@@ -92,6 +92,8 @@ export class EmbeddingService {
    */
   async generateBatchEmbeddings(texts: string[]): Promise<EmbeddingResponse> {
     try {
+      await this.initialize();
+
       const instances = texts.map((text) => ({
         content: text.slice(0, 8000),
       }));

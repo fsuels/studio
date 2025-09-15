@@ -58,11 +58,20 @@ interface SearchResponse {
 }
 
 export class PineconeService {
-  private pinecone: Pinecone;
+  private pinecone: Pinecone | null = null;
   private indexName: string;
   private namespace: string;
+  private initialized = false;
 
   constructor() {
+    this.indexName =
+      process.env.PINECONE_INDEX_NAME || 'legal-docs-semantic-search';
+    this.namespace = process.env.PINECONE_NAMESPACE || 'documents';
+  }
+
+  private async initialize() {
+    if (this.initialized) return;
+
     const apiKey = process.env.PINECONE_API_KEY;
     if (!apiKey) {
       throw new Error('PINECONE_API_KEY environment variable is required');
@@ -71,10 +80,7 @@ export class PineconeService {
     this.pinecone = new Pinecone({
       apiKey,
     });
-
-    this.indexName =
-      process.env.PINECONE_INDEX_NAME || 'legal-docs-semantic-search';
-    this.namespace = process.env.PINECONE_NAMESPACE || 'documents';
+    this.initialized = true;
   }
 
   /**
@@ -82,6 +88,10 @@ export class PineconeService {
    */
   async initializeIndex(): Promise<void> {
     try {
+      await this.initialize();
+      if (!this.pinecone) {
+        throw new Error('Pinecone client not initialized');
+      }
       const indexList = await this.pinecone.listIndexes();
       const indexExists = indexList.indexes?.some(
         (index) => index.name === this.indexName,
@@ -562,4 +572,14 @@ export class PineconeService {
   }
 }
 
-export const pineconeService = new PineconeService();
+let _pineconeService: PineconeService | null = null;
+
+export function getPineconeService(): PineconeService {
+  if (!_pineconeService) {
+    _pineconeService = new PineconeService();
+  }
+  return _pineconeService;
+}
+
+// For backward compatibility
+export const pineconeService = getPineconeService();

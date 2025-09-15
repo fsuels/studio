@@ -16,7 +16,9 @@
       "WebSearch",
       "WebFetch(domain:www.justia.com)",
       "Bash(tee:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(git status:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
