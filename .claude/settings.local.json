@@ -14,7 +14,8 @@
       "Bash(curl:*)",
       "Bash(node:*)",
       "WebSearch",
-      "WebFetch(domain:www.justia.com)"
+      "WebFetch(domain:www.justia.com)",
+      "Bash(tee:*)"
     ],
     "deny": [],
     "ask": []

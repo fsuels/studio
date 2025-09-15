@@ -8,22 +8,24 @@ export function getAdmin(): typeof admin {
     return cachedAdmin;
   }
 
+  // Check if Firebase Admin service account is available
+  const serviceAccountKeyString = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+
+  if (!serviceAccountKeyString) {
+    console.warn(
+      '[firebase-admin] FIREBASE_SERVICE_ACCOUNT_KEY_JSON not set. Returning uninitialized admin instance.',
+    );
+    // Return the uninitialized admin instance - will fail at runtime if used
+    // but won't crash the build process
+    cachedAdmin = admin;
+    return cachedAdmin;
+  }
+
   if (!admin.apps.length) {
     console.log(
       '[firebase-admin] Attempting to initialize Firebase Admin SDK...',
     );
     try {
-      const serviceAccountKeyString =
-        process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
-      if (!serviceAccountKeyString) {
-        console.error(
-          '[firebase-admin] CRITICAL: FIREBASE_SERVICE_ACCOUNT_KEY_JSON environment variable is not set.',
-        );
-        throw new Error(
-          'FIREBASE_SERVICE_ACCOUNT_KEY_JSON environment variable is not set. Firebase Admin SDK cannot be initialized.',
-        );
-      }
-
       let serviceAccount;
       try {
         serviceAccount = JSON.parse(serviceAccountKeyString);

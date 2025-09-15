@@ -1,6 +1,5 @@
 // src/lib/collaboration/notifications.ts
-import { getMessaging } from 'firebase-admin/messaging';
-import { getAdmin } from '@/lib/firebase-admin';
+import type { Messaging } from 'firebase-admin/messaging';
 import { CollaborationUser } from './client';
 
 export interface NotificationPayload {
@@ -22,7 +21,23 @@ export interface UserNotificationSettings {
 }
 
 export class CollaborationNotificationService {
-  private messaging = getMessaging();
+  private messaging: Messaging | null = null;
+
+  private async getMessaging(): Promise<Messaging> {
+    if (!this.messaging) {
+      // Check if Firebase Admin is configured
+      const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+      if (!serviceAccountKey) {
+        throw new Error('Firebase Admin SDK is not configured');
+      }
+
+      const { getAdmin } = await import('@/lib/firebase-admin');
+      const { getMessaging } = await import('firebase-admin/messaging');
+      const admin = getAdmin();
+      this.messaging = getMessaging(admin);
+    }
+    return this.messaging;
+  }
 
   async sendMentionNotification(
     fromUser: CollaborationUser,
@@ -217,7 +232,8 @@ export class CollaborationNotificationService {
     };
 
     try {
-      const response = await this.messaging.sendEachForMulticast(message);
+      const messaging = await this.getMessaging();
+      const response = await messaging.sendEachForMulticast(message);
 
       // Handle failed tokens
       if (response.failureCount > 0) {

@@ -5,12 +5,23 @@ import {
   authorizeDocumentAccess,
   checkPermission,
 } from '@/lib/collaboration/auth';
-import { getAdmin } from '@/lib/firebase-admin';
-
-const auth = getAdmin().auth();
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Firebase Admin is configured
+    const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+    if (!serviceAccountKey) {
+      console.error('[collaboration/auth] Firebase Admin SDK is not configured');
+      return NextResponse.json(
+        { error: 'Collaboration service is not configured' },
+        { status: 503 },
+      );
+    }
+
+    // Initialize Firebase Admin auth inside the function
+    const { getAdmin } = await import('@/lib/firebase-admin');
+    const auth = getAdmin().auth();
+
     const { documentId, role, expiresIn } = await request.json();
 
     // Get Firebase Auth token from headers

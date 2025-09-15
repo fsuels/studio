@@ -1,53 +1,6 @@
 // src/app/[locale]/pricing/page.tsx
 import React from 'react';
-import dynamic from 'next/dynamic';
-import { Skeleton } from '@/components/ui/skeleton';
-
-// Lazy load pricing page for better performance
-const PricingClientContent = dynamic(() => import('./pricing-client-content'), {
-  loading: () => (
-    <div className="container mx-auto px-4 py-12 space-y-12">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <Skeleton className="h-12 w-96 mx-auto" />
-        <Skeleton className="h-6 w-[600px] mx-auto" />
-      </div>
-      
-      {/* Pricing Cards */}
-      <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="p-8 border-2 rounded-lg space-y-6">
-            <div className="text-center space-y-2">
-              <Skeleton className="h-6 w-24 mx-auto" />
-              <Skeleton className="h-10 w-32 mx-auto" />
-              <Skeleton className="h-4 w-40 mx-auto" />
-            </div>
-            <div className="space-y-3">
-              {[...Array(5)].map((_, j) => (
-                <div key={j} className="flex items-center gap-2">
-                  <Skeleton className="h-4 w-4" />
-                  <Skeleton className="h-4 w-32" />
-                </div>
-              ))}
-            </div>
-            <Skeleton className="h-12 w-full" />
-          </div>
-        ))}
-      </div>
-      
-      {/* FAQ Section */}
-      <div className="max-w-3xl mx-auto space-y-6">
-        <Skeleton className="h-8 w-48 mx-auto" />
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="p-4 border rounded-lg space-y-2">
-            <Skeleton className="h-6 w-80" />
-            <Skeleton className="h-16 w-full" />
-          </div>
-        ))}
-      </div>
-    </div>
-  ),
-});
+import Link from 'next/link';
 
 // Add generateStaticParams for dynamic routes with static export
 export async function generateStaticParams() {
@@ -60,7 +13,118 @@ export default async function PricingPage({
   params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
 }) {
   const { locale } = await params;
-  // The rest of the page content including client-side hooks and logic
-  // is now in PricingClientContent.tsx
-  return <PricingClientContent locale={locale} />;
+  const t = (en: string, es?: string) => (locale === 'es' && es ? es : en);
+
+  const Plan = ({ title, price, period, features, cta }: { title: string; price: string; period?: string; features: string[]; cta: { href: string; label: string; variant?: 'primary' | 'outline' } }) => (
+    <div className="shadow-lg rounded-xl bg-card border border-border transition-all hover:shadow-xl p-8">
+      <div className="text-center space-y-2 mb-6">
+        <div className="text-2xl font-semibold text-card-foreground">{title}</div>
+        <div className="text-5xl font-bold text-primary">
+          {price}
+          {period && <span className="text-lg font-normal text-muted-foreground"> / {period}</span>}
+        </div>
+      </div>
+      <ul className="text-sm text-left space-y-3 text-card-foreground/90 mb-6">
+        {features.map((f, i) => (
+          <li key={i} className="flex items-center gap-2">✅ {f}</li>
+        ))}
+      </ul>
+      <a href={cta.href} className={cta.variant === 'outline' ? 'w-full inline-flex items-center justify-center rounded-md border border-primary text-primary px-4 py-2 hover:bg-primary/10' : 'w-full inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90'}>
+        {cta.label}
+      </a>
+    </div>
+  );
+
+  return (
+    <main className="container mx-auto px-4 py-16 md:py-24 text-center">
+      <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">{t('Simple, Transparent Pricing', 'Precios Simples y Transparentes')}</h1>
+      <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">{t('One-time $35/document • No subscription', 'Pago único de $35/documento • Sin suscripción')}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <Plan
+          title={t('Single Document', 'Documento Único')}
+          price="$35"
+          period={t('document', 'documento')}
+          features={[
+            t('1 downloadable legal PDF', '1 PDF legal descargable'),
+            t('Clause customization', 'Personalización de cláusulas'),
+            t('Email support', 'Soporte por correo'),
+            t('Secure sharing (soon)', 'Compartir seguro (pronto)')
+          ]}
+          cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar') }}
+        />
+
+        <div className="relative">
+          <div className="absolute -top-3 inset-x-0 mx-auto w-max bg-primary text-primary-foreground text-xs px-2 py-1 rounded">{t('Most Popular', 'Más Popular')}</div>
+          <Plan
+            title={t('5-Document Bundle', 'Paquete de 5 Documentos')}
+            price="$150"
+            features={[
+              t('5 downloadable PDFs', '5 PDFs descargables'),
+              t('All single document features', 'Todas las funciones del plan individual'),
+              t('Credits never expire', 'Los créditos no expiran'),
+              t('Best value per document', 'Mejor valor por documento')
+            ]}
+            cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar') }}
+          />
+        </div>
+
+        <Plan
+          title={t('Business Pro', 'Negocios Pro')}
+          price="$99"
+          period={t('month', 'mes')}
+          features={[
+            t('Unlimited documents', 'Documentos ilimitados'),
+            t('Priority support', 'Soporte prioritario'),
+            t('Team features (coming soon)', 'Funciones de equipo (pronto)'),
+            t('Cancel anytime', 'Cancela cuando quieras')
+          ]}
+          cta={{ href: `/${locale}/support`, label: t('Contact Sales', 'Contactar Ventas'), variant: 'outline' }}
+        />
+      </div>
+
+      <section className="mt-16 md:mt-24 max-w-4xl mx-auto text-left">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-foreground">{t('How We Compare', 'Cómo nos Comparamos')}</h2>
+        <div className="shadow-xl border border-border rounded-lg overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/50">
+              <tr>
+                <th className="text-left p-3 w-[200px]">{t('Feature', 'Característica')}</th>
+                <th className="text-center p-3 text-primary">123LegalDoc</th>
+                <th className="text-center p-3 text-muted-foreground">{t('Traditional Lawyer', 'Abogado Tradicional')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t">
+                <td className="p-3">{t('AI-Powered Drafting', 'Redacción con IA')}</td>
+                <td className="text-center p-3">✅</td>
+                <td className="text-center p-3">❌</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-3">{t('Instant Document Download', 'Descarga Instantánea')}</td>
+                <td className="text-center p-3">✅</td>
+                <td className="text-center p-3">❌</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-3">{t('Fully Bilingual Support', 'Soporte Bilingüe')}</td>
+                <td className="text-center p-3">✅</td>
+                <td className="text-center p-3">❌</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-3">{t('One-Time Payment Option', 'Pago Único')}</td>
+                <td className="text-center p-3">✅</td>
+                <td className="text-center p-3">❌</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div className="mt-12">
+        <Link href={`/${locale}/generate`} className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-3 hover:bg-primary/90">
+          {t('Take the Quiz →', 'Haz el Quiz →')}
+        </Link>
+      </div>
+    </main>
+  );
 }

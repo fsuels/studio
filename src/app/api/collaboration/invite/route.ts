@@ -1,10 +1,23 @@
 // src/app/api/collaboration/invite/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { inviteCollaborator, acceptInvitation } from '@/lib/collaboration/auth';
-import { getAdmin } from '@/lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Firebase Admin is configured
+    const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+    if (!serviceAccountKey) {
+      console.error('[collaboration/invite] Firebase Admin SDK is not configured');
+      return NextResponse.json(
+        { error: 'Collaboration service is not configured' },
+        { status: 503 },
+      );
+    }
+
+    // Initialize Firebase Admin auth inside the function
+    const { getAdmin } = await import('@/lib/firebase-admin');
+    const auth = getAdmin().auth();
+
     const { documentId, email, role, invitationId } = await request.json();
 
     // Get Firebase Auth token from headers
@@ -17,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const idToken = authHeader.substring(7);
-    const decodedToken = await getAdmin().auth().verifyIdToken(idToken);
+    const decodedToken = await auth.verifyIdToken(idToken);
     const userId = decodedToken.uid;
 
     if (invitationId) {
