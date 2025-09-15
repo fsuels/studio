@@ -1,6 +1,8 @@
 // src/app/[locale]/terms-of-service/page.tsx
 // Server component for Terms; logs view with a tiny client child to keep bundle small
 
+import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';
+
 export default function LocaleTermsPage({
   params,
 }: {
@@ -11,7 +13,6 @@ export default function LocaleTermsPage({
   return (
     <div className="container mx-auto px-4 py-8">
       {/** Client-side audit logging */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <PolicyAuditLogger locale={locale} policyType="terms_of_service" />
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
       <div className="prose max-w-none">
@@ -67,4 +68,3 @@ export default function LocaleTermsPage({
     </div>
   );
 }
-import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';

@@ -263,20 +263,17 @@ export function usePerformanceMonitoring() {
 
 // Bundle splitting optimization
 export function getDynamicImport(
-  componentPath: string,
+  importFunction: () => Promise<any>,
   options?: {
     preload?: boolean;
     chunkName?: string;
   },
 ) {
-  const importPromise = import(
-    /* webpackChunkName: "[request]" */
-    componentPath
-  );
+  const importPromise = importFunction();
 
   if (options?.preload) {
     // Preload on page load
-    import(componentPath);
+    importFunction();
   }
 
   return importPromise;

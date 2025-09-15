@@ -30,7 +30,10 @@
       "Bash(timeout 30 npm run dev)",
       "Bash(npm install:*)",
       "Bash(timeout 600 npm run build)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(wc:*)",
+      "Bash(timeout 30 npx tsc:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

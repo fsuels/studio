@@ -81,7 +81,7 @@ const nextConfig = {
               maxSize: 244000,
             },
             vendorsPDF: {
-              test: /[\\/]node_modules[\\/](pdf-lib|@react-pdf|jspdf)[\\/]/,
+              test: /[\\/]node_modules[\\/](pdf-lib|@pdf-lib)[\\/]/,
               name: 'vendors-pdf',
               priority: 17,
               chunks: 'all',
@@ -160,9 +160,11 @@ const nextConfig = {
     return config;
   },
 
-  /* —──────── Static-export image handling —──────── */
+  /* —──────── Enhanced image optimization —──────── */
   images: {
     unoptimized: true, // Required for static export
+    loader: 'custom',
+    loaderFile: './src/lib/image-loader.ts',
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
@@ -173,16 +175,22 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    // Formats for better compression (when optimization is enabled)
+    // Modern formats for better compression
     formats: ['image/avif', 'image/webp'],
-    // Device sizes for responsive images
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    // Optimized device sizes for responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     // Image sizes for different viewport widths
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Quality settings for different formats
+    quality: 80, // Default quality
     // Enable placeholder blur for better UX
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Enable experimental features
+    experimental: {
+      fetchPriority: true,
+    },
   },
 
   /* Add allowedDevOrigins here as instructed */
