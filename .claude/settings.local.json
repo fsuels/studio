@@ -15,7 +15,8 @@
       "Bash(node:*)",
       "WebSearch",
       "WebFetch(domain:www.justia.com)",
-      "Bash(tee:*)"
+      "Bash(tee:*)",
+      "Read(//tmp/**)"
     ],
     "deny": [],
     "ask": []

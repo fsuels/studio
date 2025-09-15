@@ -27,13 +27,18 @@ interface DocumentEmbedding {
 }
 
 export class EmbeddingService {
-  private client: aiplatform.PredictionServiceClient;
+  private client: aiplatform.PredictionServiceClient | null = null;
   private project: string;
   private location: string;
+  private initialized = false;
 
   constructor() {
     this.project = process.env.GOOGLE_CLOUD_PROJECT || '';
     this.location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+  }
+
+  private async initialize() {
+    if (this.initialized) return;
 
     if (!this.project) {
       throw new Error('GOOGLE_CLOUD_PROJECT environment variable is required');
@@ -43,6 +48,7 @@ export class EmbeddingService {
     this.client = new aiplatform.PredictionServiceClient({
       apiEndpoint: `${this.location}-aiplatform.googleapis.com`,
     });
+    this.initialized = true;
   }
 
   /**
@@ -50,6 +56,7 @@ export class EmbeddingService {
    */
   async generateEmbedding(text: string): Promise<number[]> {
     try {
+      await this.initialize();
       const request = {
         instances: [
           {
@@ -58,6 +65,9 @@ export class EmbeddingService {
         ],
       };
 
+      if (!this.client) {
+        throw new Error('Embedding service client not initialized');
+      }
       const [response] = await this.client.predict({
         endpoint: `projects/${this.project}/locations/${this.location}/publishers/google/models/textembedding-gecko@003`,
         instances: [{ content: text.slice(0, 8000) }],
@@ -90,6 +100,9 @@ export class EmbeddingService {
         instances,
       };
 
+      if (!this.client) {
+        throw new Error('Embedding service client not initialized');
+      }
       const [response] = await this.client.predict({
         endpoint: `projects/${this.project}/locations/${this.location}/publishers/google/models/textembedding-gecko@003`,
         instances,
@@ -262,4 +275,14 @@ export class EmbeddingService {
   }
 }
 
-export const embeddingService = new EmbeddingService();
+let _embeddingService: EmbeddingService | null = null;
+
+export function getEmbeddingService(): EmbeddingService {
+  if (!_embeddingService) {
+    _embeddingService = new EmbeddingService();
+  }
+  return _embeddingService;
+}
+
+// For backward compatibility
+export const embeddingService = getEmbeddingService();

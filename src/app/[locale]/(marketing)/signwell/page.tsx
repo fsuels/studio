@@ -3,7 +3,6 @@ export const revalidate = 3600; // Revalidate every hour
 
 import type { Metadata } from 'next';
 import React from 'react';
-import SignwellCtaIsland from './SignwellCtaIsland';
 
 interface SignWellPageProps {
   params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
@@ -56,7 +55,9 @@ export default async function SignWellPage({ params }: SignWellPageProps) {
             )}
           </p>
           <div className="flex justify-center gap-3">
-            <SignwellCtaIsland locale={locale} />
+            <a href={`/${locale}/signup`} className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90">
+              {t('Start eSigning', 'Comenzar Firma')}
+            </a>
             <a href={`/${locale}/templates`} className="inline-flex items-center justify-center rounded-md border border-primary text-primary px-4 py-2 bg-white hover:bg-primary/5">
               {t('Browse Templates', 'Explorar Plantillas')}
             </a>
