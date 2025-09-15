@@ -12,6 +12,7 @@ import { DiscoveryModalProvider } from '@/contexts/DiscoveryModalContext';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import { usePathname } from 'next/navigation';
+import { registerServiceWorker } from '@/lib/mobile-optimization';
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -57,6 +58,8 @@ const AppShell = React.memo(function AppShell({
 
   useEffect(() => {
     setIsMounted(true);
+    // Register service worker for document caching
+    registerServiceWorker();
   }, []);
 
   // AppShell now renders child content and global components

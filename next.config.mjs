@@ -1,4 +1,9 @@
-// next.config.mjs — Minimal configuration for stable builds
+// next.config.mjs — Optimized configuration for production builds
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 /* -------------------------------------------------------------------------- */
 /*  Core Next.js config                                                       */
@@ -220,4 +225,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
