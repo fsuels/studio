@@ -3,7 +3,7 @@ import type { LegalDocument } from '@/types/documents';
 import { RoyaltyAgreementSchema } from './schema';
 import { royaltyAgreementQuestions } from './questions';
 
-export const royaltyAgreementMeta: LegalDocument = {
+export const royaltyagreementMeta: LegalDocument = {
   id: 'royalty-agreement',
   jurisdiction: 'US',
   category: 'Business',
