@@ -52,7 +52,6 @@ export default function DocumentTypeSelector({
     return [...new Set(docs.map((d) => d.category))];
   }, []);
 
-  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
   const [categories, setCategories] = useState<string[]>(
     deriveCategories(documentLibrary),
   );

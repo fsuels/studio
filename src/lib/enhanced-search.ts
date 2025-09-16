@@ -3,6 +3,7 @@ import { taxonomy } from '@/config/taxonomy';
 import { getDocMeta } from '@/config/doc-meta';
 import slugMap from '@/config/doc-meta/slug-category-map.json';
 import type { LegalDocument } from '@/types/documents';
+import { search as legacyLibrarySearch } from '@/lib/document-library';
 import { getDocumentTitle } from '@/lib/format-utils';
 
 interface SearchResult {
@@ -254,8 +255,7 @@ export async function legacySearch(
   locale: 'en' | 'es',
   state?: string,
 ): Promise<LegalDocument[]> {
-  const mod = await import('@/lib/document-library.ts');
-  return mod.search(query, locale, state);
+  return legacyLibrarySearch(query, locale, state);
 }
 
 /**

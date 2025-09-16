@@ -22,7 +22,7 @@ import {
   getDocumentsByCountry,
 } from '@/lib/document-library';
 import type { LegalDocument } from '@/types/documents';
-// Local search imported lazily inside performSearch to avoid bundling the library
+// Local search leverages the manifest-backed document library helpers
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
