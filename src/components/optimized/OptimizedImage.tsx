@@ -11,7 +11,7 @@ import {
   getBrowserImageFormat,
   generateBlurDataURL,
   calculateImageDimensions,
-  useLazyImageObserver
+  createLazyImageObserver
 } from '@/lib/image-loader';
 
 export interface OptimizedImageProps {

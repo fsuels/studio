@@ -27,28 +27,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-      
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-      
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       
       - name: Setup Java for Firebase emulator
         uses: actions/setup-java@v3
@@ -79,22 +59,22 @@ jobs:
           echo "Firestore emulator started successfully"
       
       - name: Run linting
-        run: pnpm lint
+        run: npm run lint
       
       - name: Run type checking
-        run: pnpm typecheck
+        run: npm run typecheck
       
       - name: Run unit tests
-        run: pnpm test --coverage --watchAll=false
+        run: npm run test -- --coverage --watchAll=false
         env:
           CI: true
           FIRESTORE_EMULATOR_HOST: localhost:8080
       
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+        run: npx playwright install --with-deps
       
       - name: Run E2E tests
-        run: pnpm test:e2e
+        run: npm run e2e
         env:
           CI: true
           FIRESTORE_EMULATOR_HOST: localhost:8080
@@ -106,7 +86,7 @@ jobs:
           npx ts-node src/scripts/evalSearch.ts > evaluation_output.txt 2>&1
           
           # Extract JSON output from the script output
-          tail -n 10 evaluation_output.txt | grep -A 10 "📊 JSON Output:" | grep -A 5 "{" > summary.json || {
+          tail -n 10 evaluation_output.txt | grep -A 10 " JSON Output:" | grep -A 5 "{" > summary.json || {
             echo "Failed to extract JSON output, creating fallback"
             echo '{"best":{"semantic":0.0,"keyword":0.0,"ndcg":0.0}}' > summary.json
           }
@@ -132,17 +112,17 @@ jobs:
           
           # Check if NDCG is a valid number
           if ! [[ "$NDCG_SCORE" =~ ^[0-9]*\.?[0-9]+$ ]]; then
-            echo "❌ Invalid NDCG score: $NDCG_SCORE"
+            echo " Invalid NDCG score: $NDCG_SCORE"
             exit 1
           fi
           
           # Validate NDCG threshold (0.4 for now, can be increased to 0.8 later)
           if (( $(echo "$NDCG_SCORE < 0.4" | bc -l) )); then
-            echo "❌ Search performance below threshold. NDCG: $NDCG_SCORE < 0.4"
+            echo " Search performance below threshold. NDCG: $NDCG_SCORE < 0.4"
             exit 1
           fi
           
-          echo "✅ Search performance validation passed. NDCG: $NDCG_SCORE ≥ 0.4"
+          echo " Search performance validation passed. NDCG: $NDCG_SCORE  0.4"
       
       - name: Upload test coverage
         uses: codecov/codecov-action@v3
@@ -194,18 +174,11 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-      
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       
       - name: Build application
-        run: pnpm build
+        run: npm run build
         env:
           NODE_ENV: production
           # Add any required build environment variables
@@ -214,16 +187,16 @@ jobs:
       - name: Check build artifacts
         run: |
           if [ ! -d ".next" ]; then
-            echo "❌ Build failed - .next directory not found"
+            echo "Build failed - .next directory not found"
             exit 1
           fi
           
           if [ ! -f ".next/BUILD_ID" ]; then
-            echo "❌ Build failed - BUILD_ID not found"
+            echo "Build failed - BUILD_ID not found"
             exit 1
           fi
           
-          echo "✅ Build completed successfully"
+          echo "Build completed successfully"
           ls -la .next/
   
   security:
@@ -240,22 +213,15 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-      
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       
       - name: Run security audit
         run: |
           echo "Running security audit..."
-          pnpm audit --audit-level high || {
-            echo "⚠️ Security vulnerabilities found"
-            echo "Please run 'pnpm audit fix' to resolve issues"
+          npm audit --audit-level high || {
+            echo "Security vulnerabilities found"
+            echo "Please run 'npm audit fix' to resolve issues"
             # Don't fail CI for now, just warn
             # exit 1
           }
@@ -263,7 +229,7 @@ jobs:
       - name: Run dependency check
         run: |
           echo "Checking for outdated dependencies..."
-          pnpm outdated || echo "Some dependencies may be outdated"
+          npm outdated || echo "Some dependencies may be outdated"
 
   performance:
     name: Performance Check
@@ -280,18 +246,11 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-      
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       
       - name: Build for performance testing
-        run: pnpm build
+        run: npm run build
         env:
           NODE_ENV: production
       
@@ -301,7 +260,7 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           # Start the app in background
-          pnpm start &
+          npm start &
           APP_PID=$!
           
           # Wait for app to be ready
@@ -309,7 +268,7 @@ jobs:
           
           # Run Lighthouse
           lhci autorun --upload.target=temporary-public-storage || {
-            echo "⚠️ Lighthouse CI failed, continuing..."
+            echo "Lighthouse CI failed, continuing..."
           }
           
           # Cleanup
@@ -326,21 +285,22 @@ jobs:
     steps:
       - name: Generate summary
         run: |
-          echo "## 🔍 CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Tests | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build | ${{ needs.build.result == 'success' && '✅ Passed' || needs.build.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Security | ${{ needs.security.result == 'success' && '✅ Passed' || needs.security.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests | ${{ needs.test.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result == 'success' && 'Passed' || needs.build.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ${{ needs.security.result == 'success' && 'Passed' || needs.security.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ "${{ needs.test.result }}" != "success" ]; then
-            echo "❌ **Pipeline Failed**: Test suite did not pass" >> $GITHUB_STEP_SUMMARY
+            echo "**Pipeline Failed**: Test suite did not pass" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "Please check the test results and fix any failing tests before merging." >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ **Pipeline Passed**: All checks completed successfully" >> $GITHUB_STEP_SUMMARY
+            echo " **Pipeline Passed**: All checks completed successfully" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "This PR is ready for review and merge." >> $GITHUB_STEP_SUMMARY
           fi
+

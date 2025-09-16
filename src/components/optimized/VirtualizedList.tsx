@@ -3,10 +3,9 @@
 
 'use client';
 
-import React, { memo, useCallback, useMemo, useState, useEffect } from 'react';
-// Temporarily disable react-window due to import issues
-// import { FixedSizeList as List, VariableSizeList, type ListChildComponentProps } from 'react-window';
-// import type InfiniteLoader from 'react-window-infinite-loader';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { FixedSizeList as List, VariableSizeList, type ListChildComponentProps } from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -61,6 +60,19 @@ export function VirtualizedList<T extends VirtualizedItem>({
 }: VirtualizedListProps<T>) {
   const [isScrolling, setIsScrolling] = useState(false);
 
+  const isFixedHeight = useMemo(() => typeof itemHeight === 'number', [itemHeight]);
+  const numericItemHeight = useMemo(() => (typeof itemHeight === 'number' ? itemHeight : undefined), [itemHeight]);
+
+  const getItemSize = useCallback((index: number) => {
+    if (typeof itemHeight === 'function') {
+      return itemHeight(index);
+    }
+    if (isFixedHeight && numericItemHeight !== undefined) {
+      return numericItemHeight;
+    }
+    return 80;
+  }, [itemHeight, isFixedHeight, numericItemHeight]);
+
   // Calculate total item count including loading states
   const totalItemCount = useMemo(() => {
     return itemCount || items.length + (hasNextPage ? 1 : 0);
@@ -105,7 +117,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
   }, [useIsScrolling]);
 
   // Fixed height list
-  if (typeof itemHeight === 'number') {
+  if (isFixedHeight) {
     const ListComponent = hasNextPage && loadNextPage ? (
       <InfiniteLoader
         isItemLoaded={isItemLoaded}
@@ -119,7 +131,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
             height={height}
             width={width}
             itemCount={totalItemCount}
-            itemSize={itemHeight}
+            itemSize={numericItemHeight ?? 80}
             onItemsRendered={onItemsRendered}
             onScroll={handleScroll}
             overscanCount={overscan}
@@ -136,7 +148,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
         height={height}
         width={width}
         itemCount={items.length}
-        itemSize={itemHeight}
+        itemSize={numericItemHeight ?? 80}
         onScroll={handleScroll}
         overscanCount={overscan}
         direction={direction}
@@ -149,14 +161,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
 
     return <div className="virtualized-list-container">{ListComponent}</div>;
   }
-
   // Variable height list
-  const getItemSize = useCallback((index: number) => {
-    if (typeof itemHeight === 'function') {
-      return itemHeight(index);
-    }
-    return 80; // fallback
-  }, [itemHeight]);
 
   const VariableListComponent = hasNextPage && loadNextPage ? (
     <InfiniteLoader

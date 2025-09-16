@@ -7,17 +7,19 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](package.json)
 
 A comprehensive legal document generation platform that creates state-specific compliant legal forms with 100% legal compliance and an excellent user experience.
+For contributor workflow details, read [Repository Guidelines](./AGENTS.md).
 
-## ✨ Features
 
-- 🏛️ **State-Specific Compliance** - Automatic compliance checking for all 50 US states
-- 📄 **Smart PDF Generation** - Intelligent form filling with official state forms
-- 🌐 **Multi-language Support** - English and Spanish translations
-- 🔍 **Live Preview** - Real-time document preview as users type with smart overlay
-- ✅ **Visual Compliance Indicators** - Clear guidance on legal requirements
-- 🔒 **Secure Document Handling** - Enterprise-grade security for sensitive legal data
+## Features
 
-## 🎯 Document Creation Flow
+- **State-Specific Compliance** - Automatic compliance checking for all 50 US states
+- **Smart PDF Generation** - Intelligent form filling with official state forms
+- **Multi-language Support** - English and Spanish translations
+- **Live Preview** - Real-time document preview as users type with smart overlay
+- **Visual Compliance Indicators** - Clear guidance on legal requirements
+- **Secure Document Handling** - Enterprise-grade security for sensitive legal data
+
+## Document Creation Flow
 
 ### Official State Forms (e.g., Florida Vehicle Bill of Sale)
 
@@ -47,7 +49,7 @@ const questions = generateQuestions(overlayConfig);
 - `USE_DIRECT_PDF_FILLING=false` - All states use traditional wizard flow (recommended)
 - `USE_DIRECT_PDF_FILLING=true` - Enables experimental direct PDF form filling (deprecated)
 
-## 🧪 Code Coverage
+##  Code Coverage
 
 This project maintains high code coverage standards:
 
@@ -80,7 +82,7 @@ npm run coverage:open
 npm run coverage:report:json
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -114,7 +116,7 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
 
-## 🏗️ Development
+## - Development
 
 ### Scripts
 
@@ -139,7 +141,7 @@ When auto-generated overlays have low coverage, use the interactive manual mappi
 2. Launch mapping tool: `npx tsx scripts/manual-map.ts <pdf-path> --overlay <overlay-json-path>`
 3. Click on PDF where each field should appear
 4. Save and exit (ESC key)
-5. Coverage goes from ~20% to 100% 🎯
+5. Coverage goes from ~20% to 100% 
 
 ## Firebase configuration
 
@@ -175,7 +177,7 @@ Next.js app over **HTTP/2** with an automatic fallback to HTTP/1.1. This require
 TLS certificates which are not committed to the repository.
 
 Create a `cert` directory with `server.crt` and `server.key` files for local
-development. You can generate self‑signed certificates using OpenSSL:
+development. You can generate selfsigned certificates using OpenSSL:
 
 ```bash
 mkdir cert
@@ -212,7 +214,7 @@ domain) and Lighthouse should no longer flag insecure requests.
 
 ## Firestore Connectivity
 
-The Firestore client now auto‑detects whether your network supports gRPC. If
+The Firestore client now autodetects whether your network supports gRPC. If
 gRPC is blocked, it automatically falls back to HTTP long polling.
 You can still force polling by setting
 `NEXT_PUBLIC_FIRESTORE_FORCE_POLLING=true`, but polling is slower and should be
@@ -233,7 +235,7 @@ npm start
 
 ## Avoiding Long Main-Thread Tasks
 
-If Lighthouse flags **long main‑thread tasks** while testing your pages, ensure
+If Lighthouse flags **long mainthread tasks** while testing your pages, ensure
 the app is running a production build. Development mode bundles additional
 debugging helpers such as React's scheduler development build which can create
 long tasks and skew performance metrics. Use `npm run build` followed by
@@ -269,7 +271,8 @@ Use the provided script to add example Trustpilot-style reviews to Firestore. Su
 ```bash
 node scripts/seedReviews.js --templateId=vehicle-bill-of-sale \
   --name="Sarah L." --rating=5 \
-  --quote="Saved me hours at the DMV—printed, signed and transferred the title the same day!"
+  --quote="Saved me hours at the DMVprinted, signed and transferred the title the same day!"
 ```
 
-Each run creates a new document in the `reviews` collection so that `TestimonialsCarousel` can display template‑specific feedback.
+Each run creates a new document in the `reviews` collection so that `TestimonialsCarousel` can display templatespecific feedback.
+

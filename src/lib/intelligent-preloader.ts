@@ -429,7 +429,7 @@ export function withPreloading<T extends Record<string, any>>(
       }
     }, []);
 
-    return <Component {...props} />;
+    return React.createElement(Component, props);
   };
 }
 

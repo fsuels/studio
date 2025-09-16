@@ -13,9 +13,9 @@
     "export": "next export apps/web/out",
     "start": "cross-env NODE_ENV=production node server.mjs",
     "start:collab": "cross-env NODE_ENV=production ENABLE_COLLABORATION=true node collaboration-server.mjs",
-    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --no-error-on-unmatched-pattern || true",
-    "lint:quiet": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --quiet --no-error-on-unmatched-pattern || true",
-    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --fix --no-error-on-unmatched-pattern || true",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --no-error-on-unmatched-pattern",
+    "lint:quiet": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --quiet --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts --fix --no-error-on-unmatched-pattern",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "typecheck:app": "tsc -p tsconfig.app.json --noEmit",
@@ -30,7 +30,7 @@
     "coverage:badge": "node coverage-report.js --badge",
     "coverage:open": "open coverage/lcov-report/index.html",
     "test:e2e": "playwright test tests/prettify.test.mjs tests/isValidVIN.test.ts",
-    "e2e": "playwright test --reporter=list || true",
+    "e2e": "playwright test --reporter=list",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
@@ -229,5 +229,5 @@
     "webpack": "^5.99.8",
     "webpack-bundle-analyzer": "^4.10.2"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "npm@10.8.2"
 }
