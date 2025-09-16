@@ -38,6 +38,7 @@
     "seed:reviews": "node scripts/seed-reviews.ts",
     "seed:marketplace": "tsx scripts/seedMarketplaceTemplates.ts",
     "generate:doc": "tsx scripts/generate-doc.ts",
+    "generate:manifest": "node scripts/generate-document-manifest.mjs",
     "seed:user": "tsx scripts/seedUser.ts",
     "preview": "npm run build && npm run export && firebase hosting:channel:deploy dev",
     "analyze:build": "cross-env ANALYZE=true npm run build",

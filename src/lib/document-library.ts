@@ -7,33 +7,40 @@ import {
   getAllDocumentMetadata,
   searchDocumentMetadata,
   getDocumentsByCategory,
+  getManifestEntries,
   type DocumentMetadata
 } from './document-metadata-registry';
 import { loadDocument, loadDocuments } from './dynamic-document-loader';
 
+const manifestEntries = getManifestEntries();
+const manifestDocIds = new Set(manifestEntries.map((entry) => entry.id));
+
+const filterDocumentIdsByCountry = (countryCode: string): string[] => {
+  const normalizedCountry = countryCode.toLowerCase();
+
+  return manifestEntries
+    .filter((entry) => entry.meta.jurisdiction.split('/')[0] === normalizedCountry)
+    .map((entry) => entry.id);
+};
+
 // Fast document loading using metadata-first approach
-const loadUSDocuments = async (): Promise<LegalDocument[]> => {
-  // Get US document metadata
-  const usMetadata = getAllDocumentMetadata().filter(doc => doc.jurisdiction === 'us');
+const loadDocumentsForCountry = async (countryCode: string): Promise<LegalDocument[]> => {
+  const documentIds = filterDocumentIdsByCountry(countryCode);
 
-  // For now, only load documents that have verified implementations
-  const availableDocIds = ['vehicle-bill-of-sale'];
+  if (documentIds.length === 0) {
+    return [];
+  }
 
-  const results = await loadDocuments(availableDocIds);
+  const results = await loadDocuments(documentIds);
   const documents: LegalDocument[] = [];
 
-  for (const [docId, result] of results) {
+  for (const [, result] of results) {
     if (result.document) {
       documents.push(result.document);
     }
   }
 
   return documents;
-};
-
-const loadCADocuments = async (): Promise<LegalDocument[]> => {
-  // Canadian documents not yet implemented in new system
-  return [];
 };
 
 /**
@@ -64,36 +71,45 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
   return hasId && hasCategory && hasSchema && hasValidName;
 };
 
-// Cache for loaded documents to avoid repeated imports
-let cachedUSDocuments: LegalDocument[] | null = null;
-let cachedCADocuments: LegalDocument[] | null = null;
+// For backwards compatibility - populated dynamically as documents are loaded
+const countrySet = new Set<string>(['us']);
+manifestEntries.forEach((entry) => {
+  const [countryCode] = entry.meta.jurisdiction.split('/');
+  if (countryCode) {
+    countrySet.add(countryCode);
+  }
+});
 
-const additionsArray: LegalDocument[] =
-  documentLibraryAdditions.filter(isValidDocument);
+export const documentLibraryByCountry: Record<string, LegalDocument[]> = Array.from(
+  countrySet,
+).reduce(
+  (acc, countryCode) => {
+    acc[countryCode] = [];
+    return acc;
+  },
+  {} as Record<string, LegalDocument[]>,
+);
+
+// Cache for loaded documents to avoid repeated imports
+const cachedDocumentsByCountry: Record<string, LegalDocument[] | undefined> = {};
+
+const additionsArray: LegalDocument[] = documentLibraryAdditions
+  .filter(isValidDocument)
+  .filter((doc) => !manifestDocIds.has(doc.id));
 
 // Dynamic document library loader
-export const getDocumentsByCountry = async (country: string): Promise<LegalDocument[]> => {
-  switch (country) {
-    case 'us':
-      if (!cachedUSDocuments) {
-        cachedUSDocuments = await loadUSDocuments();
-      }
-      return cachedUSDocuments;
-    case 'ca':
-      if (!cachedCADocuments) {
-        cachedCADocuments = await loadCADocuments();
-      }
-      return cachedCADocuments;
-    default:
-      return [];
-  }
-};
+export const getDocumentsByCountry = async (
+  country: string,
+): Promise<LegalDocument[]> => {
+  const normalized = country.toLowerCase();
 
-// For backwards compatibility - but this will now be dynamically loaded
-export const documentLibraryByCountry: Record<string, LegalDocument[]> = {
-  us: [], // Will be populated dynamically
-  ca: [], // Will be populated dynamically
-  // …other country arrays…
+  if (!cachedDocumentsByCountry[normalized]) {
+    const docs = await loadDocumentsForCountry(normalized);
+    cachedDocumentsByCountry[normalized] = docs;
+    documentLibraryByCountry[normalized] = docs;
+  }
+
+  return cachedDocumentsByCountry[normalized] ?? [];
 };
 
 export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
@@ -111,14 +127,12 @@ export const getAllDocuments = async (): Promise<LegalDocument[]> => {
     return cachedAllDocuments;
   }
 
-  const [usDocuments, caDocuments] = await Promise.all([
-    getDocumentsByCountry('us'),
-    getDocumentsByCountry('ca')
-  ]);
+  const countryDocuments = await Promise.all(
+    supportedCountries.map((countryCode) => getDocumentsByCountry(countryCode)),
+  );
 
   cachedAllDocuments = [
-    ...usDocuments,
-    ...caDocuments,
+    ...countryDocuments.flat(),
     ...additionsArray,
   ];
 

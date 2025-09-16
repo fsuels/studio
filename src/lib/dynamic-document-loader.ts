@@ -1,6 +1,7 @@
 // Dynamic document loader - loads document implementations on demand
 import type { LegalDocument } from '@/types/documents';
 import { getDocumentMetadata, type DocumentMetadata } from './document-metadata-registry';
+import { DOCUMENT_IMPORTS } from './documents/manifest.generated';
 
 export interface DocumentLoadResult {
   document: LegalDocument | null;
@@ -11,16 +12,6 @@ export interface DocumentLoadResult {
 
 // Cache for loaded documents to avoid repeated imports
 const documentCache = new Map<string, LegalDocument>();
-
-// Document import mappings - temporarily empty to test build performance
-const DOCUMENT_IMPORTS: Record<string, () => Promise<{ default?: LegalDocument; [key: string]: any }>> = {
-  // Temporarily disabled for build testing
-  // 'vehicle-bill-of-sale': () => import('./documents/us/vehicle-bill-of-sale'),
-  // 'bill-of-sale-vehicle': () => import('./documents/us/vehicle-bill-of-sale'), // Alias
-  // Add more specific imports as documents are verified and optimized
-  // 'basic-nda': () => import('./documents/us/basic-nda'),
-  // 'power-of-attorney': () => import('./documents/us/power-of-attorney'),
-};
 
 /**
  * Dynamically load a document implementation without bundling everything upfront
