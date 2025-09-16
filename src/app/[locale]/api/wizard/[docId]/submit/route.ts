@@ -15,12 +15,6 @@ async function getCurrentUser(): Promise<{
   return { uid: 'test-user-123', email: 'test-user@example.com' }; // Placeholder
 }
 
-// Initial console logs for environment variables (for debugging during build/server start)
-if (!process.env.STRIPE_SECRET_KEY) {
-  console.error(
-    '[submit/route.ts] CRITICAL AT MODULE LOAD: STRIPE_SECRET_KEY environment variable is not set.',
-  );
-}
 const DEFAULT_DOCUMENT_PRICE = 35; // Fallback price in dollars
 
 export async function POST(

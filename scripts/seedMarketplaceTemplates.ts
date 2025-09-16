@@ -5,12 +5,15 @@ import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'legaldoc-26ea8.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'legaldoc-26ea8',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'legaldoc-26ea8.firebasestorage.app',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '584726654660',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:584726654660:web:82597df4ee5bc2098ba391',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? 'YOUR_FIREBASE_API_KEY',
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? 'YOUR_FIREBASE_AUTH_DOMAIN',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? 'YOUR_FIREBASE_PROJECT_ID',
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'YOUR_FIREBASE_STORAGE_BUCKET',
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? 'YOUR_FIREBASE_APP_ID',
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];

@@ -15,13 +15,13 @@ import {
 /* Fallback config (env vars override)                                */
 /* ------------------------------------------------------------------ */
 const defaultFirebaseConfig = {
-  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
-  authDomain: 'legaldoc-26ea8.firebaseapp.com',
-  projectId: 'legaldoc-26ea8',
-  storageBucket: 'legaldoc-26ea8.firebasestorage.app',
-  messagingSenderId: '584726654660',
-  appId: '1:584726654660:web:82597df4ee5bc2098ba391',
-  measurementId: 'G-3VR0TDX4ZK',
+  apiKey: 'YOUR_FIREBASE_API_KEY',
+  authDomain: 'YOUR_FIREBASE_AUTH_DOMAIN',
+  projectId: 'YOUR_FIREBASE_PROJECT_ID',
+  storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
+  messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+  appId: 'YOUR_FIREBASE_APP_ID',
+  measurementId: 'YOUR_FIREBASE_MEASUREMENT_ID',
 };
 
 const getFirebaseConfig = () => ({

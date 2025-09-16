@@ -4,10 +4,15 @@
 'use client';
 
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { FixedSizeList as List, VariableSizeList, type ListChildComponentProps } from 'react-window';
+import type { FixedSizeList as FixedSizeListType, VariableSizeList as VariableSizeListType, ListChildComponentProps } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+
+const ReactWindow = require('react-window') as typeof import('react-window');
+const { FixedSizeList, VariableSizeList } = ReactWindow;
+const List = FixedSizeList as unknown as FixedSizeListType;
+const VariableList = VariableSizeList as unknown as VariableSizeListType;
 
 export interface VirtualizedItem {
   id: string;
@@ -171,7 +176,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
       threshold={threshold}
     >
       {({ onItemsRendered, ref }) => (
-        <VariableSizeList
+        <VariableList
           ref={ref}
           height={height}
           width={width}
@@ -185,11 +190,11 @@ export function VirtualizedList<T extends VirtualizedItem>({
           className={cn('scrollbar-thin scrollbar-thumb-muted', className)}
         >
           {ItemRenderer}
-        </VariableSizeList>
+        </VariableList>
       )}
     </InfiniteLoader>
   ) : (
-    <VariableSizeList
+    <VariableList
       height={height}
       width={width}
       itemCount={items.length}
@@ -201,7 +206,7 @@ export function VirtualizedList<T extends VirtualizedItem>({
       className={cn('scrollbar-thin scrollbar-thumb-muted', className)}
     >
       {ItemRenderer}
-    </VariableSizeList>
+    </VariableList>
   );
 
   return <div className="virtualized-list-container">{VariableListComponent}</div>;

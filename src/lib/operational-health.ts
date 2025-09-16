@@ -1,5 +1,10 @@
 // src/lib/operational-health.ts
 import { getDb } from '@/lib/firebase';
+import { getAdmin } from '@/lib/firebase-admin';
+
+// Feature flags
+const OP_HEALTH_PERSIST = process.env.OPERATIONAL_HEALTH_PERSIST === 'true';
+const OP_HEALTH_COLLECT = process.env.OPERATIONAL_HEALTH_COLLECT === 'true';
 import {
   collection,
   addDoc,
@@ -82,7 +87,9 @@ class OperationalHealthMonitor {
   };
 
   private constructor() {
-    this.startMetricsCollection();
+    if (OP_HEALTH_COLLECT) {
+      this.startMetricsCollection();
+    }
   }
 
   static getInstance(): OperationalHealthMonitor {
@@ -106,15 +113,33 @@ class OperationalHealthMonitor {
       this.metrics = this.metrics.slice(-1000);
     }
 
-    // Store in Firebase for persistence
-    try {
-      const db = await getDb();
-      await addDoc(collection(db, 'operational_metrics'), {
-        ...timestampedMetric,
-        timestamp: serverTimestamp(),
-      });
-    } catch (error) {
-      console.error('Failed to store metric:', error);
+    // Optionally persist metrics if explicitly enabled and credentials are available
+    const shouldPersist = typeof window === 'undefined' && OP_HEALTH_PERSIST;
+
+    if (shouldPersist) {
+      try {
+        // Prefer Admin SDK when available; fall back to client DB otherwise
+        const adminKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+        if (adminKey) {
+          const admin = getAdmin();
+          await admin
+            .firestore()
+            .collection('operational_metrics')
+            .add({
+              ...timestampedMetric,
+              timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            });
+        } else {
+          const db = await getDb();
+          await addDoc(collection(db, 'operational_metrics'), {
+            ...timestampedMetric,
+            timestamp: serverTimestamp(),
+          });
+        }
+      } catch (error) {
+        // Reduce noise during build/SSR; only log at debug level
+        console.debug('Failed to store metric (non-fatal):', error);
+      }
     }
 
     // Check for anomalies
@@ -331,15 +356,30 @@ class OperationalHealthMonitor {
 
     this.alerts.push(alert);
 
-    // Store in Firebase
-    try {
-      const db = await getDb();
-      await addDoc(collection(db, 'operational_alerts'), {
-        ...alert,
-        timestamp: serverTimestamp(),
-      });
-    } catch (error) {
-      console.error('Failed to store alert:', error);
+    // Optionally persist alerts if enabled
+    const shouldPersist = typeof window === 'undefined' && OP_HEALTH_PERSIST;
+    if (shouldPersist) {
+      try {
+        const adminKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
+        if (adminKey) {
+          const admin = getAdmin();
+          await admin
+            .firestore()
+            .collection('operational_alerts')
+            .add({
+              ...alert,
+              timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            });
+        } else {
+          const db = await getDb();
+          await addDoc(collection(db, 'operational_alerts'), {
+            ...alert,
+            timestamp: serverTimestamp(),
+          });
+        }
+      } catch (error) {
+        console.debug('Failed to store alert (non-fatal):', error);
+      }
     }
   }
 
@@ -540,19 +580,24 @@ class OperationalHealthMonitor {
       alert.resolved = true;
 
       // Update in Firebase
-      try {
-        const db = await getDb();
-        const alertsQuery = query(
-          collection(db, 'operational_alerts'),
-          where('id', '==', alertId),
-        );
-        const snapshot = await getDocs(alertsQuery);
+      const shouldPersist =
+        typeof window === 'undefined' &&
+        process.env.OPERATIONAL_HEALTH_PERSIST === 'true';
+      if (shouldPersist) {
+        try {
+          const db = await getDb();
+          const alertsQuery = query(
+            collection(db, 'operational_alerts'),
+            where('id', '==', alertId),
+          );
+          const snapshot = await getDocs(alertsQuery);
 
-        if (!snapshot.empty) {
-          // Would update the document here
+          if (!snapshot.empty) {
+            // Would update the document here
+          }
+        } catch (error) {
+          console.debug('Failed to resolve alert in database (non-fatal):', error);
         }
-      } catch (error) {
-        console.error('Failed to resolve alert in database:', error);
       }
     }
   }

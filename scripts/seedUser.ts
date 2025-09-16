@@ -10,13 +10,17 @@ import {
 
 // ✅ Firebase config
 const firebaseConfig = {
-  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
-  authDomain: 'legaldoc-26ea8.firebaseapp.com',
-  projectId: 'legaldoc-26ea8',
-  storageBucket: 'legaldoc-26ea8.appspot.com',
-  messagingSenderId: '584726654660',
-  appId: '1:584726654660:web:82597df4ee5bc2098ba391',
-  measurementId: 'G-3VR0TDX4ZK',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? 'YOUR_FIREBASE_API_KEY',
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? 'YOUR_FIREBASE_AUTH_DOMAIN',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? 'YOUR_FIREBASE_PROJECT_ID',
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'YOUR_FIREBASE_STORAGE_BUCKET',
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? 'YOUR_FIREBASE_APP_ID',
+  measurementId:
+    process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? 'YOUR_FIREBASE_MEASUREMENT_ID',
 };
 
 // ✅ Init
