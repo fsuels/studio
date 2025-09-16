@@ -6,10 +6,11 @@ export const dynamic = 'force-dynamic';
 import React from 'react';
 import { notFound } from 'next/navigation';
 import StartWizardPageClient from './StartWizardPageClient';
-import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
+import {
+  getAllDocumentMetadata,
+  getDocumentMetadata,
+} from '@/lib/document-metadata-registry';
 import { localizations } from '@/lib/localizations';
-import { documentLibrary } from '@/lib/document-library';
-import type { LegalDocument } from '@/lib/document-library';
 
 type StartWizardPageProps = {
   params: Promise<{ locale: 'en' | 'es'; docId: string }>;
@@ -82,23 +83,25 @@ export default async function StartWizardPage({
   const { locale, docId } = await params;
 
   // Guard: if someone hits /docs/…/start for an unknown docId, 404.
-  const docConfig = documentLibrary.find((d: LegalDocument) => d.id === docId);
-  if (!docConfig) {
+  const docMeta = getDocumentMetadata(docId);
+  if (!docMeta) {
     notFound();
   }
 
   // Prepare lightweight meta for the client to avoid bundling full library there
-  const docMeta = docConfig
+  const clientDocMeta = docMeta
     ? {
-        id: docConfig.id,
-        basePrice: docConfig.basePrice,
-        category: docConfig.category,
-        name: docConfig.name,
-        description: docConfig.description,
-        translations: docConfig.translations,
+        id: docMeta.id,
+        category: docMeta.category,
+        name: docMeta.translations?.en?.name || docMeta.title,
+        description:
+          docMeta.translations?.en?.description || docMeta.description || '',
+        translations: docMeta.translations,
       }
     : { id: docId };
 
   // Delegate to the client for the form + preview + autosave logic
-  return <StartWizardPageClient locale={locale} docId={docId} docMeta={docMeta} />;
+  return (
+    <StartWizardPageClient locale={locale} docId={docId} docMeta={clientDocMeta} />
+  );
 }

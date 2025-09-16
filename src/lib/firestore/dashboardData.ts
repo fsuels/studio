@@ -1,7 +1,5 @@
 'use client';
-'use client';
 // src/lib/firestore/dashboardData.ts
-'use client';
 
 import { getDb } from '@/lib/firebase';
 import {
@@ -15,7 +13,7 @@ import {
   startAfter,
   type Timestamp,
 } from 'firebase/firestore';
-import { documentLibrary } from '@/lib/document-library';
+import { getDocumentMetadata } from '@/lib/document-metadata-registry';
 
 export interface DashboardDocument {
   id: string;
@@ -64,13 +62,13 @@ export async function getUserDocuments(
         createdAt?: Timestamp | Date | string; // Keep for compatibility if some docs only have createdAt
       };
       const docType = (data.originalDocId || data.docType || d.id) as string;
-      const docConfig = documentLibrary.find((doc) => doc.id === docType);
+      const docMeta = getDocumentMetadata(docType);
       return {
         id: d.id,
         name:
           (data.name as string) ||
-          docConfig?.name ||
-          docConfig?.translations?.en?.name ||
+          docMeta?.title ||
+          docMeta?.translations?.en?.name ||
           docType,
         // Use updatedAt for the date display, fallback to createdAt if updatedAt is missing
         date: data.updatedAt || data.createdAt || new Date(),
@@ -166,13 +164,13 @@ export async function getUserDocumentsPaginated(
           createdAt?: Timestamp | Date | string;
         };
         const docType = (data.originalDocId || data.docType || d.id) as string;
-        const docConfig = documentLibrary.find((doc) => doc.id === docType);
+        const docMeta = getDocumentMetadata(docType);
         return {
           id: d.id,
           name:
             (data.name as string) ||
-            docConfig?.name ||
-            docConfig?.translations?.en?.name ||
+            docMeta?.title ||
+            docMeta?.translations?.en?.name ||
             docType,
           date: data.updatedAt || data.createdAt || new Date(),
           status: (data.status as string) || 'Draft',

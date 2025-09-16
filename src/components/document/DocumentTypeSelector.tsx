@@ -44,10 +44,6 @@ export default function DocumentTypeSelector({
     undefined,
   );
 
-  useEffect(() => {
-    // Set hydrated state on client
-  }, []);
-
   const deriveCategories = React.useCallback((docs: LegalDocument[]) => {
     return [...new Set(docs.map((d) => d.category))];
   }, []);
