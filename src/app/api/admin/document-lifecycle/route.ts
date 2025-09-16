@@ -1,9 +1,8 @@
 // Document Lifecycle Management API
 import { NextRequest, NextResponse } from 'next/server';
 
-// Static export compatibility
-export const dynamic = 'force-static';
-export const revalidate = 0;
+// Run dynamically at request time (SSR)
+export const dynamic = 'force-dynamic';
 import { requireAdmin } from '@/lib/admin-auth';
 import {
   documentLifecycle,

@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 /*  Core Next.js config                                                       */
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
-  output: 'export', // Enable static export for Firebase hosting
+  // SSR deployment on Firebase Web Frameworks (no static export)
   trailingSlash: true,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },

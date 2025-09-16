@@ -1,9 +1,7 @@
 {
   "hosting": {
-    "public": "out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "cleanUrls": true,
-    "trailingSlash": false
+    "site": "legaldoc-26ea8",
+    "source": "."
   },
   "firestore": {
     "rules": "firestore.rules"

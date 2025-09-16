@@ -1,9 +1,8 @@
 // src/app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-// Static export compatibility for export builds
-export const dynamic = 'force-static';
-export const revalidate = 0;
+// Run dynamically at request time (SSR)
+export const dynamic = 'force-dynamic';
 
 type RequestData = {
   documentType: string;
