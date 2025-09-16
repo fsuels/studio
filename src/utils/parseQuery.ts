@@ -2,9 +2,41 @@
 // Negative tokens & phrase parsing utility for advanced query processing
 
 import { sanitize } from '../services/searchUtils';
+
 // Simple escape function to avoid ESM import issues
 function escapeStringRegexp(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const WORD_TOKEN_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}-]*$/u;
+const NEGATIVE_TOKEN_PATTERN = /^-([\p{L}\p{N}][\p{L}\p{N}-]*)$/u;
+const NON_WORD_SPLIT = /[^\p{L}\p{N}]+/u;
+
+function stripDiacritics(value: string): string {
+  if (typeof value.normalize === 'function') {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  return value;
+}
+
+function normaliseToken(token: string): string {
+  return stripDiacritics(token).toLowerCase();
+}
+
+function tokeniseKeywords(keywords: string[]): string[] {
+  const tokens: string[] = [];
+  keywords.forEach(keyword => {
+    const cleaned = stripDiacritics(keyword).toLowerCase();
+    cleaned
+      .split(NON_WORD_SPLIT)
+      .filter(Boolean)
+      .forEach(token => tokens.push(token));
+  });
+
+  return tokens;
 }
 
 export interface ParsedQuery {
@@ -28,61 +60,79 @@ export interface ParsedQuery {
  * // }
  */
 export function parseQuery(raw: string): ParsedQuery {
-  // Sanitize the input to handle Unicode, special characters, etc.
-  const clean = sanitize(raw);
-  
-  if (!clean.trim()) {
-    return {
-      positive: [],
-      negatives: [],
-      phrases: [],
-    };
+  const sanitised = sanitize(raw ?? '');
+
+  if (!sanitised.trim()) {
+    return { positive: [], negatives: [], phrases: [] };
   }
 
-  const result: ParsedQuery = {
-    positive: [],
-    negatives: [],
-    phrases: [],
-  };
+  const result: ParsedQuery = { positive: [], negatives: [], phrases: [] };
 
-  // Track what we've already extracted to avoid duplicates in positive terms
-  let remaining = clean;
+  const workingSegments: string[] = [];
+  let working = stripDiacritics(sanitised)
+    .replace(/[^\p{L}\p{N}\s-]/gu, ' ');
 
-  // 1. Extract phrases first (quoted text)
-  const phraseRegex = /"([^"]+)"/g;
-  let phraseMatch;
-  
-  while ((phraseMatch = phraseRegex.exec(clean)) !== null) {
-    const phrase = phraseMatch[1].trim();
-    if (phrase) {
-      result.phrases.push(phrase);
-      // Remove from remaining text (escape special regex characters)
-      const escapedPhrase = escapeStringRegexp(phraseMatch[0]);
-      remaining = remaining.replace(new RegExp(escapedPhrase, 'g'), ' ');
+  const quotedRegex = /"([^\"]*)"/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = quotedRegex.exec(raw)) !== null) {
+    const phraseContent = match[1];
+    if (phraseContent.trim().length === 0) {
+      continue;
+    }
+
+    const normalisedPhrase = stripDiacritics(phraseContent);
+    result.phrases.push(normalisedPhrase);
+
+    const sanitisedPhrase = stripDiacritics(phraseContent).toLowerCase();
+    if (sanitisedPhrase && /\s/.test(sanitisedPhrase)) {
+      const escapedPhrase = escapeStringRegexp(sanitisedPhrase);
+      working = working.replace(new RegExp(`\\b${escapedPhrase}\\b`, 'g'), ' ');
     }
   }
 
-  // 2. Extract negative terms (prefixed with -)
-  const negativeRegex = /-(\w+)/g;
-  let negativeMatch;
-  
-  while ((negativeMatch = negativeRegex.exec(remaining)) !== null) {
-    const negativeToken = negativeMatch[1].trim().toLowerCase();
-    if (negativeToken) {
-      result.negatives.push(negativeToken);
-      // Remove from remaining text
-      const escapedNegative = escapeStringRegexp(negativeMatch[0]);
-      remaining = remaining.replace(new RegExp(escapedNegative, 'g'), ' ');
+  // Handle unmatched trailing quote – remove everything except the last token
+  const quoteCount = (raw.match(/"/g) || []).length;
+  if (quoteCount % 2 === 1) {
+    const lastQuoteIndex = raw.lastIndexOf('"');
+    if (lastQuoteIndex !== -1 && lastQuoteIndex < raw.length - 1) {
+      const unmatchedSegment = raw.slice(lastQuoteIndex + 1);
+      const unmatchedTokens = sanitize(unmatchedSegment)
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (unmatchedTokens.length > 1) {
+        const tokensToRemove = unmatchedTokens.slice(0, -1);
+        tokensToRemove.forEach(token => {
+          const escaped = escapeStringRegexp(token);
+          working = working.replace(new RegExp(`\\b${escaped}\\b`, 'g'), ' ');
+        });
+      }
     }
   }
 
-  // 3. Extract positive terms (everything else that's not whitespace)
-  const positiveTokens = remaining
+  working = working.replace(/"/g, ' ');
+
+  const rawTokens = working
     .split(/\s+/)
-    .map(token => token.trim().toLowerCase())
-    .filter(token => token.length > 0);
+    .map(token => token.trim())
+    .filter(Boolean);
 
-  result.positive = positiveTokens;
+  rawTokens.forEach(token => {
+    if (token === '-') {
+      return;
+    }
+
+    const negativeMatch = token.match(NEGATIVE_TOKEN_PATTERN);
+    if (negativeMatch) {
+      result.negatives.push(negativeMatch[1]);
+      return;
+    }
+
+    if (WORD_TOKEN_PATTERN.test(token)) {
+      result.positive.push(token);
+    }
+  });
 
   return result;
 }
@@ -116,11 +166,36 @@ export function hasAllPhrases(keywords: string[], phrases: string[]): boolean {
     return true;
   }
 
-  const keywordText = keywords.join(' ').toLowerCase();
-  
+  const tokens = tokeniseKeywords(keywords);
+  if (tokens.length === 0) {
+    return false;
+  }
+
   return phrases.every(phrase => {
-    const normalizedPhrase = phrase.toLowerCase();
-    return keywordText.includes(normalizedPhrase);
+    const phraseTokens = stripDiacritics(phrase)
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (phraseTokens.length === 0) {
+      return true;
+    }
+
+    for (let i = 0; i <= tokens.length - phraseTokens.length; i++) {
+      let matched = true;
+      for (let j = 0; j < phraseTokens.length; j++) {
+        if (tokens[i + j] !== phraseTokens[j]) {
+          matched = false;
+          break;
+        }
+      }
+
+      if (matched) {
+        return true;
+      }
+    }
+
+    return false;
   });
 }
 
@@ -142,7 +217,13 @@ export function matchesParsedQuery(keywords: string[], parsedQuery: ParsedQuery)
     return false;
   }
 
-  return true;
+  if (parsedQuery.positive.length === 0) {
+    return true;
+  }
+
+  const keywordTokens = new Set(tokeniseKeywords(keywords));
+
+  return parsedQuery.positive.every(term => keywordTokens.has(term));
 }
 
 /**

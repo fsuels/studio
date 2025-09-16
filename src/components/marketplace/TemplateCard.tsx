@@ -64,25 +64,51 @@ export function TemplateCard({
     featured: 'pb-4',
   };
 
+  const languageDisplay = template.languageSupport
+    .map((lang) => lang.toUpperCase())
+    .join(', ');
+
+  if (typeof document !== 'undefined') {
+    document
+      .querySelectorAll('[data-template-card-anchor]')
+      .forEach((el) => el.parentElement?.removeChild(el));
+  }
+
   return (
     <Card className={cardClasses[size]}>
-      <CardHeader className={headerClasses[size]}>
+      <div
+        role="generic"
+        aria-label=""
+        data-template-card-anchor
+        className="sr-only"
+      />
+      <CardHeader role="presentation" className={headerClasses[size]}>
         {/* Template Header */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-2">
+        <div
+          role="presentation"
+          className="flex items-start justify-between gap-3"
+        >
+          <div role="presentation" className="flex-1 min-w-0">
+            <div role="presentation" className="flex items-center gap-2 mb-2">
               {template.featured && (
-                <Crown className="h-4 w-4 text-yellow-500" />
+                <span aria-hidden="true">
+                  <Crown className="h-4 w-4 text-yellow-500" />
+                </span>
               )}
               {template.verified && (
-                <Shield className="h-4 w-4 text-blue-500" />
+                <span aria-hidden="true">
+                  <Shield className="h-4 w-4 text-blue-500" />
+                </span>
               )}
               <Badge variant="secondary" className="text-xs">
                 {template.category}
               </Badge>
             </div>
 
-            <h3 className="font-semibold text-lg leading-tight mb-1 line-clamp-2">
+            <h3
+              role="presentation"
+              className="font-semibold text-lg leading-tight mb-1 line-clamp-2"
+            >
               <Link
                 href={`/marketplace/templates/${template.id}`}
                 className="hover:text-primary transition-colors"
@@ -91,13 +117,23 @@ export function TemplateCard({
               </Link>
             </h3>
 
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+            <p
+              role="presentation"
+              className="text-sm text-muted-foreground line-clamp-2 mb-3"
+            >
               {template.description}
             </p>
           </div>
 
           {/* Price */}
-          <div className="text-right flex-shrink-0">
+          <div role="presentation" className="text-right flex-shrink-0">
+            {template.featured && (
+              <div className="flex justify-end mb-1">
+                <span aria-hidden="true">
+                  <Crown className="h-4 w-4 text-yellow-500" />
+                </span>
+              </div>
+            )}
             <div className="font-bold text-lg">
               {formatPrice(
                 template.pricing.basePrice,
@@ -117,7 +153,7 @@ export function TemplateCard({
 
         {/* Creator Info */}
         {showCreator && (
-          <div className="flex items-center gap-2">
+          <div role="presentation" className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
               <AvatarImage
                 src={template.creatorProfile?.avatar}
@@ -131,19 +167,28 @@ export function TemplateCard({
               {template.creatorProfile?.displayName || 'Creator'}
             </span>
             {template.creatorProfile?.verified && (
-              <Shield className="h-3 w-3 text-blue-500" />
+              <span aria-hidden="true">
+                <Shield className="h-3 w-3 text-blue-500" />
+              </span>
             )}
           </div>
         )}
       </CardHeader>
 
-      <CardContent className="pt-0">
+      <CardContent role="presentation" className="pt-0">
         {/* Stats Row */}
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
-          <div className="flex items-center gap-4">
+        <div
+          role="presentation"
+          className="flex items-center justify-between text-sm text-muted-foreground mb-3"
+        >
+          <div role="presentation" className="flex items-center gap-4">
             {/* Rating */}
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            <div role="presentation" className="flex items-center gap-1">
+              <span aria-hidden="true">
+                <Star
+                  className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                />
+              </span>
               <span className="font-medium">
                 {template.ratings.averageRating.toFixed(1)}
               </span>
@@ -153,15 +198,19 @@ export function TemplateCard({
             </div>
 
             {/* Downloads */}
-            <div className="flex items-center gap-1">
-              <Download className="h-4 w-4" />
+            <div role="presentation" className="flex items-center gap-1">
+              <span aria-hidden="true">
+                <Download className="h-4 w-4" />
+              </span>
               <span>{formatNumber(template.stats.totalDownloads)}</span>
             </div>
           </div>
 
           {/* Last Updated */}
-          <div className="flex items-center gap-1 text-xs">
-            <Clock className="h-3 w-3" />
+          <div role="presentation" className="flex items-center gap-1 text-xs">
+            <span aria-hidden="true">
+              <Clock className="h-3 w-3" />
+            </span>
             <span>
               Updated{' '}
               {new Date(template.lastUpdated as any).toLocaleDateString()}
@@ -170,7 +219,7 @@ export function TemplateCard({
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div role="presentation" className="flex flex-wrap gap-1 mb-3">
           {template.tags.slice(0, 3).map((tag) => (
             <Badge key={tag} variant="outline" className="text-xs">
               {tag}
@@ -184,18 +233,16 @@ export function TemplateCard({
         </div>
 
         {/* Languages */}
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <div
+          role="presentation"
+          className="flex items-center gap-1 text-xs text-muted-foreground"
+        >
           <span>Languages:</span>
-          {template.languageSupport.map((lang, index) => (
-            <span key={lang}>
-              {lang.toUpperCase()}
-              {index < template.languageSupport.length - 1 && ', '}
-            </span>
-          ))}
+          <span>{languageDisplay}</span>
         </div>
       </CardContent>
 
-      <CardFooter className="pt-3 gap-2">
+      <CardFooter role="presentation" className="pt-3 gap-2">
         {/* Preview Button */}
         <Button
           variant="outline"
@@ -203,7 +250,9 @@ export function TemplateCard({
           className="flex-1"
           onClick={() => onPreview?.(template.id)}
         >
-          <Eye className="h-4 w-4 mr-1" />
+          <span aria-hidden="true">
+            <Eye className="h-4 w-4 mr-1" />
+          </span>
           Preview
         </Button>
 
@@ -215,12 +264,16 @@ export function TemplateCard({
         >
           {template.pricing.type === 'free' ? (
             <>
-              <Download className="h-4 w-4 mr-1" />
+              <span aria-hidden="true">
+                <Download className="h-4 w-4 mr-1" />
+              </span>
               Install
             </>
           ) : (
             <>
-              <DollarSign className="h-4 w-4 mr-1" />
+              <span aria-hidden="true">
+                <DollarSign className="h-4 w-4 mr-1" />
+              </span>
               Buy Now
             </>
           )}
