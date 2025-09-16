@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { documentLibraryAdditions } from './document-library-additions';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
-import { preprocessQuery, calculateRelevanceScore } from './search/comprehensive-synonym-map';
+import { preprocessQuery } from './search/comprehensive-synonym-map';
 import {
   getAllDocumentMetadata,
   searchDocumentMetadata,
@@ -11,36 +11,164 @@ import {
   type DocumentMetadata
 } from './document-metadata-registry';
 import { loadDocument, loadDocuments } from './dynamic-document-loader';
+import type { DocumentManifestEntry } from './documents/manifest.generated';
 
 const manifestEntries = getManifestEntries();
 const manifestDocIds = new Set(manifestEntries.map((entry) => entry.id));
+
+const defaultSchema = z
+  .object({
+    _fallbackDetails: z
+      .string()
+      .optional()
+      .describe('Fallback field for missing schemas'),
+  })
+  .describe('Manifest-derived placeholder schema');
+
+const normalizeCountryCode = (jurisdiction?: string): string => {
+  if (!jurisdiction) {
+    return 'us';
+  }
+
+  const [country] = jurisdiction.split('/');
+  return (country || 'us').toLowerCase();
+};
+
+const createBaseDocumentFromManifest = (
+  entry: DocumentManifestEntry,
+): LegalDocument => {
+  const { meta } = entry;
+  const enTranslation = meta.translations?.en ?? {
+    name: meta.title || entry.id,
+    description: meta.description || '',
+    aliases: meta.aliases || [],
+  };
+
+  const esTranslation = meta.translations?.es ?? {
+    name: enTranslation.name,
+    description: enTranslation.description,
+    aliases: enTranslation.aliases,
+  };
+
+  const enName = enTranslation.name || meta.title || entry.id;
+  const enDescription = enTranslation.description || meta.description || '';
+  const enAliases = enTranslation.aliases?.length
+    ? enTranslation.aliases
+    : meta.aliases || [];
+
+  const esName = esTranslation.name || enName;
+  const esDescription = esTranslation.description || enDescription;
+  const esAliases = esTranslation.aliases?.length
+    ? esTranslation.aliases
+    : enAliases;
+
+  const languageSupport = new Set<string>();
+  languageSupport.add('en');
+  if (esName || esDescription || esAliases.length) {
+    languageSupport.add('es');
+  }
+
+  const document: LegalDocument = {
+    id: entry.id,
+    jurisdiction: meta.jurisdiction,
+    category: meta.category || 'General',
+    states:
+      meta.states && meta.states.length ? [...meta.states] : undefined,
+    schema: defaultSchema,
+    questions: [],
+    name: enName,
+    description: enDescription,
+    translations: {
+      en: {
+        name: enName,
+        description: enDescription,
+        aliases: [...enAliases],
+      },
+      es: {
+        name: esName,
+        description: esDescription,
+        aliases: [...esAliases],
+      },
+    },
+    aliases: enAliases.length ? [...enAliases] : undefined,
+    aliases_es: esAliases.length ? [...esAliases] : undefined,
+    languageSupport: Array.from(languageSupport),
+    keywords: meta.tags?.length ? [...meta.tags] : undefined,
+    searchTerms: meta.aliases?.length ? [...meta.aliases] : undefined,
+    basePrice: 0,
+    requiresNotarization: meta.requiresNotary ?? false,
+    canBeRecorded: false,
+    offerNotarization: meta.requiresNotary ?? false,
+    offerRecordingHelp: false,
+  };
+
+  enrichDocument(document);
+  return document;
+};
+
+const sortDocuments = (docs: LegalDocument[]): LegalDocument[] =>
+  [...docs].sort((a, b) => {
+    const nameA =
+      a.translations?.en?.name || a.translations?.es?.name || a.name || a.id;
+    const nameB =
+      b.translations?.en?.name || b.translations?.es?.name || b.name || b.id;
+
+    return nameA.localeCompare(nameB);
+  });
+
+const baseDocumentsByCountry: Record<string, LegalDocument[]> = {};
+
+manifestEntries.forEach((entry) => {
+  const countryCode = normalizeCountryCode(entry.meta.jurisdiction);
+  const baseDoc = createBaseDocumentFromManifest(entry);
+
+  if (!baseDocumentsByCountry[countryCode]) {
+    baseDocumentsByCountry[countryCode] = [];
+  }
+
+  baseDocumentsByCountry[countryCode].push(baseDoc);
+});
+
+baseDocumentsByCountry['us'] = baseDocumentsByCountry['us'] || [];
 
 const filterDocumentIdsByCountry = (countryCode: string): string[] => {
   const normalizedCountry = countryCode.toLowerCase();
 
   return manifestEntries
-    .filter((entry) => entry.meta.jurisdiction.split('/')[0] === normalizedCountry)
+    .filter(
+      (entry) => normalizeCountryCode(entry.meta.jurisdiction) === normalizedCountry,
+    )
     .map((entry) => entry.id);
 };
 
 // Fast document loading using metadata-first approach
-const loadDocumentsForCountry = async (countryCode: string): Promise<LegalDocument[]> => {
-  const documentIds = filterDocumentIdsByCountry(countryCode);
+const loadDocumentsForCountry = async (
+  countryCode: string,
+): Promise<LegalDocument[]> => {
+  const normalized = countryCode.toLowerCase();
+  const baseDocuments = baseDocumentsByCountry[normalized] || [];
+  const documentIds = filterDocumentIdsByCountry(normalized);
 
   if (documentIds.length === 0) {
-    return [];
+    return sortDocuments(baseDocuments);
   }
 
   const results = await loadDocuments(documentIds);
-  const documents: LegalDocument[] = [];
+  const docsById = new Map<string, LegalDocument>();
 
-  for (const [, result] of results) {
+  baseDocuments.forEach((doc) => {
+    docsById.set(doc.id, doc);
+  });
+
+  for (const [docId, result] of results) {
     if (result.document) {
-      documents.push(result.document);
+      const loadedDoc = result.document;
+      enrichDocument(loadedDoc);
+      docsById.set(docId, loadedDoc);
     }
   }
 
-  return documents;
+  return sortDocuments(Array.from(docsById.values()));
 };
 
 /**
@@ -71,31 +199,71 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
   return hasId && hasCategory && hasSchema && hasValidName;
 };
 
-// For backwards compatibility - populated dynamically as documents are loaded
-const countrySet = new Set<string>(['us']);
-manifestEntries.forEach((entry) => {
-  const [countryCode] = entry.meta.jurisdiction.split('/');
-  if (countryCode) {
-    countrySet.add(countryCode);
+function prepareAdditionalDocument(doc: LegalDocument): LegalDocument {
+  const clone: LegalDocument = {
+    ...doc,
+    translations: doc.translations
+      ? Object.fromEntries(
+          Object.entries(doc.translations).map(([lang, value]) => [
+            lang,
+            {
+              ...value,
+              aliases: value.aliases ? [...value.aliases] : [],
+            },
+          ]),
+        )
+      : doc.translations,
+    questions: doc.questions ? [...doc.questions] : [],
+    keywords: doc.keywords ? [...doc.keywords] : undefined,
+    keywords_es: doc.keywords_es ? [...doc.keywords_es] : undefined,
+    searchTerms: doc.searchTerms ? [...doc.searchTerms] : undefined,
+    languageSupport: doc.languageSupport ? [...doc.languageSupport] : ['en'],
+    templatePaths: doc.templatePaths ? { ...doc.templatePaths } : undefined,
+    upsellClauses: doc.upsellClauses
+      ? doc.upsellClauses.map((clause) => ({
+          ...clause,
+          translations: clause.translations
+            ? { ...clause.translations }
+            : clause.translations,
+        }))
+      : undefined,
+    states: Array.isArray(doc.states) ? [...doc.states] : doc.states,
+    aliases: doc.aliases ? [...doc.aliases] : doc.aliases,
+    aliases_es: doc.aliases_es ? [...doc.aliases_es] : doc.aliases_es,
+  };
+
+  enrichDocument(clone);
+  return clone;
+}
+
+const additionalDocuments: LegalDocument[] = documentLibraryAdditions
+  .filter(isValidDocument)
+  .filter((doc) => !manifestDocIds.has(doc.id))
+  .map(prepareAdditionalDocument);
+
+additionalDocuments.forEach((doc) => {
+  const countryCode = normalizeCountryCode(doc.jurisdiction);
+
+  if (!baseDocumentsByCountry[countryCode]) {
+    baseDocumentsByCountry[countryCode] = [];
   }
+
+  baseDocumentsByCountry[countryCode].push(doc);
 });
 
-export const documentLibraryByCountry: Record<string, LegalDocument[]> = Array.from(
-  countrySet,
-).reduce(
-  (acc, countryCode) => {
-    acc[countryCode] = [];
-    return acc;
-  },
-  {} as Record<string, LegalDocument[]>,
+export const documentLibraryByCountry: Record<string, LegalDocument[]> = Object.fromEntries(
+  Object.entries(baseDocumentsByCountry).map(([countryCode, docs]) => [
+    countryCode,
+    sortDocuments(docs),
+  ]),
 );
 
 // Cache for loaded documents to avoid repeated imports
 const cachedDocumentsByCountry: Record<string, LegalDocument[] | undefined> = {};
-
-const additionsArray: LegalDocument[] = documentLibraryAdditions
-  .filter(isValidDocument)
-  .filter((doc) => !manifestDocIds.has(doc.id));
+let cachedAllDocuments: LegalDocument[] | null = null;
+export let allDocuments: LegalDocument[] = Object.values(
+  documentLibraryByCountry,
+).flat();
 
 // Dynamic document library loader
 export const getDocumentsByCountry = async (
@@ -107,9 +275,15 @@ export const getDocumentsByCountry = async (
     const docs = await loadDocumentsForCountry(normalized);
     cachedDocumentsByCountry[normalized] = docs;
     documentLibraryByCountry[normalized] = docs;
+    allDocuments = Object.values(documentLibraryByCountry).flat();
+    cachedAllDocuments = null;
   }
 
-  return cachedDocumentsByCountry[normalized] ?? [];
+  return (
+    cachedDocumentsByCountry[normalized] ||
+    documentLibraryByCountry[normalized] ||
+    []
+  );
 };
 
 export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
@@ -117,10 +291,7 @@ export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
   return documentLibraryByCountry[code] || documentLibraryByCountry['us'];
 }
 
-export const supportedCountries = Object.keys(documentLibraryByCountry);
-
-// Dynamic loading of all documents
-let cachedAllDocuments: LegalDocument[] | null = null;
+export const supportedCountries = Object.keys(documentLibraryByCountry).sort();
 
 export const getAllDocuments = async (): Promise<LegalDocument[]> => {
   if (cachedAllDocuments) {
@@ -131,16 +302,10 @@ export const getAllDocuments = async (): Promise<LegalDocument[]> => {
     supportedCountries.map((countryCode) => getDocumentsByCountry(countryCode)),
   );
 
-  cachedAllDocuments = [
-    ...countryDocuments.flat(),
-    ...additionsArray,
-  ];
+  cachedAllDocuments = countryDocuments.flat();
 
   return cachedAllDocuments;
 };
-
-// Legacy export - will be empty until dynamically loaded
-export const allDocuments: LegalDocument[] = [];
 
 // Backwards compatibility - synchronous version that returns known documents
 export function findMatchingDocumentsSync(
@@ -150,16 +315,10 @@ export function findMatchingDocumentsSync(
 ): LegalDocument[] {
   // Return only the additions array for immediate/synchronous access
   // This provides basic functionality while async loading completes
-  return additionsArray.filter((d) => d.id !== 'general-inquiry');
+  return Object.values(documentLibraryByCountry)
+    .flat()
+    .filter((d) => d.id !== 'general-inquiry');
 }
-
-// Default fallback schema
-const defaultSchema = z.object({
-  _fallbackDetails: z
-    .string()
-    .optional()
-    .describe('Fallback field for missing schemas'),
-});
 
 export function generateIdFromName(name: string): string {
   if (!name || typeof name !== 'string') return `doc-${Date.now()}`;
