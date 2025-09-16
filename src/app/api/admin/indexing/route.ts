@@ -1,6 +1,10 @@
 // src/app/api/admin/indexing/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+// Static export compatibility
+export const dynamic = 'force-static';
+export const revalidate = 0;
+
 interface IndexingJob {
   id: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';

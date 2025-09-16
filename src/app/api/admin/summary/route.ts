@@ -1,5 +1,9 @@
 // API endpoint for sticky summary bar real-time metrics
 import { NextRequest, NextResponse } from 'next/server';
+
+// Static export compatibility
+export const dynamic = 'force-static';
+export const revalidate = 0;
 import { requireAdmin } from '@/lib/admin-auth';
 
 export async function GET(request: NextRequest) {

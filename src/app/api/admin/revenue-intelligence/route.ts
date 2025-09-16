@@ -1,5 +1,9 @@
 // Revenue Intelligence API - MRR/ARR trends, CLV, cohort analysis, churn prediction
 import { NextRequest, NextResponse } from 'next/server';
+
+// Static export compatibility
+export const dynamic = 'force-static';
+export const revalidate = 0;
 import { requireAdmin } from '@/lib/admin-auth';
 import { generateMockOrders } from '@/lib/orders';
 import { generateRevenueIntelligence } from '@/lib/revenue-intelligence';

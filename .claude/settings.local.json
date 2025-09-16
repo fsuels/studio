@@ -35,7 +35,10 @@
       "Bash(timeout 30 npx tsc:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm run analyze:build:*)",
-      "Bash(timeout 300 npm run build:static)"
+      "Bash(timeout 300 npm run build:static)",
+      "Bash(firebase deploy:*)",
+      "Bash(cross-env ANALYZE=true npm run build)",
+      "Bash(ANALYZE=true npm run build)"
     ],
     "deny": [],
     "ask": []

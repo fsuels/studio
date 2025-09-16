@@ -1,5 +1,9 @@
 // src/app/api/admin/audit-trails/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+
+// Static export compatibility
+export const dynamic = 'force-static';
+export const revalidate = 0;
 import { requireAuth } from '@/lib/server-auth';
 import { getDb } from '@/lib/firebase';
 import {

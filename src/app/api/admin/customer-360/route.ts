@@ -1,5 +1,9 @@
 // Customer 360 API for admin dashboard
 import { NextRequest, NextResponse } from 'next/server';
+
+// Mark this route as static for `output: export` builds
+export const dynamic = 'force-static';
+export const revalidate = 0;
 import { requireAdmin } from '@/lib/admin-auth';
 import {
   generateMockCustomer360Data,

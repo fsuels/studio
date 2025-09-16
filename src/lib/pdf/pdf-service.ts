@@ -110,14 +110,15 @@ export class PDFService {
       document.registerFontkit(this.fontkit.default);
     }
 
-    const pdfBytes = await document.save();
+    // Save once to compute output size without shadowing input param
+    const outputBytes = await document.save();
 
     return {
       document,
       pages,
       form,
       fields,
-      size: pdfBytes.length,
+      size: outputBytes.length,
     };
   }
 
