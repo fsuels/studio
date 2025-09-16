@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { LegalDocument } from '@/types/documents';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getDocumentsByCountry, searchSync } from '@/lib/document-library';
 
 interface HeaderSearchProps {
   clientLocale: 'en' | 'es';
@@ -34,39 +35,32 @@ export default function HeaderSearch({
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
     : 'Search documents...';
 
-  // Search functionality
   useEffect(() => {
+    if (!mounted) return;
     let cancelled = false;
     (async () => {
-      if (searchQuery.trim().length > 1) {
-        try {
-          const mod = await import('@/lib/document-library.ts');
-          const fn = mod.search as (
-            q: string,
-            l: 'en' | 'es',
-            s?: string,
-          ) => LegalDocument[];
-          const results = fn(searchQuery, clientLocale);
-          if (!cancelled) {
-            setSearchResults(results.slice(0, 8));
-            setShowResults(results.length > 0);
-          }
-        } catch (_) {
-          if (!cancelled) {
-            setSearchResults([]);
-            setShowResults(false);
-          }
-        }
-      } else {
-        if (!cancelled) {
-          setSearchResults([]);
-          setShowResults(false);
-        }
+      try {
+        await getDocumentsByCountry('us');
+      } catch (_) {
+        // ignore hydration errors; manifest data already available
       }
     })();
+
     return () => {
       cancelled = true;
     };
+  }, [mounted]);
+
+  // Search functionality backed by manifest data
+  useEffect(() => {
+    if (searchQuery.trim().length > 1) {
+      const results = searchSync(searchQuery, clientLocale).slice(0, 8);
+      setSearchResults(results);
+      setShowResults(results.length > 0);
+    } else {
+      setSearchResults([]);
+      setShowResults(false);
+    }
   }, [searchQuery, clientLocale]);
 
   // Click outside to close results

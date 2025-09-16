@@ -5,29 +5,45 @@ import React, { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 import type { FormField } from '@/data/formSchemas';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface Props {
   templateId: string;
 }
 
 export function StepThreeInput({ templateId }: Props) {
-  const [template, setTemplate] = useState<LegalDocument | null>(null);
+  const findTemplate = React.useCallback(
+    (docs: LegalDocument[]) => docs.find((doc) => doc.id === templateId) || null,
+    [templateId],
+  );
+
+  const [template, setTemplate] = useState<LegalDocument | null>(
+    findTemplate(documentLibrary),
+  );
+
+  React.useEffect(() => {
+    setTemplate(findTemplate(documentLibrary));
+  }, [findTemplate]);
+
   React.useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
-        const t = docs.find((doc) => doc.id === templateId) || null;
-        if (!cancelled) setTemplate(t);
+        const docs = await getDocumentsByCountry('us');
+        if (!cancelled) {
+          setTemplate(findTemplate(docs));
+        }
       } catch (_) {
-        if (!cancelled) setTemplate(null);
+        if (!cancelled) {
+          setTemplate(findTemplate(documentLibrary));
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, [templateId]);
+  }, [findTemplate]);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [upsells, setUpsells] = useState({ notarize: false, record: false });
 

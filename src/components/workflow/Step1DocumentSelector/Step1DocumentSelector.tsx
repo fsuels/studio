@@ -32,6 +32,7 @@ import {
   getDocAliases,
   languageSupportsSpanish,
 } from './constants';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   selectedCategory: initialSelectedCategory,
@@ -118,18 +119,23 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     );
   }, [isHydrated, i18n.language, t]);
 
-  const [docs, setDocs] = useState<LegalDocument[]>([]);
+  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const list = (mod.documentLibrary as unknown) as LegalDocument[];
-        if (!cancelled) setDocs(list);
+        const hydratedDocs = await getDocumentsByCountry('us');
+        if (!cancelled && hydratedDocs.length) {
+          setDocs(hydratedDocs);
+        }
       } catch (_) {
-        if (!cancelled) setDocs([]);
+        if (!cancelled) {
+          setDocs(documentLibrary);
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };

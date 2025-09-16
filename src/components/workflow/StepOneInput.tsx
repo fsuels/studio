@@ -5,36 +5,45 @@ import React from 'react';
 import { File } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LegalDocument } from '@/types/documents';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface StepOneInputProps {
   onSelectCategory: (_category: string) => void;
 }
 
 export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
-  const [categories, setCategories] = React.useState<string[]>([]);
+  const deriveCategories = React.useCallback((docs: LegalDocument[]) => {
+    return Array.from(
+      new Set(
+        docs
+          .filter((doc) => doc.id !== 'general-inquiry')
+          .map((doc) => doc.category),
+      ),
+    );
+  }, []);
+
+  const [categories, setCategories] = React.useState<string[]>(
+    deriveCategories(documentLibrary),
+  );
 
   React.useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
-        const cats = Array.from(
-          new Set(
-            docs
-              .filter((doc) => doc.id !== 'general-inquiry')
-              .map((doc) => doc.category),
-          ),
-        );
-        if (!cancelled) setCategories(cats);
+        const docs = await getDocumentsByCountry('us');
+        if (!cancelled && docs.length) {
+          setCategories(deriveCategories(docs));
+        }
       } catch (_) {
-        if (!cancelled) setCategories([]);
+        if (!cancelled) {
+          setCategories(deriveCategories(documentLibrary));
+        }
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [deriveCategories]);
 
   return (
     <div className="max-w-3xl mx-auto py-8 overflow-x-hidden">

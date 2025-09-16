@@ -7,6 +7,7 @@ import ConsolidatedMegaMenuContent from '@/components/layout/mega-menu/Consolida
 import { trackMegaMenu } from '@/lib/taxonomy-analytics';
 import type { LegalDocument } from '@/types/documents';
 import { createPortal } from 'react-dom';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface ConsolidatedEnhancedMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -20,7 +21,7 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
   activeCategory,
 }) => {
   const [isClient, setIsClient] = React.useState(false);
-  const [documents, setDocuments] = React.useState<LegalDocument[]>([]);
+  const [documents, setDocuments] = React.useState<LegalDocument[]>(documentLibrary);
 
   React.useEffect(() => {
     setIsClient(true);
@@ -32,14 +33,13 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
       panels: 5,
       structure: 'document_type_grouped'
     });
-    // Lazy load documents when menu opens on client
+    // Hydrate documents when menu opens on client
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
-        setDocuments(docs);
+        const docs = await getDocumentsByCountry('us');
+        setDocuments(docs.length ? docs : documentLibrary);
       } catch (_) {
-        setDocuments([]);
+        setDocuments(documentLibrary);
       }
     })();
   }, [locale]);

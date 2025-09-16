@@ -1,9 +1,10 @@
 // src/components/StepTwoInput.tsx
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/usStates';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface StepTwoInputProps {
   category: string;
@@ -19,23 +20,39 @@ export function StepTwoInput({
   const [stateCode, setStateCode] = useState<string>('');
 
   // Memoize list of docs in this category
-  const [docsInCategory, setDocsInCategory] = useState<LegalDocument[]>([]);
+  const selectDocsForCategory = React.useCallback(
+    (docs: LegalDocument[], currentCategory: string) =>
+      docs.filter((doc) => doc.category === currentCategory),
+    [],
+  );
+
+  const [docsInCategory, setDocsInCategory] = useState<LegalDocument[]>(
+    selectDocsForCategory(documentLibrary, category),
+  );
+
+  React.useEffect(() => {
+    setDocsInCategory(selectDocsForCategory(documentLibrary, category));
+  }, [category, selectDocsForCategory]);
+
   React.useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = (mod.documentLibrary as unknown) as LegalDocument[];
-        const filtered = docs.filter((doc) => doc.category === category);
-        if (!cancelled) setDocsInCategory(filtered);
+        const docs = await getDocumentsByCountry('us');
+        if (!cancelled) {
+          setDocsInCategory(selectDocsForCategory(docs, category));
+        }
       } catch (_) {
-        if (!cancelled) setDocsInCategory([]);
+        if (!cancelled) {
+          setDocsInCategory(selectDocsForCategory(documentLibrary, category));
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, [category]);
+  }, [category, selectDocsForCategory]);
 
   // Handle state dropdown change
   const handleStateChange = (code: string) => {

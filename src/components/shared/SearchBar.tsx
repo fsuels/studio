@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import type { LegalDocument } from '@/types/documents';
 import { getDocTranslation } from '@/lib/i18nUtils';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 const SearchBar = React.memo(function SearchBar() {
   const { t: tHeader } = useTranslation('header');
@@ -20,6 +21,7 @@ const SearchBar = React.memo(function SearchBar() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<LegalDocument[]>([]);
+  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
@@ -29,51 +31,53 @@ const SearchBar = React.memo(function SearchBar() {
     setIsHydrated(true);
   }, []);
 
-  // Filter suggestions (lazy import the document library on demand)
   useEffect(() => {
     let cancelled = false;
-    if (!isHydrated) return;
-
-    const run = async () => {
-      const term = searchTerm.trim();
-      if (term.length > 1) {
-        const lower = term.toLowerCase();
-        try {
-          const mod = await import('@/lib/document-library.ts');
-          const lib: LegalDocument[] = mod.documentLibrary as LegalDocument[];
-          const results = lib
-            .filter((doc) => {
-              const { name = '', description = '', aliases = [] } = getDocTranslation(
-                doc,
-                locale,
-              );
-              return (
-                name.toLowerCase().includes(lower) ||
-                description.toLowerCase().includes(lower) ||
-                aliases.some((alias) => alias.toLowerCase().includes(lower))
-              );
-            })
-            .slice(0, 5);
-          if (!cancelled) {
-            setSuggestions(results);
-            setShowSuggestions(true);
-          }
-        } catch (e) {
-          if (!cancelled) {
-            setSuggestions([]);
-            setShowSuggestions(false);
-          }
+    (async () => {
+      try {
+        const hydrated = await getDocumentsByCountry('us');
+        if (!cancelled && hydrated.length) {
+          setDocs(hydrated);
         }
-      } else {
-        setSuggestions([]);
-        setShowSuggestions(false);
+      } catch (_) {
+        if (!cancelled) {
+          setDocs(documentLibrary);
+        }
       }
-    };
-    run();
+    })();
+
     return () => {
       cancelled = true;
     };
-  }, [searchTerm, locale, isHydrated]);
+  }, []);
+
+  // Filter suggestions using in-memory manifest-backed library
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const term = searchTerm.trim();
+    if (term.length > 1) {
+      const lower = term.toLowerCase();
+      const docResults = docs
+        .filter((doc) => {
+          const { name = '', description = '', aliases = [] } = getDocTranslation(
+            doc,
+            locale,
+          );
+          return (
+            name.toLowerCase().includes(lower) ||
+            description.toLowerCase().includes(lower) ||
+            aliases.some((alias) => alias.toLowerCase().includes(lower))
+          );
+        })
+        .slice(0, 5);
+      setSuggestions(docResults);
+      setShowSuggestions(docResults.length > 0);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [searchTerm, locale, isHydrated, docs]);
 
   // Close on outside click
   useEffect(() => {

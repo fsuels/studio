@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { getDocumentTitle } from '@/lib/format-utils';
 import type { LegalDocument } from '@/types/documents';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import {
   Briefcase,
@@ -258,19 +259,23 @@ export default function MegaMenuContent({
   onLinkClick,
 }: MegaMenuContentProps) {
   const { t } = useTranslation('common');
-  const [docs, setDocs] = React.useState<LegalDocument[]>([]);
+  const [docs, setDocs] = React.useState<LegalDocument[]>(documentLibrary);
 
   React.useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const list = (mod.documentLibrary as unknown) as LegalDocument[];
-        if (!cancelled) setDocs(list);
+        const hydratedDocs = await getDocumentsByCountry('us');
+        if (!cancelled && hydratedDocs.length) {
+          setDocs(hydratedDocs);
+        }
       } catch (_) {
-        if (!cancelled) setDocs([]);
+        if (!cancelled) {
+          setDocs(documentLibrary);
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
@@ -351,23 +356,6 @@ export default function MegaMenuContent({
 
     return categories;
   }, [locale, docs]);
-
-  // Lazy-load the document library and stash it globally for memo to use
-  React.useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = (mod.documentLibrary || []) as LegalDocument[];
-        if (!cancelled) (globalThis as any).__DOC_LIB__ = docs;
-      } catch (_) {
-        if (!cancelled) (globalThis as any).__DOC_LIB__ = [];
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const [openCategories, setOpenCategories] = React.useState<
     Record<string, boolean>
