@@ -134,17 +134,33 @@ const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-const SelectSeparator = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.Separator
-    ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-muted', className)}
-    {...props}
-  />
-));
-SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
+const PrimitiveSeparator =
+  (SelectPrimitive as unknown as { Separator?: typeof SelectPrimitive.Item })?.Separator;
+
+const SelectSeparator = PrimitiveSeparator
+  ? React.forwardRef<
+      React.ElementRef<typeof PrimitiveSeparator>,
+      React.ComponentPropsWithoutRef<typeof PrimitiveSeparator>
+    >(({ className, ...props }, ref) => (
+      <PrimitiveSeparator
+        ref={ref}
+        className={cn('-mx-1 my-1 h-px bg-muted', className)}
+        {...props}
+      />
+    ))
+  : React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>( (
+      { className, ...props },
+      ref,
+    ) => (
+      <div
+        ref={ref}
+        className={cn('-mx-1 my-1 h-px bg-muted', className)}
+        role="separator"
+        {...props}
+      />
+    ));
+
+SelectSeparator.displayName = PrimitiveSeparator?.displayName ?? 'SelectSeparator';
 
 export {
   Select,
