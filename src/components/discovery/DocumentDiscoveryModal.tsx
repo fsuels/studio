@@ -16,6 +16,12 @@ import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
 import { useDebounce } from '@/hooks/use-debounce';
 import type { DiscoveryResult } from '@/types/discovery';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import {
+  findMatchingDocuments,
+  findMatchingDocumentsSync,
+  getDocumentsByCountry,
+} from '@/lib/document-library';
+import type { LegalDocument } from '@/types/documents';
 // Local search imported lazily inside performSearch to avoid bundling the library
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
@@ -62,9 +68,20 @@ export default function DocumentDiscoveryModal() {
     if (query.trim()) {
       console.log('[Discovery Modal] Starting search for:', query);
       
-      // Always search local documents first as a reliable fallback (lazy import)
-      const { findMatchingDocuments } = await import('@/lib/document-library.ts');
-      const localDocs = findMatchingDocuments(query.trim(), locale);
+      // Ensure manifest-backed documents are hydrated for consistent results
+      try {
+        await getDocumentsByCountry('us');
+      } catch (_) {
+        // Ignore hydration errors; we still have manifest-derived defaults
+      }
+
+      // Always search local documents first as a reliable fallback
+      let localDocs: LegalDocument[];
+      try {
+        localDocs = await findMatchingDocuments(query.trim(), locale);
+      } catch (error) {
+        localDocs = findMatchingDocumentsSync(query.trim(), locale);
+      }
       console.log('[Discovery Modal] Local search found:', localDocs.length, 'documents');
       
       // Convert to DiscoveryResult format

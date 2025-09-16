@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -28,7 +28,8 @@ import {
   ClipboardList as QuestionnaireIcon,
 } from 'lucide-react'; // Updated icons and custom icon
 import { useToast } from '@/hooks/use-toast';
-import type { Question } from '@/types/documents';
+import type { Question, LegalDocument } from '@/types/documents';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
@@ -52,70 +53,70 @@ export function Questionnaire({
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const { toast } = useToast();
 
-  // Find the document object based on the name
-  const [selectedDocument, setSelectedDocument] = useState<any | null>(null);
+  const [documents, setDocuments] = useState<LegalDocument[]>(documentLibrary);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!documentType) {
-        setSelectedDocument(null);
-        return;
-      }
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const doc = (mod.documentLibrary as any[]).find((d) => d.name === documentType);
-        if (!cancelled) setSelectedDocument(doc || null);
+        const hydrated = await getDocumentsByCountry('us');
+        if (!cancelled && hydrated.length) {
+          setDocuments(hydrated);
+        }
       } catch (_) {
-        if (!cancelled) setSelectedDocument(null);
+        if (!cancelled) {
+          setDocuments(documentLibrary);
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, [documentType]);
+  }, []);
+
+  const selectedDocument = useMemo(() => {
+    if (!documentType) return null;
+    return (
+      documents.find((doc) => doc.name === documentType) ||
+      documents.find((doc) => doc.id === documentType) ||
+      null
+    );
+  }, [documents, documentType]);
+
+  const generalDocument = useMemo(
+    () => documents.find((doc) => doc.id === 'general-inquiry') || null,
+    [documents],
+  );
+
+  const fallbackDocument = useMemo(
+    () => documents.find((doc) => doc.id === 'default') || null,
+    [documents],
+  );
+
+  const applyStateFilter = useCallback(
+    (questions: Question[]) =>
+      questions.filter(
+        (q) =>
+          !q.stateSpecific ||
+          q.stateSpecific.length === 0 ||
+          (selectedState && q.stateSpecific.includes(selectedState)),
+      ),
+    [selectedState],
+  );
 
   // Effect to load and filter questions based on documentType and selectedState
   useEffect(() => {
     let questionsToLoad: Question[] = [];
-    if (selectedDocument) {
-      questionsToLoad = selectedDocument.questions || []; // Get questions from the matched document object
 
-      // Filter questions based on state relevance
-      questionsToLoad = questionsToLoad.filter(
-        (q) =>
-          !q.stateSpecific || // Keep if not state-specific
-          q.stateSpecific.length === 0 || // Keep if empty array (applies to all)
-          (selectedState && q.stateSpecific.includes(selectedState)), // Keep if state matches
-      );
+    if (!documentType) {
+      questionsToLoad = [];
+    } else if (selectedDocument) {
+      questionsToLoad = applyStateFilter(selectedDocument.questions || []);
     } else if (documentType === 'General Inquiry') {
-      // Handle General Inquiry case specifically if needed
-      (async () => {
-        try {
-          const mod = await import('@/lib/document-library.ts');
-          const generalDoc = (mod.documentLibrary as any[]).find(
-            (doc) => doc.id === 'general-inquiry',
-          );
-          questionsToLoad = generalDoc?.questions || [];
-          setCurrentQuestions(questionsToLoad);
-        } catch {
-          setCurrentQuestions([]);
-        }
-      })();
-      return;
+      questionsToLoad = generalDocument?.questions || [];
     } else if (documentType) {
-      // Fallback if name doesn't match but type is provided (e.g., use default)
-      (async () => {
-        try {
-          const mod = await import('@/lib/document-library.ts');
-          const defaultDoc = (mod.documentLibrary as any[]).find(
-            (doc) => doc.id === 'default',
-          );
-          setCurrentQuestions(defaultDoc?.questions || []);
-        } catch {
-          setCurrentQuestions([]);
-        }
-      })();
-      return;
+      questionsToLoad = fallbackDocument?.questions || [];
     }
 
     setCurrentQuestions(questionsToLoad);
@@ -131,7 +132,14 @@ export function Questionnaire({
     setIsEditing(initialEditingState);
     setAnswers({}); // Clear previous answers
     setHasSubmitted(false); // Reset submitted state
-  }, [documentType, selectedDocument, selectedState, isReadOnly]); // Re-run when these change
+  }, [
+    documentType,
+    selectedDocument,
+    generalDocument,
+    fallbackDocument,
+    applyStateFilter,
+    isReadOnly,
+  ]); // Re-run when these change
 
   const handleInputChange = (id: string, value: unknown) => {
     if (isReadOnly || !isEditing[id]) return; // Prevent changes if read-only or not editing this field

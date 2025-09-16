@@ -23,6 +23,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/usStates';
+import documentLibrary, {
+  findMatchingDocuments,
+  findMatchingDocumentsSync,
+  getDocumentsByCountry,
+} from '@/lib/document-library';
 
 interface Props {
   onSelect: (_documentId: string) => void; // Now accepts the document ID
@@ -43,45 +48,68 @@ export default function DocumentTypeSelector({
     // Set hydrated state on client
   }, []);
 
-  const [categories, setCategories] = useState<string[]>([]);
-  const [filteredDocuments, setFilteredDocuments] = useState<LegalDocument[]>([]);
+  const deriveCategories = React.useCallback((docs: LegalDocument[]) => {
+    return [...new Set(docs.map((d) => d.category))];
+  }, []);
 
-  // Lazy-load categories from the library when component mounts
+  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
+  const [categories, setCategories] = useState<string[]>(
+    deriveCategories(documentLibrary),
+  );
+  const [filteredDocuments, setFilteredDocuments] = useState<LegalDocument[]>(
+    documentLibrary,
+  );
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs: LegalDocument[] = (mod.documentLibrary as unknown) as LegalDocument[];
-        if (!cancelled) {
-          setCategories([...new Set(docs.map((d) => d.category))]);
+        const hydratedDocs = await getDocumentsByCountry('us');
+        if (!cancelled && hydratedDocs.length) {
+          setCategories(deriveCategories(hydratedDocs));
+          if (!searchQuery) {
+            setFilteredDocuments(hydratedDocs);
+          }
         }
       } catch (_) {
-        if (!cancelled) setCategories([]);
+        if (!cancelled) {
+          setCategories(deriveCategories(documentLibrary));
+          if (!searchQuery) {
+            setFilteredDocuments(documentLibrary);
+          }
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [deriveCategories, searchQuery]);
 
-  // Lazy-load search functionality and update results when inputs change
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const find = mod.findMatchingDocuments as (
-          q: string,
-          lang: 'en' | 'es',
-          state?: string,
-        ) => LegalDocument[];
-        const results = find(searchQuery, i18n.language as 'en' | 'es', selectedState);
-        if (!cancelled) setFilteredDocuments(results);
+        const results = await findMatchingDocuments(
+          searchQuery,
+          i18n.language as 'en' | 'es',
+          selectedState,
+        );
+        if (!cancelled) {
+          setFilteredDocuments(results);
+        }
       } catch (_) {
-        if (!cancelled) setFilteredDocuments([]);
+        if (!cancelled) {
+          const fallback = findMatchingDocumentsSync(
+            searchQuery,
+            i18n.language as 'en' | 'es',
+            selectedState,
+          );
+          setFilteredDocuments(fallback);
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };

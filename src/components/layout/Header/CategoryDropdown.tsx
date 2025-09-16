@@ -10,6 +10,7 @@ import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import type { LegalDocument } from '@/types/documents';
+import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
 
 interface CategoryDropdownProps {
   locale: 'en' | 'es';
@@ -345,7 +346,7 @@ export default function CategoryDropdown({
   isOpen
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
-  const [documents, setDocuments] = React.useState<LegalDocument[]>([]);
+  const [documents, setDocuments] = React.useState<LegalDocument[]>(documentLibrary);
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -377,13 +378,17 @@ export default function CategoryDropdown({
     if (!isOpen) return;
     (async () => {
       try {
-        const mod = await import('@/lib/document-library.ts');
-        const docs = mod.getDocumentsForCountry('us') as LegalDocument[];
-        if (!cancelled) setDocuments(docs);
+        const docs = await getDocumentsByCountry('us');
+        if (!cancelled && docs.length) {
+          setDocuments(docs);
+        }
       } catch (_) {
-        if (!cancelled) setDocuments([]);
+        if (!cancelled) {
+          setDocuments(documentLibrary);
+        }
       }
     })();
+
     return () => {
       cancelled = true;
     };
