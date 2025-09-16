@@ -11,7 +11,7 @@ import {
   getBrowserImageFormat,
   generateBlurDataURL,
   calculateImageDimensions,
-  createLazyImageObserver
+  useLazyImageObserver as createLazyImageObserver
 } from '@/lib/image-loader';
 
 export interface OptimizedImageProps {
@@ -103,7 +103,7 @@ export function OptimizedImage({
   useEffect(() => {
     if (!lazy || priority || isInView) return;
 
-    const observer = useLazyImageObserver(
+    const observer = createLazyImageObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
