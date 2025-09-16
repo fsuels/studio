@@ -1,7 +1,7 @@
 // src/app/api/checkout/session/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { documentLibrary } from '@/lib/document-library';
+import { getSingleDocument } from '@/lib/document-library';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { docId, locale } = await req.json();
-    const doc = documentLibrary.find((d) => d.id === docId);
+    const doc = await getSingleDocument(docId);
     if (!doc) {
       return NextResponse.json({ error: 'Unknown document' }, { status: 400 });
     }

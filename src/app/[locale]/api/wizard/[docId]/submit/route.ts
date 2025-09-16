@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAdmin } from '@/lib/firebase-admin'; // Firebase Admin SDK
-import { documentLibrary } from '@/lib/document-library';
+import { getSingleDocument } from '@/lib/document-library';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{
@@ -77,7 +77,7 @@ export async function POST(
     }
     console.log(`${logPrefix} User authenticated: ${user.uid}`);
 
-    const docConfig = documentLibrary.find((d) => d.id === params.docId);
+    const docConfig = await getSingleDocument(params.docId);
 
     if (!docConfig) {
       console.error(

@@ -1,5 +1,30 @@
 // Internal Linking System for SEO and User Experience
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import {
+  DOCUMENT_MANIFEST,
+  type GeneratedMetadata,
+} from '@/lib/documents/manifest.generated';
+
+type LinkableDocument = {
+  id: string;
+  category: string;
+  translations: GeneratedMetadata['translations'];
+  name: string;
+  description: string;
+  tags: string[];
+};
+
+const linkableDocuments: LinkableDocument[] = DOCUMENT_MANIFEST.map(({ id, meta }) => ({
+  id,
+  category: meta.category,
+  translations: meta.translations,
+  name: meta.translations.en.name,
+  description: meta.translations.en.description,
+  tags: meta.tags || [],
+}));
+
+export function getLinkableDocuments(): LinkableDocument[] {
+  return linkableDocuments;
+}
 
 export interface InternalLink {
   url: string;
@@ -11,7 +36,7 @@ export interface InternalLink {
 
 export interface LinkingSuggestion {
   keyword: string;
-  documents: LegalDocument[];
+  documents: LinkableDocument[];
   linkText: string;
   priority: 'high' | 'medium' | 'low';
 }
@@ -95,7 +120,7 @@ export function findRelevantDocuments(content: string, maxResults: number = 5): 
   
   // Check for direct keyword matches
   Object.entries(documentKeywords).forEach(([docId, keywords]) => {
-    const document = documentLibrary.find(doc => doc.id === docId);
+    const document = linkableDocuments.find((doc) => doc.id === docId);
     if (!document) return;
     
     keywords.forEach(keyword => {
@@ -136,11 +161,12 @@ export function generateCategoryLinks(category: string, locale: 'en' | 'es' = 'e
   
   return docIds
     .map(docId => {
-      const document = documentLibrary.find(doc => doc.id === docId);
+      const document = linkableDocuments.find((doc) => doc.id === docId);
       if (!document) return null;
       
       const name = document.translations?.[locale]?.name || document.name;
-      const description = document.translations?.[locale]?.description || document.description;
+      const description =
+        document.translations?.[locale]?.description || document.description;
       
       return {
         url: `${baseUrl}/${locale}/docs/${docId}`,
@@ -183,19 +209,19 @@ export function insertSmartLinks(content: string, locale: 'en' | 'es' = 'en'): s
 /**
  * Get related documents for cross-linking
  */
-export function getRelatedDocuments(docId: string, maxResults: number = 4): LegalDocument[] {
-  const currentDoc = documentLibrary.find(doc => doc.id === docId);
+export function getRelatedDocuments(docId: string, maxResults: number = 4): LinkableDocument[] {
+  const currentDoc = linkableDocuments.find(doc => doc.id === docId);
   if (!currentDoc) return [];
   
   // Find documents in same category
-  const sameCategory = documentLibrary.filter(doc => 
+  const sameCategory = linkableDocuments.filter(doc => 
     doc.id !== docId && 
     doc.category === currentDoc.category
   );
   
   // Find documents with similar keywords
   const currentKeywords = documentKeywords[docId] || [];
-  const similar = documentLibrary.filter(doc => {
+  const similar = linkableDocuments.filter(doc => {
     if (doc.id === docId) return false;
     const docKeywords = documentKeywords[doc.id] || [];
     return docKeywords.some(keyword => 
@@ -332,3 +358,5 @@ export function generateBlogPost(templateKey: string, locale: 'en' | 'es' = 'en'
   
   return content;
 }
+
+export type { LinkableDocument };

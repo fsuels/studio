@@ -1,6 +1,9 @@
 // Content Enhancement Utilities for SEO Internal Linking
-import { findRelevantDocuments, type LinkingSuggestion } from './internal-linking';
-import { documentLibrary } from './document-library';
+import {
+  findRelevantDocuments,
+  getLinkableDocuments,
+  type LinkingSuggestion,
+} from './internal-linking';
 
 export interface ContentAnalysis {
   originalContent: string;
@@ -44,7 +47,7 @@ export function analyzeContent(content: string): SEOMetrics {
   const keywordDensity: Record<string, number> = {};
   const contentLower = content.toLowerCase();
 
-  documentLibrary.forEach((doc) => {
+  getLinkableDocuments().forEach((doc) => {
     const docName = doc.translations?.en?.name || doc.name;
     if (docName) {
       const keyword = docName.toLowerCase();
@@ -270,28 +273,24 @@ export function extractDocumentReferences(content: string): {
   const implicit: string[] = [];
   const categories = new Set<string>();
 
-  documentLibrary.forEach((doc) => {
-    const docName = (doc.translations?.en?.name || doc.name).toLowerCase();
+  getLinkableDocuments().forEach((doc) => {
+    const docName = doc.name.toLowerCase();
 
     // Check for exact matches
     if (contentLower.includes(docName)) {
       explicit.push(doc.id);
-      if (doc.category) categories.add(doc.category);
+      categories.add(doc.category);
     }
 
-    // Check for related terms
-    const keywords = [
-      docName.split(' '),
-      doc.translations?.en?.description?.toLowerCase().split(' ') || [],
-      Object.keys(doc.schema?.shape || {}),
-    ]
-      .flat()
-      .filter(Boolean) as string[];
+    // Check for related terms from descriptions and tags
+    const descriptionWords = (doc.description || '').toLowerCase().split(/\s+/);
+    const keywords = [...descriptionWords, ...doc.tags];
 
     keywords.forEach((keyword) => {
-      if (keyword.length > 3 && contentLower.includes(keyword)) {
+      const normalized = keyword.trim().toLowerCase();
+      if (normalized.length > 3 && contentLower.includes(normalized)) {
         implicit.push(doc.id);
-        if (doc.category) categories.add(doc.category);
+        categories.add(doc.category);
       }
     });
   });
@@ -302,4 +301,3 @@ export function extractDocumentReferences(content: string): {
     categories: Array.from(categories),
   };
 }
-

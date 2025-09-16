@@ -7,7 +7,7 @@
 
 import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
-import { documentLibrary } from '@/lib/document-library';
+import { getLinkableDocuments } from '@/lib/internal-linking';
 
 // Input Schema
 export const InferDocumentTypeInputSchema = z.object({
@@ -57,8 +57,11 @@ export type InferDocumentTypeOutput = z.infer<
 // Currently we ignore the language argument but keep the helper for
 // potential localization of document names in the future.
 const getAvailableDocumentsContext = (): string => {
+  const docs = getLinkableDocuments();
   return `Available Document Types:
-${documentLibrary.map((doc) => `- ${doc.name} (Category: ${doc.category})`).join('\n')}`;
+${docs
+  .map((doc) => `- ${doc.name} (Category: ${doc.category})`)
+  .join('\n')}`;
 };
 
 // Define AI prompt
@@ -142,10 +145,11 @@ export const inferDocumentTypeFlow = ai.defineFlow(
       }
 
       // Filter suggestions to known docs
+      const docs = getLinkableDocuments();
       let suggestions = validOut.data.suggestions.filter(
         (s) =>
           s.documentType === 'General Inquiry' ||
-          documentLibrary.some((d) => d.name === s.documentType),
+          docs.some((d) => d.name === s.documentType),
       );
       if (suggestions.length === 0) {
         suggestions = [

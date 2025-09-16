@@ -4,12 +4,10 @@ import { getMarkdown } from '@/lib/markdown-cache';
 import DocPageClient from './DocPageClient';
 import { getAllDocumentMetadata } from '@/lib/document-metadata-registry';
 import { getRelatedDocuments } from '@/lib/internal-linking';
-import { getDocTranslation } from '@/lib/i18nUtils';
 import { localizations } from '@/lib/localizations';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { redirect } from 'next/navigation';
-import { documentLibrary } from '@/lib/document-library';
-import type { LegalDocument } from '@/lib/document-library';
+import { getSingleDocument } from '@/lib/document-library';
 
 export const dynamic = 'force-static';
 
@@ -64,15 +62,9 @@ export default async function DocPage({ params }: DocPageProps) {
     redirect(`/${locale}/docs/${canonical}`);
   }
 
-  // optional guard
-  if (!documentLibrary.find((d: LegalDocument) => d.id === docId)) {
-    // throw notFound() here if desired
-  }
-
   const markdownContent = await getMarkdown(locale, docId);
 
-  // Prepare lightweight doc meta for client to avoid bundling full library there
-  const doc = documentLibrary.find((d: LegalDocument) => d.id === docId);
+  const doc = await getSingleDocument(docId);
   const docMeta = doc
     ? {
         id: doc.id,
@@ -85,8 +77,12 @@ export default async function DocPage({ params }: DocPageProps) {
 
   // Compute related docs on the server to avoid heavy client imports
   const related = getRelatedDocuments(docId, 4).map((d) => {
-    const t = getDocTranslation(d, locale);
-    return { id: d.id, name: t.name, description: t.description };
+    const translation = d.translations[locale] || d.translations.en;
+    return {
+      id: d.id,
+      name: translation?.name || d.name,
+      description: translation?.description || d.description,
+    };
   });
 
   return (

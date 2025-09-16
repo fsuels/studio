@@ -7,9 +7,12 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { FileText, ExternalLink, ArrowRight } from 'lucide-react';
-import { getRelatedDocuments, generateCategoryLinks, type InternalLink } from '@/lib/internal-linking';
-// Avoid bundling full library; load lazily where needed
-import { getDocTranslation } from '@/lib/i18nUtils';
+import {
+  getRelatedDocuments,
+  generateCategoryLinks,
+  getLinkableDocuments,
+  type InternalLink,
+} from '@/lib/internal-linking';
 import { cn } from '@/lib/utils';
 
 interface InternalLinkWidgetProps {
@@ -40,23 +43,7 @@ export default function InternalLinkWidget({
   const { t } = useTranslation('common');
   const { setShowDiscoveryModal } = useDiscoveryModal();
 
-  // Get relevant documents
-  const [docs, setDocs] = React.useState<any[]>([]);
-  React.useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const mod = await import('@/lib/document-library.ts');
-        const d = mod.documentLibrary as any[];
-        if (!cancelled) setDocs(d);
-      } catch (_) {
-        if (!cancelled) setDocs([]);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const docs = React.useMemo(() => getLinkableDocuments(), []);
 
   const getRelevantDocs = React.useMemo(() => {
     if (documentId) {
@@ -78,15 +65,13 @@ export default function InternalLinkWidget({
     if (keywords.length > 0) {
       return docs
         .filter((doc) => {
-          const docName = getDocTranslation(doc, locale).name.toLowerCase();
-          const docDesc = (
-            getDocTranslation(doc, locale).description || ''
-          ).toLowerCase();
-          return keywords.some(
-            (keyword) =>
-              docName.includes(keyword.toLowerCase()) ||
-              docDesc.includes(keyword.toLowerCase()),
-          );
+          const translation = doc.translations[locale] || doc.translations.en;
+          const docName = (translation?.name || doc.name).toLowerCase();
+          const docDesc = (translation?.description || doc.description).toLowerCase();
+          return keywords.some((keyword) => {
+            const normalized = keyword.toLowerCase();
+            return docName.includes(normalized) || docDesc.includes(normalized);
+          });
         })
         .slice(0, maxLinks);
     }
@@ -128,7 +113,11 @@ export default function InternalLinkWidget({
         {getRelevantDocs.map((doc) => {
           if (!doc) return null;
           
-          const translatedDoc = getDocTranslation(doc, locale);
+          const translated = doc.translations[locale] || doc.translations.en;
+          const translatedDoc = {
+            name: translated?.name || doc.name,
+            description: translated?.description || doc.description,
+          };
           
           return (
             <Link
