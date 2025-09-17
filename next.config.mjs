@@ -364,8 +364,6 @@ const nextConfig = {
   /* —──────── Enhanced image optimization —──────── */
   images: {
     unoptimized: true, // Required for static export
-    loader: 'custom',
-    loaderFile: './image-loader.cjs',
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
