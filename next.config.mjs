@@ -1,8 +1,14 @@
 // next.config.mjs — Optimized configuration for production builds
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { createRequire } from 'module';
+import path from 'path';
 
 const require = createRequire(import.meta.url);
+
+const resolvePackagePath = (pkgName, ...segments) => {
+  const pkgDir = path.dirname(require.resolve(`${pkgName}/package.json`));
+  return path.join(pkgDir, ...segments);
+};
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -38,8 +44,8 @@ const nextConfig = {
     // Ensure module resolution for Firebase SDK treeshaking and framer-motion ESM
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@firebase/firestore': require.resolve('@firebase/firestore/dist/index.esm2017.js'),
-      '@firebase/firestore/lite': require.resolve('@firebase/firestore/dist/lite/index.browser.esm2017.js'),
+      '@firebase/firestore': resolvePackagePath('@firebase/firestore', 'dist', 'index.esm2017.js'),
+      '@firebase/firestore/lite': resolvePackagePath('@firebase/firestore', 'dist', 'lite', 'index.browser.esm2017.js'),
     };
 
     // Externalize problematic server-only deps
@@ -359,7 +365,7 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
     loader: 'custom',
-    loaderFile: './src/lib/image-loader.ts',
+    loaderFile: './image-loader.cjs',
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
