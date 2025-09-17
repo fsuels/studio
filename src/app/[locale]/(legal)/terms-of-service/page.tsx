@@ -3,12 +3,12 @@
 
 import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';
 
-export default function LocaleTermsPage({
+export default async function LocaleTermsPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
-  const locale = params.locale ?? 'en';
+  const { locale = 'en' } = await params;
 
   return (
     <div className="container mx-auto px-4 py-8">

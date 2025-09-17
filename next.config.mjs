@@ -1,5 +1,8 @@
 // next.config.mjs — Optimized configuration for production builds
 import bundleAnalyzer from '@next/bundle-analyzer';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -16,8 +19,8 @@ const nextConfig = {
 
   /* Optimizations for large codebases */
   experimental: {
-    // Use webpack's persistent cache for faster builds
-    webpackBuildWorker: true,
+    // Disable build worker to avoid SIGBUS crashes in constrained environments
+    webpackBuildWorker: false,
   },
 
 
@@ -32,6 +35,13 @@ const nextConfig = {
       };
     }
 
+    // Ensure module resolution for Firebase SDK treeshaking and framer-motion ESM
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@firebase/firestore': require.resolve('@firebase/firestore/dist/index.esm2017.js'),
+      '@firebase/firestore/lite': require.resolve('@firebase/firestore/dist/lite/index.browser.esm2017.js'),
+    };
+
     // Externalize problematic server-only deps
     if (isServer) {
       config.externals = config.externals || [];
@@ -39,7 +49,9 @@ const nextConfig = {
         { handlebars: 'commonjs2 handlebars' },
         { '@pinecone-database/pinecone': 'commonjs2 @pinecone-database/pinecone' },
         { openai: 'commonjs2 openai' },
-        { '@google-cloud/aiplatform': 'commonjs2 @google-cloud/aiplatform' }
+        { '@google-cloud/aiplatform': 'commonjs2 @google-cloud/aiplatform' },
+        { 'pdf-lib': 'commonjs2 pdf-lib' },
+        { '@pdf-lib/fontkit': 'commonjs2 @pdf-lib/fontkit' }
       );
     }
 

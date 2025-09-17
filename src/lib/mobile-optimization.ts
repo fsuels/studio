@@ -265,7 +265,6 @@ export function usePerformanceMonitoring() {
 export const DynamicImportPatterns = {
   // Predefined safe import patterns
   preloadFirebase: () => import('@/lib/firebase-dynamic'),
-  preloadPDF: () => import('@/lib/pdf/pdf-service'),
   preloadForms: () => import('@/components/forms/DynamicForm'),
   preloadSearch: () => import('@/services/vectorSearch'),
 

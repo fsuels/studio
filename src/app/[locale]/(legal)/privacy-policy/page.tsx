@@ -1,12 +1,14 @@
 // src/app/[locale]/privacy-policy/page.tsx
 // Server component for Privacy Policy; logs view via tiny client child to keep bundle small
 
-export default function LocalePrivacyPolicyPage({
+import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';
+
+export default async function LocalePrivacyPolicyPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
-  const locale = params.locale ?? 'en';
+  const { locale = 'en' } = await params;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -65,4 +67,3 @@ export default function LocalePrivacyPolicyPage({
     </div>
   );
 }
-import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';
