@@ -14,7 +14,7 @@
 - Additional entry points audit: no Firebase Function or CLI workflows currently invoke pdf generation; monitor future Functions additions so they adopt the logger immediately.
 
 ### Phase 1 – Manifest Adoption Sprint (Weeks 1–2)
-- 2025-09-19: TypeScript sweep now shells `npx tsc --noEmit --skipLibCheck`; Firestore 13.3.0 emits a TS1010 (`*/` expected) error—documented for follow-up.
+- 2025-09-19: TypeScript sweep now runs `npx tsc --noEmit --skipLibCheck`; Firestore 7.11.1 typings still emit TS1010 ('*/' expected) — track downstream fix or patch-package.
 - 2025-09-19: Quality verifier updated to consume manifest JSON; remaining warnings are environment-only (tsc unavailable in sandbox, lint max-warning exit).
 - 2025-09-19: Quality verification script highlights backlog of non-manifest exports/metadata (legacy template dirs); queued for cleanup or manifest parity before enabling full CI gate.
 - Replace remaining `documentLibrary` imports in client/server components with manifest-backed selectors (`DocumentTypeSelector`, Step flows, search, discovery, chips, analytics widgets).

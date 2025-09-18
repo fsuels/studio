@@ -1,6 +1,7 @@
 # Pending Follow-Ups
 
-- TypeScript check now runs `npx tsc --noEmit --skipLibCheck`; current failure traces back to `@google-cloud/firestore` typings (`*/` parsing error).
+- TypeScript check now runs `npx tsc --noEmit --skipLibCheck`; current failure traces back to `@google-cloud/firestore` typings (`*/` expected).
+
 
 - Quality verifier now aligns with manifest JSON; remaining warnings are external (tsc unavailable locally, lint max-warning exit).
 
