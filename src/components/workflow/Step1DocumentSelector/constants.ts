@@ -11,7 +11,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
-import { CategoryInfo } from './types';
+import { CategoryInfo, SelectableDocument } from './types';
 
 export const CATEGORY_LIST: CategoryInfo[] = [
   { key: 'Finance', labelKey: 'Finance', icon: Landmark },
@@ -28,9 +28,31 @@ export const CATEGORY_LIST: CategoryInfo[] = [
   { key: 'Miscellaneous', labelKey: 'General', icon: FileText },
 ];
 
+export const DEFAULT_CATEGORY_ICON = FileText;
+
+export const CATEGORY_ICON_MAP = new Map(
+  CATEGORY_LIST.map((category) => [category.key.toLowerCase(), category.icon]),
+);
+
+export const CATEGORY_LABEL_MAP = new Map(
+  CATEGORY_LIST.map((category) => [category.key.toLowerCase(), category.labelKey]),
+);
+
+export const buildCategoryInfo = (categoryName: string): CategoryInfo => {
+  const normalized = categoryName.toLowerCase();
+  const icon = CATEGORY_ICON_MAP.get(normalized) ?? DEFAULT_CATEGORY_ICON;
+  const labelKey = CATEGORY_LABEL_MAP.get(normalized) ?? categoryName;
+
+  return {
+    key: categoryName,
+    labelKey,
+    icon,
+  } satisfies CategoryInfo;
+};
+
 // Placeholder for top docs - in a real app, this comes from Firestore
 export const PLACEHOLDER_TOP_DOCS: Array<
-  Pick<DocumentSummary, 'id' | 'category' | 'translations'> & {
+  SelectableDocument & {
     icon?: React.ElementType;
   }
 > = [

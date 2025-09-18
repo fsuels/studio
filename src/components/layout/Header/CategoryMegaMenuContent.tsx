@@ -10,8 +10,11 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { X, Search, ChevronRight, FileText } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import type { LegalDocument } from '@/types/documents';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import {
+  getWorkflowDocuments,
+  searchWorkflowDocuments,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 
 interface CategoryMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -120,11 +123,15 @@ export default function CategoryMegaMenuContent({
   activeCategory,
   searchQuery,
   onClose,
-  onSearchChange
+  onSearchChange,
 }: CategoryMegaMenuContentProps) {
   const { t } = useTranslation('common');
-  const [documents, setDocuments] = React.useState<LegalDocument[]>(documentLibrary);
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
+
+  const documents = useMemo(
+    () => getWorkflowDocuments({ jurisdiction: 'us' }),
+    [],
+  );
 
   // Handle global keyboard events
   React.useEffect(() => {
@@ -138,30 +145,10 @@ export default function CategoryMegaMenuContent({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  React.useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const docs = await getDocumentsByCountry('us');
-        if (!cancelled && docs.length) {
-          setDocuments(docs);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocuments(documentLibrary);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   // Create document map for quick lookup
   const documentMap = useMemo(() => {
-    const map = new Map<string, LegalDocument>();
-    documents.forEach(doc => {
+    const map = new Map<string, DocumentSummary>();
+    documents.forEach((doc) => {
       map.set(doc.id, doc);
     });
     return map;
@@ -169,22 +156,14 @@ export default function CategoryMegaMenuContent({
 
   // Search functionality
   const searchResults = useMemo(() => {
-    if (!searchQuery) return [];
+    const trimmedQuery = searchQuery.trim();
+    if (!trimmedQuery) return [];
 
-    const query = searchQuery.toLowerCase();
-    return documents.filter(doc => {
-      if (doc.id === 'general-inquiry') return false;
-      
-      const translatedDoc = getDocTranslation(doc, locale);
-      const name = translatedDoc.name.toLowerCase();
-      const description = translatedDoc.description?.toLowerCase() || '';
-      const aliases = translatedDoc.aliases?.map(a => a.toLowerCase()) || [];
-      
-      return name.includes(query) || 
-             description.includes(query) || 
-             aliases.some(alias => alias.includes(query));
-    });
-  }, [searchQuery, documents, locale]);
+    return searchWorkflowDocuments(trimmedQuery, {
+      jurisdiction: 'us',
+      language: locale,
+    }).filter((doc) => doc.id !== 'general-inquiry');
+  }, [searchQuery, locale]);
 
   // Group search results by category
   const groupedSearchResults = useMemo(() => {
@@ -197,7 +176,7 @@ export default function CategoryMegaMenuContent({
       }
       acc[category].push(doc);
       return acc;
-    }, {} as Record<string, LegalDocument[]>);
+    }, {} as Record<string, DocumentSummary[]>);
     
     return grouped;
   }, [searchResults]);

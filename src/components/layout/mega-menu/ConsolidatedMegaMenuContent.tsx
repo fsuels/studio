@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search, X, ChevronRight, FileText, Mail, FileCheck, Users, Building } from 'lucide-react';
-import type { LegalDocument } from '@/types/documents';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ConsolidatedMegaMenuContentProps {
-  documents: LegalDocument[];
+  documents: DocumentSummary[];
   onClose?: () => void;
   onLinkClick?: () => void;
   activeCategory?: string | null;
@@ -231,7 +231,7 @@ export default function ConsolidatedMegaMenuContent({
 
   // Create a map of document IDs to documents for quick lookup
   const documentMap = useMemo(() => {
-    const map = new Map<string, LegalDocument>();
+    const map = new Map<string, DocumentSummary>();
     documents.forEach(doc => {
       map.set(doc.id, doc);
     });

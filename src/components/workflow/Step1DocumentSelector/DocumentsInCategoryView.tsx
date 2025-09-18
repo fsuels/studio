@@ -26,7 +26,9 @@ const DocumentsInCategoryView: React.FC<DocumentsInCategoryViewProps> = ({
   onDocSearchChange,
   placeholderSearchDocuments,
 }) => {
-  const handleDocumentSelect = (doc: any) => {
+  const handleDocumentSelect = (
+    doc: ViewComponentProps['documentsToDisplay'][number],
+  ) => {
     onDocumentSelect(doc);
   };
 

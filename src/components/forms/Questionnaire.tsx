@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -29,7 +29,10 @@ import {
 } from 'lucide-react'; // Updated icons and custom icon
 import { useToast } from '@/hooks/use-toast';
 import type { Question, LegalDocument } from '@/types/documents';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import {
+  getWorkflowDocuments,
+  loadWorkflowDocument,
+} from '@/lib/workflow/document-workflow';
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
@@ -53,45 +56,52 @@ export function Questionnaire({
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const { toast } = useToast();
 
-  const [documents, setDocuments] = useState<LegalDocument[]>(documentLibrary);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const hydrated = await getDocumentsByCountry('us');
-        if (!cancelled && hydrated.length) {
-          setDocuments(hydrated);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocuments(documentLibrary);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const selectedDocument = useMemo(() => {
-    if (!documentType) return null;
-    return (
-      documents.find((doc) => doc.name === documentType) ||
-      documents.find((doc) => doc.id === documentType) ||
-      null
-    );
-  }, [documents, documentType]);
-
-  const generalDocument = useMemo(
-    () => documents.find((doc) => doc.id === 'general-inquiry') || null,
-    [documents],
+  const documentsMetadata = useMemo(
+    () => getWorkflowDocuments({ jurisdiction: 'us' }),
+    [],
   );
 
-  const fallbackDocument = useMemo(
-    () => documents.find((doc) => doc.id === 'default') || null,
-    [documents],
+  const loadedDocumentsRef = useRef(new Map<string, LegalDocument | null>());
+
+  const resolveDocumentId = useCallback(
+    (type: string | null): string | null => {
+      if (!type) return null;
+      const normalized = type.toLowerCase();
+
+      const directMatch = documentsMetadata.find((doc) => doc.id === type);
+      if (directMatch) {
+        return directMatch.id;
+      }
+
+      const nameMatch = documentsMetadata.find((doc) => {
+        const englishName = doc.translations?.en?.name?.toLowerCase();
+        const spanishName = doc.translations?.es?.name?.toLowerCase();
+        return englishName === normalized || spanishName === normalized;
+      });
+
+      return nameMatch ? nameMatch.id : null;
+    },
+    [documentsMetadata],
+  );
+
+  const ensureDocument = useCallback(
+    async (docId: string | null): Promise<LegalDocument | null> => {
+      if (!docId) return null;
+
+      if (loadedDocumentsRef.current.has(docId)) {
+        return loadedDocumentsRef.current.get(docId) ?? null;
+      }
+
+      try {
+        const doc = await loadWorkflowDocument(docId);
+        loadedDocumentsRef.current.set(docId, doc);
+        return doc ?? null;
+      } catch (error) {
+        loadedDocumentsRef.current.set(docId, null);
+        return null;
+      }
+    },
+    [],
   );
 
   const applyStateFilter = useCallback(
@@ -107,39 +117,65 @@ export function Questionnaire({
 
   // Effect to load and filter questions based on documentType and selectedState
   useEffect(() => {
-    let questionsToLoad: Question[] = [];
+    let cancelled = false;
 
-    if (!documentType) {
-      questionsToLoad = [];
-    } else if (selectedDocument) {
-      questionsToLoad = applyStateFilter(selectedDocument.questions || []);
-    } else if (documentType === 'General Inquiry') {
-      questionsToLoad = generalDocument?.questions || [];
-    } else if (documentType) {
-      questionsToLoad = fallbackDocument?.questions || [];
+    async function hydrateQuestions() {
+      if (!documentType) {
+        if (cancelled) return;
+
+        setCurrentQuestions([]);
+        setIsEditing({});
+        setAnswers({});
+        setHasSubmitted(false);
+        return;
+      }
+
+      const resolvedDocId = resolveDocumentId(documentType);
+      const normalizedType = documentType.toLowerCase();
+
+      let doc: LegalDocument | null = null;
+
+      if (resolvedDocId) {
+        doc = await ensureDocument(resolvedDocId);
+      } else if (normalizedType === 'general inquiry') {
+        doc = await ensureDocument('general-inquiry');
+      } else {
+        doc = await ensureDocument('default');
+      }
+
+      if (cancelled) return;
+
+      const questionsToLoad = doc
+        ? applyStateFilter(doc.questions || [])
+        : [];
+
+      setCurrentQuestions(questionsToLoad);
+
+      const initialEditingState = questionsToLoad.reduce(
+        (acc, q) => {
+          acc[q.id] = !isReadOnly;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+
+      setIsEditing(initialEditingState);
+      setAnswers({});
+      setHasSubmitted(false);
     }
 
-    setCurrentQuestions(questionsToLoad);
+    void hydrateQuestions();
 
-    // Reset state when document type or state changes significantly
-    const initialEditingState = questionsToLoad.reduce(
-      (acc, q) => {
-        acc[q.id] = !isReadOnly; // Start in editing mode unless globally read-only
-        return acc;
-      },
-      {} as Record<string, boolean>,
-    );
-    setIsEditing(initialEditingState);
-    setAnswers({}); // Clear previous answers
-    setHasSubmitted(false); // Reset submitted state
+    return () => {
+      cancelled = true;
+    };
   }, [
     documentType,
-    selectedDocument,
-    generalDocument,
-    fallbackDocument,
     applyStateFilter,
+    ensureDocument,
+    resolveDocumentId,
     isReadOnly,
-  ]); // Re-run when these change
+  ]);
 
   const handleInputChange = (id: string, value: unknown) => {
     if (isReadOnly || !isEditing[id]) return; // Prevent changes if read-only or not editing this field

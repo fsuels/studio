@@ -364,8 +364,8 @@ class DocumentQualityVerifier {
       this.addError('Integration', 'Missing mega menu component');
     } else {
       const content = fs.readFileSync(megaMenuPath, 'utf8');
-      if (!content.includes('documentLibrary')) {
-        this.addError('Integration', 'Mega menu not using document library');
+      if (!content.includes('getWorkflowDocuments')) {
+        this.addError('Integration', 'Mega menu not using manifest workflow helpers');
       } else {
         this.addSuccess('Integration');
       }

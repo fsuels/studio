@@ -146,9 +146,9 @@ console.log(
 
 if (hasMegaMenu) {
   const megaMenuContent = fs.readFileSync(megaMenuPath, 'utf8');
-  const usesDocumentLibrary = megaMenuContent.includes('documentLibrary');
+  const usesWorkflowDocuments = megaMenuContent.includes('getWorkflowDocuments');
   console.log(
-    `   ${usesDocumentLibrary ? '✅' : '⚠️'} Uses document library: ${usesDocumentLibrary ? 'Yes' : 'No'}`,
+    `   ${usesWorkflowDocuments ? '✅' : '⚠️'} Uses manifest helpers: ${usesWorkflowDocuments ? 'Yes' : 'No'}`,
   );
 }
 

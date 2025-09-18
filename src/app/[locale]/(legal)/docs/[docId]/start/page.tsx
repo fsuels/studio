@@ -65,7 +65,7 @@ export async function generateStaticParams(): Promise<
     console.log(`[generateStaticParams] Generated ${params.length} params.`);
     if (params.length === 0) {
       console.warn(
-        '[generateStaticParams] No params generated—check documentLibrary & localizations.',
+        '[generateStaticParams] No params generated—check manifest metadata & localizations.',
       );
     }
   }

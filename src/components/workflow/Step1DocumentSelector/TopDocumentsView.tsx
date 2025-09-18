@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import TopDocChip from './TopDocChip';
-import { ViewComponentProps } from './types';
-import { PLACEHOLDER_TOP_DOCS } from './constants';
+import { ViewComponentProps, SelectableDocument } from './types';
 
 interface TopDocumentsViewProps
   extends Omit<ViewComponentProps, 'documentsToDisplay'> {
+  documents: SelectableDocument[];
   onExploreAllCategories: () => void;
 }
 
@@ -15,6 +15,7 @@ const TopDocumentsView: React.FC<TopDocumentsViewProps> = ({
   t,
   i18nLanguage,
   onDocumentSelect,
+  documents,
   onExploreAllCategories,
 }) => {
   const handleDocumentSelect = (doc: any) => {
@@ -24,7 +25,7 @@ const TopDocumentsView: React.FC<TopDocumentsViewProps> = ({
   return (
     <div className="animate-fade-in space-y-4">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {PLACEHOLDER_TOP_DOCS.map((doc) => (
+        {documents.map((doc) => (
           <TopDocChip
             key={doc.id}
             doc={doc}

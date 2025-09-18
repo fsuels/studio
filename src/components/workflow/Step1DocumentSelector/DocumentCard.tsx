@@ -52,7 +52,7 @@ const DocumentCard = React.memo(function DocumentCard({
         }) || placeholderNoDescription}
       </CardContent>
       <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
-        <span>💲{doc.basePrice}</span>
+        <span>💲{doc.basePrice ?? '—'}</span>
         <div className="flex gap-2">
           {doc.requiresNotarization && (
             <span title={placeholderRequiresNotarization}>📝</span>

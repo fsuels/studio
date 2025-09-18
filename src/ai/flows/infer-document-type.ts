@@ -33,7 +33,7 @@ export type InferDocumentTypeInput = z.infer<
 export const DocumentSuggestionSchema = z.object({
   documentType: z
     .string()
-    .describe('Exact English name from documentLibrary or "General Inquiry".'),
+    .describe('Exact manifest document name (English) or "General Inquiry".'),
   confidence: z.number().min(0).max(1).describe('Confidence level, 0 to 1.'),
   reasoning: z
     .string()
@@ -53,15 +53,39 @@ export type InferDocumentTypeOutput = z.infer<
   typeof InferDocumentTypeOutputSchema
 >;
 
-// Build context string from documentLibrary
-// Currently we ignore the language argument but keep the helper for
-// potential localization of document names in the future.
-const getAvailableDocumentsContext = (): string => {
+// Build a manifest-backed context string for the AI prompt.
+const getAvailableDocumentsContext = (): {
+  context: string;
+  englishNames: Set<string>;
+  localizedNames: Map<string, Set<string>>;
+} => {
   const docs = getLinkableDocuments();
-  return `Available Document Types:
-${docs
-  .map((doc) => `- ${doc.name} (Category: ${doc.category})`)
-  .join('\n')}`;
+  const englishNames = new Set<string>();
+  const localizedNames = new Map<string, Set<string>>();
+
+  const lines = docs.map((doc) => {
+    englishNames.add(doc.name.toLowerCase());
+
+    const locales: Array<'en' | 'es'> = ['en', 'es'];
+    locales.forEach((locale) => {
+      const localized = doc.translations?.[locale]?.name;
+      if (!localized) return;
+      const mapKey = locale;
+      if (!localizedNames.has(mapKey)) {
+        localizedNames.set(mapKey, new Set());
+      }
+      localizedNames.get(mapKey)!.add(localized.toLowerCase());
+    });
+
+    const tags = doc.tags.length ? ` | Tags: ${doc.tags.join(', ')}` : '';
+    return `- ${doc.name} (ID: ${doc.id}; Category: ${doc.category}${tags})`;
+  });
+
+  return {
+    context: `Available Document Types:\n${lines.join('\n')}`,
+    englishNames,
+    localizedNames,
+  };
 };
 
 // Define AI prompt
@@ -125,13 +149,14 @@ export const inferDocumentTypeFlow = ai.defineFlow(
       };
     }
 
-    const ctx = getAvailableDocumentsContext();
+    const { context: availableContext, englishNames, localizedNames } =
+      getAvailableDocumentsContext();
 
     try {
       const response = await prompt({
         ...parsed.data,
         // Extra context isn't part of the input schema; cast to satisfy typing
-        availableDocumentsContext: ctx,
+        availableDocumentsContext: availableContext,
       } as InferDocumentTypeInput & { availableDocumentsContext: string });
       const output = response.output as InferDocumentTypeOutput;
 
@@ -146,11 +171,31 @@ export const inferDocumentTypeFlow = ai.defineFlow(
 
       // Filter suggestions to known docs
       const docs = getLinkableDocuments();
-      let suggestions = validOut.data.suggestions.filter(
-        (s) =>
-          s.documentType === 'General Inquiry' ||
-          docs.some((d) => d.name === s.documentType),
-      );
+
+      const matchesKnownDocument = (name: string, language: 'en' | 'es') => {
+        const normalized = name.trim().toLowerCase();
+        if (!normalized) return false;
+        if (englishNames.has(normalized)) return true;
+        const localizedSet = localizedNames.get(language);
+        if (localizedSet && localizedSet.has(normalized)) {
+          return true;
+        }
+        return docs.some((doc) =>
+          [
+            doc.translations?.en?.name,
+            doc.translations?.es?.name,
+            doc.name,
+          ].some((candidate) =>
+            candidate?.toLowerCase() === normalized,
+          ),
+        );
+      };
+
+      let suggestions = validOut.data.suggestions.filter((s) => {
+        if (s.documentType === 'General Inquiry') return true;
+        const locale = parsed.data.language ?? 'en';
+        return matchesKnownDocument(s.documentType, locale);
+      });
       if (suggestions.length === 0) {
         suggestions = [
           {

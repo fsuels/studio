@@ -1,4 +1,5 @@
 import type { LegalDocument, LocalizedText } from '@/types/documents';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 
 /**
  * Safely retrieves the localized text object (name, description, aliases)
@@ -8,7 +9,7 @@ import type { LegalDocument, LocalizedText } from '@/types/documents';
  * @returns The LocalizedText object for the language or English fallback.
  */
 export function getDocTranslation(
-  doc: LegalDocument | null | undefined,
+  doc: LegalDocument | DocumentSummary | null | undefined,
   lang: string,
 ): LocalizedText {
   // Base fallback if no document or no translations

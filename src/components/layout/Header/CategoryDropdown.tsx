@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
-import type { LegalDocument } from '@/types/documents';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import {
+  getWorkflowDocuments,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 
 interface CategoryDropdownProps {
   locale: 'en' | 'es';
@@ -346,7 +348,10 @@ export default function CategoryDropdown({
   isOpen
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
-  const [documents, setDocuments] = React.useState<LegalDocument[]>(documentLibrary);
+  const documents = useMemo(
+    () => getWorkflowDocuments({ jurisdiction: 'us' }),
+    [],
+  );
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -372,32 +377,10 @@ export default function CategoryDropdown({
     }
   }, [isOpen, onLinkClick]);
 
-  // Lazy-load the document library only when the dropdown is opened
-  React.useEffect(() => {
-    let cancelled = false;
-    if (!isOpen) return;
-    (async () => {
-      try {
-        const docs = await getDocumentsByCountry('us');
-        if (!cancelled && docs.length) {
-          setDocuments(docs);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocuments(documentLibrary);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isOpen]);
-
   // Create document map for quick lookup
   const documentMap = useMemo(() => {
-    const map = new Map<string, LegalDocument>();
-    documents.forEach(doc => {
+    const map = new Map<string, DocumentSummary>();
+    documents.forEach((doc) => {
       map.set(doc.id, doc);
     });
     return map;

@@ -15,6 +15,7 @@ import { ArrowLeft, FileText } from 'lucide-react';
 import { track } from '@/lib/analytics';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import type { LegalDocument } from '@/types/documents';
 
 // Import extracted components
 import SearchResultsView from './SearchResultsView';
@@ -23,18 +24,26 @@ import AllCategoriesView from './AllCategoriesView';
 import DocumentsInCategoryView from './DocumentsInCategoryView';
 
 // Import types and constants
-import { Step1DocumentSelectorProps, ViewType, SimpleT } from './types';
+import {
+  Step1DocumentSelectorProps,
+  ViewType,
+  SimpleT,
+  SelectableDocument,
+} from './types';
 import {
   CATEGORY_LIST,
+  PLACEHOLDER_TOP_DOCS,
   getDocName,
   getDocDescription,
   getDocAliases,
   languageSupportsSpanish,
+  buildCategoryInfo,
 } from './constants';
 import {
   getWorkflowDocuments,
   searchWorkflowDocuments,
-  type DocumentSummary,
+  getWorkflowCategories,
+  loadWorkflowDocument,
 } from '@/lib/workflow/document-workflow';
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
@@ -107,136 +116,144 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     globalSearchTerm,
   ]);
 
+  const stateFilter =
+    globalSelectedState && globalSelectedState !== 'all'
+      ? globalSelectedState
+      : undefined;
+
+  const searchLanguage: 'en' | 'es' =
+    i18n.language === 'es' ? 'es' : 'en';
+
+  const workflowDocuments = useMemo(
+    () => getWorkflowDocuments({ jurisdiction: 'us', state: stateFilter }),
+    [stateFilter],
+  );
+
+  const manifestCategories = useMemo(
+    () => getWorkflowCategories({ jurisdiction: 'us', state: stateFilter }),
+    [stateFilter],
+  );
+
   const sortedCategories = useMemo(() => {
-    const uniqueCategoriesMap = new Map();
-    CATEGORY_LIST.forEach((catInfo) => {
-      if (!uniqueCategoriesMap.has(catInfo.key)) {
-        uniqueCategoriesMap.set(catInfo.key, catInfo);
-      }
-    });
-    const uniqueCategories = Array.from(uniqueCategoriesMap.values());
+    const fallbackCategories = CATEGORY_LIST.map((category) => category.key);
+    const categories = manifestCategories.length
+      ? manifestCategories
+      : fallbackCategories;
 
-    if (!isHydrated) return uniqueCategories;
-    return [...uniqueCategories].sort((a, b) =>
-      t(a.labelKey, a.key).localeCompare(t(b.labelKey, b.key), i18n.language),
+    const uniqueCategories = Array.from(new Set(categories));
+    const categoryInfos = uniqueCategories.map((categoryName) =>
+      buildCategoryInfo(categoryName),
     );
-  }, [isHydrated, i18n.language, t]);
 
-  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
+    if (!isHydrated) return categoryInfos;
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const hydratedDocs = await getDocumentsByCountry('us');
-        if (!cancelled && hydratedDocs.length) {
-          setDocs(hydratedDocs);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocs(documentLibrary);
-        }
-      }
-    })();
+    return [...categoryInfos].sort((a, b) =>
+      t(a.labelKey, { defaultValue: a.key }).localeCompare(
+        t(b.labelKey, { defaultValue: b.key }),
+        i18n.language,
+      ),
+    );
+  }, [manifestCategories, isHydrated, i18n.language, t]);
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const [loadingDocId, setLoadingDocId] = useState<string | null>(null);
+  const loadedDocsRef = React.useRef(new Map<string, LegalDocument>());
+
+  const topDocuments: SelectableDocument[] = useMemo(() => {
+    if (!workflowDocuments.length) {
+      return PLACEHOLDER_TOP_DOCS;
+    }
+
+    const byId = new Map(workflowDocuments.map((doc) => [doc.id, doc]));
+    return PLACEHOLDER_TOP_DOCS.map(
+      (doc) => byId.get(doc.id) ?? doc,
+    ) as SelectableDocument[];
+  }, [workflowDocuments]);
 
   const documentsToDisplay = useMemo(() => {
-    let docsList = [...docs];
     if (!isHydrated) return [];
 
-    if (currentView === 'search-results' && globalSearchTerm.trim() !== '') {
-      const lowerGlobalSearch = globalSearchTerm.toLowerCase();
-      docsList = docsList.filter(
-        (doc) =>
-          t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
-            .toLowerCase()
-            .includes(lowerGlobalSearch) ||
-          getDocAliases(doc, 'en').some((alias) =>
-            alias.toLowerCase().includes(lowerGlobalSearch),
-          ) ||
-          (languageSupportsSpanish(doc.languageSupport) &&
-            getDocAliases(doc, 'es').some((alias) =>
-              alias.toLowerCase().includes(lowerGlobalSearch),
-            )) ||
-          (languageSupportsSpanish(doc.languageSupport) &&
-            t(getDocName(doc, 'es'), { defaultValue: getDocName(doc, 'es') })
+    if (currentView === 'search-results') {
+      const trimmedQuery = globalSearchTerm.trim();
+      if (!trimmedQuery) {
+        return [];
+      }
+
+      return searchWorkflowDocuments(trimmedQuery, {
+        jurisdiction: 'us',
+        state: stateFilter,
+        language: searchLanguage,
+      });
+    }
+
+    if (currentView === 'documents-in-category' && selectedCategoryInternal) {
+      const normalizedCategory = selectedCategoryInternal.toLowerCase();
+      let docsList = workflowDocuments.filter(
+        (doc) => doc.category.toLowerCase() === normalizedCategory,
+      );
+
+      const trimmedDocSearch = docSearch.trim();
+      if (!trimmedDocSearch) {
+        return docsList;
+      }
+
+      const lowerDocSearch = trimmedDocSearch.toLowerCase();
+
+      docsList = docsList.filter((doc) => {
+        const matchesEnglishName = t(getDocName(doc, 'en'), {
+          defaultValue: getDocName(doc, 'en'),
+        })
+          .toLowerCase()
+          .includes(lowerDocSearch);
+
+        const matchesEnglishAliases = getDocAliases(doc, 'en').some((alias) =>
+          alias.toLowerCase().includes(lowerDocSearch),
+        );
+
+        const matchesEnglishDescription = t(getDocDescription(doc, 'en'), {
+          defaultValue: getDocDescription(doc, 'en'),
+        })
+          .toLowerCase()
+          .includes(lowerDocSearch);
+
+        const supportsSpanish = languageSupportsSpanish(doc.languageSupport);
+        const matchesSpanish = supportsSpanish
+          ? t(getDocName(doc, 'es'), {
+              defaultValue: getDocName(doc, 'es'),
+            })
               .toLowerCase()
-              .includes(lowerGlobalSearch)) ||
-          t(getDocDescription(doc, 'en'), {
-            defaultValue: getDocDescription(doc, 'en'),
-          })
-            .toLowerCase()
-            .includes(lowerGlobalSearch) ||
-          (languageSupportsSpanish(doc.languageSupport) &&
+              .includes(lowerDocSearch) ||
+            getDocAliases(doc, 'es').some((alias) =>
+              alias.toLowerCase().includes(lowerDocSearch),
+            ) ||
             t(getDocDescription(doc, 'es'), {
               defaultValue: getDocDescription(doc, 'es'),
             })
               .toLowerCase()
-              .includes(lowerGlobalSearch)),
-      );
-    } else if (
-      currentView === 'documents-in-category' &&
-      selectedCategoryInternal
-    ) {
-      docsList = docsList.filter((doc) => doc.category === selectedCategoryInternal);
-      if (docSearch.trim() !== '') {
-        const lowerDocSearch = docSearch.toLowerCase();
-        docsList = docsList.filter(
-          (doc) =>
-            t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
-              .toLowerCase()
-              .includes(lowerDocSearch) ||
-            getDocAliases(doc, 'en').some((alias) =>
-              alias.toLowerCase().includes(lowerDocSearch),
-            ) ||
-            (languageSupportsSpanish(doc.languageSupport) &&
-              getDocAliases(doc, 'es').some((alias) =>
-                alias.toLowerCase().includes(lowerDocSearch),
-              )) ||
-            (languageSupportsSpanish(doc.languageSupport) &&
-              t(getDocName(doc, 'es'), { defaultValue: getDocName(doc, 'es') })
-                .toLowerCase()
-                .includes(lowerDocSearch)) ||
-            t(getDocDescription(doc, 'en'), {
-              defaultValue: getDocDescription(doc, 'en'),
-            })
-              .toLowerCase()
-              .includes(lowerDocSearch) ||
-            (languageSupportsSpanish(doc.languageSupport) &&
-              t(getDocDescription(doc, 'es'), {
-                defaultValue: getDocDescription(doc, 'es'),
-              })
-                .toLowerCase()
-                .includes(lowerDocSearch)),
+              .includes(lowerDocSearch)
+          : false;
+
+        return (
+          matchesEnglishName ||
+          matchesEnglishAliases ||
+          matchesEnglishDescription ||
+          matchesSpanish
         );
-      }
-    } else {
-      return [];
+      });
+
+      return docsList;
     }
 
-    if (globalSelectedState && globalSelectedState !== 'all') {
-      docsList = docsList.filter(
-        (doc) =>
-          doc.states === 'all' ||
-          (Array.isArray(doc.states) &&
-            doc.states.includes(globalSelectedState)),
-      );
-    }
-
-    return docsList.filter((doc) => doc.id !== 'general-inquiry');
+    return [];
   }, [
-    selectedCategoryInternal,
-    docSearch,
-    globalSearchTerm,
-    globalSelectedState,
-    currentView,
-    t,
     isHydrated,
-    docs,
+    currentView,
+    globalSearchTerm,
+    docSearch,
+    selectedCategoryInternal,
+    workflowDocuments,
+    stateFilter,
+    searchLanguage,
+    t,
   ]);
 
   const handleCategoryClick = (key: string) => {
@@ -264,21 +281,9 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     setDocSearch('');
   };
 
-  const handleDocSelect = (
-    doc:
-      | LegalDocument
-      | Pick<LegalDocument, 'id' | 'category' | 'translations'>,
-  ) => {
+  const handleDocSelect = async (doc: SelectableDocument) => {
     if (!isHydrated) return;
-    const fullDoc = docs.find((d) => d.id === doc.id);
-    if (!fullDoc) {
-      toast({
-        title: 'Error',
-        description: 'Document details not found.',
-        variant: 'destructive',
-      });
-      return;
-    }
+
     if (isReadOnly || !globalSelectedState) {
       toast({
         title: t('State Required'),
@@ -289,14 +294,59 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       });
       return;
     }
-    onDocumentSelect(fullDoc);
-    track('select_item', {
-      item_id: fullDoc.id,
-      item_name: getDocName(fullDoc, i18n.language),
-      item_category: fullDoc.category,
-      price: fullDoc.basePrice,
-      state: globalSelectedState,
-    });
+
+    if (loadingDocId) {
+      return;
+    }
+
+    const cachedDoc = loadedDocsRef.current.get(doc.id);
+    if (cachedDoc) {
+      onDocumentSelect(cachedDoc);
+      track('select_item', {
+        item_id: cachedDoc.id,
+        item_name: getDocName(cachedDoc, i18n.language),
+        item_category: cachedDoc.category,
+        price: cachedDoc.basePrice,
+        state: globalSelectedState,
+      });
+      return;
+    }
+
+    try {
+      setLoadingDocId(doc.id);
+      const loadedDoc = await loadWorkflowDocument(doc.id);
+
+      if (!loadedDoc) {
+        toast({
+          title: t('Unable to load document'),
+          description: t(
+            'We could not load this template. Please try again or select a different document.',
+          ),
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      loadedDocsRef.current.set(doc.id, loadedDoc);
+      onDocumentSelect(loadedDoc);
+      track('select_item', {
+        item_id: loadedDoc.id,
+        item_name: getDocName(loadedDoc, i18n.language),
+        item_category: loadedDoc.category,
+        price: loadedDoc.basePrice,
+        state: globalSelectedState,
+      });
+    } catch (error) {
+      toast({
+        title: t('Unexpected error'),
+        description: t(
+          'Something went wrong while loading this document. Please try again.',
+        ),
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingDocId(null);
+    }
   };
 
   // Placeholder text constants
@@ -465,6 +515,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
             isHydrated={isHydrated}
             t={tSimple}
             i18nLanguage={i18n.language}
+            documents={topDocuments}
             globalSelectedState={globalSelectedState}
             placeholderNoDescription={placeholderNoDescription}
             placeholderRequiresNotarization={placeholderRequiresNotarization}

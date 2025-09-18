@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, FileText, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import type { LegalDocument } from '@/types/documents';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getDocumentsByCountry, searchSync } from '@/lib/document-library';
+import { searchWorkflowDocuments } from '@/lib/workflow/document-workflow';
 
 interface HeaderSearchProps {
   clientLocale: 'en' | 'es';
@@ -25,7 +25,7 @@ export default function HeaderSearch({
 }: HeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
+  const [searchResults, setSearchResults] = useState<DocumentSummary[]>([]);
   const [showResults, setShowResults] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -35,33 +35,26 @@ export default function HeaderSearch({
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
     : 'Search documents...';
 
+  // Search functionality backed by manifest metadata
   useEffect(() => {
-    if (!mounted) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        await getDocumentsByCountry('us');
-      } catch (_) {
-        // ignore hydration errors; manifest data already available
-      }
-    })();
+    if (!mounted) {
+      return;
+    }
 
-    return () => {
-      cancelled = true;
-    };
-  }, [mounted]);
+    const trimmedQuery = searchQuery.trim();
+    if (trimmedQuery.length > 1) {
+      const results = searchWorkflowDocuments(trimmedQuery, {
+        jurisdiction: 'us',
+        language: clientLocale,
+      }).slice(0, 8);
 
-  // Search functionality backed by manifest data
-  useEffect(() => {
-    if (searchQuery.trim().length > 1) {
-      const results = searchSync(searchQuery, clientLocale).slice(0, 8);
       setSearchResults(results);
       setShowResults(results.length > 0);
     } else {
       setSearchResults([]);
       setShowResults(false);
     }
-  }, [searchQuery, clientLocale]);
+  }, [searchQuery, clientLocale, mounted]);
 
   // Click outside to close results
   useEffect(() => {

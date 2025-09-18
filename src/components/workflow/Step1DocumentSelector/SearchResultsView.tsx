@@ -18,7 +18,9 @@ const SearchResultsView: React.FC<SearchResultsViewProps> = ({
   placeholderNoResults,
   onDocumentSelect,
 }) => {
-  const handleDocumentSelect = (doc: any) => {
+  const handleDocumentSelect = (
+    doc: ViewComponentProps['documentsToDisplay'][number],
+  ) => {
     onDocumentSelect(doc);
   };
 

@@ -5,8 +5,11 @@ import React from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/types/documents';
 import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
+import {
+  getWorkflowDocuments,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { FileText } from 'lucide-react';
 import {
@@ -20,7 +23,7 @@ import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
-  documents: LegalDocument[]; // This will be the US documents by default if Header passes `documentLibrary`
+  documents?: DocumentSummary[];
   onLinkClick?: () => void;
   /**
    * Categories that should start expanded when the menu first opens.
@@ -37,7 +40,7 @@ const MemoizedDocLink = React.memo(function DocLink({
   onClick,
   t,
 }: {
-  doc: LegalDocument;
+  doc: DocumentSummary;
   locale: 'en' | 'es';
   onClick?: () => void;
   t: (_key: string, _fallback?: string | object) => string;
@@ -75,9 +78,14 @@ export default function MegaMenuContent({
   );
   const currentLocale = i18n.language as 'en' | 'es';
 
+  const documentsToUse = React.useMemo(
+    () => documents ?? getWorkflowDocuments({ jurisdiction: 'us' }),
+    [documents],
+  );
+
   const getDocumentsForCategory = (categoryKey: string) => {
     const normalizedCategoryKey = categoryKey.trim().toLowerCase();
-    return documents.filter(
+    return documentsToUse.filter(
       (doc) =>
         doc.category.trim().toLowerCase() === normalizedCategoryKey &&
         doc.id !== 'general-inquiry',
