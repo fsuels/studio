@@ -16,6 +16,8 @@ const localizedContent = {
     heroCta: 'Add Document',
     heroSubtitle:
       'E-sign and notarize documents from anywhere using secure video sessions that satisfy every state requirement.',
+    valueCopy:
+      'An online notary allows you to complete notarizations remotely through encrypted video. Your identity is verified and every session is recorded for compliance.',
     metadata: {
       title: 'Online Notary Service | Remote Online Notarization | 123LegalDoc',
       description:
@@ -53,6 +55,8 @@ const localizedContent = {
     heroCta: 'Agregar Documento',
     heroSubtitle:
       'Firma y notariza documentos desde cualquier lugar mediante sesiones de video seguras que cumplen los requisitos estatales.',
+    valueCopy:
+      'Una notaría en línea te permite completar notarizaciones de forma remota mediante video cifrado. Tu identidad se verifica y cada sesión queda registrada para cumplir con la normativa.',
     metadata: {
       title: 'Servicio de Notaría en Línea | Notarización Remota | 123LegalDoc',
       description:
@@ -227,7 +231,7 @@ export default async function OnlineNotaryPage({
           <div className="text-primary text-2xl" aria-hidden="true">
             🔒
           </div>
-          <p className="text-muted-foreground max-w-xl">{content.securityCopy}</p>
+          <p className="text-muted-foreground max-w-xl">{content.valueCopy}</p>
         </section>
 
         <section>
@@ -242,6 +246,11 @@ export default async function OnlineNotaryPage({
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-foreground">{content.pricingHeading}</h2>
           <p className="text-muted-foreground">{content.pricingCopy}</p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">{content.securityHeading}</h2>
+          <p className="text-muted-foreground">{content.securityCopy}</p>
         </section>
 
         <section>
