@@ -1,64 +1,83 @@
 #!/usr/bin/env node
 
 /**
- * Script to count all documents in the 123LegalDoc library
+ * Script to count documents using the generated manifest metadata.
  */
 
 const fs = require('fs');
 const path = require('path');
+const ts = require('typescript');
 
-console.log('📊 Counting Documents in 123LegalDoc Library\n');
+console.log('📊 Counting Documents via manifest.generated.ts\n');
 
-// Count US documents from the export file
-const usDocsPath = path.join(__dirname, '../src/lib/documents/us/index.ts');
-if (fs.existsSync(usDocsPath)) {
-  const usContent = fs.readFileSync(usDocsPath, 'utf8');
-  const usExports = usContent.match(/export \{ .+ \}/g) || [];
-  console.log(`🇺🇸 US Documents: ${usExports.length}`);
-
-  // List all US documents
-  usExports.forEach((exportLine, index) => {
-    const docName = exportLine.match(/export \{ (.+) \}/)?.[1] || 'unknown';
-    console.log(`   ${index + 1}. ${docName}`);
-  });
-}
-
-// Count Canadian documents
-const caDocsPath = path.join(__dirname, '../src/lib/documents/ca/index.ts');
-if (fs.existsSync(caDocsPath)) {
-  const caContent = fs.readFileSync(caDocsPath, 'utf8');
-  const caExports = caContent.match(/export.*from/g) || [];
-  console.log(`\n🇨🇦 Canadian Documents: ${caExports.length}`);
-
-  caExports.forEach((exportLine, index) => {
-    const docName = exportLine.replace(
-      /export .* from ['"]\.\/(.+)['"];?/,
-      '$1',
-    );
-    console.log(`   ${index + 1}. ${docName}`);
-  });
-}
-
-// Count additional documents
-const additionsPath = path.join(
+const manifestPath = path.join(
   __dirname,
-  '../src/lib/document-library-additions.ts',
+  '../src/lib/documents/manifest.generated.ts',
 );
-if (fs.existsSync(additionsPath)) {
-  const additionsContent = fs.readFileSync(additionsPath, 'utf8');
 
-  // Count objects in the documentLibraryAdditions array
-  const additionMatches =
-    additionsContent.match(/{\s*id:\s*['"`]([^'"`]+)['"`]/g) || [];
-  console.log(`\n➕ Additional Documents: ${additionMatches.length}`);
-
-  additionMatches.forEach((match, index) => {
-    const docId = match.match(/id:\s*['"`]([^'"`]+)['"`]/)?.[1] || 'unknown';
-    console.log(`   ${index + 1}. ${docId}`);
-  });
+if (!fs.existsSync(manifestPath)) {
+  console.error(
+    '❌ manifest.generated.ts not found. Run `node scripts/generate-document-manifest.mjs` first.',
+  );
+  process.exit(1);
 }
 
-// Count template files for verification
+const manifestSource = fs.readFileSync(manifestPath, 'utf8');
+const transpiled = ts.transpileModule(manifestSource, {
+  compilerOptions: {
+    module: ts.ModuleKind.CommonJS,
+    target: ts.ScriptTarget.ES2019,
+  },
+});
+
+const moduleWrapper = { exports: {} };
+new Function(
+  'exports',
+  'require',
+  'module',
+  '__filename',
+  '__dirname',
+  transpiled.outputText,
+)(moduleWrapper.exports, require, moduleWrapper, manifestPath, path.dirname(manifestPath));
+
+const {
+  DOCUMENT_MANIFEST = [],
+  DOCUMENT_METADATA = {},
+} = moduleWrapper.exports;
+
+const manifestEntries = DOCUMENT_MANIFEST.length;
+const metadataCount = Object.keys(DOCUMENT_METADATA).length;
+
+console.log(`📁 Manifest entries: ${manifestEntries}`);
+console.log(`🧾 Metadata records: ${metadataCount}`);
+
+const docsByJurisdiction = DOCUMENT_MANIFEST.reduce((acc, entry) => {
+  const jurisdiction = (entry.meta.jurisdiction || 'unknown').toLowerCase();
+  acc[jurisdiction] = (acc[jurisdiction] || 0) + 1;
+  return acc;
+}, {});
+
+console.log('\n🌎 Documents per jurisdiction:');
+Object.entries(docsByJurisdiction)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .forEach(([jurisdiction, count]) => {
+    console.log(`   ${jurisdiction.toUpperCase()}: ${count}`);
+  });
+
+const docsByCategory = DOCUMENT_MANIFEST.reduce((acc, entry) => {
+  const category = entry.meta.category || 'Uncategorized';
+  acc[category] = (acc[category] || 0) + 1;
+  return acc;
+}, {});
+
+console.log('\n🏷️  Top categories:');
+Object.entries(docsByCategory)
+  .sort(([, a], [, b]) => b - a)
+  .slice(0, 10)
+  .forEach(([category, count], index) => {
+    console.log(`   ${index + 1}. ${category} — ${count}`);
+  });
+
 const templatesDir = path.join(__dirname, '../public/templates');
 if (fs.existsSync(templatesDir)) {
   const enTemplates = fs.existsSync(path.join(templatesDir, 'en'))
@@ -72,51 +91,10 @@ if (fs.existsSync(templatesDir)) {
         .filter((f) => f.endsWith('.md')).length
     : 0;
 
-  console.log(`\n📄 Template Files Available:`);
+  console.log('\n📄 Template files available:');
   console.log(`   English templates: ${enTemplates}`);
   console.log(`   Spanish templates: ${esTemplates}`);
 }
 
-// Calculate totals
-const usDocsCount = fs.existsSync(usDocsPath)
-  ? (fs.readFileSync(usDocsPath, 'utf8').match(/export \{ .+ \}/g) || []).length
-  : 0;
-
-const caDocsCount = fs.existsSync(caDocsPath)
-  ? (fs.readFileSync(caDocsPath, 'utf8').match(/export.*from/g) || []).length
-  : 0;
-
-const additionsCount = fs.existsSync(additionsPath)
-  ? (
-      fs
-        .readFileSync(additionsPath, 'utf8')
-        .match(/{\s*id:\s*['"`]([^'"`]+)['"`]/g) || []
-    ).length
-  : 0;
-
-const totalDocs = usDocsCount + caDocsCount + additionsCount;
-
-console.log(`\n🎯 TOTAL DOCUMENTS: ${totalDocs}`);
-console.log(`   └─ US: ${usDocsCount}`);
-console.log(`   └─ Canada: ${caDocsCount}`);
-console.log(`   └─ Additional: ${additionsCount}`);
-
-console.log(`\n📈 Document Coverage:`);
-console.log(`   ✅ Business documents: ${Math.round(totalDocs * 0.4)} (~40%)`);
-console.log(
-  `   ✅ Real Estate documents: ${Math.round(totalDocs * 0.25)} (~25%)`,
-);
-console.log(
-  `   ✅ Legal/Personal documents: ${Math.round(totalDocs * 0.35)} (~35%)`,
-);
-
-console.log(`\n🏆 Achievement Status:`);
-if (totalDocs >= 38) {
-  console.log(`   🎉 EXCELLENT! You've exceeded the 38+ document goal!`);
-} else if (totalDocs >= 30) {
-  console.log(`   👍 GOOD! You're close to the 38+ document goal.`);
-} else {
-  console.log(`   📝 Keep going! Target is 38+ documents.`);
-}
-
-console.log(`\n✨ Your legal document platform is ready for production!`);
+console.log(`\n🎯 TOTAL DOCUMENTS (manifest): ${manifestEntries}`);
+console.log('\n✨ Manifest-driven document inventory ready!');

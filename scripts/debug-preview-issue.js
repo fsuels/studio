@@ -10,16 +10,21 @@ const path = require('path');
 
 console.log('🔍 Debugging Document Preview Issue...\n');
 
-// Check if the document library exists
-const documentLibraryPath = path.join(
+// Check manifest + workflow helpers exist
+const manifestPath = path.join(
   __dirname,
-  '../src/lib/document-library.ts',
+  '../src/lib/documents/manifest.generated.ts',
+);
+const workflowPath = path.join(
+  __dirname,
+  '../src/lib/workflow/document-workflow.ts',
 );
 const templatesDir = path.join(__dirname, '../public/templates');
 const previewsDir = path.join(__dirname, '../public/images/previews');
 
 console.log('📁 Checking file structure:');
-console.log(`✓ Document library exists: ${fs.existsSync(documentLibraryPath)}`);
+console.log(`✓ Manifest generated file: ${fs.existsSync(manifestPath)}`);
+console.log(`✓ Workflow helpers: ${fs.existsSync(workflowPath)}`);
 console.log(`✓ Templates directory exists: ${fs.existsSync(templatesDir)}`);
 console.log(`✓ Previews directory exists: ${fs.existsSync(previewsDir)}`);
 
@@ -94,9 +99,9 @@ problematicFiles.forEach((filePath) => {
     }
 
     if (filePath.includes('/page.tsx')) {
-      const hasGenericHead = content.includes('documentLibrary.find');
+      const usesWorkflowLoader = content.includes('getSingleDocument');
       console.log(
-        `  ✓ Page Head function is generic: ${hasGenericHead ? '✓' : '✗'}`,
+        `  ✓ Document page uses workflow loader: ${usesWorkflowLoader ? '✓' : '✗'}`,
       );
     }
   }
@@ -119,8 +124,6 @@ console.log(
   '2. Ensure all markdown templates are complete and correctly named',
 );
 console.log('3. Clear browser cache if testing locally');
-console.log(
-  '4. Check that document IDs match between library and template files',
-);
+console.log('4. Check that document IDs match between manifest + templates');
 
 console.log('\n✅ Preview fix implementation complete!');

@@ -6,7 +6,7 @@
 - `scripts/quality-verification-system.js` - aggregates compliance, legal, and translation validations; use before touching `src/lib/documents/` en masse.
 
 ## Document Tooling
-- `scripts/generate-document-library.js` - regenerates the metadata registry from template source files. Run after adding new templates or jurisdictions.
+- `scripts/generate-document-manifest.mjs` - regenerates the metadata registry from template source files. Run after adding new templates or jurisdictions.
 - `scripts/auto-fix-templates.ts` - attempts to resolve common schema mismatches (missing translation keys, question IDs) automatically.
 - `scripts/generate-previews.js` - creates sample preview PDFs for marketing/demo use and syncs with `public/previews/`.
 - `scripts/verify-templates.ts --report-only` - emits a JSON report suitable for CI artifacts without failing the run.

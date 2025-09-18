@@ -1,7 +1,7 @@
 // src/app/api/checkout/session/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { getSingleDocument } from '@/lib/document-library';
+import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { docId, locale } = await req.json();
-    const doc = await getSingleDocument(docId);
+    const doc = await loadWorkflowDocument(docId);
     if (!doc) {
       return NextResponse.json({ error: 'Unknown document' }, { status: 400 });
     }

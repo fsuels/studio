@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAdmin } from '@/lib/firebase-admin'; // Firebase Admin SDK
-import { getSingleDocument } from '@/lib/document-library';
+import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{
@@ -77,7 +77,7 @@ export async function POST(
     }
     console.log(`${logPrefix} User authenticated: ${user.uid}`);
 
-    const docConfig = await getSingleDocument(params.docId);
+    const docConfig = await loadWorkflowDocument(params.docId);
 
     if (!docConfig) {
       console.error(

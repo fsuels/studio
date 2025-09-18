@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HeaderSearch from '../HeaderSearch';
-import { getDocumentLibrary } from '@/lib/document-library';
+import { searchWorkflowDocuments } from '@/lib/workflow/document-workflow';
 
-// Mock the document library
-jest.mock('@/lib/document-library', () => ({
-  getDocumentLibrary: jest.fn(),
+// Mock the workflow search helper
+jest.mock('@/lib/workflow/document-workflow', () => ({
+  searchWorkflowDocuments: jest.fn(),
 }));
 
 // Mock next/navigation
@@ -15,8 +15,8 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-const mockGetDocumentLibrary = getDocumentLibrary as jest.MockedFunction<
-  typeof getDocumentLibrary
+const mockSearchWorkflowDocuments = searchWorkflowDocuments as jest.MockedFunction<
+  typeof searchWorkflowDocuments
 >;
 
 const mockDocuments = [
@@ -44,7 +44,7 @@ const mockDocuments = [
 
 describe('HeaderSearch', () => {
   beforeEach(() => {
-    mockGetDocumentLibrary.mockReturnValue(mockDocuments as any);
+    mockSearchWorkflowDocuments.mockReturnValue(mockDocuments as any);
   });
 
   afterEach(() => {

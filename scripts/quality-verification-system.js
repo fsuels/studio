@@ -371,14 +371,31 @@ class DocumentQualityVerifier {
       }
     }
 
-    // Check document library integration
-    const docLibPath = path.join(__dirname, '../src/lib/document-library.ts');
-    if (!fs.existsSync(docLibPath)) {
-      this.addError('Integration', 'Missing document library file');
+    // Check manifest + workflow integration
+    const manifestPath = path.join(
+      __dirname,
+      '../src/lib/documents/manifest.generated.ts',
+    );
+    const workflowPath = path.join(
+      __dirname,
+      '../src/lib/workflow/document-workflow.ts',
+    );
+
+    if (!fs.existsSync(manifestPath)) {
+      this.addError('Integration', 'Missing manifest.generated.ts');
     } else {
-      const content = fs.readFileSync(docLibPath, 'utf8');
-      if (!content.includes('export const documentLibrary')) {
-        this.addError('Integration', 'Document library not properly exported');
+      this.addSuccess('Integration');
+    }
+
+    if (!fs.existsSync(workflowPath)) {
+      this.addError('Integration', 'Missing document workflow helpers');
+    } else {
+      const content = fs.readFileSync(workflowPath, 'utf8');
+      if (!content.includes('getWorkflowDocuments')) {
+        this.addWarning(
+          'Integration',
+          'document-workflow.ts missing getWorkflowDocuments export',
+        );
       } else {
         this.addSuccess('Integration');
       }

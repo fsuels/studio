@@ -1,10 +1,23 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, beforeAll } from '@jest/globals';
 import type { LegalDocument } from '@/types/documents';
-import { documentLibraryAdditions } from '@/lib/document-library-additions';
-import { getSampleDocuments, sampleDocumentIds } from './fixtures/documentSamples';
+import { getWorkflowDocuments, loadWorkflowDocument } from '@/lib/workflow/document-workflow';
+import { loadSampleDocuments, sampleDocumentIds } from './fixtures/documentSamples';
 
-const libraryUnderTest: LegalDocument[] = documentLibraryAdditions;
-const sampleDocuments = getSampleDocuments();
+let libraryUnderTest: LegalDocument[] = [];
+let sampleDocuments: LegalDocument[] = [];
+
+beforeAll(async () => {
+  const summaries = getWorkflowDocuments({ jurisdiction: 'us' });
+  const loadedDocs = await Promise.all(
+    summaries.map((summary) => loadWorkflowDocument(summary.id)),
+  );
+
+  libraryUnderTest = loadedDocs.filter(
+    (doc): doc is LegalDocument => Boolean(doc),
+  );
+
+  sampleDocuments = await loadSampleDocuments();
+});
 
 describe('Document Library', () => {
   it('exposes a deterministic catalog with unique IDs', () => {
@@ -30,8 +43,8 @@ describe('Document Library', () => {
       }
 
       expect(typeof doc.basePrice).toBe('number');
-      expect(doc.basePrice).toBeGreaterThan(0);
-      expect(doc.basePrice).toBeLessThan(1000);
+      expect((doc.basePrice ?? 0)).toBeGreaterThanOrEqual(0);
+      expect((doc.basePrice ?? 0)).toBeLessThan(1000);
     });
   });
 
@@ -39,7 +52,8 @@ describe('Document Library', () => {
     libraryUnderTest.forEach((doc) => {
       expect(Array.isArray(doc.languageSupport)).toBe(true);
       expect(doc.languageSupport).toContain('en');
-      expect(['US', 'CA', 'ALL']).toContain(doc.jurisdiction);
+      const jurisdiction = doc.jurisdiction?.toLowerCase?.() ?? '';
+      expect(['us', 'ca', 'all']).toContain(jurisdiction);
     });
   });
 

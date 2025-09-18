@@ -7,7 +7,7 @@ import { getRelatedDocuments } from '@/lib/internal-linking';
 import { localizations } from '@/lib/localizations';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { redirect } from 'next/navigation';
-import { getSingleDocument } from '@/lib/document-library';
+import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
 
 export const dynamic = 'force-static';
 
@@ -64,7 +64,7 @@ export default async function DocPage({ params }: DocPageProps) {
 
   const markdownContent = await getMarkdown(locale, docId);
 
-  const doc = await getSingleDocument(docId);
+  const doc = await loadWorkflowDocument(docId);
   const docMeta = doc
     ? {
         id: doc.id,

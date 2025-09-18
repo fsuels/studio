@@ -1,6 +1,5 @@
 // src/lib/document-library.ts - Updated to use dynamic loading system
 import { z } from 'zod';
-import { documentLibraryAdditions } from './document-library-additions';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
 import { preprocessQuery } from './search/comprehensive-synonym-map';
 import {
@@ -14,7 +13,6 @@ import { loadDocument, loadDocuments } from './dynamic-document-loader';
 import type { DocumentManifestEntry } from './documents/manifest.generated';
 
 const manifestEntries = getManifestEntries();
-const manifestDocIds = new Set(manifestEntries.map((entry) => entry.id));
 
 const defaultSchema = z
   .object({
@@ -171,86 +169,6 @@ const loadDocumentsForCountry = async (
   return sortDocuments(Array.from(docsById.values()));
 };
 
-/**
- * Type-guard to ensure we only surface well-formed documents.
- */
-const isValidDocument = (doc: unknown): doc is LegalDocument => {
-  const d = doc as Partial<LegalDocument>;
-  const hasId = !!(d && typeof d.id === 'string' && d.id.trim() !== '');
-  const hasCategory = !!(
-    d &&
-    typeof d.category === 'string' &&
-    d.category.trim() !== ''
-  );
-  const hasSchema = !!(d && d.schema && typeof d.schema.parse === 'function');
-
-  const dr = doc as {
-    translations?: { en?: { name?: string } };
-    name?: string;
-  };
-  const hasValidName =
-    !!(
-      dr.translations?.en?.name &&
-      typeof dr.translations.en.name === 'string' &&
-      dr.translations.en.name.trim() !== ''
-    ) ||
-    (!!dr.name && typeof dr.name === 'string' && dr.name.trim() !== '');
-
-  return hasId && hasCategory && hasSchema && hasValidName;
-};
-
-function prepareAdditionalDocument(doc: LegalDocument): LegalDocument {
-  const clone: LegalDocument = {
-    ...doc,
-    translations: doc.translations
-      ? Object.fromEntries(
-          Object.entries(doc.translations).map(([lang, value]) => [
-            lang,
-            {
-              ...value,
-              aliases: value.aliases ? [...value.aliases] : [],
-            },
-          ]),
-        )
-      : doc.translations,
-    questions: doc.questions ? [...doc.questions] : [],
-    keywords: doc.keywords ? [...doc.keywords] : undefined,
-    keywords_es: doc.keywords_es ? [...doc.keywords_es] : undefined,
-    searchTerms: doc.searchTerms ? [...doc.searchTerms] : undefined,
-    languageSupport: doc.languageSupport ? [...doc.languageSupport] : ['en'],
-    templatePaths: doc.templatePaths ? { ...doc.templatePaths } : undefined,
-    upsellClauses: doc.upsellClauses
-      ? doc.upsellClauses.map((clause) => ({
-          ...clause,
-          translations: clause.translations
-            ? { ...clause.translations }
-            : clause.translations,
-        }))
-      : undefined,
-    states: Array.isArray(doc.states) ? [...doc.states] : doc.states,
-    aliases: doc.aliases ? [...doc.aliases] : doc.aliases,
-    aliases_es: doc.aliases_es ? [...doc.aliases_es] : doc.aliases_es,
-  };
-
-  enrichDocument(clone);
-  return clone;
-}
-
-const additionalDocuments: LegalDocument[] = documentLibraryAdditions
-  .filter(isValidDocument)
-  .filter((doc) => !manifestDocIds.has(doc.id))
-  .map(prepareAdditionalDocument);
-
-additionalDocuments.forEach((doc) => {
-  const countryCode = normalizeCountryCode(doc.jurisdiction);
-
-  if (!baseDocumentsByCountry[countryCode]) {
-    baseDocumentsByCountry[countryCode] = [];
-  }
-
-  baseDocumentsByCountry[countryCode].push(doc);
-});
-
 export const documentLibraryByCountry: Record<string, LegalDocument[]> = Object.fromEntries(
   Object.entries(baseDocumentsByCountry).map(([countryCode, docs]) => [
     countryCode,
@@ -313,8 +231,7 @@ export function findMatchingDocumentsSync(
   lang: 'en' | 'es',
   state?: string,
 ): LegalDocument[] {
-  // Return only the additions array for immediate/synchronous access
-  // This provides basic functionality while async loading completes
+  // Return the cached manifest-backed documents for synchronous access
   return Object.values(documentLibraryByCountry)
     .flat()
     .filter((d) => d.id !== 'general-inquiry');
@@ -524,10 +441,6 @@ export function searchSync(
   return findMatchingDocumentsSync(query, lang, state);
 }
 
-const defaultDocumentLibrary = getDocumentsForCountry('us');
-export default defaultDocumentLibrary;
-export { defaultDocumentLibrary as documentLibrary };
-
 // Category-based document loading
 export async function loadDocumentsByCategory(category: string): Promise<LegalDocument[]> {
   const metadata = getDocumentsByCategory(category);
@@ -560,12 +473,6 @@ export async function getDocumentsByJurisdiction(jurisdiction: string): Promise<
   }
 
   return documents;
-}
-
-// Single document loading
-export async function getSingleDocument(docId: string): Promise<LegalDocument | null> {
-  const result = await loadDocument(docId);
-  return result.document;
 }
 
 // Async version of document library
