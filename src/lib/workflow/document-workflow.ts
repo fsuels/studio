@@ -15,6 +15,7 @@ export interface DocumentSummary {
   tags?: string[];
   aliases?: string[];
   translations: DocumentMetadata['translations'];
+  languageSupport: string[];
 }
 
 interface FilterOptions {
@@ -70,6 +71,10 @@ const mapToSummary = (metadata: DocumentMetadata): DocumentSummary => ({
   tags: metadata.tags,
   aliases: metadata.aliases,
   translations: metadata.translations,
+  languageSupport: [
+    'en',
+    ...(metadata.translations?.es?.name ? ['es'] : []),
+  ],
 });
 
 const matchesQuery = (
@@ -181,4 +186,10 @@ export async function loadWorkflowDocument(
 ): Promise<LegalDocument | null> {
   const { document } = await loadDocument(documentId);
   return document ?? null;
+}
+
+export function getWorkflowDocumentById(
+  documentId: string,
+): DocumentSummary | undefined {
+  return getWorkflowDocuments().find((doc) => doc.id === documentId);
 }

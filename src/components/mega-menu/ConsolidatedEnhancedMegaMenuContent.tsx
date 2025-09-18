@@ -5,9 +5,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ConsolidatedMegaMenuContent from '@/components/layout/mega-menu/ConsolidatedMegaMenuContent';
 import { trackMegaMenu } from '@/lib/taxonomy-analytics';
-import type { LegalDocument } from '@/types/documents';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { createPortal } from 'react-dom';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import { getWorkflowDocuments } from '@/lib/workflow/document-workflow';
 
 interface ConsolidatedEnhancedMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -21,7 +21,7 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
   activeCategory,
 }) => {
   const [isClient, setIsClient] = React.useState(false);
-  const [documents, setDocuments] = React.useState<LegalDocument[]>(documentLibrary);
+  const [documents, setDocuments] = React.useState<DocumentSummary[]>([]);
 
   React.useEffect(() => {
     setIsClient(true);
@@ -34,14 +34,8 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
       structure: 'document_type_grouped'
     });
     // Hydrate documents when menu opens on client
-    (async () => {
-      try {
-        const docs = await getDocumentsByCountry('us');
-        setDocuments(docs.length ? docs : documentLibrary);
-      } catch (_) {
-        setDocuments(documentLibrary);
-      }
-    })();
+    const docs = getWorkflowDocuments({ jurisdiction: 'us' });
+    setDocuments(docs);
   }, [locale]);
 
   const handleLinkClick = React.useCallback(() => {

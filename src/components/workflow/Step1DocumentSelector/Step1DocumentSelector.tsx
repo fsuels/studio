@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/types/documents';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -32,7 +31,11 @@ import {
   getDocAliases,
   languageSupportsSpanish,
 } from './constants';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import {
+  getWorkflowDocuments,
+  searchWorkflowDocuments,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   selectedCategory: initialSelectedCategory,

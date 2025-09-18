@@ -270,12 +270,25 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   // Filter documents by selected category
   const filteredDocs = useMemo(() => {
-    if (!selectedCategory) return [] as LegalDocument[];
+    if (!selectedCategory) return [] as DocumentSummary[];
     const validCategories = taxonomyToDocCategory[selectedCategory] || [];
-    return topDocs.filter((doc) =>
-      validCategories.includes(doc.category) || doc.category === selectedCategory
-    );
-  }, [topDocs, selectedCategory, taxonomyToDocCategory]);
+
+    const normalized = validCategories.map((value) => value.toLowerCase());
+    const matches = (doc: DocumentSummary) => {
+      if (normalized.length === 0) {
+        return doc.category.toLowerCase() === selectedCategory.toLowerCase();
+      }
+      const categoryLabel = doc.category.toLowerCase();
+      return normalized.some((value) => categoryLabel.includes(value));
+    };
+
+    const candidateDocs = topDocs.filter(matches);
+    if (candidateDocs.length > 0) {
+      return candidateDocs;
+    }
+
+    return getWorkflowDocuments({ jurisdiction: 'us' }).filter(matches);
+  }, [selectedCategory, taxonomyToDocCategory, topDocs]);
 
   const handleExploreAll = () => {
     setShowDiscoveryModal(true);
@@ -375,7 +388,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
-                const Icon = categoryMeta[doc.category]?.icon || FileText;
+                const Icon = categoryMeta[selectedCategory]?.icon || FileText;
                 const badge = badges[doc.id];
                 return (
                   <Link
@@ -392,7 +405,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                         <span className="text-sm font-medium">
                           {doc.translations?.[locale as 'en' | 'es']?.name ||
                             doc.translations?.en?.name ||
-                            doc.name ||
+                            doc.title ||
                             doc.id}
                         </span>
                       </div>

@@ -20,6 +20,11 @@
 - TODO: Produce component checklist (StepOne/Two/Three inputs, DocumentTypeSelector, search bar, mega menus, dashboard stats) with owners + risk notes.
 - TODO: Draft integration test plan validating manifest results vs. legacy list for representative categories before swapping default exports.
 - Step 1–3 workflow now powered by manifest helpers (`src/lib/workflow/document-workflow.ts`); Step 2 filters templates by state metadata and Step 3 handles loading errors. Manual QA still required to confirm manifest `states` values align with picker options.
+- DocumentTypeSelector, SearchBar, and TopDocs chips now use manifest-backed helpers; remaining discovery surfaces (mega menu, analytics dashboards) still rely on legacy library.
+- Mega menu still pending; TopDocs now pulls manifest docs per taxonomy mapping but needs manual QA to confirm category alignment.
+- Remaining legacy references: Mega menu variants (`src/components/mega-menu/*`) and analytics/dashboard views still import `document-library`; schedule follow-up conversion and remove fallback helpers once complete.
+- Consolidated mega menu now hits manifest helper; dashboards & analytics tabs still on legacy library.
+- Remaining legacy imports: DocumentFlow, Step1DocumentSelector, HeaderSearch (prefetch/search), semantic analysis utilities; plan phased replacements or removal of legacy helper once these are migrated.
 
 ### Phase 2 – Template Completeness & Validation (Weeks 2–4)
 - Audit metadata-only templates; promote to full `LegalDocument` exports or document them as metadata-only plus adjust generator to surface warnings.

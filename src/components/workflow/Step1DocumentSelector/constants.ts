@@ -10,7 +10,7 @@ import {
   ShieldQuestion,
   AlertTriangle,
 } from 'lucide-react';
-import type { LegalDocument } from '@/types/documents';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { CategoryInfo } from './types';
 
 export const CATEGORY_LIST: CategoryInfo[] = [
@@ -30,7 +30,7 @@ export const CATEGORY_LIST: CategoryInfo[] = [
 
 // Placeholder for top docs - in a real app, this comes from Firestore
 export const PLACEHOLDER_TOP_DOCS: Array<
-  Pick<LegalDocument, 'id' | 'category' | 'translations'> & {
+  Pick<DocumentSummary, 'id' | 'category' | 'translations'> & {
     icon?: React.ElementType;
   }
 > = [
@@ -92,7 +92,7 @@ export const PLACEHOLDER_TOP_DOCS: Array<
 
 // Utility functions for document translations
 export const getDocName = (
-  doc: Pick<LegalDocument, 'translations'>,
+  doc: Pick<DocumentSummary, 'translations'>,
   locale: string,
 ) =>
   locale === 'es'
@@ -100,7 +100,7 @@ export const getDocName = (
     : doc.translations?.en?.name || doc.translations?.es?.name || '';
 
 export const getDocDescription = (
-  doc: Pick<LegalDocument, 'translations'>,
+  doc: Pick<DocumentSummary, 'translations'>,
   locale: string,
 ) =>
   locale === 'es'
@@ -112,7 +112,7 @@ export const getDocDescription = (
       '';
 
 export const getDocAliases = (
-  doc: Pick<LegalDocument, 'translations'>,
+  doc: Pick<DocumentSummary, 'translations'>,
   locale: string,
 ) =>
   locale === 'es'
