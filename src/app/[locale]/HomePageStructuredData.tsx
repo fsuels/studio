@@ -38,11 +38,13 @@ export function HomePageStructuredData({ locale }: HomePageStructuredDataProps) 
     },
   ];
 
+  const jsonLd = JSON.stringify(structuredData).replace(/</g, '\\u003c');
+
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(structuredData),
+        __html: jsonLd,
       }}
     />
   );
