@@ -137,43 +137,31 @@ SelectItem.displayName = SelectPrimitive.Item.displayName;
 const PrimitiveSeparator =
   (SelectPrimitive as unknown as { Separator?: typeof SelectPrimitive.Item })?.Separator;
 
-const PrimitiveSelectSeparator = PrimitiveSeparator
-  ? React.forwardRef<
-      React.ElementRef<typeof PrimitiveSeparator>,
-      React.ComponentPropsWithoutRef<typeof PrimitiveSeparator>
-    >(({ className, ...props }, ref) => (
-      <PrimitiveSeparator
-        ref={ref}
-        className={cn('-mx-1 my-1 h-px bg-muted', className)}
-        {...props}
-      />
-    ))
-  : null;
-
-if (PrimitiveSelectSeparator) {
-  PrimitiveSelectSeparator.displayName =
-    PrimitiveSeparator?.displayName ?? 'SelectSeparator';
-}
-
-const FallbackSelectSeparator = React.forwardRef<
+const SelectSeparator = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-muted', className)}
-    role="separator"
-    {...props}
-  />
-));
-FallbackSelectSeparator.displayName = 'SelectSeparator';
+  React.HTMLAttributes<HTMLDivElement> | React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+>(({ className, ...props }, ref) => {
+  if (PrimitiveSeparator) {
+    const Component = PrimitiveSeparator;
+    return (
+      <Component
+        ref={ref as React.Ref<React.ElementRef<typeof PrimitiveSeparator>>}
+        className={cn('-mx-1 my-1 h-px bg-muted', className)}
+        {...(props as React.ComponentPropsWithoutRef<typeof PrimitiveSeparator>)}
+      />
+    );
+  }
 
-const SelectSeparator = (PrimitiveSelectSeparator ?? FallbackSelectSeparator) as
-  | typeof PrimitiveSelectSeparator
-  | typeof FallbackSelectSeparator;
-
-(SelectSeparator as React.ForwardRefExoticComponent<any> & { displayName?: string }).displayName =
-  PrimitiveSeparator?.displayName ?? 'SelectSeparator';
+  return (
+    <div
+      ref={ref}
+      className={cn('-mx-1 my-1 h-px bg-muted', className)}
+      role="separator"
+      {...(props as React.HTMLAttributes<HTMLDivElement>)}
+    />
+  );
+});
+SelectSeparator.displayName = PrimitiveSeparator?.displayName ?? 'SelectSeparator';
 
 export {
   Select,

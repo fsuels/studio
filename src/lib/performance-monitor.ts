@@ -363,7 +363,7 @@ export function usePerformanceMonitor() {
 
   const getRecommendations = useCallback(() => {
     return getPerformanceMonitor().getRecommendations();
-  }, [metrics]);
+  }, []);
 
   return {
     metrics,

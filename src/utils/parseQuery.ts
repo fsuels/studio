@@ -22,10 +22,6 @@ function stripDiacritics(value: string): string {
   return value;
 }
 
-function normaliseToken(token: string): string {
-  return stripDiacritics(token).toLowerCase();
-}
-
 function tokeniseKeywords(keywords: string[]): string[] {
   const tokens: string[] = [];
   keywords.forEach(keyword => {
@@ -68,10 +64,10 @@ export function parseQuery(raw: string): ParsedQuery {
 
   const result: ParsedQuery = { positive: [], negatives: [], phrases: [] };
 
-  const workingSegments: string[] = [];
   let working = stripDiacritics(sanitised)
     .replace(/[^\p{L}\p{N}\s-]/gu, ' ');
 
+  // eslint-disable-next-line no-useless-escape
   const quotedRegex = /"([^\"]*)"/g;
   let match: RegExpExecArray | null;
 
