@@ -11,15 +11,15 @@ import { SchemaMarkup } from '@/components/seo/SchemaMarkup';
 import { generateDocumentFAQs } from '@/lib/seo/schema';
 import { StateSpecificLegalSchema } from '@/components/seo/LocalBusinessSchema';
 import Link from 'next/link';
-
+type StateRouteParams = { locale: 'en' | 'es'; state: string };
 
 export async function generateStaticParams() {
-  const locales = ['en', 'es'];
+  const locales: StateRouteParams['locale'][] = ['en', 'es'];
   const states = usStates.map((state) =>
     state.label.toLowerCase().replace(/\s+/g, '-'),
   );
 
-  const params = [];
+  const params: StateRouteParams[] = [];
   for (const locale of locales) {
     for (const state of states) {
       params.push({ locale, state });
@@ -32,10 +32,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; state: string }>;
+  params: Promise<StateRouteParams>;
 }): Promise<Metadata> {
   const { state: stateSlug, locale } = await params;
-  const localeTyped = locale as 'en' | 'es';
+  const localeTyped = locale;
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
@@ -95,10 +95,10 @@ export async function generateMetadata({
 export default async function StatePage({
   params,
 }: {
-  params: Promise<{ locale: string; state: string }>;
+  params: Promise<StateRouteParams>;
 }) {
   const { state: stateSlug, locale } = await params;
-  const localeTyped = locale as 'en' | 'es';
+  const localeTyped = locale;
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,

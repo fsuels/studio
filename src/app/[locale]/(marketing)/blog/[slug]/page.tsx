@@ -4,11 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { blogArticles, type BlogArticle } from '@/data/blogArticles';
 
+type BlogRouteParams = { locale: 'en' | 'es'; slug: string };
+
 export async function generateStaticParams() {
-  const params = [];
+  const params: BlogRouteParams[] = [];
   for (const locale of ['en', 'es']) {
     for (const article of blogArticles) {
-      params!.push({ locale, slug: article.slug });
+      params.push({ locale: locale as BlogRouteParams['locale'], slug: article.slug });
     }
   }
   return params;
@@ -17,7 +19,7 @@ export async function generateStaticParams() {
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ locale: 'en' | 'es'; slug: string }>;
+  params: Promise<BlogRouteParams>;
 }) {
   const { locale, slug } = await params;
   const article = blogArticles.find((a) => a.slug === slug);

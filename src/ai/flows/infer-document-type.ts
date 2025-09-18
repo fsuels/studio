@@ -6,7 +6,7 @@
  */
 
 import { ai } from '@/ai/ai-instance';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { getLinkableDocuments } from '@/lib/internal-linking';
 
 // Input Schema

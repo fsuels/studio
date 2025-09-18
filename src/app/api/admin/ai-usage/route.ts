@@ -9,7 +9,149 @@ import {
   aiUsageAnalytics,
   type AIModel,
   type AIEndpoint,
+  type AIUsageAnalytics,
 } from '@/lib/ai-usage-analytics';
+
+type UsageRecordInput = {
+  model: AIModel;
+  endpoint: AIEndpoint;
+  promptTokens: number;
+  completionTokens: number;
+  latencyMs?: number;
+  success?: boolean;
+  metadata?: Record<string, unknown>;
+};
+
+type BatchUsageResult =
+  | { success: true; metricId: string }
+  | { success: false; error: string; record: unknown };
+
+type BudgetAlert = {
+  type: 'budget_critical' | 'budget_warning';
+  severity: 'critical' | 'warning';
+  message: string;
+  value: number;
+  threshold: number;
+};
+
+type ExpensiveModelAlert = {
+  type: 'expensive_models';
+  severity: 'info';
+  message: string;
+  models: string[];
+};
+
+type LowSuccessAlert = {
+  type: 'low_success_rate';
+  severity: 'warning';
+  message: string;
+  models: Array<{ model: AIModel; rate: number }>;
+};
+
+type CriticalAlert = BudgetAlert | ExpensiveModelAlert | LowSuccessAlert;
+
+type EndpointComparison = (AIUsageAnalytics['endpointAnalysis'][number] & {
+  modelSpecific?: boolean;
+  filterModel?: AIModel;
+})[];
+
+type SpendingPatterns = {
+  avgDailyCost: number;
+  peakDays: AIUsageAnalytics['trends']['dailyCosts'];
+  trend: 'increasing' | 'decreasing';
+  trendPercentage: number;
+  totalCost: number;
+  daysWithData: number;
+};
+
+type ForecastConfidence = 'low' | 'medium' | 'high';
+
+type CostForecast = {
+  forecast: Array<{
+    date: string;
+    predictedCost: number;
+    confidence: ForecastConfidence;
+  }>;
+  confidence: ForecastConfidence;
+  baseAvg: number;
+};
+
+type PerformanceAlert = {
+  type: 'high_latency' | 'quality_degradation';
+  severity: 'warning';
+  message: string;
+  value: number;
+  threshold: number;
+};
+
+type RealtimeStatus = {
+  activeRequests: number;
+  avgLatency: number;
+  requestsPerMinute: number;
+  errorRate: number;
+  topModels: Array<{ model: AIModel; usage: number }>;
+  recentErrors: Array<{
+    timestamp: string;
+    model: AIModel;
+    endpoint: AIEndpoint;
+    error: string;
+  }>;
+  costPerHour: number;
+  estimatedMonthlyCost: number;
+};
+
+type ModelAggregation = {
+  model: AIModel;
+  requests: number;
+  cost: number;
+  avgLatency: number;
+};
+
+type EndpointAggregation = {
+  endpoint: AIEndpoint;
+  requests: number;
+  cost: number;
+  avgLatency: number;
+};
+
+type UsageAggregations = {
+  byHour: HourlyAggregation[];
+  byModel: ModelAggregation[];
+  byEndpoint: EndpointAggregation[];
+};
+
+type UsageDetails = {
+  totalRecords: number;
+  records: UsageRecordSummary[];
+  aggregations: UsageAggregations;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+};
+
+type UsageRecordSummary = {
+  id: string;
+  timestamp: string;
+  model: AIModel;
+  endpoint: AIEndpoint;
+  promptTokens: number;
+  completionTokens: number;
+  latencyMs: number;
+  success: boolean;
+  totalCostUsd: number;
+  documentId: string | null;
+  customerId: string;
+};
+
+type HourlyAggregation = {
+  hour: number;
+  requests: number;
+  cost: number;
+  avgLatency: number;
+};
 
 export async function GET(request: NextRequest) {
   const adminResult = await requireAdmin(request);
@@ -224,7 +366,9 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
+    const body = (await request.json()) as {
+      usageRecords?: UsageRecordInput[];
+    };
     const { usageRecords } = body;
 
     if (!Array.isArray(usageRecords)) {
@@ -237,7 +381,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const results = [];
+    const results: BatchUsageResult[] = [];
     for (const record of usageRecords) {
       try {
         const metricId = await aiUsageAnalytics.trackAIUsage(
@@ -259,8 +403,10 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    const successful = results.filter((r) => r.success).length;
-    const failed = results.filter((r) => !r.success).length;
+    const successful = results.filter(
+      (r): r is Extract<BatchUsageResult, { success: true }> => r.success,
+    ).length;
+    const failed = results.length - successful;
 
     return NextResponse.json({
       success: true,
@@ -285,8 +431,8 @@ export async function PUT(request: NextRequest) {
 }
 
 // Helper functions
-function getCriticalAlerts(analytics: any) {
-  const alerts = [];
+function getCriticalAlerts(analytics: AIUsageAnalytics): CriticalAlert[] {
+  const alerts: CriticalAlert[] = [];
 
   // Budget alerts
   if (analytics.budgetTracking.budgetUtilization > 95) {
@@ -316,7 +462,7 @@ function getCriticalAlerts(analytics: any) {
       type: 'expensive_models',
       severity: 'info',
       message: `${expensiveModels.length} models have high monthly costs`,
-      models: expensiveModels.map((m: any) => m.model),
+      models: expensiveModels.map((m: { model: string }) => m.model),
     });
   }
 
@@ -329,7 +475,7 @@ function getCriticalAlerts(analytics: any) {
       type: 'low_success_rate',
       severity: 'warning',
       message: `${lowSuccessModels.length} models have success rates below 90%`,
-      models: lowSuccessModels.map((m: any) => ({
+      models: lowSuccessModels.map((m: { model: AIModel; successRate: number }) => ({
         model: m.model,
         rate: m.successRate,
       })),
@@ -339,12 +485,15 @@ function getCriticalAlerts(analytics: any) {
   return alerts;
 }
 
-function getEndpointComparison(analytics: any, model?: AIModel) {
-  let comparison = analytics.endpointAnalysis;
+function getEndpointComparison(
+  analytics: AIUsageAnalytics,
+  model?: AIModel,
+): EndpointComparison {
+  let comparison: EndpointComparison = analytics.endpointAnalysis;
 
   if (model) {
     // Filter data for specific model (this would need to be implemented in the analytics engine)
-    comparison = comparison.map((endpoint: any) => ({
+    comparison = comparison.map((endpoint) => ({
       ...endpoint,
       modelSpecific: true,
       filterModel: model,
@@ -354,7 +503,9 @@ function getEndpointComparison(analytics: any, model?: AIModel) {
   return comparison;
 }
 
-function getSpendingPatterns(analytics: any) {
+function getSpendingPatterns(
+  analytics: AIUsageAnalytics,
+): SpendingPatterns | {} {
   const dailyCosts = analytics.trends.dailyCosts;
   if (dailyCosts.length === 0) return {};
 
@@ -367,21 +518,22 @@ function getSpendingPatterns(analytics: any) {
 
   // Find peak spending days
   const peakDays = dailyCosts
-    .filter((day: any) => day.cost > avgDailyCost * 1.5)
-    .sort((a: any, b: any) => b.cost - a.cost)
+    .filter((day) => day.cost > avgDailyCost * 1.5)
+    .sort((a, b) => b.cost - a.cost)
     .slice(0, 5);
 
   // Identify spending trends
   const recentDays = dailyCosts.slice(-7);
   const olderDays = dailyCosts.slice(-14, -7);
   const recentAvg =
-    recentDays.reduce((sum: number, day: any) => sum + day.cost, 0) /
+    recentDays.reduce((sum: number, day) => sum + day.cost, 0) /
     recentDays.length;
   const olderAvg =
-    olderDays.reduce((sum: number, day: any) => sum + day.cost, 0) /
-    olderDays.length;
+    olderDays.reduce((sum: number, day) => sum + day.cost, 0) /
+    (olderDays.length || 1);
   const trend = recentAvg > olderAvg ? 'increasing' : 'decreasing';
-  const trendPercentage = Math.abs(((recentAvg - olderAvg) / olderAvg) * 100);
+  const base = olderAvg === 0 ? 1 : olderAvg;
+  const trendPercentage = Math.abs(((recentAvg - olderAvg) / base) * 100);
 
   return {
     avgDailyCost,
@@ -393,8 +545,10 @@ function getSpendingPatterns(analytics: any) {
   };
 }
 
-function generateCostForecast(dailyCosts: any[]) {
-  if (dailyCosts.length < 7) return { forecast: [], confidence: 'low' };
+function generateCostForecast(dailyCosts: AIUsageAnalytics['trends']['dailyCosts']): CostForecast {
+  if (dailyCosts.length < 7) {
+    return { forecast: [], confidence: 'low', baseAvg: 0 };
+  }
 
   // Simple linear regression for cost forecasting
   const recent = dailyCosts.slice(-7);
@@ -402,7 +556,7 @@ function generateCostForecast(dailyCosts: any[]) {
     recent.reduce((sum, day) => sum + day.cost, 0) / recent.length;
 
   // Generate 7-day forecast
-  const forecast = [];
+  const forecast: CostForecast['forecast'] = [];
   const baseDate = new Date();
 
   for (let i = 1; i <= 7; i++) {
@@ -427,14 +581,16 @@ function generateCostForecast(dailyCosts: any[]) {
   };
 }
 
-function getPerformanceAlerts(analytics: any) {
-  const alerts = [];
+function getPerformanceAlerts(
+  analytics: AIUsageAnalytics,
+): PerformanceAlert[] {
+  const alerts: PerformanceAlert[] = [];
 
   // High latency alerts
   const recentLatency = analytics.trends.latencyTrends.slice(-7);
   if (recentLatency.length > 0) {
     const avgLatency =
-      recentLatency.reduce((sum: number, day: any) => sum + day.avgLatency, 0) /
+      recentLatency.reduce((sum: number, day) => sum + day.avgLatency, 0) /
       recentLatency.length;
     if (avgLatency > 5000) {
       // > 5 seconds
@@ -452,7 +608,7 @@ function getPerformanceAlerts(analytics: any) {
   const recentQuality = analytics.trends.qualityTrends.slice(-7);
   if (recentQuality.length > 0) {
     const avgQuality =
-      recentQuality.reduce((sum: number, day: any) => sum + day.avgQuality, 0) /
+      recentQuality.reduce((sum: number, day) => sum + day.avgQuality, 0) /
       recentQuality.length;
     if (avgQuality < 70) {
       // Quality score below 70
@@ -469,7 +625,7 @@ function getPerformanceAlerts(analytics: any) {
   return alerts;
 }
 
-async function getRealtimeAIStatus() {
+async function getRealtimeAIStatus(): Promise<RealtimeStatus> {
   // In production, this would fetch real-time data from Redis or similar
   return {
     activeRequests: 12,
@@ -504,7 +660,7 @@ async function getUsageDetails(
   timeframe: string,
   model?: AIModel,
   endpoint?: AIEndpoint,
-) {
+): Promise<UsageDetails> {
   // In production, this would fetch detailed usage records from database
   return {
     totalRecords: 1247,
@@ -527,7 +683,7 @@ function generateMockUsageRecords(
   count: number,
   model?: AIModel,
   endpoint?: AIEndpoint,
-) {
+): UsageRecordSummary[] {
   const models: AIModel[] = [
     'gpt-4',
     'gpt-3.5-turbo',
@@ -541,7 +697,7 @@ function generateMockUsageRecords(
     'content_summarization',
   ];
 
-  const records = [];
+  const records: UsageRecordSummary[] = [];
   for (let i = 0; i < count; i++) {
     const selectedModel =
       model || models[Math.floor(Math.random() * models.length)];
@@ -569,8 +725,8 @@ function generateMockUsageRecords(
   return records.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 }
 
-function generateHourlyAggregations() {
-  const hours = [];
+function generateHourlyAggregations(): HourlyAggregation[] {
+  const hours: HourlyAggregation[] = [];
   for (let i = 0; i < 24; i++) {
     hours.push({
       hour: i,
@@ -582,7 +738,7 @@ function generateHourlyAggregations() {
   return hours;
 }
 
-function generateModelAggregations() {
+function generateModelAggregations(): ModelAggregation[] {
   return [
     { model: 'gpt-3.5-turbo', requests: 450, cost: 45.67, avgLatency: 1200 },
     { model: 'gpt-4', requests: 180, cost: 89.32, avgLatency: 2100 },
@@ -591,7 +747,7 @@ function generateModelAggregations() {
   ];
 }
 
-function generateEndpointAggregations() {
+function generateEndpointAggregations(): EndpointAggregation[] {
   return [
     {
       endpoint: 'document_generation',

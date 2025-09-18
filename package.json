@@ -75,9 +75,12 @@
     "test:accessibility:ci": "playwright test e2e/accessibility*.spec.ts --reporter=json --output-dir=test-results"
   },
   "dependencies": {
+    "@firebase/auth": "^1.10.7",
+    "@firebase/firestore": "^4.7.17",
     "@genkit-ai/googleai": "^1.6.2",
     "@genkit-ai/next": "^1.6.2",
     "@google-cloud/aiplatform": "^4.2.0",
+    "@google-cloud/firestore": "^7.11.4",
     "@google-cloud/pubsub": "^5.1.0",
     "@googlemaps/extended-component-library": "^0.6.10",
     "@heroicons/react": "^2.2.0",
