@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const TEMPLATES_ROOT = path.join(__dirname, '..', 'src', 'data', 'templates');
+const TEMPLATES_ROOT = path.join(__dirname, '..', 'data', 'templates');
 const EN_DIR = path.join(TEMPLATES_ROOT, 'en');
 const ES_DIR = path.join(TEMPLATES_ROOT, 'es');
 
