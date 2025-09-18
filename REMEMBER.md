@@ -13,13 +13,14 @@
 - [ ] Security headers: HSTS, CSP, Referrer-Policy, Permissions-Policy (HSTS, permissions, and cross-domain policies applied; CSP still disabled for PDF compatibility)
 - [ ] Contract inventory + clause/placeholder/translation checks (broaden audit beyond NDA & power-of-attorney)
 - [x] Provide Spanish variants for basic-nda and power-of-attorney markdown templates
-- [ ] Extend canonical and hreflang coverage to other marketing routes
+- [ ] Extend canonical and hreflang coverage to other marketing routes (features route complete; tackle FAQ/support next)
 ## Inventory
 ### Pages
 - [ ] /en (homepage canonical + JSON-LD ready)
 - [ ] /[locale]/category/[category]
 - [ ] /[locale]/pricing (needs structured data verification in production)
 - [ ] /[locale]/blog/how-to-draft-lease-agreement
+- [ ] /[locale]/features (localized copy + ItemList JSON-LD; monitor performance post-deploy)
 ### Contracts/Templates
 - [ ] src/data/templates — en: 4, es: 4 (parity confirmed; includes es basic-nda & power-of-attorney)
 - [ ] public/templates markdown — en: 350, es: 350 (parity)
