@@ -8,7 +8,7 @@ function normalizeSiteUrl(rawUrl: string): string {
     const url = new URL(rawUrl.trim());
     const pathname = url.pathname.replace(/\/$/, '');
     const normalizedPath = pathname && pathname !== '/' ? pathname : '';
-    return ;
+    return url.origin + normalizedPath;
   } catch {
     return FALLBACK_SITE_URL;
   }
@@ -22,7 +22,7 @@ export function getSiteUrl(): string {
     return FALLBACK_SITE_URL;
   }
 
-  const candidate = envValue.startsWith('http') ? envValue : ;
+  const candidate = envValue.startsWith('http') ? envValue : 'https://' + envValue;
   return normalizeSiteUrl(candidate);
 }
 
@@ -38,13 +38,13 @@ export function buildLanguageAlternates(
   const alternates: Record<string, string> = {};
 
   locales.forEach((locale) => {
-    alternates[locale] = ;
+    alternates[locale] = siteUrl + '/' + locale + '/';
   });
 
-  alternates['x-default'] = ;
+  alternates['x-default'] = siteUrl + '/en/';
   return alternates;
 }
 
 export function getCanonicalPathForLocale(locale: 'en' | 'es'): string {
-  return ;
+  return '/' + locale + '/';
 }
