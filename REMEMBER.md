@@ -10,7 +10,7 @@
 - [ ] robots.txt + sitemap.xml + canonical + hreflang (homepage, category, blog canonical complete; expand to remaining routes)
 - [x] Organization/WebSite JSON-LD (homepage coverage in place)
 - [ ] A11y landmarks + skip link + labels (axe clean)
-- [ ] Security headers: HSTS, CSP, Referrer-Policy, Permissions-Policy (HSTS & permissions policies applied; CSP still disabled for PDF compatibility)
+- [ ] Security headers: HSTS, CSP, Referrer-Policy, Permissions-Policy (HSTS, permissions, and cross-domain policies applied; CSP still disabled for PDF compatibility)
 - [ ] Contract inventory + clause/placeholder/translation checks (Spanish src templates pending)
 - [ ] Provide Spanish variants for basic-nda and power-of-attorney markdown templates
 - [ ] Extend canonical and hreflang coverage to other marketing routes
