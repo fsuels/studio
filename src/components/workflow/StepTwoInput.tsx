@@ -20,8 +20,12 @@ export function StepTwoInput({
 
   // Memoize list of docs in this category
   const docsInCategory: DocumentSummary[] = React.useMemo(
-    () => getWorkflowDocumentsByCategory(category, { jurisdiction: 'us' }),
-    [category],
+    () =>
+      getWorkflowDocumentsByCategory(category, {
+        jurisdiction: 'us',
+        state: stateCode || undefined,
+      }),
+    [category, stateCode],
   );
 
   // Handle state dropdown change
@@ -66,18 +70,29 @@ export function StepTwoInput({
       </select>
 
       {/* Document grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {docsInCategory.map((doc) => (
-          <button
-            key={doc.id}
-            onClick={() => onSelectTemplate(doc.id)}
-            className="flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition"
-          >
-            {/* Replace with your icon component */}
-            <div className="mb-2 text-blue-600">📄</div>
-            <span className="text-center font-medium">{doc.title}</span>
-          </button>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[6rem]">
+        {!stateCode ? (
+          <div className="col-span-full text-sm text-gray-600">
+            Select your state to see templates tailored to local requirements.
+          </div>
+        ) : docsInCategory.length === 0 ? (
+          <div className="col-span-full text-sm text-gray-600">
+            No templates available for this category in {stateCode.toUpperCase()}. Try a different
+            state or category.
+          </div>
+        ) : (
+          docsInCategory.map((doc) => (
+            <button
+              key={doc.id}
+              onClick={() => onSelectTemplate(doc.id)}
+              className="flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition"
+            >
+              {/* Replace with your icon component */}
+              <div className="mb-2 text-blue-600">📄</div>
+              <span className="text-center font-medium">{doc.title}</span>
+            </button>
+          ))
+        )}
       </div>
     </div>
   );

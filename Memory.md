@@ -19,6 +19,7 @@
 - Ship regression tests ensuring Step1–3 flows render from manifest for top 20 docs.
 - TODO: Produce component checklist (StepOne/Two/Three inputs, DocumentTypeSelector, search bar, mega menus, dashboard stats) with owners + risk notes.
 - TODO: Draft integration test plan validating manifest results vs. legacy list for representative categories before swapping default exports.
+- Step 1–3 workflow now powered by manifest helpers (`src/lib/workflow/document-workflow.ts`); Step 2 filters templates by state metadata and Step 3 handles loading errors. Manual QA still required to confirm manifest `states` values align with picker options.
 
 ### Phase 2 – Template Completeness & Validation (Weeks 2–4)
 - Audit metadata-only templates; promote to full `LegalDocument` exports or document them as metadata-only plus adjust generator to surface warnings.

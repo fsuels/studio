@@ -31,8 +31,11 @@ import {
   Copyright,
   type LucideIcon,
 } from 'lucide-react';
-import type { LegalDocument } from '@/types/documents';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import {
+  getWorkflowDocuments,
+  getWorkflowDocumentsByCategory,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 // (No need for mobile-only dropdown after redesign)
 
 const TopDocsChips = React.memo(function TopDocsChips() {
@@ -45,7 +48,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const { setShowDiscoveryModal } = useDiscoveryModal();
   const locale = (params.locale as 'en' | 'es') || 'en';
 
-  const [topDocs, setTopDocs] = useState<LegalDocument[]>(documentLibrary);
+  const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const [tax, setTax] = useState<any | null>(null);
@@ -228,28 +231,16 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    let cancelled = false;
+
     (async () => {
-      try {
-        const [docs, { taxonomy }] = await Promise.all([
-          getDocumentsByCountry('us'),
-          import('@/config/taxonomy'),
-        ]);
-        if (!cancelled) {
-          setTopDocs(docs.length ? docs : documentLibrary);
-          setTax(taxonomy);
-          setIsLoading(false);
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setTopDocs(documentLibrary);
-          setIsLoading(false);
-        }
-      }
+      const [{ taxonomy }] = await Promise.all([
+        import('@/config/taxonomy'),
+      ]);
+      setTax(taxonomy);
+      const docs = getWorkflowDocuments({ jurisdiction: 'us' });
+      setTopDocs(docs);
+      setIsLoading(false);
     })();
-    return () => {
-      cancelled = true;
-    };
   }, [isHydrated]);
 
   const categories = useMemo(

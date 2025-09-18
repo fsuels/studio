@@ -1,7 +1,7 @@
 // src/components/DocumentTypeSelector.tsx
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -21,13 +21,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/usStates';
-import documentLibrary, {
-  findMatchingDocuments,
-  findMatchingDocumentsSync,
-  getDocumentsByCountry,
-} from '@/lib/document-library';
+import {
+  getWorkflowCategories,
+  getWorkflowDocuments,
+  searchWorkflowDocuments,
+  type DocumentSummary,
+} from '@/lib/workflow/document-workflow';
 
 interface Props {
   onSelect: (_documentId: string) => void; // Now accepts the document ID
@@ -44,71 +44,65 @@ export default function DocumentTypeSelector({
     undefined,
   );
 
-  const deriveCategories = React.useCallback((docs: LegalDocument[]) => {
-    return [...new Set(docs.map((d) => d.category))];
-  }, []);
+  const language = useMemo(() => (i18n.language === 'es' ? 'es' : 'en'), [i18n.language]) as 'en' | 'es';
 
-  const [categories, setCategories] = useState<string[]>(
-    deriveCategories(documentLibrary),
-  );
-  const [filteredDocuments, setFilteredDocuments] = useState<LegalDocument[]>(
-    documentLibrary,
-  );
+  const filteredDocuments: DocumentSummary[] = useMemo(() => {
+    const baseOptions = {
+      jurisdiction: 'us',
+      state: selectedState || undefined,
+      language,
+    } as const;
+
+    if (!searchQuery.trim()) {
+      return getWorkflowDocuments(baseOptions);
+    }
+
+    return searchWorkflowDocuments(searchQuery, baseOptions);
+  }, [language, searchQuery, selectedState]);
+
+  const categories = useMemo(() => {
+    const availableCategories = getWorkflowCategories({
+      jurisdiction: 'us',
+      state: selectedState || undefined,
+    });
+
+    const categoriesInResults = Array.from(
+      new Set(filteredDocuments.map((doc) => doc.category)),
+    );
+
+    // Preserve manifest ordering but ensure categories present in filtered results.
+    return availableCategories.filter((category) =>
+      categoriesInResults.includes(category),
+    );
+  }, [filteredDocuments, selectedState]);
+
+  const docsByCategory = useMemo(() => {
+    const map = new Map<string, DocumentSummary[]>();
+    filteredDocuments.forEach((doc) => {
+      const existing = map.get(doc.category) ?? [];
+      existing.push(doc);
+      map.set(doc.category, existing);
+    });
+    return map;
+  }, [filteredDocuments]);
+
+  const [activeCategory, setActiveCategory] = useState<string>('');
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const hydratedDocs = await getDocumentsByCountry('us');
-        if (!cancelled && hydratedDocs.length) {
-          setCategories(deriveCategories(hydratedDocs));
-          if (!searchQuery) {
-            setFilteredDocuments(hydratedDocs);
-          }
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setCategories(deriveCategories(documentLibrary));
-          if (!searchQuery) {
-            setFilteredDocuments(documentLibrary);
-          }
-        }
-      }
-    })();
+    if (categories.length === 0) {
+      setActiveCategory('');
+      return;
+    }
 
-    return () => {
-      cancelled = true;
-    };
-  }, [deriveCategories, searchQuery]);
+    if (!categories.includes(activeCategory)) {
+      setActiveCategory(categories[0]);
+    }
+  }, [categories, activeCategory]);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const results = await findMatchingDocuments(
-          searchQuery,
-          i18n.language as 'en' | 'es',
-          selectedState,
-        );
-        if (!cancelled) {
-          setFilteredDocuments(results);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          const fallback = findMatchingDocumentsSync(
-            searchQuery,
-            i18n.language as 'en' | 'es',
-            selectedState,
-          );
-          setFilteredDocuments(fallback);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [searchQuery, selectedState, i18n.language]);
+  const documentsForActiveCategory = useMemo(() => {
+    if (!activeCategory) return [];
+    return docsByCategory.get(activeCategory) ?? [];
+  }, [docsByCategory, activeCategory]);
 
   return (
     <Card className="mt-6">
@@ -125,7 +119,10 @@ export default function DocumentTypeSelector({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          <Select onValueChange={setSelectedState}>
+          <Select
+            value={selectedState ?? ''}
+            onValueChange={(value) => setSelectedState(value || undefined)}
+          >
             <SelectTrigger
               aria-label={t('docTypeSelector.selectState', 'Select State')}
             >
@@ -134,6 +131,7 @@ export default function DocumentTypeSelector({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>{t('docTypeSelector.statesLabel')}</SelectLabel>
+                <SelectItem value="">{t('docTypeSelector.allStates', 'All States')}</SelectItem>
                 {usStates.map((state) => (
                   <SelectItem key={state.value} value={state.value}>
                     {state.label}
@@ -143,25 +141,32 @@ export default function DocumentTypeSelector({
             </SelectContent>
           </Select>
         </div>
-        <Tabs defaultValue={categories[0]} className="mt-4">
-          <TabsList>
-            {categories.map((category) => (
-              <TabsTrigger key={category} value={category}>
-                {category}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          {categories.map((category) => (
-            <TabsContent key={category} value={category}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredDocuments
-                  .filter((doc) => doc.category === category)
-                  .map((doc) => (
-                    <Card
-                      key={doc.id}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={t(doc.name ?? '', doc.name ?? '')}
+        {categories.length === 0 ? (
+          <div className="mt-4 text-sm text-gray-600">
+            {selectedState
+              ? t('docTypeSelector.noResultsState', 'No templates match this state.')
+              : t('docTypeSelector.noResults', 'No templates match your search.')}
+          </div>
+        ) : (
+          <Tabs value={activeCategory} onValueChange={setActiveCategory} className="mt-4">
+            <TabsList>
+              {categories.map((category) => (
+                <TabsTrigger key={category} value={category}>
+                  {category}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {categories.map((category) => {
+              const docs = docsByCategory.get(category) ?? [];
+              return (
+                <TabsContent key={category} value={category}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {docs.map((doc) => (
+                      <Card
+                        key={doc.id}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={doc.title}
                       className={`cursor-pointer hover:shadow-lg transition-all duration-200 ${selectedDocument === doc.id ? 'border-2 border-primary' : ''}`}
                       onClick={() => onSelect(doc.id)}
                       onKeyDown={(e) => {
@@ -172,15 +177,17 @@ export default function DocumentTypeSelector({
                       }}
                     >
                       <CardHeader>
-                        <CardTitle>{doc.name}</CardTitle>
+                        <CardTitle>{doc.title}</CardTitle>
                         <CardDescription>{doc.description}</CardDescription>
                       </CardHeader>
-                    </Card>
-                  ))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+              );
+            })}
+          </Tabs>
+        )}
       </CardContent>
     </Card>
   );

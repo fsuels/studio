@@ -1,15 +1,13 @@
 // src/components/SearchBar.tsx
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
-import type { LegalDocument } from '@/types/documents';
-import { getDocTranslation } from '@/lib/i18nUtils';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import { searchWorkflowDocuments, type DocumentSummary } from '@/lib/workflow/document-workflow';
 
 const SearchBar = React.memo(function SearchBar() {
   const { t: tHeader } = useTranslation('header');
@@ -20,8 +18,7 @@ const SearchBar = React.memo(function SearchBar() {
   const locale = (params.locale as 'en' | 'es') || 'en';
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState<LegalDocument[]>([]);
-  const [docs, setDocs] = useState<LegalDocument[]>(documentLibrary);
+  const [suggestions, setSuggestions] = useState<DocumentSummary[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
@@ -31,53 +28,24 @@ const SearchBar = React.memo(function SearchBar() {
     setIsHydrated(true);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const hydrated = await getDocumentsByCountry('us');
-        if (!cancelled && hydrated.length) {
-          setDocs(hydrated);
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocs(documentLibrary);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Filter suggestions using in-memory manifest-backed library
-  useEffect(() => {
-    if (!isHydrated) return;
+  const hydratedSuggestions = useMemo(() => {
+    if (!isHydrated) return [] as DocumentSummary[];
 
     const term = searchTerm.trim();
-    if (term.length > 1) {
-      const lower = term.toLowerCase();
-      const docResults = docs
-        .filter((doc) => {
-          const { name = '', description = '', aliases = [] } = getDocTranslation(
-            doc,
-            locale,
-          );
-          return (
-            name.toLowerCase().includes(lower) ||
-            description.toLowerCase().includes(lower) ||
-            aliases.some((alias) => alias.toLowerCase().includes(lower))
-          );
-        })
-        .slice(0, 5);
-      setSuggestions(docResults);
-      setShowSuggestions(docResults.length > 0);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  }, [searchTerm, locale, isHydrated, docs]);
+    if (term.length <= 1) return [];
+
+    const results = searchWorkflowDocuments(term, {
+      jurisdiction: 'us',
+      language: locale === 'es' ? 'es' : 'en',
+    });
+
+    return results.slice(0, 5);
+  }, [isHydrated, locale, searchTerm]);
+
+  useEffect(() => {
+    setSuggestions(hydratedSuggestions);
+    setShowSuggestions(isHydrated && hydratedSuggestions.length > 0);
+  }, [hydratedSuggestions, isHydrated]);
 
   // Close on outside click
   useEffect(() => {
@@ -163,7 +131,10 @@ const SearchBar = React.memo(function SearchBar() {
             className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
           >
             {suggestions.map((suggestion) => {
-              const { name } = getDocTranslation(suggestion, locale);
+              const translation =
+                suggestion.translations?.[locale as 'en' | 'es'] ??
+                suggestion.translations?.en;
+              const name = translation?.name || suggestion.title;
               return (
                 <li key={suggestion.id}>
                   <button
