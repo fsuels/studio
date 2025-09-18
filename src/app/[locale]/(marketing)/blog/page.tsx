@@ -49,7 +49,7 @@ const localizedContent = {
 
 function buildBlogStructuredData(locale: 'en' | 'es') {
   const siteUrl = getSiteUrl();
-  const localizedUrl = ;
+  const localizedUrl = `${siteUrl}/${locale}/blog/`;
   const topArticles = blogArticles.slice(0, 10);
 
   return JSON.stringify(
@@ -61,21 +61,21 @@ function buildBlogStructuredData(locale: 'en' | 'es') {
       url: localizedUrl,
       inLanguage: LOCALE_LANGUAGE_TAGS[locale],
       blogPost: topArticles.map((article) => {
-        const title = (article as Record<string, unknown>)[] as string;
-        const summary = (article as Record<string, unknown>)[] as string;
+        const title = (article as Record<string, unknown>)[`title_${locale}`] as string;
+        const summary = (article as Record<string, unknown>)[`summary_${locale}`] as string;
         return {
           '@type': 'BlogPosting',
           headline: title,
           description: summary,
           datePublished: article.date,
-          url: ,
-          mainEntityOfPage: ,
+          url: `${siteUrl}/${locale}/blog/${article.slug}`,
+          mainEntityOfPage: `${siteUrl}/${locale}/blog/${article.slug}`,
         };
       }),
     },
     null,
     0,
-  ).replace(/</g, '\u003c');
+  ).replace(/</g, '\\u003c');
 }
 
 export async function generateMetadata({
@@ -87,13 +87,13 @@ export async function generateMetadata({
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
-  const canonicalPath = ;
+  const canonicalPath = `/${locale}/blog/`;
   const supportedLocales = localizations as readonly ('en' | 'es')[];
   const languageAlternates = supportedLocales.reduce<Record<string, string>>((accumulator, supportedLocale) => {
-    accumulator[supportedLocale] = ;
+    accumulator[supportedLocale] = `${siteUrl}/${supportedLocale}/blog/`;
     return accumulator;
   }, {});
-  languageAlternates['x-default'] = ;
+  languageAlternates['x-default'] = `${siteUrl}/en/blog/`;
   const alternateOgLocales = supportedLocales
     .filter((supportedLocale) => supportedLocale !== locale)
     .map((supportedLocale) => LOCALE_LANGUAGE_TAGS[supportedLocale]);
@@ -151,8 +151,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
         <div className="grid gap-4">
           {articles.map((article) => {
             const record = article as Record<string, unknown>;
-            const title = record[] as string;
-            const summary = record[] as string;
+            const title = record[`title_${langSuffix}`] as string;
+            const summary = record[`summary_${langSuffix}`] as string;
             const date = new Date(article.date).toLocaleDateString(locale, {
               year: 'numeric',
               month: 'long',
@@ -161,9 +161,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
             return (
               <Link
                 key={article.slug}
-                href={}
+                href={`/${locale}/blog/${article.slug}`}
                 className="block border rounded-xl p-4 shadow hover:shadow-md transition hover:bg-muted"
-                aria-label={}
+                aria-label={`${title} — ${localizedContent[locale].readMore}`}
               >
                 <h2 className="text-xl font-semibold mb-1">{title}</h2>
                 <p className="text-sm text-muted-foreground mb-1">{date}</p>
