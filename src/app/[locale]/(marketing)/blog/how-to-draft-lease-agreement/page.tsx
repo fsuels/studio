@@ -5,12 +5,15 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, User, Calendar } from 'lucide-react';
 import { CategoryDocumentsWidget, BlogFooterLinks } from '@/components/blog/InternalLinkWidget';
 import BrowseTemplatesButton from '@/components/blog/BrowseTemplatesButton';
+import SEOConfig from '@/config/seo';
+import { localizations } from '@/lib/localizations';
+import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
 
 // Metadata will be generated dynamically based on locale
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   
-  const metadata = {
+  const metadataByLocale = {
     en: {
       title: 'How to Draft a Lease Agreement: Complete Guide 2024 | 123LegalDoc',
       description: 'Learn how to draft a comprehensive lease agreement with our step-by-step guide. Includes state requirements, key clauses, and free template.',
@@ -25,19 +28,51 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ogTitle: 'Cómo Redactar un Contrato de Arrendamiento: Guía Completa 2024',
       ogDescription: 'Guía profesional para crear contratos de arrendamiento legalmente sólidos con consejos expertos y plantillas gratuitas.',
     }
-  };
+  } as const;
+
+  const siteUrl = getSiteUrl();
+  const metadataBase = new URL(siteUrl + '/');
+  const canonicalPath = `/${locale}/blog/how-to-draft-lease-agreement/`;
+  const supportedLocales = localizations as readonly ('en' | 'es')[];
+  const languageAlternates = supportedLocales.reduce<Record<string, string>>(
+    (accumulator, supportedLocale) => {
+      accumulator[supportedLocale] = `${siteUrl}/${supportedLocale}/blog/how-to-draft-lease-agreement/`;
+      return accumulator;
+    },
+    {},
+  );
+  languageAlternates['x-default'] = `${siteUrl}/en/blog/how-to-draft-lease-agreement/`;
+  const alternateOgLocales = supportedLocales
+    .filter((supportedLocale) => supportedLocale !== locale)
+    .map((supportedLocale) => LOCALE_LANGUAGE_TAGS[supportedLocale]);
+
+  const localizedMetadata = metadataByLocale[locale];
   
   return {
-    title: metadata[locale].title,
-    description: metadata[locale].description,
-    keywords: metadata[locale].keywords,
+    title: localizedMetadata.title,
+    description: localizedMetadata.description,
+    keywords: localizedMetadata.keywords,
+    metadataBase,
+    alternates: {
+      canonical: canonicalPath,
+      languages: languageAlternates,
+    },
     openGraph: {
-      title: metadata[locale].ogTitle,
-      description: metadata[locale].ogDescription,
+      title: localizedMetadata.ogTitle,
+      description: localizedMetadata.ogDescription,
       type: 'article',
+      url: siteUrl + canonicalPath,
+      siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
       publishedTime: '2024-12-16',
       authors: ['123LegalDoc Legal Team'],
-    }
+      locale: LOCALE_LANGUAGE_TAGS[locale],
+      alternateLocale: alternateOgLocales,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: localizedMetadata.ogTitle,
+      description: localizedMetadata.ogDescription,
+    },
   };
 }
 

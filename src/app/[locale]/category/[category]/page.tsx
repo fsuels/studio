@@ -73,8 +73,7 @@ export async function generateMetadata({
       siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
       locale: LOCALE_LANGUAGE_TAGS[locale],
       alternateLocale: alternateOgLocales,
-    }
-    ,
+    },
     metadataBase,
     alternates: {
       canonical: canonicalPath,
