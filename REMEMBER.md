@@ -11,7 +11,7 @@
 - [x] Organization/WebSite JSON-LD (homepage coverage in place)
 - [ ] A11y landmarks + skip link + labels (axe clean)
 - [ ] Security headers: HSTS, CSP, Referrer-Policy, Permissions-Policy (HSTS, permissions, and cross-domain policies applied; CSP still disabled for PDF compatibility)
-- [ ] Contract inventory + clause/placeholder/translation checks (broaden audit beyond NDA & power-of-attorney)
+- [ ] Contract inventory + clause/placeholder/translation checks (placeholder parity tests in place; clause review outstanding)
 - [x] Provide Spanish variants for basic-nda and power-of-attorney markdown templates
 - [ ] Extend canonical and hreflang coverage to other marketing routes (features + FAQ + templates complete; address support route hardening next)
 ## Inventory
