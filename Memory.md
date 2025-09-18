@@ -14,6 +14,9 @@
 - Additional entry points audit: no Firebase Function or CLI workflows currently invoke pdf generation; monitor future Functions additions so they adopt the logger immediately.
 
 ### Phase 1 – Manifest Adoption Sprint (Weeks 1–2)
+- 2025-09-19: TypeScript sweep now shells `npx tsc --noEmit --skipLibCheck`; Firestore 13.3.0 emits a TS1010 (`*/` expected) error—documented for follow-up.
+- 2025-09-19: Quality verifier updated to consume manifest JSON; remaining warnings are environment-only (tsc unavailable in sandbox, lint max-warning exit).
+- 2025-09-19: Quality verification script highlights backlog of non-manifest exports/metadata (legacy template dirs); queued for cleanup or manifest parity before enabling full CI gate.
 - Replace remaining `documentLibrary` imports in client/server components with manifest-backed selectors (`DocumentTypeSelector`, Step flows, search, discovery, chips, analytics widgets).
 - Update Firebase/Cloud Functions (`functions/` equivalents) to consume `dynamic-document-loader` and manifest metadata, adding parity tests.
 - Ship regression tests ensuring Step1–3 flows render from manifest for top 20 docs.
@@ -29,6 +32,7 @@
 - 2025-09-19: Updated `src/lib/documents/dynamic-loader.ts` to delegate to the manifest-backed loader so hooks/components no longer rely on the three-item stub; next, align Firebase/API wrappers with the same helper.
 - 2025-09-19: `src/lib/document-loader.ts` now calls the manifest loader first and only falls back to metadata stubs when bindings are missing; Firebase Functions/back-office scripts still pending review.
 - 2025-09-19: Manifest generator now outputs JSON for cross-runtime sharing and `functions/document-manifest.ts` consumes it so Cloud Functions validate docTypes before rendering previews.
+- 2025-09-19: Legacy scripts (e.g., `scripts/count-documents.js`) now read the manifest JSON directly; remaining CLI utilities still need the same update before deprecating TS transpile hacks.
 
 ### Phase 2 – Template Completeness & Validation (Weeks 2–4)
 - Audit metadata-only templates; promote to full `LegalDocument` exports or document them as metadata-only plus adjust generator to surface warnings.

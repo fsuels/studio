@@ -20,13 +20,9 @@ const bigquery = new BigQuery();
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
 const MAX_REQUESTS_PER_WINDOW = 10; // Max 10 zero-result logs per minute per user
-const BUCKET_REFILL_RATE = 1; // 1 token per 6 seconds (10 per minute)
-
 // BigQuery configuration
 const DATASET_ID = 'search_analytics';
 const TABLE_ID = 'search_zero_results';
-const PROJECT_ID = process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT;
-
 interface TokenBucket {
   tokens: number;
   lastRefill: number;

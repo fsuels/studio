@@ -22,7 +22,6 @@ export default function PolicyAuditLogger({
           pageUrl: window.location.href,
         });
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error('PolicyAuditLogger error:', err);
       }
     };

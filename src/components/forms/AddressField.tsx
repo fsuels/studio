@@ -40,14 +40,11 @@ let googleMapsLoadPromise: Promise<void> | null = null;
 function getPlacePickerModule(): any {
   try {
     // Bust require cache so late jest.doMock calls take effect
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
     const resolved = require.resolve(
       '@googlemaps/extended-component-library/react',
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (require as any).cache?.[resolved];
     // Load module using a static string literal
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
     return require('@googlemaps/extended-component-library/react');
   } catch {
     return {};
@@ -440,7 +437,9 @@ const AddressField = React.memo(function AddressField({
                     if (types.includes('postal_code')) parts.postal_code = c.shortText || c.longText;
                     if (types.includes('country')) parts.country = c.shortText || c.longText;
                   });
-                } catch {}
+                } catch (componentError) {
+                  console.warn('Failed to extract address parts', componentError);
+                }
                 const parsedParts = {
                   street: `${parts.street_number || ''} ${parts.route || ''}`.trim(),
                   city: parts.city || '',
@@ -503,7 +502,6 @@ const AddressField = React.memo(function AddressField({
 
       {(() => {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
           const G = require('@/components/shared/GooglePlacesLoader').default;
           const Loader = G as React.ComponentType;
           return <Loader />;

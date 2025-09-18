@@ -137,7 +137,7 @@ SelectItem.displayName = SelectPrimitive.Item.displayName;
 const PrimitiveSeparator =
   (SelectPrimitive as unknown as { Separator?: typeof SelectPrimitive.Item })?.Separator;
 
-const SelectSeparator = PrimitiveSeparator
+const PrimitiveSelectSeparator = PrimitiveSeparator
   ? React.forwardRef<
       React.ElementRef<typeof PrimitiveSeparator>,
       React.ComponentPropsWithoutRef<typeof PrimitiveSeparator>
@@ -148,19 +148,32 @@ const SelectSeparator = PrimitiveSeparator
         {...props}
       />
     ))
-  : React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>( (
-      { className, ...props },
-      ref,
-    ) => (
-      <div
-        ref={ref}
-        className={cn('-mx-1 my-1 h-px bg-muted', className)}
-        role="separator"
-        {...props}
-      />
-    ));
+  : null;
 
-SelectSeparator.displayName = PrimitiveSeparator?.displayName ?? 'SelectSeparator';
+if (PrimitiveSelectSeparator) {
+  PrimitiveSelectSeparator.displayName =
+    PrimitiveSeparator?.displayName ?? 'SelectSeparator';
+}
+
+const FallbackSelectSeparator = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn('-mx-1 my-1 h-px bg-muted', className)}
+    role="separator"
+    {...props}
+  />
+));
+FallbackSelectSeparator.displayName = 'SelectSeparator';
+
+const SelectSeparator = (PrimitiveSelectSeparator ?? FallbackSelectSeparator) as
+  | typeof PrimitiveSelectSeparator
+  | typeof FallbackSelectSeparator;
+
+(SelectSeparator as React.ForwardRefExoticComponent<any> & { displayName?: string }).displayName =
+  PrimitiveSeparator?.displayName ?? 'SelectSeparator';
 
 export {
   Select,

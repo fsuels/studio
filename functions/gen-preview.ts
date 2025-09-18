@@ -1,6 +1,30 @@
 import * as functions from 'firebase-functions';
 import { getDocumentMetadata } from './document-manifest';
-import { renderMarkdown } from './lib/markdown-renderer';
+
+function renderMarkdownPreview(
+  docType: string,
+  formData: Record<string, unknown>,
+  locale: 'en' | 'es',
+): string {
+  const entries = Object.entries(formData || {});
+  if (!entries.length) {
+    return '';
+  }
+
+  const heading = `# ${docType}`;
+  const lines = entries.map(([key, value]) => {
+    if (value === undefined || value === null) {
+      return `- **${key}**: ____`;
+    }
+    if (Array.isArray(value)) {
+      const list = value.filter(Boolean).join(', ');
+      return `- **${key}**: ${list || '____'}`;
+    }
+    return `- **${key}**: ${String(value).trim() || '____'}`;
+  });
+
+  return [heading, '', ...lines].join('\n');
+}
 
 export const onDraftWrite = functions.firestore
   .document('users/{uid}/documents/{docId}')
@@ -32,7 +56,7 @@ export const onDraftWrite = functions.firestore
       ? requestedLocale
       : 'en';
 
-    const markdown = await renderMarkdown(docType, after.formData, locale);
+    const markdown = renderMarkdownPreview(docType, after.formData, locale);
 
     const translation = metadata.translations[locale];
     const fallbackMarkdown = `# ${translation.name}\n\n${

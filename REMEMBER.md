@@ -1,7 +1,13 @@
 # Pending Follow-Ups
 
+- TypeScript check now runs `npx tsc --noEmit --skipLibCheck`; current failure traces back to `@google-cloud/firestore` typings (`*/` parsing error).
+
+- Quality verifier now aligns with manifest JSON; remaining warnings are external (tsc unavailable locally, lint max-warning exit).
+
+- `scripts/quality-verification-system.js` flags missing exports and metadata gaps across legacy templates (e.g., `documents/us/*` directories); plan remediation or retire unused stubs before rerunning the sweep.
+
 - Update UI/Data layers (e.g., `src/lib/document-registry.ts` and downstream listing/search components) to source titles/routes from the generated manifest instead of the three-item stub. (Step1 selector, workflow steps 1–3, DocumentTypeSelector, mega menu variants, discovery modal, questionnaire, header/global search, and top docs chips now hydrate from the manifest-backed library without placeholders.) Manifest wrapper `src/lib/documents/dynamic-loader.ts` now proxies to the manifest loader; ensure Firebase/API wrappers adopt the same helper next.
-- Mirror the manifest-driven loader inside Firebase functions / API wrappers so backend flows use the same dynamic import surface (checkout + wizard use `getSingleDocument`; start page + Firestore dashboard now resolve metadata via manifest; `src/lib/document-loader.ts` now delegates to the manifest helper; `functions/document-manifest.ts` exposes manifest metadata for triggers—external scripts still need review).
+- Mirror the manifest-driven loader inside Firebase functions / API wrappers so backend flows use the same dynamic import surface (checkout + wizard use `getSingleDocument`; start page + Firestore dashboard now resolve metadata via manifest; `src/lib/document-loader.ts` now delegates to the manifest helper; `functions/document-manifest.ts` exposes manifest metadata for triggers; `scripts/count-documents.js` now reads the JSON manifest—remaining scripts pending audit).
 - Convert metadata-only templates (e.g., `src/lib/documents/us/accident-report`) to export full `LegalDocument` objects or decide on a separate metadata track so they can join the manifest (script currently skips them).
 - Run a full quality sweep once wiring is complete (`npm run lint`, `npm run test`, etc.); lint timed out locally and still reports legacy warnings (see latest run).
 - Document the new manifest script in contributor docs and ensure it is part of the build/pipeline (consider adding pre-commit or CI guard).

@@ -21,6 +21,53 @@ class DocumentQualityVerifier {
       failedChecks: 0,
       warningChecks: 0,
     };
+
+    const manifestPath = path.join(
+      __dirname,
+      '../src/lib/documents/manifest.generated.json',
+    );
+    this.manifestEntries = [];
+    this.manifestDocIds = new Set();
+    this.manifestDirectories = new Set();
+
+    if (fs.existsSync(manifestPath)) {
+      try {
+        const payload = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        this.manifestEntries = payload.entries || [];
+        this.manifestDocIds = new Set(
+          this.manifestEntries.map((entry) => entry.id),
+        );
+        this.manifestDirectories = new Set(
+          this.manifestEntries
+            .map((entry) => entry.importPath || '')
+            .map((importPath) => importPath.replace('./', ''))
+            .map((relativePath) => {
+              const parts = relativePath.split('/');
+              if (parts.length >= 2 && parts[0] === 'us') {
+                return parts[1];
+              }
+              return null;
+            })
+            .filter((value) => Boolean(value)),
+        );
+        if (this.manifestDirectories.size === 0) {
+          this.addWarning(
+            'Manifest',
+            'Manifest JSON contains no US entries; skipping manifest-scoped checks',
+          );
+        }
+      } catch (error) {
+        this.addWarning(
+          'Manifest',
+          `Failed to parse manifest.generated.json: ${error.message}`,
+        );
+      }
+    } else {
+      this.addWarning(
+        'Manifest',
+        'Missing manifest.generated.json; falling back to filesystem scans',
+      );
+    }
   }
 
   log(message, type = 'info') {
@@ -63,14 +110,26 @@ class DocumentQualityVerifier {
     }
   }
 
+  getDocumentDirectories() {
+    const directories = fs
+      .readdirSync(this.usDocsDir)
+      .filter((item) => {
+        const itemPath = path.join(this.usDocsDir, item);
+        return fs.statSync(itemPath).isDirectory();
+      });
+
+    if (this.manifestDirectories && this.manifestDirectories.size > 0) {
+      return directories.filter((dir) => this.manifestDirectories.has(dir));
+    }
+
+    return directories;
+  }
+
   // Check 1: Document Structure Integrity
   checkDocumentStructure() {
     this.log('Checking document structure integrity...', 'info');
 
-    const documentDirs = fs.readdirSync(this.usDocsDir).filter((item) => {
-      const itemPath = path.join(this.usDocsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
+    const documentDirs = this.getDocumentDirectories();
 
     this.results.totalDocuments = documentDirs.length;
 
@@ -110,6 +169,14 @@ class DocumentQualityVerifier {
       return;
     }
 
+    if (this.manifestDirectories && this.manifestDirectories.size > 0) {
+      this.addSuccess(
+        'Exports',
+        'Manifest JSON is authoritative; skipping legacy index.ts export check',
+      );
+      return;
+    }
+
     const indexContent = fs.readFileSync(indexPath, 'utf8');
     const exportLines = indexContent
       .split('\n')
@@ -117,10 +184,7 @@ class DocumentQualityVerifier {
         (line) => line.trim().startsWith('export {') && !line.includes('//'),
       );
 
-    const documentDirs = fs.readdirSync(this.usDocsDir).filter((item) => {
-      const itemPath = path.join(this.usDocsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
+    const documentDirs = this.getDocumentDirectories();
 
     // Check each directory has an export
     documentDirs.forEach((dir) => {
@@ -141,6 +205,13 @@ class DocumentQualityVerifier {
       const match = line.match(/from ['\"]\.\/(.+)['\"];?/);
       if (match) {
         const dirName = match[1];
+        if (
+          this.manifestDirectories &&
+          this.manifestDirectories.size > 0 &&
+          !this.manifestDirectories.has(dirName)
+        ) {
+          return;
+        }
         const dirPath = path.join(this.usDocsDir, dirName);
         if (!fs.existsSync(dirPath)) {
           this.addError(
@@ -172,10 +243,7 @@ class DocumentQualityVerifier {
       return;
     }
 
-    const documentDirs = fs.readdirSync(this.usDocsDir).filter((item) => {
-      const itemPath = path.join(this.usDocsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
+    const documentDirs = this.getDocumentDirectories();
 
     documentDirs.forEach((dir) => {
       const enTemplatePath = path.join(enTemplatesDir, `${dir}.md`);
@@ -225,10 +293,7 @@ class DocumentQualityVerifier {
   checkMetadataValidation() {
     this.log('Checking metadata validation...', 'info');
 
-    const documentDirs = fs.readdirSync(this.usDocsDir).filter((item) => {
-      const itemPath = path.join(this.usDocsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
+    const documentDirs = this.getDocumentDirectories();
 
     documentDirs.forEach((dir) => {
       const metadataPath = path.join(this.usDocsDir, dir, 'metadata.ts');
@@ -278,14 +343,25 @@ class DocumentQualityVerifier {
 
         // Check ID matches directory name
         const idMatch = content.match(/id:\s*['"]([^'"]+)['"]/);
-        if (idMatch && idMatch[1] !== dir) {
-          this.addError(
-            'Metadata',
-            `ID "${idMatch[1]}" doesn't match directory name "${dir}"`,
-            `${dir}/metadata.ts`,
-          );
-        } else if (idMatch) {
-          this.addSuccess('Metadata');
+        if (idMatch) {
+          const manifestEntryForDir = this.manifestEntries.find((entry) => {
+            const relativePath = (entry.importPath || '').replace('./', '');
+            return relativePath === `us/${dir}`;
+          });
+
+          const idMatchesDirectory = idMatch[1] === dir;
+          const idMatchesManifest =
+            manifestEntryForDir && manifestEntryForDir.id === idMatch[1];
+
+          if (idMatchesDirectory || idMatchesManifest) {
+            this.addSuccess('Metadata');
+          } else {
+            this.addError(
+              'Metadata',
+              `ID "${idMatch[1]}" doesn't match directory name "${dir}"`,
+              `${dir}/metadata.ts`,
+            );
+          }
         }
 
         // Check for aliases (warning if missing)
@@ -306,10 +382,7 @@ class DocumentQualityVerifier {
   checkSchemaValidation() {
     this.log('Checking schema validation...', 'info');
 
-    const documentDirs = fs.readdirSync(this.usDocsDir).filter((item) => {
-      const itemPath = path.join(this.usDocsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
+    const documentDirs = this.getDocumentDirectories();
 
     documentDirs.forEach((dir) => {
       const schemaPath = path.join(this.usDocsDir, dir, 'schema.ts');
@@ -374,7 +447,7 @@ class DocumentQualityVerifier {
     // Check manifest + workflow integration
     const manifestPath = path.join(
       __dirname,
-      '../src/lib/documents/manifest.generated.ts',
+      '../src/lib/documents/manifest.generated.json',
     );
     const workflowPath = path.join(
       __dirname,
@@ -382,7 +455,7 @@ class DocumentQualityVerifier {
     );
 
     if (!fs.existsSync(manifestPath)) {
-      this.addError('Integration', 'Missing manifest.generated.ts');
+      this.addError('Integration', 'Missing manifest.generated.json');
     } else {
       this.addSuccess('Integration');
     }
@@ -407,18 +480,7 @@ class DocumentQualityVerifier {
     this.log('Checking TypeScript compilation...', 'info');
 
     try {
-      // Check if TypeScript is available, if not skip this check
-      try {
-        execSync('which tsc', { stdio: 'pipe' });
-      } catch (e) {
-        this.addWarning(
-          'TypeScript',
-          'TypeScript compiler not found, skipping compilation check',
-        );
-        return;
-      }
-
-      // Run TypeScript check
+      // Run TypeScript check via local dependency
       execSync('npx tsc --noEmit --skipLibCheck', {
         cwd: path.join(__dirname, '..'),
         stdio: 'pipe',
@@ -427,8 +489,14 @@ class DocumentQualityVerifier {
     } catch (error) {
       this.addWarning(
         'TypeScript',
-        `Compilation check skipped - consider installing TypeScript: ${error.message}`,
+        `TypeScript compilation skipped or failed: ${error.message}`,
       );
+      if (error.stdout) {
+        this.log(error.stdout.toString(), 'warning');
+      }
+      if (error.stderr) {
+        this.log(error.stderr.toString(), 'warning');
+      }
     }
   }
 

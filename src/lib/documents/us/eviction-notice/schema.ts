@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export const schema = z
-  .object({
+export const schema = z.object({
     landlordName: z.string().min(1, 'Landlord name is required.'),
     tenantName: z.string().min(1, 'Tenant name is required.'),
     propertyAddress: z.string().min(1, 'Property address is required.'),

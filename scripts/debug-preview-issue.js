@@ -13,7 +13,7 @@ console.log('🔍 Debugging Document Preview Issue...\n');
 // Check manifest + workflow helpers exist
 const manifestPath = path.join(
   __dirname,
-  '../src/lib/documents/manifest.generated.ts',
+  '../src/lib/documents/manifest.generated.json',
 );
 const workflowPath = path.join(
   __dirname,
@@ -23,7 +23,7 @@ const templatesDir = path.join(__dirname, '../public/templates');
 const previewsDir = path.join(__dirname, '../public/images/previews');
 
 console.log('📁 Checking file structure:');
-console.log(`✓ Manifest generated file: ${fs.existsSync(manifestPath)}`);
+console.log(`✓ Manifest JSON file: ${fs.existsSync(manifestPath)}`);
 console.log(`✓ Workflow helpers: ${fs.existsSync(workflowPath)}`);
 console.log(`✓ Templates directory exists: ${fs.existsSync(templatesDir)}`);
 console.log(`✓ Previews directory exists: ${fs.existsSync(previewsDir)}`);
@@ -99,7 +99,9 @@ problematicFiles.forEach((filePath) => {
     }
 
     if (filePath.includes('/page.tsx')) {
-      const usesWorkflowLoader = content.includes('getSingleDocument');
+      const usesWorkflowLoader =
+        content.includes('getSingleDocument') ||
+        content.includes('loadWorkflowDocument');
       console.log(
         `  ✓ Document page uses workflow loader: ${usesWorkflowLoader ? '✓' : '✗'}`,
       );

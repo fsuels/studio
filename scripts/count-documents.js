@@ -6,44 +6,27 @@
 
 const fs = require('fs');
 const path = require('path');
-const ts = require('typescript');
-
-console.log('📊 Counting Documents via manifest.generated.ts\n');
+console.log('📊 Counting Documents via manifest.generated.json\n');
 
 const manifestPath = path.join(
   __dirname,
-  '../src/lib/documents/manifest.generated.ts',
+  '../src/lib/documents/manifest.generated.json',
 );
+
 
 if (!fs.existsSync(manifestPath)) {
   console.error(
-    '❌ manifest.generated.ts not found. Run `node scripts/generate-document-manifest.mjs` first.',
+    '❌ manifest.generated.json not found. Run `node scripts/generate-document-manifest.mjs` first.',
   );
   process.exit(1);
 }
 
-const manifestSource = fs.readFileSync(manifestPath, 'utf8');
-const transpiled = ts.transpileModule(manifestSource, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    target: ts.ScriptTarget.ES2019,
-  },
-});
-
-const moduleWrapper = { exports: {} };
-new Function(
-  'exports',
-  'require',
-  'module',
-  '__filename',
-  '__dirname',
-  transpiled.outputText,
-)(moduleWrapper.exports, require, moduleWrapper, manifestPath, path.dirname(manifestPath));
+const manifestPayload = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 const {
-  DOCUMENT_MANIFEST = [],
-  DOCUMENT_METADATA = {},
-} = moduleWrapper.exports;
+  entries: DOCUMENT_MANIFEST = [],
+  metadata: DOCUMENT_METADATA = {},
+} = manifestPayload;
 
 const manifestEntries = DOCUMENT_MANIFEST.length;
 const metadataCount = Object.keys(DOCUMENT_METADATA).length;

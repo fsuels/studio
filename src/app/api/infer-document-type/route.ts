@@ -75,8 +75,8 @@ export async function POST(request: NextRequest) {
     );
 
     console.log(`${logPrefix} Calling inferDocumentTypeFlow...`);
-    const { inferDocumentTypeFlow, InferDocumentTypeOutput } = await import('@/ai/flows/infer-document-type');
-    const output: InferDocumentTypeOutput = await inferDocumentTypeFlow(input);
+    const flowModule = await import('@/ai/flows/infer-document-type');
+    const output: InferDocumentTypeOutput = await flowModule.inferDocumentTypeFlow(input);
 
     if (!output || !output.suggestions || output.suggestions.length === 0) {
       console.error(
@@ -92,8 +92,7 @@ export async function POST(request: NextRequest) {
       }
       // If output exists but suggestions are empty, this might be a valid scenario (e.g., "General Inquiry")
       // But we should ensure the schema is still met.
-      const { InferDocumentTypeOutputSchema } = await import('@/ai/flows/infer-document-type');
-      const outputValidation = InferDocumentTypeOutputSchema.safeParse(output);
+      const outputValidation = flowModule.InferDocumentTypeOutputSchema.safeParse(output);
       if (!outputValidation.success) {
         console.error(
           `${logPrefix} inferDocumentTypeFlow output failed schema validation:`,

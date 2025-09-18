@@ -25,10 +25,14 @@ export const invoiceMeta: LegalDocument = {
     en: {
       name: 'Invoice',
       description: 'Get paid faster with professional invoices that customers take seriously. Improve cash flow with clear payment terms.',
+      aliases: ['invoice', 'billing statement', 'payment request'],
     },
     es: {
       name: 'Factura',
       description: 'Cobra a clientes por bienes o servicios que has proporcionado. Formato profesional de factura para recibir pago más rápido.',
+      aliases: ['factura', 'recibo de pago', 'cuenta por cobrar'],
     },
   },
+  aliases: ['invoice', 'billing statement', 'payment request'],
+  aliases_es: ['factura', 'recibo de pago', 'cuenta por cobrar'],
 };

@@ -2,8 +2,7 @@
 import { z } from 'zod';
 import { isValidVIN } from '@/utils/isValidVIN';
 
-export const BillOfSaleSchema = z
-  .object({
+export const BillOfSaleSchema = z.object({
     /* ---------- Seller ---------- */
     seller_name: z
       .string()

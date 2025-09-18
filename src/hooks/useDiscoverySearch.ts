@@ -429,12 +429,12 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       const [keywordResults, vectorResults] = await Promise.all(promises);
       
       // Rank keyword results using shared ranking utility (mockable in tests)
-      const rawHits = keywordResults.map(t => ({
-        id: t.id,
-        keywordsHit: new Set((t.keywords || []).map(k => k.toLowerCase())),
+      const templateById = new Map(keywordResults.map((template) => [template.id, template]));
+      const rawHits: RawHit[] = keywordResults.map((template) => ({
+        id: template.id,
+        keywordsHit: new Set((template.keywords || []).map((keyword) => keyword.toLowerCase())),
       }));
-      const rankedKeywordResults = rankDiscoveryResults(rawHits as any, tokens.originalTokens) as unknown as Array<{ id: string; title?: string; score: number }>;
-      
+      const rankedKeywordResults = rankDiscoveryResults(rawHits, tokens.originalTokens);
       // Create maps for deduplication and scoring
       const keywordMap = new Map<string, { template: MarketplaceTemplate; score: number }>();
       const vectorMap = new Map<string, { score: number }>();
@@ -442,22 +442,26 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       // Process keyword results with filtering
       const { parsedQuery } = tokens;
       
-      rankedKeywordResults.forEach(result => {
-        // Apply negative and phrase filtering if parsed query exists
+      rankedKeywordResults.forEach((result) => {
+        const template = templateById.get(result.id);
+        if (!template) {
+          return;
+        }
+
         let shouldInclude = true;
         if (parsedQuery) {
-          const keywords = result.keywords || [];
-          shouldInclude = matchesParsedQuery(keywords, parsedQuery);
+          shouldInclude = matchesParsedQuery(template.keywords || [], parsedQuery);
         }
-        
+
         if (shouldInclude) {
           keywordMap.set(result.id, {
-            template: result,
+            template,
             score: result.score,
           });
         }
       });
-      
+
+      // Process vector results
       // Process vector results
       vectorResults.forEach((result: VectorSearchResult) => {
         vectorMap.set(result.id, {

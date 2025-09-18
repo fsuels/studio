@@ -288,7 +288,8 @@ export async function POST(request: NextRequest) {
         },
         { status: 201 },
       );
-    } catch (err) {
+    } catch (submissionError) {
+      console.error('Template submission workflow error:', submissionError);
       return NextResponse.json({ error: 'Submission failed' }, { status: 500 });
     }
   } catch (error) {
@@ -304,14 +305,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * Generate URL-friendly slug from name
- */
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-}

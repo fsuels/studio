@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export const operatingAgreementSchema = z
-  .object({
+export const operatingAgreementSchema = z.object({
     // Company Information
     company_name: z.string().min(1, 'Company name is required'),
     state_of_formation: z.string().min(1, 'State of formation is required'),

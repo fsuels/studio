@@ -39,7 +39,6 @@ export function useDiscoveryModal() {
     // return a safe no-op implementation to avoid hard crashes.
     // The real provider will replace this on the client.
     if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.warn('[DiscoveryModal] Falling back to no-op context (no provider found).');
     }
     return {

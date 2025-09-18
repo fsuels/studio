@@ -100,28 +100,28 @@ export const embedTemplate = onMessagePublished(
     timeoutSeconds: 540,
   },
   async (event) => {
-    let templateId: string;
+    let templateId: string | null = null;
     let firestoreWrites = 0;
     
     try {
       // Parse message
       const messageData = event.data.message.data;
       const message = JSON.parse(Buffer.from(messageData, 'base64').toString());
-      templateId = message.id;
-      
-      if (!templateId) {
+      const resolvedTemplateId = typeof message.id === 'string' ? message.id.trim() : '';
+      if (!resolvedTemplateId) {
         throw new Error('No template ID in Pub/Sub message');
       }
+      templateId = resolvedTemplateId;
       
-      functions.logger.info(`Processing embedding for template ${templateId}`);
+      functions.logger.info(`Processing embedding for template ${resolvedTemplateId}`);
       
       // Fetch document by ID
-      const docRef = db.collection('templates').doc(templateId);
+      const docRef = db.collection('templates').doc(resolvedTemplateId);
       const snapshot = await docRef.get();
       firestoreWrites++; // Count the read
       
       if (!snapshot.exists) {
-        functions.logger.warn(`Template ${templateId} not found, skipping`);
+        functions.logger.warn(`Template ${resolvedTemplateId} not found, skipping`);
         return;
       }
       
@@ -129,14 +129,14 @@ export const embedTemplate = onMessagePublished(
       
       // Check if embedding already exists
       if (data.embedding) {
-        functions.logger.info(`Template ${templateId} already has embedding, skipping`);
+        functions.logger.info(`Template ${resolvedTemplateId} already has embedding, skipping`);
         return;
       }
       
       // Extract and hash text content
       const text = data.text || '';
       if (!text.trim()) {
-        functions.logger.warn(`Template ${templateId} has no text content, skipping`);
+        functions.logger.warn(`Template ${resolvedTemplateId} has no text content, skipping`);
         return;
       }
       
@@ -146,7 +146,7 @@ export const embedTemplate = onMessagePublished(
         .digest('hex')
         .slice(0, 512);
       
-      functions.logger.info(`Generated hash for template ${templateId}`, {
+      functions.logger.info(`Generated hash for template ${resolvedTemplateId}`, {
         templateId,
         textLength: text.length,
         hashLength: hashedText.length
@@ -165,7 +165,7 @@ export const embedTemplate = onMessagePublished(
       // Log token usage
       const totalTokens = embeddingResponse.usage.total_tokens;
       functions.logger.info('Embedding tokens', { 
-        templateId,
+        templateId: resolvedTemplateId,
         tokens: totalTokens,
         model: 'text-embedding-3-small'
       });
@@ -184,8 +184,8 @@ export const embedTemplate = onMessagePublished(
       });
       firestoreWrites++; // Count the write
       
-      functions.logger.info(`Successfully embedded template ${templateId}`, {
-        templateId,
+      functions.logger.info(`Successfully embedded template ${resolvedTemplateId}`, {
+        templateId: resolvedTemplateId,
         embeddingDimensions: float32Embedding.length,
         tokens: totalTokens,
         firestoreWrites

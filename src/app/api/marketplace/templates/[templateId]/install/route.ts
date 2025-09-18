@@ -131,7 +131,7 @@ export async function POST(
 
     const userId = 'user-id'; // TODO: Get from auth
     const db = await (await import('@/lib/firebase')).getDb();
-    const { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, serverTimestamp } =
+    const { doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp } =
       await import('firebase/firestore');
 
     // Get template

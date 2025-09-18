@@ -293,7 +293,7 @@ export const VehicleFaqSection: React.FC = () => {
           <CardContent className="pt-6">
             <h3 className="font-semibold mb-2">Do I need to notarize my vehicle bill of sale?</h3>
             <p className="text-muted-foreground">
-              Notarization requirements vary by state. Our system automatically checks your state's requirements and will alert you if notarization is needed.
+              Notarization requirements vary by state. Our system automatically checks your state&apos;s requirements and will alert you if notarization is needed.
             </p>
           </CardContent>
         </Card>
