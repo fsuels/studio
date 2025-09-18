@@ -11,8 +11,8 @@
 - [x] Organization/WebSite JSON-LD (homepage coverage in place)
 - [ ] A11y landmarks + skip link + labels (axe clean)
 - [ ] Security headers: HSTS, CSP, Referrer-Policy, Permissions-Policy (HSTS, permissions, and cross-domain policies applied; CSP still disabled for PDF compatibility)
-- [ ] Contract inventory + clause/placeholder/translation checks (Spanish src templates pending)
-- [ ] Provide Spanish variants for basic-nda and power-of-attorney markdown templates
+- [ ] Contract inventory + clause/placeholder/translation checks (verify new Spanish source templates for clause parity)
+- [x] Provide Spanish variants for basic-nda and power-of-attorney markdown templates
 - [ ] Extend canonical and hreflang coverage to other marketing routes
 ## Inventory
 ### Pages
@@ -21,9 +21,8 @@
 - [ ] /[locale]/pricing (needs structured data verification in production)
 - [ ] /[locale]/blog/how-to-draft-lease-agreement
 ### Contracts/Templates
-- [ ] src/data/templates — en: 4, es: 2 (missing es: basic-nda, power-of-attorney)
+- [ ] src/data/templates — en: 4, es: 4 (parity; newly added es basic-nda, power-of-attorney)
 - [ ] public/templates markdown — en: 350, es: 350 (parity)
 ## Resume Cursor
 pending_tasks:
-  - Provide Spanish variants for basic-nda and power-of-attorney markdown templates
   - Extend canonical and hreflang coverage to other marketing routes
