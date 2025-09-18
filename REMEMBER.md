@@ -33,8 +33,8 @@
 
 ### Document Generation & PDF Reliability
 - [ ] **Manifest adoption sprint** – Replace legacy `documentLibrary` usage in UI (Step selectors, search, discovery, AI assists, dashboard stats) and Firebase/API wrappers with manifest-backed helpers. Blocked by verifying `DocumentTypeSelector` + Step flows against new metadata.
-- Step workflow (Steps 1–3), DocumentTypeSelector, SearchBar, and TopDocs chips now use manifest-backed helpers (`src/lib/workflow/document-workflow.ts`); schedule manual regression to validate category/state coverage and update remaining discovery surfaces (mega menu, dashboards).
-- Mega menus now use manifest helpers; next: migrate DocumentFlow/Step1 selector/HeaderSearch and audit analytics dashboards; run manual QA across locales/states post-migration.
+- Step workflow (Steps 1–3), DocumentTypeSelector, SearchBar, TopDocs chips, and mega menus now use manifest-backed helpers (`src/lib/workflow/document-workflow.ts`); schedule manual regression to validate category/state coverage.
+- Next: migrate Step1DocumentSelector, HeaderSearch, and analytics dashboards off `document-library`; once complete, run lint/tests and full discovery QA across locales/states.
 - [ ] **Template completeness drive** – Upgrade metadata-only templates to full `LegalDocument` exports or define metadata-only lane; extend manifest generator tests to fail builds on partial entries.
 - [ ] **Unified generation pipeline** – Ensure `pdfService`, `dynamic-document-loader`, and Cloud Functions share a single orchestrator; add smoke tests in `tests/document-generation.test.ts` for top 10 revenue docs plus state forms.
 - [ ] **Operational safeguards** – Wire structured logging + alerting around generation failures (both Next handlers and Functions) and schedule weekly `npm run verify-templates` + lint/test/build sweep before shipping.

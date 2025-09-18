@@ -16,6 +16,8 @@ export interface DocumentSummary {
   aliases?: string[];
   translations: DocumentMetadata['translations'];
   languageSupport: string[];
+  basePrice?: number;
+  canBeRecorded?: boolean;
 }
 
 interface FilterOptions {
@@ -75,6 +77,8 @@ const mapToSummary = (metadata: DocumentMetadata): DocumentSummary => ({
     'en',
     ...(metadata.translations?.es?.name ? ['es'] : []),
   ],
+  basePrice: undefined,
+  canBeRecorded: undefined,
 });
 
 const matchesQuery = (

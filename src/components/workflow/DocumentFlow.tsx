@@ -7,7 +7,7 @@ import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from './StepTwoInput';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import { getWorkflowDocumentById } from '@/lib/workflow/document-workflow';
 
 // ✅ Correct dynamic import for default export to support preload
 const StepThreeInput = dynamic(() => import('./StepThreeInput'), {
@@ -30,29 +30,16 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
   const [step, setStep] = useState(initialDocId ? 2 : 1);
   const [category, setCategory] = useState<string>(() => {
     if (!initialDocId) return '';
-    const doc = documentLibrary.find((d) => d.id === initialDocId);
-    return doc?.category ?? '';
+    return getWorkflowDocumentById(initialDocId)?.category ?? '';
   });
 
   useEffect(() => {
-    if (!initialDocId) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const docs = await getDocumentsByCountry('us');
-        if (cancelled) return;
-        const doc = docs.find((d) => d.id === initialDocId);
-        if (doc) setCategory(doc.category);
-      } catch (_) {
-        if (cancelled) return;
-        const fallbackDoc = documentLibrary.find((d) => d.id === initialDocId);
-        if (fallbackDoc) setCategory(fallbackDoc.category);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+    if (!initialDocId) {
+      setCategory('');
+      return;
+    }
+    const doc = getWorkflowDocumentById(initialDocId);
+    setCategory(doc?.category ?? '');
   }, [initialDocId]);
 
   const advanceTo = (next: number) => {
