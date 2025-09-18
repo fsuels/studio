@@ -1,6 +1,11 @@
 // Document loader service with safe static imports
 import type { LegalDocument } from '@/types/documents';
 import { DOCUMENT_REGISTRY, type DocumentInfo } from '@/lib/document-registry';
+import {
+  logDocumentGenerationError,
+  logDocumentGenerationStart,
+  logDocumentGenerationSuccess,
+} from './logging/document-generation-logger';
 
 // Static imports for known documents that actually exist - this avoids dynamic import issues
 const documentLoaders: Record<string, () => Promise<{ default?: LegalDocument; [key: string]: any }>> = {
@@ -20,12 +25,16 @@ export interface DocumentLoadResult {
  * Safely load a document definition without causing webpack bundling issues
  */
 export async function loadDocumentDefinition(docId: string): Promise<DocumentLoadResult> {
+  const baseContext = { documentId: docId };
+  const start = logDocumentGenerationStart('legacy.loadDocumentDefinition', baseContext);
+
   // First, check if we have metadata for this document
   const metadata = DOCUMENT_REGISTRY.find(doc => doc.id === docId);
   
   // If we have a static loader for this document, use it
   const loader = documentLoaders[docId];
   if (loader) {
+    const loaderContext = { ...baseContext, attempt: 'typescript-loader' };
     try {
       const module = await loader();
       
@@ -47,14 +56,25 @@ export async function loadDocumentDefinition(docId: string): Promise<DocumentLoa
       }
       
       if (document) {
+        logDocumentGenerationSuccess('legacy.loadDocumentDefinition', start, loaderContext, {
+          source: 'typescript',
+        });
+
         return {
           document,
           metadata,
           source: 'typescript'
         };
       }
+
+      logDocumentGenerationError(
+        'legacy.loadDocumentDefinition',
+        start,
+        loaderContext,
+        new Error(`Document ${docId} export missing or invalid in module.`),
+      );
     } catch (error) {
-      console.warn(`Failed to load TypeScript document ${docId}:`, error);
+      logDocumentGenerationError('legacy.loadDocumentDefinition', start, loaderContext, error);
     }
   }
   
@@ -75,6 +95,10 @@ export async function loadDocumentDefinition(docId: string): Promise<DocumentLoa
       languageSupport: ['en', 'es']
     };
     
+    logDocumentGenerationSuccess('legacy.loadDocumentDefinition', start, baseContext, {
+      source: metadata.configType === 'json' ? 'json' : 'fallback',
+    });
+
     return {
       document: fallbackDocument,
       metadata,
@@ -98,6 +122,13 @@ export async function loadDocumentDefinition(docId: string): Promise<DocumentLoa
     languageSupport: ['en', 'es']
   };
   
+  logDocumentGenerationError(
+    'legacy.loadDocumentDefinition',
+    start,
+    baseContext,
+    new Error(`No document definition found for ${docId}`),
+  );
+
   return {
     document: unknownDocument,
     metadata: null,

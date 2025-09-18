@@ -2,6 +2,11 @@
 import type { LegalDocument } from '@/types/documents';
 import { getDocumentMetadata, type DocumentMetadata } from './document-metadata-registry';
 import { DOCUMENT_IMPORTS } from './documents/manifest.generated';
+import {
+  logDocumentGenerationError,
+  logDocumentGenerationStart,
+  logDocumentGenerationSuccess,
+} from './logging/document-generation-logger';
 
 export interface DocumentLoadResult {
   document: LegalDocument | null;
@@ -18,11 +23,23 @@ const documentCache = new Map<string, LegalDocument>();
  */
 export async function loadDocument(docId: string): Promise<DocumentLoadResult> {
   const metadata = getDocumentMetadata(docId);
+  const baseContext = {
+    documentId: docId,
+    hasMetadata: Boolean(metadata),
+  };
 
   // Check cache first
   if (documentCache.has(docId)) {
+    const cacheContext = { ...baseContext, cacheHit: true };
+    const start = logDocumentGenerationStart('manifest.loadDocument', cacheContext);
+
+    const cachedDocument = documentCache.get(docId)!;
+    logDocumentGenerationSuccess('manifest.loadDocument', start, cacheContext, {
+      source: 'cache',
+    });
+
     return {
-      document: documentCache.get(docId)!,
+      document: cachedDocument,
       metadata,
       source: 'cache'
     };
@@ -31,6 +48,12 @@ export async function loadDocument(docId: string): Promise<DocumentLoadResult> {
   // Try dynamic import if we have a mapping
   const importFn = DOCUMENT_IMPORTS[docId];
   if (importFn) {
+    const dynamicContext = {
+      ...baseContext,
+      cacheHit: false,
+      importAvailable: true,
+    };
+    const start = logDocumentGenerationStart('manifest.loadDocument', dynamicContext);
     try {
       const module = await importFn();
 
@@ -58,6 +81,11 @@ export async function loadDocument(docId: string): Promise<DocumentLoadResult> {
         // Cache the result
         documentCache.set(docId, document);
 
+        logDocumentGenerationSuccess('manifest.loadDocument', start, dynamicContext, {
+          source: 'dynamic-import',
+          enrichedWithMetadata: Boolean(metadata),
+        });
+
         return {
           document,
           metadata,
@@ -65,15 +93,18 @@ export async function loadDocument(docId: string): Promise<DocumentLoadResult> {
         };
       }
 
+      const error = new Error(`Document ${docId} found in module but not valid`);
+      logDocumentGenerationError('manifest.loadDocument', start, dynamicContext, error);
+
       return {
         document: null,
         metadata,
         source: 'fallback',
-        error: `Document ${docId} found in module but not valid`
+        error: error.message
       };
 
     } catch (error) {
-      console.warn(`Failed to load document ${docId}:`, error);
+      logDocumentGenerationError('manifest.loadDocument', start, dynamicContext, error);
       return {
         document: null,
         metadata,
@@ -84,6 +115,26 @@ export async function loadDocument(docId: string): Promise<DocumentLoadResult> {
   }
 
   // No import mapping found
+  const fallbackContext = {
+    ...baseContext,
+    cacheHit: false,
+    importAvailable: false,
+  };
+  const start = logDocumentGenerationStart('manifest.loadDocument', fallbackContext);
+
+  if (metadata) {
+    logDocumentGenerationSuccess('manifest.loadDocument', start, fallbackContext, {
+      source: metadata.configType === 'json' ? 'json' : 'fallback',
+    });
+  } else {
+    logDocumentGenerationError(
+      'manifest.loadDocument',
+      start,
+      fallbackContext,
+      new Error(`No import mapping or metadata found for document ${docId}`),
+    );
+  }
+
   return {
     document: null,
     metadata,

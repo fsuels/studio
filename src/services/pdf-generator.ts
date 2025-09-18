@@ -4,6 +4,11 @@
 import { PDFDocument, StandardFonts, rgb, PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'; // Ensure fontkit is installed
 import { FOOTER_NOTE, FOOTER_STYLE, FOOTER_CONFIG } from '../lib/pdf-constants';
+import {
+  logDocumentGenerationError,
+  logDocumentGenerationStart,
+  logDocumentGenerationSuccess,
+} from '@/lib/logging/document-generation-logger';
 
 interface PdfGenerationOptions {
   documentType: string;
@@ -20,11 +25,11 @@ interface PdfGenerationOptions {
 export async function generatePdfDocument(
   options: PdfGenerationOptions,
 ): Promise<Uint8Array> {
-  console.log(
-    '[pdf-generator] Starting PDF generation for type:',
-    options.documentType,
-  );
-  console.log('[pdf-generator] With answers:', options.answers);
+  const context = {
+    documentType: options.documentType,
+    answerCount: Object.keys(options.answers || {}).length,
+  };
+  const start = logDocumentGenerationStart('service.generatePdfDocument', context);
 
   try {
     const pdfDoc = await PDFDocument.create();
@@ -239,16 +244,15 @@ export async function generatePdfDocument(
 
     // 5. Serialize the PDF document to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();
-    console.log(
-      '[pdf-generator] PDF generation successful. Size:',
-      pdfBytes.length,
-      'bytes',
-    );
+
+    logDocumentGenerationSuccess('service.generatePdfDocument', start, context, {
+      pageCount: pdfDoc.getPages().length,
+      sizeBytes: pdfBytes.length,
+    });
+
     return pdfBytes;
   } catch (error) {
-    console.error('[pdf-generator] Error generating PDF:', error);
-    // Depending on the context, re-throw or return an error indicator
-    // For now, re-throwing to let the caller handle it
+    logDocumentGenerationError('service.generatePdfDocument', start, context, error);
     throw new Error(
       `Failed to generate PDF: ${error instanceof Error ? error.message : String(error)}`,
     );

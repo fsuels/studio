@@ -2,6 +2,11 @@
 // Consolidates all PDF operations using pdf-lib with lazy loading
 
 import type { PDFDocument, PDFPage, PDFForm, PDFField } from 'pdf-lib';
+import {
+  logDocumentGenerationError,
+  logDocumentGenerationStart,
+  logDocumentGenerationSuccess,
+} from '../logging/document-generation-logger';
 
 export interface PDFServiceConfig {
   enableFontEmbedding?: boolean;
@@ -73,14 +78,30 @@ export class PDFService {
    * Create a new PDF document
    */
   async createDocument(config?: PDFServiceConfig): Promise<PDFDocument> {
-    await this.initialize(config);
-    const doc = await this.pdfLib!.PDFDocument.create();
+    const context = {
+      enableFontEmbedding: Boolean(config?.enableFontEmbedding),
+      compressionLevel: config?.compressionLevel,
+      preserveFormFields: Boolean(config?.preserveFormFields),
+    };
+    const start = logDocumentGenerationStart('pdf.createDocument', context);
 
-    if (config?.enableFontEmbedding && this.fontkit) {
-      doc.registerFontkit(this.fontkit.default);
+    try {
+      await this.initialize(config);
+      const doc = await this.pdfLib!.PDFDocument.create();
+
+      if (config?.enableFontEmbedding && this.fontkit) {
+        doc.registerFontkit(this.fontkit.default);
+      }
+
+      logDocumentGenerationSuccess('pdf.createDocument', start, context, {
+        pageCount: doc.getPages().length,
+      });
+
+      return doc;
+    } catch (error) {
+      logDocumentGenerationError('pdf.createDocument', start, context, error);
+      throw error;
     }
-
-    return doc;
   }
 
   /**
@@ -90,36 +111,61 @@ export class PDFService {
     pdfBytes: Uint8Array | ArrayBuffer,
     config?: PDFServiceConfig
   ): Promise<PDFProcessingResult> {
-    await this.initialize(config);
-
-    const document = await this.pdfLib!.PDFDocument.load(pdfBytes);
-    const pages = document.getPages();
-
-    // Try to get form if it exists
-    let form: PDFForm | undefined;
-    let fields: PDFField[] = [];
+    const context = {
+      sourceType:
+        pdfBytes instanceof Uint8Array
+          ? 'uint8array'
+          : pdfBytes instanceof ArrayBuffer
+            ? 'arraybuffer'
+            : typeof pdfBytes,
+      enableFontEmbedding: Boolean(config?.enableFontEmbedding),
+      preserveFormFields: Boolean(config?.preserveFormFields),
+      compressionLevel: config?.compressionLevel,
+    };
+    const start = logDocumentGenerationStart('pdf.loadDocument', context);
 
     try {
-      form = document.getForm();
-      fields = form.getFields();
-    } catch {
-      // No form found, that's okay
+      await this.initialize(config);
+
+      const document = await this.pdfLib!.PDFDocument.load(pdfBytes);
+      const pages = document.getPages();
+
+      // Try to get form if it exists
+      let form: PDFForm | undefined;
+      let fields: PDFField[] = [];
+
+      try {
+        form = document.getForm();
+        fields = form.getFields();
+      } catch {
+        // No form found, that's okay
+      }
+
+      if (config?.enableFontEmbedding && this.fontkit) {
+        document.registerFontkit(this.fontkit.default);
+      }
+
+      // Save once to compute output size without shadowing input param
+      const outputBytes = await document.save();
+
+      logDocumentGenerationSuccess('pdf.loadDocument', start, context, {
+        pageCount: pages.length,
+        hasForm: Boolean(form),
+        fieldCount: fields.length,
+        sizeBytes: outputBytes.length,
+      });
+
+      return {
+        document,
+        pages,
+        form,
+        fields,
+        size: outputBytes.length,
+      };
+    } catch (error) {
+      logDocumentGenerationError('pdf.loadDocument', start, context, error);
+      throw error;
     }
-
-    if (config?.enableFontEmbedding && this.fontkit) {
-      document.registerFontkit(this.fontkit.default);
-    }
-
-    // Save once to compute output size without shadowing input param
-    const outputBytes = await document.save();
-
-    return {
-      document,
-      pages,
-      form,
-      fields,
-      size: outputBytes.length,
-    };
   }
 
   /**
@@ -130,57 +176,93 @@ export class PDFService {
     formData: Record<string, string | number | boolean>,
     config?: PDFServiceConfig
   ): Promise<Uint8Array> {
-    const result = await this.loadDocument(pdfBytes, config);
+    const context = {
+      requestedFieldCount: Object.keys(formData).length,
+      preserveFormFields: Boolean(config?.preserveFormFields),
+    };
+    const start = logDocumentGenerationStart('pdf.fillForm', context);
 
-    if (!result.form) {
-      throw new Error('PDF does not contain a fillable form');
-    }
+    try {
+      const result = await this.loadDocument(pdfBytes, config);
 
-    const { form, document } = result;
-
-    // Fill form fields
-    Object.entries(formData).forEach(([fieldName, value]) => {
-      try {
-        const field = form.getField(fieldName);
-
-        if (field.constructor.name === 'PDFTextField') {
-          (field as any).setText(String(value));
-        } else if (field.constructor.name === 'PDFCheckBox') {
-          if (value) (field as any).check();
-          else (field as any).uncheck();
-        } else if (field.constructor.name === 'PDFRadioGroup') {
-          (field as any).select(String(value));
-        } else if (field.constructor.name === 'PDFDropdown') {
-          (field as any).select(String(value));
-        }
-      } catch (error) {
-        console.warn(`Failed to fill field "${fieldName}":`, error);
+      if (!result.form) {
+        throw new Error('PDF does not contain a fillable form');
       }
-    });
 
-    // Flatten form if not preserving fields
-    if (!config?.preserveFormFields) {
-      form.flatten();
+      const { form, document } = result;
+
+      // Fill form fields
+      Object.entries(formData).forEach(([fieldName, value]) => {
+        try {
+          const field = form.getField(fieldName);
+
+          if (field.constructor.name === 'PDFTextField') {
+            (field as any).setText(String(value));
+          } else if (field.constructor.name === 'PDFCheckBox') {
+            if (value) (field as any).check();
+            else (field as any).uncheck();
+          } else if (field.constructor.name === 'PDFRadioGroup') {
+            (field as any).select(String(value));
+          } else if (field.constructor.name === 'PDFDropdown') {
+            (field as any).select(String(value));
+          }
+        } catch (error) {
+          console.warn(`Failed to fill field "${fieldName}":`, error);
+        }
+      });
+
+      // Flatten form if not preserving fields
+      if (!config?.preserveFormFields) {
+        form.flatten();
+      }
+
+      const filledBytes = await document.save();
+
+      logDocumentGenerationSuccess('pdf.fillForm', start, context, {
+        appliedFieldCount: Object.keys(formData).length,
+        flattened: !config?.preserveFormFields,
+        sizeBytes: filledBytes.length,
+      });
+
+      return filledBytes;
+    } catch (error) {
+      logDocumentGenerationError('pdf.fillForm', start, context, error);
+      throw error;
     }
-
-    return document.save();
   }
 
   /**
    * Merge multiple PDFs
    */
   async mergePDFs(pdfBytesArray: (Uint8Array | ArrayBuffer)[]): Promise<Uint8Array> {
-    await this.initialize();
+    const context = {
+      documentCount: pdfBytesArray.length,
+    };
+    const start = logDocumentGenerationStart('pdf.merge', context);
 
-    const mergedDoc = await this.pdfLib!.PDFDocument.create();
+    try {
+      await this.initialize();
 
-    for (const pdfBytes of pdfBytesArray) {
-      const doc = await this.pdfLib!.PDFDocument.load(pdfBytes);
-      const pages = await mergedDoc.copyPages(doc, doc.getPageIndices());
-      pages.forEach(page => mergedDoc.addPage(page));
+      const mergedDoc = await this.pdfLib!.PDFDocument.create();
+
+      for (const pdfBytes of pdfBytesArray) {
+        const doc = await this.pdfLib!.PDFDocument.load(pdfBytes);
+        const pages = await mergedDoc.copyPages(doc, doc.getPageIndices());
+        pages.forEach(page => mergedDoc.addPage(page));
+      }
+
+      const mergedBytes = await mergedDoc.save();
+
+      logDocumentGenerationSuccess('pdf.merge', start, context, {
+        sizeBytes: mergedBytes.length,
+        resultingPageCount: mergedDoc.getPages().length,
+      });
+
+      return mergedBytes;
+    } catch (error) {
+      logDocumentGenerationError('pdf.merge', start, context, error);
+      throw error;
     }
-
-    return mergedDoc.save();
   }
 
   /**
@@ -192,37 +274,58 @@ export class PDFService {
     value?: any;
     options?: string[];
   }>> {
-    const result = await this.loadDocument(pdfBytes);
+    const context = {
+      operation: 'extract',
+    };
+    const start = logDocumentGenerationStart('pdf.extractFormFields', context);
 
-    if (!result.form || !result.fields) {
-      return [];
-    }
+    try {
+      const result = await this.loadDocument(pdfBytes);
 
-    return result.fields.map(field => {
-      const fieldInfo: any = {
-        name: field.getName(),
-        type: field.constructor.name,
-      };
-
-      try {
-        // Get current value
-        if (field.constructor.name === 'PDFTextField') {
-          fieldInfo.value = (field as any).getText();
-        } else if (field.constructor.name === 'PDFCheckBox') {
-          fieldInfo.value = (field as any).isChecked();
-        } else if (field.constructor.name === 'PDFRadioGroup') {
-          fieldInfo.value = (field as any).getSelected();
-          fieldInfo.options = (field as any).getOptions();
-        } else if (field.constructor.name === 'PDFDropdown') {
-          fieldInfo.value = (field as any).getSelected();
-          fieldInfo.options = (field as any).getOptions();
-        }
-      } catch (error) {
-        console.warn(`Failed to read field "${field.getName()}":`, error);
+      if (!result.form || !result.fields) {
+        logDocumentGenerationSuccess('pdf.extractFormFields', start, context, {
+          fieldCount: 0,
+          hasForm: false,
+        });
+        return [];
       }
 
-      return fieldInfo;
-    });
+      const fieldsInfo = result.fields.map(field => {
+        const fieldInfo: any = {
+          name: field.getName(),
+          type: field.constructor.name,
+        };
+
+        try {
+          // Get current value
+          if (field.constructor.name === 'PDFTextField') {
+            fieldInfo.value = (field as any).getText();
+          } else if (field.constructor.name === 'PDFCheckBox') {
+            fieldInfo.value = (field as any).isChecked();
+          } else if (field.constructor.name === 'PDFRadioGroup') {
+            fieldInfo.value = (field as any).getSelected();
+            fieldInfo.options = (field as any).getOptions();
+          } else if (field.constructor.name === 'PDFDropdown') {
+            fieldInfo.value = (field as any).getSelected();
+            fieldInfo.options = (field as any).getOptions();
+          }
+        } catch (error) {
+          console.warn(`Failed to read field "${field.getName()}":`, error);
+        }
+
+        return fieldInfo;
+      });
+
+      logDocumentGenerationSuccess('pdf.extractFormFields', start, context, {
+        fieldCount: fieldsInfo.length,
+        hasForm: Boolean(result.form),
+      });
+
+      return fieldsInfo;
+    } catch (error) {
+      logDocumentGenerationError('pdf.extractFormFields', start, context, error);
+      throw error;
+    }
   }
 
   /**
@@ -239,24 +342,40 @@ export class PDFService {
       color?: string;
     }>
   ): Promise<Uint8Array> {
-    const result = await this.loadDocument(pdfBytes, { enableFontEmbedding: true });
-    const { document, pages } = result;
+    const context = {
+      overlayCount: overlays.length,
+    };
+    const start = logDocumentGenerationStart('pdf.addTextOverlay', context);
 
-    for (const overlay of overlays) {
-      const pageIndex = overlay.page || 0;
-      const page = pages[pageIndex];
+    try {
+      const result = await this.loadDocument(pdfBytes, { enableFontEmbedding: true });
+      const { document, pages } = result;
 
-      if (!page) continue;
+      for (const overlay of overlays) {
+        const pageIndex = overlay.page || 0;
+        const page = pages[pageIndex];
 
-      page.drawText(overlay.text, {
-        x: overlay.x,
-        y: overlay.y,
-        size: overlay.fontSize || 12,
-        color: this.pdfLib!.rgb(0, 0, 0), // Default to black
+        if (!page) continue;
+
+        page.drawText(overlay.text, {
+          x: overlay.x,
+          y: overlay.y,
+          size: overlay.fontSize || 12,
+          color: this.pdfLib!.rgb(0, 0, 0), // Default to black
+        });
+      }
+
+      const overlaidBytes = await document.save();
+
+      logDocumentGenerationSuccess('pdf.addTextOverlay', start, context, {
+        sizeBytes: overlaidBytes.length,
       });
-    }
 
-    return document.save();
+      return overlaidBytes;
+    } catch (error) {
+      logDocumentGenerationError('pdf.addTextOverlay', start, context, error);
+      throw error;
+    }
   }
 
   /**
@@ -270,18 +389,37 @@ export class PDFService {
       flattenForms?: boolean;
     } = {}
   ): Promise<Uint8Array> {
-    const result = await this.loadDocument(pdfBytes);
-    const { document } = result;
+    const context = {
+      compress: options.compress !== false,
+      removeMetadata: Boolean(options.removeMetadata),
+      flattenForms: Boolean(options.flattenForms),
+    };
+    const start = logDocumentGenerationStart('pdf.optimize', context);
 
-    if (options.flattenForms && result.form) {
-      result.form.flatten();
+    try {
+      const result = await this.loadDocument(pdfBytes);
+      const { document } = result;
+
+      if (options.flattenForms && result.form) {
+        result.form.flatten();
+      }
+
+      // Save with optimization
+      const optimizedBytes = await document.save({
+        useObjectStreams: options.compress !== false,
+        addDefaultPage: false,
+      });
+
+      logDocumentGenerationSuccess('pdf.optimize', start, context, {
+        sizeBytes: optimizedBytes.length,
+        initialFieldCount: result.fields?.length,
+      });
+
+      return optimizedBytes;
+    } catch (error) {
+      logDocumentGenerationError('pdf.optimize', start, context, error);
+      throw error;
     }
-
-    // Save with optimization
-    return document.save({
-      useObjectStreams: options.compress !== false,
-      addDefaultPage: false,
-    });
   }
 }
 
