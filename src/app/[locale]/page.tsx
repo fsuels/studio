@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import HomePageClient from './HomePageClient';
 import { HomePageStructuredData } from './HomePageStructuredData';
 import { defaultLocale, localizations } from '@/lib/localizations';
-import SEOConfig from '@/../next-seo.config';
+import SEOConfig from '@/config/seo';
 import {
   buildLanguageAlternates,
   getCanonicalPathForLocale,
