@@ -6,6 +6,8 @@ import ts from 'typescript';
 const PROJECT_ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const DOCUMENTS_DIR = path.resolve(PROJECT_ROOT, 'src', 'lib', 'documents');
 const OUTPUT_FILE = path.resolve(DOCUMENTS_DIR, 'manifest.generated.ts');
+const OUTPUT_JSON_FILE = path.resolve(DOCUMENTS_DIR, 'manifest.generated.json');
+
 
 function normalizeStrings(values) {
   if (!Array.isArray(values)) return [];
@@ -252,6 +254,15 @@ async function generateManifest() {
 
   const idsLiteral = manifestEntries.map((entry) => `  '${entry.id}'`).join(',\n');
 
+  const jsonPayload = {
+    entries: manifestEntries,
+    metadata: Object.fromEntries(
+      manifestEntries.map((entry) => [entry.id, entry.meta]),
+    ),
+    ids: manifestEntries.map((entry) => entry.id),
+    generatedAt: new Date().toISOString(),
+  };
+
   const fileContents = `// AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY.\n// Run: node scripts/generate-document-manifest.mjs\n\nexport interface GeneratedMetadata {\n  id: string;\n  title: string;\n  description: string;\n  category: string;\n  jurisdiction: string;\n  tags: string[];\n  aliases: string[];\n  requiresNotary?: boolean;\n  officialForm?: boolean;\n  states?: string[];\n  estimatedTime?: string;\n  complexity?: 'simple' | 'intermediate' | 'complex';\n  translations: {\n    en: { name: string; description: string; aliases: string[] };\n    es: { name: string; description: string; aliases: string[] };\n  };\n}\n\nexport interface DocumentManifestEntry {\n  id: string;\n  importPath: string;\n  meta: GeneratedMetadata;\n}\n\nexport const DOCUMENT_MANIFEST: DocumentManifestEntry[] = [\n${manifestLiteral}\n];\n\nexport const DOCUMENT_IMPORTS: Record<string, () => Promise<any>> = {\n${importMapLiteral}\n};\n\nexport const DOCUMENT_METADATA: Record<string, GeneratedMetadata> = {\n${metadataMapLiteral}\n};\n\nexport const DOCUMENT_IDS: string[] = [\n${idsLiteral}\n];\n`;
 
   const prettierConfig = await prettier.resolveConfig(PROJECT_ROOT).catch(() => undefined);
@@ -261,6 +272,7 @@ async function generateManifest() {
   });
 
   await fs.writeFile(OUTPUT_FILE, formatted);
+  await fs.writeFile(OUTPUT_JSON_FILE, JSON.stringify(jsonPayload, null, 2));
   console.log(`Generated manifest with ${manifestEntries.length} documents.`);
 }
 

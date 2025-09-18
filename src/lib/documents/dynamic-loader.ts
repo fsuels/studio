@@ -1,102 +1,96 @@
 /**
- * Dynamic Document Loader
- * Optimizes bundle size by loading document types on-demand
+ * Dynamic Document Loader (manifest-backed wrapper)
+ * Provides the legacy `loadDocument(jurisdiction, type)` signature while
+ * delegating to the manifest-driven loader so the UI and backend share a single source.
  */
 
 import type { LegalDocument } from '@/types/documents';
+import {
+  loadDocument as loadManifestDocument,
+  preloadCommonDocuments,
+  getDocumentMetadata,
+  getAllDocumentMetadata,
+} from '@/lib/dynamic-document-loader';
 
-type DocumentLoader = () => Promise<{ default: LegalDocument }>;
+const jurisdictionScopedCache = new Map<string, LegalDocument>();
 
-// Document type mapping for dynamic imports
-const US_DOCUMENT_MAP: Record<string, DocumentLoader> = {
-  // Use explicit index to avoid environments that try appending .ts
-  'vehicle-bill-of-sale': () => import('./us/vehicle-bill-of-sale/index').then(m => ({ default: m.vehicleBillOfSale })),
-  'rental-agreement': () => import('./us/rental-agreement').then(m => ({ default: m.rentalAgreement })),
-  'employment-contract': () => import('./us/employment-contract').then(m => ({ default: m.employmentContract })),
-  'non-disclosure-agreement': () => import('./us/non-disclosure-agreement').then(m => ({ default: m.nonDisclosureAgreement })),
-  'promissory-note': () => import('./us/promissory-note').then(m => ({ default: m.promissoryNote })),
-  'power-of-attorney': () => import('./us/power-of-attorney').then(m => ({ default: m.powerOfAttorney })),
-  'last-will-testament': () => import('./us/last-will-testament').then(m => ({ default: m.lastWillTestament })),
-  'living-trust': () => import('./us/living-trust').then(m => ({ default: m.livingTrust })),
-  'business-contract': () => import('./us/business-contract').then(m => ({ default: m.businessContract })),
-  'lease-agreement': () => import('./us/lease-agreement').then(m => ({ default: m.leaseAgreement })),
-  // Add other frequently used documents
+const buildCacheKey = (jurisdiction: 'us' | 'ca', documentType: string) =>
+  `${jurisdiction}:${documentType}`;
+
+const resolveCandidateIds = (
+  jurisdiction: 'us' | 'ca',
+  documentType: string,
+): string[] => {
+  const normalizedJurisdiction = jurisdiction.toLowerCase();
+  const normalizedType = documentType.trim();
+  const normalizedTypeLower = normalizedType.toLowerCase();
+
+  const candidates = new Set<string>();
+
+  if (normalizedType) {
+    candidates.add(normalizedType);
+    if (normalizedType !== normalizedTypeLower) {
+      candidates.add(normalizedTypeLower);
+    }
+  }
+
+  const typeAlreadyIncludesJurisdiction = normalizedTypeLower.includes(
+    normalizedJurisdiction,
+  );
+
+  if (!typeAlreadyIncludesJurisdiction && normalizedTypeLower) {
+    candidates.add(`${normalizedJurisdiction}-${normalizedTypeLower}`);
+    candidates.add(`${normalizedTypeLower}-${normalizedJurisdiction}`);
+    candidates.add(`${normalizedJurisdiction}/${normalizedTypeLower}`);
+  }
+
+  return Array.from(candidates);
 };
 
-const CA_DOCUMENT_MAP: Record<string, DocumentLoader> = {
-  'promissory-note-ca': () => import('./ca/promissory-note').then(m => ({ default: m.promissoryNote })),
-  // Add Canadian documents
-};
-
-// Cache for loaded documents to avoid re-imports
-const documentCache = new Map<string, LegalDocument>();
-
-/**
- * Dynamically loads a document type on-demand
- * @param jurisdiction - 'us' or 'ca'
- * @param documentType - Document type slug
- * @returns Promise resolving to the document configuration
- */
 export async function loadDocument(
   jurisdiction: 'us' | 'ca',
-  documentType: string
+  documentType: string,
 ): Promise<LegalDocument | null> {
-  const cacheKey = `${jurisdiction}-${documentType}`;
-  
-  // Return from cache if already loaded
-  if (documentCache.has(cacheKey)) {
-    return documentCache.get(cacheKey)!;
+  const cacheKey = buildCacheKey(jurisdiction, documentType);
+
+  if (jurisdictionScopedCache.has(cacheKey)) {
+    return jurisdictionScopedCache.get(cacheKey)!;
   }
 
-  try {
-    const documentMap = jurisdiction === 'us' ? US_DOCUMENT_MAP : CA_DOCUMENT_MAP;
-    const loader = documentMap[documentType];
-    
-    if (!loader) {
-      console.warn(`Document type '${documentType}' not found in ${jurisdiction} documents`);
-      return null;
+  const candidateIds = resolveCandidateIds(jurisdiction, documentType);
+
+  for (const candidate of candidateIds) {
+    if (!getDocumentMetadata(candidate)) {
+      continue;
     }
 
-    const { default: document } = await loader();
-    documentCache.set(cacheKey, document);
-    
-    return document;
-  } catch (error) {
-    console.error(`Failed to load document ${jurisdiction}/${documentType}:`, error);
-    return null;
+    const { document } = await loadManifestDocument(candidate);
+    if (document) {
+      jurisdictionScopedCache.set(cacheKey, document);
+      return document;
+    }
   }
+
+  console.warn(
+    `Document type '${documentType}' (${jurisdiction}) not found in manifest-backed loader`,
+  );
+  return null;
 }
 
-/**
- * Preloads commonly used documents for better UX
- */
 export function preloadPopularDocuments() {
-  // Preload top 10 most popular documents
-  const popularDocs = [
-    { jurisdiction: 'us' as const, type: 'vehicle-bill-of-sale' },
-    { jurisdiction: 'us' as const, type: 'rental-agreement' },
-    { jurisdiction: 'us' as const, type: 'employment-contract' },
-    { jurisdiction: 'us' as const, type: 'non-disclosure-agreement' },
-    { jurisdiction: 'us' as const, type: 'promissory-note' },
-  ];
-
-  popularDocs.forEach(({ jurisdiction, type }) => {
-    loadDocument(jurisdiction, type).catch(() => {
-      // Silently handle preload failures
-    });
-  });
+  void preloadCommonDocuments();
 }
 
-/**
- * Gets available document types for a jurisdiction
- */
 export function getAvailableDocuments(jurisdiction: 'us' | 'ca'): string[] {
-  const documentMap = jurisdiction === 'us' ? US_DOCUMENT_MAP : CA_DOCUMENT_MAP;
-  return Object.keys(documentMap);
+  const normalizedJurisdiction = jurisdiction.toLowerCase();
+
+  return getAllDocumentMetadata()
+    .filter((meta) =>
+      meta.jurisdiction?.toLowerCase().startsWith(normalizedJurisdiction),
+    )
+    .map((meta) => meta.id);
 }
 
-// Auto-preload on module load in browser environment
 if (typeof window !== 'undefined') {
-  // Delay preloading to not block initial page load
   setTimeout(preloadPopularDocuments, 2000);
 }

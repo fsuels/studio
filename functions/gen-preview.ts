@@ -1,21 +1,50 @@
 import * as functions from 'firebase-functions';
-import { getFirestore } from 'firebase-admin/firestore';
-import { renderMarkdown } from './lib/markdown-renderer'; // your existing util
+import { getDocumentMetadata } from './document-manifest';
+import { renderMarkdown } from './lib/markdown-renderer';
 
 export const onDraftWrite = functions.firestore
   .document('users/{uid}/documents/{docId}')
   .onWrite(async (change, ctx) => {
     const after = change.after.data();
-    if (!after?.formData) return null; // not a draft
+    if (!after?.formData) return null;
 
-    // Skip if content already exists
     if (after.contentMarkdown) return null;
 
-    const markdown = await renderMarkdown(
-      after.docType,
-      after.formData,
-      after.locale || 'en',
-    );
+    const docType: string = (after.docType || '').trim();
+    if (!docType) {
+      functions.logger.warn('Draft missing docType; skipping preview', {
+        documentPath: change.after.ref.path,
+      });
+      return null;
+    }
 
-    return change.after.ref.set({ contentMarkdown: markdown }, { merge: true });
+    const metadata = getDocumentMetadata(docType);
+    if (!metadata) {
+      functions.logger.warn('Unknown docType for preview generation', {
+        docType,
+        documentPath: change.after.ref.path,
+      });
+      return null;
+    }
+
+    const requestedLocale: 'en' | 'es' = after.locale === 'es' ? 'es' : 'en';
+    const locale = metadata.translations[requestedLocale]
+      ? requestedLocale
+      : 'en';
+
+    const markdown = await renderMarkdown(docType, after.formData, locale);
+
+    const translation = metadata.translations[locale];
+    const fallbackMarkdown = `# ${translation.name}\n\n${
+      translation.description || 'Preview will be available soon.'
+    }`;
+
+    return change.after.ref.set(
+      {
+        contentMarkdown: markdown || fallbackMarkdown,
+        contentLocale: locale,
+        contentTitle: translation.name,
+      },
+      { merge: true },
+    );
   });

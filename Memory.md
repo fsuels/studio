@@ -26,6 +26,9 @@
 - Consolidated mega menu now hits manifest helper; dashboards & analytics tabs still on legacy library.
 - Remaining legacy imports: DocumentFlow, Step1DocumentSelector, HeaderSearch (prefetch/search), semantic analysis utilities; plan phased replacements or removal of legacy helper once these are migrated.
 - DocumentFlow now uses manifest helper; Step1 selector + HeaderSearch still rely on legacy library for search/top docs; plan migration.
+- 2025-09-19: Updated `src/lib/documents/dynamic-loader.ts` to delegate to the manifest-backed loader so hooks/components no longer rely on the three-item stub; next, align Firebase/API wrappers with the same helper.
+- 2025-09-19: `src/lib/document-loader.ts` now calls the manifest loader first and only falls back to metadata stubs when bindings are missing; Firebase Functions/back-office scripts still pending review.
+- 2025-09-19: Manifest generator now outputs JSON for cross-runtime sharing and `functions/document-manifest.ts` consumes it so Cloud Functions validate docTypes before rendering previews.
 
 ### Phase 2 – Template Completeness & Validation (Weeks 2–4)
 - Audit metadata-only templates; promote to full `LegalDocument` exports or document them as metadata-only plus adjust generator to surface warnings.
