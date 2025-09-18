@@ -2,9 +2,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/usStates';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import { getWorkflowDocumentsByCategory, type DocumentSummary } from '@/lib/workflow/document-workflow';
 
 interface StepTwoInputProps {
   category: string;
@@ -20,39 +19,10 @@ export function StepTwoInput({
   const [stateCode, setStateCode] = useState<string>('');
 
   // Memoize list of docs in this category
-  const selectDocsForCategory = React.useCallback(
-    (docs: LegalDocument[], currentCategory: string) =>
-      docs.filter((doc) => doc.category === currentCategory),
-    [],
+  const docsInCategory: DocumentSummary[] = React.useMemo(
+    () => getWorkflowDocumentsByCategory(category, { jurisdiction: 'us' }),
+    [category],
   );
-
-  const [docsInCategory, setDocsInCategory] = useState<LegalDocument[]>(
-    selectDocsForCategory(documentLibrary, category),
-  );
-
-  React.useEffect(() => {
-    setDocsInCategory(selectDocsForCategory(documentLibrary, category));
-  }, [category, selectDocsForCategory]);
-
-  React.useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const docs = await getDocumentsByCountry('us');
-        if (!cancelled) {
-          setDocsInCategory(selectDocsForCategory(docs, category));
-        }
-      } catch (_) {
-        if (!cancelled) {
-          setDocsInCategory(selectDocsForCategory(documentLibrary, category));
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [category, selectDocsForCategory]);
 
   // Handle state dropdown change
   const handleStateChange = (code: string) => {
@@ -105,7 +75,7 @@ export function StepTwoInput({
           >
             {/* Replace with your icon component */}
             <div className="mb-2 text-blue-600">📄</div>
-            <span className="text-center font-medium">{doc.name}</span>
+            <span className="text-center font-medium">{doc.title}</span>
           </button>
         ))}
       </div>

@@ -37,7 +37,7 @@
 - [ ] **Unified generation pipeline** – Ensure `pdfService`, `dynamic-document-loader`, and Cloud Functions share a single orchestrator; add smoke tests in `tests/document-generation.test.ts` for top 10 revenue docs plus state forms.
 - [ ] **Operational safeguards** – Wire structured logging + alerting around generation failures (both Next handlers and Functions) and schedule weekly `npm run verify-templates` + lint/test/build sweep before shipping.
 - [ ] **Instrumentation baseline** – Structured logging (`src/lib/logging/document-generation-logger.ts`) now wraps pdf service, manifest/legacy loaders, API handler, and `generatePdfDocument` service (2025-09-19); capture baseline metrics from `/api/generate-pdf`, identify remaining entry points (Firebase Functions, scripts), and define reporting dashboard.
-- [ ] Confirm no other generation entry points (Firebase Functions, CLI scripts) currently exist; re-run audit when new Functions land.
+- [ ] Confirm no other generation entry points (Firebase Functions, CLI scripts) currently exist; re-run audit when new Functions land. Local analysis: `npx tsx scripts/analyze-documentgen-logs.ts --input <log>` or run smoke suite via `npx tsx scripts/run-documentgen-smoke.ts`; capture workflow documented in `docs/observability/document-generation-metrics.md` and monitoring setup in `docs/observability/gcp-document-generation-monitoring.md`.
 
 ### AI Drafting & Automation
 - [ ] **Provider activation & secrets** – Replace stubbed `aiInstance` with Genkit/Gemini configuration behind env flags; add safe fallback to rules-based heuristics when quota or compliance blocks.

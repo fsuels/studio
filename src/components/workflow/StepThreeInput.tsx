@@ -5,37 +5,37 @@ import React, { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 import type { FormField } from '@/data/formSchemas';
-import documentLibrary, { getDocumentsByCountry } from '@/lib/document-library';
+import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
 
 interface Props {
   templateId: string;
 }
 
 export function StepThreeInput({ templateId }: Props) {
-  const findTemplate = React.useCallback(
-    (docs: LegalDocument[]) => docs.find((doc) => doc.id === templateId) || null,
-    [templateId],
-  );
-
-  const [template, setTemplate] = useState<LegalDocument | null>(
-    findTemplate(documentLibrary),
-  );
-
-  React.useEffect(() => {
-    setTemplate(findTemplate(documentLibrary));
-  }, [findTemplate]);
+  const [template, setTemplate] = useState<LegalDocument | null>(null);
+  const [templateError, setTemplateError] = useState<string | null>(null);
 
   React.useEffect(() => {
     let cancelled = false;
+
     (async () => {
       try {
-        const docs = await getDocumentsByCountry('us');
+        setTemplateError(null);
+        const loaded = await loadWorkflowDocument(templateId);
         if (!cancelled) {
-          setTemplate(findTemplate(docs));
+          setTemplate(loaded);
+          if (!loaded) {
+            setTemplateError('Document template not found.');
+          }
         }
-      } catch (_) {
+      } catch (error) {
         if (!cancelled) {
-          setTemplate(findTemplate(documentLibrary));
+          setTemplate(null);
+          setTemplateError(
+            error instanceof Error
+              ? error.message
+              : 'Unable to load document template.',
+          );
         }
       }
     })();
@@ -43,7 +43,7 @@ export function StepThreeInput({ templateId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [findTemplate]);
+  }, [templateId]);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [upsells, setUpsells] = useState({ notarize: false, record: false });
 
@@ -62,7 +62,7 @@ export function StepThreeInput({ templateId }: Props) {
     try {
       // Call the corrected function name
       const response = await analyzeFormData({
-        documentType: template.name || '',
+        documentType: template.name || template.id,
         schema: (template.questions as unknown as FormField[]) || [],
         answers: formData,
         // state: stateCode,
@@ -88,9 +88,32 @@ export function StepThreeInput({ templateId }: Props) {
     setLoading(false);
   };
 
-  const allFieldsFilled = template
-    ? template.questions?.every((q) => !q.required || (formData[q.id] as string)?.trim()) ?? true
-    : true;
+  if (templateError) {
+    return (
+      <div className="max-w-4xl mx-auto p-4">
+        <h2 className="text-2xl font-semibold mb-4">
+          Step 3: Customize & Download
+        </h2>
+        <p className="text-red-600">{templateError}</p>
+      </div>
+    );
+  }
+
+  if (!template) {
+    return (
+      <div className="max-w-4xl mx-auto p-4">
+        <h2 className="text-2xl font-semibold mb-4">
+          Step 3: Customize & Download
+        </h2>
+        <p className="text-gray-600">Loading document template…</p>
+      </div>
+    );
+  }
+
+  const allFieldsFilled =
+    template.questions?.every(
+      (q) => !q.required || (formData[q.id] as string)?.trim(),
+    ) ?? true;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -101,7 +124,7 @@ export function StepThreeInput({ templateId }: Props) {
         Fill in the details below and preview your document.
       </p>
 
-      {template?.questions?.map((q) => (
+      {template.questions?.map((q) => (
         <div key={q.id} className="mb-4">
           <label className="block font-medium mb-1">{q.label}</label>
           {q.type === 'textarea' ? (

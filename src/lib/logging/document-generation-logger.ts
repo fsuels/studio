@@ -33,10 +33,12 @@ export function logDocumentGenerationStart(
     LOG_PREFIX,
     'START',
     operation,
-    sanitizeContext({
-      ...context,
-      timestamp: new Date(startTime).toISOString(),
-    }),
+    JSON.stringify(
+      sanitizeContext({
+        ...context,
+        timestamp: new Date(startTime).toISOString(),
+      }),
+    ),
   );
 
   return startTime;
@@ -55,12 +57,14 @@ export function logDocumentGenerationSuccess(
     LOG_PREFIX,
     'SUCCESS',
     operation,
-    sanitizeContext({
-      ...context,
-      ...result,
-      durationMs,
-      timestamp: new Date(endTime).toISOString(),
-    }),
+    JSON.stringify(
+      sanitizeContext({
+        ...context,
+        ...result,
+        durationMs,
+        timestamp: new Date(endTime).toISOString(),
+      }),
+    ),
   );
 }
 
@@ -77,12 +81,13 @@ export function logDocumentGenerationError(
     LOG_PREFIX,
     'ERROR',
     operation,
-    sanitizeContext({
-      ...context,
-      durationMs,
-      timestamp: new Date(endTime).toISOString(),
-      error: formatError(error),
-    }),
+    JSON.stringify(
+      sanitizeContext({
+        ...context,
+        durationMs,
+        timestamp: new Date(endTime).toISOString(),
+        error: formatError(error),
+      }),
+    ),
   );
 }
-
