@@ -1,8 +1,10 @@
 // src/app/[locale]/api/wizard/[docId]/submit/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeServerClient } from '@/lib/stripe-server';
 import { getAdmin } from '@/lib/firebase-admin'; // Firebase Admin SDK
 import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
+import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{
@@ -14,6 +16,19 @@ async function getCurrentUser(): Promise<{
   );
   return { uid: 'test-user-123', email: 'test-user@example.com' }; // Placeholder
 }
+
+function getStripeClient(): Stripe {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error('STRIPE_SECRET_KEY is not set. Aborting.');
+  }
+
+  return new Stripe(secretKey, {
+    apiVersion: STRIPE_API_VERSION,
+  });
+}
+
+
 
 const DEFAULT_DOCUMENT_PRICE = 35; // Fallback price in dollars
 
@@ -27,11 +42,13 @@ export async function POST(
 
   const admin = getAdmin();
 
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-
-  if (!stripeSecretKey) {
+  let stripe: Stripe;
+  try {
+    stripe = getStripeClient();
+  } catch (error) {
     console.error(
       `${logPrefix} CRITICAL RUNTIME: STRIPE_SECRET_KEY is not set. Aborting.`,
+      error,
     );
     return NextResponse.json(
       {
@@ -42,11 +59,6 @@ export async function POST(
       { status: 503 },
     );
   }
-
-  const stripe = new Stripe(stripeSecretKey, {
-    // Updated to the latest Stripe API version supported by the SDK
-    apiVersion: '2025-05-28.basil',
-  });
 
   try {
     const body = await req.json();

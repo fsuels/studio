@@ -1,5 +1,6 @@
-﻿# ops/Memory.md
-## Cycle Ledger\r\n`\r\n- document-intel-cycle-0005 (2025-09-19T16:42:58.9856891Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md
+# ops/Memory.md
+## Cycle Ledger\r\n`\r\n- compliance-cycle-0008 (2025-09-19T17:17:11.8682061Z, lead: Compliance) - ops/compliance/policy-glossary-es.json
+- document-intel-cycle-0005 (2025-09-19T16:42:58.9856891Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md
 - compliance-cycle-0005 (2025-09-19T16:32:46.8823448Z, lead: Compliance) - ops/artifacts/compliance-cycle-0005/policy-freshness-audit.md`r`n- growth-cycle-0003 (2025-09-19T16:25:43.2884853Z, lead: Growth) - ops/artifacts/growth-cycle-0003/marketing-seo-audit.md
 - document-intel-cycle-0004 (2025-09-19T16:14:17.9066772Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0004/overlay-audit.json
 - growth-cycle-0002 (2025-09-19T15:48:54.9598881Z, lead: Growth) - ops/artifacts/growth-cycle-0002/signwell-analytics-report.md
@@ -342,6 +343,40 @@ artifacts:
   - ops/artifacts/compliance-cycle-0005/release-gate-2025-09-22.md
   - ops/artifacts/compliance-cycle-0005/jurisdiction-outline-summary.md
   - ops/artifacts/compliance-cycle-0005/checksums.json
-```\r\n`\r\n\r\n`\r\n\r\n`\r\n
-
+```\r\n`\r\n\r\n`\r\n\r\n`\r\n## Compliance Cycle (compliance-cycle-0008)
+```
+cycle_id: compliance-cycle-0008
+ts: 2025-09-19T17:17:11.8682061Z
+lead_pod: Compliance
+mode: apply
+selected_tasks:
+  - id: compliance-policy-glossary-es-20250919
+    pod: Compliance
+    notes: Created Spanish terminology glossary for policy/UI localization; see ops/compliance/policy-glossary-es.json.
+  - id: compliance-privacy-evidence-handoff-20250919
+    pod: Compliance
+    notes: Updated DSAR checklist and privacy evidence plan with explicit artifact mapping.
+context_evidence:
+  - description: Policy glossary mapping EN->ES terms
+    source: ops/compliance/policy-glossary-es.json
+  - description: Privacy evidence plan summary
+    source: ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md
+  - description: DSAR checklist with release gate linkage
+    source: ops/compliance/dsar-cookie-verification.md
+cross_pod_followups:
+  - pod: Platform
+    action: Provide consent telemetry, cookie banner evidence, and integrate glossary-driven copy by 2025-09-26.
+    owner: Platform
+  - pod: Growth
+    action: Update marketing funnels with bilingual policy messaging using glossary terms.
+    owner: Growth
+  - pod: Document Intelligence
+    action: Use glossary and jurisdiction updates when drafting Spanish content for Washington/Colorado/Georgia templates.
+    owner: Document Intelligence
+artifacts:
+  - ops/compliance/policy-glossary-es.json
+  - ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md
+  - ops/artifacts/compliance-cycle-0006/checksums.json
+  - ops/artifacts/compliance-cycle-0007/checksums.json
+```
 

@@ -1,13 +1,13 @@
 {
     "todos": [
-        "Provision CSP webhook staging and connect metrics to SRE pipeline instrumentation.",
-        "Promote CSP alert metrics into shared observability dashboards once staging endpoint is live."
+        "Coordinate with SRE to add Prometheus scrape job for /api/security/csp-metrics/prom and surface dashboards.",
+        "Document CSP alert metric labels/thresholds with Compliance ahead of enforcement rollout."
     ],
-    "last_updated": "2025-09-19T16:38:02Z",
-    "cycle_id": "platform-cycle-0007",
+    "last_updated": "2025-09-19T17:05:21Z",
+    "cycle_id": "platform-cycle-0008",
     "notes": [
-        "Security middleware now applies CSP report-only headers to locale redirects, admin redirects, and tenant rewrites.",
-        "CSP alert dispatcher tracks skipped/delivered/failed outcomes with structured metrics and audit logging.",
-        "Automated coverage added for middleware headers and CSP alert telemetry pathways."
+        "Prometheus-backed CSP alert metrics now update alongside audit logging for every dispatch.",
+        "JSON summary and Prometheus endpoints expose counters/last event for SRE consumption.",
+        "Added API route coverage confirming telemetry endpoints stay in sync with dispatcher logic."
     ]
 }

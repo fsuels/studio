@@ -1,0 +1,136 @@
+{
+  "cycle_id": "document-intel-cycle-0006",
+  "generated_at": "2025-09-19T17:31:05.055169Z",
+  "templates": [
+    {
+      "config": "public/configs/us/colorado/power-of-attorney.json",
+      "jurisdiction": "us/colorado",
+      "docType": "power-of-attorney",
+      "pdfPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf",
+      "coordinate_count": 10,
+      "coordinates": {
+        "principal_name": {
+          "x": 64.01,
+          "y": 803.59,
+          "fontSize": 12,
+          "page": 0
+        },
+        "agent_name": {
+          "x": 54.0,
+          "y": 773.59,
+          "fontSize": 12,
+          "page": 0
+        },
+        "effective_date": {
+          "x": 133.37,
+          "y": 413.59,
+          "fontSize": 12,
+          "page": 0
+        },
+        "successor_agent_name": {
+          "x": 151.38,
+          "y": 383.59,
+          "fontSize": 12,
+          "page": 0
+        },
+        "springing_condition": {
+          "x": 290.78,
+          "y": 343.59,
+          "fontSize": 12,
+          "page": 0
+        },
+        "witness1_name": {
+          "x": 103.46,
+          "y": 177.0,
+          "fontSize": 12,
+          "page": 0
+        },
+        "witness2_name": {
+          "x": 103.46,
+          "y": 157.0,
+          "fontSize": 12,
+          "page": 0
+        },
+        "notary_county": {
+          "x": 97.58,
+          "y": 82.0,
+          "fontSize": 12,
+          "page": 0
+        },
+        "notary_date": {
+          "x": 272.09,
+          "y": 62.0,
+          "fontSize": 12,
+          "page": 0
+        },
+        "notary_commission_expires": {
+          "x": 161.46,
+          "y": 12.0,
+          "fontSize": 12,
+          "page": 0
+        }
+      }
+    },
+    {
+      "config": "public/configs/us/generic/vehicle-bill-of-sale.json",
+      "jurisdiction": "us/generic",
+      "docType": "vehicle-bill-of-sale",
+      "pdfPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf",
+      "coordinate_count": 8,
+      "coordinates": {
+        "seller_name": {
+          "page": 0,
+          "x": 90.34,
+          "y": 673.5,
+          "fontSize": 11
+        },
+        "buyer_name": {
+          "page": 0,
+          "x": 91.02,
+          "y": 653.5,
+          "fontSize": 11
+        },
+        "year": {
+          "page": 0,
+          "x": 99.02,
+          "y": 633.5,
+          "fontSize": 11
+        },
+        "make": {
+          "page": 0,
+          "x": 135.72,
+          "y": 633.5,
+          "fontSize": 11
+        },
+        "model": {
+          "page": 0,
+          "x": 172.41,
+          "y": 633.5,
+          "fontSize": 11
+        },
+        "vin": {
+          "page": 0,
+          "x": 79.68,
+          "y": 613.5,
+          "fontSize": 11
+        },
+        "price": {
+          "page": 0,
+          "x": 93.68,
+          "y": 593.5,
+          "fontSize": 11
+        },
+        "sale_date": {
+          "page": 0,
+          "x": 85.02,
+          "y": 513.5,
+          "fontSize": 11
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Colorado POA overlay now maps manual coordinates for principal/agent, effective date, successor, witnesses, and notary fields. Pending coverage for address blocks and power selection remains.",
+    "Generic vehicle bill of sale overlay now anchors key sale metadata (parties, vehicle, VIN, price, date). Address, odometer, and warranty fields still require layout updates once a richer template is available."
+  ]
+}

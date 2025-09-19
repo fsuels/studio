@@ -1,0 +1,14 @@
+﻿{
+    "public/configs/us/generic/vehicle-bill-of-sale.json":  {
+                                                                "algorithm":  "sha256",
+                                                                "hash":  "f20d06a04da2586bd9d9e359f0b9b95b275e445fbb39cac81c2cc35ccec32f34"
+                                                            },
+    "ops/artifacts/document-intel-cycle-0006/manual-overlay-audit.json":  {
+                                                                              "algorithm":  "sha256",
+                                                                              "hash":  "c96bf0c1e6247967dbd99fe32f474fa26c20a693be1116872a8d3825f3d4cccb"
+                                                                          },
+    "public/configs/us/colorado/power-of-attorney.json":  {
+                                                              "algorithm":  "sha256",
+                                                              "hash":  "e284ee9a0aca836a1bc9ce21cbd2995dc7b11caba19f01c0f518feff8d6904fe"
+                                                          }
+}

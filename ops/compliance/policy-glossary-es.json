@@ -1,0 +1,61 @@
+{
+  "last_updated": "2025-09-19T17:50:00Z",
+  "source_policies": [
+    "docs/legal/disclaimer.md",
+    "docs/legal/terms-of-service.md",
+    "docs/legal/privacy-notice.md",
+    "docs/legal/refund-policy.md"
+  ],
+  "glossary": [
+    {
+      "english": "legal document assistance service",
+      "spanish": "servicio de asistencia documental legal",
+      "notes": "Used in disclaimers to clarify nonlawyer status; keep phrase consistent across marketing and product copy."
+    },
+    {
+      "english": "not a law firm",
+      "spanish": "no es un bufete de abogados",
+      "notes": "Mandatory disclosure in all jurisdictions; bold in banners where required."
+    },
+    {
+      "english": "attorney-client relationship",
+      "spanish": "relación abogado-cliente",
+      "notes": "Appears in disclaimers and Terms of Service; accent retained for formal tone."
+    },
+    {
+      "english": "power of attorney",
+      "spanish": "poder notarial",
+      "notes": "Use with jurisdiction-specific modifiers (durable, statutory) as separate descriptors."
+    },
+    {
+      "english": "witness",
+      "spanish": "testigo",
+      "notes": "Pluralize as 'testigos'; pair with eligibility guidance in workflow inserts."
+    },
+    {
+      "english": "notary public",
+      "spanish": "notario público",
+      "notes": "Maintain accent on público; align with state-specific notarization prompts."
+    },
+    {
+      "english": "refund policy",
+      "spanish": "política de reembolsos",
+      "notes": "Use plural 'reembolsos' to match consumer protection terminology."
+    },
+    {
+      "english": "data subject access request",
+      "spanish": "solicitud de acceso a datos",
+      "notes": "DSAR acronym may remain in parentheses after first mention."
+    },
+    {
+      "english": "cookie preferences",
+      "spanish": "preferencias de cookies",
+      "notes": "Used in DSAR & cookie verification checklist; ensure lowercase per style guide."
+    },
+    {
+      "english": "contact our support team",
+      "spanish": "comuníquese con nuestro equipo de soporte",
+      "notes": "Common CTA across policies and marketing; maintain accent on comuníquese."
+    }
+  ]
+}

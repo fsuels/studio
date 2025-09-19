@@ -5,7 +5,8 @@
         "Baseline audit flagged invalid Stripe apiVersion usage, mocked integrations, and missing policies; see ops/artifacts/payments-cycle-0001/payments-audit.json.",
         "Removed hard-coded Stripe publishable fallback; frontend now requires NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
         "Stripe webhook handler now verifies signatures with HMAC and timing-safe compare (src/lib/stripe-integration.ts).",
-        "Stripe webhook endpoint now validates signatures via stripeIntegration before processing (src/app/api/webhooks/stripe/route.ts)."
+        "Stripe webhook endpoint now validates signatures via stripeIntegration before processing (src/app/api/webhooks/stripe/route.ts).",
+        "Refund automation, wizard payments, and marketplace revenue flows now reuse shared Stripe helpers for API version enforcement."
     ],
     "todos": [
         "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",

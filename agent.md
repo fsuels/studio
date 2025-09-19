@@ -12,24 +12,27 @@
 - Atomic writes: stage edits under `ops/tmp/`, fsync, then rename into place. Log checksums in `ops/artifacts/<cycle_id>/checksums.json`.
 - Locks: acquire `ops/state/lock/codex.lock`; reclaim if stale (>15 min) and record in TRACE_EVENTS.
 - Global state: CEO cycles own `Memory.md`/`Remember.md` updates; other pods treat them as read-only and submit handoff notes instead.
+- Complaint hygiene: when you update a `TEAM/<pod>/complaint.json`, run `node scripts/manage-complaints.js` to archive resolved tickets and keep CEO escalations in sync.
+ode scripts/manage-complaints.js to archive resolved tickets and keep CEO escalations in sync.
 - Evidence-first: collect measurements (Lighthouse, axe, template parity, billing smoke tests) before claiming success.
 
 ## 3. Pod-Aligned Cycle Workflow
-1. Acquire & Load - lock repository; load `Remember.md`, repo `Memory.md`, and relevant `TEAM/<pod>/memory.json`. Non-CEO pods must treat `Memory.md` and `Remember.md` as read-only context.
+1. Acquire & Load - lock repository; load `Remember.md`, repo `Memory.md`, and relevant `TEAM/<pod>/memory.json`. Non-CEO pods must treat `Memory.md` and `Remember.md` as read-only context. If a `TEAM/<pod>/complaint.json` file exists, ingest it now and surface any `open` or `in_progress` complaints for prioritization.
 2. Discover - audit systems owned by the active pod (see `TEAM/<pod>/Start.MD`). Pull context from other pods if dependencies exist.
 3. Score & Select (1-3 tasks) - use the prioritization rules in section 5. Tie-break deterministically.
 4. Plan - produce an idempotent, step-by-step plan (via plan tool). Specify exact files and expected outcomes. Reference pod hand-offs when needed.
 5. Execute - apply changes using atomic writes, respecting guardrails (security headers report-only first, no secrets, no UPL). Document actions in TRACE_EVENTS.
 6. Verify - run required checks for the touched domain (CWV, axe, SEO, billing, template parity, etc.). Store artifacts under `ops/artifacts/<cycle_id>/` and list them in PR_DESC.
-7. Persist & Handoff - update your pod `memory.json` with the new `cycle_id`, ISO-8601 UTC timestamps, notes, and follow-ups. Non-CEO pods DO NOT write to repo `Memory.md` or `Remember.md`; instead, capture handoff notes in outputs for the CEO cycle to merge. CEO sessions consolidate pod updates into the global files and prepare PR metadata (section 7).
+7. Persist & Handoff - update your pod `memory.json` with the new `cycle_id`, ISO-8601 UTC timestamps, notes, and follow-ups. Non-CEO pods DO NOT write to repo `Memory.md` or `Remember.md`; emit `UPDATED_MEMORY_MD: null` and `UPDATED_REMEMBER_MD: null`, and add a concise `handoff_summary` in `PATCH_META` so the CEO cycle can merge updates. CEO sessions consolidate pod updates into the global files and prepare PR metadata (section 7).
 
 Pod leads must start from their `TEAM/<pod>/Start.MD`, which references this contract and outlines pod-specific audits.
 
 ## 4. Collaboration & Handoff Rules
 - Always read all `TEAM/*/memory.json` when acting as CEO or when pod work impacts another pod.
-- Log cross-pod actions in the originating pod memory and flag them in handoff outputs so the CEO can update `Remember.md` under "Pending Cross-Pod Tasks".
+- Log cross-pod actions in the originating pod memory and capture them in `PATCH_META.handoff_summary` so the CEO can update `Remember.md` under "Pending Cross-Pod Tasks".
 - Escalate compliance or safety risks immediately to the CEO pod (update `TEAM/CEO/memory.json`).
 
+- Coordinate with the Complaints pod when logging or resolving `complaint.json` entries; update `history` and status fields so intake has up-to-date visibility.
 ## 5. Prioritization Formula (Deterministic)
 Let `p` be in [0.2, 0.95], `impact`, `urgency`, `cost` in {1..5}.
 - Start `p` at 0.6; add 0.1 if precise automated verification exists; subtract 0.1 if blocked by external dependencies (then clamp to bounds).
@@ -60,6 +63,8 @@ Emit sections in this exact order with valid JSON (except PATCH):
 8. `## PR_DESC`
 9. `## TRACE_EVENTS`
 10. `CYCLE_DONE`
+
+Non-CEO pods must set `UPDATED_MEMORY_MD` and `UPDATED_REMEMBER_MD` to `null` and include a concise `handoff_summary` object inside `PATCH_META` describing cross-pod follow-ups and context updates. CEO cycles consume those summaries, populate the global sections, and may clear processed handoffs.
 
 Each artifact path referenced in outputs must exist under `ops/artifacts/<cycle_id>/`.
 

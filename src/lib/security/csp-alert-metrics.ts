@@ -28,10 +28,50 @@ const counters: Record<CspAlertMetricResult, number> = {
 
 let lastEvent: CspAlertMetricEvent | undefined;
 
-function buildEvent(
+let promClient: typeof import('prom-client') | null = null;
+if (typeof window === 'undefined') {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+    promClient = require('prom-client') as typeof import('prom-client');
+  } catch (_error) {
+    promClient = null;
+  }
+}
+
+type PromHandles = {
+  registry: import('prom-client').Registry;
+  counter: import('prom-client').Counter<string>;
+};
+
+const GLOBAL_PROM_KEY = Symbol.for('csp.alert.prom.handles');
+
+function getPromHandles(): PromHandles | undefined {
+  if (typeof window !== 'undefined' || !promClient) {
+    return undefined;
+  }
+
+  const globalAny = globalThis as Record<PropertyKey, unknown>;
+  if (!globalAny[GLOBAL_PROM_KEY]) {
+    const registry = new promClient.Registry();
+    const counter = new promClient.Counter({
+      name: 'csp_alerts_total',
+      help: 'Total CSP alert dispatch attempts grouped by outcome.',
+      labelNames: ['result', 'severity', 'risk_level', 'mode'],
+      registers: [registry],
+    });
+
+    globalAny[GLOBAL_PROM_KEY] = { registry, counter } satisfies PromHandles;
+  }
+
+  return globalAny[GLOBAL_PROM_KEY] as PromHandles;
+}
+
+export async function recordCspAlertMetric(
   options: RecordCspAlertMetricOptions,
-): CspAlertMetricEvent {
-  return {
+): Promise<void> {
+  counters[options.result] += 1;
+
+  const event: CspAlertMetricEvent = {
     timestamp: new Date().toISOString(),
     result: options.result,
     severity: options.severity,
@@ -41,14 +81,7 @@ function buildEvent(
     webhookUrlConfigured: options.webhookUrlConfigured,
     environment: options.environment,
   };
-}
 
-export async function recordCspAlertMetric(
-  options: RecordCspAlertMetricOptions,
-): Promise<void> {
-  counters[options.result] += 1;
-
-  const event = buildEvent(options);
   lastEvent = event;
 
   try {
@@ -56,6 +89,14 @@ export async function recordCspAlertMetric(
   } catch (_error) {
     // Ignore serialization issues to keep logging best-effort.
   }
+
+  const promHandles = getPromHandles();
+  promHandles?.counter.inc({
+    result: options.result,
+    severity: options.severity,
+    risk_level: options.riskLevel,
+    mode: options.mode,
+  });
 
   try {
     await securityAuditLogger.logEvent({
@@ -123,4 +164,10 @@ export function resetCspAlertMetrics() {
   counters.skipped = 0;
   counters.failed = 0;
   lastEvent = undefined;
+
+  getPromHandles()?.counter.reset();
+}
+
+export function getCspAlertPromRegistry(): import('prom-client').Registry | undefined {
+  return getPromHandles()?.registry;
 }

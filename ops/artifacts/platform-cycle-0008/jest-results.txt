@@ -1,0 +1,91 @@
+
+> nextn@0.1.0 test
+> jest __tests__/middleware/security-headers.test.ts src/lib/security/__tests__/csp-alerts.test.ts src/app/api/security/__tests__/csp-metrics-route.test.ts --runInBand
+
+PASS src/app/api/security/__tests__/csp-metrics-route.test.ts (16.463 s)
+  ● Console
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:12.882Z","result":"delivered","severity":"critical","riskLevel":"high","mode":"report-only","webhookUrlConfigured":true,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+PASS src/lib/security/__tests__/csp-alerts.test.ts
+  ● Console
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:16.855Z","result":"skipped","severity":"critical","riskLevel":"high","reason":"webhook-url-not-configured","mode":"report-only","webhookUrlConfigured":false,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:16.862Z","result":"skipped","severity":"info","riskLevel":"low","reason":"below-alert-threshold","mode":"report-only","webhookUrlConfigured":true,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:16.864Z","result":"delivered","severity":"critical","riskLevel":"high","mode":"report-only","webhookUrlConfigured":true,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+    console.error
+      [csp-alert] webhook responded with non-200 { status: 500, statusText: 'error' }
+
+      208 |       return;
+      209 |     }
+    > 210 |     originalError.call(console, ...args);
+          |                   ^
+      211 |   };
+      212 | });
+      213 |
+
+      at console.call [as error] (jest.setup.js:210:19)
+      at error (src/lib/security/csp-alerts.ts:65:15)
+      at Object.<anonymous> (src/lib/security/__tests__/csp-alerts.test.ts:102:20)
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:16.877Z","result":"failed","severity":"critical","riskLevel":"high","reason":"webhook-status-500","mode":"report-only","webhookUrlConfigured":true,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+    console.error
+      [csp-alert] failed to dispatch webhook {
+        error: Error: network down
+            at Object.<anonymous> (/mnt/c/dev/123legaldoc/src/lib/security/__tests__/csp-alerts.test.ts:117:51)
+            at Promise.then.completed (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/utils.js:298:28)
+            at new Promise (<anonymous>)
+            at callAsyncCircusFn (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/utils.js:231:10)
+            at _callCircusTest (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/run.js:316:40)
+            at _runTest (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/run.js:252:3)
+            at _runTestsForDescribeBlock (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/run.js:126:9)
+            at _runTestsForDescribeBlock (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/run.js:121:9)
+            at run (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/run.js:71:3)
+            at runAndTransformResultsToJestFormat (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+            at jestAdapter (/mnt/c/dev/123legaldoc/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+            at runTestInternal (/mnt/c/dev/123legaldoc/node_modules/jest-runner/build/runTest.js:367:16)
+            at runTest (/mnt/c/dev/123legaldoc/node_modules/jest-runner/build/runTest.js:444:34)
+      }
+
+      208 |       return;
+      209 |     }
+    > 210 |     originalError.call(console, ...args);
+          |                   ^
+      211 |   };
+      212 | });
+      213 |
+
+      at console.call [as error] (jest.setup.js:210:19)
+      at error (src/lib/security/csp-alerts.ts:89:13)
+      at Object.<anonymous> (src/lib/security/__tests__/csp-alerts.test.ts:120:20)
+
+    console.log
+      [CSP Alert Metrics] {"timestamp":"2025-09-19T17:02:16.929Z","result":"failed","severity":"critical","riskLevel":"high","reason":"webhook-network-error","mode":"report-only","webhookUrlConfigured":true,"environment":"test"}
+
+      at log (src/lib/security/csp-alert-metrics.ts:88:13)
+
+
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        39.157 s
+Ran all test suites matching /__tests__\/middleware\/security-headers.test.ts|src\/lib\/security\/__tests__\/csp-alerts.test.ts|src\/app\/api\/security\/__tests__\/csp-metrics-route.test.ts/i.

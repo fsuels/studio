@@ -64,7 +64,7 @@ export class StripeIntegration {
 
   // Initialize Stripe (client-side)
   async initializeStripe(): Promise<any> {
-    console.log('🔷 Initializing Stripe...');
+    console.log('[stripe] Initializing Stripe...');
 
     // In production, this would load the actual Stripe.js library
     const stripeClient = {
@@ -95,7 +95,7 @@ export class StripeIntegration {
       }),
     };
 
-    console.log('✅ Stripe initialized');
+    console.log('[stripe] Stripe initialized');
     return stripeClient;
   }
 
@@ -105,7 +105,7 @@ export class StripeIntegration {
     name?: string,
     metadata?: Record<string, string>,
   ): Promise<StripeCustomer> {
-    console.log(`👤 Creating Stripe customer: ${email}`);
+    console.log(`[stripe] Creating Stripe customer: ${email}`);
 
     const customerId = this.generateCustomerId();
     const customer: StripeCustomer = {
@@ -118,7 +118,7 @@ export class StripeIntegration {
 
     this.customers.set(customerId, customer);
 
-    console.log(`✅ Stripe customer created: ${customerId}`);
+    console.log(`[stripe] Stripe customer created: ${customerId}`);
     return customer;
   }
 
@@ -148,7 +148,7 @@ export class StripeIntegration {
 
     this.paymentIntents.set(paymentIntentId, paymentIntent);
 
-    console.log(`✅ Payment intent created: ${paymentIntentId}`);
+    console.log(`[stripe] Payment intent created: ${paymentIntentId}`);
     return paymentIntent;
   }
 
@@ -161,7 +161,7 @@ export class StripeIntegration {
     paymentIntent?: StripePaymentIntent;
     error?: string;
   }> {
-    console.log(`🔄 Confirming payment intent: ${paymentIntentId}`);
+    console.log(`[stripe] Confirming payment intent: ${paymentIntentId}`);
 
     const paymentIntent = this.paymentIntents.get(paymentIntentId);
     if (!paymentIntent) {
@@ -183,11 +183,11 @@ export class StripeIntegration {
         );
       }
 
-      console.log(`✅ Payment confirmed: ${paymentIntentId}`);
+      console.log(`[stripe] Payment confirmed: ${paymentIntentId}`);
       return { success: true, paymentIntent };
     } else {
       paymentIntent.status = 'requires_payment_method';
-      console.log(`❌ Payment failed: ${paymentIntentId}`);
+      console.log(`[stripe] Payment failed: ${paymentIntentId}`);
       return { success: false, error: 'Your card was declined.' };
     }
   }
@@ -199,7 +199,7 @@ export class StripeIntegration {
     paymentMethodId: string,
     trialPeriodDays?: number,
   ): Promise<{ subscription: any; clientSecret?: string }> {
-    console.log(`📅 Creating subscription for customer: ${customerId}`);
+    console.log(`[stripe] Creating subscription for customer: ${customerId}`);
 
     const customer = this.customers.get(customerId);
     if (!customer) {
@@ -257,7 +257,7 @@ export class StripeIntegration {
       latest_invoice: null,
     };
 
-    console.log(`✅ Subscription created: ${stripeSubscription.id}`);
+    console.log(`[stripe] Subscription created: ${stripeSubscription.id}`);
     return { subscription: stripeSubscription };
   }
 
@@ -266,16 +266,16 @@ export class StripeIntegration {
     payload: string,
     signature: string,
   ): Promise<{ received: boolean; processed?: string }> {
-    console.log('🪝 Processing Stripe webhook...');
+    console.log('[stripe] Processing Stripe webhook...');
 
     // In production, verify the webhook signature
     if (!this.verifyWebhookSignature(payload, signature)) {
-      console.log('❌ Invalid webhook signature');
+      console.log('[stripe] Invalid webhook signature');
       return { received: false };
     }
 
     const event = JSON.parse(payload);
-    console.log(`📨 Webhook event: ${event.type}`);
+    console.log(`[stripe] Webhook event: ${event.type}`);
 
     switch (event.type) {
       case 'payment_intent.succeeded':
@@ -307,16 +307,16 @@ export class StripeIntegration {
         break;
 
       default:
-        console.log(`🔄 Unhandled event type: ${event.type}`);
+        console.log(`[stripe] Unhandled event type: ${event.type}`);
     }
 
-    console.log('✅ Webhook processed');
+    console.log('[stripe] Webhook processed');
     return { received: true, processed: event.type };
   }
 
   // Webhook handlers
   private async handlePaymentSucceeded(paymentIntent: any): Promise<void> {
-    console.log(`💰 Payment succeeded: ${paymentIntent.id}`);
+    console.log(`[stripe] Payment succeeded: ${paymentIntent.id}`);
 
     if (paymentIntent.metadata.invoiceId) {
       await paymentProcessor.processPayment(
@@ -328,32 +328,32 @@ export class StripeIntegration {
   }
 
   private async handlePaymentFailed(paymentIntent: any): Promise<void> {
-    console.log(`❌ Payment failed: ${paymentIntent.id}`);
+    console.log(`[stripe] Payment failed: ${paymentIntent.id}`);
     // Handle failed payment - send notification, update subscription status, etc.
   }
 
   private async handleSubscriptionCreated(subscription: any): Promise<void> {
-    console.log(`📅 Subscription created: ${subscription.id}`);
+    console.log(`[stripe] Subscription created: ${subscription.id}`);
     // Sync with our internal subscription system
   }
 
   private async handleSubscriptionUpdated(subscription: any): Promise<void> {
-    console.log(`📝 Subscription updated: ${subscription.id}`);
+    console.log(`[stripe] Subscription updated: ${subscription.id}`);
     // Update internal subscription data
   }
 
   private async handleSubscriptionDeleted(subscription: any): Promise<void> {
-    console.log(`🗑️ Subscription deleted: ${subscription.id}`);
+    console.log(`[stripe] Subscription deleted: ${subscription.id}`);
     // Handle subscription cancellation
   }
 
   private async handleInvoicePaymentSucceeded(invoice: any): Promise<void> {
-    console.log(`📄 Invoice payment succeeded: ${invoice.id}`);
+    console.log(`[stripe] Invoice payment succeeded: ${invoice.id}`);
     // Mark invoice as paid in our system
   }
 
   private async handleInvoicePaymentFailed(invoice: any): Promise<void> {
-    console.log(`📄 Invoice payment failed: ${invoice.id}`);
+    console.log(`[stripe] Invoice payment failed: ${invoice.id}`);
     // Handle failed invoice payment
   }
 
@@ -378,7 +378,7 @@ export class StripeIntegration {
     const updatedCustomer = { ...customer, ...updates };
     this.customers.set(customerId, updatedCustomer);
 
-    console.log(`📝 Customer updated: ${customerId}`);
+    console.log(`[stripe] Customer updated: ${customerId}`);
     return updatedCustomer;
   }
 
@@ -387,7 +387,7 @@ export class StripeIntegration {
     subscriptionId: string,
     cancelAtPeriodEnd: boolean = true,
   ): Promise<any> {
-    console.log(`❌ Canceling subscription: ${subscriptionId}`);
+    console.log(`[stripe] Canceling subscription: ${subscriptionId}`);
 
     // Find corresponding internal subscription
     const internalSubId = subscriptionId.replace('sub_stripe_', '');
@@ -405,7 +405,7 @@ export class StripeIntegration {
   async createSetupIntent(
     customerId: string,
   ): Promise<{ setupIntent: any; clientSecret: string }> {
-    console.log(`🔧 Creating setup intent for customer: ${customerId}`);
+    console.log(`[stripe] Creating setup intent for customer: ${customerId}`);
 
     const setupIntentId = `seti_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const clientSecret = `${setupIntentId}_secret_${Math.random().toString(36).substr(2, 8)}`;
@@ -418,7 +418,7 @@ export class StripeIntegration {
       usage: 'off_session',
     };
 
-    console.log(`✅ Setup intent created: ${setupIntentId}`);
+    console.log(`[stripe] Setup intent created: ${setupIntentId}`);
     return { setupIntent, clientSecret };
   }
 

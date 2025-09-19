@@ -1,15 +1,16 @@
 {
-  "cycle_id": "ai-automation-cycle-0001",
-  "last_updated": "2025-09-19T16:12:12.5542250Z",
-  "notes": [
-    "Genkit interfaces are still stubbed in src/ai/ai-instance.ts, leaving intake flows without OSS inference.",
-    "Server-side AI helpers now use the AI gateway abstraction; ClauseTooltip fetches explanations via /api/accessibility/explain-clause, eliminating NEXT_PUBLIC_OPENAI_API_KEY exposure.",
-    "No guardrail stack, evaluation harness, or observability is wired for AI routes; Spanish coverage is absent."
-  ],
-  "todos": [
-    "Deploy and document LiteLLM/vLLM gateway configuration (AI_GATEWAY_URL + API key) across environments.",
-    "Implement Llama Guard 3, Prompt Guard 2, and refusal taxonomy with compliance logging before re-enabling flows.",
-    "Stand up bilingual evaluation harness (lm-evaluation-harness + Ragas) with weekly reporting and Spanish fixtures.",
-    "Instrument Langfuse + Prometheus metrics and escalation hooks for AI incidents and quota failures."
-  ]
+    "cycle_id":  "ai-automation-cycle-0002",
+    "last_updated":  "2025-09-19T17:24:43.5859458Z",
+    "notes":  [
+                  "Updated OSS AI playbook with replacement roadmap, architecture narrative, and safety plan (TEAM/AI-Automation/AI-Automation.md).",
+                  "Captured cross-pod dependencies on Compliance (refusal taxonomy) and Platform/SRE (secret manager, GPU autoscaling, Prometheus rules).",
+                  "Confirmed AI gateway remains stubbed; guardrails, evaluations, and observability integrations are still outstanding."
+              ],
+    "todos":  [
+                  "Provision LiteLLM + vLLM with authenticated /health probe, quota configuration, and secret manager integration.",
+                  "Implement Prompt Guard 2 -> Llama Guard 3 -> heuristic refusal chain with compliance-reviewed messaging before re-enabling flows.",
+                  "Automate bilingual evaluation harness (lm-evaluation-harness + Ragas) and publish weekly Langfuse scorecards.",
+                  "Instrument Langfuse, Prometheus, Grafana, and Sentry for AI flows with incident escalation hooks.",
+                  "Author LiteLLM deployment checklist covering runbooks, alerting, and secret rotation."
+              ]
 }

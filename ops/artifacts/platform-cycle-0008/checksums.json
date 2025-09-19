@@ -1,0 +1,20 @@
+{
+  "src/lib/security/csp-alert-metrics.ts": {
+    "sha256": "0B851EB495E8CA44B80B40024423C256147F410614FBF545FA20C28E607C1E0B"
+  },
+  "src/app/api/security/csp-metrics/route.ts": {
+    "sha256": "606F8D9B45998FAA260D7E99483CBFA964329CB840B870093E6ED488D40D7066"
+  },
+  "src/app/api/security/csp-metrics/prom/route.ts": {
+    "sha256": "820391826D635FB116AC96AA3DB882E877DB3DA31642B7AA3A5EEA442C54643F"
+  },
+  "src/app/api/security/__tests__/csp-metrics-route.test.ts": {
+    "sha256": "BA22AC4FCE464E9A772E9D9C1989B6DBD28501916B7D15B8AD7CC40D71F5AAB3"
+  },
+  "ops/runbooks/csp-alert-prometheus.md": {
+    "sha256": "0129E59F6C739FCA525208C2D40AACE8C9E4C365566D5620A38993E15D4713FD"
+  },
+  "ops/artifacts/platform-cycle-0008/csp-metrics-verification.md": {
+    "sha256": "8200AEC870D291C3FCD8A87B3B2F7100AF163ADE547FBB5B49A035D9A6526906"
+  }
+}

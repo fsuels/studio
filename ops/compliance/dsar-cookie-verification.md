@@ -8,7 +8,7 @@
 | Item | Requirement | Evidence Path | Owner | Status |
 | --- | --- | --- | --- | --- |
 | Intake Channels | Confirm in-product privacy dashboard plus email privacy@123legaldoc.com route to Zendesk/Jira workflow. | Screenshots and ticket automation export | Platform + Privacy Officer | Pending |
-| Identity Verification | Document process (knowledge-based checks or email confirmation) per GDPR Article 12(6) and CCPA Section 1798.130(a)(2). | SOP attachment ops/compliance/dsar-sop.md (to create) | Compliance | Pending |
+| Identity Verification | Document process (knowledge-based checks or email confirmation) per GDPR Article 12(6) and CCPA Section 1798.130(a)(2). | SOP attachment ops/compliance/dsar-sop.md | Compliance | Pending |
 | Response Timeline | Track timers (45 days EU, 45 days California with 45-day extension) in DSAR tracker. | DSAR queue export (CSV) | Privacy Officer | Pending |
 | Data Delivery | Provide machine-readable format (JSON/CSV) and secure link (expires in 7 days). | Sample response package | Platform | Pending |
 | Denial Handling | Capture refusal reasons (manifestly unfounded, excessive) with counsel review. | DSAR decision log | Compliance | Pending |
@@ -37,7 +37,7 @@
 - Add summary to Memory.md context evidence when release gate cleared.
 
 ## 5. Follow-Up Actions
-1. Draft DSAR SOP (ops/compliance/dsar-sop.md) with request lifecycle, verification, fulfillment templates.
+1. Maintain DSAR SOP (ops/compliance/dsar-sop.md) with request lifecycle, verification, and fulfillment templates; update after dry runs.
 2. Coordinate with Platform Engineering on telemetry export for consent logging (align with GA4 ingestion work).
 3. Work with Growth to translate cookie banner copy using term glossary from Spanish localization plan.
 4. Schedule monthly audit reminder via incident tooling once roster integration is complete.

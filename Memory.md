@@ -179,3 +179,149 @@ cross_pod_followups:
 artifacts:
   - ops/artifacts/compliance-cycle-0003/deliverables.md
   - ops/artifacts/compliance-cycle-0003/checksums.json
+
+cycle_id: compliance-cycle-0006
+ts: 2025-09-19T17:13:18Z
+lead_pod: Compliance
+mode: apply
+selected_tasks:
+  - id: compliance-spanish-localization-plan-20250919
+    pod: Compliance
+    p: 0.6
+    impact: 5
+    urgency: 4
+    cost: 3
+    notes: Authored Spanish policy localization plan and glossary prerequisites; see ops/artifacts/compliance-cycle-0006/spanish-policy-localization-plan.md and ops/compliance/policy-glossary-es.json.
+  - id: compliance-dsar-cookie-checklist-20250919
+    pod: Compliance
+    p: 0.6
+    impact: 5
+    urgency: 5
+    cost: 2
+    notes: Published DSAR and cookie verification checklist to unblock privacy release gate evidence; see ops/compliance/dsar-cookie-verification.md.
+  - id: compliance-jurisdiction-update-wa-20250919
+    pod: Compliance
+    p: 0.6
+    impact: 4
+    urgency: 4
+    cost: 3
+    notes: Added Washington entry to jurisdiction knowledge base and documented follow-ups; see ops/compliance/jurisdiction-us-baseline.md.
+context_evidence:
+  - description: Spanish policy localization plan
+    source: ops/artifacts/compliance-cycle-0006/spanish-policy-localization-plan.md
+  - description: Policy glossary mapping EN->ES terminology
+    source: ops/compliance/policy-glossary-es.json
+  - description: DSAR and cookie verification checklist
+    source: ops/compliance/dsar-cookie-verification.md
+  - description: Jurisdiction update summary
+    source: ops/artifacts/compliance-cycle-0006/jurisdiction-update-summary.md
+cross_pod_followups:
+  - pod: Platform
+    action: Deliver cookie banner verification evidence, consent telemetry export, and footer policy links before 2025-09-26 release freeze.
+    owner: Platform
+  - pod: Growth
+    action: Align marketing funnels with bilingual policy messaging leveraging glossary outputs.
+    owner: Growth
+  - pod: Document Intelligence
+    action: Integrate Washington disclosures and filing checklist into workflows.
+    owner: Document Intelligence
+  - pod: Payments
+    action: Sync refund SOP and receipts with localization plan guidance.
+    owner: Payments
+artifacts:
+  - ops/artifacts/compliance-cycle-0006/spanish-policy-localization-plan.md
+  - ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md
+  - ops/artifacts/compliance-cycle-0006/jurisdiction-update-summary.md
+  - ops/artifacts/compliance-cycle-0006/checksums.json
+
+cycle_id: compliance-cycle-0007
+ts: 2025-09-19T17:20:00Z
+lead_pod: Compliance
+mode: apply
+selected_tasks:
+  - id: compliance-release-gate-status-20250922
+    pod: Compliance
+    p: 0.6
+    impact: 5
+    urgency: 5
+    cost: 2
+    notes: Logged release gate blockers and privacy evidence tracker for week of 2025-09-22; see ops/artifacts/compliance-cycle-0007/release-gate-status.md.
+  - id: compliance-dsar-sop-initial
+    pod: Compliance
+    p: 0.6
+    impact: 5
+    urgency: 4
+    cost: 3
+    notes: Authored DSAR SOP covering GDPR/CCPA timelines; see ops/compliance/dsar-sop.md.
+  - id: compliance-jurisdiction-expansion-co-ga
+    pod: Compliance
+    p: 0.6
+    impact: 4
+    urgency: 4
+    cost: 3
+    notes: Added Colorado and Georgia statutory guidance to jurisdiction baseline; see ops/compliance/jurisdiction-us-baseline.md.
+context_evidence:
+  - description: Release gate status tracker
+    source: ops/artifacts/compliance-cycle-0007/release-gate-status.md
+  - description: DSAR SOP
+    source: ops/compliance/dsar-sop.md
+  - description: Updated jurisdiction baseline (WA/CO/GA entries)
+    source: ops/compliance/jurisdiction-us-baseline.md
+cross_pod_followups:
+  - pod: Platform
+    action: Provide consent telemetry export and integrate DSAR checkpoints into on-call runbook.
+    owner: Platform
+  - pod: Document Intelligence
+    action: Implement Colorado and Georgia statutory warnings and filing guidance in templates.
+    owner: Document Intelligence
+  - pod: Growth
+    action: Update marketing copy with Colorado, Georgia, and Washington disclaimers for bilingual funnels.
+    owner: Growth
+  - pod: Payments
+    action: Align refund SOP and receipts with Colorado and Georgia requirements.
+    owner: Payments
+artifacts:
+  - ops/artifacts/compliance-cycle-0007/release-gate-status.md
+  - ops/artifacts/compliance-cycle-0007/checksums.json
+
+cycle_id: compliance-cycle-0008
+ts: 2025-09-19T17:31:27.9631668Z
+lead_pod: Compliance
+mode: apply
+selected_tasks:
+  - id: compliance-policy-glossary-es-20250919
+    pod: Compliance
+    p: 0.6
+    impact: 4
+    urgency: 4
+    cost: 2
+    notes: Created Spanish terminology glossary to guide policy and UI localization; see ops/compliance/policy-glossary-es.json.
+  - id: compliance-privacy-evidence-alignment-20250919
+    pod: Compliance
+    p: 0.6
+    impact: 5
+    urgency: 4
+    cost: 2
+    notes: Updated DSAR checklist and privacy evidence plan with explicit artifact links; see ops/compliance/dsar-cookie-verification.md and ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md.
+context_evidence:
+  - description: Policy glossary ES mapping
+    source: ops/compliance/policy-glossary-es.json
+  - description: Refined privacy evidence plan
+    source: ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md
+  - description: DSAR checklist update
+    source: ops/compliance/dsar-cookie-verification.md
+cross_pod_followups:
+  - pod: Platform
+    action: Consume glossary and privacy guidance to prepare bilingual UI copy and telemetry evidence.
+    owner: Platform
+  - pod: Growth
+    action: Use glossary for marketing translations and coordinate bilingual copy reviews.
+    owner: Growth
+artifacts:
+  - ops/compliance/policy-glossary-es.json
+  - ops/artifacts/compliance-cycle-0006/privacy-evidence-plan.md
+  - ops/artifacts/compliance-cycle-0007/release-gate-status.md
+  - ops/artifacts/compliance-cycle-0006/checksums.json
+  - ops/artifacts/compliance-cycle-0007/checksums.json
+  - ops/artifacts/compliance-cycle-0008/glossary-summary.md
+  - ops/artifacts/compliance-cycle-0008/checksums.json\r\n

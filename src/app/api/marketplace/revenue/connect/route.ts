@@ -1,5 +1,16 @@
 // src/app/api/marketplace/revenue/connect/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { STRIPE_API_VERSION } from '@/lib/stripe-config';
+
+async function getStripe() {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+
+  const { default: Stripe } = await import('stripe');
+  return new Stripe(secretKey, { apiVersion: STRIPE_API_VERSION });
+}
 
 /**
  * POST /api/marketplace/revenue/connect
@@ -112,13 +123,9 @@ export async function GET(_request: NextRequest) {
     }
 
     // Check account status with Stripe
-    const stripe = (await import('stripe')).default;
-    const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2025-05-28.basil',
-    });
-
     try {
-      const account = await stripeInstance.accounts.retrieve(stripeAccountId);
+      const stripe = await getStripe();
+      const account = await stripe.accounts.retrieve(stripeAccountId);
 
       const accountStatus = {
         connected: true,

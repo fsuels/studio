@@ -1,0 +1,6 @@
+{
+  "ops/compliance/policy-glossary-es.json": "sha256:14DEEA8B4B8921B73BEA9DB483E953876112F1B75C58BD5A72DDE12791AA94A0",
+  "ops/compliance/washington-workflow-insert.md": "sha256:C6C1DB226399CFC03CE489E6D515CF3B1B0308474F8502427F3F0B6B8D898754",
+  "ops/compliance/jurisdiction-us-baseline.md": "sha256:3D054686CE73E76CCD4BE1505A4C6B829BA6133D135281F0585E3F6B6A0E1759",
+  "ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md": "sha256:390A28EB6256036CB4497C2B6FA1DF06D72EB1DAA4D573C8123390B817FA1CEB"
+}

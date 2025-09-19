@@ -1,0 +1,14 @@
+{
+  "ops/monitoring/csp-alert-dashboard.json": {
+    "sha256": "25F9632CA27DC5BCE6C49D1737856BA049C64A1E783948C5AD752FA5649542CA"
+  },
+  "ops/monitoring/csp-alert-prometheus-rules.yaml": {
+    "sha256": "5C45D1B6CA1AE5F6FEBCF751F451A2CD1E40480FC018F8FCC346649E862E3E16"
+  },
+  "ops/runbooks/csp-alert-prometheus.md": {
+    "sha256": "663DB8339D9636EE390E6CF56C2E58225CFEE408ACD362D1DE3D6B7615DFFCCB"
+  },
+  "ops/artifacts/platform-cycle-0009/monitoring-assets.md": {
+    "sha256": "62000A1697CBD03F0873FB67CC88B097C7F2143DE7114B9B4DC3C9E58662AB57"
+  }
+}

@@ -11,13 +11,6 @@ async function DB() {
   return getDb();
 }
 
-async function getStripeClient() {
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) return null;
-  const { default: Stripe } = await import('stripe');
-  return new Stripe(key, { apiVersion: '2025-05-28.basil' });
-}
-
 export interface RefundRequest {
   id: string;
   orderId: string;
@@ -369,10 +362,7 @@ export class RefundSystem {
           };
         } else {
           // Process via Stripe
-          const stripe = await getStripeClient();
-          if (!stripe) {
-            throw new Error('Payment system is not configured');
-          }
+          const stripe = getStripeServerClient();
           const stripeRefund = await stripe.refunds.create({
             payment_intent: refund.metadata.originalPaymentIntent!,
             amount: Math.round(refund.amount * 100), // Convert to cents

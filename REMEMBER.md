@@ -1,5 +1,11 @@
-﻿## Decisions
+# Remember.md
 
+## Decisions
+
+- 2025-09-19T17:16:12Z - Published Grafana dashboard & Prometheus alert pack for CSP telemetry (ops/monitoring/*, ops/runbooks/csp-alert-prometheus.md)
+- 2025-09-19T16:45:59Z - Published Spanish localization plan, DSAR checklist, and Washington jurisdiction update (ops/artifacts/compliance-cycle-0006/*, ops/compliance/dsar-cookie-verification.md)
+- 2025-09-19T16:38:02Z - Hardened security header coverage and instrumented CSP alert metrics; tests captured (ops/artifacts/platform-cycle-0007/security-header-verification.md)
+- 2025-09-19T16:31:35Z - Logged policy freshness audit, release gate tracker, and jurisdiction baseline (ops/artifacts/compliance-cycle-0005/*, ops/compliance/jurisdiction-us-baseline.md)
 - 2025-09-19T16:42:58.9856891Z - Expanded placeholder registry sample set (service-agreement, quitclaim-deed, prenuptial-agreement) with EN/ES parity and jest verification (ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md)\r\n- 2025-09-19T15:50:12Z - Completed Spanish metadata localization for 19 real estate templates; catalog audit confirms zero translation TODOs (ops/artifacts/document-intel-cycle-0003/catalog-audit.json)
 - 2025-09-19T15:47:39.1366612Z - Instrumented SignWell CTA analytics events and structured reporting (ops/artifacts/growth-cycle-0002/signwell-analytics-report.md)
 - 2025-09-19T15:47:00.9881272Z - Added CSP alert webhook dispatcher (ops/artifacts/platform-cycle-0004/csp-alerting.md)
@@ -32,9 +38,9 @@
 
 ## Pod Status Snapshots
 ### Platform Engineering
-- last_cycle: platform-cycle-0004
-- risks: CSP alerts depend on external webhook availability; alert delivery lacks observability; incident playbook unresolved
-- focus_next: instrument alert metrics, add webhook tests/staging config, draft incident communication playbook
+- last_cycle: platform-cycle-0009
+- risks: Grafana/Prometheus assets not yet deployed; CSP enforcement still depends on SRE rollout
+- focus_next: partner with SRE on scrape deployment and align Compliance on alert severities before enforcement
 
 ### Document Intelligence
 - last_cycle: document-intel-cycle-0003
@@ -87,25 +93,28 @@
 - [ ] Refund Policy (pending)
 
 ## Pending Cross-Pod Tasks
-- (Platform -> Compliance) Validate security header rollout plan against legal requirements
-- (Platform -> Compliance) Align CSP violation escalation and response policy using new Firestore telemetry
-- (Platform -> QA) Add middleware integration coverage for locale redirects and admin authentication
-- (Platform -> QA) Create automated tests for CSP alerting once webhook staging URL is provisioned
-- (Platform -> SRE) Integrate CSP alert webhook with monitoring/metrics pipeline
-- (Payments -> Compliance) Align refund wording and dispute timelines before launch
-- (Growth -> Document Intelligence) Sync template highlights for marketing copy accuracy
-- (Document Intelligence -> Platform) Coordinate overlay ingestion once new field maps are ready
-- (Compliance -> Platform) Link policy pages in product UI and automate release gate evidence uploads
-- (Compliance -> Document Intelligence) Provide statutory citations and localization guidance for Spanish policy translations
-- (Compliance -> Document Intelligence) Review updated prenuptial/service/quitclaim flows for notarization and witness guidance
-- (Compliance -> Growth) Update marketing funnels with bilingual policy messaging and disclaimers
-- (Compliance -> Payments) Align checkout receipts and support scripts with refund policy terms
-- (AI -> Platform) Provision LiteLLM/vLLM gateway and manage AI_GATEWAY_URL secrets for prod/stage environments
-- (AI -> Compliance) Review proposed guardrail stack and refusal taxonomy before AI flows relaunch
-- (AI -> Growth) Coordinate bilingual prompts/disclaimers once AI coverage ships
-- (CEO -> Platform) Deliver KPI instrumentation blueprint covering CWV, funnel, and payments metrics before next executive review
-- (Compliance -> Platform) Integrate incident contact roster into on-call tooling and automate quarterly archive reminders
-
+- (Growth -> Platform) Surface shared canonical/hreflang helper in sitemap generator so marketing and sitemap routes stay aligned.
+- (Growth -> Platform) Automate blog metadata regression checks once GA4 ingestion is live.
+- (Platform -> Compliance) Validate security header rollout plan against legal requirements.
+- (Platform -> Compliance) Deliver cookie banner verification artifacts and DSAR workflow documentation for release gate by 2025-09-26.
+- (Platform -> Compliance) Align CSP violation escalation and response policy using new Firestore telemetry.
+- (Platform -> QA) Add middleware integration coverage for locale redirects and admin authentication.
+- (Platform -> QA) Create automated tests for CSP alerting once webhook staging URL is provisioned.
+- (Platform -> SRE) Integrate CSP alert webhook with monitoring/metrics pipeline.
+- (Payments -> Compliance) Align refund wording and dispute timelines before launch.
+- (Growth -> Document Intelligence) Sync template highlights for marketing copy accuracy.
+- (Document Intelligence -> Platform) Coordinate overlay ingestion once new field maps are ready.
+- (Compliance -> Platform) Link policy pages in product UI, deliver cookie banner verification plus DSAR workflow documentation, and automate release gate evidence uploads.
+- (Compliance -> Document Intelligence) Provide statutory citations and localization guidance for Spanish policy translations, starting with CA, TX, NY, FL, IL, and WA knowledge base entries.
+- (Compliance -> Document Intelligence) Deliver Washington workflow insert and filing checklist from jurisdiction baseline.
+- (Compliance -> Document Intelligence) Incorporate Colorado and Georgia statutory warnings, witness instructions, and filing checklists into templates.
+- (Compliance -> Growth) Update marketing funnels with bilingual policy messaging and disclaimers.
+- (Compliance -> Payments) Align checkout receipts and support scripts with refund policy terms.
+- (AI -> Platform) Provision LiteLLM/vLLM gateway and manage AI_GATEWAY_URL secrets for prod/stage.
+- (AI -> Compliance) Review proposed guardrail stack and refusal taxonomy before AI flows relaunch.
+- (AI -> Growth) Coordinate bilingual prompts/disclaimers once AI coverage ships.
+- (CEO -> Platform) Deliver KPI instrumentation blueprint covering CWV, funnel, and payments metrics before next executive review.
+- (Compliance -> Platform) Integrate incident contact roster into on-call tooling and automate quarterly archive reminders.
 ## Resume Cursor
 lead_pod: Document-Intelligence
 primary_focus: overlay parity, placeholder expansion, compliance sign-off

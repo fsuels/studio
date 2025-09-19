@@ -1,10 +1,10 @@
 // src/app/[locale]/pricing/page.tsx
 import React from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
+import { PricingCTA } from './PricingCTA';
 
 interface PricingPageParams {
   locale: 'en' | 'es';
@@ -166,7 +166,7 @@ export default async function PricingPage({
   const pricingJsonLd = buildPricingStructuredData(locale);
   const t = (en: string, es?: string) => (locale === 'es' && es ? es : en);
 
-  const Plan = ({ title, price, period, features, cta }: { title: string; price: string; period?: string; features: string[]; cta: { href: string; label: string; variant?: 'primary' | 'outline' } }) => (
+  const Plan = ({ title, price, period, features, cta, planId }: { title: string; price: string; period?: string; features: string[]; cta: { href: string; label: string; variant?: 'primary' | 'outline'; analyticsId?: string }; planId: string }) => (
     <div className="shadow-lg rounded-xl bg-card border border-border transition-all hover:shadow-xl p-8">
       <div className="text-center space-y-2 mb-6">
         <div className="text-2xl font-semibold text-card-foreground">{title}</div>
@@ -180,9 +180,18 @@ export default async function PricingPage({
           <li key={i} className="flex items-center gap-2">✅ {f}</li>
         ))}
       </ul>
-      <a href={cta.href} className={cta.variant === 'outline' ? 'w-full inline-flex items-center justify-center rounded-md border border-primary text-primary px-4 py-2 hover:bg-primary/10' : 'w-full inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90'}>
+      <PricingCTA
+        locale={locale}
+        href={cta.href}
+        className={cta.variant === 'outline' ? 'w-full inline-flex items-center justify-center rounded-md border border-primary text-primary px-4 py-2 hover:bg-primary/10' : 'w-full inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90'}
+        analytics={{
+          ctaId: cta.analyticsId ?? 'select_plan',
+          planId,
+          surface: 'plan_card',
+        }}
+      >
         {cta.label}
-      </a>
+      </PricingCTA>
     </div>
   );
 
@@ -200,6 +209,7 @@ export default async function PricingPage({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
         <Plan
+          planId="single_document"
           title={t('Single Document', 'Documento Único')}
           price="$35"
           period={t('document', 'documento')}
@@ -209,12 +219,13 @@ export default async function PricingPage({
             t('Email support', 'Soporte por correo'),
             t('Secure sharing (soon)', 'Compartir seguro (pronto)')
           ]}
-          cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar') }}
+          cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
         />
 
         <div className="relative">
           <div className="absolute -top-3 inset-x-0 mx-auto w-max bg-primary text-primary-foreground text-xs px-2 py-1 rounded">{t('Most Popular', 'Más Popular')}</div>
           <Plan
+            planId="bundle_5"
             title={t('5-Document Bundle', 'Paquete de 5 Documentos')}
             price="$150"
             features={[
@@ -223,11 +234,12 @@ export default async function PricingPage({
               t('Credits never expire', 'Los créditos no expiran'),
               t('Best value per document', 'Mejor valor por documento')
             ]}
-            cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar') }}
+            cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
           />
         </div>
 
         <Plan
+          planId="business_pro"
           title={t('Business Pro', 'Negocios Pro')}
           price="$99"
           period={t('month', 'mes')}
@@ -237,7 +249,7 @@ export default async function PricingPage({
             t('Team features (coming soon)', 'Funciones de equipo (pronto)'),
             t('Cancel anytime', 'Cancela cuando quieras')
           ]}
-          cta={{ href: `/${locale}/support`, label: t('Contact Sales', 'Contactar Ventas'), variant: 'outline' }}
+          cta={{ href: `/${locale}/support`, label: t('Contact Sales', 'Contactar Ventas'), variant: 'outline', analyticsId: 'contact_sales' }}
         />
       </div>
 
@@ -279,9 +291,19 @@ export default async function PricingPage({
       </section>
 
         <div className="mt-12">
-          <Link href={`/${locale}/generate`} className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-3 hover:bg-primary/90">
+          <PricingCTA
+            as="link"
+            locale={locale}
+            href={`/${locale}/generate`}
+            className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-3 hover:bg-primary/90"
+            analytics={{
+              ctaId: 'take_quiz',
+              planId: 'wizard_flow',
+              surface: 'quiz_banner',
+            }}
+          >
             {t('Take the Quiz →', 'Haz el Quiz →')}
-          </Link>
+          </PricingCTA>
         </div>
       </main>
     </>

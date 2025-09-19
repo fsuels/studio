@@ -1,0 +1,24 @@
+groups:
+  - name: csp-alerts.rules
+    interval: 30s
+    rules:
+      - alert: CSPAlertDispatchFailures
+        expr: sum(increase(csp_alerts_total{result="failed"}[5m])) > 0
+        for: 1m
+        labels:
+          severity: high
+          team: platform
+        annotations:
+          summary: CSP alert dispatch failures detected
+          description: One or more CSP alerts failed to send in the last 5 minutes. Investigate webhook endpoint and CSP violations.
+          runbook: ops/runbooks/csp-alert-prometheus.md
+      - alert: CSPAlertVolumeSpike
+        expr: sum(increase(csp_alerts_total[5m])) > 20
+        for: 5m
+        labels:
+          severity: medium
+          team: platform
+        annotations:
+          summary: CSP alert volume spike detected
+          description: More than 20 CSP alerts fired in the past 5 minutes. Check for widespread regressions or malicious activity.
+          runbook: ops/runbooks/csp-alert-prometheus.md
