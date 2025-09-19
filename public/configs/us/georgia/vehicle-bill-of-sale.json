@@ -133,8 +133,8 @@
       },
       "sale_date": {
         "page": 0,
-        "x": 252.0,
-        "y": 440.0,
+        "x": 110.0,
+        "y": 436.6,
         "fontSize": 11
       },
       "price": {
@@ -146,25 +146,25 @@
       "seller_name": {
         "page": 0,
         "x": 108.0,
-        "y": 372.0,
+        "y": 368.0,
         "fontSize": 11
       },
       "seller_address": {
         "page": 0,
         "x": 108.0,
-        "y": 353.0,
+        "y": 348.5,
         "fontSize": 11
       },
       "buyer_name": {
         "page": 0,
         "x": 40.0,
-        "y": 287.0,
+        "y": 283.0,
         "fontSize": 11
       },
       "buyer_address": {
         "page": 0,
         "x": 108.0,
-        "y": 228.0,
+        "y": 224.0,
         "fontSize": 11
       }
     }

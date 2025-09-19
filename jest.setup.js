@@ -216,6 +216,14 @@ afterAll(() => {
 });
 
 // Mock NextResponse
+const createMockResponse = (status = 200, headers = {}) => {
+  const responseHeaders = new Headers(headers);
+  return {
+    status,
+    headers: responseHeaders,
+  };
+};
+
 jest.mock('next/server', () => ({
   NextRequest: class NextRequest {
     constructor(url, init) {
@@ -223,6 +231,7 @@ jest.mock('next/server', () => ({
       this._method = init?.method || 'GET';
       this._headers = new Headers(init?.headers || {});
       this._body = init?.body;
+      this.nextUrl = new URL(this._url);
     }
 
     get url() {
@@ -257,6 +266,18 @@ jest.mock('next/server', () => ({
     error: () => {
       const response = new Response(null, { status: 500 });
       response.json = async () => ({ error: 'Internal Server Error' });
+      return response;
+    },
+    next: () => createMockResponse(200),
+    redirect: (url, init = {}) => {
+      const status = typeof init === 'number' ? init : init.status || 307;
+      const response = createMockResponse(status);
+      response.headers.set('location', url.toString());
+      return response;
+    },
+    rewrite: (url) => {
+      const response = createMockResponse(200);
+      response.headers.set('x-middleware-rewrite', url.toString());
       return response;
     },
   },

@@ -1,3 +1,149 @@
 {
-  "complaints": []
+  "complaints": [
+    {
+      "id": "complaint-20250919-002",
+      "reported_at": "2025-09-19T18:15:43.988630Z",
+      "reported_by": "Complaints",
+      "summary": "Home route 500s because DocumentDiscoveryModal fails to compile",
+      "details": "Multiple requests to /en and / return 500 responses after the new discovery modal refactor. Next.js reports `Unexpected token `Dialog`` for src/components/global/DocumentDiscoveryModal.tsx around the Dialog wrapper, so the server cannot compile the component. See home-500-log.txt for the full stack, including repeated 500s during page load.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Platform-Engineering",
+      "tags": [
+        "nextjs",
+        "document-discovery",
+        "runtime-error"
+      ],
+      "next_action": "Restore a compiling version of DocumentDiscoveryModal (e.g., adjust the Dialog usage or roll back) so /en loads without 500 errors.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T18:15:43.988630Z",
+          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/home-500-log.txt."
+        },
+        {
+          "ts": "2025-09-19T18:16:43.643Z",
+          "note": "Escalated to CEO from Platform-Engineering via scripts/manage-complaints.js"
+        }
+      ],
+      "source_pod": "CEO",
+      "escalated_at": "2025-09-19T18:16:43.643Z"
+    },
+    {
+      "id": "complaint-20250919-003",
+      "reported_at": "2025-09-19T18:44:07.857797Z",
+      "reported_by": "Complaints",
+      "summary": "Home page crashes because Stripe publishable key is unset",
+      "details": "Loading the home route triggers PaymentModal, which throws \"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe\" when importing loadStripe (see PaymentModal.tsx lines 20-24). The runtime overlay blocks rendering and payments, and navigation becomes unstable while the module fails to evaluate.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Payments-Monetization",
+      "tags": [
+        "stripe",
+        "env-config",
+        "payment-modal"
+      ],
+      "next_action": "Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (and guard PaymentModal) so the home page and checkout render without runtime errors.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T18:44:07.857797Z",
+          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/stripe-publishable-key-error.txt."
+        },
+        {
+          "ts": "2025-09-19T18:44:22.519Z",
+          "note": "Escalated to CEO from Payments-Monetization via scripts/manage-complaints.js"
+        }
+      ],
+      "source_pod": "CEO",
+      "escalated_at": "2025-09-19T18:44:22.519Z"
+    },
+    {
+      "id": "complaint-20250919-002",
+      "reported_at": "2025-09-19T18:15:43.988630Z",
+      "reported_by": "Complaints",
+      "summary": "Home route 500s because DocumentDiscoveryModal fails to compile",
+      "details": "Multiple requests to /en and / return 500 responses after the new discovery modal refactor. Next.js reports `Unexpected token `Dialog`` for src/components/global/DocumentDiscoveryModal.tsx around the Dialog wrapper, so the server cannot compile the component. See home-500-log.txt for the full stack, including repeated 500s during page load.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Platform-Engineering",
+      "tags": [
+        "nextjs",
+        "document-discovery",
+        "runtime-error"
+      ],
+      "next_action": "Restore a compiling version of DocumentDiscoveryModal (e.g., adjust the Dialog usage or roll back) so /en loads without 500 errors.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T18:15:43.988630Z",
+          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/home-500-log.txt."
+        },
+        {
+          "ts": "2025-09-19T18:16:43.643Z",
+          "note": "Escalated to CEO from Platform-Engineering via scripts/manage-complaints.js"
+        }
+      ],
+      "source_pod": "CEO",
+      "escalated_at": "2025-09-19T18:44:22.519Z"
+    },
+    {
+      "id": "complaint-20250919-003",
+      "reported_at": "2025-09-19T18:44:07.857797Z",
+      "reported_by": "Complaints",
+      "summary": "Home page crashes because Stripe publishable key is unset",
+      "details": "Loading the home route triggers PaymentModal, which throws \"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe\" when importing loadStripe (see PaymentModal.tsx lines 20-24). The runtime overlay blocks rendering and payments, and navigation becomes unstable while the module fails to evaluate.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Payments-Monetization",
+      "tags": [
+        "stripe",
+        "env-config",
+        "payment-modal"
+      ],
+      "next_action": "Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (and guard PaymentModal) so the home page and checkout render without runtime errors.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T18:44:07.857797Z",
+          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/stripe-publishable-key-error.txt."
+        },
+        {
+          "ts": "2025-09-19T18:44:22.519Z",
+          "note": "Escalated to CEO from Payments-Monetization via scripts/manage-complaints.js"
+        }
+      ],
+      "source_pod": "Payments-Monetization",
+      "escalated_at": "2025-09-19T18:48:05.184Z"
+    },
+    {
+      "id": "complaint-20250919-002",
+      "reported_at": "2025-09-19T18:15:43.988630Z",
+      "reported_by": "Complaints",
+      "summary": "Home route 500s because DocumentDiscoveryModal fails to compile",
+      "details": "Multiple requests to /en and / return 500 responses after the new discovery modal refactor. Next.js reports `Unexpected token `Dialog`` for src/components/global/DocumentDiscoveryModal.tsx around the Dialog wrapper, so the server cannot compile the component. See home-500-log.txt for the full stack, including repeated 500s during page load.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Platform-Engineering",
+      "tags": [
+        "nextjs",
+        "document-discovery",
+        "runtime-error"
+      ],
+      "next_action": "Restore a compiling version of DocumentDiscoveryModal (e.g., adjust the Dialog usage or roll back) so /en loads without 500 errors.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T18:15:43.988630Z",
+          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/home-500-log.txt."
+        },
+        {
+          "ts": "2025-09-19T18:16:43.643Z",
+          "note": "Escalated to CEO from Platform-Engineering via scripts/manage-complaints.js"
+        }
+      ],
+      "source_pod": "Platform-Engineering",
+      "escalated_at": "2025-09-19T18:48:05.184Z"
+    }
+  ]
 }

@@ -31,17 +31,6 @@ export interface PricingPlan {
   allowPurchaseOrder?: boolean;
 }
 
-export interface TaxConfiguration {
-  automatic_tax: boolean;
-  customer_details: {
-    ip_address: string;
-    country: string;
-    state?: string;
-  };
-  tax_exempt?: boolean;
-  tax_exempt_number?: string;
-}
-
 export interface PurchaseOrderRequest {
   id: string;
   companyName: string;
@@ -301,62 +290,7 @@ export class SmartPricingEngine {
     }));
   }
 
-  // Create Stripe checkout session with automatic tax
-  async createCheckoutSession(
-    planId: string,
-    currency: string,
-    request: Request,
-    options: {
-      customerEmail?: string;
-      successUrl: string;
-      cancelUrl: string;
-      allowPurchaseOrder?: boolean;
-    }
-  ): Promise<{
-    sessionId?: string;
-    purchaseOrderId?: string;
-    requiresPurchaseOrder?: boolean;
-  }> {
-    const plan = this.pricingPlans.find((p) => p.id === planId);
-    if (!plan) {
-      throw new Error(`Plan not found: ${planId}`);
-    }
 
-    const ip = this.getClientIP(request);
-    const location = await getLocationFromIP(ip);
-
-    // Check if this is a B2B customer requiring purchase order
-    if (options.allowPurchaseOrder && plan.allowPurchaseOrder) {
-      // Create purchase order request instead of immediate payment
-      return this.createPurchaseOrderRequest(plan, currency, location, options);
-    }
-
-    // Create Stripe checkout session with automatic tax
-    const taxConfig: TaxConfiguration = {
-      automatic_tax: true,
-      customer_details: {
-        ip_address: ip,
-        country: location.countryCode,
-        state: location.stateCode,
-      },
-    };
-
-    const stripePrice = plan.stripePriceIds[currency as keyof typeof plan.stripePriceIds];
-    
-    // In production, this would be actual Stripe API call
-    const sessionId = `cs_test_${Date.now()}_${planId}_${currency}`;
-
-    console.log('✅ Created checkout session', {
-      sessionId,
-      plan: plan.name,
-      currency,
-      price: plan.localizedPrices[currency as keyof typeof plan.localizedPrices],
-      automaticTax: taxConfig.automatic_tax,
-      customerCountry: location.countryCode,
-    });
-
-    return { sessionId };
-  }
 
   // Create purchase order request for B2B customers
   private async createPurchaseOrderRequest(

@@ -7,6 +7,8 @@ export type PolicySlug =
   | 'disclaimer'
   | 'refund-policy';
 
+export type PolicyLocale = 'en' | 'es';
+
 const POLICY_FILE_MAP: Record<PolicySlug, string> = {
   'privacy-notice': 'privacy-notice.md',
   'terms-of-service': 'terms-of-service.md',
@@ -46,16 +48,41 @@ function extractMetadata(raw: string): Omit<PolicyDocument, 'slug'> {
   };
 }
 
-export async function loadPolicy(slug: PolicySlug): Promise<PolicyDocument> {
+export async function loadPolicy(
+  slug: PolicySlug,
+  locale: PolicyLocale = 'en',
+): Promise<PolicyDocument> {
   const fileName = POLICY_FILE_MAP[slug];
   if (!fileName) {
     throw new Error(`Unsupported policy slug: ${slug}`);
   }
 
-  const filePath = path.join(process.cwd(), 'docs', 'legal', fileName);
-  const file = await fs.readFile(filePath, 'utf8');
+  const baseDir = path.join(process.cwd(), 'docs', 'legal');
+  const candidatePaths =
+    locale === 'en'
+      ? [path.join(baseDir, fileName)]
+      : [path.join(baseDir, locale, fileName), path.join(baseDir, fileName)];
 
-  const { title, lastUpdated, markdown } = extractMetadata(file);
+  let fileContents: string | null = null;
+  for (const candidate of candidatePaths) {
+    try {
+      fileContents = await fs.readFile(candidate, 'utf8');
+      break;
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      if (err.code !== 'ENOENT') {
+        throw err;
+      }
+    }
+  }
+
+  if (!fileContents) {
+    throw new Error(
+      `Policy file not found for slug "${slug}" (locale "${locale}")`,
+    );
+  }
+
+  const { title, lastUpdated, markdown } = extractMetadata(fileContents);
 
   return {
     slug,

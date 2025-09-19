@@ -17,7 +17,7 @@ export default async function LocaleDisclaimerPage({
   params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
   const { locale = 'en' } = await params;
-  const policy = await loadPolicy('disclaimer');
+  const policy = await loadPolicy('disclaimer', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';
   const lastUpdatedDate = policy.lastUpdated

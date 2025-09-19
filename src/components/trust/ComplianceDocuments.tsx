@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { track } from '@/lib/analytics';
 import {
   Card,
   CardContent,
@@ -19,6 +20,7 @@ import {
   Lock,
   Calendar,
   Eye,
+  FileCode,
 } from 'lucide-react';
 
 interface ComplianceDocument {
@@ -28,6 +30,7 @@ interface ComplianceDocument {
   lastUpdated: string;
   language: 'en' | 'es' | 'both';
   size: string;
+  sourcePath?: string;
   downloadUrl?: string;
   viewUrl?: string;
 }
@@ -44,7 +47,8 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
       type: 'policy',
       lastUpdated: '2025-09-19',
       language: 'both',
-      size: 'Repo: docs/legal/privacy-notice.md',
+      size: '45 KB',
+      sourcePath: 'docs/legal/privacy-notice.md',
       viewUrl: `/${locale}/privacy-policy`,
     },
     {
@@ -53,7 +57,8 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
       type: 'agreement',
       lastUpdated: '2025-09-19',
       language: 'both',
-      size: 'Repo: docs/legal/terms-of-service.md',
+      size: '38 KB',
+      sourcePath: 'docs/legal/terms-of-service.md',
       viewUrl: `/${locale}/terms-of-service`,
     },
     {
@@ -62,7 +67,8 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
       type: 'policy',
       lastUpdated: '2025-09-19',
       language: 'both',
-      size: 'Repo: docs/legal/disclaimer.md',
+      size: '32 KB',
+      sourcePath: 'docs/legal/disclaimer.md',
       viewUrl: `/${locale}/disclaimer`,
     },
     {
@@ -71,7 +77,8 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
       type: 'policy',
       lastUpdated: '2025-09-19',
       language: 'both',
-      size: 'Repo: docs/legal/refund-policy.md',
+      size: '29 KB',
+      sourcePath: 'docs/legal/refund-policy.md',
       viewUrl: `/${locale}/refund-policy`,
     },
     {
@@ -155,6 +162,14 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
     }
   };
 
+  const emitComplianceClick = (action: string, meta: Record<string, unknown> = {}) => {
+    track('compliance_cta_click', {
+      locale,
+      action,
+      ...meta,
+    });
+  };
+
   const filteredDocuments = documents.filter(
     (doc) => doc.language === 'both' || doc.language === locale,
   );
@@ -186,13 +201,19 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
                   <p className="text-sm text-muted-foreground">
                     {document.description}
                   </p>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       Updated:{' '}
                       {new Date(document.lastUpdated).toLocaleDateString()}
                     </div>
                     <span>{document.size}</span>
+                    {document.sourcePath && (
+                      <div className="flex items-center gap-1 text-[11px]">
+                        <FileCode className="h-3 w-3" aria-hidden />
+                        <span>{document.sourcePath}</span>
+                      </div>
+                    )}
                     {getLanguageBadge(document.language)}
                   </div>
                 </div>
@@ -202,7 +223,10 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
             <div className="flex items-center gap-2">
               {document.viewUrl && (
                 <Button variant="outline" size="sm" asChild>
-                  <a href={document.viewUrl}>
+                  <a
+                    href={document.viewUrl}
+                    onClick={() => emitComplianceClick('view_policy', { title: document.title, destination: document.viewUrl })}
+                  >
                     <Eye className="h-3 w-3" />
                     View
                   </a>
@@ -210,7 +234,11 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
               )}
               {document.downloadUrl && (
                 <Button variant="outline" size="sm" asChild>
-                  <a href={document.downloadUrl} download>
+                  <a
+                    href={document.downloadUrl}
+                    download
+                    onClick={() => emitComplianceClick('download_policy', { title: document.title, destination: document.downloadUrl })}
+                  >
                     <Download className="h-3 w-3" />
                     Download
                   </a>
@@ -224,11 +252,21 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
         <div className="border-t pt-4 space-y-3">
           <h4 className="font-medium">Quick Actions</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button
+              variant="outline"
+              size="sm"
+              className="justify-start"
+              onClick={() => emitComplianceClick('download_all_policies')}
+            >
               <Download className="h-4 w-4" />
               Download All Policies
             </Button>
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button
+              variant="outline"
+              size="sm"
+              className="justify-start"
+              onClick={() => emitComplianceClick('request_data_export')}
+            >
               <ExternalLink className="h-4 w-4" />
               Request Data Export
             </Button>
@@ -242,7 +280,11 @@ export function ComplianceDocuments({ locale }: ComplianceDocumentsProps) {
             Under GDPR and CCPA, you have the right to access, correct, delete,
             or port your data.
           </p>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => emitComplianceClick('exercise_rights')}
+          >
             <ExternalLink className="h-3 w-3" />
             Exercise Your Rights
           </Button>

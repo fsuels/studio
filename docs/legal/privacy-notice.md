@@ -79,6 +79,6 @@ Austin, TX 78701
 
 ---
 
-**Spanish Summary (Resumen en Espanol)**  
-Recopilamos informacion personal para entregar y mejorar nuestros servicios. Puede solicitar acceso, correccion, eliminacion u optar por no compartir datos con fines publicitarios escribiendo a privacy@123legaldoc.com.
+**Spanish Summary (Resumen en Espa?ol)**  
+Recopilamos informaci?n personal para ofrecer y mejorar nuestros servicios. Puede solicitar acceso, correcci?n o eliminaci?n de sus datos, u optar por no compartirlos con fines publicitarios, escribiendo a privacy@123legaldoc.com.
 

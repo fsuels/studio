@@ -1,91 +1,93 @@
-﻿{
-    "cycle_id":  "document-intel-cycle-0007",
-    "generated_at":  "2025-09-19T17:50:08.781Z",
-    "pdf":  "public/forms/vehicle-bill-of-sale/georgia/T-7.pdf",
-    "summary":  {
-                    "acro_form_fields":  0,
-                    "sections_mapped":  [
-                                            "vehicle_info",
-                                            "seller_primary",
-                                            "seller_secondary",
-                                            "lienholder"
-                                        ],
-                    "pending_fields":  [
-                                           "sale_date_segments",
-                                           "buyer_primary_address",
-                                           "notary_blocks"
-                                       ]
-                },
-    "segments":  {
-                     "vin":  {
-                                 "x0":  35.82,
-                                 "x1":  593.7,
-                                 "y":  482.34
-                             },
-                     "year":  {
-                                  "x0":  49.5,
-                                  "x1":  192.18,
-                                  "y":  459.42
-                              },
-                     "make":  {
-                                  "x0":  229.14,
-                                  "x1":  273.42,
-                                  "y":  459.42
-                              },
-                     "model":  {
-                                   "x0":  325.44,
-                                   "x1":  394.92,
-                                   "y":  459.42
-                               },
-                     "odometer":  {
-                                      "x0":  98.04,
-                                      "x1":  142.38,
-                                      "y":  436.56
-                                  },
-                     "purchase_price":  {
-                                            "x0":  512.16,
-                                            "x1":  587.46,
-                                            "y":  436.56
-                                        },
-                     "seller_name_primary":  {
-                                                 "x0":  103.32,
-                                                 "x1":  176.88,
-                                                 "y":  367.56
-                                             },
-                     "seller_name_secondary":  {
-                                                   "x0":  485.16,
-                                                   "x1":  587.46,
-                                                   "y":  367.56
-                                               },
-                     "seller_address_primary":  {
-                                                    "x0":  103.32,
-                                                    "x1":  176.88,
-                                                    "y":  348.54
-                                                },
-                     "seller_address_secondary":  {
-                                                      "x0":  485.16,
-                                                      "x1":  587.46,
-                                                      "y":  348.54
-                                                  },
-                     "buyer_name_row":  {
-                                            "x0":  35.82,
-                                            "x1":  593.7,
-                                            "y":  282.84
-                                        },
-                     "lienholder_name":  {
-                                             "x0":  102.42,
-                                             "x1":  332.22,
-                                             "y":  223.68
-                                         },
-                     "lienholder_address":  {
-                                                "x0":  198.9,
-                                                "x1":  353.52,
-                                                "y":  269.64
-                                            }
-                 },
-    "notes":  [
-                  "Horizontal rule coordinates captured for core vehicle and seller fields; manual overlay still required to position text within each measured segment.",
-                  "Date of sale uses multi-cell layout; overlay coordinate (x=252, y~440) should be verified for month/day/year alignment before production fill.",
-                  "Secondary columns (primary/secondary parties) share identical y-levels; overlay should branch on question availability or include secondary questions."
-              ]
+{
+  "cycle_id": "document-intel-cycle-0007",
+  "generated_at": "2025-09-19T17:50:08.781Z",
+  "pdf": "public/forms/vehicle-bill-of-sale/georgia/T-7.pdf",
+  "summary": {
+    "acro_form_fields": 0,
+    "sections_mapped": [
+      "vehicle_info",
+      "seller_primary",
+      "seller_secondary",
+      "lienholder"
+    ],
+    "pending_fields": [
+      "sale_date_segments",
+      "buyer_primary_address",
+      "notary_blocks"
+    ]
+  },
+  "segments": {
+    "vin": {
+      "x0": 35.82,
+      "x1": 593.7,
+      "y": 482.34
+    },
+    "year": {
+      "x0": 49.5,
+      "x1": 192.18,
+      "y": 459.42
+    },
+    "make": {
+      "x0": 229.14,
+      "x1": 273.42,
+      "y": 459.42
+    },
+    "model": {
+      "x0": 325.44,
+      "x1": 394.92,
+      "y": 459.42
+    },
+    "odometer": {
+      "x0": 98.04,
+      "x1": 142.38,
+      "y": 436.56
+    },
+    "purchase_price": {
+      "x0": 512.16,
+      "x1": 587.46,
+      "y": 436.56
+    },
+    "seller_name_primary": {
+      "x0": 103.32,
+      "x1": 176.88,
+      "y": 367.56
+    },
+    "seller_name_secondary": {
+      "x0": 485.16,
+      "x1": 587.46,
+      "y": 367.56
+    },
+    "seller_address_primary": {
+      "x0": 103.32,
+      "x1": 176.88,
+      "y": 348.54
+    },
+    "seller_address_secondary": {
+      "x0": 485.16,
+      "x1": 587.46,
+      "y": 348.54
+    },
+    "buyer_name_row": {
+      "x0": 35.82,
+      "x1": 593.7,
+      "y": 282.84
+    },
+    "lienholder_name": {
+      "x0": 102.42,
+      "x1": 332.22,
+      "y": 223.68
+    },
+    "lienholder_address": {
+      "x0": 198.9,
+      "x1": 353.52,
+      "y": 269.64
+    }
+  },
+  "notes": [
+    "Horizontal rule coordinates captured for core vehicle and seller fields; manual overlay still required to position text within each measured segment.",
+    "Date of sale uses multi-cell layout; overlay coordinate (x\u2248110, y\u2248436.6) should be QA'd against month/day/year spacing before production fill.",
+    "Secondary columns (primary/secondary parties) share identical y-levels; overlay should branch on question availability or include secondary questions.",
+    "Sample QA payload stored at ops/artifacts/document-intel-cycle-0007/georgia-overlay-sample.json; use it to render and inspect sale date/buyer rows.",
+    "Full QA checklist: ops/artifacts/document-intel-cycle-0007/georgia-overlay-qa.md"
+  ]
 }

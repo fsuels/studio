@@ -2,38 +2,14 @@
 // Creates Stripe checkout session with automatic tax and multi-currency support
 
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { STRIPE_API_VERSION } from '@/lib/stripe-config';
+import type Stripe from 'stripe';
+import { getStripeServerClient } from '@/lib/stripe-server';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
 
-function getStripeClient(): Stripe {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
-    throw new Error('STRIPE_SECRET_KEY is not configured');
-  }
-
-  return new Stripe(secretKey, {
-    apiVersion: STRIPE_API_VERSION,
-  });
-}
-
 export async function POST(req: NextRequest) {
   try {
-
-    // Check if Stripe is configured
-    let stripe: Stripe;
-    try {
-      stripe = getStripeClient();
-    } catch (error) {
-      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.', error);
-      return NextResponse.json(
-        { error: 'Payment system is not configured' },
-        { status: 503 }
-      );
-    }
-
 
     const {
       planId,
@@ -58,32 +34,29 @@ export async function POST(req: NextRequest) {
     const successUrl = `${origin}/${locale}${successPath}?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/${locale}${cancelPath}?cancelled=true`;
 
-    // Try to create checkout session with Smart Pricing Engine
-    const result = await smartPricingEngine.createCheckoutSession(
-      planId,
-      userCurrency,
-      req,
-      {
-        customerEmail,
-        successUrl,
-        cancelUrl,
-        allowPurchaseOrder,
-      }
-    );
+    // Determine plan details
+    const plan = pricingSummary.availablePlans.find((p) => p.id === planId);
+    if (!plan) {
+      return NextResponse.json({ error: 'Plan not found' }, { status: 404 });
+    }
 
-    // If purchase order is required, return that info
-    if (result.requiresPurchaseOrder) {
+    if (allowPurchaseOrder && plan.allowPurchaseOrder) {
       return NextResponse.json({
         requiresPurchaseOrder: true,
-        purchaseOrderId: result.purchaseOrderId,
+        purchaseOrderId: null,
         pricingSummary,
       });
     }
 
-    // Get the plan details for Stripe session
-    const plan = pricingSummary.availablePlans.find(p => p.id === planId);
-    if (!plan) {
-      return NextResponse.json({ error: 'Plan not found' }, { status: 404 });
+    let stripe: Stripe;
+    try {
+      stripe = getStripeServerClient();
+    } catch (error) {
+      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.', error);
+      return NextResponse.json(
+        { error: 'Payment system is not configured' },
+        { status: 503 }
+      );
     }
 
     // Create actual Stripe checkout session with automatic tax

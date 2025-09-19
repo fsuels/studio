@@ -1,0 +1,7 @@
+{
+    "src/services/document-summary.ts":  "5d7037d659b2d86cd665f316531fb2dfb619063ee974de3f7601b3c91d895147",
+    "src/ai/flows/__tests__/explain-clause.guardrails.test.ts":  "5cd2783d5b07f36afa94b8c87e01159f6cfec38b0232638ddf421bb6f3e4ac98",
+    "src/ai/flows/explain-clause.ts":  "cf7468e6519533a02402780f7049917c31cb0340f7ce11ddaa5181cd21969b5d",
+    "ops/artifacts/ai-automation-cycle-0008/guardrail-integration.md":  "89bbbc8da386664b9799186f43e285ea579e810f4138c29c546e29d0dc084787",
+    "src/services/__tests__/document-summary.guardrails.test.ts":  "f48f90bc75226b02720bdea6ac806129e446e5833b3dc7d59c94ddb0e8677c7c"
+}

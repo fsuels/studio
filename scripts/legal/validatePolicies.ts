@@ -1,4 +1,3 @@
-\
 #!/usr/bin/env tsx
 
 import { readdir, readFile } from 'node:fs/promises';

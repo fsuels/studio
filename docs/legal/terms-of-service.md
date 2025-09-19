@@ -70,5 +70,5 @@ Austin, TX 78701
 
 ---
 
-**Spanish Summary (Resumen en Espanol)**  
-Al usar 123LegalDoc, usted acepta estos Terminos. 123LegalDoc no es un bufete de abogados y el servicio se proporciona "tal cual". Revise la Politica de Privacidad y la Politica de Reembolso para conocer como manejamos sus datos y cuando estan disponibles los reembolsos.
+**Spanish Summary (Resumen en Espa?ol)**  
+Al usar 123LegalDoc, usted acepta estos T?rminos. 123LegalDoc no es un bufete de abogados y el servicio se proporciona "tal cual". Consulte la Pol?tica de Privacidad y la Pol?tica de Reembolso para conocer c?mo manejamos sus datos y cu?ndo est?n disponibles los reembolsos.

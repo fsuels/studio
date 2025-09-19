@@ -32,9 +32,10 @@
   "linkSupport": "Soporte",
   "sectionLegalTitle": "Legal",
   "linkPrivacyPolicy": "Política de Privacidad",
-  "linkTermsOfService": "Terminos de Servicio",
+  "linkTermsOfService": "Términos de Servicio",
   "linkDocs": "Documentos",
   "linkDisclaimer": "Descargo de Responsabilidad",
+  "linkRefundPolicy": "Política de Reembolso",
   "subhead": "Generación de documentos legales con IA. Rápido, accesible y seguro.",
   "sectionCommunityTitle": "Comunidad y Contacto",
   "socialLinkedInAria": "Página de LinkedIn",
@@ -45,6 +46,5 @@
   "emailPlaceholderAria": "Correo para boletín",
   "subscribeButtonAria": "Suscribirse al boletín",
   "joinMailingListDesc": "Respetamos tu bandeja de entrada. Cancela cuando quieras.",
-  "openChatAria": "Abrir chat",
-  "linkRefundPolicy": "Politica de Reembolso"
+  "openChatAria": "Abrir chat"
 }

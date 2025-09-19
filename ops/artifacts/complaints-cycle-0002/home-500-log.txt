@@ -1,0 +1,67 @@
+⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+  2023 |
+  2024 |   return (
+> 2025 |     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
+       |      ^^^^^^
+  2026 |       <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900">
+  2027 |         {/* Enhanced Header with Gradient Background */}
+  2028 |         <div className="relative overflow-hidden rounded-t-lg">
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+  2023 |
+  2024 |   return (
+> 2025 |     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
+       |      ^^^^^^
+  2026 |       <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900">
+  2027 |         {/* Enhanced Header with Gradient Background */}
+  2028 |         <div className="relative overflow-hidden rounded-t-lg">
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+  2023 |
+  2024 |   return (
+> 2025 |     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
+       |      ^^^^^^
+  2026 |       <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900">
+  2027 |         {/* Enhanced Header with Gradient Background */}
+  2028 |         <div className="relative overflow-hidden rounded-t-lg">
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.8s
+ GET /en 500 in 18110ms
+ ⨯ ./src/components/global/DocumentDiscoveryModal.tsx:2025:6
+Parsing ecmascript source code failed
+  2023 |
+  2024 |   return (
+> 2025 |     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
+       |      ^^^^^^
+  2026 |       <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900">
+  2027 |         {/* Enhanced Header with Gradient Background */}
+  2028 |         <div className="relative overflow-hidden rounded-t-lg">
+
+Unexpected token `Dialog`. Expected jsx identifier
+
+
+ GET /en 500 in 823ms
+ GET / 500 in 1075ms
+ GET / 500 in 1092ms
+ GET / 500 in 1075ms
+ GET / 500 in 1071ms
+ GET / 500 in 1082ms
+ GET / 500 in 1083ms
+ GET / 500 in 971ms
+ GET / 500 in 1125ms
+ GET / 500 in 1154ms
+ GET / 500 in 1029ms
+ GET / 500 in 1017ms

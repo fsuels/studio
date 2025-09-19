@@ -2,6 +2,7 @@
 
 ts: 2025-09-19T15:42:49.4722675Z
 summary:
+  - smart-session API now creates real Stripe Checkout sessions (no mock cs_test IDs)
   - webhook processing now handles checkout.session.completed events
   - .env templates now include STRIPE_WEBHOOK_SECRET alongside existing Stripe keys
   - shared getStripeServerClient helper caches Node Stripe client with version enforcement
@@ -12,6 +13,7 @@ summary:
   - refund-system and wizard submission routes reuse shared Stripe API version helper
   - marketplace revenue sharing and Connect setup now instantiate Stripe clients per call with STRIPE_API_VERSION
 verification:
+  - jest src/app/api/pricing/smart-session/__tests__/route.test.ts
   - jest stripe-integration
   - jest src/app/api/webhooks/stripe/__tests__/route.test.ts (Stripe webhook route)
   - jest stripe-server

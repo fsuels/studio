@@ -1,15 +1,18 @@
-﻿{
-    "cycle_id":  "document-intel-cycle-0007",
-    "last_updated":  "2025-09-19T17:56:21.907Z",
-    "notes":  [
-                  "Completed Georgia T-7 geometry audit; cleared field extraction error and logged segments in ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json.",
-                  "Georgia T-7 overlay config now references measured coordinates for VIN/year/make/model etc.; sale date still needs live PDF verification due to multi-cell layout."
-              ],
-    "todos":  [
-                  "QA Georgia T-7 overlay placement (especially sale date and buyer address) against generated PDFs before release.",
-                  "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
-                  "Automate translation parity checks in verify-templates to prevent regressions.",
-                  "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
-                  "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage."
-              ]
+{
+    "cycle_id": "document-intel-cycle-0007",
+    "last_updated": "2025-09-19T18:14:08.076684Z",
+    "notes": [
+        "Refined Georgia T-7 overlay coordinates (sale date shifted to first cell, buyer address anchored at y~224) and refreshed geometry checksums.",
+        "Georgia T-7 overlay config now references measured coordinates for VIN/year/make/model etc.; sale date still needs live PDF verification due to multi-cell layout.",
+        "QA harness sample saved at ops/artifacts/document-intel-cycle-0007/georgia-overlay-sample.json to expedite PDF overlay verification.",
+        "Overlay QA checklist documented at ops/artifacts/document-intel-cycle-0007/georgia-overlay-qa.md for manual review steps.",
+        "Template verification failed: 700 EN templates still use placeholder markdown (e.g., accident-report.md) \u2014 needs content import before launch."
+    ],
+    "todos": [
+        "QA Georgia T-7 overlay placement (especially sale date and buyer address) against generated PDFs before release.",
+        "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
+        "Automate translation parity checks in verify-templates to prevent regressions.",
+        "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
+        "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage."
+    ]
 }

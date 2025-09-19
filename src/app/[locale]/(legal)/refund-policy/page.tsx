@@ -13,7 +13,7 @@ export default async function RefundPolicyPage({
   params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
   const { locale = 'en' } = await params;
-  const policy = await loadPolicy('refund-policy');
+  const policy = await loadPolicy('refund-policy', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';
   const lastUpdatedDate = policy.lastUpdated

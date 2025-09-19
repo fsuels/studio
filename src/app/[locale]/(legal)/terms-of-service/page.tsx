@@ -13,7 +13,7 @@ export default async function LocaleTermsPage({
   params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
   const { locale = 'en' } = await params;
-  const policy = await loadPolicy('terms-of-service');
+  const policy = await loadPolicy('terms-of-service', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';
   const lastUpdatedDate = policy.lastUpdated

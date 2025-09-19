@@ -1,16 +1,16 @@
 {
-    "cycle_id": "ai-automation-cycle-0006",
-    "last_updated": "2025-09-19T18:01:13.208620+00:00",
+    "cycle_id": "ai-automation-cycle-0008",
+    "last_updated": "2025-09-19T18:47:11.407120+00:00",
     "notes": [
-        "Implemented guardrail pipeline scaffolding with Prompt Guard, Llama Guard, and heuristic fallback (src/ai/guardrails/*).",
-        "Added guardrail runbook documenting config knobs, failure handling, and escalation (ops/runbooks/guardrail-pipeline.md).",
-        "Unit tests cover heuristic blocks and disabled-mode behavior; ready for integration into API flows."
+        "Integrated guardrail checks into document summary and clause explanation flows to block unsafe prompts/responses (src/services/document-summary.ts, src/ai/flows/explain-clause.ts).",
+        "Added guardrail unit tests validating refusal paths and LiteLLM gating (src/services/__tests__/document-summary.guardrails.test.ts, src/ai/flows/__tests__/explain-clause.guardrails.test.ts).",
+        "Documented partial rollout in ops/artifacts/ai-automation-cycle-0008/guardrail-integration.md for follow-up work."
     ],
     "todos": [
-        "Integrate evaluateGuardrails into intake/drafting API routes before invoking LiteLLM.",
-        "Provision Prompt Guard 2 and Llama Guard 3 models via LiteLLM secret manager; run staging smoke tests.",
-        "Instrument guardrail events to Langfuse, Prometheus, and Sentry with escalation logging.",
-        "Expand heuristic rules with Compliance-reviewed keyword lists and add regression tests.",
-        "Schedule compliance review of refusal taxonomy and guardrail messaging prior to re-enabling flows."
+        "Extend guardrail integration to intake classification once LiteLLM-backed flow replaces Genkit stubs.",
+        "Emit guardrail decisions to Langfuse/Sentry telemetry and localize refusal messaging (EN/ES).",
+        "Refactor legal update summarizer to use OSS models via LiteLLM and remove OPENAI_API_KEY dependency.",
+        "Add AbortController timeout enforcement in guardrail pipeline and log timeout-specific review events.",
+        "Expand heuristic rules with Spanish phrases and regression tests."
     ]
 }

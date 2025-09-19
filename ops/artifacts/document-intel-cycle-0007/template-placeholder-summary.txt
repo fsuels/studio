@@ -1,0 +1,3 @@
+﻿Placeholder EN templates: 350
+Templates under 500 words: 350
+Known duplicate ES placeholders: 23

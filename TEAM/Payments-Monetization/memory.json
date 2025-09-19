@@ -10,7 +10,8 @@
         "Shared getStripeServerClient helper for server routes with jest coverage (src/lib/stripe-server.ts).",
         "Stripe webhook route now covered by jest tests for signature/payload handling (src/app/api/webhooks/stripe/__tests__/route.test.ts).",
         ".env templates now include STRIPE_WEBHOOK_SECRET alongside publishable/secret keys.",
-        "Stripe webhook handler now covers checkout.session.completed events with tests."
+        "Stripe webhook handler now covers checkout.session.completed events with tests.",
+        "Smart-session checkout route now calls real Stripe sessions with test coverage."
     ],
     "todos": [
         "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",

@@ -13,7 +13,7 @@ export default async function LocalePrivacyPolicyPage({
   params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
   const { locale = 'en' } = await params;
-  const policy = await loadPolicy('privacy-notice');
+  const policy = await loadPolicy('privacy-notice', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';
   const lastUpdatedDate = policy.lastUpdated

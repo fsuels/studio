@@ -29,7 +29,7 @@ Provide a deterministic toggle procedure for the security-header middleware whil
 5. Plan re-enable once root cause is mitigated and telemetry is stable.
 
 ## Verification & Testing
-- Local/unit: `npx jest --runTestsByPath __tests__/middleware/security-headers.test.ts`
+- Local/unit: `npx jest --runTestsByPath src/__tests__/middleware/security-headers.test.ts`
   - Validates header application, redirects, tenant rewrites, and feature-flag disable path.
 - Smoke check: Hit `/api/security/csp-report` with a sample violation payload and confirm log ingestion.
 - Observability: Ensure Grafana dashboards (`ops/monitoring/csp-alert-dashboard.json`) show report-only traffic after toggling on.

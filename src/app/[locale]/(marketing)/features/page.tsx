@@ -18,6 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
+import { FeaturesCTA } from './FeaturesCTA';
 
 interface FeaturesPageParams {
   locale: 'en' | 'es';
@@ -98,6 +99,10 @@ const localizedContent = {
         competitors: ['no', 'no'],
       },
     ],
+    ctaHeading: 'Ready to build your next document?',
+    ctaDescription: 'Kick off a guided workflow or review transparent pricing first.',
+    ctaPrimaryLabel: 'Start the Wizard',
+    ctaSecondaryLabel: 'View Pricing',
     metadata: {
       title: 'Legal Document Automation Features | 123LegalDoc',
       description:
@@ -173,6 +178,10 @@ const localizedContent = {
         competitors: ['no', 'no'],
       },
     ],
+    ctaHeading: '\u00bfListo para crear tu pr\u00f3ximo documento?',
+    ctaDescription: 'Comienza un flujo guiado o revisa primero nuestros precios transparentes.',
+    ctaPrimaryLabel: 'Iniciar el asistente',
+    ctaSecondaryLabel: 'Ver precios',
     metadata: {
       title: 'Funciones de Automatización de Documentos Legales | 123LegalDoc',
       description:
@@ -367,7 +376,31 @@ export default async function FeaturesPage({
             </Table>
           </Card>
         </section>
+
+        <section className="mt-16 text-center space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground">{content.ctaHeading}</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">{content.ctaDescription}</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <FeaturesCTA
+              locale={locale}
+              href={`/${locale}/generate`}
+              surface="features_wizard"
+              variant="primary"
+            >
+              {content.ctaPrimaryLabel}
+            </FeaturesCTA>
+            <FeaturesCTA
+              locale={locale}
+              href={`/${locale}/pricing`}
+              surface="features_pricing"
+              variant="outline"
+            >
+              {content.ctaSecondaryLabel}
+            </FeaturesCTA>
+          </div>
+        </section>
       </main>
     </>
   );
 }
+

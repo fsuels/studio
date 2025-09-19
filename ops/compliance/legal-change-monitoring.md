@@ -38,6 +38,13 @@ Daily monitoring workflow that aggregates statutory and regulatory changes, rout
 - Include source URLs, download timestamps, and assigned owner for traceability.
 - Link relevant policy or workflow changes once shipped for audit trail continuity.
 
+## Tooling
+- `npm run legal:validate` ? verifies each policy markdown file has title, last updated metadata, and Spanish summary before release approvals.
+
+
+## Known Issues
+- Spanish locale exports previously arrived with mojibake when translators delivered CP1252 files. Always confirm UTF-8 encoding before committing (`npm run legal:validate` will fail once summaries are missing accents).
+
 ## Automation Backlog
 - [ ] Convert Fastcase & LexisNexis ingests to scheduled GitHub Action (target 2025-10-15).
 - [ ] Add sentiment/keyword scoring to highlight UPL red flags automatically.

@@ -28,7 +28,10 @@
                   "Drafted DSAR dry-run invite and agenda for 2025-09-23 session (ops/artifacts/compliance-cycle-0010/dsar-dry-run-invite.md, ops/artifacts/compliance-cycle-0010/dsar-dry-run-agenda.md).",
                   "Created international readiness tracker to manage GDPR/UK/Canada tasks (ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md).",
                   "Published transfer impact assessment template to support international readiness (ops/compliance/transfer-impact-assessment-template.md).",
-                  "Published bilingual policy rollout checklist and UI linking plan (ops/compliance/bilingual-policy-rollout-checklist.md, ops/artifacts/compliance-cycle-0011/policy-linking-plan.md)."
+                  "Published bilingual policy rollout checklist and UI linking plan (ops/compliance/bilingual-policy-rollout-checklist.md, ops/artifacts/compliance-cycle-0011/policy-linking-plan.md).",
+                  "Restored Spanish footer translations to proper UTF-8 encoding (public/locales/es/footer.json).",
+                  "Updated policy loader/pages to support locale-specific markdown fallback (src/lib/legal/policies.ts).",
+                  "Patched Firebase audit logging to avoid serverTimestamp reference errors enabling policy view audits (src/services/firebase-audit-service.ts)."
               ],
     "todos":  [
                   "Execute Spanish policy localization plan, produce docs/legal/es/*, and attach bilingual sign-off evidence.",
@@ -38,7 +41,7 @@
                   "Coordinate with Document Intelligence to integrate Colorado, Georgia, and Washington statutory warnings, witness instructions, and filing checklists into templates.",
                   "Coordinate with Document Intelligence on state-by-state notice requirements for knowledge base entries and Spanish localization.",
                   "Secure certified translation approvals for Colorado, Georgia, and Washington disclosures and record them in ops/artifacts/compliance-cycle-0009/translation-approvals/.",
-                  "Drive international readiness tracker tasks (IR-001Ã¢â‚¬â€œIR-007) per ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md.",
+                  "Drive international readiness tracker tasks (IR-001ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“IR-007) per ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md.",
                   "Drive release gate adoption by collecting cookie banner verification, DSAR workflow documentation, and pod sign-offs before 2025-09-26 freeze.",
                   "Execute DSAR dry run using ops/artifacts/compliance-cycle-0010/dsar-dry-run-prep.md; confirm meeting logistics and record decisions.",
                   "Deliver Washington workflow implementation evidence with Document Intelligence, Platform, and Compliance sign-offs stored under ops/artifacts/compliance-cycle-0009/washington-implementation/.",

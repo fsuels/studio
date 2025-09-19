@@ -1,0 +1,5 @@
+Next.js runtime error: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.
+Call stack excerpt:
+- src/components/shared/PaymentModal.tsx (loadStripe gate at lines 20-24)
+- src/app/[locale]/HomePageClient.tsx via shared PaymentModal import
+Impact: Home page render halts with Turbopack runtime overlay; user sees 500 and interactions stall.

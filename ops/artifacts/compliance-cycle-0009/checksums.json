@@ -1,7 +1,8 @@
 {
-  "ops/compliance/policy-glossary-es.json": "sha256:14DEEA8B4B8921B73BEA9DB483E953876112F1B75C58BD5A72DDE12791AA94A0",
-  "ops/compliance/washington-workflow-insert.md": "sha256:C6C1DB226399CFC03CE489E6D515CF3B1B0308474F8502427F3F0B6B8D898754",
-  "ops/compliance/jurisdiction-us-baseline.md": "sha256:3D054686CE73E76CCD4BE1505A4C6B829BA6133D135281F0585E3F6B6A0E1759",
-  "ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md": "sha256:C6D60A647CED63D19D884ACFE9DA42372DDC053256DDE1DA3BE0F69320BE09C4",
-  "ops/artifacts/compliance-cycle-0009/translation-approvals/request-log-2025-09-19.md": "sha256:748A271805F9EB7E90566CB4F7A2F277D4D128EA9AB1A5C492BA66B8658DFD80"
+    "ops/compliance/policy-glossary-es.json":  "sha256:14DEEA8B4B8921B73BEA9DB483E953876112F1B75C58BD5A72DDE12791AA94A0",
+    "ops/compliance/washington-workflow-insert.md":  "sha256:C6C1DB226399CFC03CE489E6D515CF3B1B0308474F8502427F3F0B6B8D898754",
+    "ops/compliance/jurisdiction-us-baseline.md":  "sha256:3D054686CE73E76CCD4BE1505A4C6B829BA6133D135281F0585E3F6B6A0E1759",
+    "ops/artifacts/compliance-cycle-0009/translation-approvals/request-log-2025-09-19.md":  "sha256:748A271805F9EB7E90566CB4F7A2F277D4D128EA9AB1A5C492BA66B8658DFD80",
+    "ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md":  "sha256:A6FB625EC2963B37FCD241F501633DE13F877DB7F72094AD14DFBCB7775F7993",
+    "ops/artifacts/compliance-cycle-0009/translation-approvals/email-2025-09-19.eml":  "sha256:E23E423382377D33CA6B9396FD79D837AF7C780C3F844376530948AAFC020D8E"
 }

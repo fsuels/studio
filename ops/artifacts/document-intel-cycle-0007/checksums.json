@@ -1,14 +1,22 @@
 ﻿{
-    "public/configs/us/georgia/vehicle-bill-of-sale.json":  {
-                                                                "algorithm":  "sha256",
-                                                                "hash":  "c46a9e512c622ba203681df80180e505440afd1f879f2d33a748c5e170d09239"
-                                                            },
-    "public/forms/vehicle-bill-of-sale/georgia/T-7-fields.json":  {
-                                                                      "algorithm":  "sha256",
-                                                                      "hash":  "e45736f3f66c91a25aef83ef0c912dff93fe99c31cfcc3fafcc1b6804d43acea"
-                                                                  },
+    "ops/artifacts/document-intel-cycle-0007/georgia-overlay-qa.md":  {
+                                                                          "algorithm":  "sha256",
+                                                                          "hash":  "a0cc1d24d8f9f0b04337fa42056d63f39c92cbc2cbf697cf69e08e98262575dc"
+                                                                      },
+    "ops/artifacts/document-intel-cycle-0007/georgia-overlay-sample.json":  {
+                                                                                "algorithm":  "sha256",
+                                                                                "hash":  "bd77dd23bb08dd375f15bcdb68b8b29419902dd9cc756bddeb0c3ffe2b42274a"
+                                                                            },
     "ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json":  {
                                                                                "algorithm":  "sha256",
-                                                                               "hash":  "ee038df79c76c614c26e454c659ee7e83db0ec6349ff0ea0ba244e62a11f045b"
-                                                                           }
+                                                                               "hash":  "f576eca7f3e36705505a5a4b32391e6afdca65887d1e3413fb1618966e447e01"
+                                                                           },
+    "public/forms/vehicle-bill-of-sale/georgia/T-7-fields.json":  {
+                                                                      "algorithm":  "sha256",
+                                                                      "hash":  "f4c6ff4b73b99434c13240c87ccf73e68265cb4d2d5bdb0904728fc9a23d0efc"
+                                                                  },
+    "public/configs/us/georgia/vehicle-bill-of-sale.json":  {
+                                                                "algorithm":  "sha256",
+                                                                "hash":  "a645d58d6dacd8e5e03c0074d1c910a81ae1be911b2fb65ffa41803b8773b68b"
+                                                            }
 }

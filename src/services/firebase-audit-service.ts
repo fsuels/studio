@@ -1,4 +1,4 @@
-// Lazy-load Firebase modules to keep client bundles slim
+﻿// Lazy-load Firebase modules to keep client bundles slim
 let fsModulePromise: Promise<typeof import('firebase/firestore')> | null = null;
 async function FS() {
   if (!fsModulePromise) fsModulePromise = import('firebase/firestore');
@@ -72,6 +72,9 @@ export class FirebaseAuditService {
       const actualUserId = userId || currentUser?.uid || 'system';
 
       // Create a simple audit event for Firestore
+      const db = await DB();
+      const { addDoc, collection, serverTimestamp } = await FS();
+
       const event: AuditEvent = {
         eventType,
         userId: actualUserId,
@@ -83,11 +86,6 @@ export class FirebaseAuditService {
         },
       };
 
-      // Store in Firestore
-      const db = await DB();
-      const { addDoc, collection, serverTimestamp } = await FS();
-      // Ensure serverTimestamp symbol is preserved in event
-      event.timestamp = serverTimestamp();
       await addDoc(collection(db, this.COLLECTION_NAME), event);
     } catch (error) {
       console.error('Failed to log audit event:', error);
@@ -263,3 +261,4 @@ export class FirebaseAuditService {
 
 // Export singleton instance
 export const auditService = FirebaseAuditService.getInstance();
+

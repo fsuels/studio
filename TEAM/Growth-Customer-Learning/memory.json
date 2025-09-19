@@ -1,6 +1,6 @@
 {
     "cycle_id": "growth-cycle-0004",
-    "last_updated": "2025-09-19T17:50:57.463518Z",
+    "last_updated": "2025-09-19T18:10:24.849914Z",
     "notes": [
         "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
         "Retained server-rendered structured data while delegating CTA UI to a client component for tracking.",
@@ -9,7 +9,8 @@
         "Introduced PricingCTA wrapper so pricing plan and quiz CTAs emit pricing_cta_click with locale, plan_id, surface, and destination.",
         "Verified eslint on pricing route changes; existing global warnings remain in admin AI usage, stripe tests, CSP metrics, and hookform resolvers.",
         "Instrumented homepage hero CTA to emit home_cta_click with locale, surface, destination, and CTA variant before opening the discovery modal.",
-        "Instrumented templates quiz CTA to emit templates_cta_click with locale, surface, and destination prior to launching the wizard."
+        "Instrumented templates quiz CTA to emit templates_cta_click with locale, surface, and destination prior to launching the wizard.",
+        "Instrumented features page CTA duo to emit features_cta_click before navigating to the wizard or pricing."
     ],
     "todos": [
         "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
@@ -21,6 +22,7 @@
         "Coordinate with Platform to ingest pricing_cta_click into GA4/warehouse and reflect it in src/app/api/analytics/funnel/route.ts once mock data is removed.",
         "Extend PricingCTA usage to other marketing CTAs (pricing hero, trust modules) after confirming compliance messaging coverage.",
         "Coordinate with Platform to ingest home_cta_click into GA4/warehouse and surface experiment bucket metadata.",
-        "Coordinate with Platform to ingest templates_cta_click into GA4/warehouse so quiz funnel entries are tracked."
+        "Coordinate with Platform to ingest templates_cta_click into GA4/warehouse so quiz funnel entries are tracked.",
+        "Coordinate with Platform to ingest features_cta_click into GA4/warehouse for feature-to-purchase attribution."
     ]
 }

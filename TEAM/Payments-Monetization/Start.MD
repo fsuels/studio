@@ -19,5 +19,5 @@ Flow:
 6. Uphold PCI considerations, avoid exposing secrets, coordinate with Compliance on policy changes, and document financial evidence.
 7. End with the standard outputs (CYCLE_SUMMARY, PATCH, PATCH_META, UPDATED_MEMORY_MD, UPDATED_REMEMBER_MD, PR info, TRACE_EVENTS, CYCLE_DONE). Leave `UPDATED_MEMORY_MD` and `UPDATED_REMEMBER_MD` as `null` and populate `handoff_summary` inside `PATCH_META` with complaint IDs, statuses, and artifacts so the CEO can update the global ledgers while staying within context limits.
 
-Begin.
+Continue.
 ```

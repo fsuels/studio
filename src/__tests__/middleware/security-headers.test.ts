@@ -15,7 +15,7 @@ const originalFeatureFlag = process.env.FEATURE_SECURITY_HEADERS;
 process.env.FEATURE_SECURITY_HEADERS = 'true';
 
 // Import after mocks so middleware picks up the stubs and flag override
-import { middleware } from '../../middleware';
+import { middleware } from '../../../middleware';
 
 describe('middleware security headers', () => {
   beforeEach(() => {
