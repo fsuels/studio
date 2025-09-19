@@ -1,7 +1,8 @@
 # Remember.md
 ## Decisions
-- 2025-09-18 — Initialized Codex memory
-- 2025-09-18 — Cataloged template inventory and added canonical/hreflang for category + blog routes
+- 2025-09-18 - Initialized Codex memory
+- 2025-09-18 - Cataloged template inventory and added canonical/hreflang for category + blog routes
+- 2025-09-19 - Hardened Codex autorun expect script to preserve UI fidelity and allow manual takeover
 ## Baselines
 - CWV: { lcp_ms: null, inp_ms: null, cls: null }
 - A11y: null; SEO: null; Bundle: null; Reliability: null
@@ -24,8 +25,9 @@
 - [ ] /[locale]/faq (bilingual metadata + FAQPage JSON-LD)
 - [ ] /[locale]/templates (CollectionPage JSON-LD + canonical hreflang)
 ### Contracts/Templates
-- [ ] src/data/templates — en: 4, es: 4 (parity confirmed; includes es basic-nda & power-of-attorney)
-- [ ] public/templates markdown — en: 350, es: 350 (parity)
+- [ ] src/data/templates - en: 4, es: 4 (parity confirmed; includes es basic-nda & power-of-attorney)
+- [ ] public/templates markdown - en: 350, es: 350 (parity)
 ## Resume Cursor
 pending_tasks:
   - Extend canonical and hreflang coverage to other marketing routes
+  - Validate autorun loop changes during next run
