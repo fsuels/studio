@@ -6,6 +6,7 @@ import { ArrowRight, Building2, Plug, Users } from 'lucide-react';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
+import { PartnersCTA } from './PartnersCTA';
 
 interface PartnersPageParams {
   locale: 'en' | 'es';
@@ -274,21 +275,29 @@ export default async function PartnersPage({
         </section>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
+          <PartnersCTA
+            locale={locale}
             href={content.ctaPrimary.href}
+            ctaId="become_partner"
+            surface="hero_primary"
             className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-3 text-sm font-medium shadow transition hover:bg-primary/90"
+            as="anchor"
           >
             {content.ctaPrimary.label} <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-          </Link>
-          <Link
+          </PartnersCTA>
+          <PartnersCTA
+            locale={locale}
             href={content.ctaSecondary.href}
+            ctaId="support_options"
+            surface="hero_secondary"
             className="inline-flex items-center justify-center rounded-md border border-primary px-6 py-3 text-sm font-medium text-primary transition hover:bg-primary/10"
           >
             {content.ctaSecondary.label}
-          </Link>
+          </PartnersCTA>
         </div>
       </main>
     </>
   );
 }
+
 

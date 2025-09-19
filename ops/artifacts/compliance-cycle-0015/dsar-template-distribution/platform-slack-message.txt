@@ -1,0 +1,1 @@
+﻿Team, the bilingual DSAR acknowledgment template is ready for the 2025-09-23 dry run. Review: ops/compliance/dsar-acknowledgment-template.md. Please react with ✅ once received. Evidence: ops/artifacts/compliance-cycle-0015/dsar-template-distribution/platform-confirmation.png.

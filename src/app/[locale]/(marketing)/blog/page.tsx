@@ -2,8 +2,8 @@
 // Server-rendered blog index to keep client bundle lean
 import React from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { blogArticles } from '@/data/blogArticles';
+import { BlogArticleCard } from './BlogArticleCard';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
@@ -159,19 +159,17 @@ export default async function BlogPage({ params }: BlogPageProps) {
               day: 'numeric',
             });
             return (
-              <Link
+              <BlogArticleCard
                 key={article.slug}
+                locale={locale}
                 href={`/${locale}/blog/${article.slug}`}
-                className="block border rounded-xl p-4 shadow hover:shadow-md transition hover:bg-muted"
-                aria-label={`${title} — ${localizedContent[locale].readMore}`}
-              >
-                <h2 className="text-xl font-semibold mb-1">{title}</h2>
-                <p className="text-sm text-muted-foreground mb-1">{date}</p>
-                <p className="text-sm text-muted-foreground">{summary}</p>
-                <span className="mt-2 inline-block text-primary text-sm underline">
-                  {localizedContent[locale].readMore}
-                </span>
-              </Link>
+                slug={article.slug}
+                title={title}
+                summary={summary}
+                dateLabel={date}
+                readMoreLabel={localizedContent[locale].readMore}
+                ariaLabel={`${title} — ${localizedContent[locale].readMore}`}
+              />
             );
           })}
         </div>
@@ -179,3 +177,4 @@ export default async function BlogPage({ params }: BlogPageProps) {
     </>
   );
 }
+

@@ -1,22 +1,38 @@
 ﻿{
-    "ops/artifacts/document-intel-cycle-0007/georgia-overlay-qa.md":  {
-                                                                          "algorithm":  "sha256",
-                                                                          "hash":  "a0cc1d24d8f9f0b04337fa42056d63f39c92cbc2cbf697cf69e08e98262575dc"
-                                                                      },
-    "ops/artifacts/document-intel-cycle-0007/georgia-overlay-sample.json":  {
-                                                                                "algorithm":  "sha256",
-                                                                                "hash":  "bd77dd23bb08dd375f15bcdb68b8b29419902dd9cc756bddeb0c3ffe2b42274a"
-                                                                            },
     "ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json":  {
                                                                                "algorithm":  "sha256",
                                                                                "hash":  "f576eca7f3e36705505a5a4b32391e6afdca65887d1e3413fb1618966e447e01"
                                                                            },
+    "public/configs/us/georgia/vehicle-bill-of-sale.json":  {
+                                                                "algorithm":  "sha256",
+                                                                "hash":  "a645d58d6dacd8e5e03c0074d1c910a81ae1be911b2fb65ffa41803b8773b68b"
+                                                            },
     "public/forms/vehicle-bill-of-sale/georgia/T-7-fields.json":  {
                                                                       "algorithm":  "sha256",
                                                                       "hash":  "f4c6ff4b73b99434c13240c87ccf73e68265cb4d2d5bdb0904728fc9a23d0efc"
                                                                   },
-    "public/configs/us/georgia/vehicle-bill-of-sale.json":  {
-                                                                "algorithm":  "sha256",
-                                                                "hash":  "a645d58d6dacd8e5e03c0074d1c910a81ae1be911b2fb65ffa41803b8773b68b"
-                                                            }
+    "ops/artifacts/document-intel-cycle-0007/template-placeholder-audit.csv":  {
+                                                                                   "algorithm":  "sha256",
+                                                                                   "hash":  "8aca2ca11c6f761fbde3f4a77a8012bcfff79f1e1bb8cb2a0f7aec9748cdea98"
+                                                                               },
+    "public/templates/en/mediation-agreement.md":  {
+                                                       "algorithm":  "sha256",
+                                                       "hash":  "5b1ed1890e1ff112d51d6e6d0832e4930b39674c7141cdd0f8c98ada13356406"
+                                                   },
+    "ops/artifacts/document-intel-cycle-0007/template-missing-sections.csv":  {
+                                                                                  "algorithm":  "sha256",
+                                                                                  "hash":  "3ee443d57768aa5b67076e134d9970a44e0c6d33c9ea7cfbc89705fa517b05b4"
+                                                                              },
+    "ops/artifacts/document-intel-cycle-0007/template-placeholder-summary.txt":  {
+                                                                                     "algorithm":  "sha256",
+                                                                                     "hash":  "a99e7dc1d169c9edec69b1b6d04078d8bce8a8c6173f4d80a241a7d8bb5f5a8c"
+                                                                                 },
+    "public/templates/en/settlement-agreement.md":  {
+                                                        "algorithm":  "sha256",
+                                                        "hash":  "7f6c69b28bf2ce4489683a8a1b426a503a9c4cb1f25d17e4174ed73d29bfe4be"
+                                                    },
+    "ops/artifacts/document-intel-cycle-0007/template-placeholder-remediation-plan.md":  {
+                                                                                             "algorithm":  "sha256",
+                                                                                             "hash":  "cc199f01ba61a23de04e7df330cb0baf282352d4dbde958faa5860ee9e40269e"
+                                                                                         }
 }

@@ -62,7 +62,7 @@ We may update these Terms by posting a revised version on the Services. Material
 ## 13. Contact Information
 For questions about these Terms, contact:
 
-Legal Operations ? Terms Questions  
+Legal Operations – Terms Questions  
 123LegalDoc, Inc.  
 123 Legal Ops Way  
 Austin, TX 78701  
@@ -71,4 +71,6 @@ Austin, TX 78701
 ---
 
 **Spanish Summary (Resumen en Español)**  
-Al usar 123LegalDoc, usted acepta estos Términos. 123LegalDoc no es un bufete de abogados y el servicio se proporciona "tal cual". Consulte la Política de Privacidad y la Política de Reembolso para conocer cómo manejamos sus datos y cuándo están disponibles los reembolsos.
+
+Al usar 123LegalDoc, usted acepta estos Términos. 123LegalDoc no es un bufete de abogados y el servicio se proporciona "tal cual". Consulte el Aviso de Privacidad y la Política de Reembolsos para conocer cómo manejamos sus datos y cuándo están disponibles los reembolsos.
+

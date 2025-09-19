@@ -6,6 +6,7 @@ import { Mail, Clock, HelpCircle, LifeBuoy } from 'lucide-react';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
+import { SupportCTA } from './SupportCTA';
 
 interface SupportPageParams {
   locale: 'en' | 'es';
@@ -216,9 +217,15 @@ export default async function SupportPage({
         <div className="mt-16 text-center bg-secondary/50 p-6 rounded-lg border border-border">
           <p className="text-sm text-muted-foreground mb-3">📌 {content.faqPrompt}
           </p>
-          <a href={`/${locale}/faq`} className="inline-block text-primary hover:underline text-sm font-medium">
+          <SupportCTA
+            locale={locale}
+            href={`/${locale}/faq`}
+            ctaId="faq_link"
+            surface="faq_prompt"
+            className="inline-block text-primary hover:underline text-sm font-medium"
+          >
             {content.faqCta}
-          </a>
+          </SupportCTA>
         </div>
       </main>
     </>

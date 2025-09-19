@@ -1,8 +1,12 @@
 {
-    "files": [
-        {
-            "path": "ops/artifacts/growth-cycle-0005/marketing-route-audit.md",
-            "sha256": "CD2D77786727A2679B8847EEEB580823129C7756EC16CFF45449C60522415008"
-        }
-    ]
+    "files":  [
+                  {
+                      "sha256":  "CD2D77786727A2679B8847EEEB580823129C7756EC16CFF45449C60522415008",
+                      "path":  "ops/artifacts/growth-cycle-0005/marketing-route-audit.md"
+                  },
+                  {
+                      "sha256":  "BBB2F3C635277B4ADE2B18DCDC57A4E0D91D7EA448B359A0B2355D755323D97E",
+                      "path":  "ops/artifacts/growth-cycle-0005/analytics-instrumentation.md"
+                  }
+              ]
 }

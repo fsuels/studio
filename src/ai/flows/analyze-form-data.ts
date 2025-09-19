@@ -1,11 +1,7 @@
 import 'server-only';
 
-import {
-  createChatCompletion,
-  extractMessageContent,
-  getAIGatewayModel,
-  isAIGatewayConfigured,
-} from '@/ai/gateway';
+import { generateText, GuardrailViolationError } from '@/ai/ai-instance';
+import { isAIGatewayConfigured } from '@/ai/gateway';
 import type { FormField } from '@/data/formSchemas';
 
 export interface AnalyzeParams {
@@ -21,7 +17,7 @@ export interface FieldSuggestion {
   message: string;
 }
 
-const ANALYZE_MODEL = process.env.AI_GATEWAY_ANALYZE_MODEL;
+const ANALYZE_CHANNEL = 'form_review';
 
 const unavailableSuggestion: FieldSuggestion = {
   fieldId: 'general',
@@ -29,6 +25,23 @@ const unavailableSuggestion: FieldSuggestion = {
   message:
     'AI analysis service is unavailable. Please review your answers manually and contact support if you need assistance.',
 };
+
+const guardrailBlockedSuggestion = (reason?: string): FieldSuggestion => ({
+  fieldId: 'general',
+  importance: 'error',
+  message:
+    reason?.trim().length
+      ? `AI analysis blocked for safety review: ${reason}`
+      : 'AI analysis blocked for safety review. A specialist will follow up.',
+});
+
+const unexpectedFailureSuggestion = (error: unknown): FieldSuggestion => ({
+  fieldId: 'general',
+  importance: 'error',
+  message: `AI analysis failed: ${
+    error instanceof Error ? error.message : 'Unknown error'
+  }`,
+});
 
 export async function analyzeFormData(
   params: AnalyzeParams,
@@ -39,37 +52,33 @@ export async function analyzeFormData(
 
   const { documentType, schema, answers, language = 'en' } = params;
 
-  const messages = [
-    {
-      role: 'system' as const,
-      content:
-        'You are a bilingual senior paralegal ensuring data quality for legal intake forms. Respond with valid JSON matching the requested schema.',
-    },
-    {
-      role: 'user' as const,
-      content: [
-        `Language: ${language}`,
-        `Document type: ${documentType}`,
-        'Schema:',
-        JSON.stringify(schema, null, 2),
-        'Answers:',
-        JSON.stringify(answers, null, 2),
-        'Return ONLY a JSON array of objects like [{"fieldId":"", "importance":"info|warning|error", "message":""}]',
-        'Flag missing required answers as error, suspicious values as warning, and stylistic improvements as info.',
-      ].join('\n'),
-    },
-  ];
+  const prompt = [
+    `Language: ${language}`,
+    `Document type: ${documentType}`,
+    'Schema:',
+    JSON.stringify(schema, null, 2),
+    'Answers:',
+    JSON.stringify(answers, null, 2),
+    'Return ONLY a JSON array of objects like [{"fieldId":"", "importance":"info|warning|error", "message":""}]',
+    'Flag missing required answers as error, suspicious values as warning, and stylistic improvements as info.',
+  ].join('\n');
 
   try {
-    const completion = await createChatCompletion({
-      model: getAIGatewayModel(ANALYZE_MODEL),
-      messages,
-      temperature: 0.1,
+    const raw = await generateText(prompt, {
+      system:
+        'You are a bilingual senior paralegal ensuring data quality for legal intake forms. Respond with valid JSON matching the requested schema.',
+      channel: ANALYZE_CHANNEL,
+      language,
+      metadata: {
+        documentType,
+        schemaFieldCount: schema.length,
+      },
+      context: [`documentType:${documentType}`, `language:${language}`],
       responseFormat: 'json',
+      temperature: 0.1,
       maxTokens: 600,
     });
 
-    const raw = extractMessageContent(completion) || '[]';
     const suggestions = JSON.parse(raw) as FieldSuggestion[];
 
     if (!Array.isArray(suggestions)) {
@@ -78,15 +87,13 @@ export async function analyzeFormData(
 
     return suggestions;
   } catch (error) {
+    if (error instanceof GuardrailViolationError) {
+      console.warn('[analyze-form-data] Guardrail violation', error.decision);
+      return [guardrailBlockedSuggestion(error.decision.reason)];
+    }
+
     console.error('[analyze-form-data] AI gateway failure:', error);
-    return [
-      {
-        fieldId: 'general',
-        importance: 'error',
-        message: `AI analysis failed: ${
-          error instanceof Error ? error.message : 'Unknown error'
-        }`,
-      },
-    ];
+    return [unexpectedFailureSuggestion(error)];
   }
 }
+

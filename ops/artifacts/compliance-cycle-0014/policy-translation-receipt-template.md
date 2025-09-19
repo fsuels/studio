@@ -8,7 +8,7 @@ References: ops/artifacts/compliance-cycle-0012/spanish-policy-localization-stat
 - Translator: Redwood Legal LLP (Maria Santos) / Certification ID: WA ATA #WA-2023-118
 - Delivery Date: __________
 - Storage Paths:
-  - Markdown: docs/legal/es/
+  - Markdown: docs/legal/es/placeholder/
   - PDFs: ops/artifacts/compliance-cycle-0009/translation-approvals/
   - Certification letter: ops/artifacts/compliance-cycle-0009/translation-approvals/
 

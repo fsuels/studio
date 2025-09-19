@@ -212,6 +212,8 @@ class LegalTranslationEngine {
     warnings: TranslationWarning[];
     legalTermMatches: LegalTermMatch[];
     preservedTerms: string[];
+    translationMethod: 'ai_enhanced' | 'dictionary_lookup' | 'hybrid';
+    reviewRequired: boolean;
   }> {
     let translatedText = text;
     const warnings: TranslationWarning[] = [];
@@ -250,7 +252,7 @@ class LegalTranslationEngine {
 
           warnings.push({
             type: 'legal_concept_mismatch',
-            message: `"${legalTerm.term}" may not have direct equivalent in ${context.targetLanguage}`,
+            message: "" may not have direct equivalent in ,
             originalTerm: legalTerm.term,
             position: text.indexOf(legalTerm.term),
             severity: 'medium',
@@ -261,11 +263,11 @@ class LegalTranslationEngine {
           preservedTerms.push(legalTerm.term);
           warnings.push({
             type: 'untranslatable_term',
-            message: `"${legalTerm.term}" preserved in original language - no accurate translation available`,
+            message: "" preserved in original language - no accurate translation available,
             originalTerm: legalTerm.term,
             position: text.indexOf(legalTerm.term),
             severity: 'high',
-            suggestion: `Add explanatory note: ${translation.definition}`,
+            suggestion: Add explanatory note: ,
           });
         }
       } else {
@@ -273,7 +275,7 @@ class LegalTranslationEngine {
         preservedTerms.push(legalTerm.term);
         warnings.push({
           type: 'untranslatable_term',
-          message: `"${legalTerm.term}" has no translation in legal context`,
+          message: "" has no translation in legal context,
           originalTerm: legalTerm.term,
           position: text.indexOf(legalTerm.term),
           severity: 'high',
@@ -281,12 +283,21 @@ class LegalTranslationEngine {
       }
     }
 
-    // Apply AI translation with legal term preservation
-    translatedText = await this.aiTranslateWithPreservation(
+    const apiResult = await this.aiTranslateWithPreservation(
       text,
       context,
       termMap,
       preservedTerms,
+    );
+
+    translatedText = apiResult.text;
+    if (apiResult.warnings.length > 0) {
+      warnings.push(...apiResult.warnings);
+    }
+
+    const translationMethod = this.resolveTranslationMethod(
+      termMap.size,
+      apiResult.source,
     );
 
     return {
@@ -294,9 +305,10 @@ class LegalTranslationEngine {
       warnings,
       legalTermMatches,
       preservedTerms,
+      translationMethod,
+      reviewRequired: apiResult.reviewRequired,
     };
   }
-
   /**
    * AI translation with legal term preservation
    */
@@ -305,7 +317,12 @@ class LegalTranslationEngine {
     context: TranslationContext,
     termMap: Map<string, string>,
     preservedTerms: string[],
-  ): Promise<string> {
+  ): Promise<{
+    text: string;
+    warnings: TranslationWarning[];
+    source: 'ai' | 'fallback';
+    reviewRequired: boolean;
+  }> {
     try {
       const response = await fetch('/api/ai/legal-translate', {
         method: 'POST',
@@ -322,15 +339,53 @@ class LegalTranslationEngine {
         }),
       });
 
-      const { translatedText } = await response.json();
-      return translatedText;
+      const payload = (await response.json()) as {
+        translatedText?: string;
+        metadata?: {
+          source?: string;
+          warnings?: string[];
+        };
+      };
+
+      const source:
+        | 'ai'
+        | 'fallback' = payload.metadata?.source === 'fallback' ? 'fallback' : 'ai';
+
+      const mappedWarnings = Array.isArray(payload.metadata?.warnings)
+        ? payload.metadata!.warnings.map((message) => ({
+            type: 'system_warning' as const,
+            message,
+            originalTerm: '',
+            position: -1,
+            severity: source === 'fallback' ? 'high' : 'medium',
+          }))
+        : [];
+
+      return {
+        text: payload.translatedText ?? text,
+        warnings: mappedWarnings,
+        source,
+        reviewRequired: source === 'fallback' || mappedWarnings.length > 0,
+      };
     } catch (error) {
       console.error('AI translation failed:', error);
-      // Fallback to basic translation service
-      return this.fallbackTranslation(text, context);
+      const fallbackText = await this.fallbackTranslation(text, context);
+      return {
+        text: fallbackText,
+        warnings: [
+          {
+            type: 'system_warning',
+            message: 'AI translation unavailable; original text shown.',
+            originalTerm: '',
+            position: -1,
+            severity: 'high',
+          },
+        ],
+        source: 'fallback',
+        reviewRequired: true,
+      };
     }
   }
-
   /**
    * Refine translation for legal accuracy
    */
@@ -471,17 +526,17 @@ class LegalTranslationEngine {
         jurisdiction: ['US-ALL', 'CA-ALL', 'UK'],
         translations: {
           es: {
-            term: 'contraprestación',
+            term: 'contraprestaciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n',
             definition:
               'Algo de valor intercambiado entre las partes en un contrato',
             confidence: 0.95,
             source: 'legal_dictionary',
-            alternatives: ['consideración', 'causa'],
+            alternatives: ['consideraciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n', 'causa'],
           },
           fr: {
             term: 'contrepartie',
             definition:
-              'Quelque chose de valeur échangé entre les parties dans un contrat',
+              'Quelque chose de valeur ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©changÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© entre les parties dans un contrat',
             confidence: 0.92,
             source: 'legal_dictionary',
           },
@@ -508,9 +563,9 @@ class LegalTranslationEngine {
             source: 'legal_dictionary',
           },
           de: {
-            term: 'höhere Gewalt',
+            term: 'hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶here Gewalt',
             definition:
-              'Unvorhersehbare Umstände, die eine Partei daran hindern, einen Vertrag zu erfüllen',
+              'Unvorhersehbare UmstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nde, die eine Partei daran hindern, einen Vertrag zu erfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼llen',
             confidence: 0.85,
             source: 'legal_dictionary',
             alternatives: ['unabwendbares Ereignis'],
@@ -596,6 +651,18 @@ class LegalTranslationEngine {
     return 'dictionary_lookup';
   }
 
+  private resolveTranslationMethod(
+    termMapSize: number,
+    source: 'ai' | 'fallback',
+  ): 'ai_enhanced' | 'dictionary_lookup' | 'hybrid' {
+    if (source === 'fallback') {
+      return 'dictionary_lookup';
+    }
+    if (termMapSize > 0) {
+      return 'hybrid';
+    }
+    return 'ai_enhanced';
+  }
   private async fallbackTranslation(
     text: string,
     _context: TranslationContext,

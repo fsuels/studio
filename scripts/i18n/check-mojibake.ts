@@ -10,13 +10,13 @@ interface Finding {
   snippet: string;
 }
 
-const ESP_LOCALE_DIRS = [
+const TARGET_DIRECTORIES = [
   path.join('public', 'locales', 'es'),
   path.join('docs', 'legal'),
 ];
 
-const LETTERS = 'A-Za-z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1\u00DC\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00FC';
-const PATTERN = new RegExp(`[${LETTERS}\d]\?[${LETTERS}\d]`, 'u');
+const patternSource = '[A-Za-z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1\u00DC\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00FC]\?[A-Za-z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1\u00DC\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00FC]';
+const PATTERN = new RegExp(patternSource, 'u');
 const REPLACEMENT_CHAR = '\uFFFD';
 
 async function gatherFiles(root: string): Promise<string[]> {
@@ -36,8 +36,8 @@ async function gatherFiles(root: string): Promise<string[]> {
 async function scanFile(filePath: string): Promise<Finding[]> {
   const content = await readFile(filePath, 'utf8');
   const findings: Finding[] = [];
-  const lines = content.split(/?
-/);
+  const lines = content.split(/\r?\n/);
+
   lines.forEach((line, idx) => {
     const match = line.match(PATTERN);
     if (match && match.index !== undefined) {
@@ -48,6 +48,7 @@ async function scanFile(filePath: string): Promise<Finding[]> {
         snippet: line.trim(),
       });
     }
+
     const badCharIndex = line.indexOf(REPLACEMENT_CHAR);
     if (badCharIndex !== -1) {
       findings.push({
@@ -58,12 +59,13 @@ async function scanFile(filePath: string): Promise<Finding[]> {
       });
     }
   });
+
   return findings;
 }
 
 async function main() {
   const allFiles = new Set<string>();
-  for (const dir of ESP_LOCALE_DIRS) {
+  for (const dir of TARGET_DIRECTORIES) {
     const fullDir = path.join(process.cwd(), dir);
     const files = await gatherFiles(fullDir);
     files.forEach((file) => allFiles.add(file));
@@ -75,7 +77,7 @@ async function main() {
   }
 
   if (findings.length === 0) {
-    console.log('? No mojibake patterns detected across policy and es locale files.');
+    console.log('? No mojibake patterns detected across policy markdown and es locale files.');
     return;
   }
 

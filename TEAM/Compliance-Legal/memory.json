@@ -1,6 +1,6 @@
 {
-    "cycle_id":  "compliance-cycle-0014",
-    "last_updated":  "2025-09-19T19:54:55.3979902Z",
+    "cycle_id":  "compliance-cycle-0017",
+    "last_updated":  "2025-09-19T20:20:08.0781053Z",
     "notes":  [
                   "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
                   "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
@@ -39,7 +39,17 @@
                   "Created docs/legal/es staging instructions for incoming Spanish policies (docs/legal/es/README.md).",
                   "Updated DSAR dry-run tracker with bilingual acknowledgment and telemetry dependencies (ops/artifacts/compliance-cycle-0014/dsar-dry-run-updates.md).",
                   "Outlined release gate evidence checklist covering UPL, privacy, marketing, payments, and security items (ops/artifacts/compliance-cycle-0014/release-gate-evidence-checklist.md).",
-                  "Created Spanish policy translation receipt template for upcoming docs/legal/es delivery (ops/artifacts/compliance-cycle-0014/policy-translation-receipt-template.md)."
+                  "Created Spanish policy translation receipt template for upcoming docs/legal/es delivery (ops/artifacts/compliance-cycle-0014/policy-translation-receipt-template.md).",
+                  "Documented consent telemetry export instructions for Platform ahead of DSAR dry run evidence capture (ops/artifacts/compliance-cycle-0015/consent-telemetry-export-instructions.md).",
+                  "Created DSAR template distribution log to confirm cross-pod handoff (ops/artifacts/compliance-cycle-0015/dsar-template-distribution-log.md).",
+                  "Filled DSAR template distribution log with Platform/Privacy contacts and evidence placeholders (ops/artifacts/compliance-cycle-0015/dsar-template-distribution-log.md).",
+                  "Staged consent telemetry evidence directory with README and hashes.txt scaffold for Platform export (ops/artifacts/compliance-cycle-0015/consent-telemetry/README.md).",
+                  "Drafted Platform/Privacy outreach templates and scheduled 2025-09-20 handoff reminders (ops/artifacts/compliance-cycle-0015/dsar-template-distribution/outreach-draft.md).",
+                  "Documented consent telemetry outreach draft and evidence folder scaffolding (ops/artifacts/compliance-cycle-0015/consent-telemetry/outreach-draft.md).",
+                  "Published reminder schedule for DSAR template and consent telemetry outreach with 24h follow-up (ops/artifacts/compliance-cycle-0015/dsar-template-distribution/reminder-schedule.md).",
+                  "Created docs/legal/es/placeholder/ with stub files to receive certified translations and updated receipt template to point to placeholder directory.",
+                  "Prepared final outreach messages for DSAR template and consent telemetry handoffs (ops/artifacts/compliance-cycle-0015/dsar-template-distribution/platform-slack-message.txt).",
+                  "Authored post-delivery verification checklist covering confirmations, hash logging, and release gate linkage (ops/artifacts/compliance-cycle-0015/post-delivery-checklist.md)."
               ],
     "todos":  [
                   "Execute Spanish policy localization plan, produce docs/legal/es/*, and attach bilingual sign-off evidence.",
@@ -60,6 +70,14 @@
                   "Maintain translation vendor roster; add new certifications or jurisdictions as they come online.",
                   "Develop processor list and execute TIAs using ops/compliance/transfer-impact-assessment-template.md.",
                   "Partner with Platform/Growth to execute policy-linking plan and capture evidence.",
-                  "Distribute DSAR acknowledgment template to Platform and Privacy teams before the 2025-09-23 dry run; confirm receipt."
+                  "Distribute DSAR acknowledgment template to Platform and Privacy teams before the 2025-09-23 dry run; confirm receipt.",
+                  "Send consent telemetry export instructions to Platform and confirm delivery before 2025-09-23 dry run.",
+                  "Record DSAR template distribution confirmations in ops/artifacts/compliance-cycle-0015/dsar-template-distribution-log.md with evidence paths.",
+                  "Replace TBD entries in DSAR template distribution log once outreach confirmations are recorded.",
+                  "Verify Platform uploads consent telemetry files and populate hashes.txt before release gate review.",
+                  "Upon translation delivery, replace docs/legal/es/placeholder/* with certified markdown and update hashes in receipt log.",
+                  "Send DSAR template Slack/email outreach at 2025-09-20T17:00:00Z and log confirmations with evidence.",
+                  "Send consent telemetry instructions to Platform at 2025-09-20T17:00:00Z, then populate post-delivery checklist as artifacts arrive.",
+                  "Replace docs/legal/es/placeholder markdown once certified translations land; update translation receipt and release gate evidence."
               ]
 }

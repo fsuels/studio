@@ -1,5 +1,5 @@
 // src/lib/marketplace/__tests__/revenue-sharing-system.test.ts
-import { RevenueServingSystem } from '../revenue-sharing-system';
+import { RevenueSharingSystem } from '../revenue-sharing-system';
 import type {
   PurchaseEvent,
   PayoutRequest,
@@ -96,8 +96,8 @@ const mockStripe = {
   },
 };
 
-describe('RevenueServingSystem', () => {
-  let revenueSystem: RevenueServingSystem;
+describe('RevenueSharingSystem', () => {
+  let revenueSystem: RevenueSharingSystem;
 
   const mockPurchaseEvent: PurchaseEvent = {
     templateId: 'template-123',
@@ -112,7 +112,7 @@ describe('RevenueServingSystem', () => {
   };
 
   beforeEach(() => {
-    revenueSystem = new RevenueServingSystem();
+    revenueSystem = new RevenueSharingSystem();
     (revenueSystem as any).stripe = mockStripe;
     jest.clearAllMocks();
   });

@@ -1,0 +1,22 @@
+[
+    {
+        "path":  "checksums.json",
+        "sha256":  "F5AE90E3D207D370FEF97AF7A334C63A1D9C5AE5F196655D01C208EF3BFE5500"
+    },
+    {
+        "path":  "consent-telemetry-export-instructions.md",
+        "sha256":  "C3A9D4A9FB8E338A8A4541A56F00C060021F8351CC952D41999B1B08FDD11E4D"
+    },
+    {
+        "path":  "dsar-template-distribution-log.md",
+        "sha256":  "83EBEC197901BB1B25E38E7D188EAE6BF621434B73199AFAAE21A0DEE617AA61"
+    },
+    {
+        "path":  "consent-telemetry\\hashes.txt",
+        "sha256":  "B68877D402775D353AE6906E35FCD7D94D60197DE479812CB21D19E3C2D2F35B"
+    },
+    {
+        "path":  "consent-telemetry\\README.md",
+        "sha256":  "2A69593446878F6AE84F7AE9A4F4A68F272E9353491B12128E9FF4906B68CE14"
+    }
+]

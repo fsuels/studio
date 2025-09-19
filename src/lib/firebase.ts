@@ -52,7 +52,7 @@ let app: FirebaseApp;
 if (!getApps().length) {
   const config = getFirebaseConfig();
   app = initializeApp(config);
-  console.log('🔥 Firebase initialized successfully');
+  console.log('[firebase] Initialized client SDK');
 } else {
   app = getApp();
 }
@@ -71,7 +71,7 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 }
 
 /* ------------------------------------------------------------------ */
-/* Firestore – optional HTTP long-polling and show only errors        */
+/* Firestore � optional HTTP long-polling and show only errors        */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
 export function getDb(): Firestore {
@@ -81,7 +81,7 @@ export function getDb(): Firestore {
     process.env.NEXT_PUBLIC_FIRESTORE_FORCE_POLLING === 'true';
 
   /* -------------------------------------------------------------
-     ✅  initializeFirestore **requires** a settings object.
+     ?  initializeFirestore **requires** a settings object.
         If we omit it (i.e. pass `undefined`) the SDK dereferences
         `settings.cacheSizeBytes` and crashes.
      ------------------------------------------------------------- */
@@ -113,3 +113,4 @@ export const auth = getFirebaseAuth(app);
 export { app };
 // Export a Firestore instance getter to avoid collection() errors
 export const db = getDb();
+

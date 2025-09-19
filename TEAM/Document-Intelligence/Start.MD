@@ -19,5 +19,5 @@ Flow:
 6. Coordinate with compliance guardrails: avoid UPL, respect versioning rules, and document legal references when templates change.
 7. Finish with the standard outputs (CYCLE_SUMMARY, PATCH, PATCH_META, UPDATED_MEMORY_MD, UPDATED_REMEMBER_MD, PR info, TRACE_EVENTS, CYCLE_DONE). Leave `UPDATED_MEMORY_MD` and `UPDATED_REMEMBER_MD` as `null` and populate `handoff_summary` inside `PATCH_META` with complaint IDs, statuses, and artifacts so the CEO can update global context while honoring contract limits.
 
-Begin.
+Continue working review systematically very carefully as a user  everything you are responsible with in the project. check everything each page from homepage to the last. make sure everything you are responsible for exist and is working of it working properly. no excuses.
 ```

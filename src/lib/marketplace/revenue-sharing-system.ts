@@ -29,7 +29,7 @@ import type {
  * Revenue Sharing System for Template Marketplace
  * Handles payouts, commission tracking, and financial reporting for creators
  */
-export class RevenueServingSystem {
+export class RevenueSharingSystem {
   private db: ReturnType<typeof getDb> | null = null;
 
   constructor() {
@@ -50,7 +50,99 @@ export class RevenueServingSystem {
   /**
    * Process revenue share for a template purchase
    */
-  async processRevenueDhare(params: {
+  async setupCreatorAccount({
+    userId,
+    email,
+    country,
+  }: {
+    userId: string;
+    email: string;
+    country: string;
+  }): Promise<{ accountId: string; onboardingUrl: string | null }> {
+    const stripe = getStripeServerClient({ apiVersion: STRIPE_API_VERSION });
+    const account = await stripe.accounts.create({
+      type: 'express',
+      email,
+      country,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+      metadata: {
+        marketplace_user_id: userId,
+      },
+    });
+
+    const onboardingLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: process.env.STRIPE_ACCOUNT_LINK_REFRESH_URL || 'https://example.com/account/refresh',
+      return_url: process.env.STRIPE_ACCOUNT_LINK_RETURN_URL || 'https://example.com/account/return',
+      type: 'account_onboarding',
+    });
+
+    const db = await this.ensureDb();
+    await setDoc(doc(collection(db, 'marketplace-creators'), userId), {
+      stripeAccountId: account.id,
+      onboardingUrl: onboardingLink.url,
+      status: 'pending',
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+
+    return {
+      accountId: account.id,
+      onboardingUrl: onboardingLink.url,
+    };
+  }
+
+
+  async requestPayout({
+    creatorId,
+    amount,
+    currency,
+    destinationAccount,
+  }: {
+    creatorId: string;
+    amount: number;
+    currency: string;
+    destinationAccount: string;
+  }): Promise<{ payoutId: string; status: string }> {
+    const stripe = getStripeServerClient({ apiVersion: STRIPE_API_VERSION });
+
+    const payout = await stripe.transfers.create({
+      amount,
+      currency,
+      destination: destinationAccount,
+      metadata: {
+        marketplace_creator_id: creatorId,
+      },
+    });
+
+    const db = await this.ensureDb();
+    await setDoc(doc(collection(db, 'marketplace-payouts'), payout.id), {
+      creatorId,
+      amount,
+      currency,
+      destinationAccount,
+      stripeTransferId: payout.id,
+      status: payout.status,
+      createdAt: serverTimestamp(),
+    });
+
+    return {
+      payoutId: payout.id,
+      status: payout.status,
+    };
+  }
+
+  async processRevenueShare(params: {
+    templateId: string;
+    installationId: string;
+    totalAmount: number;
+    currency: string;
+    paymentIntentId: string;
+    buyerId: string;
+  }): Promise<{ creatorShare: number; platformFee: number; transactionId: string }> {
+
     templateId: string;
     installationId: string;
     totalAmount: number; // in cents

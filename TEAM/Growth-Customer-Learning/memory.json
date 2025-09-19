@@ -1,6 +1,6 @@
 {
     "cycle_id": "growth-cycle-0005",
-    "last_updated": "2025-09-19T19:54:27.2254966Z",
+    "last_updated": "2025-09-19T20:17:08.190129+00:00",
     "notes": [
         "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
         "Retained server-rendered structured data while delegating CTA UI to a client component for tracking.",
@@ -14,7 +14,10 @@
         "Instrumented footer newsletter subscribe flow to emit footer_subscribe_attempt/result analytics before toast feedback.",
         "Completed full pass on bilingual marketing routes, confirming metadata + JSON-LD coverage; see ops/artifacts/growth-cycle-0005/marketing-route-audit.md.",
         "Verified CTA analytics coverage for homepage, pricing, features, templates, signwell; cataloged gaps for partners, online-notary, support, and blog navigation events.",
-        "Spot-checked translation assets in public/locales to confirm ES parity for audited pages; noted need for automated parity/JSON-LD validation."
+        "Spot-checked translation assets in public/locales to confirm ES parity for audited pages; noted need for automated parity/JSON-LD validation.",
+        "Instrumented online-notary hero CTA with OnlineNotaryCTA wrapper to emit online_notary_cta_click containing locale and surface metadata.",
+        "Wrapped partners hero CTAs in PartnersCTA so mailto and support buttons fire partners_cta_click analytics.",
+        "Added SupportCTA plus blog article/related link wrappers to emit support_cta_click, blog_article_click, and blog_related_click events."
     ],
     "todos": [
         "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
@@ -28,8 +31,8 @@
         "Coordinate with Platform to ingest home_cta_click into GA4/warehouse and surface experiment bucket metadata.",
         "Coordinate with Platform to ingest templates_cta_click into GA4/warehouse so quiz funnel entries are tracked.",
         "Coordinate with Platform to ingest features_cta_click into GA4/warehouse for feature-to-purchase attribution.",
-        "Instrument partners mailto/support CTAs and online-notary hero CTA with track() events to maintain CTA coverage.",
-        "Add blog_article_click and blog_related_click analytics for blog index/detail flows and hand off to Platform for GA4 ingestion.",
-        "Author automated check (lint/test) to validate marketing JSON-LD schemas so regressions fail CI."
+        "Author automated check (lint/test) to validate marketing JSON-LD schemas so regressions fail CI.",
+        "Coordinate with Platform to ingest online_notary_cta_click, partners_cta_click, support_cta_click, blog_article_click, and blog_related_click events into GA4/warehouse.",
+        "Confirm Compliance is comfortable with newly instrumented partners/support/online-notary CTAs logging event payloads."
     ]
 }

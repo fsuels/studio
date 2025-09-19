@@ -1,20 +1,24 @@
-﻿{
-    "cycle_id": "ai-automation-cycle-0010",
-    "last_updated": "2025-09-19T19:59:10.6436071Z",
-    "notes": [
-        "Replaced ai-instance stub with guardrail-enforced LiteLLM gateway client; gateway secrets now required before any AI call (src/ai/ai-instance.ts).",
-        "Refactored infer-document-type flow to use LiteLLM JSON output with catalog validation and guardrail fallbacks (src/ai/flows/infer-document-type.ts).",
-        "Hardened legal translation and legal-term API routes with guardrail-aware fallbacks and surfaced telemetry metadata (src/app/api/ai/legal-translate/route.ts, src/app/api/ai/identify-legal-terms/route.ts).",
-        "Added deterministic Jest coverage around generateText guardrails and document classification flow (src/ai/__tests__/ai-instance.test.ts, src/ai/flows/__tests__/infer-document-type.flow.test.ts).",
-        "Migrated legal update summarizer to LiteLLM gateway with guardrail checks; removed OpenAI dependency (src/lib/legal-updates/ai-summarizer.ts).",
-        "Updated legal update runbook env instructions to reference AI gateway key (LEGAL_UPDATE_INTELLIGENCE_FEED.md).",
-        "Recorded OSS migration details in ops/artifacts/ai-automation-cycle-0009/legal-update-summarizer.md."
-    ],
-    "todos": [
-        "Emit guardrail events to Langfuse/Sentry for legal update summarizer responses.",
-        "Evaluate OSS summarizer accuracy/latency and tune model parameters or fallback heuristics.",
-        "Add unit tests/fixtures for legal update summarizer once synthetic data is prepared.",
-        "Plumb guardrail decision telemetry from aiInstance.generateText into Langfuse/Prometheus/Sentry once those stacks are ready.",
-        "Update client flows to surface translation/term detection warnings when fallbacks trigger."
-    ]
+{
+    "cycle_id":  "ai-automation-cycle-0012",
+    "last_updated":  "2025-09-19T20:17:40.3662138Z",
+    "notes":  [
+                  "Replaced ai-instance stub with guardrail-enforced LiteLLM gateway client; gateway secrets now required before any AI call (src/ai/ai-instance.ts).",
+                  "Refactored infer-document-type flow to use LiteLLM JSON output with catalog validation and guardrail fallbacks (src/ai/flows/infer-document-type.ts).",
+                  "Hardened legal translation and legal-term API routes with guardrail-aware fallbacks and surfaced telemetry metadata (src/app/api/ai/legal-translate/route.ts, src/app/api/ai/identify-legal-terms/route.ts).",
+                  "Added deterministic Jest coverage around generateText guardrails and document classification flow (src/ai/__tests__/ai-instance.test.ts, src/ai/flows/__tests__/infer-document-type.flow.test.ts).",
+                  "Migrated legal update summarizer to LiteLLM gateway with guardrail checks; removed OpenAI dependency (src/lib/legal-updates/ai-summarizer.ts).",
+                  "Updated legal update runbook env instructions to reference AI gateway key (LEGAL_UPDATE_INTELLIGENCE_FEED.md).",
+                  "Recorded OSS migration details in ops/artifacts/ai-automation-cycle-0009/legal-update-summarizer.md.",
+                  "Routed analyzeFormData through aiInstance.generateText with guardrail-specific fallbacks and safety logging (src/ai/flows/analyze-form-data.ts).",
+                  "Documented LiteLLM-first legal update playbook and scrubbed mojibake from LEGAL_UPDATE_INTELLIGENCE_FEED.md.",
+                  "Added guardrail regression tests for form analysis flows (src/ai/flows/__tests__/analyze-form-data.guardrails.test.ts)."
+              ],
+    "todos":  [
+                  "Emit guardrail events to Langfuse/Sentry for legal update summarizer responses.",
+                  "Evaluate OSS summarizer accuracy/latency and tune model parameters or fallback heuristics.",
+                  "Add unit tests/fixtures for legal update summarizer once synthetic data is prepared.",
+                  "Plumb guardrail decision telemetry from aiInstance.generateText into Langfuse/Prometheus/Sentry once those stacks are ready.",
+                  "Update client flows to surface translation/term detection warnings when fallbacks trigger.",
+                  "Ensure guardrail-blocked form analysis responses surface clear UX messaging in intake flows."
+              ]
 }

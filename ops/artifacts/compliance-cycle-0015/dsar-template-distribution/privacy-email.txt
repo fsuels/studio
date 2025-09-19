@@ -1,0 +1,8 @@
+﻿Subject: DSAR Acknowledgment Template – Action Needed by 2025-09-23
+
+Hi Jordan,
+
+Please review the updated DSAR acknowledgment template (English/Spanish) before the DSAR-DRYRUN-2025W38 session: ops/compliance/dsar-acknowledgment-template.md. Reply-all to confirm receipt and availability for the dry run; we will archive your reply under ops/artifacts/compliance-cycle-0015/dsar-template-distribution/privacy-confirmation.pdf.
+
+Thanks,
+Compliance and Legal Ops

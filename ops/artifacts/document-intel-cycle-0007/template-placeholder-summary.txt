@@ -1,6 +1,4 @@
 ﻿Total EN templates audited: 350
-Templates under 500 words: 322
-Templates meeting section + legal notice requirements: 
-28
-Templates missing any required section: 
-350
+Templates under 500 words: 320
+Templates meeting section + legal notice requirements: 2
+Templates missing required sections: 348

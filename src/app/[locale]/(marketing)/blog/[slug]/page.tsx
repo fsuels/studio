@@ -3,6 +3,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { RelatedDocumentLink } from './RelatedDocumentLink';
 import { blogArticles, type BlogArticle } from '@/data/blogArticles';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
@@ -215,10 +216,14 @@ export default async function BlogPostPage({
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Related Legal Documents</h2>
             <div className="grid gap-4">
               {related.map((doc) => (
-                <Link key={doc.id} href={doc.href} className="block border rounded-lg p-4 bg-white dark:bg-gray-900 hover:bg-muted transition">
-                  <h3 className="text-lg font-semibold mb-1">{doc.title}</h3>
-                  <p className="text-sm text-muted-foreground">{doc.description}</p>
-                </Link>
+                <RelatedDocumentLink
+                  key={doc.id}
+                  locale={locale}
+                  href={doc.href}
+                  documentId={doc.id}
+                  title={doc.title}
+                  description={doc.description}
+                />
               ))}
             </div>
           </div>

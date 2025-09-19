@@ -1,0 +1,40 @@
+{
+  "cycle_id": "document-intel-cycle-0008",
+  "generated_at": "2025-09-19T20:22:01.529Z",
+  "templates": {
+    "en": {
+      "file": "public/templates/en/advance-directive.md",
+      "before": {
+        "wordCount": 45,
+        "variableCount": 0,
+        "hasSection1": false,
+        "hasSignatures": false,
+        "hasLegalNotice": false
+      },
+      "after": {
+        "wordCount": 879,
+        "variableCount": 39,
+        "hasSection1": true,
+        "hasSignatures": true,
+        "hasLegalNotice": true
+      }
+    },
+    "es": {
+      "file": "public/templates/es/advance-directive.md",
+      "before": {
+        "wordCount": 55,
+        "variableCount": 0,
+        "hasSection1": false,
+        "hasSignatures": false,
+        "hasLegalNotice": false
+      },
+      "after": {
+        "wordCount": 957,
+        "variableCount": 39,
+        "hasSection1": true,
+        "hasSignatures": true,
+        "hasLegalNotice": true
+      }
+    }
+  }
+}

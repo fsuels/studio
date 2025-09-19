@@ -29,7 +29,7 @@ At our discretion we may provide prorated credits for unused months on annual pl
 2. Include your order number, purchase date, and reason for the request.
 3. Our team will review and respond within 5 business days. We may ask for additional details to help us improve the product.
 
-If a refund is approved, it may take 5?10 business days for the credit to appear on your statement, depending on your financial institution.
+If a refund is approved, it may take 5–10 business days for the credit to appear on your statement, depending on your financial institution.
 
 ## 6. Chargebacks
 Please contact us before initiating a chargeback. Unauthorized or fraudulent chargebacks may result in suspension of your account.
@@ -40,4 +40,6 @@ Consumers in certain jurisdictions may have additional rights that cannot be wai
 ---
 
 **Spanish Summary (Resumen en Español)**  
+
 Ofrecemos un reembolso completo dentro de los 30 días para compras iniciales si no ha descargado más de dos documentos y el producto no cumplió con sus expectativas. Envíe un correo electrónico a billing@123legaldoc.com con su número de pedido.
+

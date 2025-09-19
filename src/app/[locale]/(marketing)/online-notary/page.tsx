@@ -5,6 +5,7 @@ import { usStates } from '@/lib/usStates';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';
 import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
+import { OnlineNotaryCTA } from './OnlineNotaryCTA';
 
 interface OnlineNotaryPageParams {
   locale: 'en' | 'es';
@@ -219,12 +220,15 @@ export default async function OnlineNotaryPage({
         <section className="text-center space-y-4">
           <h1 className="text-3xl font-bold text-foreground">{content.heroTitle}</h1>
           <p className="text-muted-foreground max-w-3xl mx-auto text-lg">{content.heroSubtitle}</p>
-          <a
+          <OnlineNotaryCTA
+            locale={locale}
             href={`/${locale}/templates`}
+            surface="hero"
+            ctaId="add_document"
             className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90"
           >
             {content.heroCta}
-          </a>
+          </OnlineNotaryCTA>
         </section>
 
         <section className="md:flex md:items-start gap-4">
