@@ -1,14 +1,14 @@
 {
   "cycle_id": "document-intel-cycle-0008",
-  "generated_at": "2025-09-19T20:22:09.188Z",
+  "generated_at": "2025-09-19T20:25:06.388Z",
   "files": {
     "advance-directive-metrics.json": {
-      "sha256": "f640ef0cbb3a1ef0e4b7c87a268b57a00ef3bbe935b6a7e03b79db46bc9540d7",
-      "size_bytes": 956
+      "sha256": "d83fa3148c8e0b406351aa95aeaefd0838b50d078bea6342173bd5c88a3f5a24",
+      "size_bytes": 957
     },
     "advance-directive-summary.md": {
-      "sha256": "e20e1ae1cc9b69fdd50679ad8127654f3e532af1384f739fc221c794c7aafbe4",
-      "size_bytes": 1867
+      "sha256": "2a6995290d6e820e1dc5beb730caace6fd35747943546ad341341c1f16334a4c",
+      "size_bytes": 1995
     }
   }
 }

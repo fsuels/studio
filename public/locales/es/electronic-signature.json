@@ -34,7 +34,7 @@
     "docPreparedTitle": "Documento Preparado",
     "docPreparedDesc": "Su documento está ahora listo para la firma.",
     "docPrepareErrorTitle": "Error al Preparar",
-    "docPrepareErrorDesc": "Hubo un problema al preparar su documento. Int\u00e9ntelo de nuevo.",
+    "docPrepareErrorDesc": "Hubo un problema al preparar su documento. Inténtelo de nuevo.",
     "ctaPrepareDocument": "Preparar Documento para Firmar",
     "ctaViewDocument": "Ver y Firmar Documento"
   },

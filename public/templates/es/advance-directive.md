@@ -68,6 +68,23 @@ Esta Directiva Anticipada ("Directiva") es otorgada por **{{principal_full_name}
 
 ---
 
+## 9. Coordinación de Cuidados y Contactos
+
+9.1 **Médico Principal.** Médico de referencia: **{{primary_physician_name}}**, teléfono **{{primary_physician_phone}}**.
+9.2 **Centro Preferido.** Si se requiere hospitalización, la Persona Otorgante prefiere **{{preferred_hospital_name}}** en **{{preferred_hospital_city}}**, siempre que sea viable.
+9.3 **Asesor Espiritual o Cultural.** Contactar a **{{spiritual_advisor_name}}** al **{{spiritual_advisor_phone}}** para apoyar prácticas religiosas o culturales durante la atención.
+9.4 **Notas de Coordinación.** Instrucciones adicionales para el Representante y los proveedores: **{{care_coordination_notes}}**.
+
+---
+
+## 10. Distribución y Almacenamiento
+
+10.1 **Destinatarios Autorizados.** Se entregarán copias de esta Directiva a: **{{emergency_distribution_list}}**.
+10.2 **Ubicación de Resguardo.** La Persona Otorgante guardará el original en **{{directive_storage_location}}**.
+10.3 **Revisión Periódica.** La Persona Otorgante revisará y actualizará esta Directiva cada **{{review_frequency}}** (o antes si ocurren cambios importantes).
+
+---
+
 ## Firmas y Declaraciones
 
 La Persona Otorgante firma esta Directiva voluntariamente tras consultar, o haber tenido la oportunidad de consultar, con profesionales médicos y legales.

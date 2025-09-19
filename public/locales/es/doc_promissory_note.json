@@ -16,7 +16,10 @@
     "whenToUse": {
       "title": "¿Cuándo Debes Usar Uno?",
       "table": {
-        "headers": ["Situación", "Por Qué un Pagaré es Crucial"],
+        "headers": [
+          "Situación",
+          "Por Qué un Pagaré es Crucial"
+        ],
         "rows": [
           [
             "Prestar dinero a amigos o familiares",
@@ -54,14 +57,23 @@
     "clauses": {
       "title": "Cláusulas Esenciales y Puntos de Datos",
       "table": {
-        "headers": ["Cláusula/Punto de Dato", "Por Qué Es Importante"],
+        "headers": [
+          "Cláusula/Punto de Dato",
+          "Por Qué Es Importante"
+        ],
         "rows": [
-          ["Monto Principal", "La suma inicial de dinero prestada."],
+          [
+            "Monto Principal",
+            "La suma inicial de dinero prestada."
+          ],
           [
             "Tasa de Interés",
             "El porcentaje cobrado sobre el préstamo, si lo hay (verifique las leyes de usura estatales)."
           ],
-          ["Fecha del Pagaré", "Cuándo se hace la promesa de pago."],
+          [
+            "Fecha del Pagaré",
+            "Cuándo se hace la promesa de pago."
+          ],
           [
             "Partes (Prestamista y Prestatario)",
             "Nombres legales completos y direcciones de todos los involucrados."
@@ -82,7 +94,10 @@
             "Ley Aplicable",
             "Las leyes de qué estado o provincia se aplicarán al pagaré."
           ],
-          ["Firmas", "Hace que el pagaré sea legalmente vinculante."]
+          [
+            "Firmas",
+            "Hace que el pagaré sea legalmente vinculante."
+          ]
         ]
       }
     },

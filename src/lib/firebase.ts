@@ -71,7 +71,7 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 }
 
 /* ------------------------------------------------------------------ */
-/* Firestore – optional HTTP long-polling and show only errors        */
+/* Firestore - optional HTTP long-polling and show only errors        */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
 export function getDb(): Firestore {

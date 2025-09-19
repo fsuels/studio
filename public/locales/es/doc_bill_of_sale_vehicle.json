@@ -32,7 +32,10 @@
     "why": {
       "title": "¿Por Qué Necesitas Uno (Incluso en Estados de \"Apretón de Manos\")?",
       "table": {
-        "headers": ["Riesgo Sin Contrato de Compraventa", "Protección Con Uno"],
+        "headers": [
+          "Riesgo Sin Contrato de Compraventa",
+          "Protección Con Uno"
+        ],
         "rows": [
           [
             "No puedes probar que ya no eres dueño del auto—multas o peajes aún llegan a tu nombre",
@@ -66,7 +69,10 @@
     "components": {
       "title": "Cláusulas Esenciales y Puntos de Datos",
       "table": {
-        "headers": ["Cláusula", "Por Qué Importa"],
+        "headers": [
+          "Cláusula",
+          "Por Qué Importa"
+        ],
         "rows": [
           [
             "Nombres Legales Completos y Direcciones",

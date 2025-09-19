@@ -7,10 +7,10 @@
         "Placeholder remediation plan drafted at ops/artifacts/document-intel-cycle-0007/template-placeholder-remediation-plan.md; coordinate content sourcing with Legal/Growth.",
         "Audit artifacts (template-placeholder-audit.csv, template-missing-sections.csv, template-placeholder-summary.txt) quantify placeholder backlog for prioritization.",
         "Rewrote mediation-agreement.md with full production-ready content (833 words, 23 variables, required sections present); template now ready for verification batches.",
-        "Converted advance-directive templates (EN 879 words, ES 957 words) into production-ready drafts with 39 shared variables; see ops/artifacts/document-intel-cycle-0008/advance-directive-summary.md for detailed blueprint."
+        "Converted advance-directive templates (EN 994 words, ES 1088 words) into production-ready drafts with 49 shared variables, including new care coordination and storage sections; see ops/artifacts/document-intel-cycle-0008/advance-directive-summary.md for detailed blueprint."
     ],
     "todos": [
-        "Integrate new advance-directive variables into question flows/schema and rerun verify-templates for the refreshed templates set.",
+        "Integrate new advance-directive variables (care coordination, storage, pregnancy, organ donation) into question flows/schema and rerun verify-templates for the refreshed templates set.",
         "QA Georgia T-7 overlay placement (especially sale date and buyer address) against generated PDFs before release.",
         "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
         "Automate translation parity checks in verify-templates to prevent regressions.",

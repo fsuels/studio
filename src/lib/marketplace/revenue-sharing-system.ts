@@ -253,7 +253,7 @@ export class RevenueSharingSystem {
       throw new Error('Creator does not have a connected Stripe account');
     }
 
-    // Calculate Stripe fees (2.9% + 30¢ for transfers)
+    // Calculate Stripe fees (2.9% + 30Â¢ for transfers)
     const stripeFee = Math.round(params.amount * 0.029) + 30;
     const netAmount = params.amount - stripeFee;
 

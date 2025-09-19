@@ -27,5 +27,8 @@ Austin, TX 78701
 
 ---
 
-**Spanish Summary (Resumen en Español)**  
-123LegalDoc no es un bufete de abogados y la información que proporcionamos no constituye asesoría legal. No se forma una relación abogado-cliente al usar nuestros servicios. Las leyes varían según el estado; consulte a un abogado con licencia en su jurisdicción antes de utilizar cualquier documento generado.
+**Spanish Summary (Resumen en Español)**  
+
+123LegalDoc no es un bufete de abogados y la información que proporcionamos no constituye asesoría legal. No se forma una relación abogado-cliente al usar nuestros servicios. Las leyes varían según el estado; consulte a un abogado con licencia en su jurisdicción antes de utilizar cualquier documento generado.
+
+

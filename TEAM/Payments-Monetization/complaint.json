@@ -26,6 +26,29 @@
           "note": "Captured Turbopack runtime stack for missing publishable key; see ops/artifacts/complaints-cycle-0002/payment-runtime-stack.txt."
         }
       ]
+    },
+    {
+      "id": "complaint-20250919-006",
+      "reported_at": "2025-09-19T20:26:18.951429Z",
+      "reported_by": "Complaints",
+      "summary": "Marketplace revenue sharing module is syntactically invalid",
+      "details": "tsc --noEmit fails with 250+ syntax errors because src/lib/marketplace/revenue-sharing-system.ts duplicates parameter blocks and leaves stray tokens (see lines 150-772). The module cannot compile, so payout processing and revenue tracking endpoints crash on import.",
+      "severity": "critical",
+      "status": "open",
+      "target_pod": "Payments-Monetization",
+      "tags": [
+        "stripe",
+        "revenue-sharing",
+        "typecheck"
+      ],
+      "next_action": "Repair revenue-sharing-system.ts so processRevenueShare and related helpers have valid method signatures and exports; rerun tsc to ensure payments code compiles.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T20:26:18.951429Z",
+          "note": "Complaint logged by Complaints pod; see ops/artifacts/complaints-cycle-0003/typecheck-log.txt for the TypeScript failure."
+        }
+      ]
     }
   ]
 }

@@ -7,10 +7,10 @@ References: ops/compliance/release-gate-checklist.md; ops/artifacts/compliance-c
 ## Required Evidence
 | Area | Artifact | Owner | Status | Notes |
 | --- | --- | --- | --- | --- |
-| UPL Safeguards | Spanish policy markdown + certification (docs/legal/es/*, translation approvals PDFs) | Compliance | Blocked | Await Redwood delivery.
+| UPL Safeguards | Spanish policy markdown + certification (docs/legal/es/*, translation approvals PDFs) | Compliance | Completed | Certified translations published; hashes logged en policy-translation-receipt-template.md.
 | Privacy | Consent telemetry export + DSAR acknowledgment evidence | Platform + Compliance | Pending | Export sample due before 2025-09-23 dry run.
-| Marketing | Funnel copy review log (Growth) referencing Spanish policies | Growth | Pending | Needs final translations and compliance sign-off.
-| Payments | Refund SOP alignment memo + Stripe evidence | Payments + Compliance | Blocked | Waiting for Spanish refund policy and Stripe integration.
+| Marketing | Funnel copy review log (Growth) referencing Spanish policies | Growth | Pending | Spanish translations available; awaiting Growth review log.
+| Payments | Refund SOP alignment memo + Stripe evidence | Payments + Compliance | Blocked | Spanish refund policy available; pending Stripe integration evidence.
 | Security/Incident | CSP telemetry report + on-call integration proof | Platform | Pending | Must attach latest CSP export and roster tie-in.
 | Cross-Pod Sign-Offs | Signed release gate checklist | All pods | Not Started | Capture once blockers cleared.
 

@@ -1,0 +1,14 @@
+[
+    {
+        "path":  "TEAM/Document-Intelligence/complaint.json",
+        "sha256":  "E1B7E4A4A85A0C583BCA2CC20EEFDC6E91EB40706003B36047C4B20C1BFAF280"
+    },
+    {
+        "path":  "TEAM/Payments-Monetization/complaint.json",
+        "sha256":  "0B404C49EF8B69115A95BA281E470694CD39A10D24B78E9571F100DC011472DB"
+    },
+    {
+        "path":  "TEAM/Complaints/memory.json",
+        "sha256":  "A9B9A099E3B3D752D7486A632E75F783CD4F62B26FD3950CE4EBD484AE0A93BB"
+    }
+]

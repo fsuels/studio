@@ -68,6 +68,23 @@ This Advance Directive ("Directive") is executed by **{{principal_full_name}}** 
 
 ---
 
+## 9. Care Coordination and Contacts
+
+9.1 **Primary Physician.** Preferred treating physician: **{{primary_physician_name}}**, phone **{{primary_physician_phone}}**.
+9.2 **Preferred Facility.** If hospitalization is required, the Principal prefers **{{preferred_hospital_name}}** located in **{{preferred_hospital_city}}** when practical.
+9.3 **Spiritual or Cultural Advisor.** Contact **{{spiritual_advisor_name}}** at **{{spiritual_advisor_phone}}** to support religious or cultural practices during care.
+9.4 **Care Coordination Notes.** Additional instructions for the Agent and providers: **{{care_coordination_notes}}**.
+
+---
+
+## 10. Distribution and Storage
+
+10.1 **Authorized Recipients.** Copies of this Directive should be provided to: **{{emergency_distribution_list}}**.
+10.2 **Storage Location.** The Principal will store the original document at **{{directive_storage_location}}**.
+10.3 **Periodic Review.** The Principal intends to review and update this Directive every **{{review_frequency}}** (or sooner if major life events occur).
+
+---
+
 ## Signatures and Acknowledgments
 
 The Principal signs this Directive willingly after consulting, or having had the opportunity to consult, legal and medical professionals.

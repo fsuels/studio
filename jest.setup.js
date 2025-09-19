@@ -115,21 +115,6 @@ jest.mock('@radix-ui/react-slider', () => ({
   Thumb: () => <div />,
 }));
 
-jest.mock('@radix-ui/react-dropdown-menu', () => {
-  const Root = ({ children }) => <div data-testid="dropdown-root">{children}</div>;
-  const Trigger = ({ children, ...props }) => <button data-testid="dropdown-trigger" {...props}>{children}</button>;
-  const Content = ({ children, ...props }) => <div data-testid="dropdown-content" {...props}>{children}</div>;
-  const Item = ({ children, ...props }) => <div data-testid="dropdown-item" {...props}>{children}</div>;
-  const Separator = () => <hr data-testid="dropdown-separator" />;
-  const Label = ({ children, ...props }) => <div data-testid="dropdown-label" {...props}>{children}</div>;
-  const Group = ({ children, ...props }) => <div data-testid="dropdown-group" {...props}>{children}</div>;
-  const Sub = ({ children, ...props }) => <div data-testid="dropdown-sub" {...props}>{children}</div>;
-  const SubTrigger = ({ children, ...props }) => <button data-testid="dropdown-sub-trigger" {...props}>{children}</button>;
-  SubTrigger.displayName = 'DropdownMenuSubTrigger';
-  const SubContent = ({ children, ...props }) => <div data-testid="dropdown-sub-content" {...props}>{children}</div>;
-  SubContent.displayName = 'DropdownMenuSubContent';
-  return { Root, Trigger, Content, Item, Separator, Label, Group, Sub, SubTrigger, SubContent };
-});
 
 jest.mock('@radix-ui/react-select', () => {
   const Root = ({ children, ...props }) => <div data-testid="select-root" {...props}>{children}</div>;
@@ -340,3 +325,51 @@ if (!global.Response) {
   };
 }
 jest.mock('@radix-ui/react-dropdown-menu', () => {
+  const Root = ({ children }) => <div data-testid="dropdown-root">{children}</div>;
+  const Trigger = ({ children, ...props }) => (
+    <button data-testid="dropdown-trigger" type="button" {...props} role="menuitem">
+      {children}
+    </button>
+  );
+  const Content = ({ children, ...props }) => <div data-testid="dropdown-content" {...props}>{children}</div>;
+  const Item = ({ children, ...props }) => (
+    <div data-testid="dropdown-item" role="menuitem" {...props}>
+      {children}
+    </div>
+  );
+  const CheckboxItem = ({ children, checked, ...props }) => (
+    <div
+      data-testid="dropdown-checkbox"
+      role="menuitemcheckbox"
+      aria-checked={checked}
+      {...props}
+    >
+      {checked ? 'checked' : ''}
+      {children}
+    </div>
+  );
+  CheckboxItem.displayName = 'DropdownMenuCheckboxItem';
+  const Separator = () => <hr data-testid="dropdown-separator" />;
+  const Label = ({ children, ...props }) => <div data-testid="dropdown-label" {...props}>{children}</div>;
+  const Group = ({ children, ...props }) => <div data-testid="dropdown-group" {...props}>{children}</div>;
+  const Sub = ({ children, ...props }) => <div data-testid="dropdown-sub" {...props}>{children}</div>;
+  const SubTrigger = ({ children, ...props }) => (
+    <button data-testid="dropdown-sub-trigger" type="button" {...props} role="menuitem">
+      {children}
+    </button>
+  );
+  SubTrigger.displayName = 'DropdownMenuSubTrigger';
+
+  return {
+    Root,
+    Trigger,
+    Content,
+    Item,
+    CheckboxItem,
+    Separator,
+    Label,
+    Group,
+    Sub,
+    SubTrigger,
+  };
+});

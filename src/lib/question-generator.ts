@@ -78,7 +78,7 @@ function isFieldRequired(fieldId: string): boolean {
 
 function generatePlaceholder(fieldId: string, type: AllowedType): string | undefined {
   const lower = fieldId.toLowerCase();
-  if (type === 'tel') return '(555) 123-4567';
+  if (type === 'tel') return '(XXX) XXX-XXXX';
   if (type === 'date') return 'MM/DD/YYYY';
   if (type === 'number') {
     if (lower.includes('year')) return 'e.g., 2020';

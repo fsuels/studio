@@ -1,7 +1,11 @@
 [
     {
         "path":  "checksums.json",
-        "sha256":  "F5AE90E3D207D370FEF97AF7A334C63A1D9C5AE5F196655D01C208EF3BFE5500"
+        "sha256":  "A67A5B2A27F6EE5F0412F23392787EAF8A4D21481EF6F85A7ACEFCE5C26A76A4"
+    },
+    {
+        "path":  "compliance-timeline.md",
+        "sha256":  "2FDAE1FE59FC84FF60E5CCD0AD4D10FAC267E650C03919C31BCE24896B1715FF"
     },
     {
         "path":  "consent-telemetry-export-instructions.md",
@@ -9,14 +13,46 @@
     },
     {
         "path":  "dsar-template-distribution-log.md",
-        "sha256":  "83EBEC197901BB1B25E38E7D188EAE6BF621434B73199AFAAE21A0DEE617AA61"
+        "sha256":  "CE7780D1CEA67B5B7F3BEDF91D4A9347E2559F0EE69A3EE9277E72F6A28604CD"
+    },
+    {
+        "path":  "hash-guidance.md",
+        "sha256":  "8773DDA868940338D0115AD142617B6C8B585A68E20FE3CC07B485793F137B58"
+    },
+    {
+        "path":  "post-delivery-checklist.md",
+        "sha256":  "7CB5FA43E9FD90F95DBA819983D758F0D250415DB56D028A8B2D5CE6EA0830E7"
     },
     {
         "path":  "consent-telemetry\\hashes.txt",
         "sha256":  "B68877D402775D353AE6906E35FCD7D94D60197DE479812CB21D19E3C2D2F35B"
     },
     {
+        "path":  "consent-telemetry\\outreach-draft.md",
+        "sha256":  "CB64EECBAC09631164CFBDFAFEBF33474AC03D0EE74ECC659AE881CD6B6E8A93"
+    },
+    {
+        "path":  "consent-telemetry\\platform-slack-message.txt",
+        "sha256":  "827EFD28803D9D0F1BF01A2031DFED0FE315F2D734B806C6E4CF028BE566AD3A"
+    },
+    {
         "path":  "consent-telemetry\\README.md",
         "sha256":  "2A69593446878F6AE84F7AE9A4F4A68F272E9353491B12128E9FF4906B68CE14"
+    },
+    {
+        "path":  "dsar-template-distribution\\outreach-draft.md",
+        "sha256":  "1C8F57DFB734BE6ED659592D85BBC9ECD6C7946E94D74674B98A251EBD2E5FC3"
+    },
+    {
+        "path":  "dsar-template-distribution\\platform-slack-message.txt",
+        "sha256":  "C6B38804EF106E000927352BBD855F12716F0164003623EFCA888C1974BEA8F4"
+    },
+    {
+        "path":  "dsar-template-distribution\\privacy-email.txt",
+        "sha256":  "8B91A264857C14DF17199387718F9BFC705F24943C8B0323E452B8D1B8FFBD86"
+    },
+    {
+        "path":  "dsar-template-distribution\\reminder-schedule.md",
+        "sha256":  "4114559980B37465D7A1C3D897AD53026F59FFBB41D1608D07F8444B3ACE43EC"
     }
 ]
