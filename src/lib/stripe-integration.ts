@@ -2,6 +2,7 @@
 // Production-ready Stripe integration for 123LegalDoc
 
 import { paymentProcessor } from './payment-processor';
+import { STRIPE_API_VERSION } from './stripe-config';
 
 interface StripeConfig {
   publishableKey: string;
@@ -49,7 +50,7 @@ export class StripeIntegration {
         process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
       secretKey: process.env.STRIPE_SECRET_KEY || 'sk_test_123legaldoc',
       webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_123legaldoc',
-      apiVersion: '2023-10-16',
+      apiVersion: STRIPE_API_VERSION,
     };
   }
 

@@ -1,3 +1,4 @@
+import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 // src/app/api/marketplace/templates/[templateId]/install/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import type {
@@ -11,7 +12,7 @@ async function getStripeClient() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) return null;
   const { default: Stripe } = await import('stripe');
-  return new Stripe(key, { apiVersion: '2025-05-28.basil' });
+  return new Stripe(key, { apiVersion: STRIPE_API_VERSION });
 }
 
 /**

@@ -1,0 +1,11 @@
+{
+    "src/lib/security/csp-report-store.ts":  {
+                                                 "sha256":  "7C6BF4CD314B53EE7EDB890440B7FE3C43A304E3514B8E31C5009FDD06A42E02"
+                                             },
+    "ops/artifacts/platform-cycle-0002/csp-telemetry.md":  {
+                                                               "sha256":  "62C2FE3E8AC06768C4D9BAA8C2C10A2F33B96E04E6378B3092B11ECCAF98387F"
+                                                           },
+    "src/app/api/security/csp-report/route.ts":  {
+                                                     "sha256":  "77C0E64519CFEB91C6717DF96C81D1BDDDE215A1A4BDF3464D129BEFE0FB85C4"
+                                                 }
+}

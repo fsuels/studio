@@ -1,0 +1,147 @@
+{
+  "cycle_id": "document-intel-cycle-0001",
+  "generated_at": "2025-09-19T15:04:52.538Z",
+  "metrics": {
+    "us_template_count": 317,
+    "ca_template_count": 1,
+    "public_templates": {
+      "en_count": 350,
+      "es_count": 350
+    },
+    "placeholder_templates": {
+      "en_count": 4,
+      "es_count": 4
+    },
+    "schema_todo_count": 3,
+    "question_todo_count": 3,
+    "translation_todo_count": 19
+  },
+  "translation_todo_files": [
+    "src/lib/documents/us/earnest-money-agreement/metadata.ts",
+    "src/lib/documents/us/late-rent-notice/metadata.ts",
+    "src/lib/documents/us/lease-addendum/metadata.ts",
+    "src/lib/documents/us/notice-of-lease-violation/metadata.ts",
+    "src/lib/documents/us/notice-to-enter/metadata.ts",
+    "src/lib/documents/us/notice-to-pay-rent-or-quit/metadata.ts",
+    "src/lib/documents/us/office-space-lease/metadata.ts",
+    "src/lib/documents/us/parking-space-lease-agreement/metadata.ts",
+    "src/lib/documents/us/pet-addendum/metadata.ts",
+    "src/lib/documents/us/property-manager-agreement/metadata.ts",
+    "src/lib/documents/us/rent-increase-letter/metadata.ts",
+    "src/lib/documents/us/residential-rental-application/metadata.ts",
+    "src/lib/documents/us/residential-rental-inspection-report/metadata.ts",
+    "src/lib/documents/us/restaurant-lease/metadata.ts",
+    "src/lib/documents/us/retail-space-lease/metadata.ts",
+    "src/lib/documents/us/storage-space-lease-agreement/metadata.ts",
+    "src/lib/documents/us/triple-net-lease/metadata.ts",
+    "src/lib/documents/us/warehouse-lease/metadata.ts",
+    "src/lib/documents/us/warranty-deed/metadata.ts"
+  ],
+  "schema_todo_files": [
+    "src/lib/documents/us/prenuptial-agreement/schema.ts",
+    "src/lib/documents/us/quitclaim-deed/schema.ts",
+    "src/lib/documents/us/service-agreement/schema.ts"
+  ],
+  "question_todo_files": [
+    "src/lib/documents/us/prenuptial-agreement/questions.ts",
+    "src/lib/documents/us/quitclaim-deed/questions.ts",
+    "src/lib/documents/us/service-agreement/questions.ts"
+  ],
+  "overlay_summary": {
+    "power-of-attorney": {
+      "total_states": 1,
+      "states_with_fields_json": 0,
+      "states_missing_fields_json": 1,
+      "states": {
+        "colorado": {
+          "files": [
+            "Colorado-Power-of-Attorney.pdf"
+          ],
+          "has_fields_json": false
+        }
+      }
+    },
+    "vehicle-bill-of-sale": {
+      "total_states": 11,
+      "states_with_fields_json": 9,
+      "states_missing_fields_json": 2,
+      "states": {
+        "alabama": {
+          "files": [
+            "MVT-32-13B-fields.json",
+            "MVT-32-13B.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "colorado": {
+          "files": [
+            "DR-2116-fields.json",
+            "DR-2116.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "florida": {
+          "files": [
+            "HSMV-82050-fields.json",
+            "HSMV-82050.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "generic": {
+          "files": [
+            "vehicle-bill-of-sale.pdf"
+          ],
+          "has_fields_json": false
+        },
+        "georgia": {
+          "files": [
+            "T-7.pdf"
+          ],
+          "has_fields_json": false
+        },
+        "idaho": {
+          "files": [
+            "ITD-3738-fields.json",
+            "ITD-3738.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "kansas": {
+          "files": [
+            "TR-312-fields.json",
+            "TR-312.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "maryland": {
+          "files": [
+            "VR-181-fields.json",
+            "VR-181.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "montana": {
+          "files": [
+            "MV-24-fields.json",
+            "MV-24.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "north-dakota": {
+          "files": [
+            "SFN-2888-fields.json",
+            "SFN-2888.pdf"
+          ],
+          "has_fields_json": true
+        },
+        "west-virginia": {
+          "files": [
+            "DMV-7-TR-fields.json",
+            "DMV-7-TR.pdf"
+          ],
+          "has_fields_json": true
+        }
+      }
+    }
+  }
+}

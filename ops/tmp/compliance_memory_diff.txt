@@ -1,0 +1,28 @@
+diff --git a/TEAM/Compliance-Legal/memory.json b/TEAM/Compliance-Legal/memory.json
+index f05ccb69..143b4cdc 100644
+--- a/TEAM/Compliance-Legal/memory.json
++++ b/TEAM/Compliance-Legal/memory.json
+@@ -1,6 +1,18 @@
+-n++{
+-  "cycle_id": null,
+-  "last_updated": null,
+-  "notes": [],
+-  "todos": []
++{
++  "cycle_id": "compliance-cycle-0001",
++  "last_updated": "2025-09-19T14:59:47Z",
++  "notes": [
++    "Baseline compliance audit captured (ops/artifacts/compliance-cycle-0001/compliance-audit.md).",
++    "Policy stack placeholders expose FTC Section 5 transparency and UPL risk; refund policy absent.",
++    "Jurisdiction knowledge base limited to general + CA, last updated 2024-01-01; nationwide coverage missing.",
++    "Release gate lacks compliance checklist; no legal incident log maintained.",
++    "International expansion claims unsupported by legal research or GDPR safeguards."
++  ],
++  "todos": [
++    "Draft and localize disclaimer, ToS, privacy, and refund markdown with counsel review.",
++    "Ship compliance release gate checklist with artifact storage per sprint.",
++    "Expand state-by-state knowledge base with update cadence tracking.",
++    "Create legal incident log workflow covering intake through resolution.",
++    "Define international readiness SOP including data transfer impact assessments."
++  ]
+ }

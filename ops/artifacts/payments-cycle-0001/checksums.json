@@ -1,0 +1,9 @@
+{
+    "files":  [
+                  {
+                      "path":  "ops/artifacts/payments-cycle-0001/payments-audit.json",
+                      "sha256":  "cf9bc2b5b6d1464c1b092dc47b54e83989bff5872b6912934c8d6a44a9e8451c",
+                      "bytes":  9196
+                  }
+              ]
+}

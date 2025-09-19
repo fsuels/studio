@@ -1,0 +1,9 @@
+diff --git a/ops/artifacts/compliance-cycle-0001/checksums.json b/ops/artifacts/compliance-cycle-0001/checksums.json
+new file mode 100644
+index 00000000..ab1faf60
+--- /dev/null
++++ b/ops/artifacts/compliance-cycle-0001/checksums.json
+@@ -0,0 +1,3 @@
++{
++  "compliance-audit.md": "649BCCCA4E817E3C246C00085A9B92510408599A0193C5E664C418952D33D8AB"
++}

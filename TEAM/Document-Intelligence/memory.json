@@ -1,6 +1,14 @@
 ﻿{
-  "cycle_id": null,
-  "last_updated": null,
-  "notes": [],
-  "todos": []
+    "cycle_id":  "document-intel-cycle-0002",
+    "last_updated":  "2025-09-19T15:32:23.4628575Z",
+    "notes":  [
+                  "Cleared schema and question backlogs for prenuptial agreement, service agreement, and quitclaim deed; lint run confirmed TS compliance.",
+                  "Catalog audit (ops/artifacts/document-intel-cycle-0002/catalog-audit.json) now reports zero schema/question TODOs while 19 Spanish metadata items remain."
+              ],
+    "todos":  [
+                  "Localize Spanish metadata for the 19 real estate templates flagged in the audit.",
+                  "Backfill overlay field mappings for power-of-attorney and missing vehicle bill of sale states.",
+                  "Expand placeholder registry/templates beyond the current 4-template sample set.",
+                  "Review updated question sets with Compliance for jurisdictional notarization/witness guidance."
+              ]
 }

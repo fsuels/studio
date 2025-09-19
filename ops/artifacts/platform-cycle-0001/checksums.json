@@ -1,0 +1,11 @@
+{
+    "ops/artifacts/platform-cycle-0001/platform-audit.md":  {
+                                                                "sha256":  "3CDFFFDCD8D55F538AFF9FEEF790FA0FD3E97A9B72F52AA1DEBF6BA86FE51F94"
+                                                            },
+    "middleware.ts":  {
+                          "sha256":  "CB31546C30DAA744C2B4157F62CB0CD0D3007C918E3CCC0FFCA157231E195CD1"
+                      },
+    "src/app/api/security/csp-report/route.ts":  {
+                                                     "sha256":  "FD127FC1FBFC76741EC8C786682CF69B5475BF6884B08E9B417EADC851653F98"
+                                                 }
+}

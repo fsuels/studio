@@ -1,37 +1,123 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { tenantMiddleware } from '@/middleware/tenant';
 
+const SECURITY_MODE = (process.env.SECURITY_HEADER_MODE ?? 'report-only').toLowerCase();
+const REPORT_GROUP = 'csp-endpoint';
+const VALID_MODES = new Set(['report-only', 'enforce']);
+
+function resolveSecurityMode(): 'report-only' | 'enforce' {
+  if (VALID_MODES.has(SECURITY_MODE)) {
+    return SECURITY_MODE as 'report-only' | 'enforce';
+  }
+  return 'report-only';
+}
+
+function buildReportEndpoint(request: NextRequest): string {
+  const configured = process.env.NEXT_PUBLIC_CSP_REPORT_URL ?? '/api/security/csp-report';
+  if (configured.startsWith('http://') || configured.startsWith('https://')) {
+    return configured;
+  }
+
+  const hasLeadingSlash = configured.startsWith('/');
+  const path = hasLeadingSlash ? configured : `/${configured}`;
+  return `${request.nextUrl.origin}${path}`;
+}
+
+function applySecurityHeaders(request: NextRequest, response: NextResponse) {
+  const mode = resolveSecurityMode();
+  const isEnforce = mode === 'enforce';
+  const reportEndpoint = buildReportEndpoint(request);
+
+  const baseHeaders: Record<string, string> = {
+    'X-Frame-Options': 'DENY',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'X-XSS-Protection': '1; mode=block',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Cross-Origin-Resource-Policy': 'same-origin',
+    'X-DNS-Prefetch-Control': 'off',
+    'X-Permitted-Cross-Domain-Policies': 'none',
+    'X-Download-Options': 'noopen',
+    'Origin-Agent-Cluster': '?1',
+  };
+
+  Object.entries(baseHeaders).forEach(([header, value]) => {
+    response.headers.set(header, value);
+  });
+
+  if (isEnforce) {
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload',
+    );
+  } else {
+    response.headers.delete('Strict-Transport-Security');
+  }
+
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io *.googleapis.com *.gstatic.com",
+    "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+    "font-src 'self' fonts.gstatic.com data:",
+    "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
+    "connect-src 'self' blob: data: *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
+    "frame-src 'self' blob: data: *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
+    "object-src 'none'",
+    "worker-src 'self' blob: data:",
+    `report-uri ${reportEndpoint}`,
+    `report-to ${REPORT_GROUP}`,
+  ];
+
+  const cspValue = cspDirectives.join('; ');
+
+  if (isEnforce) {
+    response.headers.set('Content-Security-Policy', cspValue);
+    response.headers.delete('Content-Security-Policy-Report-Only');
+    response.headers.delete('Report-To');
+    response.headers.delete('NEL');
+  } else {
+    response.headers.set('Content-Security-Policy-Report-Only', cspValue);
+    response.headers.set(
+      'Report-To',
+      JSON.stringify({
+        group: REPORT_GROUP,
+        max_age: 108864,
+        endpoints: [{ url: reportEndpoint }],
+        include_subdomains: true,
+      }),
+    );
+    response.headers.set(
+      'NEL',
+      JSON.stringify({
+        report_to: REPORT_GROUP,
+        max_age: 108864,
+        failure_fraction: 0.05,
+        success_fraction: 0,
+      }),
+    );
+    response.headers.delete('Content-Security-Policy');
+  }
+}
+
 export async function middleware(request: NextRequest) {
-  // Handle Firebase Auth action redirects first
   if (request.nextUrl.pathname === '/__/auth/action') {
     const mode = request.nextUrl.searchParams.get('mode');
     const oobCode = request.nextUrl.searchParams.get('oobCode');
     const continueUrl = request.nextUrl.searchParams.get('continueUrl');
     const lang = request.nextUrl.searchParams.get('lang') || 'en';
-    
-    // Determine locale
     const locale = lang === 'es' ? 'es' : 'en';
-    
-    // Build redirect URL
+
     const redirectUrl = new URL(`/${locale}/auth/action`, request.url);
     if (mode) redirectUrl.searchParams.set('mode', mode);
     if (oobCode) redirectUrl.searchParams.set('oobCode', oobCode);
     if (continueUrl) redirectUrl.searchParams.set('continueUrl', continueUrl);
-    
-    console.log('🔥 Firebase Auth Action Redirect:', {
-      from: request.nextUrl.href,
-      to: redirectUrl.href,
-      mode,
-      locale
-    });
-    
+
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Handle tenant routing
   const tenantResponse = await tenantMiddleware(request);
 
-  // If tenant middleware returned a redirect or rewrite, use it
   if (
     tenantResponse.headers.get('x-middleware-rewrite') ||
     tenantResponse.headers.get('x-middleware-redirect') ||
@@ -40,78 +126,14 @@ export async function middleware(request: NextRequest) {
     return tenantResponse;
   }
 
-  // Add security headers for all requests
   const response = tenantResponse;
-
-  // Security headers
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('X-XSS-Protection', '1; mode=block');
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=63072000; includeSubDomains; preload',
-  );
-  response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=()',
-  );
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-  response.headers.set('X-DNS-Prefetch-Control', 'on');
-  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
-  response.headers.set('X-Download-Options', 'noopen');
-  response.headers.set('Origin-Agent-Cluster', '?1');
-
-  // CSP header (adjust based on your needs)
-  // More permissive CSP for Firebase Auth and PDF.js compatibility
-  const cspHeader = [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io *.googleapis.com *.gstatic.com",
-    "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
-    "font-src 'self' fonts.gstatic.com data:",
-    "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
-    "connect-src 'self' blob: data: *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
-    "frame-src 'self' blob: data: *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
-    "object-src 'self' blob: data:",
-    "worker-src 'self' blob: data:",
-  ].join('; ');
-
-  // Only apply CSP in production or when explicitly enabled (and not explicitly disabled for dev)
-  // TEMPORARY: Disable CSP for PDF rendering compatibility
-  const shouldApplyCSP = false; // Disable CSP temporarily for PDF.js compatibility
-  // const shouldApplyCSP = (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') && 
-  //                        process.env.DISABLE_CSP_DEV !== 'true';
-  
-  console.log('🔒 CSP Middleware:', { 
-    path: request.nextUrl.pathname, 
-    shouldApplyCSP, 
-    nodeEnv: process.env.NODE_ENV 
-  });
-  
-  if (shouldApplyCSP) {
-    response.headers.set('Content-Security-Policy', cspHeader);
-    console.log('🔒 CSP Header applied');
-  } else {
-    console.log('🔓 CSP Header NOT applied (disabled for PDF compatibility)');
-  }
+  applySecurityHeaders(request, response);
 
   return response;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes - these are handled separately)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - forms (PDF forms)
-     * - images (image files)
-     * - templates (template files)
-     * Files with extensions are also handled by tenant middleware
-     */
     '/((?!api|_next/static|_next/image|favicon.ico|forms|images|templates).*)',
   ],
 };

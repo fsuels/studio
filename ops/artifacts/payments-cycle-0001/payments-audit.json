@@ -1,0 +1,116 @@
+{
+    "cycle_id":  "payments-cycle-0001",
+    "generated_at":  "2025-09-19T15:25:17.0729410Z",
+    "stripe_integration":  {
+                               "status":  "blocked",
+                               "findings":  [
+                                                {
+                                                    "detail":  "Server checkout endpoints set Stripe apiVersion \u00272025-05-28.basil\u0027, which is not a valid Stripe API release.",
+                                                    "evidence":  [
+                                                                     "src/app/api/checkout/cart/route.ts:13",
+                                                                     "src/app/api/checkout/session/route.ts:10",
+                                                                     "src/app/api/pricing/smart-session/route.ts:11",
+                                                                     "src/app/api/marketplace/templates/[templateId]/install/route.ts:14"
+                                                                 ]
+                                                },
+                                                {
+                                                    "detail":  "Client Elements loader keeps a fallback publishable key hard-coded, risking accidental usage outside secure config.",
+                                                    "evidence":  [
+                                                                     "src/components/shared/PaymentModal.tsx:21"
+                                                                 ]
+                                                },
+                                                {
+                                                    "detail":  "Internal stripe-integration service stores fallback test keys and fabricates in-memory sessions instead of calling Stripe.",
+                                                    "evidence":  [
+                                                                     "src/lib/stripe-integration.ts:45",
+                                                                     "src/lib/stripe-integration.ts:347"
+                                                                 ]
+                                                },
+                                                {
+                                                    "detail":  "Webhook verifier always returns true, so signatures are never checked.",
+                                                    "evidence":  [
+                                                                     "src/lib/stripe-integration.ts:495"
+                                                                 ]
+                                                }
+                                            ]
+                           },
+    "subscription_provisioning":  {
+                                      "status":  "blocked",
+                                      "findings":  [
+                                                       {
+                                                           "detail":  "Smart pricing checkout returns mock \u0027cs_test\u0027 session ids and never persists Stripe Checkout sessions.",
+                                                           "evidence":  [
+                                                                            "src/lib/smart-pricing-engine.ts:347"
+                                                                        ]
+                                                       },
+                                                       {
+                                                           "detail":  "Payment processor simulates Stripe payments with random success rather than calling Stripe APIs.",
+                                                           "evidence":  [
+                                                                            "src/lib/payment-processor.ts:638"
+                                                                        ]
+                                                       },
+                                                       {
+                                                           "detail":  "Subscriptions are stored only in memory and not connected to Firestore or entitlement enforcement.",
+                                                           "evidence":  [
+                                                                            "src/lib/payment-processor.ts:98"
+                                                                        ]
+                                                       }
+                                                   ]
+                                  },
+    "tax_refund_alignment":  {
+                                 "status":  "incomplete",
+                                 "findings":  [
+                                                  {
+                                                      "detail":  "Smart pricing uses hard-coded tax tables and currency rates, with no integration to Stripe Tax or real registries.",
+                                                      "evidence":  [
+                                                                       "src/lib/smart-pricing-engine.ts:438",
+                                                                       "src/lib/stripe-smart-prices.ts:89"
+                                                                   ]
+                                                  },
+                                                  {
+                                                      "detail":  "Refund policy and disclosures remain pending in global backlog.",
+                                                      "evidence":  [
+                                                                       "REMEMBER.md:22",
+                                                                       "REMEMBER.md:79"
+                                                                   ]
+                                                  },
+                                                  {
+                                                      "detail":  "Stripe SKU map contains corrupted characters and placeholder IDs, signalling it was never finalized.",
+                                                      "evidence":  [
+                                                                       "src/lib/stripePrices.ts:1"
+                                                                   ]
+                                                  }
+                                              ]
+                             },
+    "financial_reporting":  {
+                                "status":  "incomplete",
+                                "findings":  [
+                                                 {
+                                                     "detail":  "Revenue intelligence pipeline relies on randomly generated mock orders instead of ingesting Stripe data.",
+                                                     "evidence":  [
+                                                                      "src/lib/orders.ts:445",
+                                                                      "src/lib/orders.ts:1033",
+                                                                      "src/lib/revenue-intelligence.ts:21"
+                                                                  ]
+                                                 }
+                                             ]
+                            },
+    "monitoring_alerting":  {
+                                "status":  "incomplete",
+                                "findings":  [
+                                                 {
+                                                     "detail":  "Payments KPIs (success rate, MRR, refunds) are undefined, indicating no telemetry source.",
+                                                     "evidence":  [
+                                                                      "REMEMBER.md:14"
+                                                                  ]
+                                                 }
+                                             ]
+                            },
+    "recommendations":  [
+                            "Replace mocked stripe-integration with a shared client that enforces secret management, valid API versions, and retries.",
+                            "Stand up Stripe webhook endpoint (Next API route) that verifies signatures and provisions subscriptions/document entitlements in Firestore.",
+                            "Coordinate with Compliance to publish refund policy and align tax settings with Stripe Tax registrations before launch.",
+                            "Ingest Stripe events and payouts into a reporting datastore to drive revenue dashboards instead of mock analytics.",
+                            "Instrument payment success, failures, and latency with metrics/alerts feeding the platform observability stack."
+                        ]
+}

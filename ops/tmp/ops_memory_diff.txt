@@ -1,0 +1,57 @@
+diff --git a/ops/Memory.md b/ops/Memory.md
+new file mode 100644
+index 00000000..85c9c7d1
+--- /dev/null
++++ b/ops/Memory.md
+@@ -0,0 +1,50 @@
++n++# ops/Memory.md
++
++## Cycle Ledger
++- document-intel-cycle-0001 (2025-09-19T15:10:52.4369864Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0001/catalog-audit.json
++- platform-cycle-0001 (2025-09-19T15:09:07.9678975Z, lead: Platform) - ops/artifacts/platform-cycle-0001/platform-audit.md
++- compliance-cycle-0001 (2025-09-19T14:59:47Z, lead: Compliance) - ops/artifacts/compliance-cycle-0001/compliance-audit.md
++
++## Document Intelligence Cycle (document-intel-cycle-0001)
++```
++cycle_id: document-intel-cycle-0001
++ts: 2025-09-19T15:10:52.4369864Z
++lead_pod: DocumentIntelligence
++mode: apply
++selected_tasks:
++  - id: docintel-catalog-audit
++    pod: DocumentIntelligence
++    p: 0.6
++    impact: 4
++    urgency: 4
++    cost: 2
++    notes: Baseline catalog audit captured coverage gaps; see ops/artifacts/document-intel-cycle-0001/catalog-audit.json.
++context_evidence:
++  - description: Document catalog audit (templates, translations, overlays)
++    source: ops/artifacts/document-intel-cycle-0001/catalog-audit.json
++cross_pod_followups:
++  - pod: Platform
++    action: Confirm overlay ingestion and PDF field map deployment once mappings are backfilled
++    owner: Platform
++artifacts:
++  - ops/artifacts/document-intel-cycle-0001/catalog-audit.json
++```
++
++## Shared Active Risks
++- CSP telemetry currently logs to console only; no durable storage or alerting.
++- Duplicate middleware and Next.js config files risk drift in routing and security behaviour.
++- Incident response playbook absent; no documented communications or rehearsal schedule.
++- Customer-facing policies (disclaimer, ToS, privacy, refund) absent or placeholder; FTC Act Section 5 and state refund statutes exposure.
++- Compliance release gate checklist missing; UPL and privacy reviews not enforced before deploys.
++- Jurisdiction knowledge base incomplete (only CA plus general data); nationwide coverage mandate unmet.
++- International launch claims lack supporting legal research; GDPR transfer safeguards undefined.
++
++## Cross-Pod Follow-Ups
++1. Persist CSP reports to durable store with alerting pipeline. (Platform -> Compliance)
++2. Consolidate middleware and Next.js config duplication before enforcing headers. (Platform)
++3. Draft incident communication playbook aligned with Platform and Compliance expectations. (Platform -> Compliance)
++4. Co-design release gate instrumentation with Platform to capture legal sign-offs each train. (Compliance -> Platform)
++5. Coordinate with Document Intelligence on state-by-state compliance brief delivery cadence. (Compliance -> DocumentIntelligence)
++6. Align Growth marketing copy with forthcoming disclaimers and refund language. (Compliance -> Growth)
++7. Partner with Payments on refund SOP and policy implementation. (Compliance -> Payments)
++8. Confirm overlay ingestion and PDF field map deployment once Document Intelligence backfills mappings. (DocumentIntelligence -> Platform)
+\ No newline at end of file

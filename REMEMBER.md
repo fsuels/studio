@@ -1,6 +1,13 @@
 ﻿# Remember.md
 
 ## Decisions
+- 2025-09-19T15:32:30Z - Cleared schema/question backlog for prenuptial, service, and quitclaim agreements; catalog audit shows zero outstanding TODOs (ops/artifacts/document-intel-cycle-0002/catalog-audit.json)
+- 2025-09-19T15:31:59.0453124Z - Persisted CSP violation telemetry to Firestore with audit logging (artifact ops/artifacts/platform-cycle-0002/csp-telemetry.md)
+- 2025-09-19T15:30:12.9341861Z - Completed Growth audit and shipped SignWell canonical/hreflang coverage (ops/artifacts/growth-cycle-0001/seo-signwell-report.md)
+- 2025-09-19T15:25:00Z - Published compliance release gate checklist and legal incident log templates (ops/compliance/*)
+- 2025-09-19T15:09:00Z - Enabled report-only security header pipeline with CSP telemetry endpoint (pending storage wiring)
+- 2025-09-19T14:59:47Z - Logged compliance baseline audit; policy stack gaps and release gate deficiencies captured (ops/artifacts/compliance-cycle-0001/compliance-audit.md)
+- 2025-09-19T15:06:00Z - Document Intelligence baseline catalog audit logged (artifact ops/artifacts/document-intel-cycle-0001/catalog-audit.json)
 - 2025-09-19T10:15:00Z - Reset executive backlog to pod-based structure with shared guardrails
 - 2025-09-19T10:15:00Z - Mandated pod Start.MD prompts and memory.json schema across TEAM directory
 
@@ -21,14 +28,14 @@
 
 ## Pod Status Snapshots
 ### Platform Engineering
-- last_cycle: reset
-- risks: security headers partially deployed; telemetry not centralized
-- focus_next: audit SSR/SSG gaps, lighthouse budgets, incident playbook draft
+- last_cycle: platform-cycle-0002
+- risks: CSP telemetry stored but lacks automated alerting; middleware duplication still risks drift; incident playbook missing
+- focus_next: wire CSP alerts/metrics, consolidate middleware configs, draft incident communication playbook
 
 ### Document Intelligence
-- last_cycle: reset
-- risks: missing schemas/questions for several templates; Spanish metadata incomplete
-- focus_next: run verify-templates, regenerate contracts inventory, backfill translations
+- last_cycle: document-intel-cycle-0002
+- risks: 19 Spanish metadata TODOs remain; overlay field maps incomplete; placeholder registry still limited to 4 templates
+- focus_next: localize flagged metadata, backfill overlay field maps, expand placeholder registry, coordinate compliance review of new flows
 
 ### AI & Automation
 - last_cycle: reset
@@ -36,14 +43,14 @@
 - focus_next: inventory Genkit pipelines, design refusal taxonomy, seed bilingual test set
 
 ### Compliance & Legal Ops
-- last_cycle: reset
-- risks: public policies not published; jurisdiction knowledge base untracked
-- focus_next: compile policy drafts, build release gate checklist, set legal update cadence
+- last_cycle: compliance-cycle-0002
+- risks: Public policy stack still placeholders; release gate checklist adoption pending; incident log contacts unassigned; jurisdiction tracker limited to CA
+- focus_next: Draft bilingual policies, operationalize release gate checklist with weekly sign-offs, populate incident log contacts, expand state knowledge base
 
 ### Growth & Customer Learning
-- last_cycle: reset
-- risks: marketing routes missing canonical/hreflang; funnel metrics unverified
-- focus_next: audit current pages, define analytics QA, plan localization messaging
+- last_cycle: growth-cycle-0001
+- risks: Funnel API still emits mock/localStorage metrics; translations rely on per-page helpers; marketing analytics events inactive
+- focus_next: Partner with Platform on production telemetry, stand up translation catalogs, prep bilingual pricing/trust experiments
 
 ### Payments & Monetization
 - last_cycle: reset
@@ -77,9 +84,19 @@
 
 ## Pending Cross-Pod Tasks
 - (Platform -> Compliance) Validate security header rollout plan against legal requirements
+- (Platform -> Compliance) Align CSP violation escalation and response policy using new Firestore telemetry
 - (Payments -> Compliance) Align refund wording and dispute timelines before launch
 - (Growth -> Document Intelligence) Sync template highlights for marketing copy accuracy
+- (Document Intelligence -> Platform) Coordinate overlay ingestion once new field maps are ready
+- (Compliance -> Platform) Embed release gate checklist into weekly go/no-go with evidence upload paths
+- (Compliance -> Document Intelligence) Prioritize statutes and notices needed for state knowledge base expansion
+- (Compliance -> Document Intelligence) Review updated prenuptial/service/quitclaim flows for notarization and witness guidance
+- (Compliance -> Growth) Provide finalized disclaimers and refund copy for marketing funnels once drafted
+- (Compliance -> Payments) Supply refund evidence inputs for release gate checklist Section 4
 
 ## Resume Cursor
-lead_pod: Platform-Engineering
-primary_focus: security headers audit and telemetry hardening
+lead_pod: Document-Intelligence
+primary_focus: Spanish metadata localization and overlay backlog reduction
+
+
+

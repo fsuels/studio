@@ -1,6 +1,7 @@
 // src/app/api/checkout/cart/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 import { track } from '@/lib/analytics';
 // Central price and coupon definitions
 import { PRICE_LOOKUP, COUPONS } from '@/lib/stripePrices';
@@ -10,7 +11,7 @@ import { PRICE_LOOKUP, COUPONS } from '@/lib/stripePrices';
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeKey ? new Stripe(stripeKey, {
   // Use the currently supported Stripe API version
-  apiVersion: '2025-05-28.basil',
+  apiVersion: STRIPE_API_VERSION,
 }) : null;
 
 // Alias imported constants for backwards compatibility with the old names

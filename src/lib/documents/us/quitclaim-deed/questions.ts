@@ -1,5 +1,151 @@
+import { usStates } from '@/lib/usStates';
 import type { Question } from '@/types/documents';
 
 export const quitclaimDeedQuestions: Question[] = [
-  // TODO: Define questions for quitclaim deed
+  {
+    id: 'grantorName',
+    label: 'Grantor full legal name',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'grantorMaritalStatus',
+    label: 'Grantor marital status',
+    type: 'select',
+    options: [
+      { value: 'single', label: 'Single' },
+      { value: 'married', label: 'Married' },
+      { value: 'widowed', label: 'Widowed' },
+      { value: 'divorced', label: 'Divorced' },
+      { value: 'domestic-partnership', label: 'Domestic partnership' },
+      { value: 'unknown', label: 'Prefer not to say / unknown' },
+    ],
+  },
+  {
+    id: 'granteeName',
+    label: 'Grantee full legal name',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'granteeMaritalStatus',
+    label: 'Grantee marital status',
+    type: 'select',
+    options: [
+      { value: 'single', label: 'Single' },
+      { value: 'married', label: 'Married' },
+      { value: 'widowed', label: 'Widowed' },
+      { value: 'divorced', label: 'Divorced' },
+      { value: 'domestic-partnership', label: 'Domestic partnership' },
+      { value: 'unknown', label: 'Prefer not to say / unknown' },
+    ],
+  },
+  {
+    id: 'transferDate',
+    label: 'Date of transfer',
+    type: 'date',
+    required: true,
+  },
+  {
+    id: 'considerationAmount',
+    label: 'Consideration amount (USD)',
+    type: 'number',
+    required: true,
+    helperText: 'Enter 0 if the transfer is a gift or family conveyance.',
+  },
+  {
+    id: 'conveyanceType',
+    label: 'Reason for conveyance',
+    type: 'select',
+    options: [
+      { value: 'sale', label: 'Sale / purchase' },
+      { value: 'gift', label: 'Gift or family transfer' },
+      { value: 'divorce', label: 'Divorce settlement' },
+      { value: 'estate', label: 'Estate or inheritance' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: true,
+  },
+  {
+    id: 'propertyStreetAddress',
+    label: 'Property street address',
+    type: 'text',
+    required: true,
+    placeholder: 'Street address of the property being conveyed',
+  },
+  {
+    id: 'propertyCity',
+    label: 'Property city',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'propertyState',
+    label: 'Property state',
+    type: 'select',
+    required: true,
+    options: usStates.map((s) => ({ value: s.value, label: s.label })),
+  },
+  {
+    id: 'propertyCounty',
+    label: 'Property county',
+    type: 'text',
+    required: true,
+    placeholder: 'County where the property sits',
+  },
+  {
+    id: 'propertyLegalDescription',
+    label: 'Legal description',
+    type: 'textarea',
+    required: true,
+    placeholder: 'Metes and bounds, lot and block, or attach Exhibit A',
+  },
+  {
+    id: 'parcelNumber',
+    label: 'Parcel or tax ID number',
+    type: 'text',
+  },
+  {
+    id: 'liensOrEncumbrances',
+    label: 'Existing liens or encumbrances',
+    type: 'textarea',
+    placeholder: 'List any mortgages, liens, or encumbrances that remain on title',
+  },
+  {
+    id: 'afterRecordingName',
+    label: 'Return recorded deed to (name)',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'afterRecordingAddress',
+    label: 'Return recorded deed to (mailing address)',
+    type: 'textarea',
+    required: true,
+    placeholder: 'Street, city, state, ZIP',
+  },
+  {
+    id: 'taxStatementRecipient',
+    label: 'Tax statements should be sent to',
+    type: 'text',
+    placeholder: 'Name or department receiving property tax statements',
+  },
+  {
+    id: 'witnessesRequired',
+    label: 'Does the recording office require witnesses?',
+    type: 'boolean',
+    helperText: 'Some states require one or two witness signatures in addition to the notary.',
+  },
+  {
+    id: 'notaryCounty',
+    label: 'County of notarization',
+    type: 'text',
+    placeholder: 'County where the deed will be notarized',
+  },
+  {
+    id: 'specialInstructions',
+    label: 'Special instructions or additional provisions',
+    type: 'textarea',
+    placeholder: 'Add vesting language, homestead waivers, or recording notes',
+  },
 ];
