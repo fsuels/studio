@@ -11,7 +11,7 @@ export default async function DocsIndexPage({ params }: DocsIndexPageProps) {
   const { locale } = await params;
 
   // For now, redirect to the homepage's document selection area
-  redirect(`/${locale}/#workflow-start`);
+  redirect(`/${locale}/marketplace`);
 
   // Or, you could render a list of all documents/categories:
   // return (

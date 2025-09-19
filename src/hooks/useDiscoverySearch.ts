@@ -21,6 +21,20 @@ let searchHitRateCounter: unknown;
 let searchQueryCounter: unknown;
 let searchResultsHistogram: unknown;
 
+const isDebugEnabled = process.env.NODE_ENV !== 'production';
+
+const debugLog = (...args: unknown[]) => {
+  if (isDebugEnabled) {
+    console.log(...args);
+  }
+};
+
+const warnLog = (...args: unknown[]) => {
+  if (isDebugEnabled) {
+    console.warn(...args);
+  }
+};
+
 // Initialize Prometheus metrics if available
 if (typeof window === 'undefined') {
   try {
@@ -53,7 +67,7 @@ if (typeof window === 'undefined') {
     });
   } catch (_error) {
     // prom-client not available, metrics disabled
-    console.debug('[Discovery Search] Prometheus metrics not available');
+    debugLog('[Discovery Search] Prometheus metrics not available');
   }
 }
 
@@ -139,7 +153,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       firestoreReads: prev.firestoreReads + readCount,
     }));
     
-    console.log('[Discovery Search] Firestore reads:', readCount);
+    debugLog('[Discovery Search] Firestore reads:', readCount);
   }, []);
 
   const [results, setResults] = useState<ExtendedDiscoveryResult[]>([]);
@@ -192,7 +206,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
     }));
 
     // Log processing info for debugging
-    console.log('[Discovery Search] Query processed:', {
+    debugLog('[Discovery Search] Query processed:', {
       rawQuery,
       clean,
       parsedQuery,
@@ -279,7 +293,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       // Merge results into state
       setResults(discoveryResults);
       
-      console.log('[Discovery Search] Firestore search completed:', {
+      debugLog('[Discovery Search] Firestore search completed:', {
         query: rawQuery,
         searchTokens,
         resultsCount: discoveryResults.length,
@@ -300,7 +314,10 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      console.warn('[Discovery Search] Firestore search failed (this is expected if no data exists):', err);
+      warnLog(
+        '[Discovery Search] Firestore search failed (this is expected if no data exists):',
+        err,
+      );
       
       // Don't set error state for permission errors - this is expected
       if (!errorMessage.includes('permission') && !errorMessage.includes('insufficient')) {
@@ -346,7 +363,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
   // Preload experiments on hook initialization
   useEffect(() => {
     preloadExperiments(['hybridSearch', 'semanticReranking', 'negativeFiltering']).catch(error => {
-      console.warn('[Discovery Search] Failed to preload experiments:', error);
+      warnLog('[Discovery Search] Failed to preload experiments:', error);
     });
   }, []);
 
@@ -372,7 +389,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
         });
       }
       
-      console.log('[Discovery Search] Hybrid search experiment status:', {
+      debugLog('[Discovery Search] Hybrid search experiment status:', {
         enabled: isHybridEnabled,
         query: rawQuery,
       });
@@ -531,7 +548,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       // Update state
       setResults(hybridResults);
       
-      console.log('[Discovery Search] Hybrid search completed:', {
+      debugLog('[Discovery Search] Hybrid search completed:', {
         query: rawQuery,
         parsedQuery: tokens.parsedQuery,
         keywordCount: keywordResults.length,
@@ -562,7 +579,10 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      console.warn('[Discovery Search] Hybrid search failed (falling back to keyword-only):', err);
+      warnLog(
+        '[Discovery Search] Hybrid search failed (falling back to keyword-only):',
+        err,
+      );
       
       // Don't set error state for permission errors - this is expected
       if (!errorMessage.includes('permission') && !errorMessage.includes('insufficient')) {
@@ -604,6 +624,6 @@ export function logFirestoreReads(count: number = 1): void {
   if (typeof logger === 'function') {
     logger(count);
   } else {
-    console.warn('[Discovery Search] Firestore read logger not available');
+    warnLog('[Discovery Search] Firestore read logger not available');
   }
 }

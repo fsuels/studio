@@ -1,10 +1,10 @@
-// Admin API for real-time compliance statistics
+﻿// Admin API for real-time compliance statistics
 import { NextRequest, NextResponse } from 'next/server';
 
 // Run dynamically at request time (SSR)
 export const dynamic = 'force-dynamic';
 import { requireAdmin } from '@/lib/admin-auth';
-import { complianceMonitor } from '@/lib/compliance';
+import { complianceMonitor, type ComplianceMetrics } from '@/lib/compliance';
 import {
   getRedStates,
   getGreenStates,
@@ -98,8 +98,16 @@ export async function GET(request: NextRequest) {
 }
 
 // Generate real-time compliance alerts
-function generateComplianceAlerts(metrics: any, blockedStates: string[]) {
-  const alerts = [];
+type ComplianceAlert = {
+  type: 'warning' | 'error' | 'info';
+  title: string;
+  message: string;
+  action: string;
+  timestamp: string;
+};
+
+function generateComplianceAlerts(metrics: ComplianceMetrics, blockedStates: string[]): ComplianceAlert[] {
+  const alerts: ComplianceAlert[] = [];
 
   // High block rate alert
   if (metrics.totalChecks > 100) {
@@ -154,3 +162,4 @@ function generateComplianceAlerts(metrics: any, blockedStates: string[]) {
 
   return alerts;
 }
+

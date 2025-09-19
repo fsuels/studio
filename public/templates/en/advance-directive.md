@@ -23,7 +23,7 @@ This Advance Directive ("Directive") is executed by **{{principal_full_name}}** 
 ## 3. Alternate Agents
 
 3.1 **First Alternate.** If the primary Agent is unable or unwilling to act, **{{alternate_agent_one_name}}** of **{{alternate_agent_one_address}}**, phone **{{alternate_agent_one_phone}}**, shall serve with the same authority granted in Section 2.
-3.2 **Second Alternate.** If both the primary Agent and first alternate are unavailable, **{{alternate_agent_two_name}}** of **{{alternate_agent_two_address}}** shall act as successor Agent.
+3.2 **Second Alternate.** If both the primary Agent and first alternate are unavailable, **{{alternate_agent_two_name}}** of **{{alternate_agent_two_address}}**, phone **{{alternate_agent_two_phone}}** shall act as successor Agent.
 3.3 **Agent Compensation.** Agents serve without compensation but may be reimbursed from the Principal's funds for reasonable out-of-pocket expenses incurred on the Principal's behalf.
 
 ---

@@ -11,14 +11,15 @@
                   "Recorded OSS migration details in ops/artifacts/ai-automation-cycle-0009/legal-update-summarizer.md.",
                   "Routed analyzeFormData through aiInstance.generateText with guardrail-specific fallbacks and safety logging (src/ai/flows/analyze-form-data.ts).",
                   "Documented LiteLLM-first legal update playbook and scrubbed mojibake from LEGAL_UPDATE_INTELLIGENCE_FEED.md.",
-                  "Added guardrail regression tests for form analysis flows (src/ai/flows/__tests__/analyze-form-data.guardrails.test.ts)."
+                  "Added guardrail regression tests for form analysis flows (src/ai/flows/__tests__/analyze-form-data.guardrails.test.ts).",
+                  "Surfaced guardrail/fallback banners in DynamicFormRenderer so general safety messages reach users (src/components/forms/DynamicFormRenderer.tsx).",
+                  "LegalTranslator UI now raises a fallback banner and surfaces guardrail detail when LiteLLM blocks output (src/components/translation/LegalTranslator.tsx, __tests__/LegalTranslator.guardrails.test.tsx)."
               ],
     "todos":  [
                   "Emit guardrail events to Langfuse/Sentry for legal update summarizer responses.",
                   "Evaluate OSS summarizer accuracy/latency and tune model parameters or fallback heuristics.",
                   "Add unit tests/fixtures for legal update summarizer once synthetic data is prepared.",
                   "Plumb guardrail decision telemetry from aiInstance.generateText into Langfuse/Prometheus/Sentry once those stacks are ready.",
-                  "Update client flows to surface translation/term detection warnings when fallbacks trigger.",
-                  "Ensure guardrail-blocked form analysis responses surface clear UX messaging in intake flows."
+                  "Validate new guardrail banners with intake UX testing dataset."
               ]
 }

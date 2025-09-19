@@ -15,6 +15,7 @@ const TARGET_DIRECTORIES = [
   path.join('docs', 'legal'),
 ];
 
+// Escape '?' twice so the tsx/ESM transpilation preserves the literal character rather than treating it as a quantifier.
 const patternSource = '[A-Za-z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1\u00DC\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00FC]\\?[A-Za-z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1\u00DC\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00FC]';
 const PATTERN = new RegExp(patternSource, 'u');
 const REPLACEMENT_CHAR = '\uFFFD';

@@ -14,6 +14,7 @@ const customJestConfig = {
     '<rootDir>/src/**/__tests__/**/*.(ts|tsx|js)',
     '<rootDir>/src/**/?(*.)(test|spec).(ts|tsx|js)',
   ],
+  testPathIgnorePatterns: ['<rootDir>/tests/e2e', '<rootDir>/__tests__/.*\\.(e2e|playwright)\\.ts$'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },

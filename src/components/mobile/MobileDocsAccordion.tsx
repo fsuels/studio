@@ -81,7 +81,7 @@ export default function MobileDocsAccordion({
                   })}
                   <li>
                     <Link
-                      href={`/${locale}/?category=${encodeURIComponent(cat.key)}#workflow-start`}
+                      href={`/${locale}/category/${encodeURIComponent(cat.key)}`}
                       className="block mt-2 text-sm italic text-gray-500"
                       onClick={onLinkClick}
                     >

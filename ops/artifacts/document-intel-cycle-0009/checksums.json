@@ -1,0 +1,9 @@
+﻿{
+    "ops/artifacts/document-intel-cycle-0009/typecheck.txt":  "c64a3b93d612cf5901e47cac76904d1fcf6bcba14f920a98530c0e31f4bfc326",
+    "ops/artifacts/document-intel-cycle-0009/eslint-legal-translation.txt":  "c3eff347d5d33b5c602cc616bf957725bf8830b72ded13e7069ad3fdc2cdd37c",
+    "ops/artifacts/document-intel-cycle-0009/legal-translation-hotfix.md":  "53792dc2ec67d18d462772d9e778cd911e6d2b00645c6256643655c313a13343",
+    "TEAM/Document-Intelligence/complaint.json":  "5f36afa8a1ddb34fdaa944f568eba0f7d30cbd718fbe3d86048653bebeaa5ec1",
+    "TEAM/Document-Intelligence/memory.json":  "2ef15f2b7d00f22ef877f89a00e02eb4c4ca4fa5079e1e5600df95569205d2b5",
+    "ops/state/lock/codex.lock":  "29105a3f2bc3b2fdcff8191bbea177ef0d726214b72a3efb7a835065375866a3",
+    "src/lib/legal-translation/LegalTranslationEngine.ts":  "d6853a4ee04a35e0324c4b54d2a9c2165f932bccfb254e974112abee40dff31f"
+}

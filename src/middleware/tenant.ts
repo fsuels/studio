@@ -29,11 +29,11 @@ export async function tenantMiddleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-interface TenantContext {
-  type: 'main' | 'tenant' | 'subdomain';
-  tenant?: Tenant;
-  slug?: string;
-}
+type TenantContext =
+  | { type: 'main' }
+  | { type: 'tenant'; tenant: Tenant }
+  | { type: 'subdomain'; slug: string };
+
 
 async function resolveTenantFromHostname(
   hostname: string,

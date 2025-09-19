@@ -1,6 +1,6 @@
 {
-    "cycle_id": "compliance-cycle-0017",
-    "last_updated": "2025-09-19T20:33:49.854912+00:00",
+    "cycle_id": "compliance-cycle-0018",
+    "last_updated": "2025-09-19T22:40:04.331894+00:00",
     "notes": [
         "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
         "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
@@ -53,12 +53,14 @@
         "Published compliance timeline covering outreach and DSAR dry run milestones (ops/artifacts/compliance-cycle-0015/compliance-timeline.md).",
         "Added hash logging guidance for consent telemetry and translation intake (ops/artifacts/compliance-cycle-0015/hash-guidance.md).",
         "Published certified Spanish versions of disclaimer, terms, privacy, and refund policies (docs/legal/es/*) with hashes recorded in translation receipt.",
-        "Entregamos la pila completa de políticas en español (docs/legal/es/*.md) con metadatos de certificación y normalizamos los resúmenes en español en las fuentes inglesas.",
-        "Regeneramos los JSON de locales ES y el glosario de políticas para eliminar mojibake y actualizamos scripts/i18n/check-mojibake.ts con escape doble de \"?\".",
-        "legal:validate e i18n:check pasan; artefactos registrados en ops/artifacts/compliance-cycle-0017/."
+        "Entregamos la pila completa de polÃ­ticas en espaÃ±ol (docs/legal/es/*.md) con metadatos de certificaciÃ³n y normalizamos los resÃºmenes en espaÃ±ol en las fuentes inglesas.",
+        "Regeneramos los JSON de locales ES y el glosario de polÃ­ticas para eliminar mojibake y actualizamos scripts/i18n/check-mojibake.ts con escape doble de \"?\".",
+        "legal:validate e i18n:check pasan; artefactos registrados en ops/artifacts/compliance-cycle-0017/.",
+        "Updated release gate evidence checklist to mark Spanish policy evidence complete and to prompt Growth/Payments follow-ups (ops/artifacts/compliance-cycle-0014/release-gate-evidence-checklist.md).",
+        "Draft Spanish policy markdown added under docs/legal/es/* with internal translations; awaiting Redwood Legal LLP certification.",
+        "Translation approval log reset to pending and new receipt stored in ops/artifacts/compliance-cycle-0018/ with current SHA256 hashes."
     ],
     "todos": [
-        "Recopilar certificaciones oficiales de Redwood Legal para las nuevas políticas en español y adjuntar evidencias en ops/artifacts/compliance-cycle-0017/.",
         "Send 2025-09-20 follow-up email to Redwood Legal LLP; log confirmation in translation approval tracker.",
         "Embed policy links within product flows, checkout, and marketing landing pages with Platform tracking.",
         "Automate incident archive reminders and integrate roster with Platform on-call tooling.",
@@ -84,9 +86,11 @@
         "Upon translation delivery, replace docs/legal/es/placeholder/* with certified markdown and update hashes in receipt log.",
         "Send DSAR template Slack/email outreach at 2025-09-20T17:00:00Z and log confirmations with evidence.",
         "Send consent telemetry instructions to Platform at 2025-09-20T17:00:00Z, then populate post-delivery checklist as artifacts arrive.",
-        "Replace docs/legal/es/placeholder markdown once certified translations land; update translation receipt and release gate evidence.",
         "Use compliance timeline to track 2025-09-20 outreach and 2025-09-23 DSAR dry run deliverables.",
         "Apply hash-guidance.md when logging consent telemetry artifacts and translated markdown.",
-        "Provide translation PDFs/certification letters to translation approvals directory and update receipt checklist with evidence once obtained."
+        "Provide translation PDFs/certification letters to translation approvals directory and update receipt checklist with evidence once obtained.",
+        "Obtain Redwood Legal LLP certified Spanish policy translations and replace docs/legal/es/*.md with signed copies.",
+        "Archive Redwood certification PDFs and update ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md with final approvals.",
+        "Notify Platform and Growth once certified Spanish policies are approved for UI linking."
     ]
 }

@@ -97,7 +97,7 @@ function buildPricingStructuredData(locale: 'en' | 'es'): string {
           : 'Instant download of a customized legal document.',
       price: '35.00',
       priceCurrency: 'USD',
-      url: siteUrl + '/' + locale + '/#workflow-start',
+      url: siteUrl + '/' + locale + '/generate',
     },
     {
       name: locale === 'es' ? 'Paquete de 5 Documentos' : '5-Document Bundle',
@@ -107,7 +107,7 @@ function buildPricingStructuredData(locale: 'en' | 'es'): string {
           : 'Five legal document downloads with bundle savings.',
       price: '150.00',
       priceCurrency: 'USD',
-      url: siteUrl + '/' + locale + '/#workflow-start',
+      url: siteUrl + '/' + locale + '/generate',
     },
     {
       name: locale === 'es' ? 'Negocios Pro' : 'Business Pro',
@@ -219,7 +219,7 @@ export default async function PricingPage({
             t('Email support', 'Soporte por correo'),
             t('Secure sharing (soon)', 'Compartir seguro (pronto)')
           ]}
-          cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
+          cta={{ href: `/${locale}/generate`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
         />
 
         <div className="relative">
@@ -234,7 +234,7 @@ export default async function PricingPage({
               t('Credits never expire', 'Los créditos no expiran'),
               t('Best value per document', 'Mejor valor por documento')
             ]}
-            cta={{ href: `/${locale}/#workflow-start`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
+            cta={{ href: `/${locale}/generate`, label: t('Get Started', 'Comenzar'), analyticsId: 'get_started' }}
           />
         </div>
 

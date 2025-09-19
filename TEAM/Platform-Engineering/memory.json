@@ -5,13 +5,14 @@
         "Automate periodic execution of scripts/check-csp-metrics.mjs in monitoring pipeline.",
         "Run staging release rehearsal toggling FEATURE_SECURITY_HEADERS before production enablement."
     ],
-    "last_updated": "2025-09-19T19:59:27Z",
+    "last_updated": "2025-09-19T20:41:35Z",
     "cycle_id": "platform-cycle-0010",
     "notes": [
         "Grafana dashboard and Prometheus rules prepared for CSP alert telemetry rollout.",
         "Runbook updated so SRE can deploy scrape job and alerts without additional context.",
         "CLI script available to verify CSP metrics endpoints pre-scrape deployment.",
         "Feature flag added for security-header middleware with rollout runbook (`ops/runbooks/security-header-feature-flag.md`).",
-        "Security header flag verification logged in ops/artifacts/platform-cycle-0010/security-header-flag.md for audit trail."
+        "Security header flag verification logged in ops/artifacts/platform-cycle-0010/security-header-flag.md for audit trail.",
+        "Question generator tests realigned with overlay outputs; vehicle BoS stability suite mocks pdf-lib (see ops/artifacts/platform-cycle-0010/question-generator-verification.md)."
     ]
 }

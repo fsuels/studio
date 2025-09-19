@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import {
   Loader2,
   FileText,
@@ -45,8 +44,13 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     locale?: string;
   };
   const router = useRouter();
-  const { setShowDiscoveryModal } = useDiscoveryModal();
   const locale = (params.locale as 'en' | 'es') || 'en';
+
+  const exploreAllDestination = `/${locale}/marketplace`;
+
+  useEffect(() => {
+    router.prefetch(exploreAllDestination);
+  }, [exploreAllDestination, router]);
 
   const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -291,7 +295,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   }, [selectedCategory, taxonomyToDocCategory, topDocs]);
 
   const handleExploreAll = () => {
-    setShowDiscoveryModal(true);
+    router.push(exploreAllDestination);
   };
 
   if (isLoading && isHydrated) {

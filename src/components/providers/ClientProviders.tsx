@@ -8,45 +8,20 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { AccessibilityProvider } from '@/contexts/AccessibilityProvider';
-import { DiscoveryModalProvider } from '@/contexts/DiscoveryModalContext';
+import { DiscoveryModalProvider, useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import { registerServiceWorker } from '@/lib/mobile-optimization';
+import { useDeferredComponent } from '@/hooks/useDeferredComponent';
 
 interface ClientProvidersProps {
   children: ReactNode;
   locale: 'en' | 'es';
 }
-
 // Statically import Footer so it is included in the main bundle.
 // This avoids an additional network request on every navigation.
 import { Footer as _Footer } from '@/components/layout/Footer';
-import dynamic from 'next/dynamic';
-
-// Load non-critical widgets lazily
-const ContactFormButton = dynamic(() =>
-  import('@/components/shared').then((m) => ({ default: m.ContactFormButton })),
-  { ssr: false, loading: () => null }
-);
-const ActivityTicker = dynamic(() =>
-  import('@/components/shared').then((m) => ({ default: m.ActivityTicker })),
-  { ssr: false, loading: () => null }
-);
-const GlobalKeyboardShortcuts = dynamic(() =>
-  import('@/components/accessibility/GlobalKeyboardShortcuts').then((m) => ({
-    default: m.GlobalKeyboardShortcuts,
-  })),
-  { ssr: false, loading: () => null }
-);
-const DocumentDiscoveryModal = dynamic(
-  () => import('@/components/global/DocumentDiscoveryModal'),
-  { ssr: false, loading: () => null }
-);
-const AIFeatureTooltip = dynamic(() =>
-  import('@/components/shared/AIFeatureTooltip'),
-  { ssr: false, loading: () => null }
-);
 
 const AppShell = React.memo(function AppShell({
   children,
@@ -55,6 +30,44 @@ const AppShell = React.memo(function AppShell({
 }) {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
+  const { showDiscoveryModal } = useDiscoveryModal();
+
+  const isHomePage = pathname === '/' || pathname === '/en' || pathname === '/es';
+
+  const ActivityTickerComponent = useDeferredComponent(
+    () => import('@/components/shared').then((m) => ({ default: m.ActivityTicker })),
+    {
+      trigger: isMounted && isHomePage,
+    },
+  );
+
+  const GlobalKeyboardShortcutsComponent = useDeferredComponent(
+    () =>
+      import('@/components/accessibility/GlobalKeyboardShortcuts').then((m) => ({
+        default: m.GlobalKeyboardShortcuts,
+      })),
+    {
+      preload: isMounted,
+    },
+  );
+
+  const DocumentDiscoveryModalComponent = useDeferredComponent(
+    () => import('@/components/global/DocumentDiscoveryModal'),
+    {
+      trigger: showDiscoveryModal,
+      preload: isMounted,
+    },
+  );
+
+  const shouldShowTooltip = isMounted && !/^\/?$|^\/(en|es)\/?$/.test(pathname || '');
+
+  const AIFeatureTooltipComponent = useDeferredComponent(
+    () => import('@/components/shared/AIFeatureTooltip'),
+    {
+      trigger: shouldShowTooltip,
+      idleDelay: 1200,
+    },
+  );
 
   useEffect(() => {
     setIsMounted(true);
@@ -67,15 +80,23 @@ const AppShell = React.memo(function AppShell({
   return (
     <>
       {children}
-      <ContactFormButton />
-      <ActivityTicker />
+      {isMounted && ActivityTickerComponent && isHomePage && (
+        <ActivityTickerComponent />
+      )}
       {/* Conditionally render accessibility components only on the client after mount */}
-      {isMounted && <GlobalKeyboardShortcuts />}
+      {isMounted && GlobalKeyboardShortcutsComponent && (
+        <GlobalKeyboardShortcutsComponent />
+      )}
       {/* Global Document Discovery Modal */}
-      {isMounted && <DocumentDiscoveryModal />}
+      {DocumentDiscoveryModalComponent && <DocumentDiscoveryModalComponent />}
+      {showDiscoveryModal && !DocumentDiscoveryModalComponent && (
+        <div className="fixed inset-0 z-[999] grid place-items-center bg-background/75">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      )}
       {/* AI Feature Educational Tooltip */}
-      {isMounted && !/^\/?$|^\/(en|es)\/?$/.test(pathname || '') && (
-        <AIFeatureTooltip />
+      {AIFeatureTooltipComponent && shouldShowTooltip && (
+        <AIFeatureTooltipComponent />
       )}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}

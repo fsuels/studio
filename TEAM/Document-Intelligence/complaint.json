@@ -1,27 +1,3 @@
 {
-  "complaints": [
-    {
-      "id": "complaint-20250919-005",
-      "reported_at": "2025-09-19T20:25:41.392216Z",
-      "reported_by": "Complaints",
-      "summary": "Legal translation engine fails to compile due to blank template strings",
-      "details": "Running eslint and tsc shows src/lib/legal-translation/LegalTranslationEngine.ts has placeholder strings missing interpolations (e.g. message: \"\" may not have direct equivalent in ,\"), so the parser stops with ',' expected. This breaks legal translation flows that import translateLegalText and prevents typecheck from finishing.",
-      "severity": "high",
-      "status": "open",
-      "target_pod": "Document-Intelligence",
-      "tags": [
-        "legal-translation",
-        "localization",
-        "typecheck"
-      ],
-      "next_action": "Restore the missing string interpolations/placeholders in LegalTranslationEngine so the module parses and legal translation routes compile; rerun lint and tsc to confirm.",
-      "owner_notes": [],
-      "history": [
-        {
-          "ts": "2025-09-19T20:25:41.392216Z",
-          "note": "Complaint logged by Complaints pod; see ops/artifacts/complaints-cycle-0003/lint-log.txt for eslint failure and ops/artifacts/complaints-cycle-0003/typecheck-log.txt for tsc errors."
-        }
-      ]
-    }
-  ]
+  "complaints": []
 }

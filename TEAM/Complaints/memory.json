@@ -1,6 +1,6 @@
 {
   "cycle_id": "complaints-cycle-0003",
-  "last_updated": "2025-09-19T20:27:17.125726Z",
+  "last_updated": "2025-09-19T20:39:51.3879675Z",
   "notes": [
     "Logged complaint-20250919-001 (Platform-Engineering) for Next.js build failure caused by server-only module import.",
     "Logged complaint-20250919-002 (Platform-Engineering) for home route 500 originating from DocumentDiscoveryModal parse failure.",
@@ -9,7 +9,8 @@
     "Reopened Stripe publishable key outage as complaint-20250919-004 after regression.",
     "Captured Turbopack runtime stack for complaint-20250919-004 (payment runtime crash).",
     "Logged complaint-20250919-005 (Document-Intelligence) for LegalTranslationEngine parse failure blocking legal translation flows.",
-    "Logged complaint-20250919-006 (Payments-Monetization) for revenue-sharing-system TypeScript corruption preventing payouts."
+    "Logged complaint-20250919-006 (Payments-Monetization) for revenue-sharing-system TypeScript corruption preventing payouts.",
+    "Escalated complaint-20250919-005 to critical after verifying mojibake corruption blocks builds."
   ],
   "todos": [
     "Confirm Platform-Engineering restores the production build path for complaint-20250919-001 and report back.",

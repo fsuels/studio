@@ -163,7 +163,7 @@ export default function MegaMenuContent({
                       {categoryDocs.length > MAX_DOCS_PER_CATEGORY_INITIAL && (
                         <li>
                           <Link
-                            href={`/${currentLocale}/?category=${encodeURIComponent(category.key)}#workflow-start`}
+                            href={`/${currentLocale}/marketplace?category=${encodeURIComponent(category.key)}`}
                             className="text-xs md:text-sm text-primary font-medium hover:underline mt-1 inline-block"
                             onClick={onLinkClick}
                           >

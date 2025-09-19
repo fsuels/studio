@@ -1,8 +1,8 @@
-// src/lib/vector-search/pinecone-service.ts
-import { Pinecone } from '@pinecone-database/pinecone';
+﻿// src/lib/vector-search/pinecone-service.ts
+import { Pinecone } from '@pinecone-database/pinecone';\r\nimport type {\r\n  PineconeRecord,\r\n  RecordMetadata,\r\n  RecordMetadataValue,\r\n  ScoredPineconeRecord,\r\n  FetchResponse,\r\n  QueryResponse,\r\n} from '@pinecone-database/pinecone';
 import { embeddingService } from './embedding-service';
 
-interface PineconeMetadata {
+interface PineconeMetadata extends Record<string, RecordMetadataValue> {
   docId: string;
   title: string;
   category: string;
@@ -196,7 +196,7 @@ export class PineconeService {
   ): Promise<void> {
     try {
       const batchSize = 100; // Pinecone's batch limit
-      const batches = [];
+      const batches: typeof documents[] = [];
 
       for (let i = 0; i < documents.length; i += batchSize) {
         batches.push(documents.slice(i, i + batchSize));
@@ -262,27 +262,23 @@ export class PineconeService {
 
       // Perform vector search
       const index = this.getIndex();
-      const searchResponse = await index.namespace(this.namespace).query({
+      const namespace = index.namespace(this.namespace);
+      const searchResponse = (await namespace.query({
         vector: queryEmbedding,
         topK: Math.min(topK * 2, 100), // Fetch more for better faceting
         filter: pineconeFilter,
         includeMetadata,
-      });
+      })) as QueryResponse<PineconeMetadata>;
 
-      // Filter by minimum score
-      const filteredResults =
-        searchResponse.matches
-          ?.filter((match) => match.score && match.score >= minScore)
-          .map((match) => ({
-            id: match.id,
-            score: match.score || 0,
-            metadata: match.metadata as PineconeMetadata,
-            explanation: this.generateExplanation(
-              query,
-              match.metadata as PineconeMetadata,
-              match.score || 0,
-            ),
-          })) || [];
+      const matches = searchResponse.matches ?? [];
+      const filteredResults: SearchResult[] = matches
+        .filter((match) => match.score !== undefined && match.score >= minScore)
+        .map((match) => ({
+          id: match.id,
+          score: match.score ?? 0,
+          metadata: match.metadata,
+          explanation: this.generateExplanation(query, match.metadata, match.score ?? 0),
+        }));
 
       // Limit to requested topK
       const results = filteredResults.slice(0, topK);
@@ -534,36 +530,33 @@ export class PineconeService {
     try {
       // First, fetch the document to get its embedding
       const index = this.getIndex();
-      const fetchResponse = await index
-        .namespace(this.namespace)
-        .fetch([docId]);
+      // First, fetch the document to get its embedding
+      const index = this.getIndex();
+      const namespace = index.namespace(this.namespace);
+      const fetchResponse = (await namespace.fetch([docId])) as FetchResponse<PineconeMetadata>;
 
-      if (!fetchResponse.vectors || !fetchResponse.vectors[docId]) {
+      const docRecord = fetchResponse.records[docId];
+      if (!docRecord?.values) {
         throw new Error(`Document ${docId} not found in index`);
       }
 
-      const docVector = fetchResponse.vectors[docId];
-
       // Search for similar documents
-      const searchResponse = await index.namespace(this.namespace).query({
-        vector: docVector.values,
+      const searchResponse = (await namespace.query({
+        vector: docRecord.values,
         topK: topK + 1, // +1 to exclude the source document
         includeMetadata: true,
-      });
+      })) as QueryResponse<PineconeMetadata>;
 
-      // Filter out the source document and apply minimum score
-      const results =
-        searchResponse.matches
-          ?.filter(
-            (match) =>
-              match.id !== docId && match.score && match.score >= minScore,
-          )
-          .map((match) => ({
-            id: match.id,
-            score: match.score || 0,
-            metadata: match.metadata as PineconeMetadata,
-          })) || [];
+      const matches = searchResponse.matches ?? [];
+      const results = matches
+        .filter((match) => match.id !== docId && match.score !== undefined && match.score >= minScore)
+        .map((match) => ({
+          id: match.id,
+          score: match.score ?? 0,
+          metadata: match.metadata,
+        }));
 
+      return results.slice(0, topK);
       return results.slice(0, topK);
     } catch (error) {
       console.error(`Error finding similar documents for ${docId}:`, error);

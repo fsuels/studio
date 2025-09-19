@@ -1,4 +1,4 @@
-// src/app/[locale]/page.tsx
+﻿// src/app/[locale]/page.tsx
 import type { Metadata } from 'next';
 import HomePageClient from './HomePageClient';
 import { HomePageStructuredData } from './HomePageStructuredData';
@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : defaultLocale;
 
   const siteUrl = getSiteUrl();
+  const fallbackTitle = SEOConfig.title ?? '123LegalDoc';
+  const fallbackDescription = SEOConfig.description ?? 'Create legal documents tailored to your needs.';
   const metadataBase = new URL(siteUrl + '/');
   const canonicalPath = getCanonicalPathForLocale(locale);
   const alternates = buildLanguageAlternates(supportedLocales, siteUrl);
@@ -35,10 +37,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     metadataBase,
     title: {
-      default: SEOConfig.title,
-      template: '%s | ' + SEOConfig.title,
+      default: fallbackTitle,
+      template: '%s | ' + fallbackTitle,
     },
-    description: SEOConfig.description,
+    description: fallbackDescription,
     alternates: {
       canonical: canonicalPath,
       languages: alternates,
@@ -46,16 +48,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: 'website',
       url: siteUrl + canonicalPath,
-      title: SEOConfig.title,
-      description: SEOConfig.description,
-      siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
+      title: fallbackTitle,
+      description: fallbackDescription,
+      siteName: SEOConfig.openGraph?.site_name ?? fallbackTitle,
       locale: ogLocale,
       alternateLocale: alternateOgLocales,
     },
     twitter: {
       card: 'summary_large_image',
-      title: SEOConfig.title,
-      description: SEOConfig.description,
+      title: fallbackTitle,
+      description: fallbackDescription,
     },
   };
 }
@@ -85,3 +87,4 @@ export default async function HomePageContainer({ params }: PageProps) {
     </>
   );
 }
+

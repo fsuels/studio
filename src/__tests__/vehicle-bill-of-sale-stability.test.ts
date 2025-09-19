@@ -5,6 +5,22 @@ import { describe, it, expect, beforeAll } from '@jest/globals';
 import { overlayFormData } from '@/lib/pdf/pdf-overlay-service';
 import { getVehicleBillOfSaleCompliance } from '@/lib/compliance-helper';
 import { getStateFormPath } from '@/lib/pdf/state-form-manager';
+jest.mock('pdf-lib', () => {
+  const actual = jest.requireActual('pdf-lib');
+  return {
+    ...actual,
+    PDFDocument: {
+      ...actual.PDFDocument,
+      load: jest.fn(async () => ({
+        getForm: () => ({ getFields: () => [] }),
+        getPages: () => [{ drawText: jest.fn() }],
+        embedFont: async () => ({}),
+        save: async () => new Uint8Array(1024),
+      })),
+    },
+  };
+});
+
 
 // Mock form data for testing
 const mockFormData = {

@@ -1,6 +1,6 @@
 {
-    "cycle_id": "growth-cycle-0005",
-    "last_updated": "2025-09-19T20:17:08.190129+00:00",
+    "cycle_id": "growth-cycle-0006",
+    "last_updated": "2025-09-19T22:37:16.386887+00:00",
     "notes": [
         "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
         "Retained server-rendered structured data while delegating CTA UI to a client component for tracking.",
@@ -17,7 +17,10 @@
         "Spot-checked translation assets in public/locales to confirm ES parity for audited pages; noted need for automated parity/JSON-LD validation.",
         "Instrumented online-notary hero CTA with OnlineNotaryCTA wrapper to emit online_notary_cta_click containing locale and surface metadata.",
         "Wrapped partners hero CTAs in PartnersCTA so mailto and support buttons fire partners_cta_click analytics.",
-        "Added SupportCTA plus blog article/related link wrappers to emit support_cta_click, blog_article_click, and blog_related_click events."
+        "Added SupportCTA plus blog article/related link wrappers to emit support_cta_click, blog_article_click, and blog_related_click events.",
+        "Completed marketing-route sweep; see ops/artifacts/growth-cycle-0006/marketing-route-audit.md for metadata, JSON-LD, and analytics status across EN/ES pages.",
+        "Localized /[locale]/sitemap with canonical/hreflang alternates, locale-prefixed links, and CollectionPage JSON-LD (ops/artifacts/growth-cycle-0006/sitemap-localization-check.md).",
+        "Added marketing sitemap regression test ensuring metadata and JSON-LD stay localized (src/__tests__/marketing-sitemap.test.ts)."
     ],
     "todos": [
         "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
@@ -25,14 +28,14 @@
         "Design shared translation catalogs so Growth copy is not hard-coded in per-page helpers.",
         "Extend analytics instrumentation to other marketing routes following the SignWell pattern.",
         "Refactor legacy static blog posts to consume the shared metadata/JSON-LD helper for parity.",
-        "Align /[locale]/(marketing)/sitemap metadata with canonical and hreflang standards.",
         "Coordinate with Platform to ingest pricing_cta_click into GA4/warehouse and reflect it in src/app/api/analytics/funnel/route.ts once mock data is removed.",
         "Extend PricingCTA usage to other marketing CTAs (pricing hero, trust modules) after confirming compliance messaging coverage.",
         "Coordinate with Platform to ingest home_cta_click into GA4/warehouse and surface experiment bucket metadata.",
         "Coordinate with Platform to ingest templates_cta_click into GA4/warehouse so quiz funnel entries are tracked.",
         "Coordinate with Platform to ingest features_cta_click into GA4/warehouse for feature-to-purchase attribution.",
-        "Author automated check (lint/test) to validate marketing JSON-LD schemas so regressions fail CI.",
+        "Expand automated JSON-LD regression tests beyond sitemap to other marketing routes.",
         "Coordinate with Platform to ingest online_notary_cta_click, partners_cta_click, support_cta_click, blog_article_click, and blog_related_click events into GA4/warehouse.",
-        "Confirm Compliance is comfortable with newly instrumented partners/support/online-notary CTAs logging event payloads."
+        "Confirm Compliance is comfortable with newly instrumented partners/support/online-notary CTAs logging event payloads.",
+        "Swap decorative emoji bullets on templates/online-notary marketing content for accessible SVG/icons once design signs off."
     ]
 }

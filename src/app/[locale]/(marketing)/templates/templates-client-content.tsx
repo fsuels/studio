@@ -25,7 +25,7 @@ export default function TemplatesClientContent({ locale }: Props) {
   const _router = useRouter();
 
   const categoryHref = (key: string) =>
-    `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;
+    `/${locale}/marketplace?category=${encodeURIComponent(key)}`;
 
   const handleTemplatesQuizClick = useCallback(() => {
     track('templates_cta_click', {

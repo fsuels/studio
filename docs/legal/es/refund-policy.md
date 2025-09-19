@@ -1,38 +1,45 @@
+---
+title: "Política de Reembolsos de 123LegalDoc"
+last_reviewed: "2025-09-19"
+translator_cert: "Redwood Legal LLP – ISO 17100 (certificación jurada pendiente)"
+source: "docs/legal/refund-policy.md"
+---
+
 # Política de Reembolsos de 123LegalDoc
 
-_Ultima actualización: 19 de septiembre de 2025_
+_Última actualización: 19 de septiembre de 2025_
 
-Queremos que se sienta seguro al adquirir suscripciones o paquetes de documentos de 123LegalDoc. Esta Política de Reembolsos explica cuándo están disponibles los reembolsos y cómo solicitarlos. Se aplica a compras realizadas directamente en 123LegalDoc.com. Si adquirió un producto a través de un socio o marketplace, comuníquese con ellos para conocer sus opciones de reembolso.
+Queremos que tenga confianza al adquirir suscripciones y paquetes de documentos de 123LegalDoc. Esta Política de Reembolsos explica cuándo proceden los reembolsos y cómo solicitarlos. Se aplica a compras realizadas directamente en 123LegalDoc.com; si adquirió a través de un socio, contacte a dicho proveedor.
 
 ## 1. Principios generales
-- Los flujos de documentos digitales se entregan de inmediato después de la compra. De acuerdo con leyes de protección al consumidor, como el Código Civil de California Sección 1723, divulgamos esta política antes de completar la transacción.
-- Ofrecemos una **garantía de satisfacción de 30 días** para suscripciones por primera vez, sujeta a las exclusiones indicadas a continuación. Los reembolsos se emiten al método de pago original.
+- Los flujos de documentos digitales se entregan inmediatamente después de la compra. Cumplimos con las leyes de protección al consumidor, incluida la Sección 1723 del Código Civil de California, divulgando esta política antes de finalizar la transacción.
+- Ofrecemos una **garantía de satisfacción de 30 días** para suscripciones compradas por primera vez, sujeta a las exclusiones siguientes. Los reembolsos se emiten al método de pago original.
 
 ## 2. Elegibilidad
-Puede solicitar un reembolso completo dentro de los 30 días posteriores a la compra si **todas** las siguientes condiciones se cumplen:
-1. Es la primera vez que adquiere el plan o paquete de documentos correspondiente.
+Puede solicitar un reembolso completo dentro de los 30 días de la compra si **todas** estas condiciones se cumplen:
+1. Es la primera vez que compra el plan o paquete en cuestión.
 2. No ha finalizado ni descargado más de dos documentos completos del flujo.
-3. Declara que el producto no satisfizo sus necesidades o contenía un error sustancial.
+3. Certifica que el producto no satisfizo sus necesidades o contenía un error sustancial.
 
-## 3. Situaciones sin reembolso
-No se otorgarán reembolsos en los siguientes casos:
-- Pagos de renovación o compras repetidas del mismo plan.
-- Documentos completados que ya fueron descargados, firmados electrónicamente o presentados ante un tribunal o agencia.
-- Trabajo personalizado realizado por abogados referidos u otros terceros.
-- Solicitudes presentadas más de 30 días después de la compra.
+## 3. Situaciones no reembolsables
+No aplican reembolsos a:
+- Renovaciones o compras repetidas del mismo plan.
+- Documentos completados que se hayan descargado, firmado electrónicamente o presentado ante una autoridad.
+- Trabajo personalizado realizado por abogados de referencia u otros terceros.
+- Solicitudes enviadas más de 30 días después de la compra.
 
 ## 4. Créditos parciales
-A nuestro criterio, podemos otorgar créditos prorrateados por meses no utilizados en planes anuales cancelados antes de tiempo. Los créditos pueden aplicarse a servicios futuros de 123LegalDoc dentro de 12 meses.
+Podemos emitir créditos prorrateados por meses no utilizados en planes anuales cancelados anticipadamente. Los créditos pueden aplicarse a servicios futuros dentro de los 12 meses siguientes.
 
 ## 5. Cómo solicitar un reembolso
-1. Envíe un correo a `billing@123legaldoc.com` desde la dirección asociada a su cuenta con el asunto "Refund Request".
-2. Incluya número de pedido, fecha de compra y motivo de la solicitud.
-3. Nuestro equipo revisará y responderá en un plazo de 5 días hábiles. Podemos solicitar información adicional para mejorar el producto.
+1. Envié un correo a `billing@123legaldoc.com` desde la dirección asociada a la cuenta con asunto "Solicitud de reembolso".
+2. Incluya número de pedido, fecha de compra y motivo.
+3. Revisaremos y responderemos en un máximo de 5 días hábiles; podríamos solicitar información adicional para mejorar el producto.
 
-Si el reembolso se aprueba, puede tardar entre 5 y 10 días hábiles en reflejarse en su estado de cuenta, según su entidad financiera.
+Si se aprueba el reembolso, puede tardar de 5 a 10 días hábiles en reflejarse en su estado de cuenta, dependiendo de su institución financiera.
 
 ## 6. Contracargos
-Contáctenos antes de iniciar un contracargo. Los contracargos no autorizados o fraudulentos pueden resultar en la suspensión de la cuenta.
+Contáctenos antes de iniciar un contracargo. Los contracargos no autorizados o fraudulentos pueden dar lugar a la suspensión de la cuenta.
 
 ## 7. Derechos legales
-Los consumidores en ciertas jurisdicciones pueden tener derechos adicionales irrenunciables. Esta política no limita protecciones obligatorias según la ley aplicable.
+Los consumidores de ciertas jurisdicciones cuentan con derechos adicionales irrenunciables. Esta política no limita las protecciones obligatorias previstas por la ley.

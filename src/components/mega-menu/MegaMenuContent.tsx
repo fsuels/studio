@@ -346,7 +346,7 @@ export default function MegaMenuContent({
 
                           {categoryDocs.length > 5 && (
                             <Link
-                              href={`/${locale}/?category=${encodeURIComponent(category.key)}#workflow-start`}
+                              href={`/${locale}/marketplace?category=${encodeURIComponent(category.key)}`}
                               className="block text-xs text-primary font-medium hover:underline mt-2 pt-2 border-t border-border"
                               onClick={onLinkClick}
                             >
@@ -372,7 +372,7 @@ export default function MegaMenuContent({
         {/* Footer */}
         <div className="mt-8 pt-6 border-t border-border text-center">
           <Link
-            href={`/${locale}/#workflow-start`}
+            href={`/${locale}/marketplace`}
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
             onClick={onLinkClick}
           >

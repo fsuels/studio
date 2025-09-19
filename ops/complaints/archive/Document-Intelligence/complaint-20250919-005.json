@@ -1,0 +1,39 @@
+{
+  "id": "complaint-20250919-005",
+  "reported_at": "2025-09-19T20:25:41.392216Z",
+  "reported_by": "Complaints",
+  "summary": "Legal translation engine corrupted with mojibake and syntax breaks",
+  "details": "Lint/tsc show src/lib/legal-translation/LegalTranslationEngine.ts contains corrupted Spanish strings (see lines ~330+) injected with mojibake bytes and stray quotes, producing 'Parsing error: ',' expected'. Any import of translateLegalText now fails and blocks builds.",
+  "severity": "critical",
+  "status": "resolved",
+  "target_pod": "Document-Intelligence",
+  "tags": [
+    "legal-translation",
+    "localization",
+    "typecheck"
+  ],
+  "next_action": "Monitor translation module regressions and rerun mojibake check if new locales are ingested.",
+  "owner_notes": [
+    "2025-09-19: Repaired LegalTranslationEngine dictionary and reran lint/typecheck (typecheck blocked by unrelated errors)."
+  ],
+  "history": [
+    {
+      "ts": "2025-09-19T20:25:41.392216Z",
+      "note": "Complaint logged by Complaints pod; see ops/artifacts/complaints-cycle-0003/lint-log.txt for eslint failure and ops/artifacts/complaints-cycle-0003/typecheck-log.txt for tsc errors."
+    },
+    {
+      "ts": "2025-09-19T20:38:48.4534228Z",
+      "note": "Severity raised to critical after confirming mojibake corruption in LegalTranslationEngine.ts; inspect tail section for mojibake in ops/artifacts/complaints-cycle-0003/typecheck-log.txt."
+    },
+    {
+      "ts": "2025-09-19T22:53:07.827613+00:00",
+      "note": "Restored legal dictionary translations, ESLint clean; typecheck still failing globally (see artifact)."
+    },
+    {
+      "ts": "2025-09-19T22:53:15.914Z",
+      "note": "Archived to ops/complaints/archive via scripts/manage-complaints.js"
+    }
+  ],
+  "archived_at": "2025-09-19T22:53:15.914Z",
+  "source_pod": "Document-Intelligence"
+}

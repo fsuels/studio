@@ -92,11 +92,6 @@ export default function LanguageSwitch({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [switchLanguage]);
 
-  // Expose switch function for external use
-  React.useImperativeHandle(React.createRef(), () => ({
-    switchLanguage,
-  }));
-
   return null; // This is a headless component that only handles keyboard shortcuts
 }
 

@@ -548,6 +548,7 @@ export default function WizardCore({ locale, docId, docMeta }: WizardCoreProps) 
                 <PreviewPane
                   docId={docType}
                   locale={locale}
+                  docConfig={docStrict}
                   currentFieldId={currentFieldId}
                   onFieldClick={handleFieldClick}
                 />

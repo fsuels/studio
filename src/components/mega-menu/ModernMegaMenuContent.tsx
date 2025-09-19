@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { enhancedSearch } from '@/lib/enhanced-search';
@@ -417,7 +417,8 @@ interface ModernMegaMenuContentProps {
 
 const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, onLinkClick }) => {
   const { t } = useTranslation('common');
-  const { setShowDiscoveryModal } = useDiscoveryModal();
+  const router = useRouter();
+  const exploreDestination = `/${locale}/marketplace`;
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all'>('all');
   const [isClient, setIsClient] = useState(false);
@@ -430,6 +431,10 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
   useEffect(() => {
     setIsClient(true);
   }, []);
+  useEffect(() => {
+    router.prefetch(exploreDestination);
+  }, [exploreDestination, router]);
+
 
   // Enhanced search with debouncing
   const performSearch = useCallback(async (query: string) => {
@@ -967,7 +972,7 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
               <p className="text-xs text-gray-500 mb-1">Can't find what you need?</p>
               <button
                 onClick={() => {
-                  setShowDiscoveryModal(true);
+                  router.push(exploreDestination);
                   onLinkClick?.();
                 }}
                 className="text-blue-600 hover:text-blue-700 font-medium text-sm"

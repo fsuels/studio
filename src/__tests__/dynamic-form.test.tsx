@@ -6,6 +6,34 @@ import DynamicForm from '@/components/forms/DynamicForm';
 import { type DocumentConfig } from '@/lib/config-loader';
 
 // Mock all problematic UI components
+jest.mock('@/components/ui/form', () => ({
+  FormField: ({ name, render }: any) => render({ field: { name, value: '', onChange: jest.fn() } }),
+  FormItem: ({ children }: any) => <div>{children}</div>,
+  FormLabel: ({ children }: any) => <label>{children}</label>,
+  FormControl: ({ children }: any) => <div>{children}</div>,
+  FormMessage: () => null,
+  FormDescription: ({ children }: any) => <small>{children}</small>,
+}));
+
+jest.mock('@/components/ui/input', () => ({ Input: (props: any) => <input {...props} /> }));
+jest.mock('@/components/ui/textarea', () => ({ Textarea: (props: any) => <textarea {...props} /> }));
+jest.mock('@/components/ui/button', () => ({ Button: ({ children, ...props }: any) => <button {...props}>{children}</button> }));
+jest.mock('@/components/ui/checkbox', () => ({ Checkbox: ({ checked, onCheckedChange, ...props }: any) => (
+  <input
+    type="checkbox"
+    checked={Boolean(checked)}
+    onChange={(e) => onCheckedChange?.(e.target.checked)}
+    {...props}
+  />
+)}));
+jest.mock('@/components/ui/card', () => ({
+  Card: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  CardContent: ({ children }: any) => <div>{children}</div>,
+  CardHeader: ({ children }: any) => <div>{children}</div>,
+  CardTitle: ({ children }: any) => <h2>{children}</h2>,
+}));
+jest.mock('@/components/ui/progress', () => ({ Progress: ({ value }: any) => <div data-testid="progress">{value}%</div> }));
+jest.mock('@/components/ui/alert', () => ({ Alert: ({ children }: any) => <div>{children}</div>, AlertDescription: ({ children }: any) => <div>{children}</div> }));
 jest.mock('@/components/ui/calendar', () => ({
   Calendar: ({ onSelect }: any) => (
     <div data-testid="calendar" onClick={() => onSelect?.(new Date())}>

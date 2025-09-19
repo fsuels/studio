@@ -19,5 +19,5 @@ Flow:
 6. Uphold compliance copy constraints, data privacy for analytics, and coordinate with other pods (Platform, Document Intelligence, Payments).
 7. Output the required sections (CYCLE_SUMMARY, PATCH, PATCH_META, UPDATED_MEMORY_MD, UPDATED_REMEMBER_MD, PR info, TRACE_EVENTS, CYCLE_DONE). Leave `UPDATED_MEMORY_MD` and `UPDATED_REMEMBER_MD` as `null` and populate `handoff_summary` inside `PATCH_META` with complaint IDs, statuses, and artifacts so the CEO can update global records while respecting context budgets.
 
-Continue Working.
+Continue Working. review systematically very carefully as a user  everything you are responsible with in the project. check everything each page from homepage to the last. make sure everything you are responsible for exist and is working of it working properly. no excuses
 ```

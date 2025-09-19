@@ -19,16 +19,24 @@ import {
   Send,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { track } from '@/lib/analytics';
 
 const HeroAIExperience = React.memo(function HeroAIExperience() {
   const { t, i18n } = useTranslation('common');
+  const router = useRouter();
+  const locale = (i18n.language === 'es' ? 'es' : 'en') as 'en' | 'es';
+  const primaryCtaDestination = `/${locale}/generate`;
   const [isHydrated, setIsHydrated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  useEffect(() => {
+    router.prefetch(primaryCtaDestination);
+  }, [primaryCtaDestination, router]);
 
   const handleSamplePrompt = (prompt: string) => {
     setSearchQuery(prompt);
@@ -140,7 +148,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
                 size="lg"
                 className="bg-brand-blue text-white hover:bg-brand-blue/90 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 text-base h-12 px-10 py-4"
               >
-                <Link href="/#workflow-start">
+                <Link href={primaryCtaDestination} prefetch>
                   {isHydrated
                     ? t('ctaPrimary', { defaultValue: 'Start for Free' })
                     : placeholderText}

@@ -10,6 +10,8 @@ import type { DiscoveryResult } from '@/types/discovery';
 import { ConfidenceBadge } from './ConfidenceBadge';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
 
+const isDebugEnabled = process.env.NODE_ENV !== 'production';
+
 interface ResultsGridProps {
   results: (SemanticResult | DiscoveryResult)[];
   locale: 'en' | 'es';
@@ -87,13 +89,13 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
           const description = translatedDoc?.description || discoveryDescription || '';
           
           // Debug logging for empty descriptions (remove in production)
-          if (!description || description.trim() === '') {
+          if (isDebugEnabled && (!description || description.trim() === '')) {
             console.warn(`[Results Grid] Empty description for document:`, {
               docId: isSemanticResult ? result.doc.id : result.id,
               hasTranslatedDoc: !!translatedDoc,
               translatedDocDesc: translatedDoc?.description,
               discoveryResultDesc: discoveryDescription,
-              resultType: isSemanticResult ? 'semantic' : 'discovery'
+              resultType: isSemanticResult ? 'semantic' : 'discovery',
             });
           }
           

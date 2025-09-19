@@ -1,7 +1,7 @@
 [
     {
         "path":  "TEAM/Document-Intelligence/complaint.json",
-        "sha256":  "E1B7E4A4A85A0C583BCA2CC20EEFDC6E91EB40706003B36047C4B20C1BFAF280"
+        "sha256":  "EB39F459175A320131F7AAD9E02138CA02011CE36B5DB6B6F9D8B8DA50972C01"
     },
     {
         "path":  "TEAM/Payments-Monetization/complaint.json",
@@ -9,6 +9,6 @@
     },
     {
         "path":  "TEAM/Complaints/memory.json",
-        "sha256":  "A9B9A099E3B3D752D7486A632E75F783CD4F62B26FD3950CE4EBD484AE0A93BB"
+        "sha256":  "223AC2288949042D8D13154618EC5CAEF3ED532148A6CD9DF8DEC3A800AB1DAD"
     }
 ]

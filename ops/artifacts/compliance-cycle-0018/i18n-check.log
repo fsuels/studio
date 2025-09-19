@@ -1,0 +1,5 @@
+
+> nextn@0.1.0 i18n:check
+> tsx scripts/i18n/check-mojibake.ts
+
+? No mojibake patterns detected across policy markdown and es locale files.

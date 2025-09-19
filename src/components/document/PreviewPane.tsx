@@ -27,10 +27,14 @@ import { Button } from '@/components/ui/button';
 import StatePDFPreview from '@/components/document/StatePDFPreview';
 import { hasOfficialForm } from '@/lib/pdf/state-form-manager';
 import { loadComplianceOnly, normalizeJurisdiction } from '@/lib/config-loader';
+import type { LegalDocument } from '@/types/documents';
+
+const templateCache = new Map<string, string>();
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
+  docConfig?: Pick<LegalDocument, 'id' | 'name' | 'translations'>;
   currentFieldId?: string; // Track which field is currently being edited
   enableInlineEditing?: boolean; // New prop to enable inline editing
   onFieldClick?: (fieldId: string) => void; // Navigation to specific field
@@ -39,6 +43,7 @@ interface PreviewPaneProps {
 export default function PreviewPane({
   locale,
   docId,
+  docConfig,
   currentFieldId,
   enableInlineEditing: _enableInlineEditing = false,
   onFieldClick,
@@ -46,6 +51,8 @@ export default function PreviewPane({
   const { t } = useTranslation('common');
   const formContext = useFormContext();
   const { watch } = formContext || {};
+  const isDevMode = process.env.NODE_ENV !== 'production';
+  const cacheKey = useMemo(() => `${locale}:${docId}`, [locale, docId]);
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
@@ -60,9 +67,13 @@ export default function PreviewPane({
   // Add a state to track if form context is ready
   const [formContextReady, setFormContextReady] = useState(false);
   const [stateHasOfficialForm, setStateHasOfficialForm] = useState<boolean | null>(null);
+  const [latestFormData, setLatestFormData] = useState<Record<string, unknown>>({});
 
   // Standardized template path in public folder
   const templatePath = useMemo(() => `/templates/${locale}/${docId}.md`, [locale, docId]);
+  const selectedState = formContextReady
+    ? (latestFormData?.state as string | undefined)
+    : undefined;
 
   const watermarkText = t('preview.watermark', {
     ns: 'translation',
@@ -78,50 +89,79 @@ export default function PreviewPane({
   useEffect(() => {
     if (formContext && watch) {
       setFormContextReady(true);
-      console.log('✅ PreviewPane: Form context is ready');
-    } else {
-      console.log('❌ PreviewPane: Form context not ready', {
+      if (isDevMode) {
+        console.log('[PreviewPane] Form context is ready');
+      }
+    } else if (isDevMode) {
+      console.log('[PreviewPane] Form context not ready', {
         hasFormContext: !!formContext,
-        hasWatch: !!watch
+        hasWatch: !!watch,
       });
     }
-  }, [formContext, watch]);
+  }, [formContext, watch, isDevMode]);
 
   // Check if the selected state has an official form using unified loader
   useEffect(() => {
-    if (!formContextReady || !watch) return;
+    if (!formContextReady) {
+      return;
+    }
 
-    const selectedState = watch('state');
     if (!selectedState || !docId) {
       setStateHasOfficialForm(null);
       return;
     }
 
+    let cancelled = false;
+
     const checkOfficialForm = async () => {
-      console.log('🔍 PreviewPane: Checking official form for state:', selectedState, 'docId:', docId);
+      if (isDevMode) {
+        console.log('[PreviewPane] Checking official form availability', {
+          docId,
+          selectedState,
+        });
+      }
       try {
         const jurisdiction = normalizeJurisdiction(selectedState);
-        console.log('🔍 PreviewPane: Normalized jurisdiction:', jurisdiction);
         const compliance = await loadComplianceOnly(docId, jurisdiction);
-        console.log('🔍 PreviewPane: Compliance loaded:', compliance);
         const hasForm = !!(compliance.officialForm && compliance.localFormPath);
-        setStateHasOfficialForm(hasForm);
-        console.log(`✅ PreviewPane: ${selectedState} has official form:`, hasForm, 'officialForm:', compliance.officialForm, 'localFormPath:', compliance.localFormPath);
-      } catch (error) {
-        console.warn('⚠️ PreviewPane: Failed to check official form, using legacy method', error);
-        // Fallback to legacy method
-        if (docId === 'vehicle-bill-of-sale') {
-          const hasForm = hasOfficialForm(selectedState);
+        if (!cancelled) {
           setStateHasOfficialForm(hasForm);
-          console.log('✅ PreviewPane: Legacy check - has official form:', hasForm);
-        } else {
-          setStateHasOfficialForm(false);
+          if (isDevMode) {
+            console.log('[PreviewPane] Official form status resolved', {
+              docId,
+              selectedState,
+              hasForm,
+            });
+          }
+        }
+      } catch (error) {
+        if (isDevMode) {
+          console.warn('[PreviewPane] Failed official form lookup, using fallback', error);
+        }
+        if (!cancelled) {
+          if (docId === 'vehicle-bill-of-sale') {
+            const hasForm = hasOfficialForm(selectedState);
+            setStateHasOfficialForm(hasForm);
+            if (isDevMode) {
+              console.log('[PreviewPane] Legacy official form status resolved', {
+                docId,
+                selectedState,
+                hasForm,
+              });
+            }
+          } else {
+            setStateHasOfficialForm(false);
+          }
         }
       }
     };
 
     checkOfficialForm();
-  }, [formContextReady, watch, docId]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [formContextReady, docId, selectedState, isDevMode]);
 
   // Auto-scroll to highlighted field
   useEffect(() => {
@@ -151,19 +191,29 @@ export default function PreviewPane({
     if (!isHydrated) return;
 
     async function fetchTemplate() {
-      setIsLoading(true);
       setError(null);
       setImageError(false);
-      setRawMarkdown('');
-      setProcessedMarkdown('');
 
       if (!templatePath) {
-        console.warn(
-          `[PreviewPane] No templatePath for docId: ${docId}, locale: ${locale}. Will attempt image fallback.`,
-        );
+        if (isDevMode) {
+          console.warn(
+            `[PreviewPane] No templatePath for docId: ${docId}, locale: ${locale}. Will attempt image fallback.`,
+          );
+        }
         setIsLoading(false);
         return;
       }
+
+      const cachedMarkdown = templateCache.get(cacheKey);
+      if (cachedMarkdown) {
+        setRawMarkdown(cachedMarkdown);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      setRawMarkdown('');
+      setProcessedMarkdown('');
 
       try {
         const response = await fetch(templatePath); // Path is already absolute from public
@@ -173,6 +223,7 @@ export default function PreviewPane({
           );
         }
         const text = await response.text();
+        templateCache.set(cacheKey, text);
         setRawMarkdown(text);
       } catch (err) {
         console.error('Error fetching Markdown template:', err);
@@ -187,7 +238,7 @@ export default function PreviewPane({
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, isHydrated, t]);
+  }, [cacheKey, docId, locale, templatePath, isHydrated, t, isDevMode]);
 
   // Function to split markdown content into pages
   const splitContentIntoPages = useCallback((content: string) => {
@@ -341,23 +392,29 @@ export default function PreviewPane({
 
   useEffect(() => {
     if (!formContextReady || !watch || !isHydrated || isLoading) {
-      if (rawMarkdown && !isLoading)
+      if (!formContextReady || !isHydrated) {
+        setLatestFormData({});
+      }
+      if (rawMarkdown && !isLoading) {
         setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
+      }
       return;
     }
 
-    const formData = watch();
-    if (formData) {
-      debouncedUpdatePreview(formData as Record<string, unknown>, rawMarkdown);
+    const initialData = watch();
+    if (initialData) {
+      const normalized = initialData as Record<string, unknown>;
+      setLatestFormData(normalized);
+      debouncedUpdatePreview(normalized, rawMarkdown);
+    } else {
+      setLatestFormData({});
+      debouncedUpdatePreview({}, rawMarkdown);
     }
 
     const subscription = watch((formData) => {
-      if (formData) {
-        debouncedUpdatePreview(
-          formData as Record<string, unknown>,
-          rawMarkdown,
-        );
-      }
+      const normalized = (formData as Record<string, unknown>) || {};
+      setLatestFormData(normalized);
+      debouncedUpdatePreview(normalized, rawMarkdown);
     });
 
     return () => {
@@ -418,44 +475,13 @@ export default function PreviewPane({
     );
   }
 
-  // Check if document has a state selected that has an official form
-  const selectedState = formContextReady && watch ? watch('state') : null;
-  const currentFormData = formContextReady && watch ? watch() : {};
-  const shouldShowStatePDF = selectedState && stateHasOfficialForm === true;
-  
-  // Debug form data (moved outside useEffect to avoid hooks order violation)
-  if (formContextReady && watch) {
-    const allFormData = watch();
-    console.log('🔄 PreviewPane: Form data changed:', {
-      selectedState,
-      stateField: allFormData.state,
-      allFields: Object.keys(allFormData),
-      stateHasOfficialForm,
-      shouldShowStatePDF,
-      condition1_selectedState: !!selectedState,
-      condition2_stateHasOfficialFormIsTrue: stateHasOfficialForm === true,
-      FINAL_shouldShowStatePDF: selectedState && stateHasOfficialForm === true
-    });
-  }
-  
-  // Debug form data
-  console.log('🔍 PreviewPane DEBUG:', {
-    formContextReady,
-    selectedState,
-    stateHasOfficialForm,
-    shouldShowStatePDF,
-    docId,
-    watchFunction: !!watch,
-    currentFormData: Object.keys(currentFormData),
-    error
-  });
+  const shouldShowStatePDF = !!selectedState && stateHasOfficialForm === true;
 
-  // If we should show state PDF, render that instead
-  if (shouldShowStatePDF && !error) {
+  if (shouldShowStatePDF && !error && selectedState) {
     return (
       <StatePDFPreview
         state={selectedState}
-        formData={currentFormData}
+        formData={latestFormData}
         documentType={docId as 'vehicle-bill-of-sale'} // Dynamic document type
       />
     );

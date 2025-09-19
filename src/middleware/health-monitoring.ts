@@ -1,6 +1,5 @@
 // src/middleware/health-monitoring.ts
 import { NextRequest, NextResponse } from 'next/server';
-import React from 'react';
 import { operationalHealth } from '@/lib/operational-health';
 
 interface PerformanceData {
@@ -34,7 +33,7 @@ export function withHealthMonitoring(
         undefined,
     });
 
-    let response: NextResponse;
+    let response: NextResponse = NextResponse.next();
     let error: Error | null = null;
 
     try {

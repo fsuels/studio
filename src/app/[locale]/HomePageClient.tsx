@@ -11,7 +11,6 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { track } from '@/lib/analytics';
 import { AutoImage, PersonalizationBlock as _PersonalizationBlock } from '@/components/shared';
 import { Skeleton as _Skeleton } from '@/components/ui/skeleton';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { CategoryDocumentsWidget as _CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
 import { 
   FileText as _FileText, 
@@ -106,7 +105,7 @@ const AnnouncementBar = lazyOnView(
 export default function HomePageClient() {
   const { t } = useTranslation('common');
   const searchParams = useSearchParams();
-  const _router = useRouter();
+  const router = useRouter();
   const params = useParams();
   const locale = (params!.locale as 'en' | 'es') || 'en';
 
@@ -118,18 +117,21 @@ export default function HomePageClient() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [ctaVariant, setCtaVariant] = useState<'A' | 'B' | 'C'>('A');
   
-  // Use global discovery modal context
-  const { setShowDiscoveryModal } = useDiscoveryModal();
+  const heroCtaDestination = `/${locale}/generate`;
+
+  useEffect(() => {
+    router.prefetch(heroCtaDestination);
+  }, [heroCtaDestination, router]);
 
   const handleHeroCtaClick = useCallback(() => {
     track('home_cta_click', {
       locale,
       surface: 'hero',
-      destination: 'discovery_modal',
+      destination: heroCtaDestination,
       cta_variant: ctaVariant,
     });
-    setShowDiscoveryModal(true);
-  }, [ctaVariant, locale, setShowDiscoveryModal]);
+    router.push(heroCtaDestination);
+  }, [ctaVariant, heroCtaDestination, locale, router]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -150,18 +152,6 @@ export default function HomePageClient() {
     }
   }, [isHydrated]);
 
-  const workflowSectionId = 'workflow-start'; // This ID is now unused as the section is removed
-
-  const scrollToWorkflow = useCallback(() => {
-    // Since the section is removed, this function might not be needed
-    // or could be repurposed if there's another target section.
-    // For now, it will do nothing if the element is not found.
-    const section = document.getElementById(workflowSectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [workflowSectionId]);
-
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -171,7 +161,6 @@ export default function HomePageClient() {
 
     if (searchFromQuery && !globalSearchTerm) {
       setGlobalSearchTerm(searchFromQuery);
-      // scrollToWorkflow(); // May not be needed as section is removed
     }
 
     if (categoryFromQuery && !selectedCategoryForFilter) {
@@ -180,7 +169,6 @@ export default function HomePageClient() {
       );
       if (isValidCategory) {
         setSelectedCategoryForFilter(categoryFromQuery);
-        // scrollToWorkflow(); // May not be needed
       }
     }
 
@@ -191,7 +179,6 @@ export default function HomePageClient() {
     globalSearchTerm,
     selectedCategoryForFilter,
     isHydrated,
-    scrollToWorkflow,
   ]);
 
   return (

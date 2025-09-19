@@ -1,0 +1,3 @@
+﻿Command: npx eslint src/lib/legal-translation/LegalTranslationEngine.ts
+Result: success (exit 0)
+

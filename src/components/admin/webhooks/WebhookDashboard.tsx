@@ -1,18 +1,22 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 import {
-  Plus,
-  Play,
-  Pause,
-  Trash2,
-  Eye,
-  Settings,
   Activity,
+  AlertTriangle,
+  Eye,
+  Pause,
+  Play,
+  Plus,
+  RefreshCw,
+  Trash2,
 } from 'lucide-react';
 import { WebhookRegistrationModal } from './WebhookRegistrationModal';
 import { WebhookDetailsModal } from './WebhookDetailsModal';
@@ -44,276 +48,418 @@ interface WebhookSubscription {
 export function WebhookDashboard() {
   const [webhooks, setWebhooks] = useState<WebhookSubscription[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [selectedWebhook, setSelectedWebhook] =
     useState<WebhookSubscription | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<'webhooks' | 'events'>('webhooks');
+
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const hasFetchedRef = useRef(false);
+  const { toast } = useToast();
+
+  const fetchWebhooks = useCallback(async () => {
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    if (!hasFetchedRef.current) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
+
+    setError(null);
+
+    try {
+      const response = await fetch('/api/webhooks', {
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => null);
+
+      if (controller.signal.aborted) {
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data?.error || 'Failed to fetch webhooks');
+      }
+
+      setWebhooks((data?.webhooks as WebhookSubscription[]) || []);
+      hasFetchedRef.current = true;
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') {
+        return;
+      }
+
+      console.error('Error fetching webhooks:', err);
+      const message =
+        (err as Error).message || 'Unable to load webhooks right now.';
+      setError(message);
+      toast({
+        title: 'Webhook load failed',
+        description: message,
+        variant: 'destructive',
+      });
+    } finally {
+      if (!controller.signal.aborted) {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    }
+  }, [toast]);
 
   useEffect(() => {
-    fetchWebhooks();
-  }, []);
+    void fetchWebhooks();
 
-  const fetchWebhooks = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/webhooks');
-      const data = await response.json();
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, [fetchWebhooks]);
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch webhooks');
+  const handleToggleWebhook = useCallback(
+    async (webhookId: string, isActive: boolean) => {
+      try {
+        const response = await fetch(`/api/webhooks/${webhookId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isActive: !isActive }),
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(data?.error || 'Failed to toggle webhook');
+        }
+
+        await fetchWebhooks();
+        toast({
+          title: isActive ? 'Webhook paused' : 'Webhook activated',
+          description: `${webhookId} ${
+            isActive ? 'is now paused' : 'is active again'
+          }.`,
+        });
+      } catch (err) {
+        console.error('Error toggling webhook:', err);
+        const message =
+          (err as Error).message || 'Unable to update webhook status.';
+        setError(message);
+        toast({
+          title: 'Webhook update failed',
+          description: message,
+          variant: 'destructive',
+        });
       }
+    },
+    [fetchWebhooks, toast],
+  );
 
-      setWebhooks(data.webhooks || []);
-    } catch (err: any) {
-      setError(err.message);
-      console.error('Error fetching webhooks:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleDeleteWebhook = useCallback(
+    async (webhookId: string) => {
+      try {
+        const response = await fetch(`/api/webhooks/${webhookId}`, {
+          method: 'DELETE',
+        });
+        const data = await response.json().catch(() => null);
 
-  const handleToggleWebhook = async (webhookId: string, isActive: boolean) => {
-    try {
-      const response = await fetch(`/api/webhooks/${webhookId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isActive: !isActive }),
-      });
+        if (!response.ok) {
+          throw new Error(data?.error || 'Failed to delete webhook');
+        }
 
-      if (!response.ok) {
-        throw new Error('Failed to toggle webhook');
+        await fetchWebhooks();
+        toast({
+          title: 'Webhook deleted',
+          description: `${webhookId} has been removed.`,
+        });
+      } catch (err) {
+        console.error('Error deleting webhook:', err);
+        const message = (err as Error).message || 'Unable to delete webhook.';
+        setError(message);
+        toast({
+          title: 'Webhook delete failed',
+          description: message,
+          variant: 'destructive',
+        });
       }
+    },
+    [fetchWebhooks, toast],
+  );
 
-      // Refresh webhooks list
-      await fetchWebhooks();
-    } catch (err: any) {
-      console.error('Error toggling webhook:', err);
-      setError(err.message);
-    }
-  };
-
-  const handleDeleteWebhook = async (webhookId: string) => {
-    if (
-      !confirm(
-        'Are you sure you want to delete this webhook? This action cannot be undone.',
-      )
-    ) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/webhooks/${webhookId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete webhook');
-      }
-
-      // Refresh webhooks list
-      await fetchWebhooks();
-    } catch (err: any) {
-      console.error('Error deleting webhook:', err);
-      setError(err.message);
-    }
-  };
-
-  const handleTestWebhook = async (webhookId: string) => {
+  const handleTestWebhook = useCallback(async (webhookId: string) => {
     try {
       const response = await fetch(`/api/webhooks/${webhookId}/test`, {
         method: 'POST',
       });
-
-      const data = await response.json();
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send test webhook');
+        throw new Error(data?.error || 'Failed to send test webhook');
       }
 
-      alert(`Test webhook sent successfully! Status: ${data.delivery.status}`);
-    } catch (err: any) {
+      toast({
+        title: 'Test webhook sent',
+        description: 'Delivery request queued successfully.',
+      });
+    } catch (err) {
       console.error('Error testing webhook:', err);
-      setError(err.message);
+      const message =
+        (err as Error).message || 'Unable to send test webhook.';
+      setError(message);
+      toast({
+        title: 'Webhook test failed',
+        description: message,
+        variant: 'destructive',
+      });
     }
-  };
+  }, [toast]);
 
-  const formatDate = (timestamp: { seconds: number }) => {
+  const formatDate = useCallback((timestamp: { seconds: number }) => {
     return new Date(timestamp.seconds * 1000).toLocaleString();
-  };
+  }, []);
 
-  const getStatusColor = (
-    isActive: boolean,
-    stats: WebhookSubscription['deliveryStats'],
-  ) => {
-    if (!isActive) return 'secondary';
-    if (stats.failedDeliveries > stats.successfulDeliveries)
-      return 'destructive';
-    return 'default';
-  };
+  const getStatusColor = useCallback(
+    (
+      isActive: boolean,
+      stats: WebhookSubscription['deliveryStats'],
+    ) => {
+      if (!isActive) return 'secondary';
+      if (stats.failedDeliveries > stats.successfulDeliveries) {
+        return 'destructive';
+      }
+      return 'default';
+    },
+    [],
+  );
 
-  const calculateSuccessRate = (
-    stats: WebhookSubscription['deliveryStats'],
-  ) => {
-    if (stats.totalDeliveries === 0) return 0;
+  const calculateSuccessRate = useCallback(
+    (stats: WebhookSubscription['deliveryStats']) => {
+      if (stats.totalDeliveries === 0) return 0;
+      return Math.round(
+        (stats.successfulDeliveries / stats.totalDeliveries) * 100,
+      );
+    },
+    [],
+  );
+
+  const handleManualRefresh = useCallback(() => {
+    void fetchWebhooks();
+  }, [fetchWebhooks]);
+
+  const aggregatedStats = useMemo(() => {
+    return webhooks.reduce(
+      (acc, webhook) => {
+        acc.totalDeliveries += webhook.deliveryStats.totalDeliveries;
+        acc.successfulDeliveries +=
+          webhook.deliveryStats.successfulDeliveries;
+        acc.failedDeliveries += webhook.deliveryStats.failedDeliveries;
+        if (webhook.isActive) {
+          acc.activeCount += 1;
+        }
+        return acc;
+      },
+      {
+        totalDeliveries: 0,
+        successfulDeliveries: 0,
+        failedDeliveries: 0,
+        activeCount: 0,
+      },
+    );
+  }, [webhooks]);
+
+  const successRatePercentage = useMemo(() => {
+    if (aggregatedStats.totalDeliveries === 0) {
+      return 0;
+    }
+
     return Math.round(
-      (stats.successfulDeliveries / stats.totalDeliveries) * 100,
+      (aggregatedStats.successfulDeliveries /
+        aggregatedStats.totalDeliveries) *
+        100,
     );
-  };
+  }, [aggregatedStats]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+  const isInitialLoad = loading && !hasFetchedRef.current;
+  const isEmpty = !loading && webhooks.length === 0;
+
+  if (isInitialLoad) {
+    return <WebhookDashboardSkeleton />;
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Webhook Management</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage webhook subscriptions and monitor delivery status
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Webhook Management
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Manage webhook subscriptions and monitor delivery status.
           </p>
+          {refreshing ? (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-primary">
+                <RefreshCw className="h-3 w-3 animate-spin" />
+                Updating…
+              </span>
+            </div>
+          ) : null}
         </div>
-        <Button onClick={() => setShowRegistrationModal(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Webhook
-        </Button>
-      </div>
-
-      {/* Error Alert */}
-      {error && (
-        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-          <p className="text-destructive font-medium">Error: {error}</p>
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            className="mt-2"
-            onClick={() => setError(null)}
+            onClick={handleManualRefresh}
+            disabled={refreshing}
           >
-            Dismiss
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin' : ''}`}
+            />
+            {refreshing ? 'Refreshing…' : 'Refresh'}
+          </Button>
+          <Button onClick={() => setShowRegistrationModal(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Webhook
           </Button>
         </div>
-      )}
+      </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+      <div aria-live="polite" className="sr-only">
+        {error ? `Error: ${error}` : ''}
+      </div>
+
+      {error ? (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            <div className="flex items-center justify-between gap-3">
+              <span>{error}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setError(null)}
+              >
+                Dismiss
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card className="border-none bg-white/80 shadow-sm ring-1 ring-slate-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Webhooks
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{webhooks.length}</div>
+            <div className="text-2xl font-semibold text-slate-900">
+              {webhooks.length.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {webhooks.filter((w) => w.isActive).length} active
+              {aggregatedStats.activeCount.toLocaleString()} active
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-none bg-white/80 shadow-sm ring-1 ring-slate-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Deliveries
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {webhooks.reduce(
-                (sum, w) => sum + w.deliveryStats.totalDeliveries,
-                0,
-              )}
+            <div className="text-2xl font-semibold text-slate-900">
+              {aggregatedStats.totalDeliveries.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">All time deliveries</p>
+            <p className="text-xs text-muted-foreground">All-time deliveries</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-none bg-white/80 shadow-sm ring-1 ring-slate-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Success Rate
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {webhooks.length > 0
-                ? Math.round(
-                    (webhooks.reduce(
-                      (sum, w) => sum + w.deliveryStats.successfulDeliveries,
-                      0,
-                    ) /
-                      Math.max(
-                        webhooks.reduce(
-                          (sum, w) => sum + w.deliveryStats.totalDeliveries,
-                          0,
-                        ),
-                        1,
-                      )) *
-                      100,
-                  )
-                : 0}
-              %
+            <div className="text-2xl font-semibold text-slate-900">
+              {successRatePercentage}%
             </div>
             <p className="text-xs text-muted-foreground">
-              Overall success rate
+              Overall delivery success
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-none bg-white/80 shadow-sm ring-1 ring-slate-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Failed Deliveries
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">
-              {webhooks.reduce(
-                (sum, w) => sum + w.deliveryStats.failedDeliveries,
-                0,
-              )}
+            <div className="text-2xl font-semibold text-destructive">
+              {aggregatedStats.failedDeliveries.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">Require attention</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Main Content */}
-      <Tabs defaultValue="webhooks" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="webhooks">Webhooks</TabsTrigger>
-          <TabsTrigger value="events">Event Log</TabsTrigger>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as 'webhooks' | 'events')}
+        className="space-y-4"
+      >
+        <TabsList className="grid w-full grid-cols-2 gap-2 rounded-2xl border border-slate-200 bg-white/80 p-2 shadow-sm">
+          <TabsTrigger
+            value="webhooks"
+            className="rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm font-medium transition hover:border-slate-200 hover:bg-slate-100/60 data-[state=active]:border-primary/30 data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Webhooks
+          </TabsTrigger>
+          <TabsTrigger
+            value="events"
+            className="rounded-xl border border-transparent bg-transparent px-3 py-2 text-sm font-medium transition hover:border-slate-200 hover:bg-slate-100/60 data-[state=active]:border-primary/30 data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Event Log
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="webhooks" className="space-y-4">
-          {webhooks.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center h-64">
-                <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">
-                  No webhooks configured
-                </h3>
-                <p className="text-muted-foreground text-center mb-4">
-                  Start by creating your first webhook to receive real-time
-                  notifications
-                </p>
+          {isEmpty ? (
+            <Card className="border border-dashed border-slate-200 bg-white/80 shadow-sm">
+              <CardContent className="flex h-64 flex-col items-center justify-center gap-3 text-center">
+                <Activity className="h-12 w-12 text-muted-foreground" />
+                <div className="space-y-1">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    No webhooks configured
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Create a webhook to receive real-time notifications from 123LegalDoc.
+                  </p>
+                </div>
                 <Button onClick={() => setShowRegistrationModal(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create First Webhook
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create first webhook
                 </Button>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-4">
               {webhooks.map((webhook) => (
-                <Card key={webhook.id}>
+                <Card
+                  key={webhook.id}
+                  className="border-none bg-white/80 shadow-sm ring-1 ring-slate-200"
+                >
                   <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <CardTitle className="text-lg">{webhook.url}</CardTitle>
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <CardTitle className="text-base font-semibold">
+                          {webhook.url}
+                        </CardTitle>
                         <Badge
                           variant={getStatusColor(
                             webhook.isActive,
@@ -322,14 +468,21 @@ export function WebhookDashboard() {
                         >
                           {webhook.isActive ? 'Active' : 'Inactive'}
                         </Badge>
-                        <Badge variant="outline">
+                        <Badge variant="outline" className="text-xs">
                           {calculateSuccessRate(webhook.deliveryStats)}% success
                         </Badge>
+                        {webhook.organizationId ? (
+                          <Badge variant="outline" className="text-xs">
+                            Org {webhook.organizationId}
+                          </Badge>
+                        ) : null}
                       </div>
-                      <div className="flex items-center gap-2">
+
+                      <div className="flex flex-wrap items-center gap-2">
                         <Button
                           variant="outline"
                           size="sm"
+                          aria-label={`Send test event to ${webhook.url}`}
                           onClick={() => handleTestWebhook(webhook.id)}
                         >
                           <Play className="h-4 w-4" />
@@ -337,6 +490,11 @@ export function WebhookDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
+                          aria-label={
+                            webhook.isActive
+                              ? `Pause webhook ${webhook.url}`
+                              : `Activate webhook ${webhook.url}`
+                          }
                           onClick={() =>
                             handleToggleWebhook(webhook.id, webhook.isActive)
                           }
@@ -350,6 +508,7 @@ export function WebhookDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
+                          aria-label={`View details for ${webhook.url}`}
                           onClick={() => {
                             setSelectedWebhook(webhook);
                             setShowDetailsModal(true);
@@ -360,6 +519,7 @@ export function WebhookDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
+                          aria-label={`Delete webhook ${webhook.url}`}
                           onClick={() => handleDeleteWebhook(webhook.id)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -367,46 +527,43 @@ export function WebhookDashboard() {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-sm font-medium">Events</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {webhook.events.slice(0, 3).map((event) => (
-                            <Badge
-                              key={event}
-                              variant="outline"
-                              className="text-xs"
-                            >
-                              {event}
-                            </Badge>
-                          ))}
-                          {webhook.events.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{webhook.events.length - 3} more
-                            </Badge>
-                          )}
-                        </div>
+                  <CardContent className="grid gap-4 md:grid-cols-3">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-slate-900">Events</p>
+                      <div className="flex flex-wrap gap-1">
+                        {webhook.events.slice(0, 4).map((event) => (
+                          <Badge key={event} variant="outline" className="text-xs">
+                            {event}
+                          </Badge>
+                        ))}
+                        {webhook.events.length > 4 ? (
+                          <Badge variant="outline" className="text-xs">
+                            +{webhook.events.length - 4} more
+                          </Badge>
+                        ) : null}
                       </div>
+                    </div>
 
-                      <div>
-                        <p className="text-sm font-medium">Delivery Stats</p>
-                        <p className="text-sm text-muted-foreground">
-                          {webhook.deliveryStats.totalDeliveries} total,{' '}
-                          {webhook.deliveryStats.successfulDeliveries}{' '}
-                          successful, {webhook.deliveryStats.failedDeliveries}{' '}
-                          failed
-                        </p>
-                      </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-slate-900">
+                        Delivery stats
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {webhook.deliveryStats.totalDeliveries.toLocaleString()} total •{' '}
+                        {webhook.deliveryStats.successfulDeliveries.toLocaleString()} success •{' '}
+                        {webhook.deliveryStats.failedDeliveries.toLocaleString()} failed
+                      </p>
+                    </div>
 
-                      <div>
-                        <p className="text-sm font-medium">Last Delivery</p>
-                        <p className="text-sm text-muted-foreground">
-                          {webhook.lastDeliveryAt
-                            ? formatDate(webhook.lastDeliveryAt)
-                            : 'Never'}
-                        </p>
-                      </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-slate-900">
+                        Last delivery
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {webhook.lastDeliveryAt
+                          ? formatDate(webhook.lastDeliveryAt)
+                          : 'Never'}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -443,6 +600,41 @@ export function WebhookDashboard() {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function WebhookDashboardSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Skeleton className="h-7 w-64" />
+        <Skeleton className="h-4 w-80" />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Card
+            key={index}
+            className="border-none bg-white/70 shadow-sm ring-1 ring-slate-200"
+          >
+            <CardContent className="space-y-3 p-6">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-6 w-16" />
+              <Skeleton className="h-3 w-20" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Card className="border border-dashed border-slate-200 bg-white/80">
+        <CardContent className="space-y-3 p-6">
+          <Skeleton className="h-5 w-40" />
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-4 w-full" />
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
 import Image from 'next/image';
@@ -186,7 +186,13 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
 const TrustAndTestimonialsSection = React.memo(
   function TrustAndTestimonialsSection() {
     const { t, i18n, ready } = useTranslation('common');
-    const { setShowDiscoveryModal } = useDiscoveryModal();
+    const router = useRouter();
+    const locale = (i18n.language === 'es' ? 'es' : 'en') as 'en' | 'es';
+    const exploreTemplatesDestination = `/${locale}/marketplace`;
+
+    useEffect(() => {
+      router.prefetch(exploreTemplatesDestination);
+    }, [exploreTemplatesDestination, router]);
     const tSimple = React.useCallback(
       (key: string, fallback?: string | object): string =>
         typeof fallback === 'string'
@@ -260,7 +266,7 @@ const TrustAndTestimonialsSection = React.memo(
       : placeholderText;
 
     const handleExploreTemplates = () => {
-      setShowDiscoveryModal(true);
+      router.push(exploreTemplatesDestination);
     };
 
     return (

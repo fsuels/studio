@@ -75,7 +75,7 @@ export function TemplateCard({
   }
 
   return (
-    <Card className={cardClasses[size]}>
+    <Card data-testid="template-card" className={cardClasses[size]}>
       <div
         role="generic"
         aria-label=""

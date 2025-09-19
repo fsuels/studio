@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Brain, Check, X } from 'lucide-react';
@@ -37,7 +37,7 @@ export default function DocumentDiscoveryModal() {
   const locale = (params!.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
-  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const {
     showDiscoveryModal,
@@ -47,167 +47,127 @@ export default function DocumentDiscoveryModal() {
   } = useDiscoveryModal();
 
   const {
-    tokens,
     results: firestoreResults,
     loading: isSearching,
-    error,
     searchFirestore,
-    hybridSearch,
-    resetMetrics
+    resetMetrics,
   } = useDiscoverySearch();
   
   const [searchInput, setSearchInput] = useState('');
   const [suggestion] = useState('');
   const [localResults, setLocalResults] = useState<DiscoveryResult[]>([]);
   const [isUsingLocalFallback, setIsUsingLocalFallback] = useState(false);
+  const [activeQuery, setActiveQuery] = useState('');
+  const [remoteQuery, setRemoteQuery] = useState('');
+  const latestQueryRef = useRef('');
+  const localCacheRef = useRef<Map<string, DiscoveryResult[]>>(new Map());
   
   // Debounce search input to avoid excessive API calls
   const debouncedSearchInput = useDebounce(searchInput, 300);
-  
-  const performSearch = async (query: string) => {
-    if (query.trim()) {
-      console.log('[Discovery Modal] Starting search for:', query);
-      
-      // Ensure manifest-backed documents are hydrated for consistent results
-      try {
-        await getDocumentsByCountry('us');
-      } catch (_) {
-        // Ignore hydration errors; we still have manifest-derived defaults
-      }
 
-      // Always search local documents first as a reliable fallback
-      let localDocs: LegalDocument[];
-      try {
-        localDocs = await findMatchingDocuments(query.trim(), locale);
-      } catch (error) {
-        localDocs = findMatchingDocumentsSync(query.trim(), locale);
-      }
-      console.log('[Discovery Modal] Local search found:', localDocs.length, 'documents');
-      
-      // Convert to DiscoveryResult format
-      const convertedResults: DiscoveryResult[] = localDocs.slice(0, 10).map((doc, index) => {
-        // Enhanced fallback for description to handle both old and new document formats
-        const description = doc.translations?.[locale]?.description || 
-                          doc.translations?.en?.description || 
-                          doc.description || 
-                          `Legal document for ${doc.category.toLowerCase()} matters`;
-        
-        // Debug logging (remove in production)
-        if (!description || description.trim() === '') {
-          console.warn(`[Discovery Modal] No description found for document: ${doc.id}`, {
-            hasTranslations: !!doc.translations,
-            hasLocaleDesc: !!doc.translations?.[locale]?.description,
-            hasEnDesc: !!doc.translations?.en?.description,
-            hasDirectDesc: !!doc.description,
-            locale
-          });
-        }
-        
-        return {
-          id: doc.id,
-          title: getDocumentTitle(doc, locale),
-          description,
-          confidence: Math.max(0.9 - (index * 0.1), 0.1), // Decreasing confidence scores
-          reason: 'keyword' as const,
-          template: {
-          id: doc.id,
-          name: getDocumentTitle(doc, locale),
-          description: doc.translations?.[locale]?.description || doc.description || '',
-          keywords: doc.translations?.[locale]?.aliases || [],
-          category: doc.category,
-          slug: doc.id,
-          createdBy: 'system',
-          creatorProfile: {
-            userId: 'system',
-            displayName: '123LegalDoc',
-            verified: true,
-            badges: [],
-            totalTemplates: 0,
-            totalDownloads: 0,
-            totalRevenue: 0,
-            averageRating: 5.0,
-          },
-          maintainers: [],
-          tags: [doc.category.toLowerCase()],
-          jurisdiction: doc.jurisdiction || 'US',
-          states: doc.states || 'all',
-          languageSupport: doc.languageSupport || ['en'],
-          visibility: 'public' as const,
-          pricing: {
-            type: 'one-time' as const,
-            basePrice: doc.basePrice || 2500,
-            currency: 'USD',
-            creatorShare: 0,
-            platformFee: 100,
-          },
-          licenseType: 'premium' as const,
-          currentVersion: '1.0.0',
-          latestVersionId: 'v1',
-          versions: ['v1'],
-          stats: {
-            totalDownloads: 0,
-            totalInstalls: 0,
-            totalRevenue: 0,
-            uniqueUsers: 0,
-            downloadsThisMonth: 0,
-            downloadsThisWeek: 0,
-            revenueThisMonth: 0,
-            totalRatings: 0,
-            averageRating: 5.0,
-            completionRate: 95,
-            forkCount: 0,
-            favoriteCount: 0,
-            reportCount: 0,
-            versionCount: 1,
-            lastVersionDate: new Date() as any,
-            updateFrequency: 365,
-          },
-          ratings: {
-            averageRating: 5.0,
-            totalRatings: 0,
-            ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
-            recentTrend: 'stable' as const,
-            trendChange: 0,
-          },
-          lastUpdated: new Date() as any,
-          featured: false,
-          verified: true,
-          moderationStatus: 'approved' as const,
-        }
-      };
-      });
-      
-      // Set local results immediately
-      setLocalResults(convertedResults);
-      setIsUsingLocalFallback(true);
-      
-      // Try Firestore search in the background (non-blocking)
-      searchFirestore(query).then(() => {
-        console.log('[Discovery Modal] Firestore search completed, results:', firestoreResults.length);
-        
-        // If Firestore has results, switch to them
-        setTimeout(() => {
-          if (firestoreResults.length > 0) {
-            console.log('[Discovery Modal] Switching to Firestore results');
-            setIsUsingLocalFallback(false);
-          }
-        }, 100);
-      }).catch((error) => {
-        console.debug('[Discovery Modal] Firestore search failed (using local results):', error.message);
-        // Don't show error to user - local search is working
-      });
-    }
-  };
-  
-  // Combined results - use local fallback if Firestore is empty
-  const results = isUsingLocalFallback ? localResults : firestoreResults;
-  
-  const clearResults = () => {
+  const clearResults = useCallback(() => {
     resetMetrics();
     setSearchInput('');
     setLocalResults([]);
     setIsUsingLocalFallback(false);
-  };
+    setActiveQuery('');
+    latestQueryRef.current = '';
+    setRemoteQuery('');
+  }, [resetMetrics]);
+  
+  const performSearch = useCallback(
+    async (rawQuery: string) => {
+      const query = rawQuery.trim();
+      if (!query) {
+        return;
+      }
+
+      latestQueryRef.current = query;
+      setActiveQuery(query);
+      setRemoteQuery('');
+
+      try {
+        await getDocumentsByCountry('us');
+      } catch (_error) {
+        // Ignore hydration failures; cached manifest data still works.
+      }
+
+      const cachedResults = localCacheRef.current.get(query);
+      let convertedResults: DiscoveryResult[] | null = cachedResults ?? null;
+
+      if (!cachedResults) {
+        let localDocs: LegalDocument[] = [];
+        try {
+          localDocs = await findMatchingDocuments(query, locale);
+        } catch (_error) {
+          localDocs = findMatchingDocumentsSync(query, locale);
+        }
+
+        if (latestQueryRef.current !== query) {
+          return;
+        }
+
+        convertedResults = localDocs.slice(0, 10).map((doc, index) => {
+          const translation = doc.translations?.[locale] ?? doc.translations?.en;
+          const description =
+            translation?.description ||
+            doc.description ||
+            `Legal document for ${doc.category?.toLowerCase() ?? 'general'} matters`;
+
+          return {
+            id: doc.id,
+            title: getDocumentTitle(doc, locale),
+            description,
+            confidence: Math.max(0.9 - index * 0.1, 0.1),
+            reason: 'keyword',
+            category: doc.category,
+            tags:
+              translation?.aliases?.length
+                ? [...translation.aliases]
+                : doc.translations?.en?.aliases ?? doc.aliases ?? [],
+          } satisfies DiscoveryResult;
+        });
+
+        localCacheRef.current.set(query, convertedResults);
+      }
+
+      if (convertedResults && latestQueryRef.current === query) {
+        setLocalResults(convertedResults);
+        setIsUsingLocalFallback(convertedResults.length > 0);
+      }
+
+      searchFirestore(query)
+        .then(() => {
+          if (latestQueryRef.current === query) {
+            setRemoteQuery(query);
+          }
+        })
+        .catch(() => {
+          // Firestore search is best-effort; fallback already populated.
+        });
+    },
+    [locale, searchFirestore],
+  );
+  
+  // Combined results - prefer Firestore when available
+  const results = useMemo(() => {
+    if (!activeQuery) {
+      return [];
+    }
+
+    const hasRemoteForActive =
+      remoteQuery === activeQuery && firestoreResults.length > 0;
+
+    if (hasRemoteForActive && !isUsingLocalFallback) {
+      return firestoreResults;
+    }
+
+    if (isUsingLocalFallback && localResults.length > 0) {
+      return localResults;
+    }
+
+    return hasRemoteForActive ? firestoreResults : localResults;
+  }, [activeQuery, firestoreResults, isUsingLocalFallback, localResults, remoteQuery]);
 
   const {
     isListening,
@@ -228,6 +188,15 @@ export default function DocumentDiscoveryModal() {
     setIsHydrated(true);
   }, []);
 
+  useEffect(() => {
+    if (!activeQuery || remoteQuery !== activeQuery) {
+      return;
+    }
+    if (firestoreResults.length > 0) {
+      setIsUsingLocalFallback(false);
+    }
+  }, [activeQuery, firestoreResults, remoteQuery]);
+
   // Trigger search when debounced input changes
   useEffect(() => {
     if (debouncedSearchInput.trim()) {
@@ -236,7 +205,7 @@ export default function DocumentDiscoveryModal() {
       // Clear results when input is empty
       clearResults();
     }
-  }, [debouncedSearchInput]);
+  }, [debouncedSearchInput, performSearch, clearResults]);
 
   // Sync with context
   useEffect(() => {

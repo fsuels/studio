@@ -23,7 +23,7 @@ Esta Directiva Anticipada ("Directiva") es otorgada por **{{principal_full_name}
 ## 3. Representantes Suplentes
 
 3.1 **Primer Suplente.** Si el Representante primario no puede o no desea actuar, **{{alternate_agent_one_name}}**, con domicilio en **{{alternate_agent_one_address}}** y teléfono **{{alternate_agent_one_phone}}**, asumirá las facultades indicadas en la Sección 2.
-3.2 **Segundo Suplente.** Si ni el Representante primario ni el primer suplente pueden actuar, **{{alternate_agent_two_name}}** de **{{alternate_agent_two_address}}** actuará como Representante sucesor.
+3.2 **Segundo Suplente.** Si ni el Representante primario ni el primer suplente pueden actuar, **{{alternate_agent_two_name}}** de **{{alternate_agent_two_address}}**, teléfono **{{alternate_agent_two_phone}}** actuará como Representante sucesor.
 3.3 **Gastos.** Los Representantes no recibirán honorarios, pero podrán ser reembolsados con fondos de la Persona Otorgante por gastos razonables efectuados en su nombre.
 
 ---

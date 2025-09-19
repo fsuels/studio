@@ -2,13 +2,11 @@
 'use client';
 
 import React from 'react';
-import dynamic from 'next/dynamic';
+import { useDeferredComponent } from '@/hooks/useDeferredComponent';
+import { cn } from '@/lib/utils';
 
-// Dynamically load the enhanced search to avoid bundling heavy deps (taxonomy, metadata)
-const EnhancedHeaderSearch = dynamic(() => import('./EnhancedHeaderSearch'), {
-  ssr: false,
-  loading: () => null,
-});
+const loadEnhancedHeaderSearch = () =>
+  import('./EnhancedHeaderSearch').then((mod) => ({ default: mod.default }));
 
 interface SmartHeaderSearchProps {
   clientLocale: 'en' | 'es';
@@ -35,7 +33,25 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
     }
   }, [mounted]);
 
-  // Always render the enhanced search shell; it lazy-loads heavy parts only on demand
+  const EnhancedHeaderSearch = useDeferredComponent(loadEnhancedHeaderSearch, {
+    trigger: mounted,
+    preload: mounted,
+    idleDelay: 500,
+  });
+
+  if (!EnhancedHeaderSearch) {
+    return (
+      <div
+        className={cn(
+          'flex h-10 w-full max-w-md items-center rounded-full bg-muted/60 px-4 text-sm text-muted-foreground',
+          className,
+        )}
+      >
+        <span className="truncate">Search documents…</span>
+      </div>
+    );
+  }
+
   return (
     <EnhancedHeaderSearch
       clientLocale={clientLocale}

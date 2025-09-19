@@ -16,6 +16,11 @@ const SearchBar = React.memo(function SearchBar() {
     locale?: string;
   };
   const locale = (params.locale as 'en' | 'es') || 'en';
+  const marketplaceDestination = `/${locale}/marketplace`;
+
+  useEffect(() => {
+    router.prefetch(marketplaceDestination);
+  }, [marketplaceDestination, router]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<DocumentSummary[]>([]);
@@ -69,7 +74,7 @@ const SearchBar = React.memo(function SearchBar() {
     if (!isHydrated) return;
     if (searchTerm.trim()) {
       router.push(
-        `/${locale}/?search=${encodeURIComponent(searchTerm)}#workflow-start`,
+        `${marketplaceDestination}?search=${encodeURIComponent(searchTerm)}`
       );
       setSearchTerm('');
       setShowSuggestions(false);

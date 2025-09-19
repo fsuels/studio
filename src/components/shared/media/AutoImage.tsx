@@ -87,13 +87,22 @@ const AutoImage: React.FC<AutoImageProps> = ({
   }
 
   // Generate a simple blur placeholder if none provided
-  const defaultBlurDataURL =
-    blurDataURL ||
-    `data:image/svg+xml;base64,${Buffer.from(
-      `<svg width="${finalWidth}" height="${finalHeight}" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#f3f4f6"/>
-      </svg>`,
-    ).toString('base64')}`;
+  const placeholderDataURL = (() => {
+    if (blurDataURL) return blurDataURL;
+
+    const svg = `<svg width="${finalWidth}" height="${finalHeight}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f3f4f6"/></svg>`;
+
+    if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
+      return `data:image/svg+xml;base64,${window.btoa(svg)}`;
+    }
+
+    const globalBtoa = (globalThis as { btoa?: (value: string) => string }).btoa;
+    if (typeof globalBtoa === 'function') {
+      return `data:image/svg+xml;base64,${globalBtoa(svg)}`;
+    }
+
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  })();
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -131,7 +140,7 @@ const AutoImage: React.FC<AutoImageProps> = ({
         height={finalHeight}
         alt={alt}
         placeholder={placeholder}
-        blurDataURL={defaultBlurDataURL}
+        blurDataURL={placeholderDataURL}
         onLoad={handleLoad}
         onError={handleError}
         className={cn(

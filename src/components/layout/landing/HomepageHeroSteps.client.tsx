@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import SearchBar from '@/components/shared/SearchBar'; // Import SearchBar
 import { track } from '@/lib/analytics';
@@ -43,6 +44,9 @@ const TrustStripPlaceholder = () => {
 
 const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
   const { t, i18n } = useTranslation('common');
+  const router = useRouter();
+  const locale = (i18n.language === 'es' ? 'es' : 'en') as 'en' | 'es';
+  const primaryCtaDestination = `/${locale}/generate`;
   const [isHydrated, setIsHydrated] = useState(false);
   const [variant, setVariant] = useState<'A' | 'B'>('A');
 
@@ -57,6 +61,10 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
       setVariant(chosen);
     }
   }, []);
+
+  useEffect(() => {
+    router.prefetch(primaryCtaDestination);
+  }, [primaryCtaDestination, router]);
 
   const handleStartClick = useCallback(() => {
     track('cta_click', { variant, label: 'start_button' });
@@ -141,7 +149,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
             className="text-lg h-12 px-10 py-4 bg-brand-blue text-white hover:bg-brand-blue/90 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             disabled={!isHydrated}
           >
-            <Link href="/#workflow-start" onClick={handleStartClick}>
+            <Link href={primaryCtaDestination} onClick={handleStartClick} prefetch>
               {isHydrated
                 ? t('ctaPrimary', {
                     defaultValue:

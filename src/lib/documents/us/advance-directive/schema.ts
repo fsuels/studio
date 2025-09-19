@@ -60,7 +60,8 @@ export const AdvanceDirectiveSchema = z.object({
   nutritionHydrationPreference: nutritionHydrationPreferenceEnum,
   pregnancyDirective: z.string().optional(),
   mentalHealthDirective: z.string().optional(),
-  qualityOfLifeStatement: z.string().optional(),\n  religiousOrCulturalRequests: z.string().optional(),
+  qualityOfLifeStatement: z.string().optional(),
+  religiousOrCulturalRequests: z.string().optional(),
 
   // Organ donation
   organDonationPreference: organDonationPreferenceEnum,
@@ -100,4 +101,3 @@ export const AdvanceDirectiveSchema = z.object({
 
 export type AdvanceDirectiveData = z.infer<typeof AdvanceDirectiveSchema>;
 export const schema = AdvanceDirectiveSchema;
-

@@ -1,4 +1,4 @@
-// Document Lifecycle Management API
+﻿// Document Lifecycle Management API
 import { NextRequest, NextResponse } from 'next/server';
 
 // Run dynamically at request time (SSR)
@@ -9,6 +9,79 @@ import {
   type DocumentStatus,
   type DocumentPriority,
 } from '@/lib/document-lifecycle';
+
+type DocumentStatusTimeline = Record<string, string>;
+
+type DocumentLifecycleRecord = {
+  documentId: string;
+  documentType: string;
+  orderId: string;
+  customerId: string;
+  customerEmail: string;
+  currentStatus: DocumentStatus;
+  priority: DocumentPriority;
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+  statusTimeline: DocumentStatusTimeline;
+  timeInCurrentStatus: number;
+  totalLifecycleTime: number;
+  expectedCompletionTime: number;
+  isStalled: boolean;
+  stallReason?: string;
+  stalledAt?: string;
+  stallThreshold: number;
+  lastReminderSent?: string;
+  reminderCount: number;
+  escalationLevel: number;
+  assignedTo?: string;
+  value?: number;
+  tags: string[];
+  notes: string;
+  version: number;
+  events: Array<Record<string, unknown>>;
+};
+
+type DocumentListResult = {
+  documents: DocumentLifecycleRecord[];
+  total: number;
+  pagination: {
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+};
+
+type BulkUpdateResult = {
+  documentId: string;
+  success: boolean;
+  error?: string;
+};
+
+type RealtimeStatusEvent = {
+  documentId: string;
+  documentType: string;
+  customerEmail: string;
+  statusChange: { from: DocumentStatus; to: DocumentStatus };
+  timestamp: string;
+};
+
+type RealtimeStatus = {
+  activeDocuments: number;
+  stalledDocuments: number;
+  overDueDocuments: number;
+  recentActivity: RealtimeStatusEvent[];
+  statusDistribution: Record<string, number>;
+  urgentDocuments: Array<{
+    documentId: string;
+    documentType: string;
+    customerEmail: string;
+    priority: DocumentPriority;
+    stalledFor: number;
+    value: number;
+    currentStatus: DocumentStatus;
+  }>;
+};
 
 export async function GET(request: NextRequest) {
   const adminResult = await requireAdmin(request);
@@ -149,9 +222,11 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        const normalizedStatus = newStatus as DocumentStatus;
+
         await documentLifecycle.updateDocumentStatus(
           documentId,
-          newStatus,
+          normalizedStatus,
           metadata || {},
           'admin',
           (adminResult as any).userId,
@@ -174,6 +249,16 @@ export async function POST(request: NextRequest) {
 
       case 'bulk_update': {
         const { documentIds, bulkStatus, bulkMetadata } = body;
+        if (!bulkStatus) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'bulkStatus is required for bulk_update',
+            },
+            { status: 400 },
+          );
+        }
+
         if (!documentIds || !Array.isArray(documentIds)) {
           return NextResponse.json(
             {
@@ -184,12 +269,14 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const bulkResults = [];
+        const normalizedBulkStatus = bulkStatus as DocumentStatus;
+
+        const bulkResults: BulkUpdateResult[] = [];
         for (const docId of documentIds) {
           try {
             await documentLifecycle.updateDocumentStatus(
               docId,
-              bulkStatus,
+              normalizedBulkStatus,
               bulkMetadata || {},
               'admin',
               (adminResult as any).userId,
@@ -214,7 +301,6 @@ export async function POST(request: NextRequest) {
           },
         });
       }
-
       default:
         return NextResponse.json(
           {
@@ -242,12 +328,12 @@ async function getDocumentsList(
   status?: DocumentStatus,
   priority?: DocumentPriority,
   timeframe: string = '30d',
-) {
+): Promise<DocumentListResult> {
   // In production, fetch from actual database
   // For demo, generate mock data
   const mockDocuments = generateMockDocuments(100);
 
-  let filtered = mockDocuments;
+  let filtered: DocumentLifecycleRecord[] = mockDocuments;
 
   if (status) {
     filtered = filtered.filter((doc) => doc.currentStatus === status);
@@ -287,7 +373,7 @@ async function getDocumentsList(
   };
 }
 
-async function getRealtimeStatus() {
+async function getRealtimeStatus(): Promise<RealtimeStatus> {
   return {
     activeDocuments: 247,
     stalledDocuments: 18,
@@ -347,7 +433,7 @@ async function getRealtimeStatus() {
   };
 }
 
-function generateMockDocuments(count: number) {
+function generateMockDocuments(count: number): DocumentLifecycleRecord[] {
   const documentTypes = [
     'Lease Agreement',
     'LLC Operating Agreement',
@@ -370,7 +456,7 @@ function generateMockDocuments(count: number) {
 
   const priorities: DocumentPriority[] = ['low', 'medium', 'high', 'urgent'];
 
-  const documents = [];
+  const documents: DocumentLifecycleRecord[] = [];
 
   for (let i = 0; i < count; i++) {
     const createdAt = new Date(
@@ -437,8 +523,8 @@ function generateMockDocuments(count: number) {
 function generateStatusTimeline(
   createdAt: string,
   currentStatus: DocumentStatus,
-) {
-  const timeline: any = { draft: createdAt };
+): DocumentStatusTimeline {
+  const timeline: DocumentStatusTimeline = { draft: createdAt };
 
   const statusOrder: DocumentStatus[] = [
     'draft',
@@ -454,10 +540,7 @@ function generateStatusTimeline(
 
   for (let i = 1; i <= currentIndex; i++) {
     currentTime += Math.random() * 2 * 24 * 60 * 60 * 1000; // Add 0-2 days
-    const statusKey = statusOrder[i].replace(
-      'pending_',
-      'pending',
-    ) as keyof typeof timeline;
+    const statusKey = statusOrder[i];
     timeline[statusKey] = new Date(currentTime).toISOString();
   }
 

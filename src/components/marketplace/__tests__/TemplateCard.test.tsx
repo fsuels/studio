@@ -295,8 +295,8 @@ describe('TemplateCard', () => {
       />,
     );
 
-    let card = screen.getByRole('generic', { name: '' }).parentElement;
-    expect(card).toHaveClass('h-auto');
+    const cardEl = screen.getByTestId('template-card');
+    expect(cardEl).toHaveClass('h-auto');
 
     rerender(
       <TemplateCard
@@ -307,8 +307,8 @@ describe('TemplateCard', () => {
       />,
     );
 
-    card = screen.getByRole('generic', { name: '' }).parentElement;
-    expect(card).toHaveClass('ring-2', 'ring-primary/20');
+    const featuredCard = screen.getByTestId('template-card');
+    expect(featuredCard).toHaveClass('ring-2', 'ring-primary/20');
   });
 
   it('truncates long tag lists', () => {

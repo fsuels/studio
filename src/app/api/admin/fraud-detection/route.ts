@@ -9,6 +9,30 @@ import {
   type FraudRiskAssessment,
 } from '@/lib/advanced-fraud-detection';
 
+type BulkAssessmentResult = {
+  orderId: string;
+  success: boolean;
+  assessment?: FraudRiskAssessment;
+  error?: string;
+};
+
+type FraudTrendPoint = {
+  date: string;
+  totalAssessments: number;
+  highRisk: number;
+  declined: number;
+  avgRiskScore: number;
+  chargebackPredictions: number;
+  avgProcessingTime: number;
+};
+
+type ChargebackPrediction = {
+  probability: number;
+  riskBand: 'A' | 'B' | 'C' | 'D' | 'E';
+  expectedLoss: number;
+  confidence: number;
+};
+
 export async function GET(request: NextRequest) {
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
@@ -164,7 +188,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const bulkResults = [];
+        const bulkResults: BulkAssessmentResult[] = [];
         for (const order of orders) {
           try {
             const result = await advancedFraudDetection.assessFraudRisk(
@@ -553,7 +577,7 @@ async function getChargebackPredictions(_timeframe: string) {
 
 async function getFraudTrends(_timeframe: string) {
   const days = _timeframe === '7d' ? 7 : _timeframe === '30d' ? 30 : 90;
-  const trends = [];
+  const trends: FraudTrendPoint[] = [];
 
   for (let i = days; i >= 0; i--) {
     const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
@@ -812,8 +836,8 @@ function generateMockRiskFactors(): RiskFactor[] {
   return allFactors.sort(() => Math.random() - 0.5).slice(0, count);
 }
 
-function generateMockChargebackPredictions(count: number) {
-  const predictions = [];
+function generateMockChargebackPredictions(count: number): ChargebackPrediction[] {
+  const predictions: ChargebackPrediction[] = [];
 
   for (let i = 0; i < count; i++) {
     const probability = Math.random() * 0.3;

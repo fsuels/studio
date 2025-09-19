@@ -1,7 +1,7 @@
 // Marketing Insights Dashboard - UTM attribution, campaign ROI, and discount analytics
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   BarChart3,
   TrendingUp,
@@ -52,63 +53,104 @@ interface MarketingInsightsDashboardProps {
 
 export default function MarketingInsightsDashboard({
   onRefresh,
-  isLoading = false,
+  isLoading: externalLoading = false,
 }: MarketingInsightsDashboardProps) {
   const [data, setData] = useState<MarketingDashboardData | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState('30d');
   const [selectedAttribution, setSelectedAttribution] = useState('last_touch');
   const [error, setError] = useState<string | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  useEffect(() => {
-    fetchMarketingData();
-  }, [selectedTimeframe, selectedAttribution]);
+  const fetchMarketingData = useCallback(async () => {
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-  const fetchMarketingData = async () => {
+    setIsFetching(true);
+    setError(null);
+
     try {
       const response = await fetch(
         `/api/analytics/marketing-attribution?timeframe=${selectedTimeframe}&attribution=${selectedAttribution}`,
+        { signal: controller.signal },
       );
       const result = await response.json();
 
-      if (result.success) {
+      if (controller.signal.aborted) {
+        return;
+      }
+
+      if (response.ok && result.success) {
         setData(result.data);
-        setError(null);
       } else {
+        setData(generateMockMarketingData());
         setError(result.error || 'Failed to load marketing data');
       }
     } catch (err) {
-      setError('Network error loading marketing insights');
+      if ((err as Error).name === 'AbortError') {
+        return;
+      }
+
       console.error('Marketing data fetch error:', err);
-
-      // Set mock data for demo
       setData(generateMockMarketingData());
+      setError('Network error loading marketing insights');
+    } finally {
+      if (!controller.signal.aborted) {
+        setIsFetching(false);
+      }
     }
-  };
+  }, [selectedAttribution, selectedTimeframe]);
 
-  const handleRefresh = () => {
-    fetchMarketingData();
+  useEffect(() => {
+    void fetchMarketingData();
+
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, [fetchMarketingData]);
+
+  const handleRefresh = useCallback(() => {
+    void fetchMarketingData();
     onRefresh?.();
-  };
+  }, [fetchMarketingData, onRefresh]);
+
+  const isBusy = externalLoading || isFetching;
+
+  const topInsights = useMemo(
+    () => data?.insights.slice(0, 3) ?? [],
+    [data],
+  );
+
+  const topChannels = useMemo(
+    () => data?.channels.slice(0, 6) ?? [],
+    [data],
+  );
+
+  const topCampaigns = useMemo(
+    () => data?.campaigns.slice(0, 5) ?? [],
+    [data],
+  );
+
+  const topDiscountCodes = useMemo(
+    () => data?.discounts.topPerformingCodes ?? [],
+    [data],
+  );
 
   if (!data) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">Marketing Insights</h2>
-            <p className="text-muted-foreground">
-              Loading attribution dashboard...
-            </p>
-          </div>
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-52" />
+          <Skeleton className="h-4 w-72" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}>
-              <CardContent className="p-6">
-                <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-8 bg-muted rounded"></div>
-                </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Card key={index}>
+              <CardContent className="space-y-3 p-6">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-3 w-20" />
               </CardContent>
             </Card>
           ))}
@@ -162,12 +204,12 @@ export default function MarketingInsightsDashboard({
             variant="outline"
             size="sm"
             onClick={handleRefresh}
-            disabled={isLoading}
+            disabled={isBusy}
           >
             <RefreshCw
-              className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
+              className={`mr-2 h-4 w-4 ${isBusy ? 'animate-spin' : ''}`}
             />
-            Refresh
+            {isBusy ? 'Refreshing…' : 'Refresh'}
           </Button>
         </div>
       </div>
@@ -210,9 +252,9 @@ export default function MarketingInsightsDashboard({
       </div>
 
       {/* Insights Cards */}
-      {data.insights.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.insights.slice(0, 3).map((insight) => (
+      {topInsights.length > 0 && (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {topInsights.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
           ))}
         </div>
@@ -220,11 +262,31 @@ export default function MarketingInsightsDashboard({
 
       {/* Main Analytics Tabs */}
       <Tabs defaultValue="attribution" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="attribution">Attribution</TabsTrigger>
-          <TabsTrigger value="channels">Channels</TabsTrigger>
-          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="discounts">Discounts</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+          <TabsTrigger
+            value="attribution"
+            className="rounded-lg border border-transparent bg-white/70 py-2 text-sm font-medium transition hover:border-slate-200 data-[state=active]:border-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Attribution
+          </TabsTrigger>
+          <TabsTrigger
+            value="channels"
+            className="rounded-lg border border-transparent bg-white/70 py-2 text-sm font-medium transition hover:border-slate-200 data-[state=active]:border-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Channels
+          </TabsTrigger>
+          <TabsTrigger
+            value="campaigns"
+            className="rounded-lg border border-transparent bg-white/70 py-2 text-sm font-medium transition hover:border-slate-200 data-[state=active]:border-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Campaigns
+          </TabsTrigger>
+          <TabsTrigger
+            value="discounts"
+            className="rounded-lg border border-transparent bg-white/70 py-2 text-sm font-medium transition hover:border-slate-200 data-[state=active]:border-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+          >
+            Discounts
+          </TabsTrigger>
         </TabsList>
 
         {/* Attribution Analysis */}
@@ -355,8 +417,8 @@ export default function MarketingInsightsDashboard({
 
         {/* Channel ROI */}
         <TabsContent value="channels" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {data.channels.slice(0, 6).map((channel) => (
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            {topChannels.map((channel) => (
               <ChannelCard key={channel.channelId} channel={channel} />
             ))}
           </div>
@@ -365,7 +427,7 @@ export default function MarketingInsightsDashboard({
         {/* Campaign Performance */}
         <TabsContent value="campaigns" className="space-y-6">
           <div className="space-y-4">
-            {data.campaigns.slice(0, 5).map((campaign) => (
+            {topCampaigns.map((campaign) => (
               <CampaignCard key={campaign.id} campaign={campaign} />
             ))}
           </div>
@@ -417,7 +479,7 @@ export default function MarketingInsightsDashboard({
             <h3 className="text-lg font-semibold">
               Top Performing Discount Codes
             </h3>
-            {data.discounts.topPerformingCodes.map((discount) => (
+            {topDiscountCodes.map((discount) => (
               <DiscountCard key={discount.id} discount={discount} />
             ))}
           </div>

@@ -1,0 +1,13 @@
+
+> nextn@0.1.0 legal:validate
+> tsx scripts/legal/validatePolicies.ts
+
+[OK] docs/legal/disclaimer.md
+[OK] docs/legal/privacy-notice.md
+[OK] docs/legal/refund-policy.md
+[OK] docs/legal/terms-of-service.md
+
+Summary:
+  Total policies checked: 4
+  Files with errors: 0
+  Files with warnings: 0

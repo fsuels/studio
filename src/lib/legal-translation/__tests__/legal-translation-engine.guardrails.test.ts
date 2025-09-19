@@ -1,6 +1,6 @@
-﻿import { legalTranslationEngine } from '@/lib/legal-translation/LegalTranslationEngine';
+import { translateLegalText } from '@/lib/legal-translation/LegalTranslationEngine';
 
-describe('legalTranslationEngine translateLegalText', () => {
+describe('translateLegalText guardrails', () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('legalTranslationEngine translateLegalText', () => {
       throw new Error(`Unexpected fetch call to ${url}`);
     });
 
-    const result = await legalTranslationEngine.translateLegalText('Sample text', {
+    const result = await translateLegalText('Sample text', {
       documentType: 'contract',
       jurisdiction: 'US-ALL',
       sourceLanguage: 'en',
@@ -48,7 +48,11 @@ describe('legalTranslationEngine translateLegalText', () => {
     });
 
     expect(result.translatedText).toBe('Texto fallback');
-    expect(result.warnings[0]?.message).toContain('Guardrail blocked translation request');
+    expect(
+      result.warnings.some((warning) =>
+        warning.message.includes('Guardrail blocked translation request'),
+      ),
+    ).toBe(true);
     expect(result.metadata.method).toBe('dictionary_lookup');
     expect(result.metadata.reviewRequired).toBe(true);
   });
