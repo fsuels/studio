@@ -100,6 +100,21 @@ export const Footer = React.memo(function Footer() {
           labelKey: 'linkPrivacyPolicy',
           defaultLabel: 'Privacy Policy',
         },
+        {
+          path: '/terms-of-service',
+          labelKey: 'linkTermsOfService',
+          defaultLabel: 'Terms of Service',
+        },
+        {
+          path: '/disclaimer',
+          labelKey: 'linkDisclaimer',
+          defaultLabel: 'Disclaimer',
+        },
+        {
+          path: '/refund-policy',
+          labelKey: 'linkRefundPolicy',
+          defaultLabel: 'Refund Policy',
+        },
         { path: '/sitemap', labelKey: 'linkSitemap', defaultLabel: 'Sitemap' },
       ],
     },

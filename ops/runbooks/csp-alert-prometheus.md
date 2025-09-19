@@ -52,3 +52,5 @@ scrape_configs:
 ## Monitoring Assets
 - Grafana dashboard template: `ops/monitoring/csp-alert-dashboard.json`
 - Prometheus rules: `ops/monitoring/csp-alert-prometheus-rules.yaml`
+- Monitoring asset guide: `ops/monitoring/README.md`
+- Verification script: `node scripts/check-csp-metrics.mjs <baseUrl> [token]`

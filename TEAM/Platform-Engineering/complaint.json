@@ -1,0 +1,27 @@
+{
+  "complaints": [
+    {
+      "id": "complaint-20250919-001",
+      "reported_at": "2025-09-19T17:53:33.5957608Z",
+      "reported_by": "Complaints",
+      "summary": "Next.js build fails because client route imports server-only module",
+      "details": "npm run build aborts when Next.js detects src/ai/flows/analyze-form-data.ts importing server-only. That module is included via DocumentFlow in the client-rendered generate page, so the production bundle fails.",
+      "severity": "high",
+      "status": "open",
+      "target_pod": "Platform-Engineering",
+      "tags": [
+        "build",
+        "nextjs",
+        "server-components"
+      ],
+      "next_action": "Refactor or relocate the analyze-form-data flow so client routes no longer depend on a server-only module, restoring the production build.",
+      "owner_notes": [],
+      "history": [
+        {
+          "ts": "2025-09-19T17:53:33.5957608Z",
+          "note": "Complaint logged by Complaints pod; build logs stored at ops/artifacts/complaints-cycle-0001/build-error.txt."
+        }
+      ]
+    }
+  ]
+}

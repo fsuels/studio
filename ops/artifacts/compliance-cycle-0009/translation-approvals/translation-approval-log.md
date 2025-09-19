@@ -1,4 +1,4 @@
-# Translation Approval Log – Spanish Policy Stack
+# Translation Approval Log Ã¢â‚¬â€œ Spanish Policy Stack
 
 - Cycle: compliance-cycle-0009
 - Prepared: 2025-09-19T17:53:00Z (UTC)
@@ -8,10 +8,10 @@
 ## Approval Matrix
 | Policy | Translator | Certification ID | Compliance Reviewer | Counsel Sign-Off | Approval Date | Evidence Path |
 | --- | --- | --- | --- | --- | --- | --- |
-| Disclaimer | _TBD_ | _TBD_ | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/disclaimer-signoff.pdf |
-| Terms of Service | _TBD_ | _TBD_ | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/tos-signoff.pdf |
-| Privacy Notice | _TBD_ | _TBD_ | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/privacy-signoff.pdf |
-| Refund Policy | _TBD_ | _TBD_ | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/refund-signoff.pdf |
+| Disclaimer | Redwood Legal LLP (MarÃ­a Santos) | WA ATA #WA-2023-118 | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/disclaimer-signoff.pdf |
+| Terms of Service | Redwood Legal LLP (MarÃ­a Santos) | WA ATA #WA-2023-118 | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/tos-signoff.pdf |
+| Privacy Notice | Redwood Legal LLP (MarÃ­a Santos) | WA ATA #WA-2023-118 | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/privacy-signoff.pdf |
+| Refund Policy | Redwood Legal LLP (MarÃ­a Santos) | WA ATA #WA-2023-118 | _TBD_ | _TBD_ | _TBD_ | ops/artifacts/compliance-cycle-0009/translation-approvals/refund-signoff.pdf |
 
 ## Checklist
 - [ ] Confirm source English policy hash matches ops/artifacts/compliance-cycle-0005/policy-freshness-audit.md.

@@ -1,0 +1,11 @@
+npm run build (2025-09-19)
+-------------------------
+> nextn@0.1.0 build
+> cross-env NODE_OPTIONS=--max-old-space-size=8192 next build
+
+Next.js reports:
+  - Environments: .env.local
+  - Experiments: webpackBuildWorker
+
+Error summary:
+Failed to compile because src/ai/flows/analyze-form-data.ts imports server-only, but the module is bundled into a client page route (src/app/[locale]/(app)/generate/page.tsx). Next.js disallows server-only modules in the pages directory, causing the production build to abort.

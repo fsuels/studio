@@ -1,0 +1,87 @@
+{
+  "artifactsDir": "ops/artifacts/ai-evals/latest",
+  "defaultEnv": {
+    "LANGFUSE_TAGS": "eval,weekly",
+    "LANGFUSE_ENV": "staging"
+  },
+  "jobs": [
+    {
+      "name": "classification-en",
+      "type": "lm_eval",
+      "description": "Run English intake classification benchmark via LiteLLM gateway.",
+      "command": [
+        "python",
+        "-m",
+        "lm_eval",
+        "--model",
+        "openai-chat-completions",
+        "--tasks",
+        "intake_classification_en",
+        "--apply_chat_template",
+        "--batch_size",
+        "4",
+        "--output_path",
+        "${OUTPUT_DIR}/lm_eval/classification-en.json",
+        "--model-args",
+        "api_base=${GATEWAY_URL},api_key=${GATEWAY_KEY},model=${MODEL},max_retries=2,request_timeout=60"
+      ],
+      "env": {
+        "MODEL": "gpt-oss-20b"
+      },
+      "artifacts": [
+        "${OUTPUT_DIR}/lm_eval/classification-en.json"
+      ]
+    },
+    {
+      "name": "classification-es",
+      "type": "lm_eval",
+      "description": "Run Spanish intake classification benchmark via LiteLLM gateway.",
+      "command": [
+        "python",
+        "-m",
+        "lm_eval",
+        "--model",
+        "openai-chat-completions",
+        "--tasks",
+        "intake_classification_es",
+        "--apply_chat_template",
+        "--batch_size",
+        "4",
+        "--output_path",
+        "${OUTPUT_DIR}/lm_eval/classification-es.json",
+        "--model-args",
+        "api_base=${GATEWAY_URL},api_key=${GATEWAY_KEY},model=${MODEL},max_retries=2,request_timeout=60"
+      ],
+      "env": {
+        "MODEL": "gpt-oss-20b"
+      },
+      "artifacts": [
+        "${OUTPUT_DIR}/lm_eval/classification-es.json"
+      ]
+    },
+    {
+      "name": "rag-intake-en",
+      "type": "ragas",
+      "description": "Evaluate RAG intake answers for English dataset using Ragas pipeline.",
+      "command": [
+        "python",
+        "-m",
+        "ragas.cli",
+        "evaluate",
+        "--dataset",
+        "ops/ai/evals/datasets/intake_en.jsonl",
+        "--config",
+        "ops/ai/evals/ragas/config_en.yaml",
+        "--output",
+        "${OUTPUT_DIR}/ragas/intake-en.json"
+      ],
+      "env": {
+        "RAGAS_GATEWAY_URL": "${GATEWAY_URL}",
+        "RAGAS_GATEWAY_KEY": "${GATEWAY_KEY}"
+      },
+      "artifacts": [
+        "${OUTPUT_DIR}/ragas/intake-en.json"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { getStripeServerClient } from '@/lib/stripe-server';
 // Automated Refund/Credit System with Audit Trails
 // Lazy-load Firestore and Stripe to keep API route bundles slim
 let fsModulePromise: Promise<typeof import('firebase/firestore')> | null = null;

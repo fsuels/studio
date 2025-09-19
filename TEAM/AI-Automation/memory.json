@@ -1,16 +1,16 @@
 {
-    "cycle_id":  "ai-automation-cycle-0002",
-    "last_updated":  "2025-09-19T17:24:43.5859458Z",
-    "notes":  [
-                  "Updated OSS AI playbook with replacement roadmap, architecture narrative, and safety plan (TEAM/AI-Automation/AI-Automation.md).",
-                  "Captured cross-pod dependencies on Compliance (refusal taxonomy) and Platform/SRE (secret manager, GPU autoscaling, Prometheus rules).",
-                  "Confirmed AI gateway remains stubbed; guardrails, evaluations, and observability integrations are still outstanding."
-              ],
-    "todos":  [
-                  "Provision LiteLLM + vLLM with authenticated /health probe, quota configuration, and secret manager integration.",
-                  "Implement Prompt Guard 2 -> Llama Guard 3 -> heuristic refusal chain with compliance-reviewed messaging before re-enabling flows.",
-                  "Automate bilingual evaluation harness (lm-evaluation-harness + Ragas) and publish weekly Langfuse scorecards.",
-                  "Instrument Langfuse, Prometheus, Grafana, and Sentry for AI flows with incident escalation hooks.",
-                  "Author LiteLLM deployment checklist covering runbooks, alerting, and secret rotation."
-              ]
+    "cycle_id": "ai-automation-cycle-0006",
+    "last_updated": "2025-09-19T18:01:13.208620+00:00",
+    "notes": [
+        "Implemented guardrail pipeline scaffolding with Prompt Guard, Llama Guard, and heuristic fallback (src/ai/guardrails/*).",
+        "Added guardrail runbook documenting config knobs, failure handling, and escalation (ops/runbooks/guardrail-pipeline.md).",
+        "Unit tests cover heuristic blocks and disabled-mode behavior; ready for integration into API flows."
+    ],
+    "todos": [
+        "Integrate evaluateGuardrails into intake/drafting API routes before invoking LiteLLM.",
+        "Provision Prompt Guard 2 and Llama Guard 3 models via LiteLLM secret manager; run staging smoke tests.",
+        "Instrument guardrail events to Langfuse, Prometheus, and Sentry with escalation logging.",
+        "Expand heuristic rules with Compliance-reviewed keyword lists and add regression tests.",
+        "Schedule compliance review of refusal taxonomy and guardrail messaging prior to re-enabling flows."
+    ]
 }

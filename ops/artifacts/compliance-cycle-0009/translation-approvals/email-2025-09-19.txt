@@ -1,0 +1,27 @@
+To: maria.santos@redwoodlegal.com
+Cc: legal@123legaldoc.com
+Subject: Spanish Policy Translation Request – 123LegalDoc
+Date: 2025-09-19T18:20:00Z
+
+Hello María,
+
+As discussed, we are requesting certified Spanish translations for the following policies:
+- docs/legal/disclaimer.md (SHA256 D70C37A143C4460E51DD5A339860C72BDC004B5B5A48FD366A25068E67EDBA6F)
+- docs/legal/terms-of-service.md (SHA256 93CD66DCBD30D1815A0CC1487A1FB208C4AF0E5C1862BD31DA8106174D5A55FE)
+- docs/legal/privacy-notice.md (SHA256 16E326597981B51BCECA745CBD869D3E0B4028AB3367F67C761D8174E201E44D)
+- docs/legal/refund-policy.md (SHA256 21585D38991DF2C14F0B0E9F56E5E85BB04220FB7682324FC8261159B4760832)
+
+Please preserve markdown structure, headings, internal anchors, and jurisdiction footnotes. Attached:
+- Glossary: ops/compliance/policy-glossary-es.json
+- Hash summary: ops/artifacts/compliance-cycle-0009/translation-approvals/policy-hash-summary-2025-09-19.txt
+
+Deliverables (due 2025-09-24):
+1. Spanish markdown files stored under docs/legal/es/ with identical filenames.
+2. Counsel-ready PDFs.
+3. Signed certification letter (license number, jurisdiction, expiration date).
+
+Let us know if you anticipate any blockers.
+
+Thank you,
+123LegalDoc Compliance Team
+legal@123legaldoc.com

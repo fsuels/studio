@@ -1,0 +1,26 @@
+﻿{
+  "id": "sample-intake-en-0001",
+  "language": "en",
+  "jurisdiction": "us-national",
+  "prompt": "The customer needs help drafting a simple service agreement for freelance graphic design work.",
+  "expected_label": "service_agreement",
+  "expected_rationale": "Service agreement covers freelance engagements and matches the described need.",
+  "metadata": {
+    "consent_reference": "SAMPLE-NOT-FOR-PRODUCTION",
+    "risk_level": "low",
+    "notes": "Replace with approved record before running evaluations."
+  }
+}
+{
+  "id": "sample-intake-en-0002",
+  "language": "en",
+  "jurisdiction": "us-ca",
+  "prompt": "User needs a power of attorney specific to California real estate transactions.",
+  "expected_label": "power_of_attorney",
+  "expected_rationale": "Prompt explicitly references power of attorney for CA real estate.",
+  "metadata": {
+    "consent_reference": "SAMPLE-NOT-FOR-PRODUCTION",
+    "risk_level": "medium",
+    "notes": "Demonstrates multi-class coverage."
+  }
+}

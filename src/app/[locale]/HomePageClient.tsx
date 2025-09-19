@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { track } from '@/lib/analytics';
 import { AutoImage, PersonalizationBlock as _PersonalizationBlock } from '@/components/shared';
 import { Skeleton as _Skeleton } from '@/components/ui/skeleton';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
@@ -119,6 +120,16 @@ export default function HomePageClient() {
   
   // Use global discovery modal context
   const { setShowDiscoveryModal } = useDiscoveryModal();
+
+  const handleHeroCtaClick = useCallback(() => {
+    track('home_cta_click', {
+      locale,
+      surface: 'hero',
+      destination: 'discovery_modal',
+      cta_variant: ctaVariant,
+    });
+    setShowDiscoveryModal(true);
+  }, [ctaVariant, locale, setShowDiscoveryModal]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -253,7 +264,7 @@ export default function HomePageClient() {
                 {/* Main CTA Button */}
                 <div className="flex justify-start">
                   <button 
-                    onClick={() => setShowDiscoveryModal(true)}
+                    onClick={handleHeroCtaClick}
                     className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
                     suppressHydrationWarning
                   >

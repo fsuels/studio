@@ -17,7 +17,6 @@ import {
   writeBatch,
   Timestamp,
 } from 'firebase/firestore';
-import Stripe from 'stripe';
 import { getStripeServerClient } from '@/lib/stripe-server';
 import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 import type {
@@ -25,18 +24,6 @@ import type {
   TemplateInstallation,
   CreatorProfile,
 } from '@/types/marketplace';
-
-// Initialize Stripe only if the secret key is available
-function getStripeClient(): Stripe {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
-    throw new Error('STRIPE_SECRET_KEY is not configured');
-  }
-
-  return new Stripe(secretKey, {
-    apiVersion: STRIPE_API_VERSION,
-  });
-}
 
 /**
  * Revenue Sharing System for Template Marketplace
@@ -179,7 +166,7 @@ export class RevenueServingSystem {
     const netAmount = params.amount - stripeFee;
 
     try {
-      const stripe = getStripeClient();
+      const stripe = getStripeServerClient();
       // Create Stripe transfer to creator's connected account
       const transfer = await stripe.transfers.create({
         amount: netAmount,
@@ -398,7 +385,7 @@ export class RevenueServingSystem {
     onboardingUrl: string;
   }> {
     try {
-      const stripe = getStripeClient();
+      const stripe = getStripeServerClient();
       // Create Stripe Express account
       const account = await stripe.accounts.create({
         type: 'express',

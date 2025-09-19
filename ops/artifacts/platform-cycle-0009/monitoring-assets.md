@@ -9,3 +9,5 @@
 - Validated dashboard JSON structure via static linting; ready for Grafana import.
 - Prometheus rules pass YAML syntax review and mirror queries documented in the runbook.
 - Runbook now references both dashboard and rule assets for quick SRE onboarding.
+- Monitoring README guides SRE import steps: ops/monitoring/README.md
+- Verification script: node scripts/check-csp-metrics.mjs <baseUrl> [token]

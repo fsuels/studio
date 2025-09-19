@@ -3,8 +3,7 @@
   "docType": "vehicle-bill-of-sale",
   "schemaVersion": "1.0",
   "formVersion": "2024.1",
-  "lastUpdated": "2025-01-25",
-  
+  "lastUpdated": "2025-09-19",
   "compliance": {
     "requiresNotary": true,
     "officialForm": "T-7",
@@ -13,40 +12,161 @@
     "specialNotes": "Georgia requires use of official T-7 form with notarization.",
     "localFormPath": "/forms/vehicle-bill-of-sale/georgia/T-7.pdf"
   },
-  
   "questions": [
-    { "id": "state", "label": "State of Sale", "type": "select", "required": true },
-    { "id": "seller_name", "label": "Seller's Full Name", "type": "text", "required": true },
-    { "id": "seller_address", "label": "Seller's Address", "type": "address", "required": true },
-    { "id": "buyer_name", "label": "Buyer's Full Name", "type": "text", "required": true },
-    { "id": "buyer_address", "label": "Buyer's Address", "type": "address", "required": true },
-    { "id": "year", "label": "Vehicle Year", "type": "number", "required": true },
-    { "id": "make", "label": "Vehicle Make", "type": "text", "required": true },
-    { "id": "model", "label": "Vehicle Model", "type": "text", "required": true },
-    { "id": "body_type", "label": "Vehicle Body Type", "type": "text", "required": true },
-    { "id": "color", "label": "Vehicle Color", "type": "text", "required": true },
-    { "id": "vin", "label": "Vehicle Identification Number (VIN)", "type": "text", "required": true },
-    { "id": "odometer", "label": "Odometer Reading", "type": "number", "required": true },
-    { "id": "price", "label": "Sale Price ($)", "type": "number", "required": true },
-    { "id": "sale_date", "label": "Date of Sale", "type": "date", "required": true }
+    {
+      "id": "state",
+      "label": "State of Sale",
+      "type": "select",
+      "required": true
+    },
+    {
+      "id": "seller_name",
+      "label": "Seller's Full Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "seller_address",
+      "label": "Seller's Address",
+      "type": "address",
+      "required": true
+    },
+    {
+      "id": "buyer_name",
+      "label": "Buyer's Full Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "buyer_address",
+      "label": "Buyer's Address",
+      "type": "address",
+      "required": true
+    },
+    {
+      "id": "year",
+      "label": "Vehicle Year",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "make",
+      "label": "Vehicle Make",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "model",
+      "label": "Vehicle Model",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "body_type",
+      "label": "Vehicle Body Type",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "color",
+      "label": "Vehicle Color",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "vin",
+      "label": "Vehicle Identification Number (VIN)",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "odometer",
+      "label": "Odometer Reading",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "price",
+      "label": "Sale Price ($)",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "sale_date",
+      "label": "Date of Sale",
+      "type": "date",
+      "required": true
+    }
   ],
-  
   "overlayConfig": {
     "pdfPath": "/forms/vehicle-bill-of-sale/georgia/T-7.pdf",
     "coordinates": {
-      "seller_name": { "page": 0, "x": 150, "y": 720, "fontSize": 10 },
-      "seller_address": { "page": 0, "x": 150, "y": 700, "fontSize": 10 },
-      "buyer_name": { "page": 0, "x": 150, "y": 650, "fontSize": 10 },
-      "buyer_address": { "page": 0, "x": 150, "y": 630, "fontSize": 10 },
-      "year": { "page": 0, "x": 100, "y": 580, "fontSize": 10 },
-      "make": { "page": 0, "x": 200, "y": 580, "fontSize": 10 },
-      "model": { "page": 0, "x": 320, "y": 580, "fontSize": 10 },
-      "body_type": { "page": 0, "x": 450, "y": 580, "fontSize": 10 },
-      "color": { "page": 0, "x": 150, "y": 540, "fontSize": 10 },
-      "vin": { "page": 0, "x": 150, "y": 520, "fontSize": 10 },
-      "odometer": { "page": 0, "x": 150, "y": 500, "fontSize": 10 },
-      "price": { "page": 0, "x": 150, "y": 480, "fontSize": 10 },
-      "sale_date": { "page": 0, "x": 300, "y": 480, "fontSize": 10 }
+      "vin": {
+        "page": 0,
+        "x": 40.0,
+        "y": 486.0,
+        "fontSize": 11
+      },
+      "year": {
+        "page": 0,
+        "x": 54.0,
+        "y": 463.0,
+        "fontSize": 11
+      },
+      "make": {
+        "page": 0,
+        "x": 234.0,
+        "y": 463.0,
+        "fontSize": 11
+      },
+      "model": {
+        "page": 0,
+        "x": 330.0,
+        "y": 463.0,
+        "fontSize": 11
+      },
+      "odometer": {
+        "page": 0,
+        "x": 103.0,
+        "y": 440.0,
+        "fontSize": 11
+      },
+      "sale_date": {
+        "page": 0,
+        "x": 252.0,
+        "y": 440.0,
+        "fontSize": 11
+      },
+      "price": {
+        "page": 0,
+        "x": 520.0,
+        "y": 440.0,
+        "fontSize": 11
+      },
+      "seller_name": {
+        "page": 0,
+        "x": 108.0,
+        "y": 372.0,
+        "fontSize": 11
+      },
+      "seller_address": {
+        "page": 0,
+        "x": 108.0,
+        "y": 353.0,
+        "fontSize": 11
+      },
+      "buyer_name": {
+        "page": 0,
+        "x": 40.0,
+        "y": 287.0,
+        "fontSize": 11
+      },
+      "buyer_address": {
+        "page": 0,
+        "x": 108.0,
+        "y": 228.0,
+        "fontSize": 11
+      }
     }
   }
 }

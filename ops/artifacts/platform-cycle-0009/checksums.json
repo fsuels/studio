@@ -1,14 +1,20 @@
-{
-  "ops/monitoring/csp-alert-dashboard.json": {
-    "sha256": "25F9632CA27DC5BCE6C49D1737856BA049C64A1E783948C5AD752FA5649542CA"
-  },
-  "ops/monitoring/csp-alert-prometheus-rules.yaml": {
-    "sha256": "5C45D1B6CA1AE5F6FEBCF751F451A2CD1E40480FC018F8FCC346649E862E3E16"
-  },
-  "ops/runbooks/csp-alert-prometheus.md": {
-    "sha256": "663DB8339D9636EE390E6CF56C2E58225CFEE408ACD362D1DE3D6B7615DFFCCB"
-  },
-  "ops/artifacts/platform-cycle-0009/monitoring-assets.md": {
-    "sha256": "62000A1697CBD03F0873FB67CC88B097C7F2143DE7114B9B4DC3C9E58662AB57"
-  }
+﻿{
+    "ops/artifacts/platform-cycle-0009/monitoring-assets.md":  {
+                                                                   "sha256":  "E7F1BA3C86E9AA3B757447045DD825EDE5CF246E08722848F5475E66B5E23B6B"
+                                                               },
+    "ops/runbooks/csp-alert-prometheus.md":  {
+                                                 "sha256":  "D55EA5F9F066E77513118BFFA4AFA12C549B6EDCA0AE42DDEA33A99F5960D0A3"
+                                             },
+    "ops/monitoring/csp-alert-dashboard.json":  {
+                                                    "sha256":  "25F9632CA27DC5BCE6C49D1737856BA049C64A1E783948C5AD752FA5649542CA"
+                                                },
+    "ops/monitoring/csp-alert-prometheus-rules.yaml":  {
+                                                           "sha256":  "5C45D1B6CA1AE5F6FEBCF751F451A2CD1E40480FC018F8FCC346649E862E3E16"
+                                                       },
+    "scripts/check-csp-metrics.mjs":  {
+                                          "sha256":  "147134E66793D24BF836DC1E350137BCE7D702EC86A8BD03B6F7B78FB5AE6325"
+                                      },
+    "ops/monitoring/README.md":  {
+                                     "sha256":  "63B4CB9132CF1D937F8C199EAAFC6BAAAD3086C9E50853A8C949890DF9557AB3"
+                                 }
 }

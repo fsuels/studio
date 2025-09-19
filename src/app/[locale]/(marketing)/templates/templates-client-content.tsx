@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
 const SearchBar = dynamic(() => import('@/components/shared/SearchBar'));
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { Button } from '@/components/ui/button';
+import { track } from '@/lib/analytics';
 const TopDocsChips = dynamic(() => import('@/components/shared/TopDocsChips'), {
   loading: () => null,
 });
@@ -25,6 +26,14 @@ export default function TemplatesClientContent({ locale }: Props) {
 
   const categoryHref = (key: string) =>
     `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;
+
+  const handleTemplatesQuizClick = useCallback(() => {
+    track('templates_cta_click', {
+      locale,
+      surface: 'templates_quiz',
+      destination: `/${locale}/generate`,
+    });
+  }, [locale]);
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
@@ -119,7 +128,7 @@ export default function TemplatesClientContent({ locale }: Props) {
           )}
         </p>
         <Button asChild size="lg">
-          <Link href={`/${locale}/generate`}>
+          <Link href={`/${locale}/generate`} onClick={handleTemplatesQuizClick}>
             {t('browseTemplates.takeQuiz', 'Take the Quiz →')}
           </Link>
         </Button>

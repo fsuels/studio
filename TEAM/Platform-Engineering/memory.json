@@ -1,13 +1,16 @@
 {
     "todos": [
-        "Coordinate with SRE to add Prometheus scrape job for /api/security/csp-metrics/prom and surface dashboards.",
-        "Document CSP alert metric labels/thresholds with Compliance ahead of enforcement rollout."
+        "Import Grafana dashboard + Prometheus rules into staging and production once scrape job is live.",
+        "Document CSP alert severity mapping with Compliance ahead of enforcement rollout.",
+        "Automate periodic execution of scripts/check-csp-metrics.mjs in monitoring pipeline.",
+        "Run staging release rehearsal toggling FEATURE_SECURITY_HEADERS before production enablement."
     ],
-    "last_updated": "2025-09-19T17:05:21Z",
-    "cycle_id": "platform-cycle-0008",
+    "last_updated": "2025-09-19T17:54:10Z",
+    "cycle_id": "platform-cycle-0010",
     "notes": [
-        "Prometheus-backed CSP alert metrics now update alongside audit logging for every dispatch.",
-        "JSON summary and Prometheus endpoints expose counters/last event for SRE consumption.",
-        "Added API route coverage confirming telemetry endpoints stay in sync with dispatcher logic."
+        "Grafana dashboard and Prometheus rules prepared for CSP alert telemetry rollout.",
+        "Runbook updated so SRE can deploy scrape job and alerts without additional context.",
+        "CLI script available to verify CSP metrics endpoints pre-scrape deployment.",
+        "Feature flag added for security-header middleware with rollout runbook (`ops/runbooks/security-header-feature-flag.md`)."
     ]
 }

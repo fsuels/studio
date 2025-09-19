@@ -101,6 +101,27 @@ async function handleAdminRoute(request: NextRequest): Promise<NextResponse | nu
 const SECURITY_MODE = (process.env.SECURITY_HEADER_MODE ?? 'report-only').toLowerCase();
 const REPORT_GROUP = 'csp-endpoint';
 const VALID_MODES = new Set(['report-only', 'enforce']);
+const TRUE_FLAG_VALUES = new Set(['true', '1', 'yes', 'on', 'enabled']);
+const FALSE_FLAG_VALUES = new Set(['false', '0', 'no', 'off', 'disabled']);
+
+function isSecurityHeadersEnabled(): boolean {
+  const raw = process.env.FEATURE_SECURITY_HEADERS;
+  if (!raw) {
+    return true;
+  }
+
+  const normalized = raw.trim().toLowerCase();
+
+  if (TRUE_FLAG_VALUES.has(normalized)) {
+    return true;
+  }
+
+  if (FALSE_FLAG_VALUES.has(normalized)) {
+    return false;
+  }
+
+  return true;
+}
 
 function resolveSecurityMode(): 'report-only' | 'enforce' {
   if (VALID_MODES.has(SECURITY_MODE)) {
@@ -121,6 +142,10 @@ function buildReportEndpoint(request: NextRequest): string {
 }
 
 function applySecurityHeaders(request: NextRequest, response: NextResponse) {
+  if (!isSecurityHeadersEnabled()) {
+    return;
+  }
+
   const mode = resolveSecurityMode();
   const isEnforce = mode === 'enforce';
   const reportEndpoint = buildReportEndpoint(request);
@@ -234,3 +259,4 @@ export const config = {
     '/((?!api|_next/static|_next/image|_vercel|favicon.ico|forms|images|templates).*)',
   ],
 };
+

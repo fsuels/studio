@@ -1,0 +1,29 @@
+﻿id: rag_intake_en_template
+metrics:
+  - faithfulness
+  - answer_relevance
+  - context_relevance
+  - context_precision
+  - answer_similarity
+
+model:
+  provider: openai-chat-completions
+  params:
+    api_base: ${RAGAS_GATEWAY_URL}
+    api_key: ${RAGAS_GATEWAY_KEY}
+    model: ${MODEL:-gpt-oss-20b}
+    temperature: 0.0
+
+dataset:
+  path: ops/ai/evals/datasets/rag_intake_en.template.jsonl
+  input_columns:
+    question: prompt
+    answer: expected_answer
+    contexts: context
+  metadata_columns:
+    language: language
+    jurisdiction: jurisdiction
+    consent_reference: metadata.consent_reference
+options:
+  batch_size: 8
+  max_examples: 200

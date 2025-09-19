@@ -1,7 +1,11 @@
-// src/app/[locale]/privacy-policy/page.tsx
-// Server component for Privacy Policy; logs view via tiny client child to keep bundle small
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import PolicyAuditLogger from '@/components/policy/PolicyAuditLogger';
+import { loadPolicy } from '@/lib/legal/policies';
+
+export const dynamic = 'force-static';
+export const revalidate = 86_400; // Refresh daily to capture policy edits
 
 export default async function LocalePrivacyPolicyPage({
   params,
@@ -9,60 +13,32 @@ export default async function LocalePrivacyPolicyPage({
   params: Promise<{ locale?: 'en' | 'es' }>;
 }) {
   const { locale = 'en' } = await params;
+  const policy = await loadPolicy('privacy-notice');
+
+  const region = locale === 'es' ? 'es-ES' : 'en-US';
+  const lastUpdatedDate = policy.lastUpdated
+    ? new Date(policy.lastUpdated)
+    : undefined;
+  const lastUpdatedDisplay =
+    lastUpdatedDate && !Number.isNaN(lastUpdatedDate.getTime())
+      ? lastUpdatedDate.toLocaleDateString(region, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      : policy.lastUpdated;
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <PolicyAuditLogger locale={locale} policyType="privacy_policy" />
-      <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
+      <PolicyAuditLogger locale={locale} policyType="privacy_policy" lastUpdated={policy.lastUpdated} />
+      <h1 className="text-3xl font-bold mb-4">{policy.title}</h1>
+      {lastUpdatedDisplay && (
+        <p className="text-muted-foreground mb-6">
+          Last updated: {lastUpdatedDisplay}
+        </p>
+      )}
       <div className="prose max-w-none">
-        <p className="text-muted-foreground mb-4">
-          Last updated: {new Date().toLocaleDateString()}
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">
-          Information We Collect
-        </h2>
-        <p className="mb-4">
-          We collect information you provide directly to us, such as when you
-          create an account, generate documents, or contact us for support.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">
-          How We Use Your Information
-        </h2>
-        <p className="mb-4">
-          We use the information we collect to provide, maintain, and improve
-          our services, including to generate legal documents and provide
-          customer support.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">
-          Information Sharing
-        </h2>
-        <p className="mb-4">
-          We do not share your personal information with third parties except as
-          described in this privacy policy or with your consent.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Data Security</h2>
-        <p className="mb-4">
-          We implement appropriate technical and organizational measures to
-          protect your personal information against unauthorized access,
-          alteration, disclosure, or destruction.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Your Rights</h2>
-        <p className="mb-4">
-          You have the right to access, update, or delete your personal
-          information. You may also have additional rights under applicable
-          privacy laws.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Contact Us</h2>
-        <p className="mb-4">
-          If you have any questions about this Privacy Policy, please contact us
-          at privacy@123legaldoc.com.
-        </p>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{policy.markdown}</ReactMarkdown>
       </div>
     </div>
   );

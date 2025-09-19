@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const tenantMiddlewareMock = jest.fn(async () => NextResponse.next());
-const getAdminUserMock = jest.fn();
-
 jest.mock('@/middleware/tenant', () => ({
-  tenantMiddleware: tenantMiddlewareMock,
+  tenantMiddleware: jest.fn(),
 }));
 
 jest.mock('@/lib/admin-auth', () => ({
-  getAdminUser: getAdminUserMock,
+  getAdminUser: jest.fn(),
 }));
 
-// Import after mocks so middleware picks up the stubs
+const tenantMiddlewareMock = jest.requireMock('@/middleware/tenant').tenantMiddleware as jest.Mock;
+const getAdminUserMock = jest.requireMock('@/lib/admin-auth').getAdminUser as jest.Mock;
+
+const originalFeatureFlag = process.env.FEATURE_SECURITY_HEADERS;
+process.env.FEATURE_SECURITY_HEADERS = 'true';
+
+// Import after mocks so middleware picks up the stubs and flag override
 import { middleware } from '../../middleware';
 
 describe('middleware security headers', () => {
@@ -20,6 +23,15 @@ describe('middleware security headers', () => {
     tenantMiddlewareMock.mockResolvedValue(NextResponse.next());
     getAdminUserMock.mockReset();
     getAdminUserMock.mockResolvedValue(null);
+    process.env.FEATURE_SECURITY_HEADERS = 'true';
+  });
+
+  afterAll(() => {
+    if (typeof originalFeatureFlag === 'undefined') {
+      delete process.env.FEATURE_SECURITY_HEADERS;
+    } else {
+      process.env.FEATURE_SECURITY_HEADERS = originalFeatureFlag;
+    }
   });
 
   it('applies security headers to locale redirects', async () => {
@@ -64,5 +76,17 @@ describe('middleware security headers', () => {
     expect(
       response.headers.get('content-security-policy-report-only') || '',
     ).toContain("default-src 'self'");
+  });
+
+  it('skips security headers when feature flag disabled', async () => {
+    process.env.FEATURE_SECURITY_HEADERS = 'false';
+
+    const request = new NextRequest('https://example.com/');
+
+    const response = await middleware(request);
+
+    expect(response.headers.get('content-security-policy')).toBeNull();
+    expect(response.headers.get('content-security-policy-report-only')).toBeNull();
+    expect(response.headers.get('referrer-policy')).toBeNull();
   });
 });

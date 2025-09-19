@@ -13,3 +13,5 @@
 - SRE runbook: ops/runbooks/csp-alert-prometheus.md
 - Grafana dashboard template: ops/monitoring/csp-alert-dashboard.json
 - Prometheus rules bundle: ops/monitoring/csp-alert-prometheus-rules.yaml
+- Monitoring README: ops/monitoring/README.md
+- Verification script: node scripts/check-csp-metrics.mjs <baseUrl> [token]

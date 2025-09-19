@@ -32,7 +32,7 @@
   "linkSupport": "Soporte",
   "sectionLegalTitle": "Legal",
   "linkPrivacyPolicy": "Política de Privacidad",
-  "linkTermsOfService": "Términos",
+  "linkTermsOfService": "Terminos de Servicio",
   "linkDocs": "Documentos",
   "linkDisclaimer": "Descargo de Responsabilidad",
   "subhead": "Generación de documentos legales con IA. Rápido, accesible y seguro.",
@@ -45,5 +45,6 @@
   "emailPlaceholderAria": "Correo para boletín",
   "subscribeButtonAria": "Suscribirse al boletín",
   "joinMailingListDesc": "Respetamos tu bandeja de entrada. Cancela cuando quieras.",
-  "openChatAria": "Abrir chat"
+  "openChatAria": "Abrir chat",
+  "linkRefundPolicy": "Politica de Reembolso"
 }

@@ -2,6 +2,7 @@
 
 ## Decisions
 
+- 2025-09-19T17:38:29Z - Introduced shared getStripeServerClient helper and unit tests to enforce Stripe API configuration (src/lib/stripe-server.ts, src/lib/__tests__/stripe-server.test.ts)
 - 2025-09-19T17:16:12Z - Published Grafana dashboard & Prometheus alert pack for CSP telemetry (ops/monitoring/*, ops/runbooks/csp-alert-prometheus.md)
 - 2025-09-19T16:45:59Z - Published Spanish localization plan, DSAR checklist, and Washington jurisdiction update (ops/artifacts/compliance-cycle-0006/*, ops/compliance/dsar-cookie-verification.md)
 - 2025-09-19T16:38:02Z - Hardened security header coverage and instrumented CSP alert metrics; tests captured (ops/artifacts/platform-cycle-0007/security-header-verification.md)

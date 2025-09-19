@@ -1,0 +1,10 @@
+﻿{
+    "src/ai/guardrails/types.ts":  "03cf19b057c940013149fb60afc784f06c34b53dfae65446eb204f5f1055de9d",
+    "ops/runbooks/guardrail-pipeline.md":  "f59f737a3ae60e282c3c1ceedcf068a3b06d65e445f5343ccb1171f167d16012",
+    "src/ai/guardrails/__tests__/pipeline.test.ts":  "5ec3e99b8cc4be2d60c012486755babbfbb01f0528a3792bb3d1cce3aebe1b69",
+    "src/ai/guardrails/heuristics.ts":  "5e42cac6579c511456c23cd6fa942155bacfd4866c834657984478da760d11f2",
+    "src/ai/guardrails/pipeline.ts":  "077fb1f09b48ef2ede5be0038835c54cf572bf42f1fc440ed83cec6f56ed948e",
+    "ops/artifacts/ai-automation-cycle-0006/guardrail-pipeline.md":  "4ebec943c23261feafcc21f395bdd244add6d62dfc3db329113a5811453253f5",
+    "src/ai/guardrails/config.ts":  "52aed9c09cb61fe4034e31c35a1e168ca563dd30b5d40fc2b268b6615c45fea6",
+    "src/ai/guardrails/index.ts":  "f564f686c06df2eb7f3f3fe757a7ed1009002bff6ce41faac94712fba0bae21f"
+}

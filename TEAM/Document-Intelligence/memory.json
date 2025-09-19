@@ -1,14 +1,15 @@
 ﻿{
-    "cycle_id":  "document-intel-cycle-0005",
-    "last_updated":  "2025-09-19T16:42:58.9856891Z",
+    "cycle_id":  "document-intel-cycle-0007",
+    "last_updated":  "2025-09-19T17:56:21.907Z",
     "notes":  [
-                  "Expanded placeholder registry sample set to include service-agreement, quitclaim-deed, and prenuptial-agreement templates in English and Spanish (7 samples total).",
-                  "Jest placeholder parity suite passes for new inventory; see ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md."
+                  "Completed Georgia T-7 geometry audit; cleared field extraction error and logged segments in ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json.",
+                  "Georgia T-7 overlay config now references measured coordinates for VIN/year/make/model etc.; sale date still needs live PDF verification due to multi-cell layout."
               ],
     "todos":  [
-                  "Normalize or replace the Georgia DMV T-7 PDF so fields can be extracted and the vehicle bill of sale overlay can be mapped.",
-                  "Author manual overlay coordinates for Colorado power-of-attorney and generic vehicle bill of sale templates due to missing acrofields.",
+                  "QA Georgia T-7 overlay placement (especially sale date and buyer address) against generated PDFs before release.",
                   "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
-                  "Automate translation parity checks in verify-templates to prevent regressions."
+                  "Automate translation parity checks in verify-templates to prevent regressions.",
+                  "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
+                  "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage."
               ]
 }

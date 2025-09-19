@@ -1,0 +1,16 @@
+﻿{
+  "id": "sample-rag-en-0001",
+  "language": "en",
+  "jurisdiction": "us-tx",
+  "prompt": "What information should I gather before creating a residential lease in Texas?",
+  "context": [
+    "Texas residential leases require tenant name, landlord name, property address, lease term, rent amount, and deposit terms.",
+    "State law limits security deposits to a reasonable amount and mandates disclosure of late fee thresholds."
+  ],
+  "expected_answer": "Collect landlord and tenant names, the property address, start/end dates, rent and deposit amounts, and ensure Texas-specific disclosures such as late fee rules are ready.",
+  "metadata": {
+    "consent_reference": "SAMPLE-NOT-FOR-PRODUCTION",
+    "risk_level": "low",
+    "notes": "Replace with approved record before running Ragas."
+  }
+}

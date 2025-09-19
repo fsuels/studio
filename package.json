@@ -72,7 +72,9 @@
     "accessibility:e2e": "playwright test e2e/accessibility.spec.ts",
     "accessibility:full": "npm run accessibility:test && npm run accessibility:e2e",
     "test:accessibility": "playwright test e2e/accessibility*.spec.ts --reporter=html,json",
-    "test:accessibility:ci": "playwright test e2e/accessibility*.spec.ts --reporter=json --output-dir=test-results"
+    "test:accessibility:ci": "playwright test e2e/accessibility*.spec.ts --reporter=json --output-dir=test-results",
+    "ai:evaluate": "tsx scripts/ai/run-evaluations.ts",
+    "legal:validate": "tsx scripts/legal/validatePolicies.ts"
   },
   "dependencies": {
     "@firebase/auth": "^1.10.7",

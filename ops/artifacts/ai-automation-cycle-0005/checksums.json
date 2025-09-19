@@ -1,0 +1,9 @@
+﻿{
+    "ops/ai/evals/ragas/config.template.yaml":  "f2a152b6ef2525f47edb48e0d2378e1e2ce5dcd98b307ce1966f4416b38247d7",
+    "ops/ai/evals/README.md":  "40289093bfcf292678dc01fe4f1417e9ae346a8149d6dff90c47e08be4f2a15c",
+    "ops/ai/evals/datasets/rag_intake_en.template.jsonl":  "d1e19b2dc4c00fbfc006400a94ed6e816fd90e7f238ea39080b96453fdb91f6f",
+    "ops/ai/evals/datasets/intake_classification.template.jsonl":  "4c7b91216f740785fc91a7ff112f55eec59c959839fac26b4a0ea91e41c49a6c",
+    "ops/ai/evals/ragas/README.md":  "ae011c84d24e23639e752e5526fe725ea538f11ac11c7994cccfb64d6194662a",
+    "ops/artifacts/ai-automation-cycle-0005/evaluation-dataset-templates.md":  "b3fd0261aca7a63caeadfcce0b70a421bd43bccf7b5e9cf4b5a673ece5b1bfa9",
+    "ops/ai/evals/datasets/README.md":  "baddf81522005c8a924023fbc5315ed7c832abbb8bad9cf523e2af0d8c82b929"
+}

@@ -242,6 +242,7 @@ export class FirebaseAuditService {
     type:
       | 'terms_accepted'
       | 'privacy_viewed'
+      | 'policy_viewed'
       | 'consent_given'
       | 'consent_withdrawn'
       | 'legal_update_interaction',
@@ -250,6 +251,7 @@ export class FirebaseAuditService {
     const eventTypeMap = {
       terms_accepted: EventType.POLICY_ACCEPTED,
       privacy_viewed: EventType.POLICY_VIEWED,
+      policy_viewed: EventType.POLICY_VIEWED,
       consent_given: EventType.CONSENT_GIVEN,
       consent_withdrawn: EventType.CONSENT_WITHDRAWN,
       legal_update_interaction: EventType.LEGAL_UPDATE_INTERACTION,

@@ -1,9 +1,11 @@
 {
   "pdfPath": "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/georgia/T-7.pdf",
-  "analyzedAt": "2025-09-19T16:12:22.574Z",
-  "pageCount": 0,
+  "analyzedAt": "2025-09-19T17:50:08.781Z",
+  "pageCount": 1,
   "fieldCount": 0,
   "fields": [],
   "suggestedMappings": {},
-  "analysisError": "Expected instance of PDFDict, but got instance of undefined"
+  "notes": [
+    "PDF has no AcroForm fields; manual overlay required. Geometry audit captured in ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json."
+  ]
 }

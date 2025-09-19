@@ -38,6 +38,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'blog',
     'privacy-policy',
     'terms-of-service',
+    'disclaimer',
+    'refund-policy',
     'about',
     'contact',
     'marketplace',

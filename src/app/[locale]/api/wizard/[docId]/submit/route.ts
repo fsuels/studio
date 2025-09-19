@@ -1,10 +1,9 @@
 // src/app/[locale]/api/wizard/[docId]/submit/route.ts
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { getStripeServerClient } from '@/lib/stripe-server';
 import { getAdmin } from '@/lib/firebase-admin'; // Firebase Admin SDK
 import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
-import { STRIPE_API_VERSION } from '@/lib/stripe-config';
+import type Stripe from 'stripe';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{
@@ -15,17 +14,6 @@ async function getCurrentUser(): Promise<{
     '[submit/route.ts] Using MOCK getCurrentUser. Replace with actual authentication.',
   );
   return { uid: 'test-user-123', email: 'test-user@example.com' }; // Placeholder
-}
-
-function getStripeClient(): Stripe {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
-    throw new Error('STRIPE_SECRET_KEY is not set. Aborting.');
-  }
-
-  return new Stripe(secretKey, {
-    apiVersion: STRIPE_API_VERSION,
-  });
 }
 
 
@@ -44,7 +32,7 @@ export async function POST(
 
   let stripe: Stripe;
   try {
-    stripe = getStripeClient();
+    stripe = getStripeServerClient();
   } catch (error) {
     console.error(
       `${logPrefix} CRITICAL RUNTIME: STRIPE_SECRET_KEY is not set. Aborting.`,

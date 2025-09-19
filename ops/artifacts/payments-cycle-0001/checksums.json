@@ -2,8 +2,8 @@
   "files": [
     {
       "path": "ops/artifacts/payments-cycle-0001/paymentmodal-hardening.md",
-      "sha256": "3f3e997c75f30207da65ec5b48833fa56247f265dc139b82c0eca0a59796f02d",
-      "bytes": 871
+      "sha256": "6906ba9417664c206d53d87f1c71dd30b2f335c994a7aee762c3d2ee05f6c101",
+      "bytes": 1256
     },
     {
       "path": "ops/artifacts/payments-cycle-0001/payments-audit.json",

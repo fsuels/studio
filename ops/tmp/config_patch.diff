@@ -1,0 +1,694 @@
+--- a/public/configs/us/colorado/power-of-attorney.json
++++ b/public/configs/us/colorado/power-of-attorney.json
+@@ -1,145 +1,205 @@
+-{
+-  "jurisdiction": "us/colorado",
+-  "docType": "power-of-attorney",
+-  "schemaVersion": "1.0",
+-  "lastUpdated": "2025-01-18",
+-  "questions": [
+-    {
+-      "id": "principal_name",
+-      "label": "Principal Name",
+-      "type": "text",
+-      "required": true,
+-      "tooltip": "Full legal name of the person granting power of attorney",
+-      "placeholder": "e.g., John Smith"
+-    },
+-    {
+-      "id": "principal_address",
+-      "label": "Principal Address",
+-      "type": "address",
+-      "required": true,
+-      "tooltip": "Complete mailing address of the principal",
+-      "placeholder": "Street address, City, State, ZIP code"
+-    },
+-    {
+-      "id": "agent_name",
+-      "label": "Agent/Attorney-in-Fact Name",
+-      "type": "text",
+-      "required": true,
+-      "tooltip": "Full legal name of the person receiving power of attorney",
+-      "placeholder": "e.g., Jane Doe"
+-    },
+-    {
+-      "id": "agent_address",
+-      "label": "Agent Address",
+-      "type": "address",
+-      "required": true,
+-      "tooltip": "Complete mailing address of the agent",
+-      "placeholder": "Street address, City, State, ZIP code"
+-    },
+-    {
+-      "id": "effective_date",
+-      "label": "Effective Date",
+-      "type": "date",
+-      "required": true,
+-      "tooltip": "Date when this power of attorney becomes effective"
+-    },
+-    {
+-      "id": "powers_granted",
+-      "label": "Powers Granted",
+-      "type": "select",
+-      "required": true,
+-      "tooltip": "What powers are you granting to your agent?",
+-      "options": [
+-        { "value": "general", "label": "General Powers (All financial and legal matters)" },
+-        { "value": "limited", "label": "Limited Powers (Specific tasks only)" },
+-        { "value": "durable", "label": "Durable Powers (Continues if incapacitated)" },
+-        { "value": "healthcare", "label": "Healthcare Decisions Only" },
+-        { "value": "financial", "label": "Financial Decisions Only" }
+-      ]
+-    },
+-    {
+-      "id": "specific_powers",
+-      "label": "Specific Powers Description",
+-      "type": "textarea",
+-      "required": false,
+-      "tooltip": "If you selected 'Limited Powers', describe the specific powers being granted",
+-      "placeholder": "e.g., Authority to sell real estate located at 123 Main St, Denver, CO"
+-    },
+-    {
+-      "id": "durability_clause",
+-      "label": "Durable Power of Attorney",
+-      "type": "boolean",
+-      "required": false,
+-      "tooltip": "Should this power of attorney remain valid if you become incapacitated?",
+-      "placeholder": "Yes, make this durable"
+-    },
+-    {
+-      "id": "successor_agent_name",
+-      "label": "Successor Agent Name",
+-      "type": "text",
+-      "required": false,
+-      "tooltip": "Optional: Name a backup agent if the first agent is unable to serve",
+-      "placeholder": "e.g., Robert Johnson"
+-    },
+-    {
+-      "id": "successor_agent_address",
+-      "label": "Successor Agent Address",
+-      "type": "address",
+-      "required": false,
+-      "tooltip": "Address of the successor agent",
+-      "placeholder": "Street address, City, State, ZIP code"
+-    },
+-    {
+-      "id": "expiration_date",
+-      "label": "Expiration Date",
+-      "type": "date",
+-      "required": false,
+-      "tooltip": "Optional: Date when this power of attorney expires (leave blank for indefinite)"
+-    },
+-    {
+-      "id": "witness1_name",
+-      "label": "Witness 1 Name",
+-      "type": "text",
+-      "required": true,
+-      "tooltip": "Colorado requires two witnesses for power of attorney documents",
+-      "placeholder": "Full name of first witness"
+-    },
+-    {
+-      "id": "witness2_name", 
+-      "label": "Witness 2 Name", 
+-      "type": "text",
+-      "required": true,
+-      "tooltip": "Colorado requires two witnesses for power of attorney documents",
+-      "placeholder": "Full name of second witness"
+-    }
+-  ],
+-  "compliance": {
+-    "requiresNotary": false,
+-    "requiresWitnesses": true,
+-    "witnessCount": 2,
+-    "hasOfficialForm": true,
+-    "hasUPOAA": true,
+-    "specialNotes": "Colorado follows UPOAA and requires two witnesses (no notary required). This document must comply with Colorado Revised Statutes A 15-14-501 et seq.",
+-    "localFormPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf"
+-  },
+-  "overlayConfig": {
+-    "fieldMapping": {
+-      "principal_name": { "fieldName": "Principal Name" },
+-      "agent_name": { "fieldName": "Agent Name" },
+-      "principal_address": { "fieldName": "Principal Address" },
+-      "agent_address": { "fieldName": "Agent Address" },
+-      "effective_date": { "fieldName": "Effective Date" }
+-    },
+-    "coordinates": {
+-      "principal_name": { "x": 150, "y": 650, "fontSize": 12, "page": 0 },
+-      "principal_address": { "x": 150, "y": 625, "fontSize": 10, "page": 0 },
+-      "agent_name": { "x": 150, "y": 575, "fontSize": 12, "page": 0 },
+-      "agent_address": { "x": 150, "y": 550, "fontSize": 10, "page": 0 },
+-      "effective_date": { "x": 150, "y": 500, "fontSize": 12, "page": 0 },
+-      "powers_granted": { "x": 150, "y": 450, "fontSize": 10, "page": 0 },
+-      "specific_powers": { "x": 150, "y": 400, "fontSize": 9, "page": 0 },
+-      "witness1_name": { "x": 150, "y": 200, "fontSize": 10, "page": 0 },
+-      "witness2_name": { "x": 400, "y": 200, "fontSize": 10, "page": 0 }
+-    }
+-  }
+-}
++{
++  "jurisdiction": "us/colorado",
++  "docType": "power-of-attorney",
++  "schemaVersion": "1.0",
++  "lastUpdated": "2025-09-19",
++  "questions": [
++    {
++      "id": "principal_name",
++      "label": "Principal Name",
++      "type": "text",
++      "required": true,
++      "tooltip": "Full legal name of the person granting power of attorney",
++      "placeholder": "e.g., John Smith"
++    },
++    {
++      "id": "principal_address",
++      "label": "Principal Address",
++      "type": "address",
++      "required": true,
++      "tooltip": "Complete mailing address of the principal",
++      "placeholder": "Street address, City, State, ZIP code"
++    },
++    {
++      "id": "agent_name",
++      "label": "Agent/Attorney-in-Fact Name",
++      "type": "text",
++      "required": true,
++      "tooltip": "Full legal name of the person receiving power of attorney",
++      "placeholder": "e.g., Jane Doe"
++    },
++    {
++      "id": "agent_address",
++      "label": "Agent Address",
++      "type": "address",
++      "required": true,
++      "tooltip": "Complete mailing address of the agent",
++      "placeholder": "Street address, City, State, ZIP code"
++    },
++    {
++      "id": "effective_date",
++      "label": "Effective Date",
++      "type": "date",
++      "required": true,
++      "tooltip": "Date when this power of attorney becomes effective"
++    },
++    {
++      "id": "powers_granted",
++      "label": "Powers Granted",
++      "type": "select",
++      "required": true,
++      "tooltip": "What powers are you granting to your agent?",
++      "options": [
++        {
++          "value": "general",
++          "label": "General Powers (All financial and legal matters)"
++        },
++        {
++          "value": "limited",
++          "label": "Limited Powers (Specific tasks only)"
++        },
++        {
++          "value": "durable",
++          "label": "Durable Powers (Continues if incapacitated)"
++        },
++        {
++          "value": "healthcare",
++          "label": "Healthcare Decisions Only"
++        },
++        {
++          "value": "financial",
++          "label": "Financial Decisions Only"
++        }
++      ]
++    },
++    {
++      "id": "specific_powers",
++      "label": "Specific Powers Description",
++      "type": "textarea",
++      "required": false,
++      "tooltip": "If you selected 'Limited Powers', describe the specific powers being granted",
++      "placeholder": "e.g., Authority to sell real estate located at 123 Main St, Denver, CO"
++    },
++    {
++      "id": "durability_clause",
++      "label": "Durable Power of Attorney",
++      "type": "boolean",
++      "required": false,
++      "tooltip": "Should this power of attorney remain valid if you become incapacitated?",
++      "placeholder": "Yes, make this durable"
++    },
++    {
++      "id": "successor_agent_name",
++      "label": "Successor Agent Name",
++      "type": "text",
++      "required": false,
++      "tooltip": "Optional: Name a backup agent if the first agent is unable to serve",
++      "placeholder": "e.g., Robert Johnson"
++    },
++    {
++      "id": "successor_agent_address",
++      "label": "Successor Agent Address",
++      "type": "address",
++      "required": false,
++      "tooltip": "Address of the successor agent",
++      "placeholder": "Street address, City, State, ZIP code"
++    },
++    {
++      "id": "expiration_date",
++      "label": "Expiration Date",
++      "type": "date",
++      "required": false,
++      "tooltip": "Optional: Date when this power of attorney expires (leave blank for indefinite)"
++    },
++    {
++      "id": "witness1_name",
++      "label": "Witness 1 Name",
++      "type": "text",
++      "required": true,
++      "tooltip": "Colorado requires two witnesses for power of attorney documents",
++      "placeholder": "Full name of first witness"
++    },
++    {
++      "id": "witness2_name",
++      "label": "Witness 2 Name",
++      "type": "text",
++      "required": true,
++      "tooltip": "Colorado requires two witnesses for power of attorney documents",
++      "placeholder": "Full name of second witness"
++    }
++  ],
++  "compliance": {
++    "requiresNotary": false,
++    "requiresWitnesses": true,
++    "witnessCount": 2,
++    "hasOfficialForm": true,
++    "hasUPOAA": true,
++    "specialNotes": "Colorado follows UPOAA and requires two witnesses (no notary required). This document must comply with Colorado Revised Statutes Section 15-14-501 et seq.",
++    "localFormPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf"
++  },
++  "overlayConfig": {
++    "pdfPath": "/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney.pdf",
++    "coordinates": {
++      "principal_name": {
++        "x": 64.01,
++        "y": 803.59,
++        "fontSize": 12,
++        "page": 0
++      },
++      "agent_name": {
++        "x": 54.0,
++        "y": 773.59,
++        "fontSize": 12,
++        "page": 0
++      },
++      "effective_date": {
++        "x": 133.37,
++        "y": 413.59,
++        "fontSize": 12,
++        "page": 0
++      },
++      "successor_agent_name": {
++        "x": 151.38,
++        "y": 383.59,
++        "fontSize": 12,
++        "page": 0
++      },
++      "springing_condition": {
++        "x": 290.78,
++        "y": 343.59,
++        "fontSize": 12,
++        "page": 0
++      },
++      "witness1_name": {
++        "x": 103.46,
++        "y": 177.0,
++        "fontSize": 12,
++        "page": 0
++      },
++      "witness2_name": {
++        "x": 103.46,
++        "y": 157.0,
++        "fontSize": 12,
++        "page": 0
++      },
++      "notary_county": {
++        "x": 97.58,
++        "y": 82.0,
++        "fontSize": 12,
++        "page": 0
++      },
++      "notary_date": {
++        "x": 272.09,
++        "y": 62.0,
++        "fontSize": 12,
++        "page": 0
++      },
++      "notary_commission_expires": {
++        "x": 161.46,
++        "y": 12.0,
++        "fontSize": 12,
++        "page": 0
++      }
++    }
++  }
++}
+--- a/public/configs/us/generic/vehicle-bill-of-sale.json
++++ b/public/configs/us/generic/vehicle-bill-of-sale.json
+@@ -1,76 +1,262 @@
+-{
+-  "jurisdiction": "us/generic",
+-  "docType": "vehicle-bill-of-sale",
+-  "schemaVersion": "1.0",
+-  "lastUpdated": "2025-01-25",
+-  
+-  "compliance": {
+-    "requiresNotary": false,
+-    "billOfSaleMandatory": false,
+-    "odometerIntegrated": false,
+-    "specialNotes": "Generic vehicle bill of sale form for states without specific requirements.",
+-    "localFormPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf"
+-  },
+-  
+-  "questions": [
+-    { "id": "state", "label": "State of Sale", "type": "select", "required": true },
+-    { "id": "seller_name", "label": "Seller's Full Name", "type": "text", "required": true },
+-    { "id": "seller_address", "label": "Seller's Address", "type": "address", "required": true },
+-    { "id": "buyer_name", "label": "Buyer's Full Name", "type": "text", "required": true },
+-    { "id": "buyer_address", "label": "Buyer's Address", "type": "address", "required": true },
+-    { "id": "year", "label": "Vehicle Year", "type": "number", "required": true },
+-    { "id": "make", "label": "Vehicle Make", "type": "text", "required": true },
+-    { "id": "model", "label": "Vehicle Model", "type": "text", "required": true },
+-    { "id": "body_type", "label": "Vehicle Body Type", "type": "select", "required": true, "options": [
+-      { "value": "Sedan", "label": "Sedan" },
+-      { "value": "SUV", "label": "SUV" },
+-      { "value": "Truck", "label": "Truck" },
+-      { "value": "Coupe", "label": "Coupe" },
+-      { "value": "Convertible", "label": "Convertible" },
+-      { "value": "Wagon", "label": "Wagon" },
+-      { "value": "Van", "label": "Van" },
+-      { "value": "Motorcycle", "label": "Motorcycle" },
+-      { "value": "Other", "label": "Other" }
+-    ]},
+-    { "id": "color", "label": "Vehicle Color", "type": "text", "required": true },
+-    { "id": "vin", "label": "Vehicle Identification Number (VIN)", "type": "text", "required": true },
+-    { "id": "odometer", "label": "Odometer Reading (miles)", "type": "number", "required": true },
+-    { "id": "odo_status", "label": "Odometer Status", "type": "select", "required": true, "options": [
+-      { "value": "ACTUAL", "label": "Actual Mileage" },
+-      { "value": "EXCEEDS", "label": "Exceeds Mechanical Limits" },
+-      { "value": "NOT_ACTUAL", "label": "Not Actual Mileage (Warning)" }
+-    ]},
+-    { "id": "price", "label": "Sale Price ($)", "type": "number", "required": true },
+-    { "id": "payment_method", "label": "Payment Method", "type": "select", "required": false, "options": [
+-      { "value": "cash", "label": "Cash" },
+-      { "value": "check", "label": "Check" },
+-      { "value": "wire", "label": "Wire Transfer" },
+-      { "value": "paypal", "label": "PayPal" },
+-      { "value": "credit_card", "label": "Credit / Debit Card" }
+-    ]},
+-    { "id": "sale_date", "label": "Date of Sale", "type": "date", "required": true },
+-    { "id": "title_number", "label": "Certificate of Title Number", "type": "text", "required": false },
+-    { "id": "existing_liens", "label": "Existing Liens", "type": "text", "required": false },
+-    { "id": "as_is", "label": "Is the vehicle sold \"as-is\"?", "type": "boolean", "required": true },
+-    { "id": "warranty_text", "label": "Warranty Details", "type": "textarea", "required": false }
+-  ],
+-  
+-  "overlayConfig": {
+-    "pdfPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf",
+-    "coordinates": {
+-      "seller_name": { "page": 0, "x": 150, "y": 720, "fontSize": 10 },
+-      "seller_address": { "page": 0, "x": 150, "y": 700, "fontSize": 10 },
+-      "buyer_name": { "page": 0, "x": 150, "y": 650, "fontSize": 10 },
+-      "buyer_address": { "page": 0, "x": 150, "y": 630, "fontSize": 10 },
+-      "year": { "page": 0, "x": 100, "y": 580, "fontSize": 10 },
+-      "make": { "page": 0, "x": 200, "y": 580, "fontSize": 10 },
+-      "model": { "page": 0, "x": 320, "y": 580, "fontSize": 10 },
+-      "body_type": { "page": 0, "x": 450, "y": 580, "fontSize": 10 },
+-      "color": { "page": 0, "x": 150, "y": 540, "fontSize": 10 },
+-      "vin": { "page": 0, "x": 150, "y": 520, "fontSize": 10 },
+-      "odometer": { "page": 0, "x": 150, "y": 500, "fontSize": 10 },
+-      "price": { "page": 0, "x": 150, "y": 480, "fontSize": 10 },
+-      "sale_date": { "page": 0, "x": 300, "y": 480, "fontSize": 10 }
+-    }
+-  }
+-}
++{
++  "jurisdiction": "us/generic",
++  "docType": "vehicle-bill-of-sale",
++  "schemaVersion": "1.0",
++  "lastUpdated": "2025-09-19",
++  "compliance": {
++    "requiresNotary": false,
++    "billOfSaleMandatory": false,
++    "odometerIntegrated": false,
++    "specialNotes": "Generic vehicle bill of sale form for states without specific requirements.",
++    "localFormPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf"
++  },
++  "questions": [
++    {
++      "id": "state",
++      "label": "State of Sale",
++      "type": "select",
++      "required": true
++    },
++    {
++      "id": "seller_name",
++      "label": "Seller's Full Name",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "seller_address",
++      "label": "Seller's Address",
++      "type": "address",
++      "required": true
++    },
++    {
++      "id": "buyer_name",
++      "label": "Buyer's Full Name",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "buyer_address",
++      "label": "Buyer's Address",
++      "type": "address",
++      "required": true
++    },
++    {
++      "id": "year",
++      "label": "Vehicle Year",
++      "type": "number",
++      "required": true
++    },
++    {
++      "id": "make",
++      "label": "Vehicle Make",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "model",
++      "label": "Vehicle Model",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "body_type",
++      "label": "Vehicle Body Type",
++      "type": "select",
++      "required": true,
++      "options": [
++        {
++          "value": "Sedan",
++          "label": "Sedan"
++        },
++        {
++          "value": "SUV",
++          "label": "SUV"
++        },
++        {
++          "value": "Truck",
++          "label": "Truck"
++        },
++        {
++          "value": "Coupe",
++          "label": "Coupe"
++        },
++        {
++          "value": "Convertible",
++          "label": "Convertible"
++        },
++        {
++          "value": "Wagon",
++          "label": "Wagon"
++        },
++        {
++          "value": "Van",
++          "label": "Van"
++        },
++        {
++          "value": "Motorcycle",
++          "label": "Motorcycle"
++        },
++        {
++          "value": "Other",
++          "label": "Other"
++        }
++      ]
++    },
++    {
++      "id": "color",
++      "label": "Vehicle Color",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "vin",
++      "label": "Vehicle Identification Number (VIN)",
++      "type": "text",
++      "required": true
++    },
++    {
++      "id": "odometer",
++      "label": "Odometer Reading (miles)",
++      "type": "number",
++      "required": true
++    },
++    {
++      "id": "odo_status",
++      "label": "Odometer Status",
++      "type": "select",
++      "required": true,
++      "options": [
++        {
++          "value": "ACTUAL",
++          "label": "Actual Mileage"
++        },
++        {
++          "value": "EXCEEDS",
++          "label": "Exceeds Mechanical Limits"
++        },
++        {
++          "value": "NOT_ACTUAL",
++          "label": "Not Actual Mileage (Warning)"
++        }
++      ]
++    },
++    {
++      "id": "price",
++      "label": "Sale Price ($)",
++      "type": "number",
++      "required": true
++    },
++    {
++      "id": "payment_method",
++      "label": "Payment Method",
++      "type": "select",
++      "required": false,
++      "options": [
++        {
++          "value": "cash",
++          "label": "Cash"
++        },
++        {
++          "value": "check",
++          "label": "Check"
++        },
++        {
++          "value": "wire",
++          "label": "Wire Transfer"
++        },
++        {
++          "value": "paypal",
++          "label": "PayPal"
++        },
++        {
++          "value": "credit_card",
++          "label": "Credit / Debit Card"
++        }
++      ]
++    },
++    {
++      "id": "sale_date",
++      "label": "Date of Sale",
++      "type": "date",
++      "required": true
++    },
++    {
++      "id": "title_number",
++      "label": "Certificate of Title Number",
++      "type": "text",
++      "required": false
++    },
++    {
++      "id": "existing_liens",
++      "label": "Existing Liens",
++      "type": "text",
++      "required": false
++    },
++    {
++      "id": "as_is",
++      "label": "Is the vehicle sold \"as-is\"?",
++      "type": "boolean",
++      "required": true
++    },
++    {
++      "id": "warranty_text",
++      "label": "Warranty Details",
++      "type": "textarea",
++      "required": false
++    }
++  ],
++  "overlayConfig": {
++    "pdfPath": "/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale.pdf",
++    "coordinates": {
++      "seller_name": {
++        "page": 0,
++        "x": 90.34,
++        "y": 673.5,
++        "fontSize": 11
++      },
++      "buyer_name": {
++        "page": 0,
++        "x": 91.02,
++        "y": 653.5,
++        "fontSize": 11
++      },
++      "year": {
++        "page": 0,
++        "x": 99.02,
++        "y": 633.5,
++        "fontSize": 11
++      },
++      "make": {
++        "page": 0,
++        "x": 135.72,
++        "y": 633.5,
++        "fontSize": 11
++      },
++      "model": {
++        "page": 0,
++        "x": 172.41,
++        "y": 633.5,
++        "fontSize": 11
++      },
++      "vin": {
++        "page": 0,
++        "x": 79.68,
++        "y": 613.5,
++        "fontSize": 11
++      },
++      "price": {
++        "page": 0,
++        "x": 93.68,
++        "y": 593.5,
++        "fontSize": 11
++      },
++      "sale_date": {
++        "page": 0,
++        "x": 85.02,
++        "y": 513.5,
++        "fontSize": 11
++      }
++    }
++  }
++}

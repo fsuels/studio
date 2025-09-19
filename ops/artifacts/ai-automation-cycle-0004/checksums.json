@@ -1,0 +1,7 @@
+{
+    "ops/ai/evals/config.example.json":  "fa836b7cd422ec45f7e01c41f589a430c40bef0de86c82aa2505728f9adae3b0",
+    "ops/artifacts/ai-automation-cycle-0004/evaluation-automation.md":  "824a7cd04b5456cd9f648b5a88ff9e0f12db7ac035b0e3197b9a249c3a124844",
+    "scripts/ai/run-evaluations.ts":  "a5df4a7e4217a0827bf8dbe03b9bf33ca0647c27c6f985ed41f6e4b5bd055db2",
+    "ops/ai/evals/README.md":  "e6dcaa6b426d74c4818ebe51974e405d30007f971c4cacc74fcb768c1a25f561",
+    "package.json":  "606adfc5bd64ef2aba32c34fcf124590dbf017bbc557a09ca423b66d448fff4b"
+}

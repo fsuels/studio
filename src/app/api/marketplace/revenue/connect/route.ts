@@ -1,16 +1,6 @@
 // src/app/api/marketplace/revenue/connect/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { STRIPE_API_VERSION } from '@/lib/stripe-config';
-
-async function getStripe() {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
-    throw new Error('STRIPE_SECRET_KEY is not configured');
-  }
-
-  const { default: Stripe } = await import('stripe');
-  return new Stripe(secretKey, { apiVersion: STRIPE_API_VERSION });
-}
+import { getStripeServerClient } from '@/lib/stripe-server';
 
 /**
  * POST /api/marketplace/revenue/connect

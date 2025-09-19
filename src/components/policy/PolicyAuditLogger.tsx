@@ -2,20 +2,29 @@
 
 import { useEffect } from 'react';
 
+export type PolicyAuditType =
+  | 'terms_of_service'
+  | 'privacy_policy'
+  | 'disclaimer'
+  | 'refund_policy';
+
 export default function PolicyAuditLogger({
   locale,
   policyType,
+  lastUpdated,
 }: {
   locale: 'en' | 'es';
-  policyType: 'terms_of_service' | 'privacy_policy';
+  policyType: PolicyAuditType;
+  lastUpdated?: string;
 }) {
   useEffect(() => {
     const log = async () => {
       try {
         const { auditService } = await import('@/services/firebase-audit-service');
-        await auditService.logComplianceEvent('privacy_viewed', {
+        await auditService.logComplianceEvent('policy_viewed', {
           policyType,
           locale,
+          lastUpdated,
           userAgent: navigator.userAgent,
           referrer: document.referrer,
           timestamp: new Date().toISOString(),
@@ -26,8 +35,7 @@ export default function PolicyAuditLogger({
       }
     };
     log();
-  }, [locale, policyType]);
+  }, [locale, policyType, lastUpdated]);
 
   return null;
 }
-

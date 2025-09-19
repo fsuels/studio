@@ -1,6 +1,6 @@
 {
-    "cycle_id":  "compliance-cycle-0009",
-    "last_updated":  "2025-09-19T18:00:00Z",
+    "cycle_id":  "compliance-cycle-0010",
+    "last_updated":  "2025-09-19T18:18:00Z",
     "notes":  [
                   "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
                   "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
@@ -17,21 +17,37 @@
                   "Produced DSAR dry-run evidence checklist and privacy artifact structure (ops/artifacts/compliance-cycle-0008/dsar-dry-run-checklist.md).",
                   "Compiled Spanish policy terminology glossary for translation parity (ops/compliance/policy-glossary-es.json).",
                   "Authored Washington workflow insert and filing checklist for template integration (ops/compliance/washington-workflow-insert.md).",
-                  "Created translation approval log template for bilingual policy sign-offs (ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md)."
+                  "Created translation approval log template for bilingual policy sign-offs (ops/artifacts/compliance-cycle-0009/translation-approvals/translation-approval-log.md).",
+                  "Published Washington county recorder resource list for implementation support (ops/artifacts/compliance-cycle-0010/washington-implementation/county-recorder-links.md).",
+                  "Drafted Spanish translation approval request template for certified vendor outreach (ops/compliance/spanish-translation-approval-request.md).",
+                  "Logged DSAR dry-run execution tracker and meeting agenda (ops/artifacts/compliance-cycle-0010/dsar-dry-run-prep.md, ops/artifacts/compliance-cycle-0010/dsar-dry-run-agenda.md).",
+                  "Outlined international readiness SOP for EU/UK/Canada expansion steps (ops/compliance/international-readiness-sop.md).",
+                  "Documented translation vendor certifications and contacts (ops/compliance/translation-vendors.md).",
+                  "Sent Spanish policy translation request to Redwood Legal LLP; hashes documented (ops/artifacts/compliance-cycle-0009/translation-approvals/request-log-2025-09-19.md).",
+                  "Recorded policy hash summary for translation outreach (ops/artifacts/compliance-cycle-0009/translation-approvals/policy-hash-summary-2025-09-19.txt).",
+                  "Drafted DSAR dry-run invite and agenda for 2025-09-23 session (ops/artifacts/compliance-cycle-0010/dsar-dry-run-invite.md, ops/artifacts/compliance-cycle-0010/dsar-dry-run-agenda.md).",
+                  "Created international readiness tracker to manage GDPR/UK/Canada tasks (ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md).",
+                  "Published transfer impact assessment template to support international readiness (ops/compliance/transfer-impact-assessment-template.md).",
+                  "Published bilingual policy rollout checklist and UI linking plan (ops/compliance/bilingual-policy-rollout-checklist.md, ops/artifacts/compliance-cycle-0011/policy-linking-plan.md)."
               ],
     "todos":  [
                   "Execute Spanish policy localization plan, produce docs/legal/es/*, and attach bilingual sign-off evidence.",
+                  "Follow up with Redwood Legal LLP for translation confirmation; update translation approval log with dates once received.",
                   "Embed policy links within product flows, checkout, and marketing landing pages with Platform tracking.",
                   "Automate incident archive reminders and integrate roster with Platform on-call tooling.",
-                  "Coordinate with Document Intelligence to integrate Colorado and Georgia statutory warnings, witness instructions, and filing checklists into templates.",
+                  "Coordinate with Document Intelligence to integrate Colorado, Georgia, and Washington statutory warnings, witness instructions, and filing checklists into templates.",
                   "Coordinate with Document Intelligence on state-by-state notice requirements for knowledge base entries and Spanish localization.",
                   "Secure certified translation approvals for Colorado, Georgia, and Washington disclosures and record them in ops/artifacts/compliance-cycle-0009/translation-approvals/.",
-                  "Define international readiness SOP including data transfer impact assessments and escalation contacts.",
+                  "Drive international readiness tracker tasks (IR-001Ã¢â‚¬â€œIR-007) per ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md.",
                   "Drive release gate adoption by collecting cookie banner verification, DSAR workflow documentation, and pod sign-offs before 2025-09-26 freeze.",
-                  "Execute DSAR dry run using ops/artifacts/compliance-cycle-0008/dsar-dry-run-checklist.md and populate privacy evidence before 2025-09-25.",
+                  "Execute DSAR dry run using ops/artifacts/compliance-cycle-0010/dsar-dry-run-prep.md; confirm meeting logistics and record decisions.",
                   "Deliver Washington workflow implementation evidence with Document Intelligence, Platform, and Compliance sign-offs stored under ops/artifacts/compliance-cycle-0009/washington-implementation/.",
                   "Review Growth bilingual copy for Colorado, Georgia, and Washington policy messaging once drafts are delivered.",
                   "Partner with Payments to align refund SOP with Colorado and Georgia requirements and capture Stripe evidence once integration is unblocked.",
-                  "Publish bilingual policy pages and link docs/legal/es/* once translations approved."
+                  "Publish bilingual policy pages and link docs/legal/es/* once translations approved.",
+                  "Request consent telemetry sample from Platform to validate cookie banner logging during the dry run.",
+                  "Maintain translation vendor roster; add new certifications or jurisdictions as they come online.",
+                  "Develop processor list and execute TIAs using ops/compliance/transfer-impact-assessment-template.md.",
+                  "Partner with Platform/Growth to execute policy-linking plan and capture evidence."
               ]
 }

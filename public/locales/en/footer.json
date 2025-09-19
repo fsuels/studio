@@ -32,7 +32,7 @@
   "linkSupport": "Support",
   "sectionLegalTitle": "Legal",
   "linkPrivacyPolicy": "Privacy Policy",
-  "linkTermsOfService": "Terms",
+  "linkTermsOfService": "Terms of Service",
   "linkDocs": "Docs",
   "linkDisclaimer": "Disclaimer",
   "subhead": "AI-Powered Legal Document Generation. Fast, Affordable, Secure.",
@@ -45,5 +45,6 @@
   "emailPlaceholderAria": "Email for newsletter",
   "subscribeButtonAria": "Subscribe to newsletter",
   "joinMailingListDesc": "We respect your inbox. Unsubscribe anytime.",
-  "openChatAria": "Open chat"
+  "openChatAria": "Open chat",
+  "linkRefundPolicy": "Refund Policy"
 }

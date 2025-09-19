@@ -274,7 +274,14 @@ export class StripeIntegration {
       return { received: false };
     }
 
-    const event = JSON.parse(payload);
+    let event: any;
+    try {
+      event = JSON.parse(payload);
+    } catch (error) {
+      console.error('[stripe] Failed to parse webhook payload', error);
+      return { received: false };
+    }
+
     console.log(`[stripe] Webhook event: ${event.type}`);
 
     switch (event.type) {
@@ -304,6 +311,10 @@ export class StripeIntegration {
 
       case 'invoice.payment_failed':
         await this.handleInvoicePaymentFailed(event.data.object);
+        break;
+
+      case 'checkout.session.completed':
+        await this.handleCheckoutSessionCompleted(event.data.object);
         break;
 
       default:
@@ -350,6 +361,11 @@ export class StripeIntegration {
   private async handleInvoicePaymentSucceeded(invoice: any): Promise<void> {
     console.log(`[stripe] Invoice payment succeeded: ${invoice.id}`);
     // Mark invoice as paid in our system
+  }
+
+  private async handleCheckoutSessionCompleted(session: any): Promise<void> {
+    console.log(`[stripe] Checkout session completed: ${session.id}`);
+    // TODO: Implement fulfillment logic (provision purchases, send receipts, etc.)
   }
 
   private async handleInvoicePaymentFailed(invoice: any): Promise<void> {

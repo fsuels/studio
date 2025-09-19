@@ -1,0 +1,30 @@
+--- a/TEAM/Document-Intelligence/memory.json
++++ b/TEAM/Document-Intelligence/memory.json
+@@ -1,14 +1,15 @@
+ {
+-    "cycle_id":  "document-intel-cycle-0005",
+-    "last_updated":  "2025-09-19T16:42:58.9856891Z",
+-    "notes":  [
+-                  "Expanded placeholder registry sample set to include service-agreement, quitclaim-deed, and prenuptial-agreement templates in English and Spanish (7 samples total).",
+-                  "Jest placeholder parity suite passes for new inventory; see ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md."
+-              ],
+-    "todos":  [
+-                  "Normalize or replace the Georgia DMV T-7 PDF so fields can be extracted and the vehicle bill of sale overlay can be mapped.",
+-                  "Author manual overlay coordinates for Colorado power-of-attorney and generic vehicle bill of sale templates due to missing acrofields.",
+-                  "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
+-                  "Automate translation parity checks in verify-templates to prevent regressions."
+-              ]
++    "cycle_id": "document-intel-cycle-0006",
++    "last_updated": "2025-09-19T17:31:55.167291Z",
++    "notes": [
++        "Manual overlay coordinates captured for Colorado statutory POA and generic vehicle bill of sale; see ops/artifacts/document-intel-cycle-0006/manual-overlay-audit.json.",
++        "Updated Colorado POA special notes to cite Section 15-14-501 and refreshed overlayConfig with explicit pdfPath metadata."
++    ],
++    "todos": [
++        "Normalize or replace the Georgia DMV T-7 PDF so fields can be extracted and the vehicle bill of sale overlay can be mapped.",
++        "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
++        "Automate translation parity checks in verify-templates to prevent regressions.",
++        "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
++        "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage."
++    ]
+ }

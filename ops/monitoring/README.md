@@ -14,6 +14,8 @@ This folder contains reusable monitoring artifacts for the CSP security header r
 2. **Grafana**
    - Import `csp-alert-dashboard.json` via *Dashboards → New → Import*.
    - Point the panels at the Prometheus data source configured to scrape CSP metrics.
+3. **Verification**
+   - Run `node scripts/check-csp-metrics.mjs <baseUrl> [token]` to confirm endpoints before enabling alerts.
 
 ## Related Runbook
 See `../runbooks/csp-alert-prometheus.md` for end-to-end rollout instructions.
