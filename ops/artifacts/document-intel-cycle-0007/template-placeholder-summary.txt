@@ -1,3 +1,6 @@
-﻿Placeholder EN templates: 350
-Templates under 500 words: 350
-Known duplicate ES placeholders: 23
+﻿Total EN templates audited: 350
+Templates under 500 words: 322
+Templates meeting section + legal notice requirements: 
+28
+Templates missing any required section: 
+350

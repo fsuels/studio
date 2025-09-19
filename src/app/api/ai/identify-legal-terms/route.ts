@@ -1,6 +1,6 @@
-// src/app/api/ai/identify-legal-terms/route.ts
+﻿// src/app/api/ai/identify-legal-terms/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { aiInstance } from '@/ai/ai-instance';
+import { aiInstance, GuardrailViolationError } from '@/ai/ai-instance';
 
 interface LegalTerm {
   term: string;
@@ -11,7 +11,21 @@ interface LegalTerm {
   alternatives?: string[];
 }
 
+type DetectionContext = {
+  jurisdiction?: string;
+  documentType?: string;
+  language?: string;
+};
+
+type DetectionOutcome = {
+  terms: LegalTerm[];
+  source: 'ai' | 'fallback';
+  warnings: string[];
+};
+
 export async function POST(request: NextRequest) {
+  const startedAt = Date.now();
+
   try {
     const body = await request.json();
     const { text, jurisdiction, documentType, language } = body;
@@ -20,20 +34,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 });
     }
 
-    // AI-powered legal term identification
-    const legalTerms = await identifyLegalTermsWithAI(text, {
+    const outcome = await identifyLegalTermsWithAI(text, {
       jurisdiction,
       documentType,
       language,
     });
+    const durationMs = Date.now() - startedAt;
 
     return NextResponse.json({
-      legalTerms,
+      legalTerms: outcome.terms,
       metadata: {
-        termsFound: legalTerms.length,
+        termsFound: outcome.terms.length,
         jurisdiction,
         language,
-        processingTime: Date.now(),
+        documentType,
+        processingTimeMs: durationMs,
+        source: outcome.source,
+        warnings: outcome.warnings,
       },
     });
   } catch (error) {
@@ -47,15 +64,25 @@ export async function POST(request: NextRequest) {
 
 async function identifyLegalTermsWithAI(
   text: string,
-  context: {
-    jurisdiction?: string;
-    documentType?: string;
-    language?: string;
-  },
-): Promise<LegalTerm[]> {
+  context: DetectionContext,
+): Promise<DetectionOutcome> {
+  const warnings: string[] = [];
+
   try {
     const prompt = `
-You are a legal terminology expert. Identify and analyze legal terms in the following text.
+You are a bilingual legal terminology expert. Identify legal terms in the text below and provide structured information.
+
+Return ONLY valid JSON matching:
+[
+  {
+    "term": "string",
+    "definition": "string",
+    "jurisdiction": ["string"],
+    "confidence": number,
+    "context": "string",
+    "alternatives": ["string"]
+  }
+]
 
 Text: "${text}"
 
@@ -64,91 +91,79 @@ Context:
 - Document Type: ${context.documentType || 'Unknown'}
 - Language: ${context.language || 'Unknown'}
 
-For each legal term found, provide:
-1. The exact term as it appears
-2. A clear definition
-3. Applicable jurisdictions
-4. Confidence score (0-1)
-5. Context within the document
-6. Alternative terms if applicable
+Rules:
+- Only include genuine legal concepts.
+- Set confidence between 0 and 1.
+- Provide concise, plain-language definitions.
+- Leave alternatives empty if none exist.`;
 
-Return as JSON array with this structure:
-[{
-  "term": "string",
-  "definition": "string", 
-  "jurisdiction": ["string"],
-  "confidence": number,
-  "context": "string",
-  "alternatives": ["string"]
-}]
+    const response = await aiInstance.generateText(prompt, {
+      system:
+        'You detect legal terminology with compliance focus. Respond with strict JSON and avoid legal advice.',
+      channel: 'legal_term_detection',
+      language: (context.language as 'en' | 'es' | undefined) ?? 'en',
+      jurisdiction: context.jurisdiction,
+      metadata: {
+        documentType: context.documentType,
+      },
+      responseFormat: 'json',
+      temperature: 0.1,
+      maxTokens: 900,
+    });
 
-Only include terms that are genuinely legal concepts, not common words.
-`;
+    const parsed = JSON.parse(response) as unknown;
+    const terms = Array.isArray(parsed) ? (parsed as LegalTerm[]) : [];
+    const cleaned = terms
+      .filter((term) =>
+        term && typeof term.term === 'string' && typeof term.definition === 'string'
+          ? typeof term.confidence === 'number' && term.confidence > 0
+          : false,
+      )
+      .map((term) => ({
+        term: term.term,
+        definition: term.definition,
+        jurisdiction:
+          Array.isArray(term.jurisdiction) && term.jurisdiction.length > 0
+            ? term.jurisdiction
+            : [context.jurisdiction || 'Unknown'],
+        confidence: Math.min(1, Math.max(0, Number(term.confidence))),
+        context: term.context || 'Identified in document text',
+        alternatives: Array.isArray(term.alternatives)
+          ? term.alternatives
+          : [],
+      }));
 
-    const response = await aiInstance.generateText(prompt);
-
-    // Parse AI response
-    let parsedTerms: LegalTerm[] = [];
-
-    try {
-      // Try to extract JSON from the response
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        parsedTerms = JSON.parse(jsonMatch[0]);
-      } else {
-        // Fallback: parse structured text response
-        parsedTerms = parseStructuredResponse(response, context);
-      }
-    } catch (parseError) {
-      console.warn('Failed to parse AI response, using fallback:', parseError);
-      parsedTerms = extractTermsWithFallback(text, context);
-    }
-
-    // Validate and filter terms
-    return parsedTerms
-      .filter((term) => term.term && term.definition && term.confidence > 0.3)
-      .slice(0, 20); // Limit to top 20 terms
+    return {
+      terms: cleaned.slice(0, 20),
+      source: 'ai',
+      warnings,
+    };
   } catch (error) {
-    console.error('AI term identification failed:', error);
-    return extractTermsWithFallback(text, context);
-  }
-}
-
-function parseStructuredResponse(response: string, context: any): LegalTerm[] {
-  const terms: LegalTerm[] = [];
-  const lines = response.split('\n').filter((line) => line.trim());
-
-  let currentTerm: Partial<LegalTerm> = {};
-
-  for (const line of lines) {
-    if (line.includes('Term:')) {
-      if (currentTerm.term) {
-        terms.push(currentTerm as LegalTerm);
-      }
-      currentTerm = {
-        term: line
-          .replace(/.*Term:\s*/, '')
-          .replace(/['"]/g, '')
-          .trim(),
-        jurisdiction: [context.jurisdiction || 'Unknown'],
-        confidence: 0.7,
-      };
-    } else if (line.includes('Definition:')) {
-      currentTerm.definition = line.replace(/.*Definition:\s*/, '').trim();
-    } else if (line.includes('Context:')) {
-      currentTerm.context = line.replace(/.*Context:\s*/, '').trim();
+    if (error instanceof GuardrailViolationError) {
+      console.warn('Guardrails blocked legal term detection', error.decision);
+      warnings.push(
+        error.decision.reason || 'Guardrails blocked the legal term detection request.',
+      );
+    } else {
+      console.error('AI term identification failed:', error);
+      warnings.push(
+        error instanceof Error ? error.message : 'AI term detection unavailable.',
+      );
     }
-  }
 
-  if (currentTerm.term) {
-    terms.push(currentTerm as LegalTerm);
+    const fallbackTerms = extractTermsWithFallback(text, context);
+    return {
+      terms: fallbackTerms,
+      source: 'fallback',
+      warnings,
+    };
   }
-
-  return terms;
 }
 
-function extractTermsWithFallback(text: string, context: any): LegalTerm[] {
-  // Fallback: use predefined legal term patterns
+function extractTermsWithFallback(
+  text: string,
+  context: DetectionContext,
+): LegalTerm[] {
   const commonLegalTerms = [
     {
       pattern:
@@ -183,8 +198,16 @@ function extractTermsWithFallback(text: string, context: any): LegalTerm[] {
     plaintiff: 'The party who initiates a lawsuit',
     defendant: 'The party being sued or accused',
     jurisdiction: 'The authority of a court to hear cases',
+    venue: 'Location where a legal case is heard',
+    discovery: 'Pre-trial exchange of evidence between parties',
+    deposition: 'Sworn out-of-court testimony used for discovery',
     'force majeure':
       'Unforeseeable circumstances preventing contract fulfillment',
+    'due process': 'Fundamental fairness required by law in legal proceedings',
+    'habeas corpus': 'Legal action to determine unlawful detention',
+    indemnify: 'To compensate for harm or loss',
+    indemnification: 'Obligation to compensate for loss or harm',
+    'hold harmless': 'Promise not to hold someone responsible for liability',
   };
 
   const foundTerms: LegalTerm[] = [];
@@ -193,11 +216,11 @@ function extractTermsWithFallback(text: string, context: any): LegalTerm[] {
     const matches = text.match(pattern);
     if (matches) {
       for (const match of matches) {
-        const term = match.toLowerCase();
-        if (legalTermDefinitions[term]) {
+        const key = match.toLowerCase();
+        if (legalTermDefinitions[key]) {
           foundTerms.push({
             term: match,
-            definition: legalTermDefinitions[term],
+            definition: legalTermDefinitions[key],
             jurisdiction: [context.jurisdiction || 'US-ALL'],
             confidence,
             context: 'Found in document text',
@@ -208,7 +231,6 @@ function extractTermsWithFallback(text: string, context: any): LegalTerm[] {
     }
   }
 
-  // Remove duplicates
   const uniqueTerms = foundTerms.filter(
     (term, index, self) =>
       index ===

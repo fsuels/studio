@@ -60,7 +60,7 @@ Add to your `.env.local`:
 
 ```bash
 # Required
-OPENAI_API_KEY=your-openai-api-key
+AI_GATEWAY_API_KEY=your-lite-llm-api-key
 SENDGRID_API_KEY=your-sendgrid-api-key
 CLOUD_SCHEDULER_TOKEN=your-secure-scheduler-token
 NEXT_PUBLIC_APP_URL=https://123legaldoc.com
@@ -354,3 +354,5 @@ GPT-4o analyzes each update for:
 ---
 
 **Legal Update Intelligence Feed v1.0** - Transforming legal document platforms from transactional tools into ongoing compliance partners.
+
+- 2025-09-19: Platform Engineering introduced feature flag `FEATURE_SECURITY_HEADERS` (see `ops/runbooks/security-header-feature-flag.md`). Default `true` keeps CSP report-only with optional HSTS; set `false` only for incident bypass per runbook.

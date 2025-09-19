@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
@@ -18,12 +18,9 @@ import {
 import { Button } from '@/components/ui/button';
 
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-
-if (!publishableKey) {
-  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.');
-}
-
-const stripePromise = loadStripe(publishableKey);
+const stripePromise = publishableKey ? loadStripe(publishableKey) : null;
+const MISSING_STRIPE_CONFIGURATION_MESSAGE =
+  'Payments are temporarily unavailable while we finalize Stripe setup. Please contact support if this persists.';
 
 interface PaymentModalProps {
   open: boolean;
@@ -73,6 +70,26 @@ export default function PaymentModal({
   const options = clientSecret
     ? { clientSecret, appearance: { theme: 'stripe' } }
     : undefined;
+  const isStripeConfigured = Boolean(stripePromise);
+  const hasClientSecret = Boolean(clientSecret);
+
+  let content: ReactNode;
+  if (!isStripeConfigured) {
+    content = (
+      <p className="mt-4 text-sm text-red-600" role="alert">
+        {MISSING_STRIPE_CONFIGURATION_MESSAGE}
+      </p>
+    );
+  } else if (!hasClientSecret) {
+    content = <p>Loading...</p>;
+  } else {
+    content = (
+      <Elements stripe={stripePromise} options={options}>
+        <CheckoutForm onSuccess={onSuccess} />
+      </Elements>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-lg shadow-xl">
@@ -83,13 +100,7 @@ export default function PaymentModal({
             your document.
           </DialogDescription>
         </DialogHeader>
-        {clientSecret ? (
-          <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm onSuccess={onSuccess} />
-          </Elements>
-        ) : (
-          <p>Loading...</p>
-        )}
+        {content}
       </DialogContent>
     </Dialog>
   );

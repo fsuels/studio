@@ -1,6 +1,6 @@
 {
-    "cycle_id":  "compliance-cycle-0010",
-    "last_updated":  "2025-09-19T18:18:00Z",
+    "cycle_id":  "compliance-cycle-0014",
+    "last_updated":  "2025-09-19T19:54:55.3979902Z",
     "notes":  [
                   "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
                   "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
@@ -31,26 +31,35 @@
                   "Published bilingual policy rollout checklist and UI linking plan (ops/compliance/bilingual-policy-rollout-checklist.md, ops/artifacts/compliance-cycle-0011/policy-linking-plan.md).",
                   "Restored Spanish footer translations to proper UTF-8 encoding (public/locales/es/footer.json).",
                   "Updated policy loader/pages to support locale-specific markdown fallback (src/lib/legal/policies.ts).",
-                  "Patched Firebase audit logging to avoid serverTimestamp reference errors enabling policy view audits (src/services/firebase-audit-service.ts)."
+                  "Patched Firebase audit logging to avoid serverTimestamp reference errors enabling policy view audits (src/services/firebase-audit-service.ts).",
+                  "Logged Spanish policy localization status with hash snapshot and Redwood follow-up actions (ops/artifacts/compliance-cycle-0012/spanish-policy-localization-status.md).",
+                  "Updated release gate readiness tracker highlighting blockers for 2025-09-26 freeze (ops/artifacts/compliance-cycle-0012/release-gate-status-2025-09-26.md).",
+                  "Prepared Redwood Legal follow-up packet with hash snapshot and escalation steps (ops/artifacts/compliance-cycle-0013/translation-followup-2025-09-20.md).",
+                  "Authored bilingual DSAR acknowledgment template for CCPA/GDPR compliance (ops/compliance/dsar-acknowledgment-template.md).",
+                  "Created docs/legal/es staging instructions for incoming Spanish policies (docs/legal/es/README.md).",
+                  "Updated DSAR dry-run tracker with bilingual acknowledgment and telemetry dependencies (ops/artifacts/compliance-cycle-0014/dsar-dry-run-updates.md).",
+                  "Outlined release gate evidence checklist covering UPL, privacy, marketing, payments, and security items (ops/artifacts/compliance-cycle-0014/release-gate-evidence-checklist.md).",
+                  "Created Spanish policy translation receipt template for upcoming docs/legal/es delivery (ops/artifacts/compliance-cycle-0014/policy-translation-receipt-template.md)."
               ],
     "todos":  [
                   "Execute Spanish policy localization plan, produce docs/legal/es/*, and attach bilingual sign-off evidence.",
-                  "Follow up with Redwood Legal LLP for translation confirmation; update translation approval log with dates once received.",
+                  "Send 2025-09-20 follow-up email to Redwood Legal LLP; log confirmation in translation approval tracker.",
                   "Embed policy links within product flows, checkout, and marketing landing pages with Platform tracking.",
                   "Automate incident archive reminders and integrate roster with Platform on-call tooling.",
                   "Coordinate with Document Intelligence to integrate Colorado, Georgia, and Washington statutory warnings, witness instructions, and filing checklists into templates.",
                   "Coordinate with Document Intelligence on state-by-state notice requirements for knowledge base entries and Spanish localization.",
                   "Secure certified translation approvals for Colorado, Georgia, and Washington disclosures and record them in ops/artifacts/compliance-cycle-0009/translation-approvals/.",
-                  "Drive international readiness tracker tasks (IR-001ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“IR-007) per ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md.",
+                  "Drive international readiness tracker tasks (IR-001 through IR-007) per ops/artifacts/compliance-cycle-0010/international-readiness-tracker.md.",
                   "Drive release gate adoption by collecting cookie banner verification, DSAR workflow documentation, and pod sign-offs before 2025-09-26 freeze.",
-                  "Execute DSAR dry run using ops/artifacts/compliance-cycle-0010/dsar-dry-run-prep.md; confirm meeting logistics and record decisions.",
+                  "Execute DSAR dry run using ops/artifacts/compliance-cycle-0010/dsar-dry-run-prep.md; incorporate bilingual acknowledgment template and telemetry export evidence.",
                   "Deliver Washington workflow implementation evidence with Document Intelligence, Platform, and Compliance sign-offs stored under ops/artifacts/compliance-cycle-0009/washington-implementation/.",
                   "Review Growth bilingual copy for Colorado, Georgia, and Washington policy messaging once drafts are delivered.",
                   "Partner with Payments to align refund SOP with Colorado and Georgia requirements and capture Stripe evidence once integration is unblocked.",
                   "Publish bilingual policy pages and link docs/legal/es/* once translations approved.",
-                  "Request consent telemetry sample from Platform to validate cookie banner logging during the dry run.",
+                  "Request consent telemetry sample from Platform and schedule export walkthrough before the 2025-09-23 DSAR dry run.",
                   "Maintain translation vendor roster; add new certifications or jurisdictions as they come online.",
                   "Develop processor list and execute TIAs using ops/compliance/transfer-impact-assessment-template.md.",
-                  "Partner with Platform/Growth to execute policy-linking plan and capture evidence."
+                  "Partner with Platform/Growth to execute policy-linking plan and capture evidence.",
+                  "Distribute DSAR acknowledgment template to Platform and Privacy teams before the 2025-09-23 dry run; confirm receipt."
               ]
 }

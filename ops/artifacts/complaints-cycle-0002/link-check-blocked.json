@@ -1,0 +1,5 @@
+{
+  "attempt": "Link validation blocked",
+  "reason": "Home route still throws compile/runtime errors, preventing navigation tests",
+  "timestamp": "2025-09-19T18:53:42Z"
+}

@@ -1,0 +1,11 @@
+Next.js 0.0.0 Turbopack runtime overlay
+Error: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.
+Stack excerpt:
+    at PaymentModal.tsx (loadStripe guard) -> .next/static/chunks/src_components_0ade1092._.js:4296:11
+    at HomePageClient.tsx via shared component import (.next/static/chunks/src_fcbee837._.js:1485:193)
+    at runModuleExecutionHooks (.next/static/chunks/_1658c2b7._.js:768:9)
+    at instantiateModule (.next/static/chunks/_1658c2b7._.js:720:9)
+    at getOrInstantiateModuleFromParent (.next/static/chunks/_1658c2b7._.js:653:12)
+    at esmImport (.next/static/chunks/_1658c2b7._.js:143:20)
+    at HomePageContainer (server chunk _43a88445._.js)
+User impact: homepage renders runtime error overlay, navigation stalls, other links remain unreachable.

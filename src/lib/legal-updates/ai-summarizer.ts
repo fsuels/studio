@@ -1,5 +1,12 @@
 // src/lib/legal-updates/ai-summarizer.ts
-import OpenAI from 'openai';
+import 'server-only';
+import { evaluateGuardrails } from '@/ai/guardrails';
+import {
+  createChatCompletion,
+  extractMessageContent,
+  getAIGatewayModel,
+  isAIGatewayConfigured,
+} from '@/ai/gateway';
 import { getAdmin } from '@/lib/firebase-admin';
 import {
   RawLegalUpdate,
@@ -32,19 +39,20 @@ interface SummarizationResult {
 }
 
 class LegalUpdateAISummarizer {
-  private openai: OpenAI;
-  private readonly model = 'gpt-4o';
-  private readonly maxTokens = 4000;
-  private readonly temperature = 0.1; // Low temperature for consistency
+  private readonly model = getAIGatewayModel(process.env.AI_LEGAL_UPDATES_MODEL);
+  private readonly maxTokens = 800;
+  private readonly temperature = 0.1;
 
   constructor() {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY environment variable is required');
+    if (!isAIGatewayConfigured()) {
+      throw new Error('AI gateway is not configured');
     }
+  }
 
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+  private ensureGatewayConfigured(): void {
+    if (!isAIGatewayConfigured()) {
+      throw new Error('AI gateway is not configured');
+    }
   }
 
   async processRawUpdate(
@@ -60,7 +68,7 @@ class LegalUpdateAISummarizer {
 
       if (!summarization) {
         console.warn(`Failed to summarize update: ${rawUpdate.id}`);
-        return null;
+        return withFallback();
       }
 
       const processedUpdate: ProcessedLegalUpdate = {
@@ -115,9 +123,21 @@ class LegalUpdateAISummarizer {
     source: LegalUpdateSource,
   ): Promise<SummarizationResult | null> {
     try {
+      this.ensureGatewayConfigured();
       const prompt = this.buildSummarizationPrompt(rawUpdate, source);
 
-      const completion = await this.openai.chat.completions.create({
+      const preDecision = await evaluateGuardrails({
+        prompt,
+        channel: 'legal_update_summary',
+        jurisdiction: source.jurisdiction,
+      });
+
+      if (!preDecision.allowed) {
+        console.warn('[legal-update-summarizer] Guardrail blocked prompt');
+        return withFallback();
+      }
+
+      const completion = await createChatCompletion({
         model: this.model,
         messages: [
           {
@@ -129,20 +149,32 @@ class LegalUpdateAISummarizer {
             content: prompt,
           },
         ],
-        max_tokens: this.maxTokens,
+        maxTokens: this.maxTokens,
         temperature: this.temperature,
-        response_format: { type: 'json_object' },
+        responseFormat: 'json',
+        timeoutMs: 60000,
       });
 
-      const content = completion.choices[0]?.message?.content;
+      const content = extractMessageContent(completion);
       if (!content) {
-        throw new Error('No response from OpenAI');
+        throw new Error('No response from AI gateway');
+      }
+
+      const postDecision = await evaluateGuardrails({
+        prompt,
+        channel: 'legal_update_summary',
+        jurisdiction: source.jurisdiction,
+      }, content);
+
+      if (!postDecision.allowed) {
+        console.warn('[legal-update-summarizer] Guardrail blocked response');
+        return null;
       }
 
       const result = JSON.parse(content);
       return this.validateAndTransformResult(result);
     } catch (error) {
-      console.error('OpenAI API error:', error);
+      console.error('AI gateway error:', error);
       return null;
     }
   }

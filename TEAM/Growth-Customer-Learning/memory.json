@@ -1,6 +1,6 @@
 {
-    "cycle_id": "growth-cycle-0004",
-    "last_updated": "2025-09-19T18:10:24.849914Z",
+    "cycle_id": "growth-cycle-0005",
+    "last_updated": "2025-09-19T19:54:27.2254966Z",
     "notes": [
         "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
         "Retained server-rendered structured data while delegating CTA UI to a client component for tracking.",
@@ -10,7 +10,11 @@
         "Verified eslint on pricing route changes; existing global warnings remain in admin AI usage, stripe tests, CSP metrics, and hookform resolvers.",
         "Instrumented homepage hero CTA to emit home_cta_click with locale, surface, destination, and CTA variant before opening the discovery modal.",
         "Instrumented templates quiz CTA to emit templates_cta_click with locale, surface, and destination prior to launching the wizard.",
-        "Instrumented features page CTA duo to emit features_cta_click before navigating to the wizard or pricing."
+        "Instrumented features page CTA duo to emit features_cta_click before navigating to the wizard or pricing.",
+        "Instrumented footer newsletter subscribe flow to emit footer_subscribe_attempt/result analytics before toast feedback.",
+        "Completed full pass on bilingual marketing routes, confirming metadata + JSON-LD coverage; see ops/artifacts/growth-cycle-0005/marketing-route-audit.md.",
+        "Verified CTA analytics coverage for homepage, pricing, features, templates, signwell; cataloged gaps for partners, online-notary, support, and blog navigation events.",
+        "Spot-checked translation assets in public/locales to confirm ES parity for audited pages; noted need for automated parity/JSON-LD validation."
     ],
     "todos": [
         "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
@@ -23,6 +27,9 @@
         "Extend PricingCTA usage to other marketing CTAs (pricing hero, trust modules) after confirming compliance messaging coverage.",
         "Coordinate with Platform to ingest home_cta_click into GA4/warehouse and surface experiment bucket metadata.",
         "Coordinate with Platform to ingest templates_cta_click into GA4/warehouse so quiz funnel entries are tracked.",
-        "Coordinate with Platform to ingest features_cta_click into GA4/warehouse for feature-to-purchase attribution."
+        "Coordinate with Platform to ingest features_cta_click into GA4/warehouse for feature-to-purchase attribution.",
+        "Instrument partners mailto/support CTAs and online-notary hero CTA with track() events to maintain CTA coverage.",
+        "Add blog_article_click and blog_related_click analytics for blog index/detail flows and hand off to Platform for GA4 ingestion.",
+        "Author automated check (lint/test) to validate marketing JSON-LD schemas so regressions fail CI."
     ]
 }

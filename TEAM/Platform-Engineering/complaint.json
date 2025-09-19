@@ -43,6 +43,14 @@
         {
           "ts": "2025-09-19T18:15:43.988630Z",
           "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/home-500-log.txt."
+        },
+        {
+          "ts": "2025-09-19T18:51:05.396848Z",
+          "note": "Captured repeated GET / 500s and user report of slow/broken navigation; see home-requests-latency.txt for timings."
+        },
+        {
+          "note": "Homepage runtime error still blocks link validation; see ops/artifacts/complaints-cycle-0002/link-check-blocked.json.",
+          "ts": "2025-09-19T18:53:50Z"
         }
       ]
     }

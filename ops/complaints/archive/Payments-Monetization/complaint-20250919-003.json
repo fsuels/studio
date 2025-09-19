@@ -1,0 +1,39 @@
+{
+  "id": "complaint-20250919-003",
+  "reported_at": "2025-09-19T18:44:07.857797Z",
+  "reported_by": "Complaints",
+  "summary": "Home page crashes because Stripe publishable key is unset",
+  "details": "Loading the home route triggers PaymentModal, which throws \"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe\" when importing loadStripe (see PaymentModal.tsx lines 20-24). The runtime overlay blocks rendering and payments, and navigation becomes unstable while the module fails to evaluate.",
+  "severity": "critical",
+  "status": "resolved",
+  "target_pod": "Payments-Monetization",
+  "tags": [
+    "stripe",
+    "env-config",
+    "payment-modal"
+  ],
+  "next_action": "Monitor Stripe key provisioning during environment rotations; guardrails are in place.",
+  "owner_notes": [
+    "2025-09-19T18:54:05.1381406Z - PaymentModal and checkout guard missing publishable key to prevent runtime crashes; lint log: ops/artifacts/payments-cycle-0002/lint-payments-cycle-0002.txt."
+  ],
+  "history": [
+    {
+      "ts": "2025-09-19T18:44:07.857797Z",
+      "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/stripe-publishable-key-error.txt."
+    },
+    {
+      "ts": "2025-09-19T18:47:58.822494Z",
+      "note": "Added home-request latency evidence; repeated GET / 500s recorded in home-requests-latency.txt."
+    },
+    {
+      "ts": "2025-09-19T18:54:05.1381406Z",
+      "note": "Payments pod guarded PaymentModal and checkout against missing publishable key; recorded lint evidence under ops/artifacts/payments-cycle-0002/."
+    },
+    {
+      "ts": "2025-09-19T18:54:29.803Z",
+      "note": "Archived to ops/complaints/archive via scripts/manage-complaints.js"
+    }
+  ],
+  "archived_at": "2025-09-19T18:54:29.803Z",
+  "source_pod": "Payments-Monetization"
+}

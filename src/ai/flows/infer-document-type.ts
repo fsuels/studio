@@ -1,13 +1,8 @@
-// **Removed 'use server'; directive**
+﻿import 'server-only';
 
-/**
- * @fileOverview This file defines a Genkit flow that infers the type of legal document a user needs
- * based on their description, state, and language. Intended for an API route.
- */
-
-import { ai } from '@/ai/ai-instance';
-import { z } from 'zod';
+import { generateText, GuardrailViolationError } from '@/ai/ai-instance';
 import { getLinkableDocuments } from '@/lib/internal-linking';
+import { z } from 'zod';
 
 // Input Schema
 export const InferDocumentTypeInputSchema = z.object({
@@ -53,7 +48,17 @@ export type InferDocumentTypeOutput = z.infer<
   typeof InferDocumentTypeOutputSchema
 >;
 
-// Build a manifest-backed context string for the AI prompt.
+const GENERAL_INQUIRY: InferDocumentTypeOutput = {
+  suggestions: [
+    {
+      documentType: 'General Inquiry',
+      confidence: 0.0,
+      reasoning:
+        'Not enough information to classify the request. A human specialist should review it.',
+    },
+  ],
+};
+
 const getAvailableDocumentsContext = (): {
   context: string;
   englishNames: Set<string>;
@@ -66,15 +71,13 @@ const getAvailableDocumentsContext = (): {
   const lines = docs.map((doc) => {
     englishNames.add(doc.name.toLowerCase());
 
-    const locales: Array<'en' | 'es'> = ['en', 'es'];
-    locales.forEach((locale) => {
+    (['en', 'es'] as const).forEach((locale) => {
       const localized = doc.translations?.[locale]?.name;
       if (!localized) return;
-      const mapKey = locale;
-      if (!localizedNames.has(mapKey)) {
-        localizedNames.set(mapKey, new Set());
+      if (!localizedNames.has(locale)) {
+        localizedNames.set(locale, new Set());
       }
-      localizedNames.get(mapKey)!.add(localized.toLowerCase());
+      localizedNames.get(locale)!.add(localized.toLowerCase());
     });
 
     const tags = doc.tags.length ? ` | Tags: ${doc.tags.join(', ')}` : '';
@@ -88,138 +91,169 @@ const getAvailableDocumentsContext = (): {
   };
 };
 
-// Define AI prompt
-const prompt = ai.definePrompt({
-  name: 'inferDocumentTypePrompt',
-  model: 'googleai/gemini-2.5-pro-exp-03-25',
-  input: { schema: InferDocumentTypeInputSchema },
-  output: { schema: InferDocumentTypeOutputSchema, format: 'json' },
-  prompt: `You are a legal AI assistant. Suggest 1-3 documents based on:
-User Description: {{{description}}}
-State: {{#if state}}{{state}}{{else}}Not Specified{{/if}}
-Language: {{language}}
-Context:
-{{{availableDocumentsContext}}}
+const buildPrompt = (
+  input: InferDocumentTypeInput,
+  documentContext: string,
+): string => {
+  return [
+    'Classify the user request into specific legal document templates.',
+    'Return strict JSON with the following shape:',
+    '{',
+    '  "suggestions": [',
+    '    { "documentType": "<exact English template name>", "confidence": 0-1, "reasoning": "short bilingual-friendly explanation" }',
+    '  ]',
+    '}',
+    'Rules:',
+    '- Suggest up to 3 document types ranked by confidence.',
+    '- Use exact template names from the catalog context. If unsure, return "General Inquiry" with confidence 0.05-0.2.',
+    '- Avoid legal advice; keep explanations informational only.',
+    '- Provide reasoning in the same language requested when possible.',
+    '- Respect the user state and highlight state-specific matches.',
+    '- If the description indicates translation-only help, consider forms like "Bilingual Document Support".',
+    '',
+    `User Description: ${input.description}`,
+    `State: ${input.state ?? 'Not specified'}`,
+    `Language: ${input.language}`,
+    '',
+    documentContext,
+  ].join('\n');
+};
 
-Respond with strict JSON matching schema.`,
+const generalInquiry = (reasoning: string): InferDocumentTypeOutput => ({
+  suggestions: [
+    {
+      documentType: 'General Inquiry',
+      confidence: 0.05,
+      reasoning,
+    },
+  ],
 });
 
-// Define flow
-export const inferDocumentTypeFlow = ai.defineFlow(
-  {
-    name: 'inferDocumentTypeFlow',
-    inputSchema: InferDocumentTypeInputSchema,
-    outputSchema: InferDocumentTypeOutputSchema,
-  },
-  async (input: InferDocumentTypeInput) => {
-    // Allow any type of additional log arguments without using `any`.
-    const log = (msg: string, ...args: unknown[]) =>
-      console.log(`[inferDocFlow] ${msg}`, ...args);
-    log('Received input', input);
+const matchesKnownDocument = (
+  value: string,
+  language: 'en' | 'es',
+  englishNames: Set<string>,
+  localizedNames: Map<string, Set<string>>,
+  docs: ReturnType<typeof getLinkableDocuments>,
+): boolean => {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return false;
+  if (englishNames.has(normalized)) return true;
 
-    // Trim and validate description
-    const trimmed = input.description?.trim();
-    if (!trimmed) {
-      return {
-        suggestions: [
-          {
-            documentType: 'General Inquiry',
-            confidence: 0.0,
-            reasoning: 'Description was empty or whitespace only.',
-          },
-        ],
-      };
-    }
+  const localizedSet = localizedNames.get(language);
+  if (localizedSet && localizedSet.has(normalized)) {
+    return true;
+  }
 
-    // Re-validate with trimmed description
-    const parsed = InferDocumentTypeInputSchema.safeParse({
-      ...input,
-      description: trimmed,
+  return docs.some((doc) =>
+    [
+      doc.translations?.en?.name,
+      doc.translations?.es?.name,
+      doc.name,
+    ].some((candidate) => candidate?.toLowerCase() === normalized),
+  );
+};
+
+export const inferDocumentTypeFlow = async (
+  input: InferDocumentTypeInput,
+): Promise<InferDocumentTypeOutput> => {
+  const log = (message: string, ...args: unknown[]) => {
+    console.log(`[inferDocumentTypeFlow] ${message}`, ...args);
+  };
+
+  log('Received input', input);
+
+  const trimmed = input.description?.trim();
+  if (!trimmed) {
+    return GENERAL_INQUIRY;
+  }
+
+  const parsed = InferDocumentTypeInputSchema.safeParse({
+    ...input,
+    description: trimmed,
+  });
+
+  if (!parsed.success) {
+    log('Validation failed', parsed.error.flatten());
+    return generalInquiry(
+      `Validation error: ${parsed.error.errors.map((e) => e.message).join(', ')}`,
+    );
+  }
+
+  const safeInput = parsed.data;
+  const { context: availableContext, englishNames, localizedNames } =
+    getAvailableDocumentsContext();
+  const catalog = getLinkableDocuments();
+
+  const prompt = buildPrompt(safeInput, availableContext);
+
+  try {
+    const raw = await generateText(prompt, {
+      system:
+        'You are a bilingual legal intake classifier. Provide compliant, non-advisory suggestions using catalog template names only.',
+      channel: 'document_classification',
+      language: safeInput.language,
+      jurisdiction: safeInput.state,
+      metadata: {
+        document_catalog_size: catalog.length,
+        has_state: Boolean(safeInput.state),
+      },
+      context: [`language:${safeInput.language}`, `state:${safeInput.state ?? 'none'}`],
+      responseFormat: 'json',
+      temperature: 0.2,
+      maxTokens: 600,
     });
-    if (!parsed.success) {
-      log('Validation failed', parsed.error.errors);
-      return {
-        suggestions: [
-          {
-            documentType: 'General Inquiry',
-            confidence: 0.0,
-            reasoning: `Validation error: ${parsed.error.errors.map((e) => e.message).join(', ')}`,
-          },
-        ],
-      };
-    }
 
-    const { context: availableContext, englishNames, localizedNames } =
-      getAvailableDocumentsContext();
-
+    let candidate: unknown;
     try {
-      const response = await prompt({
-        ...parsed.data,
-        // Extra context isn't part of the input schema; cast to satisfy typing
-        availableDocumentsContext: availableContext,
-      } as InferDocumentTypeInput & { availableDocumentsContext: string });
-      const output = response.output as InferDocumentTypeOutput;
-
-      if (!output) throw new Error('AI returned no output');
-
-      // Validate output
-      const validOut = InferDocumentTypeOutputSchema.safeParse(output);
-      if (!validOut.success) {
-        log('AI output invalid', validOut.error.errors);
-        throw new Error('AI output schema mismatch');
-      }
-
-      // Filter suggestions to known docs
-      const docs = getLinkableDocuments();
-
-      const matchesKnownDocument = (name: string, language: 'en' | 'es') => {
-        const normalized = name.trim().toLowerCase();
-        if (!normalized) return false;
-        if (englishNames.has(normalized)) return true;
-        const localizedSet = localizedNames.get(language);
-        if (localizedSet && localizedSet.has(normalized)) {
-          return true;
-        }
-        return docs.some((doc) =>
-          [
-            doc.translations?.en?.name,
-            doc.translations?.es?.name,
-            doc.name,
-          ].some((candidate) =>
-            candidate?.toLowerCase() === normalized,
-          ),
-        );
-      };
-
-      let suggestions = validOut.data.suggestions.filter((s) => {
-        if (s.documentType === 'General Inquiry') return true;
-        const locale = parsed.data.language ?? 'en';
-        return matchesKnownDocument(s.documentType, locale);
-      });
-      if (suggestions.length === 0) {
-        suggestions = [
-          {
-            documentType: 'General Inquiry',
-            confidence: 0.1,
-            reasoning: 'No valid suggestions after filtering.',
-          },
-        ];
-      }
-
-      log('Returning suggestions', suggestions);
-      return { suggestions };
-    } catch (err: unknown) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      log('Error in flow', error.message);
-      return {
-        suggestions: [
-          {
-            documentType: 'General Inquiry',
-            confidence: 0.05,
-            reasoning: `Unexpected error: ${error.message}`,
-          },
-        ],
-      };
+      candidate = JSON.parse(raw);
+    } catch (parseError) {
+      throw new Error(`Failed to parse AI response as JSON: ${raw}`);
     }
-  },
-);
+
+    const validation = InferDocumentTypeOutputSchema.safeParse(candidate);
+    if (!validation.success) {
+      log('AI output invalid', validation.error.flatten());
+      throw new Error('AI output schema mismatch');
+    }
+
+    let suggestions = validation.data.suggestions.filter((suggestion) => {
+      if (suggestion.documentType === 'General Inquiry') return true;
+      return matchesKnownDocument(
+        suggestion.documentType,
+        safeInput.language,
+        englishNames,
+        localizedNames,
+        catalog,
+      );
+    });
+
+    if (suggestions.length === 0) {
+      suggestions = [
+        {
+          documentType: 'General Inquiry',
+          confidence: 0.1,
+          reasoning: 'No catalog matches after safety filtering.',
+        },
+      ];
+    }
+
+    const output: InferDocumentTypeOutput = { suggestions };
+    log('Returning suggestions', output);
+    return output;
+  } catch (error) {
+    if (error instanceof GuardrailViolationError) {
+      log('Guardrail violation', error.decision);
+      return generalInquiry(
+        error.decision.reason ??
+          'Request routed for human review due to safety policy.',
+      );
+    }
+
+    const message =
+      error instanceof Error ? error.message : 'Unexpected classification error.';
+    log('Unexpected error', message);
+
+    return generalInquiry(`Unable to classify automatically: ${message}`);
+  }
+};

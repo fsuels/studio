@@ -7,14 +7,10 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 
-// Load stripe.js just once
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-
-if (!publishableKey) {
-  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.');
-}
-
-const stripePromise = loadStripe(publishableKey);
+const stripePromise = publishableKey ? loadStripe(publishableKey) : null;
+const CONFIG_ERROR_MESSAGE =
+  'Payments are temporarily unavailable while we finalize Stripe setup. Please contact support if this persists.';
 
 export default function CheckoutPage() {
   const search = useSearchParams();
@@ -24,6 +20,9 @@ export default function CheckoutPage() {
   const docId = search?.get('docId');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [configError, setConfigError] = useState<string | null>(
+    stripePromise ? null : CONFIG_ERROR_MESSAGE,
+  );
 
   if (!docId) {
     return (
@@ -37,9 +36,15 @@ export default function CheckoutPage() {
   }
 
   const handlePay = async () => {
+    if (!stripePromise) {
+      setConfigError(CONFIG_ERROR_MESSAGE);
+      return;
+    }
+
     setIsLoading(true);
+    setConfigError(null);
+
     try {
-      // 1) Create a session on your server
       const res = await fetch('/api/checkout/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,35 +53,38 @@ export default function CheckoutPage() {
 
       if (!res.ok) {
         console.error('Failed to create Stripe session:', await res.text());
-        setIsLoading(false);
+        setConfigError('We could not start checkout. Please try again.');
         return;
       }
 
       const { sessionId } = await res.json();
       if (!sessionId) {
         console.error('No sessionId returned from /api/checkout/session');
-        setIsLoading(false);
+        setConfigError('We could not start checkout. Please try again.');
         return;
       }
 
-      // 2) Redirect to Stripe Checkout
       const stripe = await stripePromise;
       if (!stripe) {
         console.error('Stripe.js failed to load');
-        setIsLoading(false);
+        setConfigError('Stripe.js failed to load. Please refresh and try again.');
         return;
       }
 
       const { error } = await stripe.redirectToCheckout({ sessionId });
-      if (error) console.error('redirectToCheckout error:', error.message);
-
-      // no need to setIsLoading(false) here—
-      // Stripe will navigate away if all goes well
+      if (error) {
+        console.error('redirectToCheckout error:', error.message);
+        setConfigError(error.message ?? 'Stripe redirect failed. Please try again.');
+      }
     } catch (err) {
       console.error('Unexpected checkout error:', err);
+      setConfigError('Unexpected error starting checkout. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
+
+  const stripeUnavailable = !stripePromise;
 
   return (
     <div className="max-w-md mx-auto my-16 p-6 border rounded">
@@ -87,11 +95,11 @@ export default function CheckoutPage() {
       </p>
 
       <div className="flex items-center">
-        <Button onClick={handlePay} disabled={isLoading}>
+        <Button onClick={handlePay} disabled={isLoading || stripeUnavailable}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Redirecting…
+              Redirecting...
             </>
           ) : (
             'Pay with Card'
@@ -101,6 +109,11 @@ export default function CheckoutPage() {
           Cancel
         </Button>
       </div>
+      {configError && (
+        <p className="mt-4 text-sm text-red-600" role="alert">
+          {configError}
+        </p>
+      )}
     </div>
   );
 }

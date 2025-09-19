@@ -1,11 +1,11 @@
 {
   "complaints": [
     {
-      "id": "complaint-20250919-003",
-      "reported_at": "2025-09-19T18:44:07.857797Z",
+      "id": "complaint-20250919-004",
+      "reported_at": "2025-09-19T19:42:15.285940Z",
       "reported_by": "Complaints",
-      "summary": "Home page crashes because Stripe publishable key is unset",
-      "details": "Loading the home route triggers PaymentModal, which throws \"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe\" when importing loadStripe (see PaymentModal.tsx lines 20-24). The runtime overlay blocks rendering and payments, and navigation becomes unstable while the module fails to evaluate.",
+      "summary": "Stripe publishable key regression breaks homepage execution",
+      "details": "Homepage still loads PaymentModal.tsx without NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, triggering the runtime guard error and blocking navigation. This repeats even after the prior fix was marked resolved; see stripe-publishable-key-error.txt and link-check-blocked.json for the current reproduction and blocked link validation.",
       "severity": "critical",
       "status": "open",
       "target_pod": "Payments-Monetization",
@@ -14,16 +14,16 @@
         "env-config",
         "payment-modal"
       ],
-      "next_action": "Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (and guard PaymentModal) so the home page and checkout render without runtime errors.",
+      "next_action": "Restore publishable key provisioning or add resilient fallback so PaymentModal no longer blocks the homepage.",
       "owner_notes": [],
       "history": [
         {
-          "ts": "2025-09-19T18:44:07.857797Z",
-          "note": "Complaint logged by Complaints pod; evidence captured at ops/artifacts/complaints-cycle-0002/stripe-publishable-key-error.txt."
+          "ts": "2025-09-19T19:42:15.285967Z",
+          "note": "Complaint logged by Complaints pod; evidence: ops/artifacts/complaints-cycle-0002/stripe-publishable-key-error.txt, ops/artifacts/complaints-cycle-0002/home-requests-latency.txt, ops/artifacts/complaints-cycle-0002/link-check-blocked.json."
         },
         {
-          "ts": "2025-09-19T18:47:58.822494Z",
-          "note": "Added home-request latency evidence; repeated GET / 500s recorded in home-requests-latency.txt."
+          "ts": "2025-09-19T19:53:52.225252Z",
+          "note": "Captured Turbopack runtime stack for missing publishable key; see ops/artifacts/complaints-cycle-0002/payment-runtime-stack.txt."
         }
       ]
     }

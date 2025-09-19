@@ -1,12 +1,12 @@
 {
     "cycle_id": "document-intel-cycle-0007",
-    "last_updated": "2025-09-19T18:14:08.076684Z",
+    "last_updated": "2025-09-19T19:58:35.179615Z",
     "notes": [
         "Refined Georgia T-7 overlay coordinates (sale date shifted to first cell, buyer address anchored at y~224) and refreshed geometry checksums.",
         "Georgia T-7 overlay config now references measured coordinates for VIN/year/make/model etc.; sale date still needs live PDF verification due to multi-cell layout.",
-        "QA harness sample saved at ops/artifacts/document-intel-cycle-0007/georgia-overlay-sample.json to expedite PDF overlay verification.",
-        "Overlay QA checklist documented at ops/artifacts/document-intel-cycle-0007/georgia-overlay-qa.md for manual review steps.",
-        "Template verification failed: 700 EN templates still use placeholder markdown (e.g., accident-report.md) \u2014 needs content import before launch."
+        "Placeholder remediation plan drafted at ops/artifacts/document-intel-cycle-0007/template-placeholder-remediation-plan.md; coordinate content sourcing with Legal/Growth.",
+        "Audit artifacts (template-placeholder-audit.csv, template-missing-sections.csv, template-placeholder-summary.txt) quantify placeholder backlog for prioritization.",
+        "Rewrote mediation-agreement.md with full production-ready content (833 words, 23 variables, required sections present); template now ready for verification batches."
     ],
     "todos": [
         "QA Georgia T-7 overlay placement (especially sale date and buyer address) against generated PDFs before release.",

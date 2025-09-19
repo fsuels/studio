@@ -39,5 +39,5 @@ Consumers in certain jurisdictions may have additional rights that cannot be wai
 
 ---
 
-**Spanish Summary (Resumen en Espa?ol)**  
-Ofrecemos un reembolso completo dentro de los 30 d?as para compras iniciales si no ha descargado m?s de dos documentos y el producto no cumpli? con sus expectativas. Env?e un correo electr?nico a billing@123legaldoc.com con su n?mero de pedido.
+**Spanish Summary (Resumen en Español)**  
+Ofrecemos un reembolso completo dentro de los 30 días para compras iniciales si no ha descargado más de dos documentos y el producto no cumplió con sus expectativas. Envíe un correo electrónico a billing@123legaldoc.com con su número de pedido.

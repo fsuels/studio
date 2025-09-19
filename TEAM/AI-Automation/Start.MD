@@ -19,5 +19,5 @@ Flow:
 6. Maintain UPL avoidance, redact PII, and document safety outcomes; escalate critical issues per guardrails.
 7. Deliver the required outputs (CYCLE_SUMMARY, PATCH, PATCH_META, UPDATED_MEMORY_MD, UPDATED_REMEMBER_MD, PR info, TRACE_EVENTS, CYCLE_DONE). Leave `UPDATED_MEMORY_MD` and `UPDATED_REMEMBER_MD` as `null` and populate `handoff_summary` inside `PATCH_META` with complaint IDs, statuses, and artifacts so the CEO orchestrator can update the global files while keeping context within contract bounds.
 
-Begin.
+Continue working.
 ```

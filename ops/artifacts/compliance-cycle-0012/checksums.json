@@ -1,0 +1,14 @@
+[
+    {
+        "path":  "checksums.json",
+        "sha256":  "59392775D15C70779F63D9CE3EF63CF658C2E0CB1A93D8F0226DAEBB0EC6672E"
+    },
+    {
+        "path":  "release-gate-status-2025-09-26.md",
+        "sha256":  "89025157F5CA39A7C03AF451A27C4C137DC9B5B67D97660B3B63547FB5632EAB"
+    },
+    {
+        "path":  "spanish-policy-localization-status.md",
+        "sha256":  "2894EDB888B6924E9B6F9C9F62F0638D17CB8EBE0F0A89BC6887918A21E185B9"
+    }
+]

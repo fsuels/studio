@@ -48,6 +48,9 @@ const questions = generateQuestions(overlayConfig);
 
 - `USE_DIRECT_PDF_FILLING=false` - All states use traditional wizard flow (recommended)
 - `USE_DIRECT_PDF_FILLING=true` - Enables experimental direct PDF form filling (deprecated)
+- `FEATURE_SECURITY_HEADERS=true` - Default security headers (CSP report-only with optional HSTS); see `ops/runbooks/security-header-feature-flag.md`.
+- `FEATURE_SECURITY_HEADERS=false` - Temporarily disable headers during incident response; re-enable once mitigated.
+
 
 ##  Code Coverage
 
@@ -107,6 +110,7 @@ npm install
 ```bash
 cp .env.example .env.local
 # Edit .env.local with your configuration
+> **Security note:** Leave `FEATURE_SECURITY_HEADERS=true` unless you are executing the incident bypass playbook; see `ops/runbooks/security-header-feature-flag.md`.
 ```
 
 4. Run the development server:

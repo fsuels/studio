@@ -1,0 +1,14 @@
+[
+    {
+        "path":  "dsar-dry-run-updates.md",
+        "sha256":  "722DFAC515338776AA55C531D6E480DF8CA2652E0CA66B9DA4FAC18F4B613740"
+    },
+    {
+        "path":  "policy-translation-receipt-template.md",
+        "sha256":  "8BFBE937AF6B44D5B9C805AB4B2EC0879E299E84465ED422CC9508009062B01A"
+    },
+    {
+        "path":  "release-gate-evidence-checklist.md",
+        "sha256":  "33A5CEF1293C8FA04B73C6D41CAD3A0E35F977D7C387BB5D494832864B3B10CD"
+    }
+]

@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { track } from '@/lib/analytics';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -49,6 +50,7 @@ export const Footer = React.memo(function Footer() {
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.includes('@')) {
+      track('footer_subscribe_attempt', { locale, status: 'invalid_email' });
       toast({
         title: t('errorInvalidEmailTitle', { defaultValue: 'Invalid Email' }),
         description: t('errorInvalidEmailDesc', {
@@ -59,6 +61,7 @@ export const Footer = React.memo(function Footer() {
       return;
     }
     setIsLoading(true);
+      track('footer_subscribe_attempt', { locale, status: 'submitted' });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     toast({
       title: t('subscribedSuccessTitle', { defaultValue: 'Subscribed!' }),
@@ -66,6 +69,7 @@ export const Footer = React.memo(function Footer() {
         defaultValue: 'Thanks for joining our mailing list.',
       }),
     });
+      track('footer_subscribe_result', { locale, status: 'success' });
     setEmail('');
     setIsLoading(false);
   };

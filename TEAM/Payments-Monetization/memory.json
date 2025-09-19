@@ -1,21 +1,24 @@
 {
-    "cycle_id": "payments-cycle-0001",
-    "last_updated": "2025-09-19T15:21:15.8086455Z",
-    "notes": [
-        "Baseline audit flagged invalid Stripe apiVersion usage, mocked integrations, and missing policies; see ops/artifacts/payments-cycle-0001/payments-audit.json.",
-        "Removed hard-coded Stripe publishable fallback; frontend now requires NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
-        "Stripe webhook handler now verifies signatures with HMAC and timing-safe compare (src/lib/stripe-integration.ts).",
-        "Stripe webhook endpoint now validates signatures via stripeIntegration before processing (src/app/api/webhooks/stripe/route.ts).",
-        "Refund automation, wizard payments, and marketplace revenue flows now reuse shared Stripe helpers for API version enforcement.",
-        "Shared getStripeServerClient helper for server routes with jest coverage (src/lib/stripe-server.ts).",
-        "Stripe webhook route now covered by jest tests for signature/payload handling (src/app/api/webhooks/stripe/__tests__/route.test.ts).",
-        ".env templates now include STRIPE_WEBHOOK_SECRET alongside publishable/secret keys.",
-        "Stripe webhook handler now covers checkout.session.completed events with tests.",
-        "Smart-session checkout route now calls real Stripe sessions with test coverage."
-    ],
-    "todos": [
-        "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",
-        "Stand up verified Stripe webhook + Firestore provisioning for subscriptions, documents, and entitlements.",
-        "Coordinate with Compliance to publish refund policy and align Stripe Tax registrations before launch."
-    ]
+  "cycle_id": "payments-cycle-0002",
+  "last_updated": "2025-09-19T18:54:54.368Z",
+  "notes": [
+    "Baseline audit flagged invalid Stripe apiVersion usage, mocked integrations, and missing policies; see ops/artifacts/payments-cycle-0001/payments-audit.json.",
+    "Removed hard-coded Stripe publishable fallback; frontend now requires NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
+    "Stripe webhook handler now verifies signatures with HMAC and timing-safe compare (src/lib/stripe-integration.ts).",
+    "Stripe webhook endpoint now validates signatures via stripeIntegration before processing (src/app/api/webhooks/stripe/route.ts).",
+    "Refund automation, wizard payments, and marketplace revenue flows now reuse shared Stripe helpers for API version enforcement.",
+    "Shared getStripeServerClient helper for server routes with jest coverage (src/lib/stripe-server.ts).",
+    "Stripe webhook route now covered by jest tests for signature/payload handling (src/app/api/webhooks/stripe/__tests__/route.test.ts).",
+    ".env templates now include STRIPE_WEBHOOK_SECRET alongside publishable/secret keys.",
+    "Stripe webhook handler now covers checkout.session.completed events with tests.",
+    "Smart-session checkout route now calls real Stripe sessions with test coverage.",
+    "Guarded PaymentModal and /[locale]/checkout from missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY so the home experience stays available; complaint-20250919-003 closed.",
+    "Captured lint verification (existing repo warnings only) at ops/artifacts/payments-cycle-0002/lint-payments-cycle-0002.txt and archived complaints via scripts/manage-complaints.js."
+  ],
+  "todos": [
+    "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",
+    "Stand up verified Stripe webhook + Firestore provisioning for subscriptions, documents, and entitlements.",
+    "Coordinate with Compliance to publish refund policy and align Stripe Tax registrations before launch.",
+    "Coordinate with Platform to provision NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY in every environment and monitor the guard to ensure it remains fail-safe only."
+  ]
 }

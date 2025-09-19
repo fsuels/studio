@@ -1,14 +1,17 @@
 {
   "cycle_id": "complaints-cycle-0002",
-  "last_updated": "2025-09-19T18:44:29.724829Z",
+  "last_updated": "2025-09-19T19:54:05.400146Z",
   "notes": [
     "Logged complaint-20250919-001 (Platform-Engineering) for Next.js build failure caused by server-only module import.",
     "Logged complaint-20250919-002 (Platform-Engineering) for home route 500 originating from DocumentDiscoveryModal parse failure.",
-    "Logged complaint-20250919-003 (Payments-Monetization) for missing Stripe publishable key breaking homepage payments."
+    "Logged complaint-20250919-003 (Payments-Monetization) for missing Stripe publishable key breaking homepage payments.",
+    "Appended latency evidence and user impact notes to complaint-20250919-002/home route 500.",
+    "Reopened Stripe publishable key outage as complaint-20250919-004 after regression.",
+    "Captured Turbopack runtime stack for complaint-20250919-004 (payment runtime crash)."
   ],
   "todos": [
     "Confirm Platform-Engineering restores the production build path for complaint-20250919-001 and report back.",
     "Coordinate with Platform-Engineering on complaint-20250919-002 and confirm the home route compiles before closing.",
-    "Verify Payments-Monetization sets NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY and hardens PaymentModal before closing complaint-20250919-003."
+    "Verify Payments-Monetization restores NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY and guards PaymentModal before closing complaint-20250919-004."
   ]
 }
