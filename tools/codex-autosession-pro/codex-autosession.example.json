@@ -1,0 +1,12 @@
+{
+  "repo_dir": "C:\\path\\to\\repo",
+  "model": "gpt-5-codex",
+  "reasoning": "high",
+  "approvals": "auto",
+  "sandbox": "workspace-write",
+  "cycle_prompt": "Resume continuous improvement using Auto-Agents.md/Auto-Remember.md/Auto-Memory.md; make a small, safe, testable change; run tests; write a concise summary to state/autosummary.md; stop when one change set is complete.",
+  "commit_message": "codex: autosession cycle",
+  "branch": "",
+  "use_wsl": false
+}
+

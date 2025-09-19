@@ -1,0 +1,13 @@
+{
+  "repo_dir": "C:\\dev\\123legaldoc",
+  "model": "gpt-5-codex",
+  "reasoning": "high",
+  "approvals": "full",
+  "sandbox": "workspace-write",
+  "cycle_prompt": "Resume continuous improvement using Auto-Agents.md/Auto-Remember.md/Auto-Memory.md; make a small, safe, testable change; run tests; append a brief summary to state/autosummary.md; stop when one change set is complete.",
+  "commit_message": "codex: autosession cycle",
+  "branch": "",
+  "use_wsl": false
+}
+
+
