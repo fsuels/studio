@@ -1,0 +1,2 @@
+Command: npx eslint src/app/[locale]/(marketing)/blog/[slug]/page.tsx
+Result: pass (no findings)

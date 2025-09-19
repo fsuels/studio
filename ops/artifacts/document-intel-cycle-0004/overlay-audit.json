@@ -1,0 +1,108 @@
+{
+  "cycle_id": "document-intel-cycle-0004",
+  "generated_at": "2025-09-19T16:13:41.973Z",
+  "templates": [
+    {
+      "templateId": "power-of-attorney",
+      "total_states": 1,
+      "states_with_fields_json": 1,
+      "states_with_extracted_fields": 0,
+      "states_missing_fields_json": 0,
+      "states": {
+        "colorado": {
+          "has_fields_json": true,
+          "status": "no_acrofields",
+          "fieldCount": 0,
+          "analysisError": null,
+          "fieldsFile": "public/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney-fields.json"
+        }
+      }
+    },
+    {
+      "templateId": "vehicle-bill-of-sale",
+      "total_states": 11,
+      "states_with_fields_json": 11,
+      "states_with_extracted_fields": 9,
+      "states_missing_fields_json": 0,
+      "states": {
+        "alabama": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 42,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/alabama/MVT-32-13B-fields.json"
+        },
+        "colorado": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 22,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/colorado/DR-2116-fields.json"
+        },
+        "florida": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 40,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/florida/HSMV-82050-fields.json"
+        },
+        "generic": {
+          "has_fields_json": true,
+          "status": "no_acrofields",
+          "fieldCount": 0,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale-fields.json"
+        },
+        "georgia": {
+          "has_fields_json": true,
+          "status": "parse_failed",
+          "fieldCount": 0,
+          "analysisError": "Expected instance of PDFDict, but got instance of undefined",
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/georgia/T-7-fields.json"
+        },
+        "idaho": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 49,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/idaho/ITD-3738-fields.json"
+        },
+        "kansas": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 21,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/kansas/TR-312-fields.json"
+        },
+        "maryland": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 31,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/maryland/VR-181-fields.json"
+        },
+        "montana": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 18,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/montana/MV-24-fields.json"
+        },
+        "north-dakota": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 36,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/north-dakota/SFN-2888-fields.json"
+        },
+        "west-virginia": {
+          "has_fields_json": true,
+          "status": "extracted",
+          "fieldCount": 31,
+          "analysisError": null,
+          "fieldsFile": "public/forms/vehicle-bill-of-sale/west-virginia/DMV-7-TR-fields.json"
+        }
+      }
+    }
+  ]
+}

@@ -1,18 +1,28 @@
-﻿{
-  "cycle_id": "compliance-cycle-0004",
-  "last_updated": "2025-09-19T15:35:00Z",
-  "notes": [
-    "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
-    "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
-    "Incident contact roster and archival SOP documented (ops/compliance/legal-incident-contacts.md).",
-    "Legal incident log template now populated with contacts and roster references.",
-    "Spanish localization and jurisdiction knowledge base expansion remain outstanding."
-  ],
-  "todos": [
-    "Localize disclaimer, Terms, privacy, and refund policy into Spanish with counsel review.",
-    "Embed policy links within product flows, checkout, and marketing landing pages.",
-    "Automate incident archive reminders and integrate roster with Platform on-call workflows.",
-    "Coordinate with Document Intelligence on state-by-state notice requirements for knowledge base.",
-    "Define international readiness SOP including data transfer impact assessments."
-  ]
+{
+    "cycle_id":  "compliance-cycle-0006",
+    "last_updated":  "2025-09-19T16:45:39.5672217Z",
+    "notes":  [
+                  "Published customer-facing policy stack (docs/legal/*.md) covering disclaimer, Terms, privacy, and refund obligations.",
+                  "Release gate checklist updated to reference policy files for UPL, privacy, and marketing reviews.",
+                  "Incident contact roster and archival SOP documented (ops/compliance/legal-incident-contacts.md).",
+                  "Legal incident log template now populated with contacts and roster references.",
+                  "Spanish localization and jurisdiction knowledge base expansion remain outstanding.",
+                  "Conducted policy freshness audit and scheduled review cadences (ops/artifacts/compliance-cycle-0005/policy-freshness-audit.md).",
+                  "Published release gate tracker for week of 2025-09-22 to drive cross-pod sign-offs (ops/artifacts/compliance-cycle-0005/release-gate-2025-09-22.md).",
+                  "Authored baseline U.S. jurisdiction knowledge base covering CA, TX, NY, FL, IL (ops/compliance/jurisdiction-us-baseline.md).",
+                  "Documented Spanish policy localization project plan (ops/artifacts/compliance-cycle-0006/spanish-policy-localization-plan.md).",
+                  "Published DSAR and cookie banner verification checklist (ops/compliance/dsar-cookie-verification.md).",
+                  "Added Washington coverage to jurisdiction knowledge base (ops/compliance/jurisdiction-us-baseline.md)."
+              ],
+    "todos":  [
+                  "Execute Spanish policy localization plan, produce docs/legal/es/*, and attach bilingual sign-off evidence.",
+                  "Embed policy links within product flows, checkout, and marketing landing pages with Platform tracking.",
+                  "Automate incident archive reminders and integrate roster with Platform on-call tooling.",
+                  "Extend jurisdiction knowledge base to Colorado and Georgia with statutory citations and share template impacts with Document Intelligence.",
+                  "Coordinate with Document Intelligence on state-by-state notice requirements for knowledge base entries and Spanish localization.",
+                  "Define international readiness SOP including data transfer impact assessments and escalation contacts.",
+                  "Drive release gate adoption by collecting cookie banner verification, DSAR workflow documentation, and pod sign-offs before 2025-09-26 freeze.",
+                  "Draft DSAR SOP and assemble privacy evidence package per ops/compliance/dsar-cookie-verification.md.",
+                  "Prepare Washington workflow insert and filing checklist for Document Intelligence handoff."
+              ]
 }

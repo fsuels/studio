@@ -82,7 +82,7 @@ context_evidence:
     source: src/ai/flows/analyze-form-data.ts
 cross_pod_followups:
   - pod: Platform
-    action: Replace NEXT_PUBLIC_OPENAI_API_KEY usage with OSS gateway and secure server-side secrets.
+    action: Provision LiteLLM/vLLM gateway and manage AI_GATEWAY_URL secrets for prod/stage.
     owner: Platform
   - pod: Compliance
     action: Validate AI guardrail plan (Llama Guard, Prompt Guard, refusal taxonomy) before re-enabling flows.

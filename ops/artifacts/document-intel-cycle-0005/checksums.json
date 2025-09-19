@@ -1,0 +1,34 @@
+﻿{
+    "cycle_id":  "document-intel-cycle-0005",
+    "generated_at":  "2025-09-19T16:42:38.4250394Z",
+    "files":  [
+                  {
+                      "path":  "src/data/templates/en/service-agreement.md",
+                      "sha256":  "1bad85fe1ce489818ec825169249a797314cc32e9cd8612adb06008765e35060"
+                  },
+                  {
+                      "path":  "src/data/templates/es/service-agreement.md",
+                      "sha256":  "48c03e3bc1bf8747d1c4c3054c15aa998d683335dbcd478baed4a20b3bef37a8"
+                  },
+                  {
+                      "path":  "src/data/templates/en/quitclaim-deed.md",
+                      "sha256":  "3dba76184e2fe40191529b0c84a5ed2a9d9149df4ab8010ab2c8e46f44dc2478"
+                  },
+                  {
+                      "path":  "src/data/templates/es/quitclaim-deed.md",
+                      "sha256":  "9023ef8979a158b5e49c0385727ed86d8a40f56749cdeb8244c17e67c760662b"
+                  },
+                  {
+                      "path":  "src/data/templates/en/prenuptial-agreement.md",
+                      "sha256":  "23f9367d6f977d5cdd309804ab210988047643df307ef49de6b4b8551db56b4c"
+                  },
+                  {
+                      "path":  "src/data/templates/es/prenuptial-agreement.md",
+                      "sha256":  "25bd2208edf712f2b50342e88f8923bd84f8e0ead75514dc78ab631da856425a"
+                  },
+                  {
+                      "path":  "ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md",
+                      "sha256":  "88cf195133e96003c1b8da261d735db823a85686b8eb6df571ea86a53c19b3f9"
+                  }
+              ]
+}

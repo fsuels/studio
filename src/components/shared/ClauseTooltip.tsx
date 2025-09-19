@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { explainClause } from '@/ai/flows/explain-clause';
 import { useAccessibility } from '@/contexts/AccessibilityProvider';
 import { Lightbulb, Volume2 } from 'lucide-react';
 
@@ -48,51 +47,51 @@ function ClauseTooltip({
   className,
   importance = 'medium',
 }: ClauseTooltipProps) {
-  const aiEnabled = !!process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   const { preferences } = useAccessibility();
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [isAutoExplained, setIsAutoExplained] = useState(false);
   const [simplifiedText, setSimplifiedText] = useState<string>('');
 
-  // Auto-explain when accessibility mode is active
-  useEffect(() => {
-    if (preferences.autoExplainClauses && !isAutoExplained && !content) {
-      handleExplain();
-      setIsAutoExplained(true);
-    }
-  }, [preferences.autoExplainClauses, isAutoExplained, content, handleExplain]);
-
-  // Simplify jargon when enabled
-  useEffect(() => {
-    if (preferences.simplifyLegalJargon && text) {
-      simplifyJargon();
-    } else {
-      setSimplifiedText('');
-    }
-  }, [preferences.simplifyLegalJargon, text, simplifyJargon]);
-
   const handleExplain = useCallback(async () => {
-    if (!aiEnabled) {
-      setContent('AI explanations are disabled in this environment.');
-      return;
-    }
     const cached = getCache(id);
     if (cached) {
       setContent(cached);
       return;
     }
+
     setLoading(true);
     try {
-      const result = await explainClause(text);
-      setContent(result);
-      setCache(id, result);
+      const response = await fetch('/api/accessibility/explain-clause', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => ({}));
+        const message =
+          typeof errorPayload?.error === 'string'
+            ? errorPayload.error
+            : 'Unable to explain this clause at the moment.';
+        setContent(message);
+        return;
+      }
+
+      const data = await response.json();
+      const explanation =
+        (typeof data.explanation === 'string' && data.explanation.trim())
+          ? data.explanation.trim()
+          : 'Explanation is currently unavailable.';
+      setContent(explanation);
+      setCache(id, explanation);
     } catch (error) {
       console.error('Failed to explain clause:', error);
       setContent('Unable to explain this clause at the moment.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [aiEnabled, id, text]);
+  }, [id, text]);
 
   const simplifyJargon = useCallback(async () => {
     try {
@@ -113,14 +112,32 @@ function ClauseTooltip({
     }
   }, [text]);
 
+  // Auto-explain when accessibility mode is active
+  useEffect(() => {
+    if (preferences.autoExplainClauses && !isAutoExplained && !content) {
+      void handleExplain();
+      setIsAutoExplained(true);
+    }
+  }, [preferences.autoExplainClauses, isAutoExplained, content, handleExplain]);
+
+  // Simplify jargon when enabled
+  useEffect(() => {
+    if (preferences.simplifyLegalJargon && text) {
+      void simplifyJargon();
+    } else {
+      setSimplifiedText('');
+    }
+  }, [preferences.simplifyLegalJargon, text, simplifyJargon]);
+
   const handleOpenChange = async (open: boolean) => {
     if (!open) return;
-    if (!content) {
+    if (!content && !loading) {
       await handleExplain();
     }
   };
 
   const speakText = (textToSpeak: string) => {
+    if (typeof window === 'undefined') return;
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.rate = 0.8;
@@ -206,7 +223,7 @@ function ClauseTooltip({
               </div>
             ) : content ? (
               <>
-                <div className="text-left">{content}</div>
+                <div className="text-left whitespace-pre-line">{content}</div>
 
                 {preferences.voiceGuidance && (
                   <div className="flex items-center gap-2 pt-1 border-t border-border">

@@ -1,4 +1,4 @@
-﻿# AGENT.md - Codex Global Contract
+# AGENT.md - Codex Global Contract
 
 ## 1. Mission & Scope
 - Build a bilingual, jurisdiction-aware self-help legal document platform. Launch with full U.S. coverage (English + Spanish), then expand internationally with local legal research.
@@ -11,22 +11,23 @@
 - Wall clock: complete each cycle within 5 minutes.
 - Atomic writes: stage edits under `ops/tmp/`, fsync, then rename into place. Log checksums in `ops/artifacts/<cycle_id>/checksums.json`.
 - Locks: acquire `ops/state/lock/codex.lock`; reclaim if stale (>15 min) and record in TRACE_EVENTS.
+- Global state: CEO cycles own `Memory.md`/`Remember.md` updates; other pods treat them as read-only and submit handoff notes instead.
 - Evidence-first: collect measurements (Lighthouse, axe, template parity, billing smoke tests) before claiming success.
 
 ## 3. Pod-Aligned Cycle Workflow
-1. Acquire & Load - lock repository; load `Remember.md`, repo `Memory.md`, and relevant `TEAM/<pod>/memory.json`.
+1. Acquire & Load - lock repository; load `Remember.md`, repo `Memory.md`, and relevant `TEAM/<pod>/memory.json`. Non-CEO pods must treat `Memory.md` and `Remember.md` as read-only context.
 2. Discover - audit systems owned by the active pod (see `TEAM/<pod>/Start.MD`). Pull context from other pods if dependencies exist.
 3. Score & Select (1-3 tasks) - use the prioritization rules in section 5. Tie-break deterministically.
 4. Plan - produce an idempotent, step-by-step plan (via plan tool). Specify exact files and expected outcomes. Reference pod hand-offs when needed.
 5. Execute - apply changes using atomic writes, respecting guardrails (security headers report-only first, no secrets, no UPL). Document actions in TRACE_EVENTS.
 6. Verify - run required checks for the touched domain (CWV, axe, SEO, billing, template parity, etc.). Store artifacts under `ops/artifacts/<cycle_id>/` and list them in PR_DESC.
-7. Persist & Handoff - update repo `Memory.md`, `Remember.md`, and pod `memory.json` with new `cycle_id`, ISO-8601 UTC timestamps, notes, and follow-ups. Prepare PR metadata and final outputs (section 7).
+7. Persist & Handoff - update your pod `memory.json` with the new `cycle_id`, ISO-8601 UTC timestamps, notes, and follow-ups. Non-CEO pods DO NOT write to repo `Memory.md` or `Remember.md`; instead, capture handoff notes in outputs for the CEO cycle to merge. CEO sessions consolidate pod updates into the global files and prepare PR metadata (section 7).
 
 Pod leads must start from their `TEAM/<pod>/Start.MD`, which references this contract and outlines pod-specific audits.
 
 ## 4. Collaboration & Handoff Rules
 - Always read all `TEAM/*/memory.json` when acting as CEO or when pod work impacts another pod.
-- Log cross-pod actions in both the originating pod memory and `Remember.md` under "Pending Cross-Pod Tasks".
+- Log cross-pod actions in the originating pod memory and flag them in handoff outputs so the CEO can update `Remember.md` under "Pending Cross-Pod Tasks".
 - Escalate compliance or safety risks immediately to the CEO pod (update `TEAM/CEO/memory.json`).
 
 ## 5. Prioritization Formula (Deterministic)

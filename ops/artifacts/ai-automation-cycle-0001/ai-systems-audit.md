@@ -4,9 +4,9 @@
 
 ## Genkit Pipelines
 - `src/ai/ai-instance.ts` replaces Genkit with a stub that logs warnings and never reaches Google AI or vLLM backends; every `ai.definePrompt` call returns a no-op handler.
-- `src/ai/flows/infer-document-type.ts` still references `googleai/gemini-2.5-pro-exp-03-25`, but the stub prevents any request, so API consumers get only filtered fallback suggestions.
-- Other flows (`summarize-document.ts`, `explain-clause.ts`, `analyze-form-data.ts`) bypass Genkit entirely and call proprietary OpenAI SDKs with `NEXT_PUBLIC_OPENAI_API_KEY`.
-- No Genkit pipelines, manifests, or deployment configs exist under `src/ai` or `scripts`; `genkit-cli` is installed but unused.
+- src/ai/ai-instance.ts replaces Genkit with a stub that logs warnings and never reaches Google AI or vLLM backends; every i.definePrompt call returns a no-op handler.
+- src/ai/flows/infer-document-type.ts still references googleai/gemini-2.5-pro-exp-03-25, but the stub prevents any request, so API consumers get only filtered fallback suggestions until LiteLLM/vLLM is provisioned.
+- Other flows (summarize-document.ts, explain-clause.ts, nalyze-form-data.ts) now call the OSS gateway helper (src/ai/gateway.ts), but still lack production LiteLLM/vLLM routing.
 
 **Risk:** Intake flows cannot reach planned OSS models; current implementation violates the Open-first directive and delivers inconsistent behavior between routes.
 
@@ -30,7 +30,7 @@
 **Risk:** Safety incidents or outages would go undetected; guardrail breaches cannot reach on-call or compliance teams.
 
 ## Logging & Key Management
-- OpenAI SDK usage pulls `process.env.NEXT_PUBLIC_OPENAI_API_KEY`, exposing credentials to browsers and client bundles (`ClauseTooltip.tsx`, `document-summary.ts`).
+- AI gateway depends on server-only AI_GATEWAY_URL and AI_GATEWAY_API_KEY; ensure these secrets stay out of client bundles and are rotated regularly.
 - No redaction of prompts/responses; console logs include raw request payloads (`infer-document-type` route logs full bodies).
 
 **Risk:** Credential leakage and PII exposure; violates privacy-by-design and security guardrails.
@@ -48,3 +48,8 @@
 3. Stand up evaluation harness (lm-eval + Ragas) with bilingual gold sets and publish baseline metrics.
 4. Instrument Langfuse/Prometheus traces and escalation hooks for guardrail violations and quota errors.
 5. Localize prompts/responses, add Spanish disclaimers, and verify parity across EN/ES flows.
+
+## Remediation Progress (2025-09-19T16:12:12.5542250Z)
+- Replaced client-exposed NEXT_PUBLIC_OPENAI_API_KEY usage with server-only AI gateway helpers (`src/ai/gateway.ts`).
+- Updated analyze, summarize, and clause explanation flows to call the OSS-compatible gateway with bilingual prompts.
+- Added `/api/accessibility/explain-clause` and rerouted `ClauseTooltip` to fetch explanations over HTTPS, keeping prompts off the client bundle.

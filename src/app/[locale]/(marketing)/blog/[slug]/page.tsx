@@ -1,11 +1,152 @@
 // src/app/[locale]/blog/[slug]/page.tsx
 // Server-rendered blog post to keep client bundle lean
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { blogArticles, type BlogArticle } from '@/data/blogArticles';
-
+import SEOConfig from '@/config/seo';
+import { localizations } from '@/lib/localizations';
+import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
 type BlogRouteParams = { locale: 'en' | 'es'; slug: string };
-
+const SUPPORTED_LOCALES = localizations as readonly ('en' | 'es')[];
+const BLOG_AUTHOR_BY_LOCALE = {
+  en: '123LegalDoc Legal Team',
+  es: 'Equipo Legal de 123LegalDoc',
+} as const;
+const NOT_FOUND_TITLES = {
+  en: 'Article Not Found | 123LegalDoc',
+  es: 'Articulo no encontrado | 123LegalDoc',
+} as const;
+const NOT_FOUND_DESCRIPTIONS = {
+  en: 'This article is not available yet. Explore other legal resources from 123LegalDoc.',
+  es: 'Este articulo no esta disponible todavia. Explora otros recursos legales de 123LegalDoc.',
+} as const;
+const NOT_FOUND_HEADINGS = {
+  en: 'Article Not Found',
+  es: 'Articulo no encontrado',
+} as const;
+function getLocalizedArticleField(article: BlogArticle, field: 'title' | 'summary' | 'content', locale: 'en' | 'es'): string {
+  const key = `${field}_${locale}` as keyof BlogArticle;
+  return article[key] as string;
+}
+function buildArticleKeywords(slug: string, locale: 'en' | 'es'): string[] {
+  const slugKeywords = slug.replace(/-/g, ' ');
+  if (locale === 'es') {
+    return [slugKeywords, 'documentos legales', 'automatizacion legal', 'blog 123LegalDoc'];
+  }
+  return [slugKeywords, 'legal documents', 'document automation', '123LegalDoc blog'];
+}
+function buildBlogPostStructuredData(locale: 'en' | 'es', article: BlogArticle, canonicalUrl: string): string {
+  const title = getLocalizedArticleField(article, 'title', locale);
+  const description = getLocalizedArticleField(article, 'summary', locale);
+  const content = getLocalizedArticleField(article, 'content', locale);
+  const publishedDateIso = new Date(article.date).toISOString();
+  const textContent = content.replace(/<[^>]+>/g, ' ');
+  const wordCount = textContent.trim().split(/\s+/).filter(Boolean).length;
+  return JSON.stringify(
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      datePublished: publishedDateIso,
+      dateModified: publishedDateIso,
+      author: {
+        '@type': 'Organization',
+        name: BLOG_AUTHOR_BY_LOCALE[locale],
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: '123LegalDoc',
+        url: getSiteUrl(),
+      },
+      inLanguage: LOCALE_LANGUAGE_TAGS[locale],
+      mainEntityOfPage: canonicalUrl,
+      url: canonicalUrl,
+      wordCount,
+    },
+    null,
+    0,
+  ).replace(/</g, '\u003c');
+}
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<BlogRouteParams>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const article = blogArticles.find((entry) => entry.slug === slug);
+  const siteUrl = getSiteUrl();
+  const metadataBase = new URL(siteUrl + '/');
+  const canonicalPath = `/${locale}/blog/${slug}/`;
+  const canonicalUrl = siteUrl + canonicalPath;
+  const languageAlternates = SUPPORTED_LOCALES.reduce<Record<string, string>>((accumulator, supportedLocale) => {
+    accumulator[supportedLocale] = `${siteUrl}/${supportedLocale}/blog/${slug}/`;
+    return accumulator;
+  }, {});
+  languageAlternates['x-default'] = `${siteUrl}/en/blog/${slug}/`;
+  const alternateOgLocales = SUPPORTED_LOCALES
+    .filter((supportedLocale) => supportedLocale !== locale)
+    .map((supportedLocale) => LOCALE_LANGUAGE_TAGS[supportedLocale]);
+  if (!article) {
+    const fallbackTitle = NOT_FOUND_TITLES[locale];
+    const fallbackDescription = NOT_FOUND_DESCRIPTIONS[locale];
+    return {
+      metadataBase,
+      title: fallbackTitle,
+      description: fallbackDescription,
+      alternates: {
+        canonical: canonicalPath,
+        languages: languageAlternates,
+      },
+      openGraph: {
+        type: 'article',
+        title: NOT_FOUND_HEADINGS[locale],
+        description: fallbackDescription,
+        url: canonicalUrl,
+        siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
+        locale: LOCALE_LANGUAGE_TAGS[locale],
+        alternateLocale: alternateOgLocales,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: NOT_FOUND_HEADINGS[locale],
+        description: fallbackDescription,
+      },
+    };
+  }
+  const localizedTitle = getLocalizedArticleField(article, 'title', locale);
+  const localizedSummary = getLocalizedArticleField(article, 'summary', locale);
+  const keywords = buildArticleKeywords(slug, locale);
+  const publishedTime = new Date(article.date).toISOString();
+  const author = BLOG_AUTHOR_BY_LOCALE[locale];
+  return {
+    metadataBase,
+    title: `${localizedTitle} | 123LegalDoc`,
+    description: localizedSummary,
+    keywords,
+    alternates: {
+      canonical: canonicalPath,
+      languages: languageAlternates,
+    },
+    openGraph: {
+      type: 'article',
+      title: localizedTitle,
+      description: localizedSummary,
+      url: canonicalUrl,
+      siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
+      locale: LOCALE_LANGUAGE_TAGS[locale],
+      alternateLocale: alternateOgLocales,
+      publishedTime,
+      authors: [author],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: localizedTitle,
+      description: localizedSummary,
+    },
+  };
+}
 export async function generateStaticParams() {
   const params: BlogRouteParams[] = [];
   for (const locale of ['en', 'es']) {
@@ -15,27 +156,28 @@ export async function generateStaticParams() {
   }
   return params;
 }
-
 export default async function BlogPostPage({
   params,
 }: {
   params: Promise<BlogRouteParams>;
 }) {
   const { locale, slug } = await params;
+  const backToBlogLabel = locale === 'es' ? 'Volver al blog' : 'Back to Blog';
   const article = blogArticles.find((a) => a.slug === slug);
-
   if (!article) {
     return (
       <main className="max-w-3xl mx-auto px-6 py-20">
-        <h1 className="text-3xl font-bold mb-4 text-destructive">Article Not Found</h1>
-        <p className="text-muted-foreground">Could not find an article with the slug: <span className="font-mono bg-muted px-1">{slug}</span></p>
+        <h1 className="text-3xl font-bold mb-4 text-destructive">{NOT_FOUND_HEADINGS[locale]}</h1>
+        <p className="text-muted-foreground">
+          {NOT_FOUND_DESCRIPTIONS[locale]}{' '}
+          <span className="font-mono bg-muted px-1">{slug}</span>
+        </p>
         <div className="mt-4">
-          <Link href={`/${locale}/blog`} className="underline">Back to Blog</Link>
+          <Link href={`/${locale}/blog`} className="underline">{backToBlogLabel}</Link>
         </div>
       </main>
     );
   }
-
   const langSuffix = locale === 'es' ? 'es' : 'en';
   const title = article[`title_${langSuffix}` as keyof BlogArticle] as string;
   const content = article[`content_${langSuffix}` as keyof BlogArticle] as string;
@@ -44,20 +186,29 @@ export default async function BlogPostPage({
     month: 'long',
     day: 'numeric',
   });
-
+  const siteUrl = getSiteUrl();
+  const canonicalUrl = `${siteUrl}/${locale}/blog/${slug}/`;
+  const structuredData = buildBlogPostStructuredData(locale, article, canonicalUrl);
   const related = getRelatedDocuments(article, locale);
-
   return (
-    <main className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: structuredData,
+        }}
+      />
+      <main className="max-w-3xl mx-auto px-6 py-12 md:py-20">
       <div className="mb-4">
-        <Link href={`/${locale}/blog`} className="text-sm text-primary underline">&larr; Back to Blog</Link>
+        <Link href={`/${locale}/blog`} className="text-sm text-primary underline">
+          &larr; {backToBlogLabel}
+        </Link>
       </div>
       <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">{title}</h1>
       <p className="text-sm text-muted-foreground mb-8">{formattedDate}</p>
       <article className="prose prose-primary dark:prose-invert max-w-none text-foreground mb-16">
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </article>
-
       {related.length > 0 && (
         <section className="mb-16">
           <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8">
@@ -73,7 +224,6 @@ export default async function BlogPostPage({
           </div>
         </section>
       )}
-
       <nav className="flex justify-between items-center border-t pt-6">
         <div>
           {article.prev && (
@@ -91,9 +241,9 @@ export default async function BlogPostPage({
         </div>
       </nav>
     </main>
+    </>
   );
 }
-
 function getRelatedDocuments(article: BlogArticle, locale: 'en' | 'es') {
   const langSuffix = locale === 'es' ? '_es' : '_en';
   const title = ((article as any)[`title${langSuffix}`] as string || '').toLowerCase();
@@ -107,7 +257,6 @@ function getRelatedDocuments(article: BlogArticle, locale: 'en' | 'es') {
       description: locale === 'es' ? esDesc : enDesc,
       href: `/${locale}/docs/${id}`,
     });
-
   if (/lease|rent|property|landlord|tenant/.test(full)) {
     add('lease-agreement', 'Lease Agreement', 'Contrato de Arrendamiento', 'Rental agreements for residential/commercial use', 'Contratos de alquiler residenciales/comerciales');
     add('eviction-notice', 'Eviction Notice', 'Aviso de Desalojo', 'Legal notice to tenants', 'Notificación legal a inquilinos');

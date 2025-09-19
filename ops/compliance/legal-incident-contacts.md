@@ -38,3 +38,7 @@ This roster supports the legal incident log at `ops/compliance/legal-incident-lo
 - Notify CEO and Platform leads of roster updates via Slack `#compliance-ops` channel.
 
 
+## 6. Change Log
+| Date | Change | Author |
+| --- | --- | --- |
+| 2025-09-19 | Initial roster and archival SOP published; escrow contacts recorded. | Compliance Ops |

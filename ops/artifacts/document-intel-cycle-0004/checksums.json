@@ -1,0 +1,22 @@
+{
+    "cycle_id":  "document-intel-cycle-0004",
+    "generated_at":  "2025-09-19T16:14:00.2417701Z",
+    "files":  [
+                  {
+                      "path":  "public/forms/power-of-attorney/colorado/Colorado-Power-of-Attorney-fields.json",
+                      "sha256":  "faf528fda071ab073d71c1c36af10a1ddfe5c055d887a66823310e575b26e4a0"
+                  },
+                  {
+                      "path":  "public/forms/vehicle-bill-of-sale/georgia/T-7-fields.json",
+                      "sha256":  "0ffc1bc47cd1cc8192cce105018466cc139ecb8492b849e268505b24bcea735f"
+                  },
+                  {
+                      "path":  "public/forms/vehicle-bill-of-sale/generic/vehicle-bill-of-sale-fields.json",
+                      "sha256":  "dcc6ef6d8eebc5b05e70e89d92d1c81b1d5307a540a3c7078118a147ae54d13e"
+                  },
+                  {
+                      "path":  "ops/artifacts/document-intel-cycle-0004/overlay-audit.json",
+                      "sha256":  "7cd137b77cd08f762f03f95587d4107137c1e3bf57f7242e928731e023c93878"
+                  }
+              ]
+}

@@ -1,40 +1,44 @@
-import { OpenAI } from 'openai';
+import 'server-only';
 
-let openai: OpenAI | null = null;
+import {
+  createChatCompletion,
+  extractMessageContent,
+  getAIGatewayModel,
+  isAIGatewayConfigured,
+} from '@/ai/gateway';
 
-const initOpenAI = (): OpenAI | null => {
-  if (openai) return openai;
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY as
-    | string
-    | undefined;
-  // Gracefully disable when no key is provided in dev
-  if (!apiKey) {
-    // Use debug to avoid Dev Overlay redbox from console.error
-    console.debug('[explain-clause] OpenAI disabled: missing NEXT_PUBLIC_OPENAI_API_KEY');
-    return null;
-  }
-  try {
-    openai = new OpenAI({ apiKey });
-    return openai;
-  } catch (err) {
-    console.debug('[explain-clause] Failed to init OpenAI', err);
-    return null;
-  }
-};
+const EXPLAIN_MODEL = process.env.AI_GATEWAY_EXPLAIN_MODEL;
 
 export async function explainClause(text: string): Promise<string> {
-  const client = initOpenAI();
-  if (!client) return 'AI service unavailable.';
-  const prompt = `Explain this legal clause in plain English: "${text}"`;
+  if (!text?.trim()) {
+    return 'Clause text is required.';
+  }
+
+  if (!isAIGatewayConfigured()) {
+    return 'AI explanation service is currently unavailable.';
+  }
+
   try {
-    const res = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const completion = await createChatCompletion({
+      model: getAIGatewayModel(EXPLAIN_MODEL),
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You explain legal clauses in plain language without providing legal advice. Be concise and bilingual-friendly.',
+        },
+        {
+          role: 'user',
+          content: `Explain this legal clause in plain English and include a Spanish translation when helpful:\n\n"${text}"`,
+        },
+      ],
       temperature: 0.3,
-      messages: [{ role: 'user', content: prompt }],
+      maxTokens: 400,
     });
-    return res.choices[0].message.content?.trim() || '';
-  } catch (err) {
-    console.debug('[explain-clause] API error', err);
+
+    return extractMessageContent(completion) || 'No explanation returned.';
+  } catch (error) {
+    console.debug('[explain-clause] AI gateway failure:', error);
     return 'Unable to retrieve explanation.';
   }
 }

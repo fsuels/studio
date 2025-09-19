@@ -59,7 +59,9 @@ function ensureLocaleRedirect(request: NextRequest): NextResponse | null {
 
   redirectUrl.search = request.nextUrl.search;
 
-  return NextResponse.redirect(redirectUrl);
+  const response = NextResponse.redirect(redirectUrl);
+  applySecurityHeaders(request, response);
+  return response;
 }
 
 async function handleAdminRoute(request: NextRequest): Promise<NextResponse | null> {
@@ -78,7 +80,9 @@ async function handleAdminRoute(request: NextRequest): Promise<NextResponse | nu
   const adminUser = await getAdminUser(request);
 
   if (!adminUser) {
-    return NextResponse.redirect(new URL('/admin', request.url));
+    const redirectResponse = NextResponse.redirect(new URL('/admin', request.url));
+    applySecurityHeaders(request, redirectResponse);
+    return redirectResponse;
   }
 
   const requestHeaders = new Headers(request.headers);
@@ -208,9 +212,14 @@ export async function middleware(request: NextRequest) {
 
   if (
     tenantResponse.headers.get('x-middleware-rewrite') ||
-    tenantResponse.headers.get('x-middleware-redirect') ||
-    tenantResponse.status !== 200
+    tenantResponse.headers.get('x-middleware-redirect')
   ) {
+    applySecurityHeaders(request, tenantResponse);
+    return tenantResponse;
+  }
+
+  if (tenantResponse.status !== 200) {
+    applySecurityHeaders(request, tenantResponse);
     return tenantResponse;
   }
 

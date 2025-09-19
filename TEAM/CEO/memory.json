@@ -1,15 +1,18 @@
 {
-  "cycle_id": "ceo-cycle-0001",
-  "last_updated": "2025-09-19T15:43:04.5625253Z",
-  "notes": [
-    "Completed cross-pod executive audit; see ops/artifacts/ceo-cycle-0001/executive-audit.md for pod summaries aligned to KPIs.",
-    "Platform enforcement blocked by missing CSP alerting and incident playbook; ties to security header backlog item and platform health KPI.",
-    "Compliance policy stack, jurisdiction tracker, and cross-pod dependencies remain the gating risk for launch-readiness KPIs.",
-    "Baseline KPI instrumentation (CWV, telemetry, payments) still absent, preventing north-star tracking."
-  ],
-  "todos": [
-    "Assign owners with Platform, Compliance, and Data to implement KPI instrumentation plan before next cycle report.",
-    "Schedule cross-pod working session (Platform, Compliance, Payments, Growth) to unblock policy, refund, and telemetry dependencies.",
-    "Define pod cycle rotation and publish executive cadence notes to keep backlog prioritization deterministic."
-  ]
+    "cycle_id":  "ceo-cycle-0001",
+    "last_updated":  "2025-09-19T16:38:54.7245200Z",
+    "notes":  [
+                  "Completed cross-pod executive audit; see ops/artifacts/ceo-cycle-0001/executive-audit.md for pod summaries aligned to KPIs.",
+                  "Platform enforcement blocked by missing CSP alerting and incident playbook; ties to security header backlog item and platform health KPI.",
+                  "Compliance policy stack, jurisdiction tracker, and cross-pod dependencies remain the gating risk for launch-readiness KPIs.",
+                  "Baseline KPI instrumentation (CWV, telemetry, payments) still absent, preventing north-star tracking.",
+                  "Published KPI instrumentation blueprint assigning telemetry deliverables and timelines (ops/artifacts/ceo-cycle-0001/kpi-instrumentation-plan.md).",
+                  "Published KPI instrumentation status tracker capturing Week 1-3 deliverables and blockers (ops/artifacts/ceo-cycle-0001/kpi-instrumentation-status.md)."
+              ],
+    "todos":  [
+                  "Confirm Platform delivers GA4 ingestion + Lighthouse/axe pipelines by 2025-09-26 with artifacts attached.",
+                  "Hold cross-pod instrumentation checkpoint (Platform, Growth, Payments, Compliance) to track Week 2 dashboard commitments.",
+                  "Publish pod rotation and executive cadence memo once instrumentation gating items are owned.",
+                  "Review instrumentation status tracker with pod leads during weekly executive checkpoint."
+              ]
 }

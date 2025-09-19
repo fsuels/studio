@@ -1,26 +1,44 @@
-import { OpenAI } from 'openai';
+import 'server-only';
 
-const getClient = () => {
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-  return apiKey ? new OpenAI({ apiKey }) : null;
-};
+import {
+  createChatCompletion,
+  extractMessageContent,
+  getAIGatewayModel,
+  isAIGatewayConfigured,
+} from '@/ai/gateway';
+
+const DOCUMENT_SUMMARY_MODEL = process.env.AI_GATEWAY_SUMMARY_MODEL;
 
 export async function summarizeDocument(text: string): Promise<string> {
-  const client = getClient();
-  if (!client) {
+  if (!text?.trim()) {
+    return '';
+  }
+
+  if (!isAIGatewayConfigured()) {
     return 'AI summary service not configured.';
   }
+
   try {
-    const res = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const completion = await createChatCompletion({
+      model: getAIGatewayModel(DOCUMENT_SUMMARY_MODEL),
       messages: [
-        { role: 'user', content: `Summarize the following document:\n${text}` },
+        {
+          role: 'system',
+          content:
+            'You produce short, neutral summaries of legal documents in plain language. Do not provide legal advice.',
+        },
+        {
+          role: 'user',
+          content: `Summarize the following document in a short paragraph:\n\n${text}`,
+        },
       ],
       temperature: 0.3,
+      maxTokens: 400,
     });
-    return res.choices[0].message.content ?? '';
-  } catch (err: unknown) {
-    console.error('Failed to summarize document', err);
+
+    return extractMessageContent(completion) || '';
+  } catch (error) {
+    console.error('[services/document-summary] AI gateway failure:', error);
     return 'Error generating summary.';
   }
 }

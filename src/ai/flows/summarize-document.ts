@@ -1,22 +1,11 @@
-import { OpenAI } from 'openai';
+import 'server-only';
 
-let openai: OpenAI | null = null;
-
-const initOpenAI = (): OpenAI | null => {
-  if (openai) return openai;
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error('[summarize-document] Missing NEXT_PUBLIC_OPENAI_API_KEY');
-    return null;
-  }
-  try {
-    openai = new OpenAI({ apiKey });
-    return openai;
-  } catch (err) {
-    console.error('[summarize-document] Failed to init OpenAI', err);
-    return null;
-  }
-};
+import {
+  createChatCompletion,
+  extractMessageContent,
+  getAIGatewayModel,
+  isAIGatewayConfigured,
+} from '@/ai/gateway';
 
 export interface DocumentSummaryOptions {
   readingLevel?: 'simple' | 'standard' | 'advanced';
@@ -34,15 +23,66 @@ export interface DocumentSummary {
   warnings?: string[];
 }
 
+const SUMMARY_MODEL = process.env.AI_GATEWAY_SUMMARY_MODEL;
+const SIMPLIFY_MODEL = process.env.AI_GATEWAY_SIMPLIFY_MODEL;
+
+const FALLBACK_SUMMARY: DocumentSummary = {
+  summary:
+    'Unable to generate an AI summary at this time. Please review the document manually.',
+  keyPoints: [
+    'Review all sections carefully',
+    'Pay attention to rights, obligations, and signatures',
+    'Record any deadlines or required actions',
+    'Consult a legal professional if you require advice',
+  ],
+  readingTime: '< 1 minute',
+  complexity: 'medium',
+  warnings: ['AI summarization unavailable'],
+};
+
+const readingLevelInstructions = {
+  simple:
+    'Use simple, everyday language. Write at a 6th-grade reading level. Avoid legal jargon.',
+  standard:
+    'Use clear, accessible language. Write at a high school reading level. Explain legal terms when needed.',
+  advanced:
+    'Use professional but clear language. Write at a college reading level. Include necessary legal terminology with context.',
+};
+
+const lengthInstructions = {
+  brief: 'Keep the summary to 2-3 sentences maximum.',
+  detailed: 'Provide a thorough but concise summary in 1-2 paragraphs.',
+  comprehensive:
+    'Provide a detailed summary with comprehensive coverage of all major sections.',
+};
+
+function estimateReadingTime(text: string): { readingTime: string; complexity: DocumentSummary['complexity'] } {
+  const wordCount = text.split(/\s+/).length;
+  const minutes = Math.ceil(wordCount / 200);
+  const readingTime = minutes < 1 ? '< 1 minute' : `${minutes} minute${minutes > 1 ? 's' : ''}`;
+  const hasComplexTerms =
+    /\b(whereas|heretofore|pursuant|notwithstanding|indemnify|covenant|warranty|liability|damages|breach|remedy|jurisdiction|venue|arbitration|mediation)\b/gi.test(
+      text,
+    );
+
+  const complexity: DocumentSummary['complexity'] =
+    wordCount < 500 && !hasComplexTerms
+      ? 'low'
+      : wordCount < 1500 && !hasComplexTerms
+        ? 'medium'
+        : 'high';
+
+  return { readingTime, complexity };
+}
+
 export async function summarizeDocument(
   documentText: string,
   documentType?: string,
   options: DocumentSummaryOptions = {},
 ): Promise<DocumentSummary | null> {
-  const client = initOpenAI();
-  if (!client) {
-    console.error('[summarize-document] OpenAI client not available');
-    return null;
+  if (!isAIGatewayConfigured()) {
+    const { readingTime, complexity } = estimateReadingTime(documentText);
+    return { ...FALLBACK_SUMMARY, readingTime, complexity };
   }
 
   const {
@@ -52,157 +92,97 @@ export async function summarizeDocument(
     includeKeyTerms = true,
   } = options;
 
-  // Estimate reading time (average 200 words per minute)
-  const wordCount = documentText.split(/\s+/).length;
-  const readingTimeMinutes = Math.ceil(wordCount / 200);
-  const readingTime =
-    readingTimeMinutes < 1
-      ? '< 1 minute'
-      : `${readingTimeMinutes} minute${readingTimeMinutes > 1 ? 's' : ''}`;
-
-  // Determine complexity based on document length and legal terminology
-  const hasComplexTerms =
-    /\b(whereas|heretofore|pursuant|notwithstanding|indemnify|covenant|warranty|liability|damages|breach|remedy|jurisdiction|venue|arbitration|mediation)\b/gi.test(
-      documentText,
-    );
-  const complexity: 'low' | 'medium' | 'high' =
-    wordCount < 500 && !hasComplexTerms
-      ? 'low'
-      : wordCount < 1500 && !hasComplexTerms
-        ? 'medium'
-        : 'high';
-
-  const readingLevelInstructions = {
-    simple:
-      'Use simple, everyday language. Write at a 6th-grade reading level. Avoid legal jargon.',
-    standard:
-      'Use clear, accessible language. Write at a high school reading level. Explain legal terms when needed.',
-    advanced:
-      'Use professional but clear language. Write at a college reading level. Include necessary legal terminology with context.',
-  };
-
-  const lengthInstructions = {
-    brief: 'Keep the summary to 2-3 sentences maximum.',
-    detailed: 'Provide a thorough but concise summary in 1-2 paragraphs.',
-    comprehensive:
-      'Provide a detailed summary with comprehensive coverage of all major sections.',
-  };
-
+  const { readingTime, complexity } = estimateReadingTime(documentText);
   const focusInstruction =
     focusAreas.length > 0
       ? `Pay special attention to these areas: ${focusAreas.join(', ')}.`
       : '';
 
-  const prompt = `
-    You are a legal document expert specializing in plain-language explanations. 
-    
-    DOCUMENT TYPE: ${documentType || 'Legal Document'}
-    
-    INSTRUCTIONS:
-    - ${readingLevelInstructions[readingLevel]}
-    - ${lengthInstructions[maxLength]}
-    - ${focusInstruction}
-    - Identify 3-5 key points that every reader should understand
-    - ${includeKeyTerms ? 'Define important legal terms in simple language' : 'Avoid complex legal terminology'}
-    - Highlight any potential risks, obligations, or important deadlines
-    - Be objective and factual - don't provide legal advice
-    
-    DOCUMENT TEXT:
-    ${documentText}
-    
-    RESPONSE FORMAT (JSON):
+  const messages = [
     {
-      "summary": "Plain-language summary of the document",
-      "keyPoints": ["Key point 1", "Key point 2", "Key point 3", "Key point 4", "Key point 5"],
-      "importantTerms": [{"term": "Legal Term", "definition": "Simple explanation"}],
-      "warnings": ["Important warning or consideration"]
-    }
-    
-    Respond only with valid JSON.
-  `;
+      role: 'system' as const,
+      content: 'You are a bilingual legal document assistant producing plain-language explanations without offering legal advice. Respond with strict JSON.',
+    },
+    {
+      role: 'user' as const,
+      content: `DOCUMENT TYPE: ${documentType || 'Legal Document'}\n\nINSTRUCTIONS:\n- ${readingLevelInstructions[readingLevel]}\n- ${lengthInstructions[maxLength]}\n- ${focusInstruction}\n- Identify 3-5 key points every reader should understand\n- ${
+        includeKeyTerms
+          ? 'Define important legal terms in simple language'
+          : 'Avoid complex legal terminology'
+      }\n- Highlight potential risks, obligations, or deadlines\n- Remain objective; do not provide legal advice\n\nDOCUMENT TEXT:\n${documentText}\n\nRESPONSE FORMAT (JSON):\n{\n  "summary": "Plain-language summary of the document",\n  "keyPoints": ["Key point 1", "Key point 2", "Key point 3", "Key point 4", "Key point 5"],\n  "importantTerms": [{"term": "Legal Term", "definition": "Simple explanation"}],\n  "warnings": ["Important warning or consideration"]\n}\n\nReturn only valid JSON.`,
+    },
+  ];
 
   try {
-    const response = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      temperature: 0.3,
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
+    const completion = await createChatCompletion({
+      model: getAIGatewayModel(SUMMARY_MODEL),
+      messages,
+      temperature: 0.2,
+      responseFormat: 'json',
+      maxTokens: 1500,
     });
 
-    const content = response.choices[0].message.content?.trim();
+    const content = extractMessageContent(completion);
     if (!content) {
-      throw new Error('Empty response from OpenAI');
+      throw new Error('AI gateway returned empty content');
     }
 
-    // Parse the JSON response
-    const parsedResponse = JSON.parse(content);
+    const parsed = JSON.parse(content) as Partial<DocumentSummary> & {
+      warnings?: string[];
+    };
 
     const summary: DocumentSummary = {
-      summary: parsedResponse.summary || '',
-      keyPoints: parsedResponse.keyPoints || [],
+      summary: parsed.summary ?? FALLBACK_SUMMARY.summary,
+      keyPoints: Array.isArray(parsed.keyPoints) ? parsed.keyPoints : [],
       importantTerms: includeKeyTerms
-        ? parsedResponse.importantTerms || []
+        ? (Array.isArray(parsed.importantTerms) ? parsed.importantTerms : [])
         : undefined,
       readingTime,
       complexity,
-      warnings: parsedResponse.warnings || [],
+      warnings: Array.isArray(parsed.warnings)
+        ? parsed.warnings
+        : parsed.warnings
+          ? [String(parsed.warnings)]
+          : [],
     };
 
     return summary;
-  } catch (err) {
-    console.error('[summarize-document] API error', err);
-
-    // Return a fallback summary
-    return {
-      summary:
-        'Unable to generate AI summary at this time. Please review the document manually.',
-      keyPoints: [
-        'Review all sections carefully',
-        'Pay attention to your rights and obligations',
-        'Note any important dates or deadlines',
-        'Consider consulting with a legal professional if needed',
-      ],
-      readingTime,
-      complexity,
-      warnings: ['AI summarization temporarily unavailable'],
-    };
+  } catch (error) {
+    console.error('[summarize-document] AI gateway failure:', error);
+    return { ...FALLBACK_SUMMARY, readingTime, complexity };
   }
 }
 
 export async function simplifyLegalJargon(text: string): Promise<string> {
-  const client = initOpenAI();
-  if (!client) return text;
+  if (!isAIGatewayConfigured()) {
+    return text;
+  }
 
-  const prompt = `
-    Replace legal jargon in this text with simple, everyday language while preserving the meaning:
-    
-    "${text}"
-    
-    Rules:
-    - Keep the same meaning and legal accuracy
-    - Use common words instead of legal terms when possible
-    - Make it accessible to someone without legal training
-    - Keep the same sentence structure when possible
-    
-    Return only the simplified text, nothing else.
-  `;
+  const prompt = `Replace legal jargon in this text with simple, everyday language while preserving the meaning.\n\n"${text}"\n\nRules:\n- Keep the same meaning and legal accuracy\n- Use common words instead of legal terms when possible\n- Make it accessible to someone without legal training\n- Preserve the original sentence structure when possible\n\nReturn only the simplified text.`;
 
   try {
-    const response = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const completion = await createChatCompletion({
+      model: getAIGatewayModel(SIMPLIFY_MODEL || SUMMARY_MODEL),
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You rewrite legal text in plain language while maintaining accuracy. Reply with text only.',
+        },
+        { role: 'user', content: prompt },
+      ],
       temperature: 0.2,
-      max_tokens: 500,
-      messages: [{ role: 'user', content: prompt }],
+      maxTokens: 600,
     });
 
-    return response.choices[0].message.content?.trim() || text;
-  } catch (err) {
-    console.error('[simplify-jargon] API error', err);
+    return extractMessageContent(completion) || text;
+  } catch (error) {
+    console.error('[simplify-legal-jargon] AI gateway failure:', error);
     return text;
   }
 }
 
-// Cache for document summaries to avoid repeated API calls
+// Cache for document summaries to avoid repeated AI calls
 const summaryCache = new Map<
   string,
   { summary: DocumentSummary; timestamp: number }
@@ -214,19 +194,14 @@ export async function getCachedDocumentSummary(
   documentType?: string,
   options: DocumentSummaryOptions = {},
 ): Promise<DocumentSummary | null> {
-  // Create a cache key based on document content and options
   const cacheKey = `${documentType || 'unknown'}-${JSON.stringify(options)}-${documentText.slice(0, 100)}`;
-
-  // Check cache first
   const cached = summaryCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
     return cached.summary;
   }
 
-  // Generate new summary
   const summary = await summarizeDocument(documentText, documentType, options);
 
-  // Cache the result
   if (summary) {
     summaryCache.set(cacheKey, { summary, timestamp: Date.now() });
   }

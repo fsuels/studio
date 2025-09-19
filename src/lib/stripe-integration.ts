@@ -2,6 +2,7 @@
 // Production-ready Stripe integration for 123LegalDoc
 
 import { paymentProcessor } from './payment-processor';
+import * as crypto from 'node:crypto';
 import { STRIPE_API_VERSION } from './stripe-config';
 
 interface StripeConfig {
@@ -500,13 +501,55 @@ export class StripeIntegration {
   }
 
   // Verify webhook signature
-  private verifyWebhookSignature(payload: string, signature: string): boolean {
-    // In production, use Stripe's signature verification
-    // const computedSignature = crypto.createHmac('sha256', this.config.webhookSecret).update(payload).digest('hex');
-    // return signature.includes(computedSignature);
+  private verifyWebhookSignature(payload: string, signatureHeader: string): boolean {
+    if (!signatureHeader) {
+      return false;
+    }
 
-    // For demo purposes, always return true
-    return true;
+    try {
+      const segments = signatureHeader.split(',').map((part) => part.trim());
+      let timestamp: string | undefined;
+      const signatures: string[] = [];
+
+      for (const segment of segments) {
+        const [key, value] = segment.split('=');
+        if (key === 't') {
+          timestamp = value;
+        } else if (key === 'v1' && value) {
+          signatures.push(value);
+        }
+      }
+
+      if (!timestamp || signatures.length === 0) {
+        return false;
+      }
+
+      const signedPayload = `${timestamp}.${payload}`;
+      const expectedSignature = crypto
+        .createHmac('sha256', this.config.webhookSecret)
+        .update(signedPayload, 'utf8')
+        .digest('hex');
+
+      return signatures.some((candidate) => this.constantTimeCompare(candidate, expectedSignature));
+    } catch (error) {
+      console.error('Failed to verify Stripe webhook signature:', error);
+      return false;
+    }
+  }
+
+  private constantTimeCompare(candidate: string, expected: string): boolean {
+    if (candidate.length !== expected.length) {
+      return false;
+    }
+
+    const candidateBuffer = Buffer.from(candidate, 'hex');
+    const expectedBuffer = Buffer.from(expected, 'hex');
+
+    if (candidateBuffer.length !== expectedBuffer.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(candidateBuffer, expectedBuffer);
   }
 
   // Utility functions

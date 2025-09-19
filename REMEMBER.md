@@ -1,7 +1,6 @@
-﻿# Remember.md
+﻿## Decisions
 
-## Decisions
-- 2025-09-19T15:50:12Z - Completed Spanish metadata localization for 19 real estate templates; catalog audit confirms zero translation TODOs (ops/artifacts/document-intel-cycle-0003/catalog-audit.json)
+- 2025-09-19T16:42:58.9856891Z - Expanded placeholder registry sample set (service-agreement, quitclaim-deed, prenuptial-agreement) with EN/ES parity and jest verification (ops/artifacts/document-intel-cycle-0005/placeholder-registry-expansion.md)\r\n- 2025-09-19T15:50:12Z - Completed Spanish metadata localization for 19 real estate templates; catalog audit confirms zero translation TODOs (ops/artifacts/document-intel-cycle-0003/catalog-audit.json)
 - 2025-09-19T15:47:39.1366612Z - Instrumented SignWell CTA analytics events and structured reporting (ops/artifacts/growth-cycle-0002/signwell-analytics-report.md)
 - 2025-09-19T15:47:00.9881272Z - Added CSP alert webhook dispatcher (ops/artifacts/platform-cycle-0004/csp-alerting.md)
 - 2025-09-19T15:43:04.5625253Z - Completed CEO executive audit aligning pod risks to KPIs (ops/artifacts/ceo-cycle-0001/executive-audit.md)
@@ -44,8 +43,8 @@
 
 ### AI & Automation
 - last_cycle: ai-automation-cycle-0001
-- risks: Genkit pipelines are stubbed; NEXT_PUBLIC_OPENAI_API_KEY exposes secrets; no guardrails/evaluations or Spanish prompt coverage
-- focus_next: ship OSS gateway with guardrails, launch bilingual evaluation harness, and wire Langfuse/Prometheus escalation
+- risks: Genkit pipelines remain stubbed; OSS gateway deployment plus guardrails/evaluations/observability are still outstanding.
+- focus_next: stand up LiteLLM/vLLM gateway with managed secrets, add guardrails + bilingual evaluations, and hook Langfuse/Prometheus telemetry
 
 ### Compliance & Legal Ops
 - last_cycle: compliance-cycle-0002
@@ -101,7 +100,7 @@
 - (Compliance -> Document Intelligence) Review updated prenuptial/service/quitclaim flows for notarization and witness guidance
 - (Compliance -> Growth) Update marketing funnels with bilingual policy messaging and disclaimers
 - (Compliance -> Payments) Align checkout receipts and support scripts with refund policy terms
-- (AI -> Platform) Replace NEXT_PUBLIC_OPENAI_API_KEY usage with OSS gateway and secure server-side secrets
+- (AI -> Platform) Provision LiteLLM/vLLM gateway and manage AI_GATEWAY_URL secrets for prod/stage environments
 - (AI -> Compliance) Review proposed guardrail stack and refusal taxonomy before AI flows relaunch
 - (AI -> Growth) Coordinate bilingual prompts/disclaimers once AI coverage ships
 - (CEO -> Platform) Deliver KPI instrumentation blueprint covering CWV, funnel, and payments metrics before next executive review
@@ -110,6 +109,9 @@
 ## Resume Cursor
 lead_pod: Document-Intelligence
 primary_focus: overlay parity, placeholder expansion, compliance sign-off
+
+
+
 
 
 

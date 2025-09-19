@@ -1,14 +1,18 @@
 {
-    "cycle_id":  "growth-cycle-0002",
-    "last_updated":  "2025-09-19T15:47:30.2359654Z",
-    "notes":  [
-                  "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
-                  "Retained server-rendered structured data while delegating CTA UI to a client component for tracking."
-              ],
-    "todos":  [
-                  "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
-                  "Request Compliance sign-off on SignWell hero/disclaimer copy before campaign launch.",
-                  "Design shared translation catalogs so Growth copy is not hard-coded in per-page helpers.",
-                  "Extend analytics instrumentation to other marketing routes following the SignWell pattern."
-              ]
+    "cycle_id": "growth-cycle-0003",
+    "last_updated": "2025-09-19T16:25:43.2884853Z",
+    "notes": [
+        "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
+        "Retained server-rendered structured data while delegating CTA UI to a client component for tracking.",
+        "Completed marketing route SEO audit; documented canonical/hreflang+JSON-LD coverage gaps (ops/artifacts/growth-cycle-0003/marketing-seo-audit.md).",
+        "Added locale-aware generateMetadata and BlogPosting structured data for dynamic blog articles with lint verification."
+    ],
+    "todos": [
+        "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
+        "Request Compliance sign-off on SignWell hero/disclaimer copy before campaign launch.",
+        "Design shared translation catalogs so Growth copy is not hard-coded in per-page helpers.",
+        "Extend analytics instrumentation to other marketing routes following the SignWell pattern.",
+        "Refactor legacy static blog posts to consume the shared metadata/JSON-LD helper for parity.",
+        "Align /[locale]/(marketing)/sitemap metadata with canonical and hreflang standards."
+    ]
 }

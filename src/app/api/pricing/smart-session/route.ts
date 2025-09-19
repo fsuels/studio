@@ -7,21 +7,33 @@ import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 import { smartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
-const stripeKey = process.env.STRIPE_SECRET_KEY;
-const stripe = stripeKey ? new Stripe(stripeKey, {
-  apiVersion: STRIPE_API_VERSION,
-}) : null;
+
+function getStripeClient(): Stripe {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+
+  return new Stripe(secretKey, {
+    apiVersion: STRIPE_API_VERSION,
+  });
+}
 
 export async function POST(req: NextRequest) {
   try {
+
     // Check if Stripe is configured
-    if (!stripe) {
-      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+    let stripe: Stripe;
+    try {
+      stripe = getStripeClient();
+    } catch (error) {
+      console.error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.', error);
       return NextResponse.json(
         { error: 'Payment system is not configured' },
         { status: 503 }
       );
     }
+
 
     const {
       planId,
