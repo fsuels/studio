@@ -6,6 +6,7 @@
 - [ ] Disclaimers refreshed for impacted flows (ABA Model Rule 5.5; state UPL statutes)
 - [ ] Automated guidance reviewed for scope-of-service limits (no individualized advice)
 - [ ] Attorney referral and escalation paths validated
+- Reference: docs/legal/disclaimer.md
 - Evidence:
   - Owner:
   - Timestamp:
@@ -14,6 +15,7 @@
 - [ ] Data inventory changes assessed (CCPA Section 1798.100; GDPR Art.5 & 25)
 - [ ] DPIA/PIA updates attached when new processing introduced
 - [ ] Cookie/consent banners verified against locale requirements
+- Reference: docs/legal/privacy-notice.md
 - Evidence:
   - Owner:
   - Timestamp:
@@ -22,6 +24,7 @@
 - [ ] Landing pages, emails, ads reviewed for FTC Act Section 5 truth-in-advertising
 - [ ] Testimonials, guarantees, refund language match approved copy
 - [ ] Localization and translations spot-checked for parity
+- Reference: docs/legal/terms-of-service.md, docs/legal/refund-policy.md
 - Evidence:
   - Owner:
   - Timestamp:
@@ -56,5 +59,3 @@
 - [ ] Signed checklist stored under `ops/artifacts/<release_cycle>/compliance-release-gate.md`
 - [ ] Supporting evidence paths listed in Memory.md cycle entry
 - [ ] PR/Change log references updated
-
-

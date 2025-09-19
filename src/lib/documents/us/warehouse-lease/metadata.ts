@@ -29,9 +29,9 @@ export const warehouseLeaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Warehouse Lease', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento de almacén',
       description:
-        'Industrial lease agreement for warehouse and storage facilities', // TODO: Add Spanish translation
+        'Contrato de arrendamiento industrial para almacenes y centros de almacenamiento.',
       aliases: [],
     },
   },

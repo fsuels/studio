@@ -29,9 +29,9 @@ export const noticeToPayRentOrQuitMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Notice to Pay Rent or Quit', // TODO: Add Spanish translation
+      name: 'Aviso para pagar la renta o desocupar',
       description:
-        'Legal notice for unpaid rent requiring payment or vacating premises', // TODO: Add Spanish translation
+        'Notificación legal por renta impaga que exige el pago inmediato o la desocupación de la vivienda.',
       aliases: [],
     },
   },

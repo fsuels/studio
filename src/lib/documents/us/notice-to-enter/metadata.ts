@@ -29,9 +29,9 @@ export const noticeToEnterMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Notice to Enter', // TODO: Add Spanish translation
+      name: 'Aviso de ingreso a la propiedad',
       description:
-        'Landlord notice to enter rental property for inspections or repairs', // TODO: Add Spanish translation
+        'Aviso del arrendador para ingresar a la propiedad rentada para inspecciones o reparaciones.',
       aliases: [],
     },
   },

@@ -29,9 +29,9 @@ export const residentialRentalInspectionReportMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Residential Rental Inspection Report', // TODO: Add Spanish translation
+      name: 'Informe de inspección de alquiler residencial',
       description:
-        'Document property condition for move-in and move-out inspections', // TODO: Add Spanish translation
+        'Documenta el estado de la propiedad durante las inspecciones de entrada y salida.',
       aliases: [],
     },
   },

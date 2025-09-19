@@ -28,8 +28,8 @@ export const noticeOfLeaseViolationMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Notice of Lease Violation', // TODO: Add Spanish translation
-      description: 'Official notice to tenants for lease agreement violations', // TODO: Add Spanish translation
+      name: 'Aviso de incumplimiento de contrato de arrendamiento',
+      description: 'Notificación oficial para inquilinos que incumplen el contrato de arrendamiento.',
       aliases: [],
     },
   },

@@ -29,9 +29,9 @@ export const storageSpaceLeaseAgreementMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Storage Space Lease Agreement', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento de espacio de almacenamiento',
       description:
-        'Lease agreement for storage units and self-storage facilities', // TODO: Add Spanish translation
+        'Contrato de arrendamiento para unidades de almacenamiento y bodegas de auto-servicio.',
       aliases: [],
     },
   },

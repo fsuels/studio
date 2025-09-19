@@ -29,9 +29,9 @@ export const retailSpaceLeaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Retail Space Lease', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento de local comercial',
       description:
-        'Commercial lease agreement for retail locations and storefronts', // TODO: Add Spanish translation
+        'Contrato de arrendamiento comercial para locales y tiendas minoristas.',
       aliases: [],
     },
   },

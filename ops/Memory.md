@@ -1,10 +1,51 @@
 # ops/Memory.md
 
 ## Cycle Ledger
+- growth-cycle-0002 (2025-09-19T15:48:54.9598881Z, lead: Growth) - ops/artifacts/growth-cycle-0002/signwell-analytics-report.md
 - document-intel-cycle-0002 (2025-09-19T15:32:23.4628575Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0002/catalog-audit.json
 - document-intel-cycle-0001 (2025-09-19T15:10:52.4369864Z, lead: DocumentIntelligence) - ops/artifacts/document-intel-cycle-0001/catalog-audit.json
 - platform-cycle-0001 (2025-09-19T15:09:07.9678975Z, lead: Platform) - ops/artifacts/platform-cycle-0001/platform-audit.md
 - compliance-cycle-0001 (2025-09-19T14:59:47Z, lead: Compliance) - ops/artifacts/compliance-cycle-0001/compliance-audit.md
+
+## Growth Cycle (growth-cycle-0002)
+```
+cycle_id: growth-cycle-0002
+ts: 2025-09-19T15:48:54.9598881Z
+lead_pod: Growth
+mode: apply
+selected_tasks:
+  - id: growth-signwell-analytics-001
+    pod: Growth
+    p: 0.6
+    impact: 4
+    urgency: 4
+    cost: 2
+    notes: Added client-side CTA/disclaimer tracking for SignWell; see src/app/[locale]/(marketing)/signwell/SignWellContent.tsx.
+  - id: growth-analytics-gap-brief-001
+    pod: Growth
+    p: 0.6
+    impact: 3
+    urgency: 3
+    cost: 1
+    notes: Documented analytics gap and verification steps in ops/artifacts/growth-cycle-0002/signwell-analytics-report.md.
+context_evidence:
+  - description: SignWell analytics instrumentation report
+    source: ops/artifacts/growth-cycle-0002/signwell-analytics-report.md
+  - description: SignWell CTA client component with tracking
+    source: src/app/[locale]/(marketing)/signwell/SignWellContent.tsx
+  - description: Server metadata and JSON-LD integration
+    source: src/app/[locale]/(marketing)/signwell/page.tsx
+cross_pod_followups:
+  - pod: Platform
+    action: Pipe signwell_cta_click & signwell_disclaimer_view events into GA4/warehouse and retire mock funnel metrics
+    owner: Platform
+  - pod: Compliance
+    action: Review SignWell hero/disclaimer copy now tracked for compliance acknowledgement
+    owner: Compliance
+artifacts:
+  - ops/artifacts/growth-cycle-0002/signwell-analytics-report.md
+  - ops/artifacts/growth-cycle-0002/checksums.json
+```
 
 ## Document Intelligence Cycle (document-intel-cycle-0002)
 ```

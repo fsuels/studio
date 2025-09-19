@@ -1,0 +1,11 @@
+{
+    "src/lib/security/csp-report-store.ts":  {
+                                                 "sha256":  "97910F4FEAF2E370E32C5BAB0ABE63BD379D86450375E7F82ADD628651037501"
+                                             },
+    "ops/artifacts/platform-cycle-0004/csp-alerting.md":  {
+                                                              "sha256":  "C0AA86392651958A88EDA3F641AF28C7284B0EAFB7E6EC40EACC9D599F232720"
+                                                          },
+    "src/lib/security/csp-alerts.ts":  {
+                                           "sha256":  "7C461C551094B615071BD098E3033E2AB40FC5A08539104BCFBFA899CB9C654D"
+                                       }
+}

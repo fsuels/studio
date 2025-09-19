@@ -29,9 +29,9 @@ export const propertyManagerAgreementMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Property Manager Agreement', // TODO: Add Spanish translation
+      name: 'Contrato de administración de propiedades',
       description:
-        'Agreement for property management services and responsibilities', // TODO: Add Spanish translation
+        'Acuerdo para los servicios y responsabilidades de administración de propiedades.',
       aliases: [],
     },
   },

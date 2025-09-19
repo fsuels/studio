@@ -1,14 +1,14 @@
 {
     "todos":  [
-                  "Wire CSP telemetry into durable alerting/metrics pipeline (BigQuery/SIEM) with runbook thresholds.",
-                  "Consolidate middleware duplication between root and src implementations before enforcement.",
-                  "Draft incident communication playbook for platform-led security events."
+                  "Provision CSP webhook staging + instrument delivery metrics (SRE collaboration).",
+                  "Add automated tests around CSP alerting once webhook URL available.",
+                  "Draft incident communication playbook for security events."
               ],
-    "last_updated":  "2025-09-19T15:32:37.9674075Z",
-    "cycle_id":  "platform-cycle-0002",
+    "last_updated":  "2025-09-19T15:47:07.7063545Z",
+    "cycle_id":  "platform-cycle-0004",
     "notes":  [
-                  "CSP violation reports persist to Firestore with risk/severity tagging and audit logging.",
-                  "Report-only security header pipeline remains gated by SECURITY_HEADER_MODE for enforcement toggles.",
-                  "Middleware duplication between root and src middleware along with incident comms still open."
+                  "CSP alert dispatcher posts high/critical violations to webhook when configured.",
+                  "Persisted reports now return alert delivery metadata for monitoring.",
+                  "Alert pipeline still needs staging webhook, metrics, and incident comms runbook."
               ]
 }

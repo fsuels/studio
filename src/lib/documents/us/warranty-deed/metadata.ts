@@ -28,8 +28,8 @@ export const warrantyDeedMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Warranty Deed', // TODO: Add Spanish translation
-      description: 'Property transfer deed with full warranties and guarantees', // TODO: Add Spanish translation
+      name: 'Escritura con garantía general',
+      description: 'Escritura de transferencia de propiedad con garantías y avales completos.',
       aliases: [],
     },
   },

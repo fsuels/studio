@@ -8,9 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 
 // Load stripe.js just once
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_51234567890abcdefghijklmnopqrstuvwxyz',
-);
+const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.');
+}
+
+const stripePromise = loadStripe(publishableKey);
 
 export default function CheckoutPage() {
   const search = useSearchParams();

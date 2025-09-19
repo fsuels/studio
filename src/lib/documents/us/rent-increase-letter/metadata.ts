@@ -28,8 +28,8 @@ export const rentIncreaseLetterMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Rent Increase Letter', // TODO: Add Spanish translation
-      description: 'Formal notice to tenants regarding rent increases', // TODO: Add Spanish translation
+      name: 'Carta de aumento de renta',
+      description: 'Aviso formal a los inquilinos sobre incrementos en la renta.',
       aliases: [],
     },
   },

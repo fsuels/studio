@@ -1,5 +1,98 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { tenantMiddleware } from '@/middleware/tenant';
+import { getAdminUser } from '@/lib/admin-auth';
+
+const supportedLocales = ['en', 'es'] as const;
+const defaultLocale = 'en' as const;
+type SupportedLocale = typeof supportedLocales[number];
+
+function isSupportedLocale(locale: string): locale is SupportedLocale {
+  return (supportedLocales as readonly string[]).includes(locale);
+}
+
+function detectLocale(request: NextRequest): SupportedLocale {
+  const pathname = request.nextUrl.pathname;
+  const acceptLanguage = request.headers.get('accept-language');
+
+  if (acceptLanguage) {
+    for (const locale of supportedLocales) {
+      if (acceptLanguage.includes(locale)) {
+        return locale;
+      }
+    }
+  }
+
+  const firstSegment = pathname.split('/')[1];
+  if (firstSegment && isSupportedLocale(firstSegment)) {
+    return firstSegment;
+  }
+
+  return defaultLocale;
+}
+
+function ensureLocaleRedirect(request: NextRequest): NextResponse | null {
+  const pathname = request.nextUrl.pathname || '/';
+
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/_vercel') ||
+    pathname.startsWith('/admin') ||
+    pathname.includes('.')
+  ) {
+    return null;
+  }
+
+  const missingLocale = supportedLocales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+  );
+
+  if (!missingLocale) {
+    return null;
+  }
+
+  const locale = detectLocale(request);
+  const redirectUrl = new URL(
+    `/${locale}${pathname === '/' ? '' : pathname}`,
+    request.url,
+  );
+
+  redirectUrl.search = request.nextUrl.search;
+
+  return NextResponse.redirect(redirectUrl);
+}
+
+async function handleAdminRoute(request: NextRequest): Promise<NextResponse | null> {
+  const pathname = request.nextUrl.pathname;
+
+  if (!pathname.startsWith('/admin')) {
+    return null;
+  }
+
+  if (pathname === '/admin') {
+    const response = NextResponse.next();
+    applySecurityHeaders(request, response);
+    return response;
+  }
+
+  const adminUser = await getAdminUser(request);
+
+  if (!adminUser) {
+    return NextResponse.redirect(new URL('/admin', request.url));
+  }
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-admin-user', JSON.stringify(adminUser));
+
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+
+  applySecurityHeaders(request, response);
+  return response;
+}
 
 const SECURITY_MODE = (process.env.SECURITY_HEADER_MODE ?? 'report-only').toLowerCase();
 const REPORT_GROUP = 'csp-endpoint';
@@ -101,19 +194,14 @@ function applySecurityHeaders(request: NextRequest, response: NextResponse) {
 }
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === '/__/auth/action') {
-    const mode = request.nextUrl.searchParams.get('mode');
-    const oobCode = request.nextUrl.searchParams.get('oobCode');
-    const continueUrl = request.nextUrl.searchParams.get('continueUrl');
-    const lang = request.nextUrl.searchParams.get('lang') || 'en';
-    const locale = lang === 'es' ? 'es' : 'en';
+  const localeRedirect = ensureLocaleRedirect(request);
+  if (localeRedirect) {
+    return localeRedirect;
+  }
 
-    const redirectUrl = new URL(`/${locale}/auth/action`, request.url);
-    if (mode) redirectUrl.searchParams.set('mode', mode);
-    if (oobCode) redirectUrl.searchParams.set('oobCode', oobCode);
-    if (continueUrl) redirectUrl.searchParams.set('continueUrl', continueUrl);
-
-    return NextResponse.redirect(redirectUrl);
+  const adminResponse = await handleAdminRoute(request);
+  if (adminResponse) {
+    return adminResponse;
   }
 
   const tenantResponse = await tenantMiddleware(request);
@@ -134,6 +222,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|forms|images|templates).*)',
+    '/((?!api|_next/static|_next/image|_vercel|favicon.ico|forms|images|templates).*)',
   ],
 };

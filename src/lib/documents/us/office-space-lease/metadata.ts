@@ -28,8 +28,8 @@ export const officeSpaceLeaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Office Space Lease', // TODO: Add Spanish translation
-      description: 'Commercial lease agreement specifically for office spaces', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento de oficina',
+      description: 'Contrato de arrendamiento comercial específico para espacios de oficina.',
       aliases: [],
     },
   },

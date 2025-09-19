@@ -29,9 +29,9 @@ export const residentialRentalApplicationMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Residential Rental Application', // TODO: Add Spanish translation
+      name: 'Solicitud de alquiler residencial',
       description:
-        'Comprehensive rental application form for prospective tenants', // TODO: Add Spanish translation
+        'Formulario integral de solicitud de alquiler para arrendatarios potenciales.',
       aliases: [],
     },
   },

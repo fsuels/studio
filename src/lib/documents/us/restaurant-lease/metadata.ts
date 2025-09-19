@@ -29,9 +29,9 @@ export const restaurantLeaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Restaurant Lease', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento para restaurante',
       description:
-        'Specialized lease agreement for restaurant and food service businesses', // TODO: Add Spanish translation
+        'Contrato de arrendamiento especializado para negocios de restaurantes y servicios de alimentos.',
       aliases: [],
     },
   },

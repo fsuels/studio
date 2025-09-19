@@ -28,8 +28,8 @@ export const lateRentNoticeMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Late Rent Notice', // TODO: Add Spanish translation
-      description: 'Official notice to tenants for overdue rent payments', // TODO: Add Spanish translation
+      name: 'Aviso de retraso en el pago del alquiler',
+      description: 'Aviso oficial para informar a los inquilinos sobre pagos de renta vencidos.',
       aliases: [],
     },
   },

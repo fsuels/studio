@@ -28,8 +28,8 @@ export const parkingSpaceLeaseAgreementMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Parking Space Lease Agreement', // TODO: Add Spanish translation
-      description: 'Lease agreement for parking spaces and garages', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento de estacionamiento',
+      description: 'Contrato de arrendamiento para espacios de estacionamiento y garajes.',
       aliases: [],
     },
   },

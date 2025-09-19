@@ -28,8 +28,8 @@ export const petAddendumMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Pet Addendum', // TODO: Add Spanish translation
-      description: 'Add pet terms to existing lease agreements', // TODO: Add Spanish translation
+      name: 'Anexo de mascotas',
+      description: 'Agrega cláusulas sobre mascotas a contratos de arrendamiento existentes.',
       aliases: [],
     },
   },

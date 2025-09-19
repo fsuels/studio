@@ -1,0 +1,8 @@
+{
+    "docs/runbooks/csp-incident-playbook.md":  {
+                                                   "sha256":  "CC880A5C4A37937E2EFD231F8DA126D22576FFE5450CE099E70752EE0B8EE87D"
+                                               },
+    "ops/artifacts/platform-cycle-0006/csp-incident-playbook.md":  {
+                                                                       "sha256":  "AE5C836008B9E9CD42C336C89454F53F65DCD1AAE4519AC72C25D34568CCA508"
+                                                                   }
+}

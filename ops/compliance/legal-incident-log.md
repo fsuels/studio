@@ -1,6 +1,6 @@
 # Legal Incident Log Template
 
-> Record every compliance or regulatory incident within 24 hours of discovery (GDPR Art.33; CCPA Section 1798.82). Duplicate this template per incident or append rows to the log below. Store evidence under `ops/artifacts/<cycle>/incidents/`.
+> Record every compliance or regulatory incident within 24 hours of discovery (GDPR Art.33; CCPA Section 1798.82). Duplicate this template per incident or append rows to the log below. Store evidence under `ops/artifacts/<cycle>/incidents/`. See the contact roster in `ops/compliance/legal-incident-contacts.md` for the latest escalation details.
 
 ## Intake Checklist
 - [ ] Incident categorized (UPL, privacy, marketing, payments, other)
@@ -24,11 +24,13 @@
 ## Escalation Contacts
 | Role | Name | Channel |
 | --- | --- | --- |
-| Compliance Lead |  |  |
-| CEO |  |  |
-| External Counsel |  |  |
-| Platform On-Call |  |  |
-| Privacy Officer |  |  |
+| Compliance Lead | Jordan Ellis | jordan.ellis@123legaldoc.com / Slack #compliance-ops |
+| CEO | Morgan Alvarez | morgan.alvarez@123legaldoc.com |
+| External Counsel | Redwood Legal LLP | breachdesk@redwood-legal.com |
+| Platform On-Call | See ops/platform/oncall.md | PagerDuty: platform-oncall |
+| Privacy Officer | Luis Martinez | privacy@123legaldoc.com |
+| Customer Support Lead | Taylor Brooks | support@123legaldoc.com |
+| Payments Compliance | Sarah Kim | payments@123legaldoc.com |
 
 ## Storage & Versioning
 - Store the active log at `ops/compliance/legal-incident-log.md`.

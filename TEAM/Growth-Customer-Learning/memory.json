@@ -1,13 +1,14 @@
-﻿{
-    "cycle_id":  "growth-cycle-0001",
-    "last_updated":  "2025-09-19T15:27:03.3714260Z",
+{
+    "cycle_id":  "growth-cycle-0002",
+    "last_updated":  "2025-09-19T15:47:30.2359654Z",
     "notes":  [
-                  "Audit captured marketing SEO/analytics gaps; see ops/artifacts/growth-cycle-0001/growth-audit.md for funnel, localization, and experiment findings.",
-                  "Updated /signwell with canonical/hreflang, SignWell service JSON-LD, and compliance disclosure for bilingual messaging (src/app/[locale]/(marketing)/signwell/page.tsx)."
+                  "Instrumented SignWell CTA and compliance disclaimer events using the analytics wrapper (signwell_cta_click, signwell_disclaimer_view).",
+                  "Retained server-rendered structured data while delegating CTA UI to a client component for tracking."
               ],
     "todos":  [
-                  "Coordinate with Platform to replace mock funnel/NPS data with GA4 or warehouse-backed telemetry feeding src/app/api/analytics/funnel/route.ts.",
-                  "Request Compliance sign-off on new SignWell hero/disclaimer copy before scaling campaigns.",
-                  "Design shared translation catalogs so Growth copy is not hard-coded in per-page helpers."
+                  "Coordinate with Platform to ingest SignWell events into GA4/warehouse and retire mock funnel metrics in src/app/api/analytics/funnel/route.ts.",
+                  "Request Compliance sign-off on SignWell hero/disclaimer copy before campaign launch.",
+                  "Design shared translation catalogs so Growth copy is not hard-coded in per-page helpers.",
+                  "Extend analytics instrumentation to other marketing routes following the SignWell pattern."
               ]
 }

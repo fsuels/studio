@@ -1,5 +1,6 @@
 import { getFirestore } from '@/lib/firebase-admin-optimized';
 import { securityAuditLogger } from '@/lib/security-audit-logger';
+import { dispatchCspAlert } from '@/lib/security/csp-alerts';
 
 export type NormalizedCspReport = Record<string, unknown> & {
   'blocked-uri'?: string;
@@ -32,6 +33,8 @@ interface PersistResult {
   firestoreId?: string;
   riskLevel: CspRiskLevel;
   severity: CspSeverity;
+  alertDelivered: boolean;
+  alertReason?: string;
   reason?: string;
 }
 
@@ -93,7 +96,8 @@ async function writeToFirestore(
       referer: data.referer ?? null,
       userAuthenticated: data.userAuthenticated ?? false,
       receivedAt: new Date().toISOString(),
-      environment: process.env.NEXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? 'development',
+      environment:
+        process.env.NEXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? 'development',
     });
     return doc.id;
   } catch (error) {
@@ -171,11 +175,27 @@ export async function persistCspReport(
     },
   });
 
+  const alertResult = await dispatchCspAlert({
+    riskLevel,
+    severity,
+    mode: options.mode,
+    blockedUri: options.report['blocked-uri'] as string | undefined,
+    documentUri: options.report['document-uri'] as string | undefined,
+    violatedDirective: options.report['violated-directive'] as string | undefined,
+    userAgent: options.userAgent,
+    ipAddress: options.ipAddress,
+    firestoreId,
+    environment:
+      process.env.NEXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? 'development',
+  });
+
   return {
     stored: Boolean(firestoreId),
     firestoreId,
     riskLevel,
     severity,
+    alertDelivered: alertResult.delivered,
+    alertReason: alertResult.reason,
     reason: firestoreId ? undefined : 'firestore-unavailable-or-disabled',
   };
 }

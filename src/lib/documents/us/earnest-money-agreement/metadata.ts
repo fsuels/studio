@@ -29,9 +29,9 @@ export const earnestMoneyAgreementMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Earnest Money Agreement', // TODO: Add Spanish translation
+      name: 'Acuerdo de depósito en garantía',
       description:
-        'Agreement for earnest money deposits in real estate transactions', // TODO: Add Spanish translation
+        'Asegura tu compra de bienes raíces gestionando correctamente el depósito en garantía con condiciones claras de reembolso.',
       aliases: [],
     },
   },

@@ -1,6 +1,15 @@
-﻿{
-  "cycle_id": null,
-  "last_updated": null,
-  "notes": [],
-  "todos": []
+{
+  "cycle_id": "ai-automation-cycle-0001",
+  "last_updated": "2025-09-19T15:39:30.4311772Z",
+  "notes": [
+    "Genkit interfaces are stubbed in src/ai/ai-instance.ts, leaving intake flows without OSS inference.",
+    "Multiple flows rely on NEXT_PUBLIC_OPENAI_API_KEY, exposing secrets and bypassing safety guardrails.",
+    "No guardrail stack, evaluation harness, or observability is wired for AI routes; Spanish coverage is absent."
+  ],
+  "todos": [
+    "Replace OpenAI SDK usage with vLLM/LiteLLM gateway and server-only key management, removing NEXT_PUBLIC_OPENAI_API_KEY.",
+    "Implement Llama Guard 3, Prompt Guard 2, and refusal taxonomy with compliance logging before re-enabling flows.",
+    "Stand up bilingual evaluation harness (lm-evaluation-harness + Ragas) with weekly reporting and Spanish fixtures.",
+    "Instrument Langfuse + Prometheus metrics and escalation hooks for AI incidents and quota failures."
 }
+

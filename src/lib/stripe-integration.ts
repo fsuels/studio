@@ -45,11 +45,18 @@ export class StripeIntegration {
   private paymentIntents: Map<string, StripePaymentIntent> = new Map();
 
   constructor() {
+    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    if (!publishableKey || !secretKey || !webhookSecret) {
+      throw new Error('Stripe integration requires NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, and STRIPE_WEBHOOK_SECRET to be defined.');
+    }
+
     this.config = {
-      publishableKey:
-        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
-      secretKey: process.env.STRIPE_SECRET_KEY || 'sk_test_123legaldoc',
-      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_123legaldoc',
+      publishableKey,
+      secretKey,
+      webhookSecret,
       apiVersion: STRIPE_API_VERSION,
     };
   }

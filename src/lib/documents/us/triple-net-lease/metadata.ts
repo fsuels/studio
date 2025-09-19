@@ -28,8 +28,8 @@ export const tripleNetLeaseMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Triple Net Lease', // TODO: Add Spanish translation
-      description: 'Commercial lease where tenant pays all property expenses', // TODO: Add Spanish translation
+      name: 'Contrato de arrendamiento triple neto',
+      description: 'Contrato de arrendamiento comercial en el que el inquilino paga todos los gastos de la propiedad.',
       aliases: [],
     },
   },

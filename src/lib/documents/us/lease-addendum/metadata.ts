@@ -29,9 +29,9 @@ export const leaseAddendumMeta: LegalDocument = {
       aliases: [],
     },
     es: {
-      name: 'Lease Addendum', // TODO: Add Spanish translation
+      name: 'Anexo al contrato de arrendamiento',
       description:
-        'Add terms to existing lease agreements with a legally binding lease addendum', // TODO: Add Spanish translation
+        'Agrega términos a contratos de arrendamiento existentes con un anexo legalmente vinculante.',
       aliases: [],
     },
   },

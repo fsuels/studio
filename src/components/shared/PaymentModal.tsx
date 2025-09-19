@@ -17,9 +17,13 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_51234567890abcdefghijklmnopqrstuvwxyz',
-);
+const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be set to initialize Stripe.');
+}
+
+const stripePromise = loadStripe(publishableKey);
 
 interface PaymentModalProps {
   open: boolean;

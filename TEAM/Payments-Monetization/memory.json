@@ -1,12 +1,14 @@
 {
-    "cycle_id":  "payments-cycle-0001",
-    "last_updated":  "2025-09-19T15:21:15.8086455Z",
-    "notes":  [
-                  "Baseline audit flagged invalid Stripe apiVersion usage, mocked integrations, and missing policies; see ops/artifacts/payments-cycle-0001/payments-audit.json."
-              ],
-    "todos":  [
-                  "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",
-                  "Stand up verified Stripe webhook + Firestore provisioning for subscriptions, documents, and entitlements.",
-                  "Coordinate with Compliance to publish refund policy and align Stripe Tax registrations before launch."
-              ]
+    "cycle_id": "payments-cycle-0001",
+    "last_updated": "2025-09-19T15:21:15.8086455Z",
+    "notes": [
+        "Baseline audit flagged invalid Stripe apiVersion usage, mocked integrations, and missing policies; see ops/artifacts/payments-cycle-0001/payments-audit.json.",
+        "Removed hard-coded Stripe publishable fallback; frontend now requires NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
+        "Checkout route now enforces NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (src/app/[locale]/(legal)/checkout/page.tsx)."
+    ],
+    "todos": [
+        "Replace mocked Stripe client/server code with production-ready implementation using supported API versions and secret storage.",
+        "Stand up verified Stripe webhook + Firestore provisioning for subscriptions, documents, and entitlements.",
+        "Coordinate with Compliance to publish refund policy and align Stripe Tax registrations before launch."
+    ]
 }
