@@ -2,7 +2,7 @@
 ## Decisions
 - 2025-09-18 - Initialized Codex memory
 - 2025-09-18 - Cataloged template inventory and added canonical/hreflang for category + blog routes
-- 2025-09-19 - Hardened Codex autorun expect script to preserve UI fidelity and allow manual takeover
+- 2025-09-19 - Hardened Codex autorun expect script (~/codex-autorun.prev.20250918023449/start.exp) to preserve UI fidelity and allow manual takeover
 ## Baselines
 - CWV: { lcp_ms: null, inp_ms: null, cls: null }
 - A11y: null; SEO: null; Bundle: null; Reliability: null
