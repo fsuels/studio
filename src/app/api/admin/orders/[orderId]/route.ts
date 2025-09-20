@@ -11,9 +11,9 @@ const ordersDB: Order[] = generateMockOrders(150);
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ orderId: string }> },
+  context: { params: { orderId: string } },
 ) {
-  const { orderId } = await context.params;
+  const { orderId } = context.params;
   // Require admin authentication
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
@@ -75,9 +75,9 @@ export async function GET(
 // Update specific order
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ orderId: string }> },
+  context: { params: { orderId: string } },
 ) {
-  const { orderId } = await context.params;
+  const { orderId } = context.params;
   const adminResult = await requireAdmin(request);
   if (adminResult instanceof Response) {
     return adminResult;

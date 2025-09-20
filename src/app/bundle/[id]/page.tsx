@@ -18,9 +18,9 @@ import Link from 'next/link';
 export default async function BundleDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   // try Firestore first
   let bundle = (await loadBundles()).find((b) => b.id === id);
   if (!bundle) {

@@ -1,5 +1,18 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const PORT = parseInt(process.env.PORT || process.env.E2E_PORT || '3000', 10);
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
+const SHOULD_START_SERVER = (() => {
+  if (!process.env.BASE_URL) return true;
+  try {
+    const url = new URL(BASE_URL);
+    const host = url.hostname;
+    return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0';
+  } catch {
+    return true;
+  }
+})();
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -22,7 +35,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
+    baseURL: BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -77,12 +90,15 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
+  webServer: SHOULD_START_SERVER
+    ? {
+        command: 'npm run dev',
+        url: BASE_URL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 180 * 1000,
+        env: { PORT: String(PORT) },
+      }
+    : undefined,
 
   /* Global setup and teardown */
   globalSetup: require.resolve('./e2e/global-setup.ts'),

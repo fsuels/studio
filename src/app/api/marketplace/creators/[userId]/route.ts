@@ -12,10 +12,10 @@ import type {
  */
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ userId: string }> },
+  context: { params: { userId: string } },
 ) {
   try {
-    const { userId } = await context.params;
+    const { userId } = context.params;
     const url = new URL(request.url);
 
     const includeTemplates =
@@ -102,7 +102,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ userId: string }> },
+  context: { params: { userId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -111,7 +111,7 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { userId } = await context.params;
+    const { userId } = context.params;
     const body = await request.json();
 
     // Check permissions

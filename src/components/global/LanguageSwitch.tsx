@@ -2,33 +2,23 @@
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import {
-  useRouter,
-  usePathname,
-  useSearchParams,
-  useParams,
-} from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LanguageSwitchProps {
-  /** Current locale from the URL */
   currentLocale: 'en' | 'es';
-  /** Whether to show the toast notification */
   showToast?: boolean;
 }
 
 const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
-const localeNames = {
+const localeNames: Record<'en' | 'es', string> = {
   en: 'English',
   es: 'Español',
 };
 
-export default function LanguageSwitch({
-  currentLocale,
-  showToast = true,
-}: LanguageSwitchProps) {
+export default function LanguageSwitch({ currentLocale, showToast = true }: LanguageSwitchProps) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
   const searchParams = useSearchParams();
@@ -36,7 +26,6 @@ export default function LanguageSwitch({
 
   const switchLanguage = useCallback(
     (targetLocale?: 'en' | 'es') => {
-      // If no target locale specified, cycle to the next one
       const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
 
       if (newLocale === currentLocale) {
@@ -50,38 +39,30 @@ export default function LanguageSwitch({
         return;
       }
 
-      // Build new path with swapped locale
       let newPath = pathname.startsWith(`/${currentLocale}`)
         ? pathname.replace(`/${currentLocale}`, `/${newLocale}`)
         : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
-      // Preserve query parameters
       const query = searchParams ? searchParams.toString() : '';
       if (query) newPath += `?${query}`;
 
-      // Show toast notification
       if (showToast) {
         toast.success(
           t('Language switched', {
             defaultValue: `Switched to ${localeNames[newLocale]}`,
           }),
-          {
-            icon: <Languages className="h-4 w-4" />,
-            duration: 2000,
-          },
+          { icon: <Languages className="h-4 w-4" />, duration: 2000 },
         );
       }
 
-      // Navigate to new locale
       router.push(newPath);
     },
     [currentLocale, pathname, searchParams, router, t, showToast],
   );
 
-  // Handle ⌘L keyboard shortcut for language switching
+  // Handle ⌘/Ctrl + L keyboard shortcut for language switching
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ⌘L (Mac) or Ctrl+L (Windows/Linux) to switch language
       if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         switchLanguage();
@@ -92,10 +73,9 @@ export default function LanguageSwitch({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [switchLanguage]);
 
-  return null; // This is a headless component that only handles keyboard shortcuts
+  return null;
 }
 
-// Hook for using language switching functionality
 export function useLanguageSwitch(currentLocale: 'en' | 'es') {
   const router = useRouter();
   const pathname = usePathname() ?? '';
@@ -129,10 +109,7 @@ export function useLanguageSwitch(currentLocale: 'en' | 'es') {
           t('Language switched', {
             defaultValue: `Switched to ${localeNames[newLocale]}`,
           }),
-          {
-            icon: <Languages className="h-4 w-4" />,
-            duration: 2000,
-          },
+          { icon: <Languages className="h-4 w-4" />, duration: 2000 },
         );
       }
 
@@ -149,3 +126,4 @@ export function useLanguageSwitch(currentLocale: 'en' | 'es') {
     nextLocale: currentLocale === 'en' ? 'es' : 'en',
   };
 }
+

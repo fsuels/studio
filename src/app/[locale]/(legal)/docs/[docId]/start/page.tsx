@@ -13,7 +13,7 @@ import {
 import { localizations } from '@/lib/localizations';
 
 type StartWizardPageProps = {
-  params: Promise<{ locale: 'en' | 'es'; docId: string }>;
+  params: { locale: 'en' | 'es'; docId: string };
 };
 
 // Revalidate every hour so start pages stay fresh without rebuilding
@@ -80,7 +80,7 @@ export async function generateStaticParams(): Promise<
 export default async function StartWizardPage({
   params,
 }: StartWizardPageProps) {
-  const { locale, docId } = await params;
+  const { locale, docId } = params;
 
   // Guard: if someone hits /docs/…/start for an unknown docId, 404.
   const docMeta = getDocumentMetadata(docId);

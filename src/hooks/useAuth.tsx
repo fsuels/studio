@@ -15,6 +15,27 @@ import React, {
 import type { User as FirebaseUser } from 'firebase/auth';
 import type { FirebaseError, FirebaseOptions, FirebaseApp } from 'firebase/app';
 
+// Centralized, validated Firebase client config
+function getClientFirebaseConfig(): FirebaseOptions {
+  const config: FirebaseOptions = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  };
+
+  // Detect missing or placeholder API key early to avoid opaque runtime crashes
+  if (!config.apiKey || config.apiKey === 'YOUR_FIREBASE_API_KEY') {
+    const msg =
+      '[useAuth] Missing Firebase client config. Set NEXT_PUBLIC_FIREBASE_* variables (see .env.example).';
+    // Throwing here lets callers handle and show a friendlier error/CTA
+    throw new Error(msg);
+  }
+  return config;
+}
+
 // 1) Define the shape of your auth context
 interface User {
   uid: string;
@@ -56,48 +77,49 @@ function useAuthHook(): AuthContextType {
     let unsubscribe: (() => void) | undefined;
     setIsLoading(true);
     (async () => {
-      const [{ getAuth, onAuthStateChanged }, { initializeApp, getApps, getApp }] = await Promise.all([
-        import('firebase/auth'),
-        import('firebase/app'),
-      ]);
-      const config: FirebaseOptions = {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      };
-      const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
-      const auth = getAuth(appInst);
-      unsubscribe = onAuthStateChanged(auth, (fbUser: FirebaseUser | null) => {
-        if (fbUser) {
-          const newUser: User = {
-            uid: fbUser.uid,
-            email: fbUser.email,
-            name: fbUser.displayName || '',
-            phone: '',
-            address: '',
-            twoStep: false,
-            textUpdates: false,
-          };
-          setIsLoggedIn(true);
-          setUser(newUser);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(
-              'mockAuth',
-              JSON.stringify({ isLoggedIn: true, user: newUser }),
-            );
+      try {
+        const [{ getAuth, onAuthStateChanged }, { initializeApp, getApps, getApp }] = await Promise.all([
+          import('firebase/auth'),
+          import('firebase/app'),
+        ]);
+        const config = getClientFirebaseConfig();
+        const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
+        const auth = getAuth(appInst);
+        unsubscribe = onAuthStateChanged(auth, (fbUser: FirebaseUser | null) => {
+          if (fbUser) {
+            const newUser: User = {
+              uid: fbUser.uid,
+              email: fbUser.email,
+              name: fbUser.displayName || '',
+              phone: '',
+              address: '',
+              twoStep: false,
+              textUpdates: false,
+            };
+            setIsLoggedIn(true);
+            setUser(newUser);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(
+                'mockAuth',
+                JSON.stringify({ isLoggedIn: true, user: newUser }),
+              );
+            }
+          } else {
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('mockAuth');
+            }
+            setIsLoggedIn(false);
+            setUser(null);
           }
-        } else {
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('mockAuth');
-          }
-          setIsLoggedIn(false);
-          setUser(null);
-        }
+          setIsLoading(false);
+        });
+      } catch (e: unknown) {
+        // Provide clear guidance instead of crashing the app with auth/invalid-api-key
+        const message =
+          e instanceof Error ? e.message : 'Firebase initialization failed';
+        console.error('[useAuth] Initialization error:', message);
         setIsLoading(false);
-      });
+      }
     })();
     return () => {
       if (unsubscribe) unsubscribe();
@@ -112,14 +134,7 @@ function useAuthHook(): AuthContextType {
           import('firebase/auth'),
           import('firebase/app'),
         ]);
-        const config: FirebaseOptions = {
-          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-        };
+        const config = getClientFirebaseConfig();
         const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
         const auth = getAuth(appInst);
         let fbUser = auth.currentUser;
@@ -158,14 +173,7 @@ function useAuthHook(): AuthContextType {
     async (email: string, password: string, name?: string) => {
       const [authMod] = await Promise.all([import('firebase/auth')]);
       const { initializeApp, getApps, getApp } = await import('firebase/app');
-      const config: FirebaseOptions = {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      };
+      const config = getClientFirebaseConfig();
       const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
       const auth = authMod.getAuth(appInst);
       const cred = await authMod.createUserWithEmailAndPassword(auth, email, password);
@@ -182,14 +190,7 @@ function useAuthHook(): AuthContextType {
       import('firebase/auth'),
       import('firebase/app'),
     ]);
-    const config: FirebaseOptions = {
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    };
+    const config = getClientFirebaseConfig();
     const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
     const auth = getAuth(appInst);
     const currentUser = auth.currentUser;
@@ -254,14 +255,7 @@ function useAuthHook(): AuthContextType {
         import('firebase/auth'),
         import('firebase/app'),
       ]);
-      const config: FirebaseOptions = {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      };
+      const config = getClientFirebaseConfig();
       const appInst: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
       const auth = getAuth(appInst);
       

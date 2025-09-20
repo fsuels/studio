@@ -12,7 +12,7 @@ export default async function Head({
 }: {
   params: Promise<DocPageParams>;
 }) {
-  const { locale, docId } = await params;
+  const { locale, docId } = params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
   const docConfig = getDocumentMetadata(docId);

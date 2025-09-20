@@ -11,7 +11,7 @@ import {
 import { Building, ArrowLeft, HelpCircle, Mail as _Mail } from 'lucide-react';
 
 interface TenantNotFoundPageProps {
-  searchParams: Promise<{ slug?: string }>;
+  searchParams: { slug?: string };
 }
 
 export default async function TenantNotFoundPage({

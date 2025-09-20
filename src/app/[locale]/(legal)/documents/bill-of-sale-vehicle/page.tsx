@@ -31,10 +31,10 @@ export async function generateStaticParams() {
 export default async function VehicleBillOfSalePage({
   params,
 }: {
-  params: Promise<{ locale: 'en' | 'es' }>;
+  params: { locale: 'en' | 'es' };
 }) {
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { locale } = await params; // kept for future enhancement
+  const { locale } = params; // kept for future enhancement
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   return (

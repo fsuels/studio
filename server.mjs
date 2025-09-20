@@ -1,7 +1,8 @@
 import next from 'next';
 import { createSecureServer } from 'node:http2';
 import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+import path from 'node:path';
 import { parse } from 'node:url';
 
 const port = process.env.PORT || 3000;
@@ -18,6 +19,15 @@ const options = {
 const httpPort = process.env.HTTP_PORT || 80;
 
 app.prepare().then(() => {
+  // In production, ensure the Next build exists to avoid missing-manifest errors
+  if (!dev) {
+    const manifestPath = path.join(process.cwd(), '.next', 'server', 'middleware-manifest.json');
+    if (!existsSync(manifestPath)) {
+      console.error('[startup] Missing .next build output. Run "npm run build" before starting.');
+      process.exit(1);
+    }
+  }
+
   const server = createSecureServer(options, (req, res) => {
     const url = req.url || '';
     if (

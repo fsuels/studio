@@ -126,7 +126,7 @@ export async function generateMetadata({
 }: {
   params: Promise<TemplatesPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -179,7 +179,7 @@ export default async function TemplatesPage({
 }: {
   params: Promise<TemplatesPageParams>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const structuredData = buildTemplatesStructuredData(locale);
 
   return (

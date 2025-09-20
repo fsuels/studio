@@ -9,14 +9,14 @@ import { TenantFooter } from '@/components/tenant/TenantFooter';
 
 interface TenantLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 export default async function TenantLayout({
   children,
   params,
 }: TenantLayoutProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 

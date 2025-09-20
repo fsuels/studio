@@ -130,7 +130,7 @@ export async function generateMetadata({
 }: {
   params: Promise<FaqPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -178,7 +178,7 @@ export async function generateStaticParams() {
 }
 
 export default async function FAQPage({ params }: { params: Promise<FaqPageParams> }) {
-  const { locale } = await params;
+  const { locale } = params;
   const content = localizedContent[locale];
 
   const faqStructuredData = buildFaqStructuredData(locale);

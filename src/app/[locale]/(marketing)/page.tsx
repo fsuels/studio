@@ -12,11 +12,11 @@ import {
 } from '@/lib/seo/site';
 
 interface PageProps {
-  params: Promise<{ locale?: string }>;
+  params: { locale?: string };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale: localeParam } = await params;
+  const { locale: localeParam } = params;
 
   const supportedLocales = localizations as readonly ('en' | 'es')[];
   const locale = supportedLocales.includes(localeParam as 'en' | 'es')
@@ -71,7 +71,7 @@ export async function generateStaticParams() {
 }
 
 export default async function HomePageContainer({ params }: PageProps) {
-  const { locale: localeParam } = await params;
+  const { locale: localeParam } = params;
 
   const supportedLocales = localizations as readonly ('en' | 'es')[];
   const locale = supportedLocales.includes(localeParam as 'en' | 'es')
@@ -85,4 +85,3 @@ export default async function HomePageContainer({ params }: PageProps) {
     </>
   );
 }
-

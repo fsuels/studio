@@ -3,6 +3,7 @@
 
 import React, { ReactNode } from 'react';
 import I18nClientProvider from '@/components/providers/I18nProvider';
+import { AuthProvider } from '@/hooks/useAuth';
 import { ThemeProvider } from 'next-themes';
 import { Loader2 } from 'lucide-react';
 
@@ -36,11 +37,13 @@ export function MarketingProviders({ children, locale }: MarketingProvidersProps
           </div>
         }
       >
-        {children}
+        {/* Ensure header components using useAuth have context on marketing pages */}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </I18nClientProvider>
     </ThemeProvider>
   );
 }
 
 export default MarketingProviders;
-

@@ -21,7 +21,7 @@ export async function POST(
       );
     }
 
-    const { webhookId } = await context.params;
+    const { webhookId } = context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Send test webhook

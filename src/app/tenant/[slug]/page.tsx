@@ -5,11 +5,11 @@ import { TenantDashboardLazy } from '@/components/tenant/TenantDashboard.lazy';
 import { redirect } from 'next/navigation';
 
 interface TenantPageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 export default async function TenantPage({ params }: TenantPageProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 

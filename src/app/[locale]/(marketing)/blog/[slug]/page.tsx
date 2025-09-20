@@ -75,7 +75,7 @@ export async function generateMetadata({
 }: {
   params: Promise<BlogRouteParams>;
 }): Promise<Metadata> {
-  const { locale, slug } = await params;
+  const { locale, slug } = params;
   const article = blogArticles.find((entry) => entry.slug === slug);
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -162,7 +162,7 @@ export default async function BlogPostPage({
 }: {
   params: Promise<BlogRouteParams>;
 }) {
-  const { locale, slug } = await params;
+  const { locale, slug } = params;
   const backToBlogLabel = locale === 'es' ? 'Volver al blog' : 'Back to Blog';
   const article = blogArticles.find((a) => a.slug === slug);
   if (!article) {

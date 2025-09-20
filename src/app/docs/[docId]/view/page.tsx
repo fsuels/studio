@@ -5,8 +5,8 @@ export const dynamic = 'force-static';
 export default async function LegacyDocViewRedirect({
   params,
 }: {
-  params: Promise<{ docId: string }>;
+  params: { docId: string };
 }) {
-  const { docId } = await params;
+  const { docId } = params;
   redirect(`/en/docs/${docId}/view`);
 }

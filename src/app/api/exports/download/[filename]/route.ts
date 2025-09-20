@@ -4,14 +4,14 @@ import { readFile, stat } from 'fs/promises';
 import { join } from 'path';
 
 interface RouteParams {
-  params: Promise<{
+  params: {
     filename: string;
-  }>;
+  };
 }
 
 export async function GET(request: NextRequest, context: RouteParams) {
   try {
-    const { filename } = await context.params;
+    const { filename } = context.params;
 
     // Validate filename to prevent directory traversal
     if (

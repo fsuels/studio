@@ -10,9 +10,9 @@ export const revalidate = 86_400; // Refresh daily to capture policy edits
 export default async function LocalePrivacyPolicyPage({
   params,
 }: {
-  params: Promise<{ locale?: 'en' | 'es' }>;
+  params: { locale?: 'en' | 'es' };
 }) {
-  const { locale = 'en' } = await params;
+  const { locale = 'en' } = params;
   const policy = await loadPolicy('privacy-notice', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';

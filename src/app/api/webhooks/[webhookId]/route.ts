@@ -56,7 +56,7 @@ export async function GET(
       );
     }
 
-    const { webhookId } = await context.params;
+    const { webhookId } = context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Get webhook details
@@ -112,7 +112,7 @@ export async function PATCH(
       );
     }
 
-    const { webhookId } = await context.params;
+    const { webhookId } = context.params;
 
     // Parse request body
     const body = await request.json();
@@ -193,7 +193,7 @@ export async function DELETE(
       );
     }
 
-    const { webhookId } = await context.params;
+    const { webhookId } = context.params;
     const registry = WebhookRegistry.getInstance();
 
     // Delete webhook

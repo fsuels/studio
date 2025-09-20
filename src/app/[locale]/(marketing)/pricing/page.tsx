@@ -15,7 +15,7 @@ export async function generateMetadata({
 }: {
   params: Promise<PricingPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const metadataByLocale = {
     en: {
@@ -162,7 +162,7 @@ export default async function PricingPage({
 }: {
   params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const pricingJsonLd = buildPricingStructuredData(locale);
   const t = (en: string, es?: string) => (locale === 'es' && es ? es : en);
   const comparisonRows = [

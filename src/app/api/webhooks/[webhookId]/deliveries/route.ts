@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    const { webhookId } = await context.params;
+    const { webhookId } = context.params;
 
     // Parse query parameters
     const url = new URL(request.url);

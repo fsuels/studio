@@ -34,7 +34,7 @@ const META = {
 type SupportedLocale = keyof typeof META;
 
 interface SignWellPageProps {
-  params: Promise<{ locale: SupportedLocale } & Record<string, string>>;
+  params: { locale: SupportedLocale } & Record<string, string>>;
 }
 
 function buildSignWellStructuredData(locale: SupportedLocale): string {
@@ -99,9 +99,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: SupportedLocale }>;
+  params: Promise<{ locale: SupportedLocale };
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
   const copy = META[locale] ?? META.en;
 
   const siteUrl = getSiteUrl();
@@ -147,7 +147,7 @@ export async function generateMetadata({
 }
 
 export default async function SignWellPage({ params }: SignWellPageProps) {
-  const { locale } = await params;
+  const { locale } = params;
   const localeKey: SupportedLocale = locale in META ? locale : 'en';
   const structuredData = buildSignWellStructuredData(localeKey);
 

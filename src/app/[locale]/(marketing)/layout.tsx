@@ -5,10 +5,10 @@ import MarketingProviders from '@/components/providers/MarketingProviders';
 
 const LanguageSwitch = dynamic(() => import('@/components/global/LanguageSwitch'));
 
-interface Props { children: React.ReactNode; params: Promise<{ locale?: string }> }
+interface Props { children: React.ReactNode; params: { locale?: string } }
 
 export default async function MarketingLayout({ children, params }: Props) {
-  const { locale: pathLocale } = await params;
+  const { locale: pathLocale } = params;
   const detectedLocale =
     pathLocale === 'es' || pathLocale === 'en' ? (pathLocale as 'en' | 'es') : 'en';
 

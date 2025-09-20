@@ -3,6 +3,10 @@ import { Metadata } from 'next';
 import { StickySummaryBar } from '@/components/ui/StickySummaryBar';
 import EnhancedOrdersTable from '@/components/admin/EnhancedOrdersTable';
 
+// Ensure this admin page is always server-rendered at runtime
+// and not included in static pre-rendering during build.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Enhanced Orders - Admin Dashboard',
   description:

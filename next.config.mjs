@@ -22,13 +22,18 @@ const nextConfig = {
   trailingSlash: true,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
-
-  /* Optimizations for large codebases */
+  
+  // Prevent Next from generating vendor-chunks for packages in dev
+  // Disable optimizePackageImports by providing an empty array (boolean is invalid)
   experimental: {
-    // Disable build worker to avoid SIGBUS crashes in constrained environments
+    optimizePackageImports: [],
     webpackBuildWorker: false,
   },
 
+  // Note: If the vendor-chunk issue persists, we can consider
+  // adding a modularizeImports rule for lucide-react. Leaving it
+  // off by default to avoid case-mapping pitfalls across icons.
+  
 
   /* Webpack config attached conditionally below for production builds */
 
@@ -57,8 +62,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  /* Add allowedDevOrigins here as instructed */
-  allowedDevOrigins: ['*'],
+  // Note: We no longer set custom non-standard dev options here
 
   /* Headers for CSP - disable strict CSP in development for PDF viewing */
   // Note: CSP is handled in middleware.ts to avoid conflicts

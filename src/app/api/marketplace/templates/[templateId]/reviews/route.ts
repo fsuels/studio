@@ -27,10 +27,10 @@ import type {
  */
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ templateId: string }> },
+  context: { params: { templateId: string } },
 ) {
   try {
-    const { templateId } = await context.params;
+    const { templateId } = context.params;
     const url = new URL(request.url);
 
     const page = parseInt(url.searchParams.get('page') || '1');
@@ -160,7 +160,7 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ templateId: string }> },
+  context: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -169,7 +169,7 @@ export async function POST(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { templateId } = await context.params;
+    const { templateId } = context.params;
     const body = await request.json();
     const { rating, title, comment, pros, cons, templateVersion } = body;
 

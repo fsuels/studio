@@ -10,9 +10,9 @@ export const revalidate = 86_400;
 export default async function RefundPolicyPage({
   params,
 }: {
-  params: Promise<{ locale?: 'en' | 'es' }>;
+  params: { locale?: 'en' | 'es' };
 }) {
-  const { locale = 'en' } = await params;
+  const { locale = 'en' } = params;
   const policy = await loadPolicy('refund-policy', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';

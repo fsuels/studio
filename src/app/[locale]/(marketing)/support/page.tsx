@@ -103,7 +103,7 @@ export async function generateMetadata({
 }: {
   params: Promise<SupportPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -155,7 +155,7 @@ export default async function SupportPage({
 }: {
   params: Promise<SupportPageParams>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const content = localizedContent[locale];
 
   const supportJsonLd = buildSupportStructuredData(locale);

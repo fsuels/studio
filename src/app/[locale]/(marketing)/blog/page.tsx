@@ -83,7 +83,7 @@ export async function generateMetadata({
 }: {
   params: Promise<BlogPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -131,7 +131,7 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const { locale } = await params;
+  const { locale } = params;
   const langSuffix = locale === 'es' ? 'es' : 'en';
   const articles = blogArticles
     .slice()

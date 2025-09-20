@@ -14,9 +14,9 @@ export async function generateStaticParams() {
 export default async function LocaleDisclaimerPage({
   params,
 }: {
-  params: Promise<{ locale?: 'en' | 'es' }>;
+  params: { locale?: 'en' | 'es' };
 }) {
-  const { locale = 'en' } = await params;
+  const { locale = 'en' } = params;
   const policy = await loadPolicy('disclaimer', locale);
 
   const region = locale === 'es' ? 'es-ES' : 'en-US';

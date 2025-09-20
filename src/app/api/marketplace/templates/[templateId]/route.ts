@@ -8,10 +8,10 @@ import type { MarketplaceTemplate } from '@/types/marketplace';
  */
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ templateId: string }> },
+  context: { params: { templateId: string } },
 ) {
   try {
-    const { templateId } = await context.params;
+    const { templateId } = context.params;
     const url = new URL(request.url);
     const includeVersions = url.searchParams.get('includeVersions') === 'true';
     const includeStats = url.searchParams.get('includeStats') === 'true';
@@ -122,7 +122,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ templateId: string }> },
+  context: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -131,7 +131,7 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { templateId } = await context.params;
+    const { templateId } = context.params;
     const body = await request.json();
 
     const db = await (await import('@/lib/firebase')).getDb();
@@ -227,7 +227,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ templateId: string }> },
+  context: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -236,7 +236,7 @@ export async function DELETE(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-    const { templateId } = await context.params;
+    const { templateId } = context.params;
     const url = new URL(request.url);
     const force = url.searchParams.get('force') === 'true';
 

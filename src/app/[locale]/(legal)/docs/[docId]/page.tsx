@@ -54,7 +54,7 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
 
 // 🔑 Mark your Page component async and await params before using them
 export default async function DocPage({ params }: DocPageProps) {
-  const { locale, docId } = await params;
+  const { locale, docId } = params;
 
   // Normalize legacy aliases to canonical slug and redirect if needed
   const canonical = resolveDocSlug(docId);

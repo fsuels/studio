@@ -152,7 +152,7 @@ export async function generateMetadata({
 }: {
   params: Promise<OnlineNotaryPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -204,7 +204,7 @@ export default async function OnlineNotaryPage({
 }: {
   params: Promise<OnlineNotaryPageParams>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const content = localizedContent[locale];
   const structuredData = buildOnlineNotaryStructuredData(locale);
 

@@ -6,12 +6,12 @@ import SignUpClientContent from './signup-client-content';
 export const dynamic = 'force-dynamic';
 
 interface SignUpPageProps {
-  params: Promise<{
+  params: {
     locale: 'en' | 'es';
-  }>;
+  };
 }
 
 export default async function SignUpPage({ params }: SignUpPageProps) {
-  const { locale } = await params;
+  const { locale } = params;
   return <SignUpClientContent locale={locale} />;
 }

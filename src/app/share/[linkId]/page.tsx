@@ -16,9 +16,9 @@ export async function generateStaticParams() {
 export default async function SharePage({
   params,
 }: {
-  params: Promise<{ linkId: string }>;
+  params: { linkId: string };
 }) {
-  const { linkId } = await params;
+  const { linkId } = params;
 
   // In a real app, you would fetch the document data associated with linkId
   // and display it, potentially with restricted access controls.

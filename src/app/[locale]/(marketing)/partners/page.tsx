@@ -176,7 +176,7 @@ export async function generateMetadata({
 }: {
   params: Promise<PartnersPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -228,7 +228,7 @@ export default async function PartnersPage({
 }: {
   params: Promise<PartnersPageParams>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const content = localizedContent[locale];
   const partnersJsonLd = buildPartnersStructuredData(locale);
 

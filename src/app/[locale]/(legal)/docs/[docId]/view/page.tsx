@@ -3,15 +3,15 @@ import React from 'react';
 import ViewDocumentPageClient from './ViewDocumentPageClient';
 
 interface ViewDocumentPageProps {
-  params: Promise<{
+  params: {
     locale: 'en' | 'es';
     docId: string;
-  }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default async function ViewDocumentPage({ params, searchParams }: ViewDocumentPageProps) {
-  const { locale, docId } = await params;
+  const { locale, docId } = params;
   const search = await searchParams;
   
   // Debug logging to understand the routing

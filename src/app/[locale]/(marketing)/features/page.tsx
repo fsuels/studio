@@ -226,7 +226,7 @@ export async function generateMetadata({
 }: {
   params: Promise<FeaturesPageParams>;
 }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale } = params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -288,7 +288,7 @@ export default async function FeaturesPage({
 }: {
   params: Promise<FeaturesPageParams>;
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   const content = localizedContent[locale];
 
   const features = Object.entries(content.features).map(([key, feature]) => ({
