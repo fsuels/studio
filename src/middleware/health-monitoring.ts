@@ -1,4 +1,5 @@
 // src/middleware/health-monitoring.ts
+import React from 'react';
 import { NextRequest, NextResponse } from 'next/server';
 import { operationalHealth } from '@/lib/operational-health';
 
@@ -22,15 +23,17 @@ export function withHealthMonitoring(
     const route = new URL(req.url).pathname;
 
     // Store request start data
+    const userAgent = req.headers.get('user-agent') ?? 'unknown';
+    const forwardedIp =
+      req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip');
+    const clientIp = forwardedIp ?? 'unknown';
+
     performanceStore.set(requestId, {
       startTime,
       route,
       method: req.method,
-      userAgent: req.headers.get('user-agent') || undefined,
-      ip:
-        req.headers.get('x-forwarded-for') ||
-        req.headers.get('x-real-ip') ||
-        undefined,
+      userAgent,
+      ip: clientIp,
     });
 
     let response: NextResponse = NextResponse.next();
@@ -47,7 +50,7 @@ export function withHealthMonitoring(
         {
           error: 'Internal Server Error',
           message:
-            process.env.NODE_ENV === 'development' ? error.message : undefined,
+            process.env.NODE_ENV === 'development' ? error.message ?? 'Unknown error' : 'An unexpected error occurred',
         },
         { status: 500 },
       );
@@ -329,3 +332,5 @@ export function monitorClientPerformance() {
     }).catch(console.error);
   });
 }
+
+

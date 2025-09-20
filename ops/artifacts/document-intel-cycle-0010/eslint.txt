@@ -1,0 +1,2 @@
+﻿Command: npx eslint --no-ignore src/lib/legal-translation/__tests__/legal-translation-encoding.guardrails.test.ts
+Result: Ignored by repository eslintignore (no files linted).

@@ -27,15 +27,25 @@ export interface SemanticAnalysisOptions {
 
 export class SemanticAnalysisEngine {
   private expandQuery(query: string): string[] {
-    const expanded = new Set([query.toLowerCase()]);
+    const expanded = new Set<string>();
+    const baseQuery = query.toLowerCase();
+    expanded.add(baseQuery);
 
-    Object.entries(taxonomy.synonyms || {}).forEach(([syn, targets]) => {
-      if (query.toLowerCase().includes(syn.toLowerCase())) {
-        targets.forEach(t => expanded.add(String(t).toLowerCase()));
+    const synonyms = taxonomy.synonyms ?? {};
+
+    Object.entries(synonyms).forEach(([synonym, rawTargets]) => {
+      const normalizedSynonym = synonym.toLowerCase();
+      const targets = (Array.isArray(rawTargets) ? rawTargets : [rawTargets])
+        .map((target) => String(target).toLowerCase())
+        .filter((target) => target.length > 0);
+
+      if (baseQuery.includes(normalizedSynonym)) {
+        targets.forEach((target) => expanded.add(target));
       }
-      targets.forEach(t => {
-        if (query.toLowerCase().includes(String(t).toLowerCase())) {
-          expanded.add(syn.toLowerCase());
+
+      targets.forEach((target) => {
+        if (baseQuery.includes(target)) {
+          expanded.add(normalizedSynonym);
         }
       });
     });

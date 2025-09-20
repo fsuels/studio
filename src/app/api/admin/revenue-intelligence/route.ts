@@ -1,14 +1,173 @@
 // Revenue Intelligence API - MRR/ARR trends, CLV, cohort analysis, churn prediction
 import { NextRequest, NextResponse } from 'next/server';
-
-// Run dynamically at request time (SSR)
-export const dynamic = 'force-dynamic';
 import { requireAdmin } from '@/lib/admin-auth';
-import { generateMockOrders } from '@/lib/orders';
-import { generateRevenueIntelligence } from '@/lib/revenue-intelligence';
+import { generateMockOrders, type Order } from '@/lib/orders';
+import {
+  generateRevenueIntelligence,
+  type RevenueMetrics,
+  type CustomerLifetimeValue,
+  type CohortAnalysis,
+  type ChurnPrediction,
+  type RevenueLeakage,
+} from '@/lib/revenue-intelligence';
 
-// Mock database - in production, use your actual database
-const ordersDB = generateMockOrders(500); // Larger dataset for better analytics
+export const dynamic = 'force-dynamic';
+
+const ordersDB: Order[] = generateMockOrders(500); // Larger dataset for better analytics
+
+type RevenueDataType =
+  | 'overview'
+  | 'mrr_trends'
+  | 'customer_ltv'
+  | 'cohort_analysis'
+  | 'churn_prediction'
+  | 'revenue_leakage';
+
+type Timeframe = '3months' | '6months' | '12months' | '24months';
+
+type RevenueIntelligenceSnapshot = ReturnType<typeof generateRevenueIntelligence>;
+
+interface MonthlyMRRBreakdownEntry {
+  month: string;
+  newMRR: number;
+  churnedMRR: number;
+  expansionMRR: number;
+  contractionMRR: number;
+  netMRR: number;
+}
+
+type GrowthTrend = 'increasing' | 'stable' | 'improving';
+type GrowthImpact = 'high' | 'medium' | 'low';
+
+interface GrowthFactorDetail {
+  rate: number;
+  trend: GrowthTrend;
+  impact: GrowthImpact;
+}
+
+interface GrowthFactorsSummary {
+  newCustomerAcquisition: GrowthFactorDetail;
+  customerExpansion: GrowthFactorDetail;
+  churnReduction: GrowthFactorDetail;
+  priceOptimization: GrowthFactorDetail;
+}
+
+interface MRRForecastPoint {
+  month: string;
+  projected: number;
+  conservative: number;
+  optimistic: number;
+  confidence: number;
+}
+
+type SegmentKey = CustomerLifetimeValue['segment'];
+
+interface SegmentMetrics {
+  count: number;
+  totalLTV: number;
+  avgLTV: number;
+}
+
+type CustomerSegmentsSummary = Record<SegmentKey, SegmentMetrics>;
+
+type LTVDistributionBuckets = {
+  '0-100': number;
+  '100-250': number;
+  '250-500': number;
+  '500-1000': number;
+  '1000+': number;
+};
+
+interface RetentionSummary {
+  avgMonth1: number;
+  avgMonth3: number;
+  avgMonth6: number;
+  avgMonth12: number;
+  avgMonth24: number;
+}
+
+interface CohortComparison {
+  latest: string;
+  previous: string;
+  sizeChange: number;
+  revenueChange: number;
+  retentionChange: {
+    month1: number;
+    month3: number;
+    month6: number;
+  };
+}
+
+interface ChurnRiskCounts {
+  low: number;
+  medium: number;
+  high: number;
+  critical: number;
+}
+
+interface ChurnRiskDistribution {
+  counts: ChurnRiskCounts;
+  percentages: ChurnRiskCounts;
+}
+
+interface PreventionStrategyCategory {
+  count: number;
+  actions: string[];
+}
+
+interface PreventionStrategies {
+  immediate: PreventionStrategyCategory;
+  proactive: PreventionStrategyCategory;
+  preventive: PreventionStrategyCategory;
+}
+
+interface ChurnImpact {
+  atRiskCustomers: number;
+  potentialRevenueLoss: number;
+  averageLossPerCustomer: number;
+  preventionROI: number;
+}
+
+interface RecoveryOpportunity {
+  type: RevenueLeakage['type'];
+  recoveryPotential: number;
+  priority: 'high' | 'medium' | 'low';
+  timeframe: '1-3 months' | '3-6 months';
+  effortRequired: 'high' | 'medium' | 'low';
+}
+
+interface LeakagePreventionPlan {
+  shortTerm: string[];
+  mediumTerm: string[];
+  longTerm: string[];
+}
+
+interface LeakageTrend {
+  month: string;
+  churnRevenue: number;
+  refundRevenue: number;
+  totalRevenue: number;
+}
+
+function isRevenueDataType(value: string | null): value is RevenueDataType {
+  return (
+    value === 'overview' ||
+    value === 'mrr_trends' ||
+    value === 'customer_ltv' ||
+    value === 'cohort_analysis' ||
+    value === 'churn_prediction' ||
+    value === 'revenue_leakage'
+  );
+}
+
+function isTimeframe(value: string | null): value is Timeframe {
+  return (
+    value === '3months' ||
+    value === '6months' ||
+    value === '12months' ||
+    value === '24months'
+  );
+}
 
 export async function GET(request: NextRequest) {
   // Require admin authentication
@@ -19,18 +178,36 @@ export async function GET(request: NextRequest) {
 
   try {
     const url = new URL(request.url);
-    const dataType = url.searchParams.get('type') || 'overview';
-    const timeframe = url.searchParams.get('timeframe') || '12months';
+    const dataTypeParam = url.searchParams.get('type');
+    const timeframeParam = url.searchParams.get('timeframe');
+    const revenueDataType: RevenueDataType = isRevenueDataType(dataTypeParam)
+      ? dataTypeParam
+      : 'overview';
+    const timeframe: Timeframe = isTimeframe(timeframeParam)
+      ? timeframeParam
+      : '12months';
     const _cohortPeriod = url.searchParams.get('cohortPeriod') || '6months';
 
-    // Filter orders based on timeframe
     const filteredOrders = filterOrdersByTimeframe(ordersDB, timeframe);
+    const intelligence: RevenueIntelligenceSnapshot =
+      generateRevenueIntelligence(filteredOrders);
 
-    // Generate comprehensive revenue intelligence
-    const intelligence = generateRevenueIntelligence(filteredOrders);
+    switch (revenueDataType) {
+      case 'overview': {
+        const totalCustomers = intelligence.customerLTV.length;
+        const totalAtRisk = intelligence.churnPredictions.filter(
+          (c) => c.churnRisk === 'high' || c.churnRisk === 'critical',
+        ).length;
+        const totalRevenueLeakage = intelligence.revenueLeakage.reduce(
+          (sum, leak) => sum + leak.amount,
+          0,
+        );
+        const avgLTV =
+          totalCustomers > 0
+            ? intelligence.customerLTV.reduce((sum, c) => sum + c.ltv, 0) /
+              totalCustomers
+            : 0;
 
-    switch (dataType) {
-      case 'overview':
         return NextResponse.json({
           success: true,
           data: {
@@ -38,23 +215,17 @@ export async function GET(request: NextRequest) {
               mrr: intelligence.revenueMetrics.mrr,
               arr: intelligence.revenueMetrics.arr,
               mrrGrowth: intelligence.revenueMetrics.growth.mrrGrowth,
-              totalCustomers: intelligence.customerLTV.length,
-              avgLTV:
-                intelligence.customerLTV.reduce((sum, c) => sum + c.ltv, 0) /
-                intelligence.customerLTV.length,
-              churnRisk: intelligence.churnPredictions.filter(
-                (c) => c.churnRisk === 'high' || c.churnRisk === 'critical',
-              ).length,
-              revenueLeakage: intelligence.revenueLeakage.reduce(
-                (sum, leak) => sum + leak.amount,
-                0,
-              ),
+              totalCustomers,
+              avgLTV,
+              churnRisk: totalAtRisk,
+              revenueLeakage: totalRevenueLeakage,
             },
-            trends: intelligence.revenueMetrics.trends.slice(-12), // Last 12 months
-            topRisks: intelligence.churnPredictions.slice(0, 10), // Top 10 at-risk customers
+            trends: intelligence.revenueMetrics.trends.slice(-12),
+            topRisks: intelligence.churnPredictions.slice(0, 10),
             revenueLeakage: intelligence.revenueLeakage,
           },
         });
+      }
 
       case 'mrr_trends':
         return NextResponse.json({
@@ -125,16 +296,15 @@ export async function GET(request: NextRequest) {
             monthlyTrends: calculateLeakageTrends(filteredOrders),
           },
         });
-
-      default:
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Invalid data type requested',
-          },
-          { status: 400 },
-        );
     }
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Invalid data type requested',
+      },
+      { status: 400 },
+    );
   } catch (error) {
     console.error('Revenue Intelligence API error:', error);
 
@@ -148,8 +318,10 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper functions
-function filterOrdersByTimeframe(orders: any[], timeframe: string) {
+function filterOrdersByTimeframe(
+  orders: Order[],
+  timeframe: Timeframe,
+): Order[] {
   const now = new Date();
   const cutoffDate = new Date();
 
@@ -166,15 +338,15 @@ function filterOrdersByTimeframe(orders: any[], timeframe: string) {
     case '24months':
       cutoffDate.setMonth(now.getMonth() - 24);
       break;
-    default:
-      cutoffDate.setMonth(now.getMonth() - 12);
   }
 
   return orders.filter((order) => new Date(order.createdAt) >= cutoffDate);
 }
 
-function generateMonthlyMRRBreakdown(orders: any[]) {
-  const monthlyData = new Map();
+function generateMonthlyMRRBreakdown(
+  orders: Order[],
+): MonthlyMRRBreakdownEntry[] {
+  const monthlyData = new Map<string, MonthlyMRRBreakdownEntry>();
 
   orders.forEach((order) => {
     const month = new Date(order.createdAt).toISOString().slice(0, 7);
@@ -190,7 +362,10 @@ function generateMonthlyMRRBreakdown(orders: any[]) {
     }
 
     const data = monthlyData.get(month);
-    // Simplified MRR calculation
+    if (!data) {
+      return;
+    }
+
     data.newMRR += order.payment.amount * 0.8; // Assume 80% is recurring
     data.netMRR += order.payment.amount * 0.8;
   });
@@ -200,7 +375,7 @@ function generateMonthlyMRRBreakdown(orders: any[]) {
   );
 }
 
-function analyzeGrowthFactors(_orders: any[]) {
+function analyzeGrowthFactors(_orders: Order[]): GrowthFactorsSummary {
   return {
     newCustomerAcquisition: {
       rate: 15.2,
@@ -225,12 +400,14 @@ function analyzeGrowthFactors(_orders: any[]) {
   };
 }
 
-function generateMRRForecast(metrics: any) {
+function generateMRRForecast(
+  metrics: RevenueMetrics,
+): MRRForecastPoint[] {
   const currentMRR = metrics.mrr;
   const growthRate = metrics.growth.mrrGrowth / 100;
 
-  const forecast = [];
-  for (let i = 1; i <= 12; i++) {
+  const forecast: MRRForecastPoint[] = [];
+  for (let i = 1; i <= 12; i += 1) {
     const projectedMRR = currentMRR * Math.pow(1 + growthRate, i);
     const month = new Date();
     month.setMonth(month.getMonth() + i);
@@ -240,63 +417,45 @@ function generateMRRForecast(metrics: any) {
       projected: projectedMRR,
       conservative: projectedMRR * 0.85,
       optimistic: projectedMRR * 1.15,
-      confidence: Math.max(50, 95 - i * 5), // Decreasing confidence over time
+      confidence: Math.max(50, 95 - i * 5),
     });
   }
 
   return forecast;
 }
 
-function groupCustomersBySegment(customers: any[]) {
-  const segments = {
+function groupCustomersBySegment(
+  customers: CustomerLifetimeValue[],
+): CustomerSegmentsSummary {
+  const segments: Record<SegmentKey, CustomerLifetimeValue[]> = {
     high_value: customers.filter((c) => c.segment === 'high_value'),
     medium_value: customers.filter((c) => c.segment === 'medium_value'),
     low_value: customers.filter((c) => c.segment === 'low_value'),
     at_risk: customers.filter((c) => c.segment === 'at_risk'),
   };
 
+  const buildMetrics = (segment: SegmentKey): SegmentMetrics => {
+    const group = segments[segment];
+    const totalLTV = group.reduce((sum, c) => sum + c.ltv, 0);
+    return {
+      count: group.length,
+      totalLTV,
+      avgLTV: group.length > 0 ? totalLTV / group.length : 0,
+    };
+  };
+
   return {
-    high_value: {
-      count: segments.high_value.length,
-      totalLTV: segments.high_value.reduce((sum, c) => sum + c.ltv, 0),
-      avgLTV:
-        segments.high_value.length > 0
-          ? segments.high_value.reduce((sum, c) => sum + c.ltv, 0) /
-            segments.high_value.length
-          : 0,
-    },
-    medium_value: {
-      count: segments.medium_value.length,
-      totalLTV: segments.medium_value.reduce((sum, c) => sum + c.ltv, 0),
-      avgLTV:
-        segments.medium_value.length > 0
-          ? segments.medium_value.reduce((sum, c) => sum + c.ltv, 0) /
-            segments.medium_value.length
-          : 0,
-    },
-    low_value: {
-      count: segments.low_value.length,
-      totalLTV: segments.low_value.reduce((sum, c) => sum + c.ltv, 0),
-      avgLTV:
-        segments.low_value.length > 0
-          ? segments.low_value.reduce((sum, c) => sum + c.ltv, 0) /
-            segments.low_value.length
-          : 0,
-    },
-    at_risk: {
-      count: segments.at_risk.length,
-      totalLTV: segments.at_risk.reduce((sum, c) => sum + c.ltv, 0),
-      avgLTV:
-        segments.at_risk.length > 0
-          ? segments.at_risk.reduce((sum, c) => sum + c.ltv, 0) /
-            segments.at_risk.length
-          : 0,
-    },
+    high_value: buildMetrics('high_value'),
+    medium_value: buildMetrics('medium_value'),
+    low_value: buildMetrics('low_value'),
+    at_risk: buildMetrics('at_risk'),
   };
 }
 
-function calculateLTVDistribution(customers: any[]) {
-  const buckets = {
+function calculateLTVDistribution(
+  customers: CustomerLifetimeValue[],
+): LTVDistributionBuckets {
+  const buckets: LTVDistributionBuckets = {
     '0-100': 0,
     '100-250': 0,
     '250-500': 0,
@@ -305,65 +464,85 @@ function calculateLTVDistribution(customers: any[]) {
   };
 
   customers.forEach((customer) => {
-    if (customer.ltv < 100) buckets['0-100']++;
-    else if (customer.ltv < 250) buckets['100-250']++;
-    else if (customer.ltv < 500) buckets['250-500']++;
-    else if (customer.ltv < 1000) buckets['500-1000']++;
-    else buckets['1000+']++;
+    if (customer.ltv < 100) buckets['0-100'] += 1;
+    else if (customer.ltv < 250) buckets['100-250'] += 1;
+    else if (customer.ltv < 500) buckets['250-500'] += 1;
+    else if (customer.ltv < 1000) buckets['500-1000'] += 1;
+    else buckets['1000+'] += 1;
   });
 
   return buckets;
 }
 
-function calculateRetentionSummary(cohorts: any[]) {
-  const summary = {
-    avgMonth1: 0,
-    avgMonth3: 0,
-    avgMonth6: 0,
-    avgMonth12: 0,
-    avgMonth24: 0,
-  };
+function calculateRetentionSummary(
+  cohorts: CohortAnalysis[],
+): RetentionSummary {
+  return computeRetentionSummary(cohorts, (cohort) => cohort.retentionRates);
+}
 
-  if (cohorts.length > 0) {
-    summary.avgMonth1 =
-      cohorts.reduce((sum, c) => sum + c.retentionRates.month1, 0) /
-      cohorts.length;
-    summary.avgMonth3 =
-      cohorts.reduce((sum, c) => sum + c.retentionRates.month3, 0) /
-      cohorts.length;
-    summary.avgMonth6 =
-      cohorts.reduce((sum, c) => sum + c.retentionRates.month6, 0) /
-      cohorts.length;
-    summary.avgMonth12 =
-      cohorts.reduce((sum, c) => sum + c.retentionRates.month12, 0) /
-      cohorts.length;
-    summary.avgMonth24 =
-      cohorts.reduce((sum, c) => sum + c.retentionRates.month24, 0) /
-      cohorts.length;
+function calculateRevenueRetentionSummary(
+  cohorts: CohortAnalysis[],
+): RetentionSummary {
+  return computeRetentionSummary(cohorts, (cohort) => cohort.revenueRetention);
+}
+
+type RetentionExtractor = (
+  cohort: CohortAnalysis,
+) => CohortAnalysis['retentionRates'];
+
+function computeRetentionSummary(
+  cohorts: CohortAnalysis[],
+  extractor: RetentionExtractor,
+): RetentionSummary {
+  if (cohorts.length === 0) {
+    return {
+      avgMonth1: 0,
+      avgMonth3: 0,
+      avgMonth6: 0,
+      avgMonth12: 0,
+      avgMonth24: 0,
+    };
   }
 
-  return summary;
+  const totals = cohorts.reduce(
+    (acc, cohort) => {
+      const rates = extractor(cohort);
+      acc.month1 += rates.month1;
+      acc.month3 += rates.month3;
+      acc.month6 += rates.month6;
+      acc.month12 += rates.month12;
+      acc.month24 += rates.month24;
+      return acc;
+    },
+    { month1: 0, month3: 0, month6: 0, month12: 0, month24: 0 },
+  );
+  const divisor = cohorts.length;
+
+  return {
+    avgMonth1: totals.month1 / divisor,
+    avgMonth3: totals.month3 / divisor,
+    avgMonth6: totals.month6 / divisor,
+    avgMonth12: totals.month12 / divisor,
+    avgMonth24: totals.month24 / divisor,
+  };
 }
 
-function calculateRevenueRetentionSummary(cohorts: any[]) {
-  // Similar to calculateRetentionSummary but for revenue
-  return calculateRetentionSummary(cohorts);
-}
-
-function compareCohorts(cohorts: any[]) {
+function compareCohorts(
+  cohorts: CohortAnalysis[],
+): CohortComparison | null {
   if (cohorts.length < 2) return null;
 
   const latest = cohorts[cohorts.length - 1];
   const previous = cohorts[cohorts.length - 2];
+  const sizeBaseline = previous.cohortSize || 1;
+  const revenueBaseline = previous.totalRevenue || 1;
 
   return {
     latest: latest.cohortMonth,
     previous: previous.cohortMonth,
-    sizeChange:
-      ((latest.cohortSize - previous.cohortSize) / previous.cohortSize) * 100,
+    sizeChange: ((latest.cohortSize - previous.cohortSize) / sizeBaseline) * 100,
     revenueChange:
-      ((latest.totalRevenue - previous.totalRevenue) / previous.totalRevenue) *
-      100,
+      ((latest.totalRevenue - previous.totalRevenue) / revenueBaseline) * 100,
     retentionChange: {
       month1: latest.retentionRates.month1 - previous.retentionRates.month1,
       month3: latest.retentionRates.month3 - previous.retentionRates.month3,
@@ -372,34 +551,46 @@ function compareCohorts(cohorts: any[]) {
   };
 }
 
-function calculateChurnRiskDistribution(predictions: any[]) {
-  const distribution = {
-    low: predictions.filter((p) => p.churnRisk === 'low').length,
-    medium: predictions.filter((p) => p.churnRisk === 'medium').length,
-    high: predictions.filter((p) => p.churnRisk === 'high').length,
-    critical: predictions.filter((p) => p.churnRisk === 'critical').length,
+function calculateChurnRiskDistribution(
+  predictions: ChurnPrediction[],
+): ChurnRiskDistribution {
+  const counts: ChurnRiskCounts = {
+    low: 0,
+    medium: 0,
+    high: 0,
+    critical: 0,
   };
 
+  predictions.forEach((prediction) => {
+    counts[prediction.churnRisk] += 1;
+  });
+
   const total = predictions.length;
+  const denominator = total === 0 ? 1 : total;
+
   return {
-    counts: distribution,
+    counts,
     percentages: {
-      low: (distribution.low / total) * 100,
-      medium: (distribution.medium / total) * 100,
-      high: (distribution.high / total) * 100,
-      critical: (distribution.critical / total) * 100,
+      low: (counts.low / denominator) * 100,
+      medium: (counts.medium / denominator) * 100,
+      high: (counts.high / denominator) * 100,
+      critical: (counts.critical / denominator) * 100,
     },
   };
 }
 
-function generatePreventionStrategies(predictions: any[]) {
-  const highRisk = predictions.filter(
+function generatePreventionStrategies(
+  predictions: ChurnPrediction[],
+): PreventionStrategies {
+  const immediate = predictions.filter(
     (p) => p.churnRisk === 'high' || p.churnRisk === 'critical',
   );
+  const proactive = predictions.filter((p) => p.churnRisk === 'medium');
+  const preventive = predictions.filter((p) => p.churnRisk === 'low');
 
   return {
     immediate: {
-      count: highRisk.length,
+      count: immediate.length,
       actions: [
         'Personal outreach campaign',
         'Special retention offers',
@@ -407,7 +598,7 @@ function generatePreventionStrategies(predictions: any[]) {
       ],
     },
     proactive: {
-      count: predictions.filter((p) => p.churnRisk === 'medium').length,
+      count: proactive.length,
       actions: [
         'Email nurture sequences',
         'Product usage optimization',
@@ -415,7 +606,7 @@ function generatePreventionStrategies(predictions: any[]) {
       ],
     },
     preventive: {
-      count: predictions.filter((p) => p.churnRisk === 'low').length,
+      count: preventive.length,
       actions: [
         'Regular satisfaction surveys',
         'Feature announcement campaigns',
@@ -425,14 +616,19 @@ function generatePreventionStrategies(predictions: any[]) {
   };
 }
 
-function calculateChurnImpact(churnPredictions: any[], customerLTV: any[]) {
+function calculateChurnImpact(
+  churnPredictions: ChurnPrediction[],
+  customerLTV: CustomerLifetimeValue[],
+): ChurnImpact {
   const atRiskCustomers = churnPredictions.filter(
     (p) => p.churnRisk === 'high' || p.churnRisk === 'critical',
   );
 
   const potentialLoss = atRiskCustomers.reduce((sum, prediction) => {
     const customer = customerLTV.find((c) => c.email === prediction.email);
-    return sum + (customer ? customer.ltv * prediction.churnProbability : 0);
+    return (
+      sum + (customer ? customer.ltv * prediction.churnProbability : 0)
+    );
   }, 0);
 
   return {
@@ -440,14 +636,16 @@ function calculateChurnImpact(churnPredictions: any[], customerLTV: any[]) {
     potentialRevenueLoss: potentialLoss,
     averageLossPerCustomer:
       atRiskCustomers.length > 0 ? potentialLoss / atRiskCustomers.length : 0,
-    preventionROI: potentialLoss * 0.7, // Assume 70% can be saved with intervention
+    preventionROI: potentialLoss * 0.7,
   };
 }
 
-function identifyRecoveryOpportunities(leakage: any[]) {
+function identifyRecoveryOpportunities(
+  leakage: RevenueLeakage[],
+): RecoveryOpportunity[] {
   return leakage.map((leak) => ({
     type: leak.type,
-    recoveryPotential: leak.amount * 0.3, // Assume 30% recovery potential
+    recoveryPotential: leak.amount * 0.3,
     priority:
       leak.percentage > 5 ? 'high' : leak.percentage > 2 ? 'medium' : 'low',
     timeframe: leak.type === 'churn' ? '3-6 months' : '1-3 months',
@@ -455,7 +653,9 @@ function identifyRecoveryOpportunities(leakage: any[]) {
   }));
 }
 
-function generateLeakagePreventionPlan(_leakage: any[]) {
+function generateLeakagePreventionPlan(
+  _leakage: RevenueLeakage[],
+): LeakagePreventionPlan {
   return {
     shortTerm: [
       'Implement exit surveys',
@@ -475,10 +675,9 @@ function generateLeakagePreventionPlan(_leakage: any[]) {
   };
 }
 
-function calculateLeakageTrends(orders: any[]) {
-  const monthlyLeakage = new Map();
+function calculateLeakageTrends(orders: Order[]): LeakageTrend[] {
+  const monthlyLeakage = new Map<string, LeakageTrend>();
 
-  // Calculate monthly churn and refunds
   orders.forEach((order) => {
     const month = new Date(order.createdAt).toISOString().slice(0, 7);
     if (!monthlyLeakage.has(month)) {
@@ -491,6 +690,10 @@ function calculateLeakageTrends(orders: any[]) {
     }
 
     const data = monthlyLeakage.get(month);
+    if (!data) {
+      return;
+    }
+
     data.totalRevenue += order.payment.amount;
 
     if (order.status === 'refunded') {

@@ -2,6 +2,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { SessionReplayAPI } from '@/lib/support-toolkit/session-replay';
+import type {
+  SessionEvent,
+  SessionReplay,
+  SessionSearchFilters,
+} from '@/lib/support-toolkit/session-replay';
+
+interface SessionAnalytics {
+  totalSessions: number;
+  errorRate: number;
+  averageDuration: number;
+  topDocumentTypes: Array<{ type: string; count: number }>;
+  commonErrorPatterns: Array<{ pattern: string; count: number; impact: string }>;
+}
 
 export async function GET(request: NextRequest) {
   // Require admin authentication
@@ -24,7 +37,7 @@ export async function GET(request: NextRequest) {
     const tags = url.searchParams.get('tags')?.split(',').filter(Boolean);
     const limit = parseInt(url.searchParams.get('limit') || '10');
 
-    let sessions;
+    let sessions: SessionReplay[] = [];
 
     if (ticketId) {
       // Get sessions linked to a specific support ticket
@@ -34,7 +47,7 @@ export async function GET(request: NextRequest) {
       sessions = await SessionReplayAPI.getSessionsByUser(userId, limit);
     } else {
       // Search sessions with filters
-      const filters = {
+      const filters: SessionSearchFilters = {
         hasErrors,
         documentTypes,
         tags,
@@ -46,17 +59,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate session analytics
-    const analytics = {
-      totalSessions: sessions.length,
-      errorRate:
-        sessions.filter((s) => s.events.some((e) => e.type === 'error'))
-          .length / sessions.length,
-      averageDuration:
-        sessions.reduce((sum, s) => sum + (s.duration || 0), 0) /
-        sessions.length,
-      topDocumentTypes: getTopDocumentTypes(sessions),
-      commonErrorPatterns: getCommonErrorPatterns(sessions),
-    };
+    const analytics = buildSessionAnalytics(sessions);
 
     return NextResponse.json({
       success: true,
@@ -135,17 +138,48 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper functions for analytics
+function buildSessionAnalytics(sessions: SessionReplay[]): SessionAnalytics {
+  const totalSessions = sessions.length;
+  const base: SessionAnalytics = {
+    totalSessions,
+    errorRate: 0,
+    averageDuration: 0,
+    topDocumentTypes: [],
+    commonErrorPatterns: [],
+  };
+
+  if (totalSessions === 0) {
+    return base;
+  }
+
+  const errorSessions = sessions.filter((session) =>
+    session.events.some((event) => event.type === 'error'),
+  ).length;
+
+  const totalDuration = sessions.reduce((sum, session) => {
+    return sum + (session.duration ?? 0);
+  }, 0);
+
+  return {
+    totalSessions,
+    errorRate: errorSessions / totalSessions,
+    averageDuration: totalDuration / totalSessions,
+    topDocumentTypes: getTopDocumentTypes(sessions),
+    commonErrorPatterns: getCommonErrorPatterns(sessions),
+  };
+}
+
 function getTopDocumentTypes(
-  sessions: any[],
+  sessions: SessionReplay[],
 ): Array<{ type: string; count: number }> {
   const documentTypes = new Map<string, number>();
 
   sessions.forEach((session) => {
     session.events
-      .filter((event: any) => event.type === 'document_action')
-      .forEach((event: any) => {
+      .filter((event: SessionEvent) => event.type === 'document_action')
+      .forEach((event) => {
         const type = event.data.documentType;
-        if (type) {
+        if (typeof type === 'string' && type.length > 0) {
           documentTypes.set(type, (documentTypes.get(type) || 0) + 1);
         }
       });
@@ -158,15 +192,19 @@ function getTopDocumentTypes(
 }
 
 function getCommonErrorPatterns(
-  sessions: any[],
+  sessions: SessionReplay[],
 ): Array<{ pattern: string; count: number; impact: string }> {
   const errorPatterns = new Map<string, number>();
 
   sessions.forEach((session) => {
     session.events
-      .filter((event: any) => event.type === 'error')
-      .forEach((event: any) => {
-        const errorMessage = event.data.errorMessage || 'Unknown error';
+      .filter((event: SessionEvent) => event.type === 'error')
+      .forEach((event) => {
+        const rawMessage = event.data.errorMessage;
+        const errorMessage =
+          typeof rawMessage === 'string' && rawMessage.length > 0
+            ? rawMessage
+            : 'Unknown error';
         const pattern = extractErrorPattern(errorMessage);
         errorPatterns.set(pattern, (errorPatterns.get(pattern) || 0) + 1);
       });

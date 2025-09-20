@@ -58,6 +58,15 @@ export interface SessionReplay {
   isActive: boolean;
 }
 
+export interface SessionSearchFilters {
+  userId?: string;
+  startDate?: Date;
+  endDate?: Date;
+  hasErrors?: boolean;
+  documentTypes?: string[];
+  tags?: string[];
+}
+
 class SessionRecorder {
   private sessionId: string;
   private userId?: string;
@@ -294,14 +303,7 @@ export class SessionReplayAPI {
     );
   }
 
-  static async searchSessions(filters: {
-    userId?: string;
-    startDate?: Date;
-    endDate?: Date;
-    hasErrors?: boolean;
-    documentTypes?: string[];
-    tags?: string[];
-  }): Promise<SessionReplay[]> {
+  static async searchSessions(filters: SessionSearchFilters): Promise<SessionReplay[]> {
     let q = query(collection(db, 'sessionReplays'));
 
     if (filters.userId) {

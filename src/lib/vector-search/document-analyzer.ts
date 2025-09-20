@@ -1,6 +1,6 @@
 // src/lib/vector-search/document-analyzer.ts
 import { getDocMeta } from '@/config/doc-meta';
-import { pineconeService } from './pinecone-service';
+import pineconeService from './pinecone-service';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 

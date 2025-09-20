@@ -122,9 +122,10 @@ export async function POST(request: NextRequest) {
     console.error(`${logPrefix} Raw Error Object:`, error);
 
     let statusCode = 500;
-    let clientErrorMessage =
+    let clientErrorMessage: string =
       'An internal server error occurred during document type inference.';
-    let errorCode = 'INFERENCE_INTERNAL_SERVER_ERROR';
+    let errorCode: ErrorResponse['code'] =
+      'INFERENCE_INTERNAL_SERVER_ERROR';
     let errorDetails: unknown =
       error instanceof Error
         ? { name: error.name, message: error.message, stack: error.stack }

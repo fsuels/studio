@@ -39,7 +39,7 @@ export default function DynamicField({
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel className="flex items-center gap-2">
-            {config.label}
+            <span id={`${config.id}-label`}>{config.label}</span>
             {config.required && <span className="text-red-500">*</span>}
             {config.tooltip && (
               <TooltipProvider>
@@ -56,7 +56,7 @@ export default function DynamicField({
           </FormLabel>
           
           <FormControl>
-            {renderFieldInput(config, field)}
+            {renderFieldInput(config, field, `${config.id}-label`)}
           </FormControl>
           
           {config.tooltip && !config.tooltip.includes('Click') && (
@@ -72,10 +72,10 @@ export default function DynamicField({
   );
 }
 
-function renderFieldInput(config: QuestionConfig, field: any) {
+function renderFieldInput(config: QuestionConfig, field: any, labelId: string) {
   const baseProps = {
     ...field,
-    placeholder: config.placeholder,
+    name: config.id,
   };
   
   switch (config.type) {
@@ -83,6 +83,9 @@ function renderFieldInput(config: QuestionConfig, field: any) {
       return (
         <Input
           {...baseProps}
+          id={config.id}
+          placeholder={config.placeholder}
+          aria-labelledby={labelId}
           type="text"
           autoComplete={getAutoComplete(config.id)}
         />
@@ -92,6 +95,9 @@ function renderFieldInput(config: QuestionConfig, field: any) {
       return (
         <Textarea
           {...baseProps}
+          id={config.id}
+          placeholder={config.placeholder}
+          aria-labelledby={labelId}
           rows={4}
           className="resize-vertical"
         />
@@ -101,6 +107,9 @@ function renderFieldInput(config: QuestionConfig, field: any) {
       return (
         <Input
           {...baseProps}
+          id={config.id}
+          placeholder={config.placeholder}
+          aria-labelledby={labelId}
           type="number"
           min={config.validation?.min}
           max={config.validation?.max}
@@ -110,8 +119,14 @@ function renderFieldInput(config: QuestionConfig, field: any) {
       
     case 'select':
       return (
-        <Select onValueChange={field.onChange} value={field.value}>
-          <SelectTrigger>
+        <Select
+          onValueChange={field.onChange}
+          value={field.value}
+          name={config.id}
+          aria-labelledby={labelId}
+          aria-label={config.label}
+        >
+          <SelectTrigger id={config.id} aria-labelledby={labelId}>
             <SelectValue placeholder={config.placeholder || `Select ${config.label}`} />
           </SelectTrigger>
           <SelectContent>
@@ -151,6 +166,9 @@ function renderFieldInput(config: QuestionConfig, field: any) {
       return (
         <Input
           {...baseProps}
+          id={config.id}
+          placeholder={config.placeholder}
+          aria-labelledby={labelId}
           type="text"
         />
       );

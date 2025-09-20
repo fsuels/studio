@@ -1,6 +1,8 @@
 // src/services/vectorSearch.ts
 // Vector index query helper with Redis caching, latency fallback, and HTTP endpoint integration
 
+import type { SearchResult } from '@/lib/vector-search/pinecone-service';
+
 // Conditional imports for server-side only
 let crypto: unknown = null;
 let Redis: unknown = null;
@@ -29,10 +31,11 @@ const logger: Logger = {
   warn: (message: string, data?: unknown) => console.warn(message, data),
 };
 
-// Vector search result interface
-export interface VectorSearchResult {
-  id: string;
-  score: number;
+// Vector search result interface aligned with Pinecone search results
+export interface VectorSearchResult
+  extends Pick<SearchResult, 'id' | 'score'> {
+  metadata?: SearchResult['metadata'];
+  explanation?: string;
 }
 
 // Cache configuration
@@ -379,7 +382,12 @@ async function queryVectorEndpoint(
     
     // Validate and normalize results
     const normalizedResults: VectorSearchResult[] = results.map((item: unknown, index: number) => {
-      const obj = item as { id?: unknown; score?: unknown };
+      const obj = item as {
+        id?: unknown;
+        score?: unknown;
+        metadata?: unknown;
+        explanation?: unknown;
+      };
       if (!obj || typeof obj !== 'object') {
         throw new Error(`Invalid result item at index ${index}: expected object`);
       }
@@ -392,9 +400,18 @@ async function queryVectorEndpoint(
         throw new Error(`Invalid result item at index ${index}: missing or invalid score`);
       }
       
+      const metadata =
+        obj.metadata && typeof obj.metadata === 'object'
+          ? (obj.metadata as SearchResult['metadata'])
+          : undefined;
+      const explanation =
+        typeof obj.explanation === 'string' ? obj.explanation : undefined;
+
       return {
         id: obj.id,
         score: obj.score,
+        metadata,
+        explanation,
       };
     });
     

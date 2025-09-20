@@ -33,7 +33,7 @@ interface FormSection {
 
 export default function DynamicForm({
   config,
-  initialData = {},
+  initialData,
   onSave,
   onSubmit,
   autoSave = true,
@@ -120,11 +120,17 @@ export default function DynamicForm({
   }, [config.questions]);
   
   // Initialize form with validation
+  const initialValues = useMemo(() => initialData ?? {}, [initialData]);
+
   const form = useForm({
     resolver: zodResolver(validationSchema),
-    defaultValues: initialData,
+    defaultValues: initialValues,
     mode: 'onChange'
   });
+
+  useEffect(() => {
+    form.reset(initialValues);
+  }, [initialValues, form]);
   
   const { watch, handleSubmit, formState: { errors, isValid, isDirty } } = form;
   

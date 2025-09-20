@@ -16,7 +16,11 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "baseUrl": ".",
-    "types": [],
+    "types": [
+      "node",
+      "fuse.js",
+      "stream-chat"
+    ],
     "paths": {
       "@/*": [
         "src/*"

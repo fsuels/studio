@@ -1,6 +1,6 @@
 {
-    "cycle_id": "document-intel-cycle-0009",
-    "last_updated": "2025-09-19T22:53:32.348496+00:00",
+    "cycle_id": "document-intel-cycle-0010",
+    "last_updated": "2025-09-19T23:12:41.022344+00:00",
     "notes": [
         "Refined Georgia T-7 overlay coordinates (sale date shifted to first cell, buyer address anchored at y~224) and refreshed geometry checksums.",
         "Georgia T-7 overlay config now references measured coordinates for VIN/year/make/model etc.; sale date still needs live PDF verification due to multi-cell layout.",
@@ -10,7 +10,8 @@
         "Converted advance-directive templates (EN 994 words, ES 1088 words) into production-ready drafts with 49 shared variables, including new care coordination and storage sections; see ops/artifacts/document-intel-cycle-0008/advance-directive-summary.md for detailed blueprint.",
         "Aligned advance-directive schema/questions with 50 bilingual placeholders (care coordination, storage, notary) and refreshed parity metrics at ops/artifacts/document-intel-cycle-0008/.",
         "document-intel-cycle-0009: Replaced mojibake-laden legal dictionary entries with clean ASCII translations for five canonical contract concepts.",
-        "LegalTranslationEngine passes ESLint after repair; tsc still failing due to broader admin/AI regressions (see ops/artifacts/document-intel-cycle-0009/typecheck.txt)."
+        "LegalTranslationEngine passes ESLint after repair; tsc still failing due to broader admin/AI regressions (see ops/artifacts/document-intel-cycle-0009/typecheck.txt).",
+        "document-intel-cycle-0010: Extended mojibake scanner to LegalTranslationEngine sources and added guardrail Jest test to catch corrupted dictionary entries."
     ],
     "todos": [
         "Run verify-templates (or targeted smoke) to confirm the updated advance-directive schema/question wiring before release.",
@@ -20,6 +21,7 @@
         "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
         "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage.",
         "Plan next placeholder replacements (accident-report, ach-authorization-form) using cycle-0007 audit for prioritization.",
-        "Coordinate with AI and Platform owners on restoring global typecheck success so Document Intelligence verifications can gate releases."
+        "Coordinate with AI and Platform owners on restoring global typecheck success so Document Intelligence verifications can gate releases.",
+        "Integrate mojibake scanner into CI guardrails for template releases."
     ]
 }

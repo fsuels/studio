@@ -1,6 +1,11 @@
-﻿// src/lib/vector-search/pinecone-service.ts
-import { Pinecone } from '@pinecone-database/pinecone';\r\nimport type {\r\n  PineconeRecord,\r\n  RecordMetadata,\r\n  RecordMetadataValue,\r\n  ScoredPineconeRecord,\r\n  FetchResponse,\r\n  QueryResponse,\r\n} from '@pinecone-database/pinecone';
-import { embeddingService } from './embedding-service';
+// src/lib/vector-search/pinecone-service.ts
+import { Pinecone } from '@pinecone-database/pinecone';
+import type {
+  FetchResponse,
+  QueryResponse,
+  RecordMetadataValue,
+} from '@pinecone-database/pinecone';
+import embeddingService from './embedding-service';
 
 interface PineconeMetadata extends Record<string, RecordMetadataValue> {
   docId: string;
@@ -150,6 +155,10 @@ export class PineconeService {
    * Get index instance
    */
   private getIndex() {
+    if (!this.pinecone) {
+      throw new Error('Pinecone client not initialized');
+    }
+
     return this.pinecone.index(this.indexName);
   }
 
@@ -162,6 +171,8 @@ export class PineconeService {
     metadata: Omit<PineconeMetadata, 'docId' | 'content'>,
   ): Promise<void> {
     try {
+      await this.initialize();
+
       const embedding = await embeddingService.generateEmbedding(content);
 
       const record: VectorRecord = {
@@ -195,6 +206,8 @@ export class PineconeService {
     }>,
   ): Promise<void> {
     try {
+      await this.initialize();
+
       const batchSize = 100; // Pinecone's batch limit
       const batches: typeof documents[] = [];
 
@@ -253,6 +266,8 @@ export class PineconeService {
         includeMetadata = true,
         includeFacets = true,
       } = options || {};
+
+      await this.initialize();
 
       // Generate query embedding
       const queryEmbedding = await embeddingService.generateEmbedding(query);
@@ -497,6 +512,8 @@ export class PineconeService {
    */
   async deleteDocument(docId: string): Promise<void> {
     try {
+      await this.initialize();
+
       const index = this.getIndex();
       await index.namespace(this.namespace).deleteOne(docId);
       console.log(`Deleted document: ${docId}`);
@@ -511,6 +528,8 @@ export class PineconeService {
    */
   async getIndexStats(): Promise<unknown> {
     try {
+      await this.initialize();
+
       const index = this.getIndex();
       return await index.describeIndexStats();
     } catch (error) {
@@ -529,8 +548,8 @@ export class PineconeService {
   ): Promise<SearchResult[]> {
     try {
       // First, fetch the document to get its embedding
-      const index = this.getIndex();
-      // First, fetch the document to get its embedding
+      await this.initialize();
+
       const index = this.getIndex();
       const namespace = index.namespace(this.namespace);
       const fetchResponse = (await namespace.fetch([docId])) as FetchResponse<PineconeMetadata>;
@@ -557,7 +576,6 @@ export class PineconeService {
         }));
 
       return results.slice(0, topK);
-      return results.slice(0, topK);
     } catch (error) {
       console.error(`Error finding similar documents for ${docId}:`, error);
       throw error;
@@ -565,14 +583,6 @@ export class PineconeService {
   }
 }
 
-let _pineconeService: PineconeService | null = null;
+export const pineconeService = new PineconeService();
 
-export function getPineconeService(): PineconeService {
-  if (!_pineconeService) {
-    _pineconeService = new PineconeService();
-  }
-  return _pineconeService;
-}
-
-// For backward compatibility
-export const pineconeService = getPineconeService();
+export default pineconeService;

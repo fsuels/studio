@@ -277,14 +277,6 @@ export class EmbeddingService {
   }
 }
 
-let _embeddingService: EmbeddingService | null = null;
+export const embeddingService = new EmbeddingService();
 
-export function getEmbeddingService(): EmbeddingService {
-  if (!_embeddingService) {
-    _embeddingService = new EmbeddingService();
-  }
-  return _embeddingService;
-}
-
-// For backward compatibility
-export const embeddingService = getEmbeddingService();
+export default embeddingService;

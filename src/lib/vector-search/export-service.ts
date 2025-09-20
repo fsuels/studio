@@ -2,7 +2,10 @@
 import { stringify } from 'csv-stringify/sync';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { pineconeService, type SearchFilters, type SearchResult } from './pinecone-service';
+import pineconeService, {
+  type SearchFilters,
+  type SearchResult,
+} from './pinecone-service';
 
 interface ExportOptions {
   format: 'csv' | 'json' | 'xlsx';

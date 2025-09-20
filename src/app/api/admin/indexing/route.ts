@@ -1,5 +1,7 @@
 // src/app/api/admin/indexing/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { documentAnalyzer } from '@/lib/vector-search/document-analyzer';
+import { pineconeService } from '@/lib/vector-search/pinecone-service';
 
 // Run dynamically at request time (SSR)
 export const dynamic = 'force-dynamic';
@@ -14,6 +16,65 @@ interface IndexingJob {
   failed: Array<{ docId: string; error: string }>;
   startedAt: string;
   completedAt?: string;
+}
+
+type SupportedLocale = 'en' | 'es';
+
+interface StartBulkIndexingParams {
+  locale?: SupportedLocale;
+  batchSize?: number;
+  force?: boolean;
+}
+
+interface IndexSingleDocumentParams {
+  docId: string;
+  locale?: SupportedLocale;
+  force?: boolean;
+}
+
+type IndexingRequestBody =
+  | ({ action: 'start_bulk_indexing' } & StartBulkIndexingParams)
+  | ({ action: 'index_single_document' } & IndexSingleDocumentParams)
+  | { action: 'initialize_index' }
+  | { action: 'get_index_stats' }
+  | { action: 'cleanup_index' };
+
+function isSupportedLocale(value: unknown): value is SupportedLocale {
+  return value === 'en' || value === 'es';
+}
+
+function isIndexingRequestBody(value: unknown): value is IndexingRequestBody {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const body = value as Record<string, unknown>;
+  const action = body.action;
+
+  if (action === 'start_bulk_indexing') {
+    const { locale, batchSize, force } = body;
+    const localeValid =
+      locale === undefined || isSupportedLocale(locale);
+    const batchSizeValid =
+      batchSize === undefined || typeof batchSize === 'number';
+    const forceValid = force === undefined || typeof force === 'boolean';
+    return localeValid && batchSizeValid && forceValid;
+  }
+
+  if (action === 'index_single_document') {
+    const { docId, locale, force } = body;
+    const docIdValid = typeof docId === 'string' && docId.length > 0;
+    const localeValid =
+      locale === undefined || isSupportedLocale(locale);
+    const forceValid = force === undefined || typeof force === 'boolean';
+    return docIdValid && localeValid && forceValid;
+  }
+
+  return (
+    action === 'initialize_index' ||
+    action === 'get_index_stats' ||
+    action === 'cleanup_index'
+  );
 }
 
 const activeJobs = new Map<string, IndexingJob>();
@@ -42,14 +103,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { action, ...params } = body;
 
-    switch (action) {
+    if (!isIndexingRequestBody(body)) {
+      return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
+
+    switch (body.action) {
       case 'start_bulk_indexing':
-        return await handleStartBulkIndexing(params);
+        return await handleStartBulkIndexing(body);
 
       case 'index_single_document':
-        return await handleIndexSingleDocument(params);
+        return await handleIndexSingleDocument(body);
 
       case 'initialize_index':
         return await handleInitializeIndex();
@@ -111,13 +175,12 @@ export async function GET(request: NextRequest) {
 /**
  * Start bulk indexing of all documents
  */
-async function handleStartBulkIndexing(params: any) {
-  const { locale = 'en', batchSize = 10, force = false } = params;
+async function handleStartBulkIndexing(params: StartBulkIndexingParams) {
+  const locale: SupportedLocale = params.locale ?? 'en';
+  const batchSize = Math.max(1, params.batchSize ?? 10);
+  const force = params.force ?? false;
 
   try {
-    // Lazy import services
-    const { documentAnalyzer } = await import('@/lib/vector-search/document-analyzer');
-
     // Generate job ID
     const jobId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -132,7 +195,7 @@ async function handleStartBulkIndexing(params: any) {
     }
 
     // Filter documents that need processing (if not forcing)
-    const docsToProcess = allDocIds;
+    const docsToProcess: string[] = allDocIds;
     if (!force) {
       // In a real implementation, you'd check which docs need reprocessing
       // For now, process all documents
@@ -188,7 +251,7 @@ async function handleStartBulkIndexing(params: any) {
 async function processBulkIndexing(
   jobId: string,
   docIds: string[],
-  locale: 'en' | 'es',
+  locale: SupportedLocale,
   batchSize: number,
 ) {
   const job = activeJobs.get(jobId);
@@ -239,8 +302,10 @@ async function processBulkIndexing(
 /**
  * Index a single document
  */
-async function handleIndexSingleDocument(params: any) {
-  const { docId, locale = 'en', force = false } = params;
+async function handleIndexSingleDocument(params: IndexSingleDocumentParams) {
+  const docId = params.docId;
+  const locale: SupportedLocale = params.locale ?? 'en';
+  const force = params.force ?? false;
 
   if (!docId) {
     return NextResponse.json(

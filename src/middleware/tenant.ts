@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Tenant } from '@/types/tenant';
+import { DEFAULT_TENANT_FEATURES, DEFAULT_TENANT_LIMITS, Tenant } from '@/types/tenant';
 
 // Tenant resolution and routing middleware
 export async function tenantMiddleware(request: NextRequest) {
@@ -34,6 +34,29 @@ type TenantContext =
   | { type: 'tenant'; tenant: Tenant }
   | { type: 'subdomain'; slug: string };
 
+const FALLBACK_TENANT_SETTINGS: Tenant['settings'] = {
+  allowPublicSignup: false,
+  requireEmailVerification: true,
+  documentRetentionDays: 365,
+  defaultUserRole: 'viewer',
+  enableGuestAccess: false,
+  enableDocumentSharing: true,
+  enableComments: true,
+  timezone: 'UTC',
+  dateFormat: 'YYYY-MM-DD',
+  emailNotifications: {
+    newUserSignup: true,
+    documentCreated: true,
+    documentShared: true,
+    documentCompleted: true,
+    systemUpdates: true,
+  },
+  security: {
+    enforcePasswordPolicy: false,
+    sessionTimeoutMinutes: 60,
+    ipWhitelist: [],
+  },
+};
 
 async function resolveTenantFromHostname(
   hostname: string,
@@ -104,8 +127,8 @@ async function handleTenantRequest(
   // Add tenant context headers
   response.headers.set('x-tenant-id', tenant.id);
   response.headers.set('x-tenant-slug', tenant.slug);
-  response.headers.set('x-tenant-name', tenant.name);
-  response.headers.set('x-tenant-plan', tenant.subscription.plan);
+  response.headers.set('x-tenant-name', tenant.name ?? tenant.slug);
+  response.headers.set('x-tenant-plan', tenant.subscription?.plan ?? 'trial');
 
   return response;
 }
@@ -178,9 +201,7 @@ export async function getTenantFromHeaders(
     return null;
   }
 
-  // For now, construct minimal tenant from headers
-  // In production, you might want to fetch full tenant data
-  const plan =
+  const plan: Tenant['subscription']['plan'] =
     tenantPlan === 'trial' ||
     tenantPlan === 'starter' ||
     tenantPlan === 'professional' ||
@@ -188,17 +209,56 @@ export async function getTenantFromHeaders(
       ? tenantPlan
       : 'trial';
 
+  const fallbackName = tenantName || tenantSlug;
+  const nowIso = new Date().toISOString();
+
+  const subscription: Tenant['subscription'] = {
+    plan,
+    status: 'active',
+    currentPeriodStart: nowIso,
+    currentPeriodEnd: nowIso,
+    cancelAtPeriodEnd: false,
+    monthlyDocumentQuota: 0,
+    documentsUsedThisMonth: 0,
+    ovageRate: 0,
+  };
+
+  const features: Tenant['features'] = { ...DEFAULT_TENANT_FEATURES };
+  const limits: Tenant['limits'] = { ...DEFAULT_TENANT_LIMITS };
+  const settings = JSON.parse(
+    JSON.stringify(FALLBACK_TENANT_SETTINGS),
+  ) as Tenant['settings'];
+
   return {
     id: tenantId,
     slug: tenantSlug,
-    name: tenantName || tenantSlug,
-    subscription: { plan } as unknown as Tenant['subscription'],
-  } as Tenant;
-}
-
-// Client-side tenant context hook
+    name: fallbackName,
+    description: '',
+    ownerUserId: 'system',
+    contactEmail: 'support@123legaldoc.com',
+    branding: {
+      primaryColor: '#0F172A',
+      secondaryColor: '#1E293B',
+      companyName: fallbackName,
+    },
+    domains: [],
+    subscription,
+    features,
+    limits,
+    status: plan === 'trial' ? 'trial' : 'active',
+    createdAt: nowIso,
+    updatedAt: nowIso,
+    settings,
+  };
+}// Client-side tenant context hook
 export function useTenant() {
   // This would be implemented with React context
   // For now, return null
   return null;
 }
+
+
+
+
+
+

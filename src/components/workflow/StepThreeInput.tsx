@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
-import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
+import type { FieldSuggestion } from '@/ai/flows/analyze-form-data';
 import type { FormField } from '@/data/formSchemas';
 import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
 
@@ -57,35 +57,47 @@ export function StepThreeInput({ templateId }: Props) {
   };
 
   const runAiCheck = async () => {
+    if (!template) {
+      return;
+    }
     setLoading(true);
     setIsReviewing(true);
     try {
-      // Call the corrected function name
-      const response = await analyzeFormData({
-        documentType: template.name || template.id,
-        schema: (template.questions as unknown as FormField[]) || [],
-        answers: formData,
-        // state: stateCode,
-        // language: 'en',
+      const res = await fetch('/api/form-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          documentType: template.name || template.id,
+          schema: (template.questions as unknown as FormField[]) || [],
+          answers: formData,
+        }),
+        cache: 'no-store',
       });
-      // Assuming analyzeFormData returns an array of suggestions/issues objects
-      // Adjust this based on the actual return type of analyzeFormData
-      // For now, let's assume it returns an array of objects with a 'message' and 'type' (issue/suggestion)
-      const issues = response
+
+      if (!res.ok) {
+        throw new Error(`AI analysis request failed with status ${res.status}`);
+      }
+
+      const { suggestions }: { suggestions: FieldSuggestion[] } = await res.json();
+
+      const issues = suggestions
         .filter((r) => r.importance === 'error' || r.importance === 'warning')
         .map((r) => r.message);
-      const suggestions = response
+      const infoSuggestions = suggestions
         .filter((r) => r.importance === 'info')
         .map((r) => r.message);
 
       setAiIssues(issues);
-      setAiSuggestions(suggestions);
+      setAiSuggestions(infoSuggestions);
     } catch (err) {
       console.error('Error during AI check:', err);
       setAiIssues(['Unable to analyze the form. Please try again later.']);
       setAiSuggestions([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (templateError) {
@@ -243,3 +255,4 @@ export function StepThreeInput({ templateId }: Props) {
     </div>
   );
 }
+

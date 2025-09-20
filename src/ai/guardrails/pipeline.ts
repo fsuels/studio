@@ -1,4 +1,4 @@
-﻿import 'server-only';
+import 'server-only';
 
 import { createChatCompletion, extractMessageContent } from '@/ai/gateway';
 import { loadGuardrailConfig } from './config';
@@ -12,6 +12,18 @@ type GuardrailModelResult = {
   verdict: GuardrailVerdict;
   reason?: string;
   metadata?: Record<string, unknown>;
+};
+
+const VERDICT_ALLOWED: Record<GuardrailVerdict, boolean> = {
+  allow: true,
+  review: false,
+  block: false,
+};
+
+const VERDICT_ESCALATE: Record<GuardrailVerdict, boolean> = {
+  allow: false,
+  review: true,
+  block: true,
 };
 
 async function callGuardrailModel(
@@ -211,12 +223,14 @@ export async function evaluateGuardrails(
       metadata: { rule: heuristicRule.id, severity: heuristicRule.severity },
     });
 
+    const heuristicVerdict = heuristicRule.verdict;
+
     return {
-      allowed: heuristicRule.verdict === 'allow',
-      verdict: heuristicRule.verdict,
+      allowed: VERDICT_ALLOWED[heuristicVerdict],
+      verdict: heuristicVerdict,
       stage: 'heuristic',
       reason: heuristicRule.reason,
-      escalate: heuristicRule.verdict !== 'allow',
+      escalate: VERDICT_ESCALATE[heuristicVerdict],
       events,
     };
   }
@@ -233,3 +247,4 @@ export async function evaluateGuardrails(
     events,
   };
 }
+

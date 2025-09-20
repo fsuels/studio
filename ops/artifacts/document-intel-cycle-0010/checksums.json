@@ -1,0 +1,10 @@
+﻿{
+    "ops/artifacts/document-intel-cycle-0010/legal-translation-guardrails.md":  "516eef1ce6b14ffbe0bb9dc1d31799e7083a668932ed01ac5fad646925ece820",
+    "TEAM/Document-Intelligence/memory.json":  "0d44e21238377947aa3f54d17d40bb07224dfacee75c1a62301775162c498be9",
+    "src/lib/legal-translation/__tests__/legal-translation-encoding.guardrails.test.ts":  "28e59d55725860c06a79e5d1eb727b3b28a368eaa7112db5c9f2340d8f215b81",
+    "ops/artifacts/document-intel-cycle-0010/mojibake-scan.txt":  "cd24dd805e5ee0d4302a575abf8fc1c476e34a7a0c66adbc707fc9e9df08ee6f",
+    "scripts/i18n/check-mojibake.ts":  "b17c8bf8b21e18fb78671bf5b81f69c08732a34945b5c142228228a41d1656b2",
+    "ops/state/lock/codex.lock":  "5f75b8b24ee29ecb933404d3072fd7420390e68e246e7d39e382bf5ac0d4b7fd",
+    "ops/artifacts/document-intel-cycle-0010/jest-legal-translation.txt":  "50c87a6c9524bb242d06987f111c2c986c775f2b9126fa08cdfaebb1005e8d4d",
+    "ops/artifacts/document-intel-cycle-0010/eslint.txt":  "8f1a64bf7d9a87e96bdd93897d32c194430248c7b1614d7e21cf4499273be1d9"
+}

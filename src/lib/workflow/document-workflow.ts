@@ -1,4 +1,4 @@
-﻿import { getAllDocumentMetadata, type DocumentMetadata } from '@/lib/document-metadata-registry';
+import { getAllDocumentMetadata, type DocumentMetadata } from '@/lib/document-metadata-registry';
 import { loadDocument } from '@/lib/dynamic-document-loader';
 import type { LegalDocument } from '@/types/documents';
 import { preprocessQuery } from '@/lib/search/comprehensive-synonym-map';

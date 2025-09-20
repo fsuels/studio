@@ -1,5 +1,15 @@
 // API endpoints for automated refund system
 import { NextRequest, NextResponse } from 'next/server';
+import type { RefundRequest } from '@/lib/support-toolkit/refund-system';
+
+interface RefundSummary {
+  total: number;
+  totalAmount: number;
+  byStatus: Record<RefundRequest['status'], number>;
+  byReason: Record<RefundRequest['reason'], number>;
+  autoApprovalRate: number;
+  averageProcessingTime: number;
+}
 
 export async function GET(request: NextRequest) {
   // Require admin authentication for refund queries (lazy import)
@@ -16,7 +26,7 @@ export async function GET(request: NextRequest) {
     const _status = url.searchParams.get('status');
     const pending = url.searchParams.get('pending') === 'true';
 
-    let refunds;
+    let refunds: RefundRequest[] = [];
 
     const { RefundSystem } = await import(
       '@/lib/support-toolkit/refund-system'
@@ -41,33 +51,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate summary statistics
-    const summary = {
-      total: refunds.length,
-      totalAmount: refunds.reduce((sum, r) => sum + r.amount, 0),
-      byStatus: refunds.reduce(
-        (acc, r) => {
-          acc[r.status] = (acc[r.status] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      ),
-      byReason: refunds.reduce(
-        (acc, r) => {
-          acc[r.reason] = (acc[r.reason] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      ),
-      autoApprovalRate:
-        refunds.filter((r) => r.metadata.autoApprovalRules?.length).length /
-        refunds.length,
-      averageProcessingTime: calculateAverageProcessingTime(refunds),
-    };
+    const summary = buildRefundSummary(refunds);
 
     return NextResponse.json({
       success: true,
       data: {
-        refunds: refunds.sort((a, b) => b.createdAt - a.createdAt),
+        refunds: [...refunds].sort((a, b) => b.createdAt - a.createdAt),
         summary,
       },
     });
@@ -234,14 +223,64 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper function to calculate average processing time
-function calculateAverageProcessingTime(refunds: any[]): number {
-  const processedRefunds = refunds.filter((r) => r.processedAt && r.createdAt);
+function calculateAverageProcessingTime(refunds: RefundRequest[]): number {
+  const processedRefunds = refunds.filter(
+    (refund) => typeof refund.processedAt === 'number' && refund.createdAt,
+  );
 
-  if (processedRefunds.length === 0) return 0;
+  if (processedRefunds.length === 0) {
+    return 0;
+  }
 
-  const totalTime = processedRefunds.reduce((sum, r) => {
-    return sum + (r.processedAt - r.createdAt);
+  const totalTime = processedRefunds.reduce((sum, refund) => {
+    return sum + ((refund.processedAt ?? 0) - refund.createdAt);
   }, 0);
 
   return totalTime / processedRefunds.length;
+}
+
+function buildRefundSummary(refunds: RefundRequest[]): RefundSummary {
+  const byStatus = refunds.reduce<RefundSummary['byStatus']>((acc, refund) => {
+    acc[refund.status] += 1;
+    return acc;
+  }, createStatusAccumulator());
+
+  const byReason = refunds.reduce<RefundSummary['byReason']>((acc, refund) => {
+    acc[refund.reason] += 1;
+    return acc;
+  }, createReasonAccumulator());
+
+  const autoApprovalCount = refunds.filter(
+    (refund) => (refund.metadata.autoApprovalRules?.length ?? 0) > 0,
+  ).length;
+
+  return {
+    total: refunds.length,
+    totalAmount: refunds.reduce((sum, refund) => sum + refund.amount, 0),
+    byStatus,
+    byReason,
+    autoApprovalRate: refunds.length === 0 ? 0 : autoApprovalCount / refunds.length,
+    averageProcessingTime: calculateAverageProcessingTime(refunds),
+  };
+}
+
+function createStatusAccumulator(): RefundSummary['byStatus'] {
+  return {
+    pending: 0,
+    approved: 0,
+    processed: 0,
+    failed: 0,
+    rejected: 0,
+  };
+}
+
+function createReasonAccumulator(): RefundSummary['byReason'] {
+  return {
+    customer_request: 0,
+    technical_issue: 0,
+    billing_error: 0,
+    fraud_protection: 0,
+    goodwill: 0,
+    chargeback: 0,
+  };
 }
