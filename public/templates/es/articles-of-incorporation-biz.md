@@ -1,99 +1,349 @@
-# Contrato de Compraventa de Vehículo
+# Estatutos de Incorporacion (Empresa)
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**ARTICULOS DE INCORPORACION**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**Presentados ante la Secretaria de Estado de {{state}}**
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Nombre Corporativo
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+El nombre de la corporacion es:
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**{{corporation_name}}**
 
-## 2. Precio de Compra y Pago
+{{#if name_reservation}}
+Este nombre fue reservado bajo el Numero de Reserva {{reservation_number}} con fecha {{reservation_date}}.
+{{/if}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+---
 
-## 3. Condición del Vehículo
+## 2. Domicilio Registrado y Agente
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+### 2.1 Domicilio Registrado
+
+La direccion del domicilio registrado es:
+{{registered_office_address}}
+
+### 2.2 Agente Registrado
+
+El nombre del agente registrado en dicho domicilio es:
+**{{registered_agent_name}}**
+
+{{#if registered_agent_entity}}
+**Entidad del Agente Registrado:** {{registered_agent_entity_name}}
+{{/if}}
+
+El agente registrado acepta el nombramiento y actuara en nombre de la corporacion para fines de notificaciones oficiales.
+
+---
+
+## 3. Proposito y Facultades
+
+### 3.1 Proposito General
+
+El proposito para el cual se organiza esta corporacion es:
+{{#if general_purpose}}
+Realizar cualquier acto o actividad licita permitida por la Ley de Corporaciones Comerciales de {{state}}.
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**Proposito especifico:** {{specific_purpose}}
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 3.2 Actividades Comerciales Especificas
 
-El Vendedor declara y garantiza que:
+La corporacion se organiza para desarrollar las siguientes actividades comerciales:
+{{business_activities}}
 
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
+### 3.3 Facultades
 
-## 5. Ley Aplicable
+La corporacion tendra todas las facultades otorgadas por las leyes de {{state}}, incluyendo:
 
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+- Realizar negocios y operaciones
+- Comprar, arrendar o adquirir bienes
+- Vender, ceder, hipotecar o disponer de bienes
+- Obtener creditos y emitir obligaciones
+- Otorgar prestamos e invertir fondos
+- Celebrar contratos y acuerdos
+- Demandar y ser demandada en su nombre corporativo
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Capital Social
+
+### 4.1 Acciones Autorizadas
+
+El numero total de acciones que la corporacion puede emitir es:
+**{{total_authorized_shares}}** acciones
+
+### 4.2 Clases de Acciones
+
+{{#if multiple_stock_classes}}
+La corporacion esta autorizada para emitir las siguientes clases de acciones:
+
+**Acciones Ordinarias Clase A:**
+
+- Numero de acciones: {{class_a_shares}}
+- Valor nominal: ${{class_a_par_value}} por accion
+- Derechos y privilegios: {{class_a_rights}}
+
+**Acciones Ordinarias Clase B:**
+
+- Numero de acciones: {{class_b_shares}}
+- Valor nominal: ${{class_b_par_value}} por accion
+- Derechos y privilegios: {{class_b_rights}}
+
+{{#if preferred_stock}}
+**Acciones Preferentes:**
+
+- Numero de acciones: {{preferred_shares}}
+- Valor nominal: ${{preferred_par_value}} por accion
+- Derechos y privilegios: {{preferred_rights}}
+{{/if}}
+{{else}}
+**Acciones Ordinarias:**
+
+- Numero de acciones: {{common_shares}}
+- Valor nominal: {{#if par_value}}${{par_value}} por accion{{else}}Sin valor nominal{{/if}}
+{{/if}}
+
+### 4.3 Derechos y Restricciones sobre las Acciones
+
+{{stock_rights_restrictions}}
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Incorporadores
+
+Los nombres y domicilios de los incorporadores son:
+
+**Incorporador 1:**
+**Nombre:** {{incorporator_1_name}}
+**Domicilio:** {{incorporator_1_address}}
+**Firma:** ****************_****************
+
+{{#if incorporator_2_name}}
+**Incorporador 2:**
+**Nombre:** {{incorporator_2_name}}
+**Domicilio:** {{incorporator_2_address}}
+**Firma:** ****************_****************
+{{/if}}
+
+{{#if incorporator_3_name}}
+**Incorporador 3:**
+**Nombre:** {{incorporator_3_name}}
+**Domicilio:** {{incorporator_3_address}}
+**Firma:** ****************_****************
+{{/if}}
+
+---
+
+## 6. Directores Iniciales
+
+{{#if initial_directors_named}}
+Los nombres y domicilios de los directores iniciales son:
+
+**Director 1:**
+**Nombre:** {{director_1_name}}
+**Domicilio:** {{director_1_address}}
+
+**Director 2:**
+**Nombre:** {{director_2_name}}
+**Domicilio:** {{director_2_address}}
+
+**Director 3:**
+**Nombre:** {{director_3_name}}
+**Domicilio:** {{director_3_address}}
+
+{{additional_directors}}
+{{else}}
+El numero de directores iniciales es {{initial_director_count}}, pero sus nombres y domicilios no se detallan en este documento. Seran designados conforme a los estatutos sociales.
+{{/if}}
+
+---
+
+## 7. Oficina Principal
+
+La direccion de la oficina principal de la corporacion es:
+{{principal_office_address}}
+
+**Direccion postal (si es diferente):**
+{{#if different_mailing_address}}
+{{mailing_address}}
+{{else}}
+Igual que la direccion de la oficina principal.
+{{/if}}
+
+---
+
+## 8. Duracion
+
+{{#if perpetual_duration}}
+La corporacion tendra existencia perpetua.
+{{else}}
+La corporacion tendra una duracion de {{duration_period}}.
+{{/if}}
+
+---
+
+## 9. Disposiciones Adicionales
+
+{{#if additional_provisions}}
+
+### 9.1 Limitacion de Responsabilidad de los Directores
+
+{{director_liability_limitation}}
+
+### 9.2 Indemnizacion
+
+{{indemnification_provisions}}
+
+### 9.3 Combinaciones de Negocios
+
+{{business_combination_provisions}}
+
+### 9.4 Otras Disposiciones
+
+{{other_provisions}}
+{{else}}
+No se incluyen disposiciones adicionales.
+{{/if}}
+
+---
+
+## 10. Elecciones Fiscales y Corporativas
+
+{{#if s_corporation_election}}
+
+### 10.1 Eleccion de Corporacion S
+
+La corporacion elige el tratamiento como Corporacion S para efectos fiscales federales y presentara el Formulario 2553 ante el Servicio de Impuestos Internos.
+{{/if}}
+
+{{#if close_corporation}}
+
+### 10.2 Eleccion de Corporacion Cerrada
+
+La corporacion elige ser tratada como corporacion cerrada conforme a la ley de {{state}}.
+{{/if}}
+
+---
+
+## 11. Fecha de Vigencia
+
+{{#if delayed_effective_date}}
+Estos Estatutos entraran en vigor el {{effective_date}}.
+{{else}}
+Estos Estatutos entraran en vigor al momento de su presentacion ante la Secretaria de Estado.
+{{/if}}
+
+---
+
+## 12. Declaracion de los Incorporadores
+
+Los incorporadores declaran que:
+
+- La informacion contenida en estos Estatutos es verdadera y correcta.
+- La corporacion se organiza con fines legitimos.
+- Los incorporadores tienen autoridad para firmar estos Estatutos de Incorporacion.
+
+---
+
+## Signatures
+
+## 13. Firmas de los Incorporadores
+
+**EN FE DE LO CUAL**, los incorporadores suscriben estos Estatutos con fecha {{execution_date}}.
+
+**FIRMAS DE INCORPORADORES:**
+
+**{{incorporator_1_name}}:**
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{incorporator_1_name}}, Incorporador |                    |
+
+{{#if incorporator_2_name}}
+**{{incorporator_2_name}}:**
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{incorporator_2_name}}, Incorporador |                    |
+{{/if}}
+
+{{#if incorporator_3_name}}
+**{{incorporator_3_name}}:**
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{incorporator_3_name}}, Incorporador |                    |
+{{/if}}
+
+---
+
+## 14. Aceptacion del Agente Registrado
+
+{{#if registered_agent_acceptance_required}}
+Yo, {{registered_agent_name}}, acepto el nombramiento como agente registrado de {{corporation_name}}.
+
+**AGENTE REGISTRADO:**
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{registered_agent_name}}           |                    |
+| Agente Registrado                   |                    |
+
+{{/if}}
+
+---
+
+## 15. Informacion de Presentacion
+
+**Para uso de la Secretaria de Estado:**
+
+**Cuota de presentacion:** $****__****  
+**Numero de expediente:** ****__****  
+**Fecha de presentacion:** ****__****  
+**Fecha de vigencia:** ****__****
+
+**Registrado por:** ************__************  
+**Secretaria de Estado de {{state}}**
+
+---
+
+## 16. Informacion de Contacto
+
+**Contacto principal de la corporacion:**
+**Nombre:** {{primary_contact_name}}  
+**Cargo:** {{primary_contact_title}}  
+**Telefono:** {{primary_contact_phone}}  
+**Correo electronico:** {{primary_contact_email}}
+
+**Abogado (si aplica):**
+**Nombre:** {{attorney_name}}  
+**Despacho:** {{law_firm_name}}  
+**Telefono:** {{attorney_phone}}  
+**Correo electronico:** {{attorney_email}}  
+**Numero de colegiatura:** {{attorney_bar_number}}
+
+---
+
+## 17. Documentos Requeridos
+
+{{#if required_attachments}}
+Se adjuntan los siguientes documentos:
+{{attachment_list}}
+{{else}}
+No se adjuntan documentos adicionales.
+{{/if}}
+
+---
+
+**IMPORTANT LEGAL NOTICE / AVISO LEGAL IMPORTANTE:** Estos Estatutos de Incorporacion deben revisarse con un profesional legal calificado para asegurar el cumplimiento de las leyes corporativas de {{state}} y de los requisitos comerciales especificos. Las exigencias estatales pueden variar, por lo que se recomienda obtener asesoria legal y fiscal antes de presentar esta documentacion. Documentos adicionales, como reglamentos internos, acuerdos de accionistas y elecciones fiscales federales, pueden ser necesarios para completar el proceso de incorporacion.
+
+_Ac 2025 123LegalDoc - Formulario de autoservicio - No es asesoramiento legal - Terminos: 123LegalDoc.com/terms_

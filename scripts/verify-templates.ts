@@ -3,16 +3,25 @@
 /**
  * Template Verification System for 123LegalDoc
  *
- * This script ensures all legal document templates meet quality standards
- * and prevents duplicate content issues.
+ * This script ensures all legal document templates meet quality standards,
+ * enforces bilingual parity (variables, sections, metadata), and prevents duplicate content issues.
  *
  * Run: npm run verify-templates
+ * - Checks EN/ES template parity before generating the report.
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import chalk from 'chalk';
+import { DOCUMENT_METADATA } from '../src/lib/documents/manifest.generated';
+
+import {
+  findTranslationParityIssues,
+  type BilingualTemplateSummary,
+  type MetadataIndex,
+} from './verify-templates-parity';
+
 
 interface TemplateValidationResult {
   path: string;
@@ -21,6 +30,10 @@ interface TemplateValidationResult {
   warnings: string[];
   contentHash: string;
   documentType: string;
+  language: string;
+  variables: string[];
+  sectionHeadings: string[];
+  numberedSections: string[];
   variableCount: number;
   sectionCount: number;
   wordCount: number;
@@ -35,10 +48,16 @@ interface ValidationRules {
   documentTypePatterns: Record<string, RegExp>;
 }
 
+interface TemplateVerifierOptions {
+  reportOnly?: boolean;
+}
+
 class TemplateVerifier {
   private templateDir: string;
   private validationResults: TemplateValidationResult[] = [];
   private duplicateHashes: Map<string, string[]> = new Map();
+  private metadataIndex: MetadataIndex;
+  private readonly reportOnly: boolean;
 
   // Validation rules for all templates
   private globalRules: ValidationRules = {
@@ -105,6 +124,18 @@ class TemplateVerifier {
 
   // Document-specific validation rules
   private documentRules: Record<string, Partial<ValidationRules>> = {
+    'advance-directive': {
+      requiredVariables: [
+        '{{witness_one_name}}',
+        '{{witness_one_signature_date}}',
+        '{{witness_two_name}}',
+        '{{witness_two_signature_date}}',
+        '{{notary_state}}',
+        '{{notary_county}}',
+        '{{notary_date}}',
+        '{{notary_commission_expiration}}',
+      ],
+    },
     'bill-of-sale-vehicle': {
       requiredSections: [
         'Vehicle Description',
@@ -171,8 +202,10 @@ class TemplateVerifier {
     },
   };
 
-  constructor(templateDir: string) {
+  constructor(templateDir: string, options: TemplateVerifierOptions = {}) {
     this.templateDir = templateDir;
+    this.metadataIndex = DOCUMENT_METADATA;
+    this.reportOnly = options.reportOnly ?? false;
   }
 
   /**
@@ -180,7 +213,7 @@ class TemplateVerifier {
    */
   async verifyAllTemplates(): Promise<boolean> {
     console.log(
-      chalk.blue.bold('\n🔍 Starting Template Verification System\n'),
+      chalk.blue.bold('\n[verify] Starting Template Verification System\n'),
     );
 
     const languages = ['en', 'es'];
@@ -205,7 +238,7 @@ class TemplateVerifier {
           allValid = false;
           this.reportErrors(result);
         } else {
-          console.log(chalk.green(`✅ ${file}`));
+          console.log(chalk.green(`[OK] ${file}`));
         }
 
         // Track content hashes for duplicate detection
@@ -216,13 +249,57 @@ class TemplateVerifier {
       }
     }
 
+    this.checkLanguageParity();
+
     // Check for duplicates
     this.checkForDuplicates();
+
+    const finalValidity = this.validationResults.every((r) => r.isValid);
 
     // Generate report
     this.generateReport();
 
-    return allValid;
+    return finalValidity;
+  }
+
+  private checkLanguageParity(): void {
+    const summaries: BilingualTemplateSummary[] = this.validationResults.map((result) => ({
+      documentType: result.documentType,
+      language: result.language,
+      variables: result.variables,
+      sectionHeadings: result.sectionHeadings,
+      numberedSections: result.numberedSections,
+    }));
+
+    const issues = findTranslationParityIssues(summaries, this.metadataIndex);
+
+    for (const issue of issues) {
+      let attached = false;
+
+      for (const language of issue.affectedLanguages) {
+        const target = this.validationResults.find(
+          (r) =>
+            r.documentType === issue.documentType && r.language === language,
+        );
+
+        if (target) {
+          this.raiseParityError(target, issue.message);
+          attached = true;
+        }
+      }
+
+      if (!attached) {
+        const fallback = this.validationResults.find(
+          (r) => r.documentType === issue.documentType,
+        );
+
+        if (fallback) {
+          this.raiseParityError(fallback, issue.message);
+        } else {
+          console.log(chalk.red(`[PARITY] ${issue.documentType}: ${issue.message}`));
+        }
+      }
+    }
   }
 
   /**
@@ -233,7 +310,31 @@ class TemplateVerifier {
   ): Promise<TemplateValidationResult> {
     const content = fs.readFileSync(filePath, 'utf-8');
     const fileName = path.basename(filePath, '.md');
+    const language = path.basename(path.dirname(filePath));
     const contentHash = crypto.createHash('md5').update(content).digest('hex');
+    const variableTokens = Array.from(
+      content.matchAll(/\{\{\s*([#\/>]?)\s*([a-zA-Z0-9_.-]+)[^}]*\}\}/g),
+    );
+    const variableNames = variableTokens
+      .map(([, prefix, name]) => ({ prefix, name }))
+      .filter(
+        ({ prefix, name }) =>
+          Boolean(name) && !['#', '/', '>'].includes(prefix) && name !== 'else',
+      )
+      .map(({ name }) => name.trim());
+    const variables = Array.from(new Set(variableNames)).sort();
+
+    const lines = content.split(/\r?\n/).map((line) => line.trim());
+    const sectionHeadings = lines
+      .filter((line) => line.startsWith('## '))
+      .map((line) => line.replace(/^##\s+/, '').trim());
+    const numberedSections = sectionHeadings
+      .map((heading) => {
+        const match = heading.match(/^(\d+(?:\.\d+)*)/);
+        return match ? match[1] : null;
+      })
+      .filter((value): value is string => Boolean(value));
+    const wordCount = content.split(/\s+/).length;
 
     const result: TemplateValidationResult = {
       path: filePath,
@@ -242,9 +343,13 @@ class TemplateVerifier {
       warnings: [],
       contentHash,
       documentType: fileName,
-      variableCount: (content.match(/\{\{[^}]+\}\}/g) || []).length,
-      sectionCount: (content.match(/^##\s+\d+\./gm) || []).length,
-      wordCount: content.split(/\s+/).length,
+      language,
+      variables,
+      sectionHeadings,
+      numberedSections,
+      variableCount: variableNames.length,
+      sectionCount: numberedSections.length,
+      wordCount,
     };
 
     // Apply global rules
@@ -379,7 +484,7 @@ class TemplateVerifier {
     content: string,
     result: TemplateValidationResult,
   ): void {
-    const lines = content.split('\n');
+    const lines = content.split(/\r?\n/);
 
     // Check for proper header
     if (!lines[0].startsWith('# ')) {
@@ -417,11 +522,11 @@ class TemplateVerifier {
    * Check for duplicate content across templates
    */
   private checkForDuplicates(): void {
-    console.log(chalk.yellow('\n🔎 Checking for duplicate content...'));
+    console.log(chalk.yellow('\n[scan] Checking for duplicate content...'));
 
     for (const [hash, files] of this.duplicateHashes.entries()) {
       if (files.length > 1) {
-        console.log(chalk.red(`\n❌ DUPLICATE CONTENT DETECTED:`));
+        console.log(chalk.red('\n[FAIL] DUPLICATE CONTENT DETECTED:'));
         console.log(chalk.red(`The following files have identical content:`));
         files.forEach((file) => console.log(chalk.red(`  - ${file}`)));
 
@@ -438,11 +543,25 @@ class TemplateVerifier {
     }
   }
 
+  private raiseParityError(
+    result: TemplateValidationResult,
+    message: string,
+  ): void {
+    if (!result.errors.includes(message)) {
+      const wasValid = result.isValid;
+      result.errors.push(message);
+      result.isValid = false;
+      if (wasValid) {
+        this.reportErrors(result);
+      }
+    }
+  }
+
   /**
    * Report errors for a template
    */
   private reportErrors(result: TemplateValidationResult): void {
-    console.log(chalk.red(`\n❌ ${path.basename(result.path)}`));
+    console.log(chalk.red(`\n[FAIL] ${path.basename(result.path)}`));
 
     if (result.errors.length > 0) {
       console.log(chalk.red('  Errors:'));
@@ -483,7 +602,7 @@ class TemplateVerifier {
       0,
     );
 
-    console.log(chalk.blue.bold('\n📊 Verification Report\n'));
+    console.log(chalk.blue.bold('\n[Report] Verification Report\n'));
     console.log(`Total Templates: ${totalTemplates}`);
     console.log(`Valid Templates: ${chalk.green(validTemplates)}`);
     console.log(`Invalid Templates: ${chalk.red(invalidTemplates)}`);
@@ -514,14 +633,18 @@ class TemplateVerifier {
 
     if (invalidTemplates > 0) {
       console.log(
-        chalk.red.bold(
-          '\n❌ VERIFICATION FAILED: Fix the errors above and run verification again.',
-        ),
+        chalk.red.bold('\n[FAIL] VERIFICATION FAILED: Fix the errors above and run verification again.'),
       );
-      process.exit(1);
+      if (!this.reportOnly) {
+        process.exit(1);
+      } else {
+        console.log(
+          chalk.gray('[report-only] Exit code suppressed for diagnostic run.'),
+        );
+      }
     } else {
       console.log(
-        chalk.green.bold('\n✅ ALL TEMPLATES VERIFIED SUCCESSFULLY!'),
+        chalk.green.bold('\n[OK] ALL TEMPLATES VERIFIED SUCCESSFULLY!'),
       );
     }
   }
@@ -529,14 +652,22 @@ class TemplateVerifier {
 
 // Run verification
 async function main() {
+  const args = process.argv.slice(2);
+  const reportOnly = args.includes('--report-only');
+
   const templateDir = path.join(__dirname, '..', 'public', 'templates');
-  const verifier = new TemplateVerifier(templateDir);
+  const verifier = new TemplateVerifier(templateDir, { reportOnly });
 
   try {
-    await verifier.verifyAllTemplates();
+    const isValid = await verifier.verifyAllTemplates();
+    if (!isValid && !reportOnly) {
+      process.exit(1);
+    }
   } catch (error) {
     console.error(chalk.red('Verification failed with error:'), error);
-    process.exit(1);
+    if (!reportOnly) {
+      process.exit(1);
+    }
   }
 }
 
@@ -546,3 +677,4 @@ if (require.main === module) {
 }
 
 export { TemplateVerifier };
+export { findTranslationParityIssues } from './verify-templates-parity';

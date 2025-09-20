@@ -51,6 +51,14 @@ Observability and verification (logs, npm run verify-templates)
 - scripts/template-monitor.ts and parity audits complement manifest generation for overlay readiness and placeholder detection.
 - Add Jest or Playwright coverage whenever schemas or questions change; all template additions should ship with at least one smoke test of the wizard flow.
 
+### Translation Parity Quickstart
+- Execute `npm run verify-templates` any time you touch template copy, questions, or metadata. The script runs the same bilingual parity sweep as CI and prints `[FAIL] …` entries for each broken locale file.
+- Interpreting failures:
+  - `Variable parity mismatch (missing in ES: …)` → align Handlebars variables between the EN and ES markdown.
+  - `Metadata missing Spanish translation block` → fill in `translations.es` (name, description, aliases) in the template's `metadata.ts`.
+  - `Section count mismatch: EN has …, ES has …` → sync numbered headings so both languages share the same structure.
+- After addressing the flagged template, rerun `npm run verify-templates` until `[Report] Invalid Templates: 0`. The command refreshes `template-verification-report.json`, so keep the latest run handy when updating the translation workflow doc for reviewers.
+
 ## Operational Checklist
 1. Add or update template modules (metadata, schema, questions, overlays).
 2. Rebuild the manifest (npm run generate-document-manifest or node scripts/generate-document-manifest.mjs).

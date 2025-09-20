@@ -1,99 +1,263 @@
-# Contrato de Compraventa de Vehículo
+# Declaracion Jurada General
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**DECLARACION JURADA GENERAL**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Informacion de la Persona Declarante
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+Yo, **{{affiant_name}}**, debidamente juramentado, declaro lo siguiente:
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**Datos de la Persona Declarante:**
 
-## 2. Precio de Compra y Pago
+- **Nombre completo:** {{affiant_name}}
+- **Domicilio:** {{affiant_address}}
+- **Fecha de nacimiento:** {{affiant_dob}}
+- **Ocupacion:** {{affiant_occupation}}
+- **Telefono:** {{affiant_phone}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+---
 
-## 3. Condición del Vehículo
+## 2. Proposito de la Declaracion
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+Esta declaracion se emite con el siguiente proposito:
+{{affidavit_purpose}}
+
+**Asunto relacionado:** {{related_matter}}  
+**Numero de expediente (si aplica):** {{case_number}}
+
+---
+
+## 3. Relacion de Hechos
+
+### 3.1 Conocimiento Personal
+
+Tengo conocimiento personal de los hechos incluidos en esta Declaracion y, si fuera llamado a testificar, podria declarar competentemente sobre la veracidad de lo expuesto.
+
+### 3.2 Declaraciones Factuales
+
+{{#if numbered_facts}}
+
+1. {{fact_1}}
+
+2. {{fact_2}}
+
+3. {{fact_3}}
+
+4. {{fact_4}}
+
+5. {{fact_5}}
+
+{{additional_numbered_facts}}
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**Declaracion de hechos:**
+{{factual_narrative}}
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 3.3 Documentos de Respaldo
 
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
+{{#if supporting_documents}}
+**Documentos adjuntos:** Los siguientes documentos se anexan y forman parte de esta Declaracion:
+{{supporting_document_list}}
 {{/if}}
 
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
+{{#if witness_information}}
+**Testigos presentes:** {{witness_information}}
 {{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Circunstancias y Contexto
+
+### 4.1 Fecha y Hora de los Eventos
+
+**Fecha(s) relevante(s):** {{event_dates}}  
+**Hora(s) relevante(s):** {{event_times}}  
+**Lugar(es) de los hechos:** {{event_locations}}
+
+### 4.2 Relacion con el Asunto
+
+**Relacion con este asunto:** {{relationship_to_matter}}
+
+### 4.3 Fuente del Conocimiento
+
+**Como obtuve el conocimiento:** {{knowledge_source}}
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Declaraciones Adicionales
+
+### 5.1 Memoria y Estado Mental
+
+Durante los eventos descritos mantuve plena capacidad mental y mi recuerdo de los hechos es fiel y exacto.
+
+### 5.2 Compensacion
+
+{{#if no_compensation}}
+No he recibido ni se me ha prometido compensacion alguna por emitir esta Declaracion.
+{{else}}
+**Compensacion o intereses:** {{compensation_details}}
+{{/if}}
+
+### 5.3 Ausencia de Coaccion
+
+Realizo esta Declaracion de manera voluntaria, sin presion, coaccion ni influencia indebida de ninguna persona.
+
+---
+
+## 6. Verificacion y Juramento
+
+### 6.1 Veracidad y Exactitud
+
+Declaro bajo pena de perjurio que las manifestaciones precedentes son ciertas y correctas segun mi leal saber y entender.
+
+### 6.2 Divulgacion Completa
+
+He revelado todos los hechos materiales que conozco sobre este asunto y no he omitido informacion relevante.
+
+### 6.3 Actualizaciones o Correcciones
+
+{{#if corrections_needed}}
+**Correcciones a declaraciones previas:** {{corrections_details}}
+{{else}}
+Esta Declaracion sustituye cualquier declaracion previa que haya realizado respecto de este asunto.
+{{/if}}
+
+---
+
+## 7. Adjuntos y Anexos
+
+{{#if has_attachments}}
+Los siguientes elementos se adjuntan y forman parte de esta Declaracion:
+
+**Anexo A:** {{exhibit_a_description}}  
+**Anexo B:** {{exhibit_b_description}}  
+**Anexo C:** {{exhibit_c_description}}  
+{{additional_exhibits}}
+{{else}}
+No se incluyen anexos con esta Declaracion.
+{{/if}}
+
+---
+
+## 8. Aviso de Consecuencias Legales
+
+Entiendo que:
+
+- Esta Declaracion puede emplearse en procedimientos judiciales o administrativos
+- Las declaraciones falsas pueden exponerme a sanciones por perjurio
+- Esta Declaracion tiene la misma fuerza que un testimonio prestado bajo juramento en audiencia
+- Puedo ser citado para testificar sobre los asuntos descritos
+
+---
+
+## Signatures
+
+## 9. Firmas de la Persona Declarante
+
+**FIRMADO** el **{{execution_date}}** en {{execution_location}}.
+
+**DECLARANTE:**
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{affiant_name}}                    |                    |
+| Nombre impreso: {{affiant_name}}    |                    |
+
+---
+
+## 10. Notarizacion
+
+**COMPARECIO Y JURAMENTADO** ante mi en esta fecha **{{execution_date}}** {{affiant_name}}, quien demostro mediante evidencia satisfactoria ser la persona que comparece.
+
+**Estado de {{state}}**  
+**Condado de {{county}}**
+
+Certifico bajo PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que lo anterior es verdadero y correcto.
+
+**Notario Publico:** ****************_****************  
+**Mi comision expira:** ************_************
+
+**[Sello notarial]**
+
+---
+
+## 11. Testigos (si aplica)
+
+{{#if witnesses_present}}
+**TESTIGO 1:**
+
+Fui testigo de la firma de esta Declaracion por {{affiant_name}}.
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{witness_1_name}}                  |                    |
+| Domicilio: {{witness_1_address}}    |                    |
+
+**TESTIGO 2:**
+
+Fui testigo de la firma de esta Declaracion por {{affiant_name}}.
+
+| Firma                               | Fecha              |
+| ----------------------------------- | ------------------ |
+| ****************_****************   | {{execution_date}} |
+| {{witness_2_name}}                  |                    |
+| Domicilio: {{witness_2_address}}    |                    |
+{{else}}
+No se requirio la presencia de testigos para esta Declaracion.
+{{/if}}
+
+---
+
+## 12. Constancia de Notificacion (si aplica)
+
+{{#if service_required}}
+Certifico que una copia fiel de esta Declaracion fue entregada a las siguientes partes el {{service_date}}:
+
+**Metodo de entrega:** {{service_method}} (Entrega personal/Correo certificado/Correo electronico/Otro)
+
+**Partes notificadas:**
+{{parties_served}}
+
+**Entregado por:** {{served_by_name}}  
+**Fecha de entrega:** {{service_date}}
+
+| Firma de quien notifica             | Fecha             |
+| ----------------------------------- | ----------------- |
+| ****************_****************   | {{service_date}}  |
+| {{served_by_name}}                  |                   |
+{{else}}
+No se realizo notificacion adicional relacionada con esta Declaracion.
+{{/if}}
+
+---
+
+## 13. Informacion del Abogado (si aplica)
+
+{{#if attorney_prepared}}
+**Preparado por abogado:**
+
+**Nombre del abogado:** {{attorney_name}}  
+**Numero de colegiatura:** {{attorney_bar_number}}  
+**Despacho:** {{law_firm_name}}  
+**Domicilio:** {{attorney_address}}  
+**Telefono:** {{attorney_phone}}  
+**Correo electronico:** {{attorney_email}}
+
+**Abogado de:** {{attorney_represents}}
+{{else}}
+Esta Declaracion fue preparada sin asistencia legal formal.
+{{/if}}
+
+---
+
+**IMPORTANT LEGAL NOTICE / AVISO LEGAL IMPORTANTE:** Esta declaracion jurada general debe revisarse con un profesional legal calificado para asegurar que cumple los requisitos especificos para su proposito. Declarar hechos falsos puede resultar en cargos por perjurio. El formato y las formalidades pueden variar segun la jurisdiccion y el tipo de procedimiento.
+
+_Ac 2025 123LegalDoc - Formulario de autoservicio - No es asesoramiento legal - Terminos: 123LegalDoc.com/terms_

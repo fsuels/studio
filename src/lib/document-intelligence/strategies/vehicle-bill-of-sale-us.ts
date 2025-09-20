@@ -133,16 +133,29 @@ const baseVehicleBillOfSaleFlow: FormSection[] = [
         validation: { pattern: '^[A-HJ-NPR-Z0-9]{17}$' }
       },
       {
-        id: 'mileage',
+        id: 'odometer',
         type: 'number',
         label: {
           en: 'Odometer Reading (Miles)',
-          es: 'Lectura del Odómetro (Millas)'
+          es: 'Lectura del Odometro (Millas)'
         },
         required: true,
         validation: { min: 0 }
+      },
+      {
+        id: 'odo_status',
+        type: 'select',
+        label: {
+          en: 'Odometer Status',
+          es: 'Estado del Odometro'
+        },
+        required: true,
+        options: [
+          { value: 'ACTUAL', label: { en: 'Actual Mileage', es: 'Millaje real' } },
+          { value: 'EXCEEDS', label: { en: 'Exceeds Mechanical Limits', es: 'Excede limites mecanicos' } },
+          { value: 'NOT_ACTUAL', label: { en: 'Not Actual Mileage (Warning)', es: 'Millaje no real (advertencia)' } }
+        ]
       }
-    ]
   },
   {
     id: 'seller_information',
@@ -230,7 +243,7 @@ const baseVehicleBillOfSaleFlow: FormSection[] = [
     icon: 'DollarSign',
     fields: [
       {
-        id: 'sale_price',
+        id: 'price',
         type: 'number',
         label: {
           en: 'Sale Price ($)',
@@ -253,15 +266,88 @@ const baseVehicleBillOfSaleFlow: FormSection[] = [
         type: 'select',
         label: {
           en: 'Payment Method',
-          es: 'Método de Pago'
+          es: 'Metodo de Pago'
         },
-        required: true,
+        required: false,
         options: [
           { value: 'cash', label: { en: 'Cash', es: 'Efectivo' } },
           { value: 'check', label: { en: 'Check', es: 'Cheque' } },
-          { value: 'bank_transfer', label: { en: 'Bank Transfer', es: 'Transferencia Bancaria' } },
-          { value: 'financing', label: { en: 'Financing', es: 'Financiamiento' } }
+          { value: 'wire', label: { en: 'Wire Transfer', es: 'Transferencia bancaria' } },
+          { value: 'paypal', label: { en: 'PayPal', es: 'PayPal' } },
+          { value: 'credit_card', label: { en: 'Credit or Debit Card', es: 'Tarjeta de credito o debito' } }
         ]
+      },
+      {
+        id: 'existing_liens',
+        type: 'textarea',
+        label: {
+          en: 'Existing Liens or Encumbrances',
+          es: 'Gravamenes o cargas existentes'
+        },
+        required: false,
+        placeholder: {
+          en: 'e.g., None or Loan with XYZ Bank',
+          es: 'ej., Ninguno o Prestamo con Banco XYZ'
+        }
+      }
+    ]
+  },
+  {
+    id: 'condition_and_warranty',
+    title: {
+      en: 'Condition and Warranty',
+      es: 'Condicion y Garantia'
+    },
+    order: 6,
+    icon: 'ShieldCheck',
+    fields: [
+      {
+        id: 'as_is',
+        type: 'checkbox',
+        label: {
+          en: 'Vehicle is sold as-is (no warranties)',
+          es: 'Vehiculo vendido en el estado en que se encuentra (sin garantias)'
+        },
+        required: false
+      },
+      {
+        id: 'warranty_text',
+        type: 'textarea',
+        label: {
+          en: 'Warranty Details (if provided)',
+          es: 'Detalles de garantia (si aplica)'
+        },
+        required: false,
+        placeholder: {
+          en: 'Describe any warranty coverage or limitations',
+          es: 'Describa la cobertura o limites de la garantia'
+        },
+        conditionalLogic: {
+          showIf: {
+            field: 'as_is',
+            value: false
+          }
+        }
+      }
+    ]
+  },
+  {
+    id: 'notary_details',
+    title: {
+      en: 'Notary Details',
+      es: 'Detalles de notario'
+    },
+    order: 7,
+    icon: 'Feather',
+    fields: [
+      {
+        id: 'county',
+        type: 'text',
+        label: {
+          en: 'County for notarization',
+          es: 'Condado para notarizacion'
+        },
+        required: false
       }
     ]
   }
@@ -290,6 +376,8 @@ export const floridaVehicleBillOfSaleStrategy: DocumentStrategy = {
     baseVehicleBillOfSaleFlow[2], // seller_information
     baseVehicleBillOfSaleFlow[3], // buyer_information
     baseVehicleBillOfSaleFlow[4], // transaction_details
+    baseVehicleBillOfSaleFlow[5], // condition_and_warranty
+    baseVehicleBillOfSaleFlow[6], // notary_details
     {
       id: 'florida_specific_odometer',
       title: {
@@ -351,12 +439,12 @@ export const floridaVehicleBillOfSaleStrategy: DocumentStrategy = {
     'make': { pdfField: 'make_field' },
     'model': { pdfField: 'model_field' },
     'vin': { pdfField: 'vin_field' },
-    'mileage': { pdfField: 'odometer_field' },
+    'odometer': { pdfField: 'odometer_field' },
     'seller_name': { pdfField: 'seller_name_field' },
     'seller_address': { pdfField: 'seller_address_field' },
     'buyer_name': { pdfField: 'buyer_name_field' },
     'buyer_address': { pdfField: 'buyer_address_field' },
-    'sale_price': { 
+    'price': { 
       pdfField: 'sale_price_field',
       transform: (value) => `$${value.toLocaleString()}`
     },

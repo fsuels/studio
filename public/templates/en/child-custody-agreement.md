@@ -15,7 +15,7 @@ Collectively referred to herein as the "Parents."
 
 ## 1. Child Information
 
-### 1.1 Children Subject to This Agreement
+### 1.1 Children Covered by This Agreement
 
 This Agreement concerns the following minor child(ren):
 
@@ -33,7 +33,7 @@ This Agreement concerns the following minor child(ren):
 - **Date of Birth:** {{child_2_dob}}
 - **Age:** {{child_2_age}}
 - **Social Security #:** {{child_2_ssn}}
-  {{/if}}
+{{/if}}
 
 {{#if child_3_name}}
 **Child 3:**
@@ -42,66 +42,78 @@ This Agreement concerns the following minor child(ren):
 - **Date of Birth:** {{child_3_dob}}
 - **Age:** {{child_3_age}}
 - **Social Security #:** {{child_3_ssn}}
-  {{/if}}
+{{/if}}
 
 ### 1.2 Current Residence
 
-The child(ren) currently reside(s) with {{current_primary_parent}} at {{current_residence_address}}.
+The child(ren) currently reside with {{current_primary_parent}} at {{current_residence_address}}.
 
 ---
 
-## 2. Legal and Physical Custody
+## 2. Custody Arrangements
 
 ### 2.1 Legal Custody
 
 {{#if joint_legal_custody}}
-**Joint Legal Custody:** Both Parents shall share joint legal custody of the child(ren). All major decisions regarding the child(ren)'s health, education, and welfare shall be made jointly by both Parents.
+**Joint Legal Custody:** Both Parents shall share joint legal custody of the child(ren). Major decisions regarding health, education, religion, and general welfare shall be made jointly.  
+- **Medical decision authority:** {{medical_decision_authority}}  
+- **Educational decision authority:** {{educational_decision_authority}}  
+- **Religious decision authority:** {{religious_decision_authority}}  
+- **Extracurricular decision authority:** {{extracurricular_decision_authority}}
 {{else}}
-**Sole Legal Custody:** {{sole_legal_custody_parent}} shall have sole legal custody of the child(ren) and the authority to make major decisions regarding the child(ren)'s health, education, and welfare.
+**Sole Legal Custody:** {{sole_legal_custody_parent}} shall have sole legal custody and the authority to make major decisions regarding health, education, religion, and welfare.
 {{/if}}
 
 ### 2.2 Physical Custody
 
 {{#if joint_physical_custody}}
-**Joint Physical Custody:** Both Parents shall share joint physical custody of the child(ren) according to the schedule set forth in Section 3 below.
+**Joint Physical Custody:** The Parents shall share physical custody according to the schedule in Section 3.
 {{else}}
-**Primary Physical Custody:** {{primary_custody_parent}} shall have primary physical custody of the child(ren).  
-**Visitation Rights:** {{visitation_parent}} shall have visitation rights as set forth in Section 3 below.
+**Primary Physical Custody:** {{primary_custody_parent}} shall have primary physical custody.  
+**Visitation Parent:** {{visitation_parent}} shall exercise parenting time as outlined in Section 3.
 {{/if}}
+
+### 2.3 Geographic Restrictions
+
+{{geographic_restrictions}}
+
+### 2.4 Relocation
+
+- **Notice requirement:** {{relocation_notice_requirement}}  
+- **Approval process:** {{relocation_approval_process}}  
+- **Schedule modifications:** {{relocation_schedule_modification}}
 
 ---
 
-## 3. Parenting Time Schedule
+## 3. Visitation Schedule
 
-### 3.1 Regular Weekly Schedule
+### 3.1 Regular Parenting Time
 
 {{#if alternating_weeks}}
-**Alternating Weeks:** The child(ren) shall alternate weeks between Parents, with transitions occurring on {{transition_day}} at {{transition_time}}.
+**Alternating Weeks:** The child(ren) will alternate weekly between Parents, with transitions every {{transition_day}} at {{transition_time}}.
 {{else}}
 **Weekly Schedule:**
 
-- **{{parent_1_name}}:** {{parent_1_schedule}}
-- **{{parent_2_name}}:** {{parent_2_schedule}}
-- **Transition Times:** {{transition_details}}
-  {{/if}}
+- **{{parent_1_name}}:** {{parent_1_schedule}}  
+- **{{parent_2_name}}:** {{parent_2_schedule}}  
+- **Transition details:** {{transition_details}}
+{{/if}}
 
 ### 3.2 Holiday Schedule
 
-**Major Holidays:**
+| Holiday               | {{holiday_year_1}}          | {{holiday_year_2}}          |
+| --------------------- | --------------------------- | --------------------------- |
+| New Year's Day        | {{new_years_parent_1}}      | {{new_years_parent_2}}      |
+| Easter / Passover     | {{easter_parent_1}}         | {{easter_parent_2}}         |
+| Memorial Day          | {{memorial_parent_1}}       | {{memorial_parent_2}}       |
+| Independence Day      | {{july4_parent_1}}          | {{july4_parent_2}}          |
+| Labor Day             | {{labor_parent_1}}          | {{labor_parent_2}}          |
+| Halloween             | {{halloween_parent_1}}      | {{halloween_parent_2}}      |
+| Thanksgiving          | {{thanksgiving_parent_1}}   | {{thanksgiving_parent_2}}   |
+| Christmas Eve         | {{christmas_eve_parent_1}}  | {{christmas_eve_parent_2}}  |
+| Christmas Day         | {{christmas_parent_1}}      | {{christmas_parent_2}}      |
 
-| Holiday          | {{holiday_year_1}}         | {{holiday_year_2}}         |
-| ---------------- | -------------------------- | -------------------------- |
-| New Year's Day   | {{new_years_parent_1}}     | {{new_years_parent_2}}     |
-| Easter/Passover  | {{easter_parent_1}}        | {{easter_parent_2}}        |
-| Memorial Day     | {{memorial_parent_1}}      | {{memorial_parent_2}}      |
-| Independence Day | {{july4_parent_1}}         | {{july4_parent_2}}         |
-| Labor Day        | {{labor_parent_1}}         | {{labor_parent_2}}         |
-| Halloween        | {{halloween_parent_1}}     | {{halloween_parent_2}}     |
-| Thanksgiving     | {{thanksgiving_parent_1}}  | {{thanksgiving_parent_2}}  |
-| Christmas Eve    | {{christmas_eve_parent_1}} | {{christmas_eve_parent_2}} |
-| Christmas Day    | {{christmas_parent_1}}     | {{christmas_parent_2}}     |
-
-**Holiday Times:** Holidays begin at {{holiday_start_time}} and end at {{holiday_end_time}} the following day, unless otherwise specified.
+Holiday parenting time begins at {{holiday_start_time}} and ends at {{holiday_end_time}}, unless otherwise agreed in writing.
 
 ### 3.3 Summer Vacation
 
@@ -113,10 +125,14 @@ The child(ren) currently reside(s) with {{current_primary_parent}} at {{current_
 
 ### 3.5 Special Occasions
 
-**Birthdays:** {{birthday_schedule}}  
-**Mother's Day:** {{mothers_day_schedule}}  
-**Father's Day:** {{fathers_day_schedule}}  
-**Parent Birthdays:** {{parent_birthday_schedule}}
+- **Child birthdays:** {{birthday_schedule}}  
+- **Mother's Day:** {{mothers_day_schedule}}  
+- **Father's Day:** {{fathers_day_schedule}}  
+- **Parent birthdays:** {{parent_birthday_schedule}}
+
+### 3.6 Supervision Requirements
+
+{{supervision_requirements}}
 
 ---
 
@@ -124,126 +140,87 @@ The child(ren) currently reside(s) with {{current_primary_parent}} at {{current_
 
 ### 4.1 Exchange Location
 
-Child exchanges shall occur at: {{exchange_location}}
+Parenting-time exchanges shall occur at {{exchange_location}}.
 
 ### 4.2 Transportation Responsibility
 
 {{transportation_responsibility}}
 
-### 4.3 Exchange Guidelines
+### 4.3 Delays and Contingencies
 
-- Exchanges shall occur on time as scheduled
-- Both Parents shall be courteous and civil during exchanges
-- The child(ren) shall bring clothing and personal items appropriate for the visit
-- {{additional_exchange_guidelines}}
+Late arrivals exceeding {{late_notice_threshold}} minutes must be communicated immediately. Additional exchange instructions: {{additional_exchange_guidelines}}
 
 ---
 
-## 5. Communication
+## 5. Communication and Decision Making
 
-### 5.1 Parent-Child Communication
+### 5.1 Parent Communication Methods
 
-{{#if communication_restrictions}}
-**Communication Schedule:** {{communication_schedule}}  
-**Communication Methods:** {{communication_methods}}  
-**Communication Times:** {{communication_times}}
-{{else}}
-Each Parent shall have reasonable telephone/video contact with the child(ren) when the child(ren) are with the other Parent.
-{{/if}}
+Primary coordination will occur through {{parent_communication_methods}} and {{communication_platform}}. Emergency matters shall be handled by direct phone call followed by written confirmation.
 
-### 5.2 Parent-to-Parent Communication
+### 5.2 Contact with the Child(ren)
 
-Communication between Parents regarding the child(ren) shall be:
+The non-residential Parent may communicate with the child(ren) according to {{communication_schedule}}, subject to the following parameters: {{communication_methods}}, {{communication_times}}.
 
-- Conducted in a respectful and business-like manner
-- Focused on the child(ren)'s needs and well-being
-- {{parent_communication_methods}}
+### 5.3 Major Decisions
 
-### 5.3 Emergency Communication
-
-In case of emergency involving the child(ren), the Parent with the child(ren) shall immediately notify the other Parent.
+- **Medical decisions:** {{medical_decision_authority}} / {{medical_expense_allocation}}  
+- **Educational decisions:** {{educational_decision_authority}} / {{educational_expense_allocation}}  
+- **Religious upbringing:** {{religious_decision_authority}}  
+- **Extracurricular activities:** {{extracurricular_decision_authority}} / {{extracurricular_expense_allocation}}
 
 ---
 
-## 6. Decision-Making Authority
+## 6. Child Support
 
-### 6.1 Educational Decisions
+### 6.1 Support Obligation
 
-{{educational_decision_authority}}
+- **Paying parent:** {{support_paying_parent}}  
+- **Receiving parent:** {{support_receiving_parent}}  
+- **Monthly amount:** {{monthly_support_amount}}  
+- **Support order date/reference:** {{support_order_date}}
 
-### 6.2 Medical Decisions
+Payments shall be made via {{support_payment_method}} according to {{support_payment_schedule}}. If processed through an agency, the method is {{child_support_method}} with payments due on the {{child_support_due_day}} of each month.
 
-{{medical_decision_authority}}
+### 6.2 Shared Expenses
 
-### 6.3 Religious Decisions
+- **Childcare expenses:** {{childcare_expense_allocation}}  
+- **Unreimbursed medical expenses:** {{medical_expense_split}}  
+- **Medical insurance responsibility:** {{health_insurance_responsibility}}  
+- **Educational expenses:** {{education_expense_split}}  
+- **Extracurricular costs:** {{extracurricular_split}}
 
-{{religious_decision_authority}}
+### 6.3 Reimbursements
 
-### 6.4 Extracurricular Activities
-
-{{extracurricular_decision_authority}}
-
-### 6.5 Emergency Medical Care
-
-Either Parent may authorize emergency medical care when the child(ren) are in their care.
-
----
-
-## 7. Child Support
-
-### 7.1 Support Obligation
-
-{{#if separate_support_order}}
-Child support is addressed in a separate Child Support Order dated {{support_order_date}}.
-{{else}}
-**Support Amount:** {{support_paying_parent}} shall pay ${{monthly_support_amount}} per month in child support to {{support_receiving_parent}}.  
-**Payment Schedule:** Support shall be paid {{support_payment_schedule}}.  
-**Payment Method:** {{support_payment_method}}
-{{/if}}
-
-### 7.2 Additional Expenses
-
-**Medical Expenses:** {{medical_expense_allocation}}  
-**Childcare Expenses:** {{childcare_expense_allocation}}  
-**Educational Expenses:** {{educational_expense_allocation}}  
-**Extracurricular Expenses:** {{extracurricular_expense_allocation}}
+Documented reimbursement requests must be paid within {{reimbursement_days}} days.
 
 ---
 
-## 8. Relocation
+## 7. Health and Safety
 
-### 8.1 Notice Requirement
+### 7.1 Health Plans
 
-{{relocation_notice_requirement}}
+{{mental_health_plan}}
 
-### 8.2 Relocation Approval
+### 7.2 Substance Use and Safety
 
-{{relocation_approval_process}}
-
-### 8.3 Impact on Custody Schedule
-
-If relocation is approved, the custody schedule may be modified as follows:
-{{relocation_schedule_modification}}
+- **Substance restrictions:** {{substance_use_restrictions}}  
+- **Additional safety policies:** {{substance_policy}}  
+- **Other restrictions:** {{additional_restrictions}}
 
 ---
 
-## 9. Restrictions and Limitations
+## 8. Education and Activities
 
-### 9.1 Geographic Restrictions
+- **School enrollment:** {{school_name}}  
+- **Approved activities:** {{extracurricular_activities}}
 
-{{geographic_restrictions}}
+---
 
-### 9.2 Substance Use
+## 9. Parenting Guidelines
 
-{{substance_use_restrictions}}
-
-### 9.3 Supervision Requirements
-
-{{supervision_requirements}}
-
-### 9.4 Other Restrictions
-
-{{additional_restrictions}}
+- **New partner introduction:** {{new_partner_policy}}  
+- **Other expectations:** {{additional_restrictions}}
 
 ---
 
@@ -251,13 +228,11 @@ If relocation is approved, the custody schedule may be modified as follows:
 
 ### 10.1 Mediation
 
-{{#if mediation_required}}
-Before filing any court action to modify this Agreement, the Parents agree to attempt mediation with a qualified mediator.
-{{/if}}
+Disputes under this Agreement shall first be submitted to {{mediation_provider}}.
 
 ### 10.2 Court Intervention
 
-{{court_intervention_process}}
+If mediation fails, the Parents may seek relief from the court. Process notes: {{court_intervention_process}}
 
 ### 10.3 Attorney Fees
 
@@ -267,16 +242,13 @@ Before filing any court action to modify this Agreement, the Parents agree to at
 
 ## 11. Modification
 
-### 11.1 Agreement Modification
+### 11.1 Modification Procedure
 
-This Agreement may only be modified by:
+This Agreement may be modified only by written consent of both Parents or by court order upon a substantial change in circumstances.
 
-- Written agreement signed by both Parents, or
-- Court order based on substantial change in circumstances
+### 11.2 Best Interests Standard
 
-### 11.2 Best Interest Standard
-
-Any modification must be in the best interest of the child(ren).
+Any modification must be in the best interests of the child(ren).
 
 ---
 
@@ -288,7 +260,7 @@ This Agreement may be enforced through the courts of {{jurisdiction}}.
 
 ### 12.2 Contempt of Court
 
-Violation of this Agreement may result in contempt of court proceedings.
+Violation of this Agreement may result in contempt proceedings or other sanctions.
 
 ---
 
@@ -296,23 +268,23 @@ Violation of this Agreement may result in contempt of court proceedings.
 
 ### 13.1 Governing Law
 
-This Agreement shall be governed by the laws of {{state}}.
+This Agreement is governed by the laws of {{state}}.
 
-### 13.2 Best Interest of Child
+### 13.2 Best Interests of the Child
 
-All provisions of this Agreement are intended to serve the best interests of the child(ren).
+All provisions are intended to promote the best interests of the child(ren).
 
 ### 13.3 Entire Agreement
 
-This Agreement constitutes the entire agreement between the Parents regarding custody and visitation.
+This Agreement constitutes the entire understanding between the Parents regarding custody and visitation.
 
 ### 13.4 Severability
 
-If any provision is held invalid, the remainder shall remain in full force and effect.
+If any provision is held invalid, the remaining provisions remain in full force and effect.
 
 ### 13.5 Binding Effect
 
-This Agreement is binding upon both Parents and their heirs and assigns.
+This Agreement is binding upon the Parents and their heirs, successors, and assigns.
 
 ---
 
@@ -322,15 +294,17 @@ This Agreement is binding upon both Parents and their heirs and assigns.
 
 ---
 
+## Signatures
+
 ## 15. Signatures
 
-**IN WITNESS WHEREOF**, the Parents have executed this Child Custody Agreement as of the date first written above.
+**IN WITNESS WHEREOF**, the Parents execute this Agreement effective the date first written above.
 
 **PARENT 1:**
 
 | Signature                                  | Date               |
 | ------------------------------------------ | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
+| ****************_****************          | {{agreement_date}} |
 | {{parent_1_name}}                          |                    |
 | Print Name: {{parent_1_name}}              |                    |
 
@@ -338,7 +312,7 @@ This Agreement is binding upon both Parents and their heirs and assigns.
 
 | Signature                                  | Date               |
 | ------------------------------------------ | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
+| ****************_****************          | {{agreement_date}} |
 | {{parent_2_name}}                          |                    |
 | Print Name: {{parent_2_name}}              |                    |
 
@@ -349,14 +323,10 @@ This Agreement is binding upon both Parents and their heirs and assigns.
 **State of {{state}}**  
 **County of {{county}}**
 
-On this **{{agreement_date}}**, before me personally appeared {{parent_1_name}} and {{parent_2_name}}, who proved to me on the basis of satisfactory evidence to be the persons whose names are subscribed to the within instrument and acknowledged to me that they executed the same in their authorized capacities.
+On {{agreement_date}}, before me personally appeared {{parent_1_name}} and {{parent_2_name}}, who proved to me on the basis of satisfactory evidence to be the persons whose names are subscribed to this instrument and acknowledged executing the same.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
-
-**WITNESS** my hand and official seal.
-
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notary Public:** ****************_****************  
+**My Commission Expires:** ****************
 
 ---
 
@@ -365,19 +335,16 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 {{#if court_approval_required}}
 **FOR COURT USE ONLY:**
 
-This Child Custody Agreement is:
-[ ] APPROVED and ORDERED by the Court
-[ ] REJECTED by the Court
+[ ] APPROVED and ORDERED  
+[ ] REJECTED
 
-**Judge:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Date:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Court:** ******\*\*\*\*******\_******\*\*\*\*******
+**Judge:** ****************  
+**Date:** ****************  
+**Court:** ****************
 {{/if}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This child custody agreement should be reviewed by qualified legal counsel to ensure compliance with state family laws and protection of children's best interests. Custody laws vary significantly by state, and court approval may be required. Both parents should understand their rights and obligations under this agreement.
+**IMPORTANT LEGAL NOTICE:** This child custody agreement should be reviewed by qualified legal counsel to ensure compliance with state family laws and to protect the best interests of the child(ren). Custody laws vary by jurisdiction, and court approval may be required. Both Parents should fully understand their rights and obligations under this Agreement.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
-
-© 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms
+_Ac 2025 123LegalDoc - DIY form - Not legal advice - Terms: 123LegalDoc.com/terms_

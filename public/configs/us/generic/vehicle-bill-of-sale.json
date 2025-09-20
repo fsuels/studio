@@ -256,6 +256,36 @@
         "x": 85.02,
         "y": 513.5,
         "fontSize": 11
+      },
+      "seller_address": {
+        "page": 0,
+        "x": 320.0,
+        "y": 673.5,
+        "fontSize": 11
+      },
+      "buyer_address": {
+        "page": 0,
+        "x": 320.0,
+        "y": 653.5,
+        "fontSize": 11
+      },
+      "odometer": {
+        "page": 0,
+        "x": 93.0,
+        "y": 573.5,
+        "fontSize": 11
+      },
+      "odo_status": {
+        "page": 0,
+        "x": 250.0,
+        "y": 573.5,
+        "fontSize": 11
+      },
+      "warranty_text": {
+        "page": 0,
+        "x": 85.0,
+        "y": 533.5,
+        "fontSize": 10
       }
     }
   }

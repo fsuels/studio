@@ -8,6 +8,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as chokidar from 'chokidar';
 import chalk from 'chalk';
+import { DOCUMENT_METADATA } from '../src/lib/documents/manifest.generated';
+import {
+  findTranslationParityIssues,
+  type BilingualTemplateSummary,
+  type ParityIssue,
+} from './verify-templates-parity';
 import { TemplateVerifier } from './verify-templates';
 
 interface TemplateMetrics {
@@ -19,6 +25,7 @@ interface TemplateMetrics {
   lastVerification: Date;
   recentChanges: TemplateChange[];
   qualityScore: number;
+  parityIssues: ParityIssue[];
 }
 
 interface TemplateChange {
@@ -46,6 +53,7 @@ class TemplateMonitor {
       lastVerification: new Date(),
       recentChanges: [],
       qualityScore: 0,
+      parityIssues: [],
     };
   }
 
@@ -93,11 +101,7 @@ class TemplateMonitor {
     try {
       // Run verification silently
       const originalLog = console.log;
-      console.log = () => {}; // Suppress output
-
-      await this.verifier.verifyAllTemplates();
-
-      console.log = originalLog; // Restore output
+      console.log = () => {}; // Suppress output\n\n      try {\n        await this.verifier.verifyAllTemplates();\n      } finally {\n        console.log = originalLog; // Restore output\n      }
 
       // Read verification report
       const reportPath = path.join(
@@ -130,11 +134,7 @@ class TemplateMonitor {
           );
         }
 
-        // Calculate quality score (0-100)
-        this.metrics.qualityScore = Math.round(
-          (this.metrics.validTemplates / this.metrics.totalTemplates) * 100,
-        );
-      }
+        // Calculate quality score (0-100)\n        const totalTemplates = this.metrics.totalTemplates;\n        this.metrics.qualityScore =\n          totalTemplates === 0\n            ? 0\n            : Math.round((this.metrics.validTemplates / totalTemplates) * 100);\n\n        const results = Array.isArray(report.results) ? report.results : [];\n        const summaries: BilingualTemplateSummary[] = results\n          .filter((r: any) => r?.documentType && r?.language)\n          .map((r: any) => ({\n            documentType: r.documentType,\n            language: r.language,\n            variables: Array.isArray(r.variables) ? r.variables : [],\n            sectionHeadings: Array.isArray(r.sectionHeadings)\n              ? r.sectionHeadings\n              : [],\n            numberedSections: Array.isArray(r.numberedSections)\n              ? r.numberedSections\n              : [],\n          }));\n\n        this.metrics.parityIssues = findTranslationParityIssues(\n          summaries,\n          DOCUMENT_METADATA,\n        );\n      }
     } catch (error) {
       console.error(chalk.red('Error updating metrics:'), error);
     }
@@ -147,7 +147,7 @@ class TemplateMonitor {
     filePath: string,
     changeType: 'added' | 'modified' | 'deleted',
   ): Promise<void> {
-    const fileName = path.basename(filePath);
+    const fileName = path.basename(filePath);\n    const documentType = path.basename(filePath, '.md');
 
     // Add to recent changes
     const change: TemplateChange = {
@@ -170,9 +170,7 @@ class TemplateMonitor {
     }
 
     // Update metrics
-    await this.updateMetrics();
-
-    // Display alert for invalid changes
+    await this.updateMetrics();\n\n    const parityIssuesForDoc = documentType\n      ? this.metrics.parityIssues.filter((issue) => issue.documentType === documentType)\n      : [];\n\n    if (parityIssuesForDoc.length > 0) {\n      change.isValid = false;\n      console.log(chalk.red.bold(\n[PARITY]  translation parity issues detected:));\n      parityIssuesForDoc.forEach((issue) => {\n        console.log(chalk.red(  - ));\n      });\n      console.log('');\n    }\n\n    // Display alert for invalid changes
     if (change.isValid === false) {
       console.log(
         chalk.red.bold(`\n⚠️  ALERT: Invalid template detected: ${fileName}`),
@@ -305,3 +303,14 @@ if (require.main === module) {
 }
 
 export { TemplateMonitor };
+
+
+
+
+
+
+
+
+
+
+

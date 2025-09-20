@@ -1,6 +1,6 @@
 # State Disclosure Inserts - Colorado & Georgia
 
-_Last updated: 2025-09-19T17:35:00Z (UTC)_
+_Last updated: 2025-09-20T00:45:00Z (UTC)_
 
 ## Usage Notes
 - Audience: Platform (UI banners, checkout), Document Intelligence (template guidance), Growth (marketing copy), Compliance (review/approvals).
@@ -65,6 +65,36 @@ _Last updated: 2025-09-19T17:35:00Z (UTC)_
 - **Platform**: display statements 1-2 in Georgia-specific flows and checkout; link referral request CTA to support workflow.
 - **Growth**: localize marketing materials (EN/ES) with statements 1-2; include CTA for attorney referrals.
 - **Compliance**: record evidence in release gate artifacts and track referral response SLA.
+
+## Washington Disclosure Package
+**Statutory references**: RCW 2.48.190 (nonlawyer disclosure), RCW 11.125.050 (execution of powers of attorney), RCW 65.04.045 (recording standards), WAC 308-30 (notary requirements).
+
+### Required Statements (English)
+1. **Nonlawyer Disclosure (UI/Marketing)**  
+   "123LegalDoc is a nonlawyer document preparation service. We are not attorneys and cannot provide legal advice. Washington law (RCW 2.48.190) requires this notice."
+2. **Translator & Complaint Notice (Support/Emails)**  
+   "We offer bilingual support. Email support@123legaldoc.com for Spanish assistance. Washington residents may contact the Washington Attorney General's Consumer Protection Division if they have concerns about our service."
+3. **Execution Guidance (POA/Healthcare Documents)**  
+   "Washington powers of attorney must be signed in front of two qualified witnesses or acknowledged before a notary public (RCW 11.125.050). Remote notarization is allowed when performed by a Washington-commissioned notary who has registered with the Department of Licensing (WAC 308-30)."
+4. **Recording Standards Reminder (Deeds/Recordables)**  
+   "Deeds and other recordable documents must follow RCW 65.04.045 formatting rules (1-inch margins, readable 8-point font, black ink). Include county cover sheets and Real Estate Excise Tax (REET) guidance where applicable."
+
+### Spanish Translation (submit for certified review)
+1. **Aviso para Servicios sin Abogados**  
+   "123LegalDoc es un servicio de preparacion de documentos sin abogados. No somos abogados y no podemos brindar asesoria legal. Esta divulgacion es requerida por la ley de Washington (RCW 2.48.190)."
+2. **Aviso de Soporte y Quejas**  
+   "Ofrecemos soporte bilingue. Escriba a support@123legaldoc.com para recibir ayuda en espanol. Los residentes de Washington pueden contactar a la Division de Proteccion al Consumidor del Fiscal General si tienen inquietudes sobre nuestro servicio."
+3. **Guia de Ejecucion**  
+   "Los poderes notariales de Washington deben firmarse frente a dos testigos calificados o ante un notario publico (RCW 11.125.050). La notarizacion remota es valida cuando la realiza un notario comisionado en Washington que notifico al Department of Licensing (WAC 308-30)."
+4. **Recordacion sobre Formatos**  
+   "Las escrituras y otros documentos registrables deben cumplir con las reglas de formato de RCW 65.04.045 (margenes de 1 pulgada, letra de al menos 8 puntos, tinta negra legible). Incluya la hoja de portada del condado y la guia del impuesto REET cuando corresponda."
+
+### Implementation Checklist
+- **Document Intelligence**: add statements 3-4 to Washington POA, advance directive, and recordable-document templates; attach the notary/witness checklist and county cover sheet guidance from ops/compliance/washington-workflow-insert.md.
+- **Platform**: display statements 1-2 in Washington-specific flows (geo/IP, /en-us-wa, /es-us-wa) and transactional emails; log banner evidence for release gates.
+- **Growth**: localize Washington landing pages, lifecycle emails, and help center content with statements 1-2; coordinate bilingual QA for marketing assets.
+- **Compliance**: capture screenshots and template outputs showing the new statements; store evidence under ops/artifacts/compliance-cycle-0010/washington-implementation/.
+
 
 ## Next Steps
 - File integration evidence alongside release gate status (ops/artifacts/compliance-cycle-0007/release-gate-status.md).

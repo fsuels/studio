@@ -70,6 +70,12 @@ jobs:
           CI: true
           FIRESTORE_EMULATOR_HOST: localhost:8080
       
+
+      - name: Run template parity tests
+        run: npm run test -- verify-templates-parity.test.ts
+        env:
+          CI: true
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       

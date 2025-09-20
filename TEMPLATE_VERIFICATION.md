@@ -94,7 +94,13 @@ npm run fix-templates
 
 ```bash
 npm run template-report
+# or
+npm run verify-templates -- --report-only
 ```
+
+This diagnostic mode still produces `template-verification-report.json` but
+keeps the exit code at `0`, which is useful for dashboards or Slack bots that
+only need the JSON payload.
 
 ## 📊 Quality Metrics
 

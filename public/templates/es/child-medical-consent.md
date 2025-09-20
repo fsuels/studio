@@ -1,99 +1,150 @@
-# Contrato de Compraventa de Vehículo
+# Consentimiento Medico para Menores / Child Medical Consent Form
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**AUTORIZACION PARA TRATAMIENTO MEDICO DE MENOR**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+Yo, **{{parent_guardian_name}}**, en mi calidad de **{{relationship}}** (madre/padre o tutor legal) de **{{child_name}}**, menor nacido el **{{child_dob}}**, otorgo el presente consentimiento.
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Informacion del Menor / Child Information
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
-
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
-
-## 2. Precio de Compra y Pago
-
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
-
-## 3. Condición del Vehículo
-
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
-{{/if}}
-
-## 4. Declaraciones y Garantías del Vendedor
-
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+| Campo                        | Informacion             |
+| --------------------------- | ----------------------- |
+| **Nombre completo**         | {{child_name}}          |
+| **Fecha de nacimiento**     | {{child_dob}}           |
+| **Domicilio**               | {{child_address}}       |
+| **Telefono de emergencia**  | {{emergency_phone}}     |
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 2. Persona Autorizada / Authorized Caregiver
+
+Autorizo a **{{caregiver_name}}**, con domicilio en **{{caregiver_address}}** y telefono **{{caregiver_phone}}**, para que consienta tratamiento medico del menor durante el periodo indicado.
+
+- **Vigencia de la autorizacion:** desde **{{start_date}}** hasta **{{end_date}}**
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 3. Informacion Medica / Medical Information
+
+### Medicamentos actuales / Current Medications
+
+{{child_medications}}
+
+### Alergias conocidas / Known Allergies
+
+{{child_allergies}}
+
+### Condiciones medicas / Medical Conditions
+
+{{medical_conditions}}
+
+### Medico de cabecera / Primary Care Physician
+
+- **Nombre:** {{doctor_name}}
+- **Telefono:** {{doctor_phone}}
+- **Domicilio:** {{doctor_address}}
+
+### Hospital preferido / Preferred Hospital
+
+{{preferred_hospital}}
+
+---
+
+## 4. Alcance del Consentimiento / Scope of Consent
+
+La persona designada queda facultada para:
+
+1. **Atencion rutinaria:** Aprobar examenes y tratamientos no emergentes.
+2. **Tratamiento de emergencia:** Autorizar intervenciones de emergencia, incluida cirugia, cuando sea necesario.
+3. **Medicamentos recetados:** Aceptar la administracion de medicamentos prescritos por profesionales autorizados.
+4. **Transporte medico:** Autorizar el traslado del menor a instalaciones de salud apropiadas.
+
+### Restricciones / Restrictions
+
+{{restrictions}}
+
+---
+
+## 5. Seguro Medico / Insurance Information
+
+| Campo                     | Informacion           |
+| ------------------------- | --------------------- |
+| **Aseguradora**           | {{insurance_company}} |
+| **Numero de poliza**      | {{policy_number}}     |
+| **Numero de grupo**       | {{group_number}}      |
+| **Titular principal**     | {{primary_insured}}   |
+
+---
+
+## 6. Contactos de Emergencia / Emergency Contacts
+
+### Contacto principal / Primary Contact
+
+- **Nombre:** {{emergency_contact_1_name}}
+- **Relacion:** {{emergency_contact_1_relationship}}
+- **Telefono:** {{emergency_contact_1_phone}}
+
+### Contacto secundario / Secondary Contact
+
+- **Nombre:** {{emergency_contact_2_name}}
+- **Relacion:** {{emergency_contact_2_relationship}}
+- **Telefono:** {{emergency_contact_2_phone}}
+
+---
+
+## 7. Declaracion Legal / Legal Authorization
+
+Declaro que:
+
+1. Tengo la autoridad legal para expedir este consentimiento.
+2. Esta autorizacion permanece vigente hasta la fecha indicada o hasta su revocacion por escrito.
+3. Eximo de responsabilidad a la persona autorizada y a los proveedores que actuen de buena fe con base en este documento.
+4. Asumo la responsabilidad de los gastos medicos generados.
+
+**Este consentimiento se rige por las leyes de {{state}}.**
+
+---
+
+## Signatures / Firmas
+
+## 8. Firmas / Signatures
+
+Fecha del acuerdo: **{{agreement_date}}**
+
+**Firma del progenitor o tutor / Parent or Guardian Signature**
+
+| Firma                                   | Fecha              |
+| --------------------------------------- | ------------------ |
+| ****************_****************       | {{agreement_date}} |
+| {{parent_guardian_name}}                |                    |
+| {{parent_title}} de {{child_name}}      |                    |
+
+**Firma del testigo / Witness Signature**
+
+| Firma                                   | Fecha              |
+| --------------------------------------- | ------------------ |
+| ****************_****************       | {{agreement_date}} |
+| Nombre del testigo: ****************    |                    |
+
+---
+
+## 9. Notarizacion / Notarization
+
+**Estado de {{state}}**  
+**Condado de {{county}}**
+
+En {{agreement_date}} comparecio {{parent_guardian_name}}, quien acredito su identidad y reconocio haber firmado este instrumento.
+
+Certifico bajo pena de perjurio, conforme a las leyes del Estado de {{state}}, que lo anterior es verdadero.
+
+**Notario Publico:** ****************_****************  
+**Mi comision expira:** ************
+
+---
+
+**IMPORTANT LEGAL NOTICE / AVISO LEGAL IMPORTANTE:** Se recomienda revisar este formulario con un profesional legal para asegurar el cumplimiento de las leyes estatales. Los proveedores medicos pueden requerir documentacion adicional. Mantenga copias de esta autorizacion siempre que el menor se encuentre bajo el cuidado de la persona designada.
+
+_Ac 2025 123LegalDoc - Formulario de autoservicio - No es asesoramiento legal - Terminos: 123LegalDoc.com/terms_

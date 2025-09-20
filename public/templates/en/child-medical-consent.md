@@ -4,7 +4,7 @@
 
 **CONSENT FOR MEDICAL TREATMENT OF MINOR CHILD**
 
-I, **{{parent_guardian_name}}**, am the **{{relationship}}** (parent/legal guardian) of **{{child_name}}**, a minor child born on **{{child_dob}}**.
+I, **{{parent_guardian_name}}**, am the **{{relationship}}** (parent/legal guardian) of **{{child_name}}**, a minor child born on **{{child_dob}}**, and I provide the authorization set forth below.
 
 ---
 
@@ -15,39 +15,39 @@ I, **{{parent_guardian_name}}**, am the **{{relationship}}** (parent/legal guard
 | **Child's Full Name** | {{child_name}}      |
 | **Date of Birth**     | {{child_dob}}       |
 | **Address**           | {{child_address}}   |
-| **Phone Number**      | {{emergency_phone}} |
+| **Emergency Phone**   | {{emergency_phone}} |
 
 ---
 
 ## 2. Authorized Caregiver
 
-I hereby authorize **{{caregiver_name}}**, residing at **{{caregiver_address}}**, phone **{{caregiver_phone}}**, to consent to medical treatment for the above-named child under the following circumstances:
+I authorize **{{caregiver_name}}**, residing at **{{caregiver_address}}**, phone **{{caregiver_phone}}**, to consent to medical treatment for the child identified above.
 
-**Period of Authorization:** From **{{start_date}}** to **{{end_date}}**
+- **Authorization period:** from **{{start_date}}** through **{{end_date}}**
 
 ---
 
 ## 3. Medical Information
 
-### Current Medications:
+### Current Medications
 
 {{child_medications}}
 
-### Known Allergies:
+### Known Allergies
 
 {{child_allergies}}
 
-### Medical Conditions:
+### Medical Conditions
 
 {{medical_conditions}}
 
-### Primary Care Physician:
+### Primary Care Physician
 
-- **Doctor:** {{doctor_name}}
+- **Physician:** {{doctor_name}}
 - **Phone:** {{doctor_phone}}
 - **Address:** {{doctor_address}}
 
-### Preferred Hospital:
+### Preferred Hospital
 
 {{preferred_hospital}}
 
@@ -55,14 +55,14 @@ I hereby authorize **{{caregiver_name}}**, residing at **{{caregiver_address}}**
 
 ## 4. Scope of Consent
 
-I authorize the above-named caregiver to:
+The authorized caregiver may:
 
-1. **Routine Medical Care:** Consent to routine medical examinations and non-emergency treatment
-2. **Emergency Treatment:** Authorize emergency medical treatment including surgery if necessary
-3. **Prescription Medications:** Consent to administration of prescription medications as prescribed by licensed physicians
-4. **Medical Transportation:** Authorize transportation to medical facilities when necessary
+1. **Routine care:** Approve routine examinations and non-emergency treatment.
+2. **Emergency care:** Authorize emergency medical treatment, including surgery, if necessary.
+3. **Medications:** Consent to the administration of prescription medications as prescribed.
+4. **Medical transportation:** Approve transportation of the child to appropriate medical facilities.
 
-### Restrictions (if any):
+### Restrictions
 
 {{restrictions}}
 
@@ -81,13 +81,13 @@ I authorize the above-named caregiver to:
 
 ## 6. Emergency Contacts
 
-### Primary Contact:
+### Primary Contact
 
 - **Name:** {{emergency_contact_1_name}}
 - **Relationship:** {{emergency_contact_1_relationship}}
 - **Phone:** {{emergency_contact_1_phone}}
 
-### Secondary Contact:
+### Secondary Contact
 
 - **Name:** {{emergency_contact_2_name}}
 - **Relationship:** {{emergency_contact_2_relationship}}
@@ -97,33 +97,37 @@ I authorize the above-named caregiver to:
 
 ## 7. Legal Authorization
 
-I understand that this authorization allows the named caregiver to make medical decisions for my child as if they were the parent/guardian. I acknowledge that:
+I acknowledge and agree that:
 
-1. I have the legal authority to give this consent
-2. This consent remains in effect until the expiration date or until revoked in writing
-3. I will hold harmless the caregiver and medical providers acting in good faith under this authorization
-4. I am responsible for all medical expenses incurred
+1. I have the legal authority to grant this consent.
+2. This authorization remains effective until the expiration date above or until revoked in writing.
+3. The caregiver and medical providers acting in good faith under this authorization are held harmless.
+4. I am responsible for all medical expenses incurred on behalf of the child.
 
 **This authorization is governed by the laws of {{state}}.**
 
 ---
 
+## Signatures
+
 ## 8. Signatures
 
-**Parent/Guardian Signature:**
+Agreement Date: **{{agreement_date}}**
+
+**Parent/Guardian Signature**
 
 | Signature                                  | Date               |
 | ------------------------------------------ | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
+| ****************_****************          | {{agreement_date}} |
 | {{parent_guardian_name}}                   |                    |
 | {{parent_title}} of {{child_name}}         |                    |
 
-**Witness Signature:**
+**Witness Signature**
 
-| Signature                                      | Date               |
-| ---------------------------------------------- | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\*******     | **\*\***\_**\*\*** |
-| Witness Name: ****\*\*****\_\_\_\_****\*\***** |                    |
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ****************_****************          | {{agreement_date}} |
+| Witness Name: ****************             |                    |
 
 ---
 
@@ -132,19 +136,15 @@ I understand that this authorization allows the named caregiver to make medical 
 **State of {{state}}**  
 **County of {{county}}**
 
-On this **\_** day of \***\*\_\*\***, 20\_\_\_, before me personally appeared {{parent_guardian_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.
+On {{agreement_date}}, before me personally appeared {{parent_guardian_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to this instrument and acknowledged executing the same in the authorized capacity.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+I certify under penalty of perjury under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
 
-**WITNESS** my hand and official seal.
-
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notary Public:** ****************_****************  
+**My Commission Expires:** ************
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This form should be reviewed by a licensed attorney to ensure compliance with state laws. Medical providers may require additional documentation. Keep copies of this form with you at all times when caring for the child.
+**IMPORTANT LEGAL NOTICE:** This form should be reviewed by a licensed attorney to ensure compliance with state laws. Medical providers may require additional documentation. Keep copies of this authorization whenever the child is in the caregiver's custody.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
-
-© 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms
+_Ac 2025 123LegalDoc - DIY form - Not legal advice - Terms: 123LegalDoc.com/terms_

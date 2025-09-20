@@ -11,7 +11,8 @@
         "Aligned advance-directive schema/questions with 50 bilingual placeholders (care coordination, storage, notary) and refreshed parity metrics at ops/artifacts/document-intel-cycle-0008/.",
         "document-intel-cycle-0009: Replaced mojibake-laden legal dictionary entries with clean ASCII translations for five canonical contract concepts.",
         "LegalTranslationEngine passes ESLint after repair; tsc still failing due to broader admin/AI regressions (see ops/artifacts/document-intel-cycle-0009/typecheck.txt).",
-        "document-intel-cycle-0010: Extended mojibake scanner to LegalTranslationEngine sources and added guardrail Jest test to catch corrupted dictionary entries."
+        "document-intel-cycle-0010: Extended mojibake scanner to LegalTranslationEngine sources and added guardrail Jest test to catch corrupted dictionary entries.",
+        "document-intel-cycle-0010: Replaced generic vehicle bill of sale placeholders with production-ready EN/ES templates, synced strategy/question flow, and added overlay coordinates for address, odometer, and warranty fields."
     ],
     "todos": [
         "Run verify-templates (or targeted smoke) to confirm the updated advance-directive schema/question wiring before release.",
@@ -19,7 +20,6 @@
         "Coordinate Compliance review of updated Spanish metadata and notarization/witness guidance.",
         "Automate translation parity checks in verify-templates to prevent regressions.",
         "Extend Colorado POA overlay to cover address blocks and power selections once layout accommodations exist.",
-        "Replace the generic vehicle bill of sale placeholder with a production-ready template that exposes address, odometer, and warranty fields for overlay coverage.",
         "Plan next placeholder replacements (accident-report, ach-authorization-form) using cycle-0007 audit for prioritization.",
         "Coordinate with AI and Platform owners on restoring global typecheck success so Document Intelligence verifications can gate releases.",
         "Integrate mojibake scanner into CI guardrails for template releases."

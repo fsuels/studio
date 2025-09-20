@@ -1,99 +1,351 @@
-# Contrato de Compraventa de Vehículo
+# Contrato de Arrendamiento Comercial / Commercial Lease Agreement
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**CONTRATO DE ARRENDAMIENTO COMERCIAL**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
+Este Contrato de Arrendamiento Comercial ("Arrendamiento") se celebra el **{{lease_date}}**, entre:
 
-Referidos colectivamente en este documento como las “Partes”.
+- **Arrendador:** {{landlord_name}}, entidad {{landlord_entity_type}} organizada conforme a las leyes de {{landlord_state}}, con domicilio principal en {{landlord_address}}
+- **Arrendatario:** {{tenant_name}}, entidad {{tenant_entity_type}} organizada conforme a las leyes de {{tenant_state}}, con domicilio principal en {{tenant_address}}
+
+En adelante, las "Partes".
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Descripcion del Inmueble / Premises Description
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+### 1.1 Inmueble Arrendado / Leased Premises
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**Direccion:** {{property_address}}  
+**Ciudad:** {{city}}, **Estado:** {{state}}, **Codigo Postal:** {{zip_code}}  
+**Descripcion legal / Legal Description:** {{legal_description}}
 
-## 2. Precio de Compra y Pago
+### 1.2 Detalles del Edificio / Property Details
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+**Nombre del edificio:** {{building_name}}  
+**Unidad o suite:** {{suite_number}}  
+**Superficie total:** {{total_square_feet}} pies cuadrados  
+**Superficie util:** {{usable_square_feet}} pies cuadrados  
+**Tipo de inmueble / Property Type:** {{property_type}} (Oficina/Comercial/Industrial/Almacen/Otro)
 
-## 3. Condición del Vehículo
+### 1.3 Areas incluidas / Included Areas
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+**Areas comunes:** {{common_areas}}  
+**Estacionamientos asignados:** {{parking_spaces}}  
+**Bodegas/almacenaje:** {{storage_areas}}  
+**Otras inclusiones:** {{other_inclusions}}
+
+---
+
+## 2. Plazo del Arrendamiento / Lease Terms
+
+### 2.1 Periodo del arrendamiento / Lease Period
+
+**Tipo de arrendamiento:** {{lease_type}} (Gross/Net/Modified Gross/Triple Net)  
+**Inicio:** {{commencement_date}}  
+**Vencimiento:** {{expiration_date}}  
+**Duracion total:** {{lease_term_years}} anos y {{lease_term_months}} meses
+
+### 2.2 Opciones de renovacion / Renewal Options
+
+{{#if renewal_options}}
+**Opciones:** El Arrendatario podra renovar {{renewal_option_count}} vez/veces por {{renewal_term}}, sujeto a {{renewal_terms}}.  
+**Aviso de renovacion:** {{renewal_notice_days}} dias de anticipacion por escrito.  
+**Renta durante renovacion:** {{renewal_rent_terms}}
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**No existen opciones de renovacion** en este Arrendamiento.
 {{/if}}
-
-## 4. Declaraciones y Garantías del Vendedor
-
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 3. Renta y Cargos Adicionales / Rent and Additional Charges
+
+### 3.1 Renta base / Base Rent
+
+**Renta anual:** ${{annual_base_rent}}  
+**Renta mensual:** ${{monthly_base_rent}}  
+**Tarifa por pie cuadrado:** ${{rent_per_sq_ft}} por pie cuadrado anual  
+**Inicio de renta:** {{rent_commencement_date}}
+
+### 3.2 Condiciones de pago / Rent Payment Terms
+
+**Fecha de pago:** {{rent_due_date}} de cada mes  
+**Metodo de pago:** {{payment_method}}  
+**Direccion de pago:** {{payment_address}}  
+**Recargo por mora:** {{late_fee_percentage}}% o ${{late_fee_amount}} (lo que sea mayor)  
+**Periodo de gracia:** {{grace_period}} dias
+
+### 3.3 Incrementos de renta / Rent Increases
+
+{{#if rent_increases}}
+**Ajustes de renta:** {{rent_escalation_type}}
+
+- **Incremento anual:** {{annual_increase_percentage}}% anual
+- **Ajuste CPI:** {{#if cpi_adjustment}}Basado en el Indice de Precios al Consumidor{{/if}}
+- **Revision a mercado:** {{#if market_rate_review}}Cada {{market_review_years}} anos{{/if}}
+{{/if}}
+
+### 3.4 Gastos operativos / Operating Expenses
+
+{{#if operating_expenses}}
+**Porcentaje del Arrendatario:** {{tenant_expense_percentage}}%
+
+**Gastos incluidos:** impuestos, seguros, mantenimiento de areas comunes (CAM), servicios comunes, honorarios de administracion, reparaciones y {{additional_operating_expenses}}.
+
+**Tope de gastos (Expense Stop):** ${{expense_stop}} por pie cuadrado anual  
+**Conciliacion:** Informe anual antes de {{reconciliation_date}}
+{{/if}}
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 4. Depositos / Security Deposit and Additional Deposits
+
+### 4.1 Deposito en garantia / Security Deposit
+
+**Monto:** ${{security_deposit}}  
+**Aplicacion:** Garantizar el cumplimiento de obligaciones.  
+**Devolucion:** Dentro de {{deposit_return_days}} dias tras la entrega, menos cargos autorizados.
+
+### 4.2 Otros depositos / Additional Deposits
+
+{{#if additional_deposits}}
+- **Primer mes de renta:** ${{monthly_base_rent}}  
+- **Ultimo mes de renta:** {{#if last_month_required}}${{monthly_base_rent}}{{else}}No requerido{{/if}}  
+- **Depositos de servicios:** {{utility_deposits}}  
+- **Deposito por llaves:** ${{key_deposit}}
+{{/if}}
+
+---
+
+## 5. Uso y Operacion / Use and Operation
+
+### 5.1 Uso autorizado / Permitted Use
+
+{{permitted_use}}
+
+### 5.2 Reglas del edificio / Building Rules
+
+{{building_rules}}
+
+### 5.3 Licencias y cumplimiento normativo / Compliance
+
+El Arrendatario obtendra licencias aplicables y cumplira todas las leyes y ordenanzas.
+
+---
+
+## 6. Servicios y Mantenimiento / Services and Maintenance
+
+### 6.1 Servicios incluidos / Included Services
+
+{{utilities_and_services}}
+
+### 6.2 Mantenimiento del Arrendatario / Tenant Maintenance
+
+{{tenant_maintenance_obligations}}
+
+### 6.3 Mantenimiento del Arrendador / Landlord Maintenance
+
+{{landlord_maintenance_obligations}}
+
+---
+
+## 7. Mejoras y Alteraciones / Improvements and Alterations
+
+### 7.1 Condicion inicial / Condition of Premises
+
+{{initial_condition}}
+
+### 7.2 Alteraciones / Alterations
+
+{{alterations_clause}}
+
+### 7.3 Mejoras permanentes / Leasehold Improvements
+
+{{leasehold_improvements}}
+
+---
+
+## 8. Seguros e Indemnizacion / Insurance and Indemnification
+
+### 8.1 Seguro del Arrendatario / Tenant Insurance
+
+{{tenant_insurance_requirements}}
+
+### 8.2 Seguro del Arrendador / Landlord Insurance
+
+{{landlord_insurance_requirements}}
+
+### 8.3 Indemnizacion / Indemnity
+
+{{indemnification_clause}}
+
+---
+
+## 9. Cesion y Subarrendamiento / Assignment and Subletting
+
+{{assignment_subletting_clause}}
+
+---
+
+## 10. Incumplimiento y Recursos / Default and Remedies
+
+### 10.1 Eventos de incumplimiento
+
+{{events_of_default}}
+
+### 10.2 Recursos del Arrendador
+
+{{landlord_remedies}}
+
+### 10.3 Recursos del Arrendatario
+
+{{tenant_remedies}}
+
+---
+
+## 11. Terminacion y Rescision / Termination
+
+### 11.1 Terminacion anticipada
+
+{{early_termination_clause}}
+
+### 11.2 Desocupacion
+
+{{surrender_clause}}
+
+---
+
+## 12. Notificaciones / Notices
+
+**Direcciones de notificacion:**
+
+- Arrendador: {{landlord_notice_address}}
+- Arrendatario: {{tenant_notice_address}}
+
+Metodo autorizado: {{notice_delivery_methods}}
+
+---
+
+## 13. Cumplimiento Ambiental y Seguridad / Environmental and Safety Compliance
+
+### 13.1 Cumplimiento ambiental
+
+{{environmental_compliance_clause}}
+
+### 13.2 Materiales peligrosos
+
+{{hazardous_materials_policy}}
+
+### 13.3 Cumplimiento ADA
+
+{{ada_compliance_responsibility}}
+
+---
+
+## 14. Siniestra y Expropiacion / Casualty and Condemnation
+
+### 14.1 Danos por siniestro
+
+{{casualty_provisions}}
+
+### 14.2 Expropiacion
+
+{{condemnation_provisions}}
+
+---
+
+## 15. Estacionamiento / Parking
+
+### 15.1 Asignacion
+
+- Espacios asignados: {{assigned_parking_spaces}}  
+- Espacios para visitantes: {{visitor_parking_spaces}}  
+- Cuota de estacionamiento: {{#if parking_fee}}${{parking_fee_amount}} por espacio al mes{{else}}Incluido en la renta{{/if}}
+
+### 15.2 Normas de estacionamiento
+
+{{parking_rules}}
+
+---
+
+## 16. Rotulacion / Signage
+
+### 16.1 Rotulos permitidos
+
+{{signage_rights}}
+
+### 16.2 Aprobacion
+
+Todo rotulo requiere aprobacion previa escrita del Arrendador y cumplimiento con normas locales.
+
+---
+
+## 17. Disposiciones Generales / General Provisions
+
+### 17.1 Ley aplicable / Governing Law
+
+Este contrato se rige por las leyes de {{governing_state}}.
+
+### 17.2 Acuerdo integro / Entire Agreement
+
+Este documento constituye el acuerdo completo entre las Partes.
+
+### 17.3 Modificaciones / Amendment
+
+Solo podra modificarse por escrito firmado por ambas Partes.
+
+### 17.4 Divisibilidad / Severability
+
+Si alguna clausula es invalida, las demas continuaran vigentes.
+
+### 17.5 Obligaciones vinculantes / Binding Effect
+
+Vincula a las Partes y a sus sucesores y cesionarios.
+
+---
+
+## 18. Disposiciones Especiales / Special Provisions
+
+{{special_provisions}}
+
+---
+
+## Signatures / Firmas
+
+## 19. Firmas / Signatures
+
+**EN FE DE LO CUAL**, las Partes firman este Arrendamiento en la fecha indicada.
+
+**ARRENDADOR / LANDLORD:**
+
+| Firma                                   | Fecha           |
+| --------------------------------------- | -------------- |
+| ****************_****************       | {{lease_date}} |
+| {{landlord_name}}                       |                |
+| Por: {{landlord_signatory}}             |                |
+| Cargo: {{landlord_title}}               |                |
+
+**ARRENDATARIO / TENANT:**
+
+| Firma                                   | Fecha           |
+| --------------------------------------- | -------------- |
+| ****************_****************       | {{lease_date}} |
+| {{tenant_name}}                         |                |
+| Por: {{tenant_signatory}}               |                |
+| Cargo: {{tenant_title}}                 |                |
+
+---
+
+### Reconocimiento Notarial / Notarization
+
+**Estado de {{state}}**  
+**Condado de {{county}}**
+
+[Incluir bloque notarial conforme a la ley aplicable]
+
+---
+
+**IMPORTANT LEGAL NOTICE / AVISO LEGAL IMPORTANTE:** Este contrato debe revisarse con un profesional legal para asegurar cumplimiento con las normas locales y las necesidades comerciales especificas. Los arrendamientos comerciales varian segun la jurisdiccion y el tipo de inmueble.
+
+_Ac 2025 123LegalDoc - Formulario de autoservicio - No es asesoramiento legal - Terminos: 123LegalDoc.com/terms_

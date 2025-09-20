@@ -4,5 +4,27 @@
   "pageCount": 1,
   "fieldCount": 0,
   "fields": [],
-  "suggestedMappings": {}
+  "suggestedMappings": {
+    "seller_address": {
+      "contains": [
+        "Seller Address"
+      ]
+    },
+    "buyer_address": {
+      "contains": [
+        "Buyer Address"
+      ]
+    },
+    "odometer": {
+      "contains": [
+        "Odometer",
+        "Mileage"
+      ]
+    },
+    "warranty_text": {
+      "contains": [
+        "Warranty"
+      ]
+    }
+  }
 }

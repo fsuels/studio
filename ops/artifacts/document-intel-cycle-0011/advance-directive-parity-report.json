@@ -1,0 +1,41 @@
+{
+  "cycle": "document-intel-cycle-0011",
+  "runTimestamp": "2025-09-20T05:06:02.342Z",
+  "command": "npm run verify-templates",
+  "templates": [
+    {
+      "path": "C:\\dev\\123legaldoc\\public\\templates\\en\\advance-directive.md",
+      "language": "en",
+      "isValid": true,
+      "errors": [],
+      "warnings": [
+        "No content pattern defined for document type: advance-directive"
+      ],
+      "wordCount": 997,
+      "variableCount": 50,
+      "sectionCount": 10
+    },
+    {
+      "path": "C:\\dev\\123legaldoc\\public\\templates\\es\\advance-directive.md",
+      "language": "es",
+      "isValid": true,
+      "errors": [],
+      "warnings": [
+        "No content pattern defined for document type: advance-directive"
+      ],
+      "wordCount": 1027,
+      "variableCount": 50,
+      "sectionCount": 10
+    }
+  ],
+  "parityCheck": {
+    "missingVariables": {
+      "en": [],
+      "es": []
+    },
+    "sectionCountMismatch": false,
+    "sectionNumberingMismatch": false
+  },
+  "scope": "advance-directive",
+  "sourceReport": "template-verification-report.json"
+}
