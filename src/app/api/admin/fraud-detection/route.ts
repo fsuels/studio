@@ -1,75 +1,43 @@
-// Advanced Fraud Detection API
 import { NextRequest, NextResponse } from 'next/server';
-
-// Run dynamically at request time (SSR)
-export const dynamic = 'force-dynamic';
 import { requireAdmin } from '@/lib/admin-auth';
 import {
-  advancedFraudDetection,
   type FraudRiskAssessment,
   type VelocityCheck,
   type DeviceFingerprint,
   type ChargebackRiskFactors,
 } from '@/lib/advanced-fraud-detection';
 
-type BulkAssessmentResult = {
-  orderId: string;
-  success: boolean;
-  assessment?: FraudRiskAssessment;
-  error?: string;
-};
+export const dynamic = 'force-dynamic';
 
-type FraudTrendPoint = {
-  date: string;
-  totalAssessments: number;
-  highRisk: number;
-  declined: number;
-  avgRiskScore: number;
-  chargebackPredictions: number;
-  avgProcessingTime: number;
-};
-
-type ChargebackPrediction = {
-  probability: number;
-  riskBand: 'A' | 'B' | 'C' | 'D' | 'E';
-  expectedLoss: number;
-  confidence: number;
-};
-
-const PAYMENT_METHODS = ['credit_card', 'paypal', 'stripe'] as const;
-type PaymentMethod = (typeof PAYMENT_METHODS)[number];
-
-type FraudDocType =
+type SuccessDoc =
   | 'fraud.overview'
   | 'fraud.assessments'
   | 'fraud.velocity'
   | 'fraud.devices'
   | 'fraud.chargeback'
   | 'fraud.trends'
-  | 'fraud.rules'
-  | 'fraud.assessment.single'
-  | 'fraud.assessment.bulk'
-  | 'fraud.assessment.feedback'
-  | 'fraud.error';
+  | 'fraud.rules';
 
-type FraudApiSuccess<
-  TDoc extends FraudDocType,
-  TPayload extends Record<string, unknown>,
+type FraudDocType = SuccessDoc | 'fraud.error';
+
+type SuccessResponse<
+  TDoc extends SuccessDoc,
+  TData extends Record<string, unknown>,
 > = {
   status: 'success';
+  success: true;
   docType: TDoc;
-} & TPayload;
+  data: TData;
+};
 
-type FraudApiError<TDoc extends FraudDocType> = {
+type ErrorResponse = {
   status: 'error';
-  docType: TDoc;
+  success: false;
+  docType: 'fraud.error';
   error: string;
 };
 
-type FraudApiResponse<
-  TDoc extends FraudDocType,
-  TPayload extends Record<string, unknown>,
-> = FraudApiSuccess<TDoc, TPayload> | FraudApiError<TDoc>;
+type PaymentMethod = 'credit_card' | 'paypal' | 'stripe';
 
 type DashboardFraudAssessment = FraudRiskAssessment & {
   id: string;
@@ -89,7 +57,16 @@ type FraudAssessmentsPayload = {
   };
 };
 
-const DOC_TYPE_ALIASES: Record<string, FraudDocType> = {
+
+const RISK_LEVELS: FraudRiskAssessment['riskLevel'][] = [
+  'very_low',
+  'low',
+  'medium',
+  'high',
+  'very_high',
+];
+
+const DOC_TYPE_ALIASES: Record<string, SuccessDoc> = {
   overview: 'fraud.overview',
   'fraud.overview': 'fraud.overview',
   'fraud/overview': 'fraud.overview',
@@ -101,8 +78,8 @@ const DOC_TYPE_ALIASES: Record<string, FraudDocType> = {
   'velocity_analytics': 'fraud.velocity',
   'fraud.velocity': 'fraud.velocity',
   'fraud/velocity': 'fraud.velocity',
-  device: 'fraud.devices',
   devices: 'fraud.devices',
+  device: 'fraud.devices',
   'device_analytics': 'fraud.devices',
   'fraud.devices': 'fraud.devices',
   'fraud/device': 'fraud.devices',
@@ -120,7 +97,58 @@ const DOC_TYPE_ALIASES: Record<string, FraudDocType> = {
   'fraud/rules': 'fraud.rules',
 };
 
-function resolveDocType(value: string | null): FraudDocType | null {
+export async function GET(request: NextRequest) {
+  const authResult = await requireAdmin(request);
+  if (authResult instanceof Response) {
+    return authResult;
+  }
+
+  const url = new URL(request.url);
+  const docType = resolveDocType(
+    url.searchParams.get('docType') ?? url.searchParams.get('type') ?? 'overview',
+  );
+
+  if (!docType) {
+    return errorResponse('Invalid docType parameter', 400);
+  }
+
+  const timeframe = url.searchParams.get('timeframe') ?? '30d';
+  const riskLevelParam = url.searchParams.get('riskLevel');
+  const parsedPage = Number.parseInt(url.searchParams.get('page') ?? '1', 10);
+  const parsedLimit = Number.parseInt(url.searchParams.get('limit') ?? '50', 10);
+  const page = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
+  const limitRaw = Number.isNaN(parsedLimit) || parsedLimit < 1 ? 50 : parsedLimit;
+  const limit = Math.min(limitRaw, 100);
+
+  switch (docType) {
+    case 'fraud.overview':
+      return successResponse(docType, buildOverview(timeframe));
+    case 'fraud.assessments':
+      return successResponse(
+        docType,
+        buildAssessments({
+          timeframe,
+          riskLevel: normaliseRiskLevel(riskLevelParam),
+          page,
+          limit,
+        }),
+      );
+    case 'fraud.velocity':
+      return successResponse(docType, buildVelocityAnalytics(timeframe));
+    case 'fraud.devices':
+      return successResponse(docType, buildDeviceAnalytics(timeframe));
+    case 'fraud.chargeback':
+      return successResponse(docType, buildChargebackInsights(timeframe));
+    case 'fraud.trends':
+      return successResponse(docType, buildFraudTrends(timeframe));
+    case 'fraud.rules':
+      return successResponse(docType, buildFraudRules());
+    default:
+      return errorResponse('Unsupported docType', 400);
+  }
+}
+
+function resolveDocType(value: string | null): SuccessDoc | null {
   if (!value) {
     return null;
   }
@@ -128,686 +156,299 @@ function resolveDocType(value: string | null): FraudDocType | null {
   return DOC_TYPE_ALIASES[key] ?? null;
 }
 
-export async function GET(request: NextRequest) {
-  const adminResult = await requireAdmin(request);
-  if (adminResult instanceof Response) {
-    return adminResult;
+function normaliseRiskLevel(value: string | null): FraudRiskAssessment['riskLevel'] | undefined {
+  if (!value) {
+    return undefined;
   }
-
-  try {
-    const url = new URL(request.url);
-    const docTypeParam =
-      url.searchParams.get('docType') ?? url.searchParams.get('type') ?? 'overview';
-    const docType = resolveDocType(docTypeParam);
-
-    if (!docType) {
-      return NextResponse.json<FraudApiError<'fraud.error'>>(
-        {
-          status: 'error',
-          docType: 'fraud.error',
-          error: 'Invalid docType parameter',
-        },
-        { status: 400 },
-      );
-    }
-
-    const timeframe = url.searchParams.get('timeframe') || '30d';
-    const riskLevel = url.searchParams.get('riskLevel') || undefined;
-    const parsedPage = parseInt(url.searchParams.get('page') || '1', 10);
-    const parsedLimit = parseInt(url.searchParams.get('limit') || '50', 10);
-    const page = Number.isNaN(parsedPage) ? 1 : Math.max(parsedPage, 1);
-    const limit = Number.isNaN(parsedLimit) ? 50 : Math.max(parsedLimit, 1);
-
-    switch (docType) {
-      case 'fraud.overview': {
-        const overview = await getFraudOverview(timeframe);
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.overview',
-            Awaited<ReturnType<typeof getFraudOverview>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...overview,
-        });
-      }
-
-      case 'fraud.assessments': {
-        const assessments = await getFraudAssessments(
-          timeframe,
-          riskLevel,
-          page,
-          limit,
-        );
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.assessments',
-            Awaited<ReturnType<typeof getFraudAssessments>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...assessments,
-        });
-      }
-
-      case 'fraud.velocity': {
-        const velocityData = await getVelocityAnalytics(timeframe);
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.velocity',
-            Awaited<ReturnType<typeof getVelocityAnalytics>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...velocityData,
-        });
-      }
-
-      case 'fraud.devices': {
-        const deviceData = await getDeviceAnalytics(timeframe);
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.devices',
-            Awaited<ReturnType<typeof getDeviceAnalytics>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...deviceData,
-        });
-      }
-
-      case 'fraud.chargeback': {
-        const chargebackData = await getChargebackPredictions(timeframe);
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.chargeback',
-            Awaited<ReturnType<typeof getChargebackPredictions>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...chargebackData,
-        });
-      }
-
-      case 'fraud.trends': {
-        const trendsData = await getFraudTrends(timeframe);
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.trends',
-            Awaited<ReturnType<typeof getFraudTrends>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...trendsData,
-        });
-      }
-
-      case 'fraud.rules': {
-        const rulesData = await getFraudRules();
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.rules',
-            Awaited<ReturnType<typeof getFraudRules>>
-          >
-        >({
-          status: 'success',
-          docType,
-          ...rulesData,
-        });
-      }
-
-      default: {
-        return NextResponse.json<FraudApiError<'fraud.error'>>(
-          {
-            status: 'error',
-            docType: 'fraud.error',
-            error: 'Unsupported docType parameter',
-          },
-          { status: 400 },
-        );
-      }
-    }
-  } catch (error) {
-    console.error('Fraud detection API error:', error);
-
-    return NextResponse.json<FraudApiError<'fraud.error'>>(
-      {
-        status: 'error',
-        docType: 'fraud.error',
-        error: 'Failed to retrieve fraud detection data',
-      },
-      { status: 500 },
-    );
-  }
+  const candidate = value.trim().toLowerCase();
+  return RISK_LEVELS.find((level) => level === candidate) ?? undefined;
 }
 
-// Assess fraud risk for a specific order
-export async function POST(request: NextRequest) {
-  const adminResult = await requireAdmin(request);
-  if (adminResult instanceof Response) {
-    return adminResult;
-  }
-
-  try {
-    const body = await request.json();
-    const { action, orderData, deviceData, requestMetadata } = body;
-
-    if (!action) {
-      return NextResponse.json<FraudApiError<'fraud.error'>>(
-        {
-          status: 'error',
-          docType: 'fraud.error',
-          error: 'Action is required',
-        },
-        { status: 400 },
-      );
-    }
-
-    switch (action) {
-      case 'assess_risk': {
-        if (!orderData) {
-          return NextResponse.json<
-            FraudApiError<'fraud.assessment.single'>
-          >(
-            {
-              status: 'error',
-              docType: 'fraud.assessment.single',
-              error: 'orderData is required for risk assessment',
-            },
-            { status: 400 },
-          );
-        }
-
-        const assessment = await advancedFraudDetection.assessFraudRisk(
-          orderData,
-          deviceData || {},
-          requestMetadata || {},
-        );
-
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.assessment.single',
-            { assessment: FraudRiskAssessment }
-          >
-        >({
-          status: 'success',
-          docType: 'fraud.assessment.single',
-          assessment,
-        });
-      }
-
-      case 'bulk_assess': {
-        const { orders } = body;
-        if (!Array.isArray(orders)) {
-          return NextResponse.json<
-            FraudApiError<'fraud.assessment.bulk'>
-          >(
-            {
-              status: 'error',
-              docType: 'fraud.assessment.bulk',
-              error: 'orders array is required for bulk assessment',
-            },
-            { status: 400 },
-          );
-        }
-
-        const bulkResults: BulkAssessmentResult[] = [];
-        for (const order of orders) {
-          try {
-            const result = await advancedFraudDetection.assessFraudRisk(
-              order.orderData,
-              order.deviceData || {},
-              order.requestMetadata || {},
-            );
-            bulkResults.push({
-              orderId: order.orderId,
-              success: true,
-              assessment: result,
-            });
-          } catch (error) {
-            bulkResults.push({
-              orderId: order.orderId,
-              success: false,
-              error:
-                error instanceof Error ? error.message : 'Unknown error',
-            });
-          }
-        }
-
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.assessment.bulk',
-            {
-              total: number;
-              successful: number;
-              failed: number;
-              results: BulkAssessmentResult[];
-            }
-          >
-        >({
-          status: 'success',
-          docType: 'fraud.assessment.bulk',
-          total: orders.length,
-          successful: bulkResults.filter((r) => r.success).length,
-          failed: bulkResults.filter((r) => !r.success).length,
-          results: bulkResults,
-        });
-      }
-
-      case 'update_feedback': {
-        const { assessmentId, actualOutcome, fraudConfirmed } = body;
-        if (!assessmentId) {
-          return NextResponse.json<
-            FraudApiError<'fraud.assessment.feedback'>
-          >(
-            {
-              status: 'error',
-              docType: 'fraud.assessment.feedback',
-              error: 'assessmentId is required',
-            },
-            { status: 400 },
-          );
-        }
-
-        await updateAssessmentFeedback(
-          assessmentId,
-          actualOutcome,
-          fraudConfirmed,
-        );
-
-        return NextResponse.json<
-          FraudApiResponse<
-            'fraud.assessment.feedback',
-            { feedbackUpdated: true }
-          >
-        >({
-          status: 'success',
-          docType: 'fraud.assessment.feedback',
-          feedbackUpdated: true,
-        });
-      }
-
-      default:
-        return NextResponse.json<FraudApiError<'fraud.error'>>(
-          {
-            status: 'error',
-            docType: 'fraud.error',
-            error: 'Invalid action',
-          },
-          { status: 400 },
-        );
-    }
-  } catch (error) {
-    console.error('Fraud detection operation error:', error);
-
-    return NextResponse.json<FraudApiError<'fraud.error'>>(
-      {
-        status: 'error',
-        docType: 'fraud.error',
-        error: 'Failed to process fraud detection operation',
-      },
-      { status: 500 },
-    );
-  }
+function successResponse<TDoc extends SuccessDoc, TData extends Record<string, unknown>>(
+  docType: TDoc,
+  data: TData,
+) {
+  return NextResponse.json<SuccessResponse<TDoc, TData>>({
+    status: 'success',
+    success: true,
+    docType,
+    data,
+  });
 }
 
-// Helper functions
-async function getFraudOverview(_timeframe: string) {
-  // In production, fetch from actual database
-  const assessments = generateMockAssessments(1000);
+function errorResponse(message: string, status: number) {
+  return NextResponse.json<ErrorResponse>(
+    {
+      status: 'error',
+      success: false,
+      docType: 'fraud.error',
+      error: message,
+    },
+    { status },
+  );
+}
 
-  const totalAssessments = assessments.length;
-  const highRiskCount = assessments.filter(
-    (a) => a.riskLevel === 'high' || a.riskLevel === 'very_high',
-  ).length;
-  const autoDeclined = assessments.filter(
-    (a) => a.recommendation === 'decline',
-  ).length;
-  const manualReviews = assessments.filter(
-    (a) =>
-      a.recommendation === 'manual_review' || a.recommendation === 'review',
-  ).length;
+function buildOverview(timeframe: string): OverviewPayload {
+  const horizonDays = resolveHorizonDays(timeframe);
+  const totalAssessments = randomInt(400, 800);
+  const highRiskCount = randomInt(40, 120);
+  const autoDeclined = Math.floor(highRiskCount * 0.35);
+  const manualReviews = Math.floor(highRiskCount * 0.45);
 
-  const avgProcessingTime =
-    assessments.reduce((sum, a) => sum + a.processingTime, 0) /
-    totalAssessments;
-  const avgRiskScore =
-    assessments.reduce((sum, a) => sum + a.overallScore, 0) / totalAssessments;
-
-  // Risk distribution
   const riskDistribution = {
-    very_low: assessments.filter((a) => a.riskLevel === 'very_low').length,
-    low: assessments.filter((a) => a.riskLevel === 'low').length,
-    medium: assessments.filter((a) => a.riskLevel === 'medium').length,
-    high: assessments.filter((a) => a.riskLevel === 'high').length,
-    very_high: assessments.filter((a) => a.riskLevel === 'very_high').length,
+    very_low: randomInt(80, 120),
+    low: randomInt(120, 180),
+    medium: randomInt(90, 140),
+    high: randomInt(40, 70),
+    very_high: randomInt(15, 30),
   };
 
-  // Top risk factors
-  const allFactors = assessments.flatMap((a) => a.riskFactors);
-  const factorCounts = allFactors.reduce(
-    (acc, factor) => {
-      acc[factor.factor] = (acc[factor.factor] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
-
-  const topRiskFactors = Object.entries(factorCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10)
-    .map(([factor, count]) => ({
-      factor,
-      count,
-      percentage: (count / totalAssessments) * 100,
+  const topRiskFactors = generateMockRiskFactors()
+    .slice(0, 8)
+    .map((factor, index) => ({
+      factor: factor.factor,
+      count: randomInt(12, 60),
+      percentage: Number((randomFloat(2, 8) * (index + 1)).toFixed(1)),
     }));
 
-  // Chargeback predictions
-  const chargebackPredictions = assessments.map((a) => a.chargebackLikelihood);
-  const avgChargebackRisk =
-    chargebackPredictions.reduce((sum, p) => sum + p.probability, 0) /
-    chargebackPredictions.length;
-  const highChargebackRisk = chargebackPredictions.filter(
-    (p) => p.riskBand === 'D' || p.riskBand === 'E',
-  ).length;
+  const recentHighRisk = Array.from({ length: 10 }, (_, idx) => {
+    const assessment = generateMockAssessment({ seed: idx, level: 'high' });
+    return {
+      id: assessment.id,
+      timestamp: assessment.timestamp,
+      riskScore: assessment.overallScore,
+      riskLevel: assessment.riskLevel,
+      recommendation: assessment.recommendation,
+      topFactors: assessment.riskFactors.slice(0, 3).map((factor) => factor.factor),
+      chargebackRisk: Number((assessment.chargebackLikelihood.probability * 100).toFixed(1)),
+    };
+  });
+
+  const performanceMetrics = {
+    accuracy: Number(randomFloat(92, 97).toFixed(1)),
+    precision: Number(randomFloat(88, 94).toFixed(1)),
+    recall: Number(randomFloat(89, 95).toFixed(1)),
+    falsePositiveRate: Number(randomFloat(2, 4).toFixed(1)),
+    modelConfidence: Number(randomFloat(85, 92).toFixed(1)),
+  };
 
   return {
     summary: {
       totalAssessments,
       highRiskCount,
-      highRiskPercentage: (highRiskCount / totalAssessments) * 100,
+      highRiskPercentage: Number(((highRiskCount / totalAssessments) * 100).toFixed(1)),
       autoDeclined,
-      autoDeclineRate: (autoDeclined / totalAssessments) * 100,
+      autoDeclineRate: Number(((autoDeclined / totalAssessments) * 100).toFixed(1)),
       manualReviews,
-      manualReviewRate: (manualReviews / totalAssessments) * 100,
-      avgProcessingTime: Math.round(avgProcessingTime),
-      avgRiskScore: Math.round(avgRiskScore),
-      avgChargebackRisk: (avgChargebackRisk * 100).toFixed(2),
-      highChargebackRisk,
-      fraudPrevented: autoDeclined + Math.floor(manualReviews * 0.3), // Estimate
-      estimatedSavings: (autoDeclined + Math.floor(manualReviews * 0.3)) * 75, // $75 avg loss per fraud
+      manualReviewRate: Number(((manualReviews / totalAssessments) * 100).toFixed(1)),
+      avgProcessingTime: randomInt(210, 360),
+      avgRiskScore: randomInt(420, 610),
+      avgChargebackRisk: Number(randomFloat(6, 14).toFixed(1)),
+      highChargebackRisk: randomInt(18, 42),
+      fraudPrevented: autoDeclined + Math.floor(manualReviews * 0.3),
+      estimatedSavings: (autoDeclined + Math.floor(manualReviews * 0.3)) * 75,
     },
     riskDistribution,
     topRiskFactors,
-    recentHighRisk: assessments
-      .filter((a) => a.riskLevel === 'high' || a.riskLevel === 'very_high')
-      .slice(0, 10)
-      .map((a) => ({
-        id: `assessment_${Math.random().toString(36).substr(2, 8)}`,
-        timestamp: a.timestamp,
-        riskScore: a.overallScore,
-        riskLevel: a.riskLevel,
-        recommendation: a.recommendation,
-        topFactors: a.riskFactors.slice(0, 3).map((f) => f.factor),
-        chargebackRisk: (a.chargebackLikelihood.probability * 100).toFixed(1),
-      })),
-    performanceMetrics: {
-      accuracy: 94.5, // Model accuracy %
-      precision: 89.2, // Precision %
-      recall: 91.8, // Recall %
-      falsePositiveRate: 2.1, // False positive %
-      modelConfidence: 87.3, // Avg model confidence %
-    },
+    recentHighRisk,
+    performanceMetrics,
+    horizonDays,
   };
 }
 
-async function getFraudAssessments(
-  timeframe: string,
-  riskLevel?: string,
-  page: number = 1,
-  limit: number = 50,
-): Promise<FraudAssessmentsPayload> {
-  let assessments = generateMockAssessments(500);
+function buildAssessments(options: {
+  timeframe: string;
+  riskLevel?: FraudRiskAssessment['riskLevel'];
+  page: number;
+  limit: number;
+}): FraudAssessmentsPayload {
+  const poolSize = 180;
+  const baseAssessments = Array.from({ length: poolSize }, (_, idx) =>
+    generateMockAssessment({ seed: idx }),
+  );
 
-  if (riskLevel) {
-    assessments = assessments.filter((a) => a.riskLevel === riskLevel);
-  }
+  const filtered = options.riskLevel
+    ? baseAssessments.filter((assessment) => assessment.riskLevel === options.riskLevel)
+    : baseAssessments;
 
-  const safePage = Number.isFinite(page) && page > 0 ? page : 1;
-  const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 50;
-  const offset = (safePage - 1) * safeLimit;
-
-  const paginatedAssessments: DashboardFraudAssessment[] = assessments
-    .slice(offset, offset + safeLimit)
-    .map((assessment, index) => ({
-      ...assessment,
-      id: `assessment_${(offset + index + 1).toString().padStart(4, '0')}`,
-      orderId: `ord_${Math.random().toString(36).slice(2, 10)}`,
-      customerEmail: `customer${offset + index + 1}@example.com`,
-      orderValue: Number((Math.random() * 500 + 35).toFixed(2)),
-      paymentMethod: randomChoice(PAYMENT_METHODS),
-    }));
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / options.limit));
+  const offset = (options.page - 1) * options.limit;
+  const assessments = filtered.slice(offset, offset + options.limit);
 
   return {
-    assessments: paginatedAssessments,
+    assessments,
     pagination: {
-      page: safePage,
-      limit: safeLimit,
-      total: assessments.length,
-      totalPages: Math.max(1, Math.ceil(assessments.length / safeLimit)),
+      page: options.page,
+      limit: options.limit,
+      total,
+      totalPages,
     },
   };
 }
 
-async function getVelocityAnalytics(_timeframe: string) {
+function buildVelocityAnalytics(_timeframe: string): VelocityPayload {
   return {
     emailVelocity: {
-      highVelocityEmails: 23,
-      avgOrdersPerEmail: 1.2,
-      maxOrdersPerEmail: 8,
-      suspiciousPatterns: [
-        {
-          email: 'user***@tempmail.org',
-          orderCount24h: 5,
-          distinctIPs: 3,
-          riskScore: 850,
-        },
-        {
-          email: 'test***@10minutemail.com',
-          orderCount24h: 4,
-          distinctIPs: 2,
-          riskScore: 720,
-        },
-      ],
+      highVelocityEmails: randomInt(20, 34),
+      avgOrdersPerEmail: Number(randomFloat(1.1, 1.6).toFixed(2)),
+      maxOrdersPerEmail: randomInt(6, 10),
+      suspiciousPatterns: Array.from({ length: 4 }, () => ({
+        email: `user${randomInt(1200, 9800)}@tempmail.org`,
+        orderCount24h: randomInt(4, 9),
+        distinctIPs: randomInt(2, 5),
+        riskScore: Number(randomFloat(0.7, 0.95).toFixed(2)),
+      })),
     },
     ipVelocity: {
-      highVelocityIPs: 18,
-      avgOrdersPerIP: 1.8,
-      maxOrdersPerIP: 12,
-      vpnDetections: 45,
-      proxyDetections: 23,
-      suspiciousPatterns: [
-        {
-          ip: '192.168.***.*',
-          orderCount24h: 8,
-          distinctEmails: 6,
-          vpnDetected: true,
-          riskScore: 950,
-        },
-      ],
+      highVelocityIPs: randomInt(14, 26),
+      avgOrdersPerIP: Number(randomFloat(1.4, 2.2).toFixed(2)),
+      maxOrdersPerIP: randomInt(10, 18),
+      vpnDetections: randomInt(18, 35),
+      proxyDetections: randomInt(10, 24),
+      suspiciousPatterns: Array.from({ length: 3 }, () => ({
+        ip: `${randomInt(10, 240)}.${randomInt(0, 255)}.${randomInt(0, 255)}.${randomInt(1, 254)}`,
+        orderCount24h: randomInt(6, 12),
+        distinctEmails: randomInt(4, 9),
+        vpnDetected: Math.random() > 0.5,
+        riskScore: Number(randomFloat(0.75, 0.96).toFixed(2)),
+      })),
     },
     deviceVelocity: {
-      highVelocityDevices: 12,
-      avgOrdersPerDevice: 1.1,
-      newDeviceRate: 78.5, // % of orders from new devices
-      suspiciousPatterns: [
-        {
-          deviceId: 'fp_abc123',
-          orderCount24h: 4,
-          locationChanges: 8,
-          riskScore: 780,
-        },
-      ],
+      highVelocityDevices: randomInt(10, 18),
+      avgOrdersPerDevice: Number(randomFloat(1.0, 1.3).toFixed(2)),
+      newDeviceRate: Number(randomFloat(68, 82).toFixed(1)),
+      suspiciousPatterns: Array.from({ length: 3 }, () => ({
+        deviceId: `fp_${Math.random().toString(36).slice(2, 10)}`,
+        orderCount24h: randomInt(4, 7),
+        locationChanges: randomInt(5, 11),
+        riskScore: Number(randomFloat(0.68, 0.9).toFixed(2)),
+      })),
     },
     cardVelocity: {
-      highVelocityCards: 8,
-      avgOrdersPerCard: 1.3,
-      chargebackCards: 3,
-      suspiciousPatterns: [
-        {
-          cardLast4: '****1234',
-          orderCount24h: 6,
-          distinctEmails: 4,
-          chargebackHistory: 1,
-          riskScore: 900,
-        },
-      ],
+      highVelocityCards: randomInt(7, 12),
+      avgOrdersPerCard: Number(randomFloat(1.2, 1.6).toFixed(2)),
+      chargebackCards: randomInt(2, 5),
+      suspiciousPatterns: Array.from({ length: 3 }, () => ({
+        cardLast4: `${randomInt(1000, 9999)}`,
+        orderCount24h: randomInt(5, 9),
+        distinctEmails: randomInt(3, 6),
+        chargebackHistory: randomInt(0, 2),
+        riskScore: Number(randomFloat(0.72, 0.93).toFixed(2)),
+      })),
     },
   };
 }
 
-async function getDeviceAnalytics(_timeframe: string) {
+function buildDeviceAnalytics(_timeframe: string): DeviceAnalyticsPayload {
   return {
     overview: {
-      totalDevices: 2847,
-      newDevices: 1756,
-      returningDevices: 1091,
-      highRiskDevices: 127,
-      blockedDevices: 45,
+      totalDevices: randomInt(2400, 3100),
+      newDevices: randomInt(1400, 1900),
+      returningDevices: randomInt(900, 1200),
+      highRiskDevices: randomInt(120, 190),
+      blockedDevices: randomInt(35, 70),
     },
     fingerprinting: {
-      uniqueFingerprints: 2847,
-      duplicateFingerprints: 23,
-      incompleteFingerprints: 156,
+      uniqueFingerprints: randomInt(2300, 2800),
+      duplicateFingerprints: randomInt(18, 36),
+      incompleteFingerprints: randomInt(140, 210),
       fingerprintQuality: {
-        high: 2156,
-        medium: 534,
-        low: 157,
+        high: randomInt(1800, 2200),
+        medium: randomInt(380, 520),
+        low: randomInt(120, 180),
       },
     },
     patterns: {
-      multipleLocations: 78,
-      rapidLocationChanges: 34,
-      suspiciousUserAgents: 23,
-      tamperingAttempts: 12,
+      multipleLocations: randomInt(70, 110),
+      rapidLocationChanges: randomInt(32, 58),
+      suspiciousUserAgents: randomInt(18, 35),
+      tamperingAttempts: randomInt(10, 22),
     },
-    topRiskyDevices: [
-      {
-        deviceId: 'fp_xyz789',
-        riskScore: 950,
-        orderCount: 8,
-        locations: 5,
-        countries: 3,
-        lastSeen: new Date(Date.now() - 300000).toISOString(),
-      },
-      {
-        deviceId: 'fp_abc456',
-        riskScore: 880,
-        orderCount: 6,
-        locations: 4,
-        countries: 2,
-        lastSeen: new Date(Date.now() - 600000).toISOString(),
-      },
-    ],
+    topRiskyDevices: Array.from({ length: 5 }, (_, idx) => ({
+      deviceId: `fp_${Math.random().toString(36).slice(2, 10)}`,
+      riskScore: randomInt(780, 980),
+      orderCount: randomInt(5, 11),
+      locations: randomInt(3, 8),
+      countries: randomInt(2, 4),
+      lastSeen: new Date(Date.now() - idx * 15 * 60 * 1000).toISOString(),
+    })),
   };
 }
 
-async function getChargebackPredictions(_timeframe: string) {
-  const predictions = generateMockChargebackPredictions(100);
+function buildChargebackInsights(_timeframe: string): ChargebackPayload {
+  const riskBands: Record<'A' | 'B' | 'C' | 'D' | 'E', number> = {
+    A: randomInt(40, 60),
+    B: randomInt(30, 50),
+    C: randomInt(20, 40),
+    D: randomInt(15, 25),
+    E: randomInt(8, 18),
+  };
+  const totalPredictions = Object.values(riskBands).reduce((sum, count) => sum + count, 0);
+  const highRiskTransactions = riskBands.D + riskBands.E;
 
   return {
     overview: {
-      totalPredictions: predictions.length,
-      avgChargebackRisk: (
-        (predictions.reduce((sum, p) => sum + p.probability, 0) /
-          predictions.length) *
-        100
-      ).toFixed(2),
-      highRiskTransactions: predictions.filter(
-        (p) => p.riskBand === 'D' || p.riskBand === 'E',
-      ).length,
-      estimatedChargebacks: predictions
-        .reduce((sum, p) => sum + p.probability, 0)
-        .toFixed(1),
-      estimatedLosses: predictions
-        .reduce((sum, p) => sum + p.expectedLoss, 0)
-        .toFixed(2),
+      totalPredictions,
+      avgChargebackRisk: Number(randomFloat(6, 14).toFixed(2)),
+      highRiskTransactions,
+      estimatedChargebacks: Number(randomFloat(12, 28).toFixed(1)),
+      estimatedLosses: Number(randomFloat(1800, 3600).toFixed(2)),
     },
-    riskBands: {
-      A: predictions.filter((p) => p.riskBand === 'A').length,
-      B: predictions.filter((p) => p.riskBand === 'B').length,
-      C: predictions.filter((p) => p.riskBand === 'C').length,
-      D: predictions.filter((p) => p.riskBand === 'D').length,
-      E: predictions.filter((p) => p.riskBand === 'E').length,
-    },
+    riskBands,
     topRiskFactors: [
-      { factor: 'High order value', impact: 0.08, frequency: 23 },
-      { factor: 'New customer', impact: 0.06, frequency: 156 },
-      { factor: 'Geographic distance', impact: 0.05, frequency: 89 },
-      { factor: 'Unusual time of day', impact: 0.04, frequency: 67 },
-      { factor: 'VPN usage', impact: 0.07, frequency: 34 },
+      { factor: 'High order value', impact: 0.08, frequency: randomInt(20, 38) },
+      { factor: 'New customer', impact: 0.06, frequency: randomInt(30, 48) },
+      { factor: 'Geographic distance', impact: 0.05, frequency: randomInt(22, 34) },
+      { factor: 'Unusual time of day', impact: 0.04, frequency: randomInt(18, 28) },
+      { factor: 'VPN usage', impact: 0.07, frequency: randomInt(14, 22) },
     ],
-    highRiskPredictions: predictions
-      .filter((p) => p.riskBand === 'D' || p.riskBand === 'E')
-      .slice(0, 20)
-      .map((p) => ({
-        orderId: `ord_${Math.random().toString(36).substr(2, 8)}`,
-        probability: (p.probability * 100).toFixed(1),
-        riskBand: p.riskBand,
-        expectedLoss: p.expectedLoss.toFixed(2),
-        confidence: (p.confidence * 100).toFixed(1),
-        orderValue: (Math.random() * 500 + 35).toFixed(2),
-        customerEmail: `customer${Math.floor(Math.random() * 1000)}@example.com`,
-      })),
+    highRiskPredictions: Array.from({ length: 20 }, (_, idx) => ({
+      orderId: `ord_${Math.random().toString(36).slice(2, 10)}`,
+      probability: Number(randomFloat(12, 28).toFixed(1)),
+      riskBand: idx % 2 === 0 ? 'D' : 'E',
+      expectedLoss: Number(randomFloat(120, 480).toFixed(2)),
+      confidence: Number(randomFloat(68, 92).toFixed(1)),
+      orderValue: Number(randomFloat(80, 620).toFixed(2)),
+      customerEmail: `customer${randomInt(1000, 9999)}@example.com`,
+    })),
   };
 }
 
-async function getFraudTrends(_timeframe: string) {
-  const days = _timeframe === '7d' ? 7 : _timeframe === '30d' ? 30 : 90;
-  const trends: FraudTrendPoint[] = [];
-
-  for (let i = days; i >= 0; i--) {
-    const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
-    trends.push({
+function buildFraudTrends(timeframe: string): FraudTrendsPayload {
+  const days = resolveHorizonDays(timeframe);
+  const trends = Array.from({ length: days }, (_, index) => {
+    const dayOffset = days - index;
+    const date = new Date(Date.now() - dayOffset * 24 * 60 * 60 * 1000);
+    return {
       date: date.toISOString().split('T')[0],
-      totalAssessments: Math.floor(Math.random() * 100) + 50,
-      highRisk: Math.floor(Math.random() * 20) + 5,
-      declined: Math.floor(Math.random() * 15) + 2,
-      avgRiskScore: Math.floor(Math.random() * 200) + 200,
-      chargebackPredictions: Math.floor(Math.random() * 10) + 2,
-      avgProcessingTime: Math.floor(Math.random() * 50) + 100,
-    });
-  }
+      totalAssessments: randomInt(55, 140),
+      highRisk: randomInt(8, 24),
+      declined: randomInt(4, 16),
+      avgRiskScore: randomInt(380, 620),
+      chargebackPredictions: randomInt(6, 18),
+      avgProcessingTime: randomInt(180, 360),
+    };
+  });
 
-  // Calculate percentage changes
   const recent = trends.slice(-7);
   const previous = trends.slice(-14, -7);
-
-  const recentAvg =
-    recent.reduce((sum, t) => sum + t.avgRiskScore, 0) / recent.length;
-  const previousAvg =
-    previous.reduce((sum, t) => sum + t.avgRiskScore, 0) / previous.length;
-  const riskScoreChange = (
-    ((recentAvg - previousAvg) / previousAvg) *
-    100
-  ).toFixed(1);
-
-  const recentDeclined = recent.reduce((sum, t) => sum + t.declined, 0);
-  const previousDeclined = previous.reduce((sum, t) => sum + t.declined, 0);
-  const declineRateChange = (
-    ((recentDeclined - previousDeclined) / previousDeclined) *
-    100
-  ).toFixed(1);
+  const riskScoreChange = calculatePercentageChange(
+    recent.reduce((sum, item) => sum + item.avgRiskScore, 0) / recent.length,
+    previous.length
+      ? previous.reduce((sum, item) => sum + item.avgRiskScore, 0) / previous.length
+      : undefined,
+  );
+  const declineRateChange = calculatePercentageChange(
+    recent.reduce((sum, item) => sum + item.declined, 0),
+    previous.length ? previous.reduce((sum, item) => sum + item.declined, 0) : undefined,
+  );
 
   return {
     trends,
     insights: {
-      riskScoreChange: {
-        value: riskScoreChange,
-        direction:
-          parseFloat(riskScoreChange) > 0 ? 'increasing' : 'decreasing',
-      },
-      declineRateChange: {
-        value: declineRateChange,
-        direction:
-          parseFloat(declineRateChange) > 0 ? 'increasing' : 'decreasing',
-      },
+      riskScoreChange,
+      declineRateChange,
       seasonalPatterns: [
         'Fraud attempts increase 35% on weekends',
         'Higher risk scores during 2-6 AM hours',
@@ -816,319 +457,346 @@ async function getFraudTrends(_timeframe: string) {
       emergingThreats: [
         'Increase in VPN-based fraud attempts (+23%)',
         'New device fingerprinting evasion techniques',
-        'Coordinated attack pattern from Eastern Europe',
+        'Coordinated attack pattern observed across three regions',
       ],
     },
   };
 }
 
-async function getFraudRules() {
+function buildFraudRules(): FraudRulesPayload {
   return {
     velocityRules: [
       {
         id: 'velocity_email_24h',
         name: 'Email 24h Velocity',
-        description: 'Decline if email used >5 times in 24h',
+        description: 'Decline if email used more than five times in 24 hours',
         threshold: 5,
         action: 'decline',
         enabled: true,
-        triggeredCount: 23,
+        triggeredCount: randomInt(20, 42),
       },
       {
         id: 'velocity_ip_1h',
         name: 'IP 1h Velocity',
-        description: 'Review if IP used >3 times in 1h',
+        description: 'Review if IP used more than three times in one hour',
         threshold: 3,
         action: 'review',
         enabled: true,
-        triggeredCount: 45,
+        triggeredCount: randomInt(38, 64),
       },
     ],
     geographicRules: [
       {
         id: 'geo_distance_500',
         name: 'High Geographic Distance',
-        description: 'Review if IP >500km from billing address',
+        description: 'Review if IP is more than 500km from billing address',
         threshold: 500,
         action: 'review',
         enabled: true,
-        triggeredCount: 67,
+        triggeredCount: randomInt(28, 44),
       },
     ],
     paymentRules: [
       {
         id: 'payment_prepaid',
         name: 'Prepaid Card Block',
-        description: 'Decline all prepaid card transactions',
-        threshold: null,
+        description: 'Decline transactions using prepaid cards for orders over $250',
+        threshold: 250,
         action: 'decline',
         enabled: false,
-        triggeredCount: 12,
+        triggeredCount: randomInt(6, 12),
       },
     ],
     deviceRules: [
       {
         id: 'device_vpn',
         name: 'VPN Detection',
-        description: 'Review transactions from VPN/Proxy',
+        description: 'Review transactions when VPN or proxy usage is detected',
         threshold: null,
         action: 'review',
         enabled: true,
-        triggeredCount: 89,
+        triggeredCount: randomInt(48, 82),
       },
     ],
   };
 }
 
-async function updateAssessmentFeedback(
-  assessmentId: string,
-  actualOutcome: string,
-  fraudConfirmed: boolean,
-) {
-  // In production, update the assessment with actual outcome for ML training
-  console.log(
-    `Updated assessment ${assessmentId}: outcome=${actualOutcome}, fraud=${fraudConfirmed}`,
-  );
-}
-
-// Mock data generators
-function generateMockAssessments(count: number): FraudRiskAssessment[] {
-  const assessments: FraudRiskAssessment[] = [];
-
-  for (let i = 0; i < count; i++) {
-    const overallScore = randomInt(120, 980);
-    const riskLevel: FraudRiskAssessment['riskLevel'] =
-      overallScore >= 800
-        ? 'very_high'
-        : overallScore >= 600
-          ? 'high'
-          : overallScore >= 400
-            ? 'medium'
-            : overallScore >= 200
-              ? 'low'
-              : 'very_low';
-
-    const deviceFingerprint = generateMockDeviceFingerprint(i);
-    const velocityCheck = generateMockVelocityCheck(deviceFingerprint.id);
-    const chargebackLikelihood = generateMockChargebackLikelihood();
-
-    assessments.push({
-      overallScore,
-      riskLevel,
-      recommendation:
-        overallScore >= 700
-          ? 'decline'
-          : overallScore >= 500
-            ? 'manual_review'
-            : overallScore >= 300
-              ? 'review'
-              : 'approve',
-      velocityScore: randomInt(80, 320),
-      deviceScore: randomInt(60, 240),
-      geographicScore: randomInt(60, 240),
-      paymentScore: randomInt(60, 240),
-      chargebackScore: Math.round(chargebackLikelihood.probability * 1000),
-      riskFactors: generateMockRiskFactors(),
-      velocityCheck,
-      deviceFingerprint,
-      chargebackLikelihood,
-      actions: generateMockActions(riskLevel),
-      processingTime: randomInt(120, 620),
-      timestamp: new Date(
-        Date.now() - randomInt(0, 30) * 24 * 60 * 60 * 1000 - randomInt(0, 23) * 60 * 60 * 1000,
-      ).toISOString(),
-    });
+function calculatePercentageChange(current: number, previous?: number) {
+  if (!previous || previous === 0) {
+    return { value: 0, direction: 'stable' as const };
   }
-
-  return assessments.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+  const value = Number((((current - previous) / previous) * 100).toFixed(1));
+  return {
+    value,
+    direction: value > 0 ? ('increasing' as const) : ('decreasing' as const),
+  };
 }
 
-type RiskFactor = {
-  category: 'velocity' | 'device' | 'geographic' | 'payment' | 'behavioral';
-  factor: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  impact: number;
-  description: string;
-};
+function resolveHorizonDays(timeframe: string): number {
+  switch (timeframe) {
+    case '7d':
+      return 7;
+    case '90d':
+      return 90;
+    case '1y':
+      return 365;
+    default:
+      return 30;
+  }
+}
 
-function generateMockRiskFactors(): RiskFactor[] {
-  const allFactors: RiskFactor[] = [
+interface AssessmentOptions {
+  seed: number;
+  level?: FraudRiskAssessment['riskLevel'];
+}
+
+function generateMockAssessment({ seed, level }: AssessmentOptions): DashboardFraudAssessment {
+  const riskLevel = level ?? pick(RISK_LEVELS);
+  const overallScore = deriveOverallScore(riskLevel);
+  const velocityCheck = generateMockVelocityCheck(seed);
+  const deviceFingerprint = generateMockDeviceFingerprint(seed);
+  const chargebackLikelihood = generateMockChargebackLikelihood();
+  const riskFactors = generateMockRiskFactors();
+  const recommendation = deriveRecommendation(riskLevel, overallScore);
+  const actions = generateMockActions(riskLevel);
+  const timestamp = new Date(Date.now() - seed * 45 * 60 * 1000).toISOString();
+  const assessment: FraudRiskAssessment = {
+    overallScore,
+    riskLevel,
+    recommendation,
+    velocityScore: randomInt(150, 320),
+    deviceScore: randomInt(120, 260),
+    geographicScore: randomInt(110, 240),
+    paymentScore: randomInt(120, 260),
+    chargebackScore: Math.round(chargebackLikelihood.probability * 1000),
+    riskFactors,
+    velocityCheck,
+    deviceFingerprint,
+    chargebackLikelihood,
+    actions,
+    processingTime: randomInt(180, 420),
+    timestamp,
+  };
+
+  return {
+    ...assessment,
+    id: `assessment_${seed.toString().padStart(4, '0')}`,
+    orderId: `ord_${Math.random().toString(36).slice(2, 10)}`,
+    customerEmail: `customer${randomInt(1000, 9999)}@example.com`,
+    orderValue: Number(randomFloat(45, 620).toFixed(2)),
+    paymentMethod: pick(['credit_card', 'paypal', 'stripe'] as const),
+  };
+}
+
+function deriveOverallScore(level: FraudRiskAssessment['riskLevel']) {
+  switch (level) {
+    case 'very_low':
+      return randomInt(120, 240);
+    case 'low':
+      return randomInt(240, 420);
+    case 'medium':
+      return randomInt(420, 620);
+    case 'high':
+      return randomInt(620, 820);
+    case 'very_high':
+    default:
+      return randomInt(820, 980);
+  }
+}
+
+function deriveRecommendation(
+  level: FraudRiskAssessment['riskLevel'],
+  score: number,
+): FraudRiskAssessment['recommendation'] {
+  if (level === 'very_high' || score >= 820) {
+    return 'decline';
+  }
+  if (level === 'high' || score >= 680) {
+    return 'manual_review';
+  }
+  if (level === 'medium') {
+    return 'review';
+  }
+  return 'approve';
+}
+
+function generateMockRiskFactors() {
+  const catalog = [
     {
       category: 'velocity',
       factor: 'high_email_velocity',
       severity: 'high',
-      impact: 200,
-      description: 'Email used in 5 orders in 24h',
+      impact: randomInt(140, 210),
+      description: 'Email observed across multiple orders in short interval',
     },
     {
       category: 'velocity',
-      factor: 'high_ip_velocity',
+      factor: 'ip_velocity_spike',
       severity: 'medium',
-      impact: 150,
-      description: 'IP used in 8 orders this week',
+      impact: randomInt(110, 180),
+      description: 'IP address used for numerous orders this week',
     },
     {
       category: 'device',
       factor: 'vpn_detected',
       severity: 'medium',
-      impact: 100,
-      description: 'VPN or proxy usage detected',
-    },
-    {
-      category: 'device',
-      factor: 'new_device',
-      severity: 'low',
-      impact: 50,
-      description: 'First time seeing this device',
+      impact: randomInt(90, 150),
+      description: 'VPN or proxy usage detected during checkout',
     },
     {
       category: 'geographic',
       factor: 'country_mismatch',
-      severity: 'medium',
-      impact: 120,
-      description: 'IP country differs from billing',
-    },
-    {
-      category: 'geographic',
-      factor: 'high_distance',
       severity: 'high',
-      impact: 180,
-      description: 'IP 800km from billing address',
+      impact: randomInt(160, 220),
+      description: 'IP country differs from billing country',
     },
     {
       category: 'payment',
-      factor: 'high_value_first_order',
+      factor: 'prepaid_card_usage',
       severity: 'medium',
-      impact: 130,
-      description: 'High-value first-time purchase',
+      impact: randomInt(100, 170),
+      description: 'Prepaid card detected for high-value order',
     },
     {
       category: 'behavioral',
-      factor: 'unusual_time',
+      factor: 'rapid_form_completion',
       severity: 'low',
-      impact: 60,
-      description: 'Order placed at unusual hour',
+      impact: randomInt(60, 120),
+      description: 'Form submitted significantly faster than average customer',
     },
-  ];
-
-  const count = Math.floor(Math.random() * 4) + 1;
-  return allFactors.sort(() => Math.random() - 0.5).slice(0, count);
+  ] as const;
+  return Array.from({ length: randomInt(3, 5) }, () => pick(catalog));
 }
 
-function generateMockVelocityCheck(fingerprintId: string): VelocityCheck {
+function generateMockVelocityCheck(seed: number): VelocityCheck {
   const now = Date.now();
-  const indicatorSets: readonly string[][] = [
-    ['velocity_spike'],
-    ['location_mismatch'],
-    ['device_change'],
-    ['velocity_spike', 'location_mismatch'],
-    [],
-  ];
-
-  const randomEmail = `customer${Math.floor(Math.random() * 10000)}@example.com`;
-  const randomIp = `192.168.${randomInt(0, 254)}.${randomInt(1, 254)}`;
-
   return {
     email: {
-      address: randomEmail,
-      orderCount24h: randomInt(0, 6),
-      orderCountWeek: randomInt(1, 25),
-      firstOrderDate: new Date(
-        now - randomInt(30, 360) * 24 * 60 * 60 * 1000,
-      ).toISOString(),
-      lastOrderDate: new Date(
-        now - randomInt(0, 72) * 60 * 60 * 1000,
-      ).toISOString(),
-      distinctIPs: randomInt(1, 7),
-      distinctDevices: randomInt(1, 6),
+      address: `customer${seed}@example.com`,
+      orderCount24h: randomInt(1, 6),
+      orderCountWeek: randomInt(3, 18),
+      firstOrderDate: new Date(now - randomInt(15, 180) * 24 * 60 * 60 * 1000).toISOString(),
+      lastOrderDate: new Date(now - randomInt(1, 72) * 60 * 60 * 1000).toISOString(),
+      distinctIPs: randomInt(1, 5),
+      distinctDevices: randomInt(1, 4),
       failedAttempts: randomInt(0, 3),
     },
     ip: {
-      address: randomIp,
-      orderCount24h: randomInt(0, 10),
-      orderCountWeek: randomInt(1, 40),
-      distinctEmails: randomInt(1, 12),
-      distinctCards: randomInt(1, 10),
-      firstSeen: new Date(
-        now - randomInt(60, 360) * 24 * 60 * 60 * 1000,
-      ).toISOString(),
-      lastSeen: new Date(now - randomInt(0, 24) * 60 * 60 * 1000).toISOString(),
-      vpnDetected: Math.random() < 0.25,
-      proxyDetected: Math.random() < 0.2,
-      riskLevel: randomChoice(['low', 'medium', 'high'] as const),
-    },
-    device: {
-      fingerprintId,
-      orderCount24h: randomInt(0, 5),
-      orderCountWeek: randomInt(1, 18),
+      address: `${randomInt(10, 240)}.${randomInt(0, 255)}.${randomInt(0, 255)}.${randomInt(1, 254)}`,
+      orderCount24h: randomInt(1, 12),
+      orderCountWeek: randomInt(3, 32),
       distinctEmails: randomInt(1, 8),
       distinctCards: randomInt(1, 6),
-      locationChanges: randomInt(0, 10),
-      riskIndicators: [...randomChoice(indicatorSets)],
+      firstSeen: new Date(now - randomInt(30, 300) * 24 * 60 * 60 * 1000).toISOString(),
+      lastSeen: new Date(now - randomInt(1, 48) * 60 * 60 * 1000).toISOString(),
+      vpnDetected: Math.random() > 0.7,
+      proxyDetected: Math.random() > 0.6,
+      riskLevel: pick(['low', 'medium', 'high'] as const),
+    },
+    device: {
+      fingerprintId: `fp_${Math.random().toString(36).slice(2, 10)}`,
+      orderCount24h: randomInt(0, 5),
+      orderCountWeek: randomInt(1, 16),
+      distinctEmails: randomInt(1, 7),
+      distinctCards: randomInt(1, 5),
+      locationChanges: randomInt(0, 6),
+      riskIndicators: ['velocity_spike', 'location_mismatch', 'device_change'].filter(
+        () => Math.random() > 0.5,
+      ),
     },
     card: {
-      last4: randomInt(1000, 9999).toString(),
-      bin: randomInt(100000, 999999).toString(),
+      last4: `${randomInt(1000, 9999)}`,
+      bin: `${randomInt(100000, 999999)}`,
       orderCount24h: randomInt(0, 4),
-      orderCountWeek: randomInt(1, 12),
-      distinctEmails: randomInt(1, 6),
-      distinctIPs: randomInt(1, 5),
-      chargebackHistory: randomInt(0, 2),
-      issuerCountry: randomChoice(['US', 'CA', 'GB', 'DE', 'AU']),
-      cardType: randomChoice(['credit', 'debit', 'prepaid'] as const),
+      orderCountWeek: randomInt(1, 10),
+      distinctEmails: randomInt(1, 5),
+      distinctIPs: randomInt(1, 4),
+      chargebackHistory: randomInt(0, 3),
+      issuerCountry: pick(['US', 'CA', 'GB', 'DE', 'AU'] as const),
+      cardType: pick(['credit', 'debit', 'prepaid'] as const),
     },
   };
 }
 
-function generateMockDeviceFingerprint(seed: string | number): DeviceFingerprint {
-  const seedString = String(seed);
+function generateMockDeviceFingerprint(seed: number): DeviceFingerprint {
   const now = Date.now();
-  const fonts = ['Arial', 'Times New Roman', 'Helvetica', 'Georgia', 'Verdana', 'Courier New'];
-  const plugins = ['Chrome PDF Plugin', 'Widevine CDM', 'QuickTime'];
-  const locationCount = randomInt(1, 3);
-  const locations = Array.from({ length: locationCount }).map((_, index) => ({
-    ip: `192.168.${(seedString.length + index) % 255}.${randomInt(2, 254)}`,
-    country: randomChoice(['US', 'CA', 'GB', 'DE', 'AU']),
-    city: randomChoice(['New York', 'Los Angeles', 'London', 'Berlin', 'Sydney']),
-    timestamp: new Date(now - index * 6 * 60 * 60 * 1000).toISOString(),
-  }));
-
-  const firstSeen = new Date(now - randomInt(1, 30) * 24 * 60 * 60 * 1000).toISOString();
-  const lastSeen = new Date(now - randomInt(0, 12) * 60 * 60 * 1000).toISOString();
-
   return {
-    id: `fp_${seedString}_${Math.random().toString(36).slice(2, 10)}`,
-    userAgent: randomChoice([
+    id: `fp_${seed}_${Math.random().toString(36).slice(2, 8)}`,
+    userAgent: pick([
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
       'Mozilla/5.0 (X11; Linux x86_64)',
-    ]),
+    ] as const),
     screen: {
-      width: randomInt(1280, 2560),
-      height: randomInt(720, 1440),
+      width: pick([1280, 1440, 1920, 2560] as const),
+      height: pick([720, 900, 1080, 1440] as const),
       colorDepth: 24,
-      pixelRatio: randomChoice([1, 1.5, 2]),
+      pixelRatio: pick([1, 1.5, 2] as const),
     },
-    timezone: randomChoice(['UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Singapore']),
-    language: randomChoice(['en-US', 'en-GB', 'de-DE']),
-    platform: randomChoice(['Win32', 'MacIntel', 'Linux x86_64']),
+    timezone: pick(['UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Singapore'] as const),
+    language: pick(['en-US', 'en-GB', 'de-DE'] as const),
+    platform: pick(['Win32', 'MacIntel', 'Linux x86_64'] as const),
     cookiesEnabled: true,
     localStorage: true,
     sessionStorage: true,
     canvas: Math.random().toString(36).slice(-16),
     webgl: Math.random().toString(36).slice(-16),
-    fonts: fonts.slice(0, randomInt(2, fonts.length)),
-    plugins: plugins.slice(0, randomInt(1, plugins.length)),
-    firstSeen,
-    lastSeen,
-    useCount: randomInt(1, 25),
-    locations,
-    riskScore: randomInt(200, 900),
+    fonts: pick([
+      ['Arial', 'Helvetica', 'Georgia'],
+      ['Roboto', 'Open Sans', 'Lato'],
+      ['Times New Roman', 'Calibri', 'Verdana'],
+    ] as const),
+    plugins: pick([
+      ['Chrome PDF Plugin', 'Widevine CDM'],
+      ['QuickTime', 'Shockwave Flash'],
+      ['Java Applet Plug-in', 'Unity Player'],
+    ] as const),
+    firstSeen: new Date(now - randomInt(60, 180) * 24 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(now - randomInt(1, 10) * 24 * 60 * 60 * 1000).toISOString(),
+    useCount: randomInt(1, 24),
+    locations: Array.from({ length: randomInt(1, 3) }, (_, idx) => ({
+      ip: `${randomInt(10, 240)}.${randomInt(0, 255)}.${randomInt(0, 255)}.${randomInt(1, 254)}`,
+      country: pick(['US', 'CA', 'GB', 'DE', 'AU'] as const),
+      city: pick(['New York', 'Los Angeles', 'London', 'Berlin', 'Sydney'] as const),
+      timestamp: new Date(now - idx * 6 * 60 * 60 * 1000).toISOString(),
+    })),
+    riskScore: Number(randomFloat(120, 880).toFixed(2)),
+  };
+}
+
+function generateMockChargebackFactors(): ChargebackRiskFactors {
+  return {
+    customerAge: randomInt(10, 1200),
+    totalOrders: randomInt(1, 120),
+    totalSpent: Number(randomFloat(120, 16000).toFixed(2)),
+    chargebackHistory: randomInt(0, 5),
+    disputeHistory: randomInt(0, 4),
+    orderValue: Number(randomFloat(25, 900).toFixed(2)),
+    avgOrderValue: Number(randomFloat(40, 520).toFixed(2)),
+    orderValueStdDev: Number(randomFloat(12, 140).toFixed(2)),
+    timeOfDay: randomInt(0, 23),
+    dayOfWeek: randomInt(0, 6),
+    ipCountry: pick(['US', 'CA', 'GB', 'DE', 'AU', 'FR'] as const),
+    billingCountry: pick(['US', 'CA', 'GB', 'DE', 'AU', 'FR'] as const),
+    shippingCountry: Math.random() > 0.7 ? pick(['US', 'CA', 'GB', 'DE', 'AU', 'FR'] as const) : undefined,
+    distanceKm: Number(randomFloat(20, 4500).toFixed(2)),
+    highRiskCountry: Math.random() > 0.85,
+    paymentMethod: pick(['credit_card', 'paypal', 'bank_transfer'] as const),
+    cardCountry: pick(['US', 'CA', 'GB', 'DE', 'AU', 'FR'] as const),
+    cardType: pick(['credit', 'debit', 'prepaid'] as const),
+    binRiskLevel: pick(['low', 'medium', 'high'] as const),
+    emailVelocity: Number(randomFloat(0.5, 8.2).toFixed(2)),
+    ipVelocity: Number(randomFloat(0.5, 6.5).toFixed(2)),
+    deviceVelocity: Number(randomFloat(0.3, 5.1).toFixed(2)),
+    deviceRisk: Number(randomFloat(10, 98).toFixed(2)),
+    emailRisk: Number(randomFloat(10, 98).toFixed(2)),
+    vpnUsage: Math.random() > 0.75,
+    proxyUsage: Math.random() > 0.7,
   };
 }
 
 function generateMockChargebackLikelihood(): FraudRiskAssessment['chargebackLikelihood'] {
-  const probability = Number((Math.random() * 0.3).toFixed(3));
+  const probability = Number(randomFloat(0.02, 0.28).toFixed(3));
   const riskBand: FraudRiskAssessment['chargebackLikelihood']['riskBand'] =
     probability >= 0.2
       ? 'E'
@@ -1139,20 +807,19 @@ function generateMockChargebackLikelihood(): FraudRiskAssessment['chargebackLike
           : probability >= 0.03
             ? 'B'
             : 'A';
-
   return {
     probability,
     riskBand,
-    expectedLoss: Number((probability * (Math.random() * 600 + 50)).toFixed(2)),
-    confidence: Number((0.6 + Math.random() * 0.4).toFixed(2)),
+    expectedLoss: Number((probability * randomFloat(80, 720)).toFixed(2)),
+    confidence: Number(randomFloat(0.62, 0.94).toFixed(2)),
     factors: generateMockChargebackFactors(),
   };
 }
 
 function generateMockActions(
-  riskLevel: FraudRiskAssessment['riskLevel'],
+  level: FraudRiskAssessment['riskLevel'],
 ): FraudRiskAssessment['actions'] {
-  const actions: FraudRiskAssessment['actions'] = [
+  const base: FraudRiskAssessment['actions'] = [
     {
       type: 'monitor',
       reason: 'Baseline monitoring',
@@ -1160,9 +827,23 @@ function generateMockActions(
       automated: true,
     },
   ];
-
-  if (riskLevel === 'high' || riskLevel === 'very_high') {
-    actions.push(
+  if (level === 'very_high') {
+    base.push(
+      {
+        type: 'decline',
+        reason: 'Risk exceeds acceptable threshold',
+        priority: 'high',
+        automated: false,
+      },
+      {
+        type: 'flag',
+        reason: 'Flag for manual investigation',
+        priority: 'high',
+        automated: false,
+      },
+    );
+  } else if (level === 'high') {
+    base.push(
       {
         type: 'review',
         reason: 'Requires manual analyst review',
@@ -1171,70 +852,42 @@ function generateMockActions(
       },
       {
         type: 'flag',
-        reason: 'Flag for future velocity checks',
+        reason: 'Add to velocity watchlist',
         priority: 'medium',
         automated: true,
       },
     );
-
-    if (riskLevel === 'very_high') {
-      actions.push({
-        type: 'decline',
-        reason: 'Risk exceeds acceptable threshold',
-        priority: 'high',
-        automated: false,
-      });
-    }
-  } else if (riskLevel === 'medium') {
-    actions.push({
+  } else if (level === 'medium') {
+    base.push({
       type: 'verify',
       reason: 'Request additional verification evidence',
       priority: 'medium',
       automated: false,
     });
   } else {
-    actions.push({
+    base.push({
       type: 'approve',
       reason: 'Low risk assessment',
       priority: 'low',
       automated: true,
     });
   }
-
-  return actions;
+  return base;
 }
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function randomChoice<T>(items: readonly T[]): T {
-  return items[randomInt(0, items.length - 1)];
+function randomFloat(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
 }
 
-function generateMockChargebackPredictions(count: number): ChargebackPrediction[] {
-  const predictions: ChargebackPrediction[] = [];
-
-  for (let i = 0; i < count; i++) {
-    const probability = Math.random() * 0.3;
-    const riskBand =
-      probability >= 0.15
-        ? 'E'
-        : probability >= 0.08
-          ? 'D'
-          : probability >= 0.04
-            ? 'C'
-            : probability >= 0.02
-              ? 'B'
-              : 'A';
-
-    predictions.push({
-      probability,
-      riskBand,
-      expectedLoss: probability * (Math.random() * 500 + 35) * 2,
-      confidence: Math.random() * 0.4 + 0.6,
-    });
-  }
-
-  return predictions;
+function pick<T>(items: readonly T[]): T {
+  return items[Math.floor(Math.random() * items.length)];
 }
+
+
+
+
+

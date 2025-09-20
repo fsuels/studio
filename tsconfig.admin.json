@@ -1,9 +1,38 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "plugins": [],
+    "paths": {
+      "@/lib/vector-search/document-analyzer": [
+        "types/admin-api-stubs/vector-search/document-analyzer"
+      ],
+      "@/lib/vector-search/pinecone-service": [
+        "types/admin-api-stubs/vector-search/pinecone-service"
+      ],
+      "@/lib/admin-auth": [
+        "types/admin-api-stubs/lib/admin-auth"
+      ],
+      "@/lib/orders": [
+        "types/admin-api-stubs/lib/orders"
+      ],
+      "@/lib/revenue-intelligence": [
+        "types/admin-api-stubs/lib/revenue-intelligence"
+      ],
+      "@/lib/collaboration/auth": [
+        "types/admin-api-stubs/lib/collaboration-auth"
+      ],
+      "@/lib/firebase-admin": [
+        "types/admin-api-stubs/lib/firebase-admin"
+      ]
+    }
   },
   "include": [
-    "src/app/api/admin/**/*.ts"
+    "next-env.d.ts",
+    "src/app/api/admin/**/*.ts",
+    "types/admin-api-stubs/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

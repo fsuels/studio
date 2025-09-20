@@ -77,8 +77,7 @@ async function verifyAuthenticatedUser(
 }
 
 function ensureAdminSdkConfigured(): NextResponse | undefined {
-  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON;
-  if (!serviceAccountKey) {
+  if (!process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON) {
     console.error('[collaboration/auth] Firebase Admin SDK is not configured');
     return NextResponse.json(
       { error: 'Collaboration service is not configured' },
@@ -134,6 +133,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       token: collaborationToken,
+      role,
+      expiresIn: normalizedExpiresIn,
       expiresAt: Date.now() + normalizedExpiresIn,
     });
   } catch (error) {

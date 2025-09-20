@@ -1,3 +1,6 @@
+jest.mock('canvas', () => ({}));
+jest.mock('canvas/lib/bindings', () => ({}));
+jest.mock('canvas/lib/canvas', () => ({}));
 import '@testing-library/jest-dom';
 import React from 'react';
 // Ensure React is available in tests that reference it directly

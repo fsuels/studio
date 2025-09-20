@@ -5,12 +5,27 @@ import '@testing-library/jest-dom';
 import DynamicForm from '@/components/forms/DynamicForm';
 import { type DocumentConfig } from '@/lib/config-loader';
 
+let formInitialData = {};
 // Mock all problematic UI components
 jest.mock('@/components/ui/form', () => ({
-  FormField: ({ name, render }: any) => render({ field: { name, value: '', onChange: jest.fn() } }),
+  __setInitialData: (data: Record<string, unknown> = {}) => {
+    formInitialData = data || {};
+  },
+  FormField: ({ name, render }: any) =>
+    render({
+      field: {
+        name,
+        value: formInitialData?.[name] ?? '',
+        onChange: jest.fn(),
+      },
+    }),
   FormItem: ({ children }: any) => <div>{children}</div>,
-  FormLabel: ({ children }: any) => <label>{children}</label>,
-  FormControl: ({ children }: any) => <div>{children}</div>,
+  FormLabel: ({ children, htmlFor, ...props }: any) => (
+    <label htmlFor={htmlFor} {...props}>
+      {children}
+    </label>
+  ),
+  FormControl: ({ children }: any) => <>{children}</>,
   FormMessage: () => null,
   FormDescription: ({ children }: any) => <small>{children}</small>,
 }));
@@ -49,6 +64,14 @@ jest.mock('@/components/ui/popover', () => ({
 }));
 
 jest.mock('canvas', () => ({}));
+jest.mock('canvas/lib/bindings', () => ({}));
+jest.mock('canvas/lib/canvas', () => ({}));
+
+const formModule = require('@/components/ui/form');
+
+beforeEach(() => {
+  formModule.__setInitialData({});
+});
 
 jest.mock('@/components/ui/select', () => {
   const React = require('react');
@@ -198,10 +221,10 @@ describe('DynamicForm', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByRole('combobox').length).toBeGreaterThan(0);
     expect(
-      screen.getByRole('button', { name: /Effective Date/i })
+      screen.getByRole('button', { name: /Pick a date/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('checkbox', { name: /Is this a mutual NDA/i })
+      screen.getByRole('checkbox', { name: /Yes/i })
     ).toBeInTheDocument();
   });
 
@@ -251,6 +274,7 @@ describe('DynamicForm', () => {
       mutual: true
     };
     
+    formModule.__setInitialData(initialData);
     render(<DynamicForm config={mockConfig} initialData={initialData} />);
 
     await waitFor(() =>

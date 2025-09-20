@@ -34,6 +34,17 @@ type TenantContext =
   | { type: 'tenant'; tenant: Tenant }
   | { type: 'subdomain'; slug: string };
 
+const VALID_TENANT_PLANS = new Set<Tenant['subscription']['plan']>(['trial', 'starter', 'professional', 'enterprise']);
+const VALID_TENANT_STATUSES = new Set<Tenant['status']>(['active', 'inactive', 'suspended', 'trial']);
+
+function isTenantPlan(value: string | null): value is Tenant['subscription']['plan'] {
+  return value !== null && VALID_TENANT_PLANS.has(value as Tenant['subscription']['plan']);
+}
+
+function isTenantStatus(value: string | null): value is Tenant['status'] {
+  return value !== null && VALID_TENANT_STATUSES.has(value as Tenant['status']);
+}
+
 const FALLBACK_TENANT_SETTINGS: Tenant['settings'] = {
   allowPublicSignup: false,
   requireEmailVerification: true,
@@ -130,6 +141,7 @@ async function handleTenantRequest(
   response.headers.set('x-tenant-slug', tenant.slug);
   response.headers.set('x-tenant-name', tenant.name ?? tenant.slug);
   response.headers.set('x-tenant-plan', tenant.subscription?.plan ?? 'trial');
+  response.headers.set('x-tenant-status', tenant.status);
 
   return response;
 }
@@ -196,26 +208,34 @@ export async function getTenantFromHeaders(
   const tenantId = headers.get('x-tenant-id');
   const tenantSlug = headers.get('x-tenant-slug');
   const tenantName = headers.get('x-tenant-name');
-  const tenantPlan = headers.get('x-tenant-plan');
+  const tenantPlanHeader = headers.get('x-tenant-plan');
+  const tenantStatusHeader = headers.get('x-tenant-status');
 
   if (!tenantId || !tenantSlug) {
     return null;
   }
 
-  const plan: Tenant['subscription']['plan'] =
-    tenantPlan === 'trial' ||
-    tenantPlan === 'starter' ||
-    tenantPlan === 'professional' ||
-    tenantPlan === 'enterprise'
-      ? tenantPlan
-      : 'trial';
+  const plan: Tenant['subscription']['plan'] = isTenantPlan(tenantPlanHeader)
+    ? tenantPlanHeader
+    : 'trial';
+  const status: Tenant['status'] = isTenantStatus(tenantStatusHeader)
+    ? tenantStatusHeader
+    : plan === 'trial'
+      ? 'trial'
+      : 'active';
+  const subscriptionStatus: Tenant['subscription']['status'] =
+    status === 'suspended'
+      ? 'past_due'
+      : status === 'inactive'
+        ? 'canceled'
+        : 'active';
 
   const fallbackName = tenantName || tenantSlug;
   const nowIso = new Date().toISOString();
 
   const subscription: Tenant['subscription'] = {
     plan,
-    status: 'active',
+    status: subscriptionStatus,
     currentPeriodStart: nowIso,
     currentPeriodEnd: nowIso,
     cancelAtPeriodEnd: false,
@@ -246,12 +266,14 @@ export async function getTenantFromHeaders(
     subscription,
     features,
     limits,
-    status: plan === 'trial' ? 'trial' : 'active',
+    status,
     createdAt: nowIso,
     updatedAt: nowIso,
     settings,
   };
-}// Client-side tenant context hook
+}
+
+// Client-side tenant context hook
 export function useTenant() {
   // This would be implemented with React context
   // For now, return null

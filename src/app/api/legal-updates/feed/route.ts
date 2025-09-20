@@ -1,3 +1,4 @@
+
 // src/app/api/legal-updates/feed/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdmin } from '@/lib/firebase-admin';
@@ -7,14 +8,14 @@ import {
   COLLECTIONS,
 } from '@/lib/legal-updates/schema';
 
-interface FeedRequest {
+type FeedRequest = {
   userId?: string;
-  limit?: number;
-  filter?: 'all' | 'urgent' | 'unread';
+  limit: number;
+  filter: 'all' | 'urgent' | 'unread';
   jurisdiction?: string;
   category?: string;
-  offset?: number;
-}
+  offset: number;
+};
 
 interface UpdateWithUserData extends ProcessedLegalUpdate {
   isRead?: boolean;
@@ -22,19 +23,37 @@ interface UpdateWithUserData extends ProcessedLegalUpdate {
   isDismissed?: boolean;
 }
 
+const DEFAULT_LIMIT = 10;
+const MAX_LIMIT = 50;
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
+
+    const userId = searchParams.get('userId') || undefined;
+    const rawLimit = Number.parseInt(searchParams.get('limit') ?? '', 10);
+    const limit = Number.isFinite(rawLimit)
+      ? Math.min(Math.max(rawLimit, 1), MAX_LIMIT)
+      : DEFAULT_LIMIT;
+
+    const rawOffset = Number.parseInt(searchParams.get('offset') ?? '', 10);
+    const offset = Number.isFinite(rawOffset) && rawOffset > 0 ? rawOffset : 0;
+
+    const filterParam = searchParams.get('filter');
+    const allowedFilters: FeedRequest['filter'][] = ['all', 'urgent', 'unread'];
+    const filter = allowedFilters.includes(filterParam as FeedRequest['filter'])
+      ? (filterParam as FeedRequest['filter'])
+      : 'all';
+
     const feedRequest: FeedRequest = {
-      userId: searchParams.get('userId') || undefined,
-      limit: Math.min(parseInt(searchParams.get('limit') || '10'), 50),
-      filter: (searchParams.get('filter') as any) || 'all',
+      userId,
+      limit,
+      filter,
       jurisdiction: searchParams.get('jurisdiction') || undefined,
       category: searchParams.get('category') || undefined,
-      offset: parseInt(searchParams.get('offset') || '0'),
+      offset,
     };
 
-    // Get user preferences if userId provided
     let userPreferences: UserLegalUpdatePreferences | null = null;
     if (feedRequest.userId && feedRequest.userId !== 'anonymous') {
       const prefDoc = await getAdmin()
@@ -46,72 +65,74 @@ export async function GET(request: NextRequest) {
       if (prefDoc.exists) {
         userPreferences = {
           id: prefDoc.id,
-          ...prefDoc.data(),
-        } as UserLegalUpdatePreferences;
+          ...(prefDoc.data() as UserLegalUpdatePreferences),
+        };
       }
     }
 
-    // Build query based on preferences and filters
     let query = getAdmin()
       .firestore()
       .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
       .where('status', '==', 'active')
       .orderBy('publishedDate', 'desc');
 
-    // Apply jurisdiction filter
     if (feedRequest.jurisdiction) {
       query = query.where('jurisdiction', '==', feedRequest.jurisdiction);
-    } else if (userPreferences?.jurisdictions.length) {
-      query = query.where('jurisdiction', 'in', userPreferences.jurisdictions);
+    } else {
+      const preferredJurisdictions = userPreferences?.jurisdictions ?? [];
+      if (preferredJurisdictions.length > 0) {
+        query = query.where('jurisdiction', 'in', preferredJurisdictions.slice(0, 10));
+      }
     }
 
-    // Apply category filter
     if (feedRequest.category) {
       query = query.where('category', '==', feedRequest.category);
-    } else if (userPreferences?.categories.length) {
-      query = query.where('category', 'in', userPreferences.categories);
+    } else {
+      const preferredCategories = userPreferences?.categories ?? [];
+      if (preferredCategories.length > 0) {
+        query = query.where('category', 'in', preferredCategories.slice(0, 10));
+      }
     }
 
-    // Apply urgency filter for urgent updates
     if (feedRequest.filter === 'urgent') {
       query = query.where('urgency', 'in', ['critical', 'high']);
     }
 
-    // Apply urgency threshold from user preferences
     if (userPreferences?.urgencyThreshold) {
-      const thresholds = ['critical', 'high', 'medium', 'low'];
-      const minUrgencyIndex = thresholds.indexOf(
-        userPreferences.urgencyThreshold,
-      );
+      const thresholds: Array<UserLegalUpdatePreferences['urgencyThreshold']> = [
+        'critical',
+        'high',
+        'medium',
+        'low',
+      ];
+      const minUrgencyIndex = thresholds.indexOf(userPreferences.urgencyThreshold);
       const allowedUrgencies = thresholds.slice(0, minUrgencyIndex + 1);
-      query = query.where('urgency', 'in', allowedUrgencies);
+      if (allowedUrgencies.length > 0) {
+        query = query.where('urgency', 'in', allowedUrgencies);
+      }
     }
 
-    // Get recent updates (last 30 days by default)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     query = query.where('publishedDate', '>=', thirtyDaysAgo);
 
-    // Apply pagination
-    if (feedRequest.offset > 0) {
-      query = query.offset(feedRequest.offset);
+    if (offset > 0) {
+      query = query.offset(offset);
     }
-    query = query.limit(feedRequest.limit);
+    query = query.limit(limit);
 
     const snapshot = await query.get();
     const updates = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data(),
-    })) as ProcessedLegalUpdate[];
+      ...(doc.data() as ProcessedLegalUpdate),
+    }));
 
-    // Get user interaction data
     const updatesWithUserData: UpdateWithUserData[] = await Promise.all(
       updates.map(async (update) => {
         if (!feedRequest.userId || feedRequest.userId === 'anonymous') {
           return update;
         }
 
-        // Get user's interaction with this update
         const userInteraction = await getUserInteraction(
           feedRequest.userId,
           update.id,
@@ -119,29 +140,27 @@ export async function GET(request: NextRequest) {
 
         return {
           ...update,
-          isRead: userInteraction?.isRead || false,
-          isBookmarked: userInteraction?.isBookmarked || false,
-          isDismissed: userInteraction?.isDismissed || false,
+          isRead: userInteraction?.isRead ?? false,
+          isBookmarked: userInteraction?.isBookmarked ?? false,
+          isDismissed: userInteraction?.isDismissed ?? false,
         };
       }),
     );
 
-    // Apply read/unread filter after getting user data
     const filteredUpdates =
       feedRequest.filter === 'unread'
         ? updatesWithUserData.filter((u) => !u.isRead)
         : updatesWithUserData;
 
-    // Get summary statistics
     const stats = await getFeedStatistics(feedRequest.userId);
 
     return NextResponse.json({
       success: true,
       updates: filteredUpdates,
       pagination: {
-        limit: feedRequest.limit,
-        offset: feedRequest.offset,
-        hasMore: filteredUpdates.length === feedRequest.limit,
+        limit,
+        offset,
+        hasMore: filteredUpdates.length === limit,
       },
       stats,
       userPreferences: userPreferences
@@ -160,7 +179,6 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
 async function getUserInteraction(userId: string, updateId: string) {
   try {
     const interactionDoc = await getAdmin()

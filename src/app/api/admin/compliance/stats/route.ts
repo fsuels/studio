@@ -56,20 +56,29 @@ interface ComplianceHealthSnapshot {
   uptime: string;
 }
 
-interface ComplianceStatsResponse {
-  success: true;
-  data: {
-    metrics: ComplianceMetrics & {
-      conversionRate: number;
-      blockRate: number;
-    };
-    stateBreakdown: ComplianceStateBreakdown;
-    trends: ComplianceTrends;
-    health: ComplianceHealthSnapshot;
-    alerts: ComplianceAlert[];
-    lastUpdated: string;
+interface ComplianceData {
+  metrics: ComplianceMetrics & {
+    conversionRate: number;
+    blockRate: number;
   };
+  stateBreakdown: ComplianceStateBreakdown;
+  trends: ComplianceTrends;
+  health: ComplianceHealthSnapshot;
+  alerts: ComplianceAlert[];
+  lastUpdated: string;
 }
+
+type ComplianceSuccessResponse = {
+  success: true;
+  data: ComplianceData;
+};
+
+type ComplianceErrorResponse = {
+  success: false;
+  error: string;
+};
+
+type ComplianceApiResponse = ComplianceSuccessResponse | ComplianceErrorResponse;
 
 export async function GET(request: NextRequest) {
   // Require admin authentication
@@ -114,7 +123,7 @@ export async function GET(request: NextRequest) {
       }),
     );
 
-    const response: ComplianceStatsResponse = {
+    const response: ComplianceSuccessResponse = {
       success: true,
       data: {
         metrics: {
@@ -138,17 +147,18 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    return NextResponse.json(response);
+    return NextResponse.json<ComplianceApiResponse>(response);
   } catch (error) {
     console.error('Admin compliance stats error:', error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to retrieve compliance statistics',
-      },
-      { status: 500 },
-    );
+    const errorResponse: ComplianceErrorResponse = {
+      success: false,
+      error: 'Failed to retrieve compliance statistics',
+    };
+
+    return NextResponse.json<ComplianceApiResponse>(errorResponse, {
+      status: 500,
+    });
   }
 }
 

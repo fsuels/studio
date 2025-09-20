@@ -42,15 +42,15 @@ export async function generatePdfDocument(
       StandardFonts.HelveticaBold,
     );
 
-    const page = pdfDoc.addPage(); // Default page size (Letter)
-    const { width, height } = page.getSize();
+    let currentPage = pdfDoc.addPage(); // Default page size (Letter)
+    let { width, height } = currentPage.getSize();
     const fontSize = 12;
     const titleFontSize = 18;
     const margin = 50;
     let y = height - margin - titleFontSize;
 
     // 1. Add Title
-    page.drawText(options.documentType, {
+    currentPage.drawText(options.documentType, {
       x: margin,
       y: y,
       font: helveticaBoldFont,
@@ -88,17 +88,15 @@ export async function generatePdfDocument(
     };
 
     // Track pages and notary seal requirements
-    const pages = [page];
+    const pages: PDFPage[] = [currentPage];
     const isNotaryDocument =
       options.documentType.toLowerCase().includes('notary') ||
       options.documentType.toLowerCase().includes('affidavit') ||
       options.documentType.toLowerCase().includes('power of attorney');
 
-    // Add footer to current page
-    addFooter(page);
 
     // 3. Add Content based on Answers
-    page.drawText('Details Provided:', {
+    currentPage.drawText('Details Provided:', {
       x: margin,
       y: y,
       font: helveticaBoldFont,
@@ -106,6 +104,11 @@ export async function generatePdfDocument(
       color: rgb(0, 0, 0),
     });
     y -= fontSize + 10;
+
+    const footerPadding =
+      FOOTER_STYLE.margin.bottom +
+      FOOTER_STYLE.fontSize +
+      FOOTER_CONFIG.minContentGap;
 
     for (const [key, value] of Object.entries(options.answers)) {
       // Basic formatting - improve as needed
@@ -116,20 +119,16 @@ export async function generatePdfDocument(
 
       // Check if text will fit on the current page (accounting for footer space)
       const textHeight = fontSize * 1.2; // Approximate height
-      const footerSpace =
-        FOOTER_STYLE.margin.bottom +
-        FOOTER_STYLE.fontSize +
-        FOOTER_CONFIG.minContentGap;
-      if (y - textHeight < margin + footerSpace) {
+      if (y - textHeight < margin + footerPadding) {
         // Add a new page if content doesn't fit
         const newPage = pdfDoc.addPage();
         pages.push(newPage);
-        y = newPage.getSize().height - margin; // Reset y to top margin
-        // Add footer to new page (UPL protection - every page requirement)
-        addFooter(newPage);
+        currentPage = newPage;
+        ({ width, height } = currentPage.getSize());
+        y = height - margin; // Reset y to top margin
       }
 
-      page.drawText(text, {
+      currentPage.drawText(text, {
         x: margin,
         y: y,
         font: helveticaFont,
@@ -143,40 +142,26 @@ export async function generatePdfDocument(
 
     // 4. Add Placeholder Signature Line and Notary Section (if applicable)
     y -= 40; // Space before signature
-    const footerSpace =
-      FOOTER_STYLE.margin.bottom +
-      FOOTER_STYLE.fontSize +
-      FOOTER_CONFIG.minContentGap;
     const signatureAreaHeight = isNotaryDocument ? 120 : 50; // Extra space for notary seal
 
-    if (y < margin + footerSpace + signatureAreaHeight) {
+    if (y < margin + footerPadding + signatureAreaHeight) {
       // Check if enough space for signature/notary area on this page
       const newPage = pdfDoc.addPage();
       pages.push(newPage);
-      y = newPage.getSize().height - margin;
-      page = newPage; // Update current page reference
-    }
-
-    // Determine if this is the final page (for notary seal auto-scaling)
-    const isFinalPage = page === pages[pages.length - 1];
-
-    // Re-add footer to final page with notary seal consideration
-    if (isFinalPage && isNotaryDocument) {
-      // Remove existing footer and re-add with notary seal offset
-      addFooter(page, true); // hasNotarySeal = true
-    } else {
-      addFooter(page);
+      currentPage = newPage;
+      ({ width, height } = currentPage.getSize());
+      y = height - margin;
     }
 
     // Add signature line
-    page.drawLine({
+    currentPage.drawLine({
       start: { x: margin, y: y },
       end: { x: margin + 200, y: y },
       thickness: 1,
       color: rgb(0, 0, 0),
     });
     y -= 15;
-    page.drawText('Signature', {
+    currentPage.drawText('Signature', {
       x: margin,
       y: y,
       font: helveticaFont,
@@ -187,7 +172,7 @@ export async function generatePdfDocument(
     // Add notary section if applicable
     if (isNotaryDocument) {
       y -= 30;
-      page.drawText('Notary Public:', {
+      currentPage.drawText('Notary Public:', {
         x: margin,
         y: y,
         font: helveticaBoldFont,
@@ -196,15 +181,18 @@ export async function generatePdfDocument(
       });
       y -= 20;
 
+      // Determine final page for seal placement
+      const isFinalPage = currentPage === pages[pages.length - 1];
+
       // Notary signature line
-      page.drawLine({
+      currentPage.drawLine({
         start: { x: margin, y: y },
         end: { x: margin + 200, y: y },
         thickness: 1,
         color: rgb(0, 0, 0),
       });
       y -= 15;
-      page.drawText('Notary Signature', {
+      currentPage.drawText('Notary Signature', {
         x: margin,
         y: y,
         font: helveticaFont,
@@ -225,7 +213,7 @@ export async function generatePdfDocument(
           )
         : sealY;
 
-      page.drawRectangle({
+      currentPage.drawRectangle({
         x: sealX,
         y: adjustedSealY,
         width: 80,
@@ -233,7 +221,7 @@ export async function generatePdfDocument(
         borderColor: rgb(0.7, 0.7, 0.7),
         borderWidth: 1,
       });
-      page.drawText('NOTARY SEAL', {
+      currentPage.drawText('NOTARY SEAL', {
         x: sealX + 10,
         y: adjustedSealY + 15,
         font: helveticaFont,
@@ -241,6 +229,11 @@ export async function generatePdfDocument(
         color: rgb(0.5, 0.5, 0.5),
       });
     }
+
+    pages.forEach((pageEntry, index) => {
+      const isFinal = index === pages.length - 1;
+      addFooter(pageEntry, isFinal && isNotaryDocument);
+    });
 
     // 5. Serialize the PDF document to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();

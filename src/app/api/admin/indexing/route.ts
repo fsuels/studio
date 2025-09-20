@@ -19,25 +19,40 @@ interface IndexingJob {
   completedAt?: string;
 }
 
+
 const localeSchema = z.enum(['en', 'es']);
 type SupportedLocale = z.infer<typeof localeSchema>;
 
+const startBulkIndexingSchema = z.object({
+  action: z.literal('start_bulk_indexing'),
+  locale: localeSchema.optional(),
+  batchSize: z.coerce.number().int().min(1).max(500).optional(),
+  force: z.boolean().optional(),
+});
+type StartBulkIndexingAction = z.infer<typeof startBulkIndexingSchema>;
+
+const indexSingleDocumentSchema = z.object({
+  action: z.literal('index_single_document'),
+  docId: z.string().min(1),
+  locale: localeSchema.optional(),
+  force: z.boolean().optional(),
+});
+type IndexSingleDocumentAction = z.infer<typeof indexSingleDocumentSchema>;
+
+const initializeIndexSchema = z.object({ action: z.literal('initialize_index') });
+const getIndexStatsSchema = z.object({ action: z.literal('get_index_stats') });
+const cleanupIndexSchema = z.object({ action: z.literal('cleanup_index') });
+
+type InitializeIndexAction = z.infer<typeof initializeIndexSchema>;
+type GetIndexStatsAction = z.infer<typeof getIndexStatsSchema>;
+type CleanupIndexAction = z.infer<typeof cleanupIndexSchema>;
+
 const postActionSchema = z.discriminatedUnion('action', [
-  z.object({
-    action: z.literal('start_bulk_indexing'),
-    locale: localeSchema.optional(),
-    batchSize: z.coerce.number().int().min(1).max(500).optional(),
-    force: z.boolean().optional(),
-  }),
-  z.object({
-    action: z.literal('index_single_document'),
-    docId: z.string().min(1),
-    locale: localeSchema.optional(),
-    force: z.boolean().optional(),
-  }),
-  z.object({ action: z.literal('initialize_index') }),
-  z.object({ action: z.literal('get_index_stats') }),
-  z.object({ action: z.literal('cleanup_index') }),
+  startBulkIndexingSchema,
+  indexSingleDocumentSchema,
+  initializeIndexSchema,
+  getIndexStatsSchema,
+  cleanupIndexSchema,
 ]);
 type PostAction = z.infer<typeof postActionSchema>;
 
@@ -171,9 +186,7 @@ export async function GET(request: NextRequest) {
 /**
  * Start bulk indexing of all documents
  */
-async function handleStartBulkIndexing(
-  params: Extract<PostAction, { action: 'start_bulk_indexing' }>,
-) {
+async function handleStartBulkIndexing(params: StartBulkIndexingAction) {
   const locale: SupportedLocale = params.locale ?? 'en';
   const batchSize = params.batchSize ?? 10;
   const force = params.force ?? false;
@@ -300,9 +313,7 @@ async function processBulkIndexing(
 /**
  * Index a single document
  */
-async function handleIndexSingleDocument(
-  params: Extract<PostAction, { action: 'index_single_document' }>,
-) {
+async function handleIndexSingleDocument(params: IndexSingleDocumentAction) {
   const docId = params.docId;
   const locale: SupportedLocale = params.locale ?? 'en';
   const force = params.force ?? false;

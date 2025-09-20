@@ -159,7 +159,7 @@ export function searchWorkflowDocuments(
   query: string,
   options: FilterOptions = {},
 ): DocumentSummary[] {
-  const preprocessedTokens = preprocessQuery(query || '');
+  const preprocessedTokens: string[] = preprocessQuery(query || '');
   const tokens = preprocessedTokens
     .map((token) => token.trim().toLowerCase())
     .filter(Boolean);

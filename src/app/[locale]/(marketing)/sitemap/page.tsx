@@ -13,9 +13,9 @@ import type { SitemapLocale } from './utils';
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: SitemapLocale };
+  params: Promise<{ locale: SitemapLocale }>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
 
   const siteUrl = getSiteUrl();
@@ -65,12 +65,12 @@ export function generateStaticParams() {
   return (localizations as readonly SitemapLocale[]).map((locale) => ({ locale }));
 }
 
-export default function SitemapPage({
+export default async function SitemapPage({
   params,
 }: {
-  params: { locale: SitemapLocale };
+  params: Promise<{ locale: SitemapLocale }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
   const sections = getLocalizedSections(locale);
   const structuredData = buildSitemapStructuredData(locale);

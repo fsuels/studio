@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
   const searchParams = request.nextUrl.searchParams;
   const frequency = resolveDigestFrequency(searchParams.get('frequency'));
+  const requestId = request.headers.get('x-request-id') ?? undefined;
 
   try {
     // Validate authentication
@@ -100,6 +101,7 @@ export async function POST(request: NextRequest) {
 
     await logEmailDigestEvent(LEGAL_UPDATE_EMAIL_EVENTS.DIGEST_TRIGGERED, {
       frequency,
+      ...(requestId ? { requestId } : {}),
     });
 
     const emailService = await getEmailService();
@@ -110,6 +112,7 @@ export async function POST(request: NextRequest) {
       emailsSent: results.sent,
       emailsFailed: results.failed,
       processingTime: Date.now() - startTime,
+      ...(requestId ? { requestId } : {}),
     });
 
     console.log(
@@ -134,6 +137,7 @@ export async function POST(request: NextRequest) {
       error: error instanceof Error ? error.message : 'Unknown error',
       frequency,
       processingTime: Date.now() - startTime,
+      ...(requestId ? { requestId } : {}),
     });
 
     return NextResponse.json(
@@ -210,9 +214,18 @@ export async function GET(request: NextRequest) {
           );
         }
 
-        // Create test email content
-        const testResult =
-          await legalUpdateEmailService.sendLegalUpdateDigest('daily');
+        const emailService = await getEmailService();
+        const testResult = await emailService.sendLegalUpdateDigest(
+          DEFAULT_DIGEST_FREQUENCY,
+        );
+
+        await logEmailDigestEvent(LEGAL_UPDATE_EMAIL_EVENTS.DIGEST_TEST_SENT, {
+          frequency: DEFAULT_DIGEST_FREQUENCY,
+          testEmail,
+          emailsSent: testResult.sent,
+          emailsFailed: testResult.failed,
+          triggeredBy: 'admin-test',
+        });
 
         return NextResponse.json({
           message: 'Test email functionality executed',

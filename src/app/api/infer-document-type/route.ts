@@ -1,21 +1,109 @@
 // src/app/api/infer-document-type/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import {
+  getAllDocumentMetadata,
+  type DocumentMetadata,
+} from '@/lib/document-metadata-registry';
+import type { InferDocumentTypeOutput as FlowInferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 
-// Type definitions (will be imported dynamically at runtime)
-type InferDocumentTypeOutput = {
-  suggestions: Array<{
-    docType: string;
-    confidence: number;
-    reasoning?: string;
-  }>;
+type FlowSuggestion = FlowInferDocumentTypeOutput['suggestions'][number];
+
+type ApiDocType = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  jurisdiction: string;
+  states?: string[];
+  requiresNotary?: boolean;
+  tags?: string[];
+  aliases?: string[];
+  translations: DocumentMetadata['translations'];
 };
 
-type ErrorResponse = {
-  error: string;
-  details?: unknown;
-  code?: string;
+type InferenceSuggestionResponse = {
+  docType: ApiDocType | null;
+  documentType: string;
+  confidence: number;
+  reasoning?: string;
 };
+
+type InferDocumentTypeApiResponse = {\n  suggestions: InferenceSuggestionResponse[];\n};\n\ntype ErrorResponse = {\n  error: string;\n  code: string;\n  details?: unknown;\n};
+
+type DocumentIndex = {
+  lookup: Map<string, DocumentMetadata>;
+};
+
+const DOCUMENT_INDEX: DocumentIndex = buildDocumentIndex();
+
+function buildDocumentIndex(): DocumentIndex {
+  const lookup = new Map<string, DocumentMetadata>();
+  const metadataList = getAllDocumentMetadata();
+
+  metadataList.forEach((metadata) => {
+    collectMetadataKeys(metadata).forEach((key) => {
+      if (!lookup.has(key)) {
+        lookup.set(key, metadata);
+      }
+    });
+  });
+
+  return { lookup };
+}
+
+function collectMetadataKeys(metadata: DocumentMetadata): string[] {
+  const keys = new Set<string>();
+
+  const addKey = (value?: string | null) => {
+    if (!value) return;
+    const normalized = value.trim().toLowerCase();
+    if (normalized) {
+      keys.add(normalized);
+    }
+  };
+
+  addKey(metadata.id);
+  addKey(metadata.title);
+  addKey(metadata.translations?.en?.name);
+  addKey(metadata.translations?.es?.name);
+
+  (metadata.aliases ?? []).forEach(addKey);
+  (metadata.tags ?? []).forEach(addKey);
+  (metadata.translations?.en?.aliases ?? []).forEach(addKey);
+  (metadata.translations?.es?.aliases ?? []).forEach(addKey);
+
+  return Array.from(keys);
+}
+
+function mapMetadataToApiDoc(metadata: DocumentMetadata): ApiDocType {
+  return {
+    id: metadata.id,
+    title: metadata.title,
+    description: metadata.description,
+    category: metadata.category,
+    jurisdiction: metadata.jurisdiction,
+    states: metadata.states,
+    requiresNotary: metadata.requiresNotary,
+    tags: metadata.tags,
+    aliases: metadata.aliases,
+    translations: metadata.translations,
+  };
+}
+
+function resolveDocType(documentType: string): ApiDocType | null {
+  const normalized = documentType?.trim().toLowerCase();
+  if (!normalized) {
+    return null;
+  }
+
+  const metadata = DOCUMENT_INDEX.lookup.get(normalized);
+  if (!metadata) {
+    return null;
+  }
+
+  return mapMetadataToApiDoc(metadata);
+}
 
 export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -76,7 +164,8 @@ export async function POST(request: NextRequest) {
 
     console.log(`${logPrefix} Calling inferDocumentTypeFlow...`);
     const flowModule = await import('@/ai/flows/infer-document-type');
-    const output: InferDocumentTypeOutput = await flowModule.inferDocumentTypeFlow(input);
+    const output: FlowInferDocumentTypeOutput =
+      await flowModule.inferDocumentTypeFlow(input);
 
     if (!output || !output.suggestions || output.suggestions.length === 0) {
       console.error(
@@ -112,7 +201,24 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`${logPrefix} Sending successful response status 200.`);
-    return NextResponse.json(output, { status: 200 });
+
+    const suggestions = output.suggestions.map((suggestion: FlowSuggestion) => {
+      const docType = resolveDocType(suggestion.documentType);
+      if (!docType) {
+        console.warn(`${logPrefix} Unable to resolve documentType from catalog: ${suggestion.documentType}`);
+      }
+
+      return {
+        docType,
+        documentType: suggestion.documentType,
+        confidence: suggestion.confidence,
+        reasoning: suggestion.reasoning,
+      };
+    });
+
+    const responsePayload: InferDocumentTypeApiResponse = { suggestions };
+
+    return NextResponse.json(responsePayload, { status: 200 });
   } catch (error: unknown) {
     console.error(
       `${logPrefix} === UNHANDLED ERROR IN API HANDLER (/infer-document-type) START ===`,
@@ -210,3 +316,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(responsePayload, { status: statusCode });
   }
 }
+
+

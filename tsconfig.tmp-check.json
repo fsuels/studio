@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "fuse.js",
+      "react",
+      "react-dom"
+    ]
+  },
+  "include": [
+    "src/ai/guardrails/pipeline.ts",
+    "src/app/[locale]/(marketing)/sitemap/page.tsx",
+    "src/app/[locale]/(marketing)/sitemap/utils.ts",
+    "src/app/[locale]/(marketing)/templates/templates-client-content.tsx",
+    "src/app/api/infer-document-type/route.ts",
+    "src/lib/firebase-admin.ts",
+    "src/lib/operational-health.ts",
+    "src/middleware/health-monitoring.ts",
+    "src/middleware/tenant.ts"
+  ]
+}

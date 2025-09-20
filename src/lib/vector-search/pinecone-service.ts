@@ -7,13 +7,7 @@ import type {
 } from '@pinecone-database/pinecone';
 import embeddingService from './embedding-service';
 
-export type PineconeMetadataPrimitive = RecordMetadataValue;
-export type PineconeMetadataValue =
-  | PineconeMetadataPrimitive
-  | PineconeMetadataPrimitive[];
-
-export interface PineconeMetadata
-  extends Record<string, PineconeMetadataValue> {
+export interface PineconeMetadata {
   docId: string;
   title: string;
   category: string;
@@ -32,7 +26,7 @@ export interface PineconeMetadata
 interface VectorRecord {
   id: string;
   values: number[];
-  metadata: PineconeMetadata;
+  metadata: Record<string, RecordMetadataValue>;
 }
 
 export interface SearchFilters {
@@ -51,7 +45,7 @@ export interface SearchFilters {
 export interface SearchResult {
   id: string;
   score: number;
-  metadata: PineconeMetadata | null;
+  metadata: PineconeMetadata;
   explanation?: string;
 }
 
@@ -165,34 +159,11 @@ export class PineconeService {
       throw new Error('Pinecone client not initialized');
     }
 
-    return this.pinecone.index<PineconeMetadata>(this.indexName);
+    return this.pinecone.index(this.indexName);
   }
 
   private getNamespace() {
     return this.getIndex().namespace(this.namespace);
-  }
-
-  private sanitizeMetadata(metadata: PineconeMetadata): PineconeMetadata {
-    const cleaned: Record<string, PineconeMetadataValue> = {};
-
-    for (const [key, value] of Object.entries(metadata)) {
-      if (value === undefined || value === null) {
-        continue;
-      }
-
-      if (Array.isArray(value)) {
-        const filtered = value.filter(
-          (item): item is PineconeMetadataPrimitive =>
-            item !== undefined && item !== null,
-        );
-
-        cleaned[key] = filtered as PineconeMetadataPrimitive[];
-      } else {
-        cleaned[key] = value;
-      }
-    }
-
-    return cleaned as PineconeMetadata;
   }
 
   private ensureMetadata(
@@ -200,11 +171,15 @@ export class PineconeService {
     metadata?: Partial<PineconeMetadata>,
   ): PineconeMetadata {
     const timestamp = new Date().toISOString();
+    const cleanStrings = (values?: string[]): string[] =>
+      (values ?? [])
+        .map((value) => value?.trim())
+        .filter((value): value is string => Boolean(value));
 
-    const normalized: PineconeMetadata = {
+    return {
       docId: metadata?.docId ?? id,
       title:
-        metadata?.title ??
+        metadata?.title?.trim() ??
         metadata?.content?.slice(0, 120) ??
         id,
       category: metadata?.category ?? 'uncategorized',
@@ -213,14 +188,52 @@ export class PineconeService {
       governingLaw: metadata?.governingLaw,
       createdAt: metadata?.createdAt ?? timestamp,
       lastModified: metadata?.lastModified ?? timestamp,
-      tags: metadata?.tags ?? [],
-      parties: metadata?.parties,
-      amounts: metadata?.amounts,
-      dates: metadata?.dates,
-      content: metadata?.content,
+      tags: cleanStrings(metadata?.tags),
+      parties: metadata?.parties ? cleanStrings(metadata.parties) : undefined,
+      amounts: metadata?.amounts ? cleanStrings(metadata.amounts) : undefined,
+      dates: metadata?.dates ? cleanStrings(metadata.dates) : undefined,
+      content: metadata?.content?.slice(0, 1000),
+    };
+  }
+
+  private normalizeMetadataForIndex(
+    metadata: PineconeMetadata,
+  ): Record<string, RecordMetadataValue> {
+    const normalized: Record<string, RecordMetadataValue> = {
+      docId: metadata.docId,
+      title: metadata.title,
+      category: metadata.category,
+      complexity: metadata.complexity,
+      createdAt: metadata.createdAt,
+      lastModified: metadata.lastModified,
+      tags: metadata.tags,
     };
 
-    return this.sanitizeMetadata(normalized);
+    if (metadata.jurisdiction) {
+      normalized.jurisdiction = metadata.jurisdiction;
+    }
+
+    if (metadata.governingLaw) {
+      normalized.governingLaw = metadata.governingLaw;
+    }
+
+    if (metadata.parties && metadata.parties.length > 0) {
+      normalized.parties = metadata.parties;
+    }
+
+    if (metadata.amounts && metadata.amounts.length > 0) {
+      normalized.amounts = metadata.amounts;
+    }
+
+    if (metadata.dates && metadata.dates.length > 0) {
+      normalized.dates = metadata.dates;
+    }
+
+    if (metadata.content) {
+      normalized.content = metadata.content;
+    }
+
+    return normalized;
   }
 
   /**
@@ -236,14 +249,16 @@ export class PineconeService {
 
       const embedding = await embeddingService.generateEmbedding(content);
 
+      const metadataForIndex = this.ensureMetadata(docId, {
+        ...metadata,
+        docId,
+        content: content.slice(0, 1000), // Store truncated content for display
+      });
+
       const record: VectorRecord = {
         id: docId,
         values: embedding,
-        metadata: this.ensureMetadata(docId, {
-          ...metadata,
-          docId,
-          content: content.slice(0, 1000), // Store truncated content for display
-        }),
+        metadata: this.normalizeMetadataForIndex(metadataForIndex),
       };
 
       const namespace = this.getNamespace();
@@ -287,14 +302,16 @@ export class PineconeService {
             throw new Error('Missing embedding for batch item ' + doc.docId);
           }
 
+          const metadataForIndex = this.ensureMetadata(doc.docId, {
+            ...doc.metadata,
+            docId: doc.docId,
+            content: doc.content.slice(0, 1000),
+          });
+
           return {
             id: doc.docId,
             values,
-            metadata: this.ensureMetadata(doc.docId, {
-              ...doc.metadata,
-              docId: doc.docId,
-              content: doc.content.slice(0, 1000),
-            }),
+            metadata: this.normalizeMetadataForIndex(metadataForIndex),
           };
         });
 
@@ -350,14 +367,17 @@ export class PineconeService {
         topK: Math.min(topK * 2, 100), // Fetch more for better faceting
         filter: pineconeFilter,
         includeMetadata,
-      })) as QueryResponse<PineconeMetadata>;
+      })) as QueryResponse<Record<string, RecordMetadataValue>>;
 
       const matches = searchResponse.matches ?? [];
       const filteredResults: SearchResult[] = matches
         .filter((match) => match.score !== undefined && match.score >= minScore)
         .map((match) => {
           const score = match.score ?? 0;
-          const metadata = this.ensureMetadata(match.id, match.metadata ?? undefined);
+          const metadata = this.ensureMetadata(
+            match.id,
+            (match.metadata as Partial<PineconeMetadata> | undefined) ?? undefined,
+          );
 
           return {
             id: match.id,
@@ -454,9 +474,6 @@ export class PineconeService {
 
     results.forEach((result) => {
       const { metadata } = result;
-      if (!metadata) {
-        return;
-      }
 
       // Count categories
       if (metadata.category) {
@@ -498,7 +515,7 @@ export class PineconeService {
    */
   private generateExplanation(
     query: string,
-    metadata: PineconeMetadata | null,
+    metadata: PineconeMetadata,
     score: number,
   ): string {
     const reasons: string[] = [];
@@ -509,10 +526,6 @@ export class PineconeService {
       reasons.push('Strong semantic similarity');
     } else {
       reasons.push('Semantic relevance detected');
-    }
-
-    if (!metadata) {
-      return reasons.join(', ');
     }
 
     const queryLower = query.toLowerCase();
@@ -634,7 +647,9 @@ export class PineconeService {
       await this.initialize();
 
       const namespace = this.getNamespace();
-      const fetchResponse = (await namespace.fetch([docId])) as FetchResponse<PineconeMetadata>;
+      const fetchResponse = (await namespace.fetch([docId])) as FetchResponse<
+        Record<string, RecordMetadataValue>
+      >;
 
       const docRecord = fetchResponse.records[docId];
       if (!docRecord?.values) {
@@ -646,7 +661,7 @@ export class PineconeService {
         vector: docRecord.values,
         topK: topK + 1, // +1 to exclude the source document
         includeMetadata: true,
-      })) as QueryResponse<PineconeMetadata>;
+      })) as QueryResponse<Record<string, RecordMetadataValue>>;
 
       const matches = searchResponse.matches ?? [];
       const results = matches
@@ -659,7 +674,10 @@ export class PineconeService {
         .map((match) => ({
           id: match.id,
           score: match.score ?? 0,
-          metadata: this.ensureMetadata(match.id, match.metadata ?? undefined),
+          metadata: this.ensureMetadata(
+            match.id,
+            (match.metadata as Partial<PineconeMetadata> | undefined) ?? undefined,
+          ),
         }));
 
       return results.slice(0, topK);

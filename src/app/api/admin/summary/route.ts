@@ -41,6 +41,26 @@ interface SummaryRecommendation {
   priority: 'low' | 'medium' | 'high';
 }
 
+interface SummaryData extends SummaryMetrics {
+  alerts: SummaryAlert[];
+  healthScore: number;
+  trends: SummaryTrends;
+  recommendations: string[];
+  lastSync: number;
+}
+
+type SummarySuccessResponse = {
+  success: true;
+  data: SummaryData;
+};
+
+type SummaryErrorResponse = {
+  success: false;
+  error: string;
+};
+
+type SummaryApiResponse = SummarySuccessResponse | SummaryErrorResponse;
+
 // Run dynamically at request time (SSR)
 export const dynamic = 'force-dynamic';
 
@@ -159,27 +179,32 @@ export async function GET(request: NextRequest) {
 
     const recommendations = generateRecommendations(finalMetrics);
 
-    return NextResponse.json({
+    const response: SummarySuccessResponse = {
       success: true,
       data: {
         ...finalMetrics,
         alerts,
         healthScore,
         trends,
-        recommendations: recommendations.map((recommendation) => recommendation.message),
+        recommendations: recommendations.map(
+          (recommendation) => recommendation.message,
+        ),
         lastSync: Date.now(),
       },
-    });
+    };
+
+    return NextResponse.json<SummaryApiResponse>(response);
   } catch (error) {
     console.error('Summary metrics API error:', error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to retrieve summary metrics',
-      },
-      { status: 500 },
-    );
+    const errorResponse: SummaryErrorResponse = {
+      success: false,
+      error: 'Failed to retrieve summary metrics',
+    };
+
+    return NextResponse.json<SummaryApiResponse>(errorResponse, {
+      status: 500,
+    });
   }
 }
 
