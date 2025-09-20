@@ -6,6 +6,75 @@
   "fields": [],
   "suggestedMappings": {},
   "notes": [
-    "PDF has no AcroForm fields; manual overlay required. Geometry audit captured in ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json."
-  ]
+    "PDF has no AcroForm fields; manual overlay required. Geometry audit captured in ops/artifacts/document-intel-cycle-0007/georgia-overlay-audit.json.",
+    "Coordinates reflect 2025-09-20 QA run with sample data; sale date is anchored in left-most cell and buyer address centered in primary mailing block."
+  ],
+  "manualCoordinates": {
+    "vin": {
+      "page": 0,
+      "x": 40.0,
+      "y": 486.0,
+      "fontSize": 11
+    },
+    "year": {
+      "page": 0,
+      "x": 54.0,
+      "y": 463.0,
+      "fontSize": 11
+    },
+    "make": {
+      "page": 0,
+      "x": 234.0,
+      "y": 463.0,
+      "fontSize": 11
+    },
+    "model": {
+      "page": 0,
+      "x": 330.0,
+      "y": 463.0,
+      "fontSize": 11
+    },
+    "odometer": {
+      "page": 0,
+      "x": 103.0,
+      "y": 440.0,
+      "fontSize": 11
+    },
+    "sale_date": {
+      "page": 0,
+      "x": 120.0,
+      "y": 431.0,
+      "fontSize": 11
+    },
+    "price": {
+      "page": 0,
+      "x": 520.0,
+      "y": 440.0,
+      "fontSize": 11
+    },
+    "seller_name": {
+      "page": 0,
+      "x": 108.0,
+      "y": 368.0,
+      "fontSize": 11
+    },
+    "seller_address": {
+      "page": 0,
+      "x": 108.0,
+      "y": 348.5,
+      "fontSize": 11
+    },
+    "buyer_name": {
+      "page": 0,
+      "x": 40.0,
+      "y": 283.0,
+      "fontSize": 11
+    },
+    "buyer_address": {
+      "page": 0,
+      "x": 108.0,
+      "y": 230.0,
+      "fontSize": 11
+    }
+  }
 }
