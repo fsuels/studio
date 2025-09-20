@@ -114,7 +114,7 @@ export default function DocumentDiscoveryModal() {
             doc.description ||
             `Legal document for ${doc.category?.toLowerCase() ?? 'general'} matters`;
 
-          return {
+          const result: DiscoveryResult = {
             id: doc.id,
             title: getDocumentTitle(doc, locale),
             description,
@@ -125,7 +125,9 @@ export default function DocumentDiscoveryModal() {
               translation?.aliases?.length
                 ? [...translation.aliases]
                 : doc.translations?.en?.aliases ?? doc.aliases ?? [],
-          } satisfies DiscoveryResult;
+          };
+
+          return result;
         });
 
         localCacheRef.current.set(query, convertedResults);

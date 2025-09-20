@@ -37,8 +37,8 @@ export async function ensureI18nInitialized(
 
       let localeResources: Resource[string] | null = null;
       try {
-        // Load only the current locale to reduce bundle size
-        localeResources = await loadLocaleResources(locale);
+        // Load only the current locale and requested namespaces to reduce payload
+        localeResources = await loadLocaleResources(locale, options.namespaces);
       } catch (err) {
         console.error(
           'i18n resource load error; falling back to minimal resources',
@@ -58,18 +58,8 @@ export async function ensureI18nInitialized(
         } as unknown as Resource[string];
       }
 
-      const ns = options.namespaces ?? [
-        'common',
-        'header',
-        'footer',
-        'support',
-        'faq',
-        'documents',
-        'doc_bill_of_sale_vehicle',
-        'doc_promissory_note',
-        'online-notary',
-        'electronic-signature',
-      ];
+      // Default to a minimal set unless explicitly expanded by callers
+      const ns = options.namespaces ?? ['common', 'header', 'footer'];
 
       const resources: Resource = {
         [locale]: localeResources!,

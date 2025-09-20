@@ -18,7 +18,6 @@ mismatched_docs = {
     for result in report.get('results', [])
     if any('Metadata alias count mismatch' in error for error in result.get('errors', []))
 }
-
 def normalize_es(value: str) -> str:
     normalized = unicodedata.normalize('NFD', value.strip().lower())
     return ''.join(ch for ch in normalized if unicodedata.category(ch) != 'Mn')
@@ -37,6 +36,29 @@ for entry in manifest['entries']:
                 continue
             observed_translations.setdefault(normalize_en(en_alias), set()).add(candidate.lower())
 
+
+
+
+TRANSLATION_OVERRIDES = {
+    'marine bill of sale': 'factura de venta marítima',
+    'boat bill of sale': 'factura de venta de embarcación',
+    'auto maintenance agreement': 'acuerdo de mantenimiento automotriz',
+    'car repair contract': 'contrato de reparación de automóvil',
+    'donation agreement': 'acuerdo de donación',
+    'cryptocurrency agreement': 'acuerdo de criptomonedas',
+}
+
+forced_docs = {
+    entry['id']
+    for entry in manifest['entries']
+    if any(normalize_en(alias) in TRANSLATION_OVERRIDES for alias in entry['meta']['translations']['en'].get('aliases', []))
+}
+
+# mismatched docs now include override coverage
+mismatched_docs = mismatched_docs.union(forced_docs)
+
+BAD_SUBSTRINGS = ('(', 'bolsa de venta', 'automático')
+
 translation_cache: dict[str, str] = {}
 
 REMOVE_SUFFIXES = (
@@ -53,6 +75,9 @@ def translate_alias(alias: str) -> str:
     alias = alias.strip()
     if not alias:
         return alias
+    lower_key = alias.lower()
+    if lower_key in TRANSLATION_OVERRIDES:
+        return TRANSLATION_OVERRIDES[lower_key]
     if alias in translation_cache:
         return translation_cache[alias]
 
@@ -79,7 +104,7 @@ def translate_alias(alias: str) -> str:
     return normalized
 
 def ensure_unique_translation(candidate: str, english_alias: str, existing_norm: set[str]) -> str:
-    base = candidate.strip() or english_alias.strip().lower()
+    base = candidate.strip().lower() or english_alias.strip().lower()
     if normalize_es(base) not in existing_norm:
         return base
 
@@ -103,10 +128,10 @@ def rewrite_alias_array(content: str, locale: str, aliases: list[str]) -> str:
     if translations_idx == -1:
         raise ValueError('Missing translations block')
 
-    locale_marker = f'\n    {locale}: '
+    locale_marker = f"\n    {locale}: "
     locale_idx = content.find(locale_marker, translations_idx)
     if locale_idx == -1:
-        locale_marker = f'{locale}: '
+        locale_marker = f"{locale}: "
         locale_idx = content.find(locale_marker, translations_idx)
         if locale_idx == -1:
             raise ValueError(f'Missing locale block for {locale}')
@@ -160,38 +185,48 @@ for doc_id in sorted(mismatched_docs):
     en_aliases = entry['meta']['translations']['en'].get('aliases', [])
     es_aliases = entry['meta']['translations']['es'].get('aliases', [])
 
-    if len(en_aliases) <= len(es_aliases):
-        continue
+    existing_norm = set()
+    rebuilt_aliases: list[str] = []
 
-    missing_index = len(es_aliases)
-    english_alias = en_aliases[missing_index]
-    existing_norm = {normalize_es(alias) for alias in es_aliases}
+    for idx, english_alias in enumerate(en_aliases):
+        lower_key = normalize_en(english_alias)
+        selected = None
 
-    spanish_alias = None
-    for candidate in observed_translations.get(normalize_en(english_alias), set()):
-        if normalize_es(candidate) not in existing_norm:
-            spanish_alias = candidate.lower()
-            break
+        override = TRANSLATION_OVERRIDES.get(lower_key)
+        if override:
+            selected = override
+        elif idx < len(es_aliases):
+            existing_candidate = es_aliases[idx].strip().lower()
+            if existing_candidate and not any(bad in existing_candidate for bad in BAD_SUBSTRINGS):
+                selected = existing_candidate
 
-    if spanish_alias is None:
-        translated = translate_alias(english_alias)
-        spanish_alias = ensure_unique_translation(translated, english_alias, existing_norm)
+        if selected is None:
+            for candidate in observed_translations.get(lower_key, set()):
+                if normalize_es(candidate) not in existing_norm:
+                    selected = candidate
+                    break
 
-    final_aliases = es_aliases + [spanish_alias]
+        if selected is None:
+            translated = translate_alias(english_alias)
+            selected = translated
+
+        selected = ensure_unique_translation(selected, english_alias, existing_norm)
+        existing_norm.add(normalize_es(selected))
+        rebuilt_aliases.append(selected)
 
     metadata_dir = entry['importPath'].lstrip('./')
     metadata_path = DOCUMENTS_DIR / metadata_dir / 'metadata.ts'
 
     content = metadata_path.read_text(encoding='utf-8')
     content = rewrite_alias_array(content, 'en', en_aliases)
-    content = rewrite_alias_array(content, 'es', final_aliases)
+    content = rewrite_alias_array(content, 'es', rebuilt_aliases)
     metadata_path.write_text(content, encoding='utf-8')
 
-    updates.append((doc_id, english_alias, spanish_alias))
+    updates.append((doc_id, en_aliases[-1], rebuilt_aliases[-1]))
 
 if updates:
     print(f'Updated {len(updates)} metadata files:')
     for doc_id, english_alias, spanish_alias in updates:
-        print(f" - {doc_id}: added '{spanish_alias}' for '{english_alias}'")
+        print(f" - {doc_id}: ensured parity for '{english_alias}' with '{spanish_alias}'")
 else:
     print('No metadata files were updated.')

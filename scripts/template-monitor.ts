@@ -26,6 +26,7 @@ interface TemplateMetrics {
   recentChanges: TemplateChange[];
   qualityScore: number;
   parityIssues: ParityIssue[];
+  parityIndex: Record<string, ParityIssue[]>;
 }
 
 interface TemplateChange {
@@ -54,6 +55,7 @@ class TemplateMonitor {
       recentChanges: [],
       qualityScore: 0,
       parityIssues: [],
+      parityIndex: {},
     };
   }
 
@@ -100,6 +102,7 @@ class TemplateMonitor {
   private async updateMetrics(): Promise<void> {
     try {
       this.metrics.parityIssues = [];
+      this.metrics.parityIndex = {};
       // Run verification silently
       const originalLog = console.log;
       console.log = () => {}; // Suppress output\n\n      try {\n        await this.verifier.verifyAllTemplates();\n      } finally {\n        console.log = originalLog; // Restore output\n      }
@@ -135,9 +138,17 @@ class TemplateMonitor {
           );
         }
 
-        // Calculate quality score (0-100)\n        const totalTemplates = this.metrics.totalTemplates;\n        this.metrics.qualityScore =\n          totalTemplates === 0\n            ? 0\n            : Math.round((this.metrics.validTemplates / totalTemplates) * 100);\n\n        const results = Array.isArray(report.results) ? report.results : [];\n        const summaries: BilingualTemplateSummary[] = results\n          .filter((r: any) => r?.documentType && r?.language)\n          .map((r: any) => ({\n            documentType: r.documentType,\n            language: r.language,\n            variables: Array.isArray(r.variables) ? r.variables : [],\n            sectionHeadings: Array.isArray(r.sectionHeadings)\n              ? r.sectionHeadings\n              : [],\n            numberedSections: Array.isArray(r.numberedSections)\n              ? r.numberedSections\n              : [],\n          }));\n\n        this.metrics.parityIssues = findTranslationParityIssues(\n          summaries,\n          DOCUMENT_METADATA,\n        );\n      }
-    } catch (error) {
-      console.error(chalk.red('Error updating metrics:'), error);
+        const parityIssues = findTranslationParityIssues(
+          summaries,
+          DOCUMENT_METADATA,
+        );
+        this.metrics.parityIssues = parityIssues;
+        this.metrics.parityIndex = parityIssues.reduce<Record<string, ParityIssue[]>>((acc, issue) => {
+          const list = acc[issue.documentType] ?? [];
+          list.push(issue);
+          acc[issue.documentType] = list;
+          return acc;
+        }, {});
     }
   }
 
@@ -173,12 +184,9 @@ class TemplateMonitor {
     // Update metrics
     await this.updateMetrics();
 
-    const parityIssuesForDoc =
-      documentType && this.metrics.parityIssues.length > 0
-        ? this.metrics.parityIssues.filter(
-            (issue) => issue.documentType === documentType,
-          )
-        : [];
+    const parityIssuesForDoc = documentType
+      ? this.metrics.parityIndex[documentType] ?? []
+      : [];
 
     if (parityIssuesForDoc.length > 0) {
       change.isValid = false;

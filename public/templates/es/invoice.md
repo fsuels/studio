@@ -1,58 +1,57 @@
-﻿# Invoice
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Factura
 
 ---
 
-**INVOICE**
+**FACTURA**
 
-**Invoice #:** {{invoice_number}}  
-**Date:** {{invoice_date}}  
-**Due Date:** {{due_date}}
+**Factura n.º:** {{invoice_number}}  
+**Fecha:** {{invoice_date}}  
+**Fecha de vencimiento:** {{due_date}}
 
 ---
 
-## Bill To:
+## Cliente
 
 **{{client_name}}**  
 {{client_address}}  
 {{client_city}}, {{client_state}} {{client_zip}}  
 {{client_country}}
 
-**Contact Information:**  
-**Email:** {{client_email}}  
-**Phone:** {{client_phone}}  
-**Tax ID/VAT:** {{client_tax_id}}
+**Contacto:**  
+**Correo electrónico:** {{client_email}}  
+**Teléfono:** {{client_phone}}  
+**ID fiscal/VAT:** {{client_tax_id}}
 
 ---
 
-## Bill From:
+## Emisor
 
 **{{business_name}}**  
 {{business_address}}  
 {{business_city}}, {{business_state}} {{business_zip}}  
 {{business_country}}
 
-**Contact Information:**  
-**Email:** {{business_email}}  
-**Phone:** {{business_phone}}  
-**Website:** {{business_website}}  
-**Tax ID/EIN:** {{business_tax_id}}
+**Contacto:**  
+**Correo electrónico:** {{business_email}}  
+**Teléfono:** {{business_phone}}  
+**Sitio web:** {{business_website}}  
+**ID fiscal/EIN:** {{business_tax_id}}
 
 ---
 
-## Project/Order Information
+## Información del proyecto o pedido
 
-**Project Name:** {{project_name}}  
-**Purchase Order #:** {{purchase_order_number}}  
-**Reference #:** {{reference_number}}  
-**Sales Representative:** {{sales_rep_name}}
+**Nombre del proyecto:** {{project_name}}  
+**Orden de compra n.º:** {{purchase_order_number}}  
+**Referencia n.º:** {{reference_number}}  
+**Representante de ventas:** {{sales_rep_name}}
 
 ---
 
-## Items/Services
+## Conceptos y servicios
 
-| Description                | Quantity               | Rate                | Amount             |
-| -------------------------- | ---------------------- | ------------------- | ------------------ | ------------------ | ------- |
+| Descripción                | Cantidad               | Tarifa              | Importe             |
+| -------------------------- | ---------------------- | ------------------- | ------------------ |
 | {{item_1_description}}     | {{item_1_quantity}}    | ${{item_1_rate}}    | ${{item_1_amount}} |
 | {{#if item_2_description}} | {{item_2_description}} | {{item_2_quantity}} | ${{item_2_rate}}   | ${{item_2_amount}} | {{/if}} |
 | {{#if item_3_description}} | {{item_3_description}} | {{item_3_quantity}} | ${{item_3_rate}}   | ${{item_3_amount}} | {{/if}} |
@@ -63,134 +62,118 @@
 
 ---
 
-## Cost Breakdown
+## Desglose de costos
 
-### Subtotal Calculations
+### Subtotales
 
 **Subtotal:** ${{subtotal}}
 
-### Discounts
+### Descuentos
 
 {{#if discount_applied}}
-**Discount ({{discount_percentage}}%):** -${{discount_amount}}  
-**Discount Description:** {{discount_description}}
+**Descuento ({{discount_percentage}}%):** -${{discount_amount}}  
+**Descripción del descuento:** {{discount_description}}
 {{else}}
-**Discount:** $0.00
+**Descuento:** $0.00
 {{/if}}
 
-### Taxes
+### Impuestos
 
 {{#if tax_applicable}}
-**Sales Tax ({{tax_rate}}%):** ${{sales_tax_amount}}  
-**Tax Jurisdiction:** {{tax_jurisdiction}}  
+**Impuesto sobre ventas ({{tax_rate}}%):** ${{sales_tax_amount}}  
+**Jurisdicción fiscal:** {{tax_jurisdiction}}  
 {{#if additional_taxes}}
-**Additional Taxes:** ${{additional_tax_amount}}  
-**Tax Description:** {{additional_tax_description}}
+**Impuestos adicionales:** ${{additional_tax_amount}}  
+**Descripción:** {{additional_tax_description}}
 {{/if}}
 {{else}}
-**Tax:** $0.00
+**Impuesto:** $0.00
 {{/if}}
 
-### Shipping & Handling
+### Envío y manejo
 
 {{#if shipping_charges}}
-**Shipping:** ${{shipping_amount}}  
-**Handling:** ${{handling_amount}}  
-**Shipping Method:** {{shipping_method}}
+**Envío:** ${{shipping_amount}}  
+**Manejo:** ${{handling_amount}}  
+**Método de envío:** {{shipping_method}}
 {{else}}
-**Shipping & Handling:** $0.00
+**Envío y manejo:** $0.00
 {{/if}}
 
-### Other Fees
+### Otros cargos
 
 {{#if other_fees}}
 {{other_fees_breakdown}}
 {{else}}
-**Other Fees:** $0.00
+**Otros cargos:** $0.00
 {{/if}}
 
 ---
 
-## Total Amount Due
+## Importe total a pagar
 
-|                         | Amount                     |
-| ----------------------- | -------------------------- |
-| **Subtotal**            | ${{subtotal}}              |
-| **Discount**            | -${{discount_amount}}      |
-| **Tax**                 | ${{total_tax_amount}}      |
-| **Shipping & Handling** | ${{total_shipping_amount}} |
-| **Other Fees**          | ${{other_fees_total}}      |
-| **TOTAL DUE**           | **${{total_amount_due}}**  |
+|                         | Importe                   |
+| ----------------------- | ------------------------- |
+| **Subtotal**            | ${{subtotal}}             |
+| **Descuento**           | -${{discount_amount}}     |
+| **Impuestos**           | ${{total_tax_amount}}     |
+| **Envío y manejo**      | ${{total_shipping_amount}}|
+| **Otros cargos**        | ${{other_fees_total}}     |
+| **TOTAL A PAGAR**       | **${{total_amount_due}}** |
 
 ---
 
-## Payment Information
+## Información de pago
 
-### Payment Terms
+### Condiciones de pago
 
-**Payment Terms:** {{payment_terms}}  
-**Due Date:** {{due_date}}
+- **Plazo:** {{payment_terms}}  
+- **Método(s) aceptado(s):** {{accepted_payment_methods}}  
+- **Instrucciones de pago:** {{payment_instructions}}
 
-{{#if early_payment_discount}}
-**Early Payment Discount:** {{early_payment_discount_rate}}% if paid by {{early_payment_date}}
-{{/if}}
-
-{{#if late_payment_fee}}
-**Late Payment Fee:** {{late_payment_fee_rate}}% per month on overdue amounts
-{{/if}}
-
-### Accepted Payment Methods
-
-{{#if accepts_cash}}â˜ Cash{{/if}}  
-{{#if accepts_check}}â˜ Check (payable to {{business_name}}){{/if}}  
-{{#if accepts_credit_card}}â˜ Credit Card{{/if}}  
-{{#if accepts_bank_transfer}}â˜ Bank Transfer/ACH{{/if}}  
-{{#if accepts_online_payment}}â˜ Online Payment{{/if}}
-
-### Payment Instructions
+### Detalles bancarios
 
 {{#if bank_transfer_details}}
-**Bank Transfer Details:**  
-**Bank Name:** {{bank_name}}  
-**Account Name:** {{account_name}}  
-**Account Number:** {{account_number}}  
-**Routing Number:** {{routing_number}}  
-**SWIFT Code:** {{swift_code}}
+**Nombre del banco:** {{bank_name}}  
+**Número de cuenta:** {{bank_account_number}}  
+**Número de ruta/ABA:** {{bank_routing_number}}  
+**SWIFT/BIC:** {{bank_swift}}  
+**Referencia obligatoria:** {{payment_reference}}
 {{/if}}
 
-{{#if online_payment_url}}
-**Online Payment:** {{online_payment_url}}
+### Pagos en línea
+
+{{#if online_payment_link}}
+Puede completar su pago en línea en: {{online_payment_link}}
 {{/if}}
 
-{{#if check_payment_address}}
-**Mail Checks To:**  
-{{check_payment_address}}
+### Pagos parciales
+
+{{#if partial_payment_terms}}
+Se permiten pagos parciales conforme a: {{partial_payment_terms}}
+{{else}}
+Se requiere el pago completo para cerrar la factura.
 {{/if}}
 
 ---
 
-## Additional Information
+## Mensaje al cliente
 
-### Notes
+{{customer_message}}
 
-{{#if invoice_notes}}
-{{invoice_notes}}
-{{else}}
-Thank you for your business!
-{{/if}}
+---
 
-### Terms and Conditions
+## Políticas y condiciones
 
-{{#if terms_and_conditions}}
-{{terms_and_conditions}}
-{{else}}
+### Política de devoluciones
 
-1. Payment is due within {{payment_terms}} of invoice date
-2. Late payments may incur additional fees
-3. All work performed and materials provided are subject to our standard terms of service
-   {{/if}}
+{{return_policy}}
 
-### Warranty/Return Policy
+### Política de reembolsos
+
+{{refund_policy}}
+
+### Política de garantías
 
 {{#if warranty_policy}}
 {{warranty_policy}}
@@ -198,123 +181,121 @@ Thank you for your business!
 
 ---
 
-## Contact Information
+## Información de contacto
 
-### Questions About This Invoice?
+### ¿Preguntas sobre la factura?
 
-**Contact:** {{billing_contact_name}}  
-**Phone:** {{billing_contact_phone}}  
-**Email:** {{billing_contact_email}}  
-**Hours:** {{business_hours}}
+**Contacto:** {{billing_contact_name}}  
+**Teléfono:** {{billing_contact_phone}}  
+**Correo:** {{billing_contact_email}}  
+**Horario:** {{business_hours}}
 
-### Billing Department
+### Departamento de facturación
 
 {{#if separate_billing_contact}}
-**Billing Contact:** {{billing_department_contact}}  
-**Billing Phone:** {{billing_department_phone}}  
-**Billing Email:** {{billing_department_email}}
+**Contacto de facturación:** {{billing_department_contact}}  
+**Teléfono:** {{billing_department_phone}}  
+**Correo:** {{billing_department_email}}
 {{/if}}
 
 ---
 
-## Business Information
+## Información empresarial
 
-### Business Registration
+### Registro de la empresa
 
-**Business License #:** {{business_license_number}}  
-**State of Incorporation:** {{state_of_incorporation}}  
-**Federal Tax ID:** {{federal_tax_id}}
+**Licencia comercial n.º:** {{business_license_number}}  
+**Estado de constitución:** {{state_of_incorporation}}  
+**ID fiscal federal:** {{federal_tax_id}}
 
 {{#if professional_licenses}}
 
-### Professional Licenses
+### Licencias profesionales
 
 {{professional_license_information}}
 {{/if}}
 
 ---
 
-## Attachments
+## Anexos
 
 {{#if has_attachments}}
-**Supporting Documents:**
+**Documentos de respaldo:**
 
 - {{attachment_1}}
 - {{attachment_2}}
 - {{attachment_3}}
-  {{additional_attachments}}
-  {{else}}
-  No supporting documents attached.
-  {{/if}}
+{{additional_attachments}}
+{{else}}
+No se adjuntaron documentos adicionales.
+{{/if}}
 
 ---
 
-## For Internal Use Only
+## Uso interno
 
-**Customer ID:** {{customer_id}}  
-**Invoice Created By:** {{created_by}}  
-**Sales Territory:** {{sales_territory}}  
-**Commission Rate:** {{commission_rate}}%
-
----
-
-## Payment Record
-
-**For Accounting Use:**
-
-| Payment Date | Amount Paid | Payment Method | Check/Transaction # | Balance Remaining     |
-| ------------ | ----------- | -------------- | ------------------- | --------------------- |
-|              |             |                |                     | ${{total_amount_due}} |
-|              |             |                |                     |                       |
-|              |             |                |                     |                       |
+**ID del cliente:** {{customer_id}}  
+**Factura creada por:** {{created_by}}  
+**Territorio de ventas:** {{sales_territory}}  
+**Porcentaje de comisión:** {{commission_rate}}%
 
 ---
 
-## Remittance Advice
+## Registro de pagos
+
+**Uso contable:**
+
+| Fecha de pago | Importe pagado | Método de pago | Cheque/Transacción n.º | Saldo restante       |
+| ------------- | -------------- | -------------- | ---------------------- | -------------------- |
+|               |                |                |                        | ${{total_amount_due}}|
+|               |                |                |                        |                      |
+|               |                |                |                        |                      |
+
+---
+
+## Talón de remisión
 
 {{#if remittance_copy}}
-**REMITTANCE COPY - RETURN WITH PAYMENT**
+**COPIA DE REMISIÓN – FAVOR DEVOLVER CON EL PAGO**
 
-**Invoice #:** {{invoice_number}}  
-**Invoice Date:** {{invoice_date}}  
-**Amount Due:** ${{total_amount_due}}  
-**Due Date:** {{due_date}}
+**Factura n.º:** {{invoice_number}}  
+**Fecha de emisión:** {{invoice_date}}  
+**Importe a pagar:** ${{total_amount_due}}  
+**Fecha de vencimiento:** {{due_date}}
 
-**Remit To:**  
+**Enviar a:**  
 {{business_name}}  
 {{remittance_address}}
 
-**Amount Paid:** $ **\*\***\_\_\_\_**\*\***  
-**Check #:** **\*\***\_\_\_\_**\*\***  
-**Date Paid:** **\*\***\_\_\_\_**\*\***
+**Importe pagado:** $ ______________  
+**Cheque n.º:** ______________  
+**Fecha de pago:** ______________
 {{/if}}
 
 ---
 
-## Important Legal Notices
+## Avisos legales importantes
 
-### Collection Notice
+### Aviso de cobranza
 
 {{#if collection_notice}}
-**COLLECTION NOTICE:** Past due accounts may be subject to collection action, including but not limited to credit reporting, collection agency referral, and legal action. Additional collection costs may be added to your account.
+**AVISO:** Las cuentas vencidas pueden ser objeto de acciones de cobranza, incluyendo reportes de crédito, agencias externas y procesos legales. Los costos adicionales de cobranza podrán añadirse a su cuenta.
 {{/if}}
 
-### Dispute Resolution
+### Resolución de disputas
 
 {{#if dispute_procedure}}
-**Disputes:** Any disputes regarding this invoice must be raised within {{dispute_period}} days of the invoice date. Please contact {{dispute_contact}} to resolve billing questions.
+**Disputas:** Cualquier aclaración sobre esta factura debe presentarse dentro de {{dispute_period}} días a {{dispute_contact}}.
 {{/if}}
 
-### Governing Law
+### Ley aplicable
 
-This invoice and any disputes arising from it shall be governed by the laws of {{governing_state}}.
+Esta factura se regirá por las leyes de {{governing_state}}.
 
 ---
 
-**IMPORTANT NOTICE:** This invoice should be reviewed carefully for accuracy. Please contact us immediately if you notice any discrepancies. Payment of this invoice constitutes acceptance of the goods/services provided and the terms stated herein.
+**AVISO LEGAL IMPORTANTE:** Revise esta factura cuidadosamente. Comuníquese con nosotros de inmediato si detecta discrepancias. El pago implica aceptación de los bienes/servicios y de los términos expuestos.
 
-## _Invoice generated by 123LegalDoc - Professional Legal Document Platform_
+## _Factura generada por 123LegalDoc - Plataforma Profesional de Documentos Legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+(c) 2025 123LegalDoc · Documento de autoayuda · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

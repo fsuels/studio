@@ -355,7 +355,7 @@ export default function CategoryDropdown({
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const router = useRouter();
-  const exploreDestination = `/${locale}/marketplace`;
+  const exploreDestination = `/${locale}/marketplace/`;
 
   React.useEffect(() => {
     router.prefetch(exploreDestination);

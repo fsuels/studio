@@ -25,3 +25,11 @@
 - Delivered full Spanish rewrites for `eviction-notice` and `employment-offer-letter` templates, preserving EN variable sets while removing temporary English fallback notices.
 - Confirmed global verifier reflects the updates (timestamp 2025-09-20T05:27:40.266Z); outstanding failures remain tied to historical 50-word stubs outside this cycle.
 - Next focus areas: translate remaining high-priority templates (`healthcare-power-of-attorney`, `non-compete-agreement`, etc.) and coordinate copy review before dropping the interim notices.
+### Localization Update – 2025-09-20 05:43Z
+
+- `invoice` now has a complete Spanish draft with matching conditionals/variables; verified via latest `npm run verify-templates` snapshot.
+- Replaced the English fallback in `last-will-testament` with a full localization, including executor, guardian, and trust clauses.
+- Remaining files carrying the temporary English notice: `commercial-lease-agreement`, `divorce-settlement-agreement`, `employment-termination-letter`, `independent-contractor-agreement`, `llc-operating-agreement`, `living-trust`, `living-will`, `non-compete-agreement`, `partnership-agreement`, `prenuptial-agreement`, `quitclaim-deed`.
+- `prenuptial-agreement` y `non-compete-agreement` ahora cuentan con versiones completas en español; retirar el banner temporal cuando QA cierre.
+- Próximo lote sugerido: `llc-operating-agreement`, `living-trust`, `living-will`, `independent-contractor-agreement`, `employment-termination-letter`, `divorce-settlement-agreement`, `commercial-lease-agreement`, `partnership-agreement`, `quitclaim-deed`.
+- QA/localization review requested for `invoice`, `last-will-testament`, `prenuptial-agreement`, `non-compete-agreement`; assign to Localization QA to confirm tone, diacritics, and legal phrasing before publishing.

@@ -1,8 +1,11 @@
 // src/components/layout/Logo.tsx
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'next/navigation';
 
 interface LogoProps {
   wrapperClassName?: string;
@@ -18,10 +21,12 @@ const Logo = React.memo(function Logo({
 }: LogoProps) {
   // Use the 'header' namespace for logo translations
   const { t } = useTranslation('header');
+  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
+  const locale = (params.locale as 'en' | 'es') || 'en';
 
   return (
     <Link
-      href="/"
+      href={`/${locale}/`}
       className={cn(
         'flex flex-col items-center gap-1 text-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm',
         wrapperClassName,

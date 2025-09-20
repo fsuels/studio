@@ -16,7 +16,7 @@ const SearchBar = React.memo(function SearchBar() {
     locale?: string;
   };
   const locale = (params.locale as 'en' | 'es') || 'en';
-  const marketplaceDestination = `/${locale}/marketplace`;
+  const marketplaceDestination = `/${locale}/marketplace/`;
 
   useEffect(() => {
     router.prefetch(marketplaceDestination);

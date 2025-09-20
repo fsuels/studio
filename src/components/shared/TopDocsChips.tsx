@@ -46,7 +46,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const router = useRouter();
   const locale = (params.locale as 'en' | 'es') || 'en';
 
-  const exploreAllDestination = `/${locale}/marketplace`;
+  const exploreAllDestination = `/${locale}/marketplace/`;
 
   useEffect(() => {
     router.prefetch(exploreAllDestination);
@@ -397,7 +397,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                 return (
                   <Link
                     key={doc.id}
-                    href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
+                    href={`/${locale}/docs/${resolveDocSlug(doc.id)}/`}
                     prefetch
                     className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
                   >
@@ -465,7 +465,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               )}
               <Button
                 variant="link"
-                onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
+                onClick={() => router.push(`/${locale}/category/${selectedCategory}/`)}
                 className="text-primary text-sm"
               >
                 {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })} →

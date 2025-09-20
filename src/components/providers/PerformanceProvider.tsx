@@ -49,6 +49,7 @@ export function PerformanceProvider({ children }: PerformanceProviderProps) {
 
     return () => {
       observer.disconnect();
+      intelligentPreloader.destroy();
     };
   }, []);
 

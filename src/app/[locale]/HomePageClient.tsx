@@ -9,16 +9,7 @@ import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { track } from '@/lib/analytics';
-import { AutoImage, PersonalizationBlock as _PersonalizationBlock } from '@/components/shared';
-import { Skeleton as _Skeleton } from '@/components/ui/skeleton';
-import { CategoryDocumentsWidget as _CategoryDocumentsWidget } from '@/components/blog/InternalLinkWidget';
-import { 
-  FileText as _FileText, 
-  Users as _Users, 
-  Building as _Building 
-} from 'lucide-react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Link from 'next/link';
+import AutoImage from '@/components/shared/media/AutoImage';
 
 // Minimal loading spinner without text
 const _MinimalLoadingSpinner = () => (
@@ -117,7 +108,7 @@ export default function HomePageClient() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [ctaVariant, setCtaVariant] = useState<'A' | 'B' | 'C'>('A');
   
-  const heroCtaDestination = `/${locale}/generate`;
+  const heroCtaDestination = `/${locale}/generate/`;
 
   useEffect(() => {
     router.prefetch(heroCtaDestination);
@@ -242,9 +233,12 @@ export default function HomePageClient() {
                     <span className="text-sm font-semibold text-green-800">
                       30-Day Money-Back Guarantee
                     </span>
-                    <span className="text-xs text-green-700">
-                      • No Questions Asked
-                    </span>
+                                    <span className="inline-flex items-center gap-1 text-green-700">
+                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>No questions asked</span>
+                </span>
                   </div>
                 </div>
                 
@@ -275,7 +269,7 @@ export default function HomePageClient() {
               </div>
               
               {/* Trust indicators under CTA */}
-              <div className="flex items-center justify-start gap-6 text-sm text-gray-700 pt-2">
+              <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-sm text-gray-700 pt-2">
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -298,22 +292,26 @@ export default function HomePageClient() {
             </div>
             {/* Trust Line */}
             <div className="mt-6">
-              <p className="text-sm text-gray-700 flex items-center gap-1 flex-wrap">
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Smart Legal Templates</span>
-                <span className="mx-2">•</span>
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Fast & Secure</span>
-                <span className="mx-2">•</span>
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Editable in Real Time</span>
-              </p>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Smart Legal Templates</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Fast & Secure</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Editable in Real Time</span>
+                </div>
+              </div>
             </div>
           </div>
           {/* Right column */}
@@ -325,6 +323,8 @@ export default function HomePageClient() {
                   : '/images/hero-main.png'
               }
               alt="Hero image illustrating legal document generation"
+              width={1536}
+              height={1024}
               className="w-full max-w-lg rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
               priority

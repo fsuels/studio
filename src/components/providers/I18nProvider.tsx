@@ -10,12 +10,15 @@ interface I18nProviderProps {
   locale: 'en' | 'es';
   /** Optional element shown until the i18n instance is ready */
   fallback?: ReactNode;
+  /** Optional namespaces to load to minimize payload */
+  namespaces?: string[];
 }
 
 const I18nClientProvider: React.FC<I18nProviderProps> = ({
   children,
   locale,
   fallback,
+  namespaces,
 }) => {
   // i18nInstance from i18n.ts is already initialized (or being initialized).
   // We just need to ensure the language is correctly set.
@@ -35,7 +38,7 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
     let cancelled = false;
     const sync = async () => {
       try {
-        await ensureI18nInitialized({ locale });
+        await ensureI18nInitialized({ locale, namespaces });
         if (cancelled) return;
         if (i18nInstance.language !== locale) {
           await i18nInstance.changeLanguage(locale);

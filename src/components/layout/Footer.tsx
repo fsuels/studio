@@ -175,8 +175,8 @@ export const Footer = React.memo(function Footer() {
           <div className="col-span-2">
             <h4 className="text-white font-semibold mb-2">{t('sectionCommunityTitle', { defaultValue: 'Community & Contact' })}</h4>
             <p className="text-xs mb-3">{t('joinMailingListTitle', { defaultValue: 'Get our latest legal updates and templates.' })}</p>
-            <form onSubmit={handleSubscribe} className="flex items-center gap-2 max-w-md">
-              <div className="relative flex-grow rounded-md bg-slate-800 focus-within:ring-2 focus-within:ring-sky-500">
+            <form onSubmit={handleSubscribe} className="flex w-full max-w-md flex-col gap-3 sm:flex-row sm:items-center sm:gap-2">
+              <div className="relative w-full flex-1 rounded-md bg-slate-800 focus-within:ring-2 focus-within:ring-sky-500">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <Input
                   id="newsletter-email"
@@ -185,15 +185,14 @@ export const Footer = React.memo(function Footer() {
                   placeholder={t('emailPlaceholder', { defaultValue: 'Enter your email address' })}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 pr-2 py-2 h-11 text-sm bg-transparent border-0 placeholder:text-slate-400 focus-visible:ring-0 text-slate-200"
+                  className="h-11 w-full bg-transparent border-0 pl-10 pr-3 text-sm text-slate-200 placeholder:text-slate-400 focus-visible:ring-0"
                   aria-label={t('emailPlaceholderAria', { defaultValue: 'Email for newsletter' })}
                   disabled={isLoading}
                 />
               </div>
               <Button
                 type="submit"
-                size="icon"
-                className="h-11 w-11 shrink-0 rounded-md bg-sky-600 hover:bg-sky-500 text-white"
+                className="flex h-11 w-full items-center justify-center rounded-md bg-sky-600 text-sm font-medium text-white transition-colors hover:bg-sky-500 sm:w-12"
                 aria-label={t('subscribeButtonAria', { defaultValue: 'Subscribe to newsletter' })}
                 disabled={isLoading}
               >
@@ -201,7 +200,7 @@ export const Footer = React.memo(function Footer() {
               </Button>
             </form>
           </div>
-          <div className="text-xs space-y-2 md:text-right">
+          <div className="text-center text-xs space-y-2 md:text-right">
             <p className="flex md:justify-end items-center gap-2">
               <Phone className="h-4 w-4 text-sky-400" />
               <span>{t('supportPhoneNumber', { defaultValue: '(888) 123-4567 (toll-free)' })}</span>
@@ -210,7 +209,7 @@ export const Footer = React.memo(function Footer() {
               <Clock className="h-4 w-4 text-sky-400" />
               <span>{t('supportHours', { defaultValue: 'Mon–Fri, 9am–6pm EST' })}</span>
             </p>
-            <div className="mt-3 flex gap-3 md:justify-end">
+            <div className="mt-3 flex justify-center gap-3 md:justify-end">
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label={t('socialLinkedInAria', { defaultValue: 'LinkedIn Page' })} className="text-slate-300 hover:text-white transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>

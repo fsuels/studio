@@ -1,305 +1,303 @@
-﻿# LLC Operating Agreement
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Acuerdo Operativo de LLC
 
 ---
 
-**LIMITED LIABILITY COMPANY OPERATING AGREEMENT**
+**ACUERDO OPERATIVO DE SOCIEDAD DE RESPONSABILIDAD LIMITADA**
 
-**Company Name:** {{company_name}}  
-**State of Formation:** {{state_of_formation}}  
-**Effective Date:** {{effective_date}}
-
----
-
-## 1. Company Information
-
-### 1.1 Formation and Name
-
-**LLC Name:** {{company_name}}  
-**State of Organization:** {{state_of_formation}}  
-**Principal Office Address:** {{principal_office_address}}  
-**Registered Agent:** {{registered_agent_name}} at {{registered_agent_address}}  
-**EIN:** {{federal_ein}} (if obtained)
-
-### 1.2 Articles of Organization
-
-This Operating Agreement supplements the Articles of Organization filed with the {{state_of_formation}} Secretary of State on {{articles_filing_date}}.
-
-### 1.3 Purpose and Business
-
-**Business Purpose:** {{business_purpose}}
-
-**Permitted Activities:** The Company may engage in any lawful business activity permitted by {{state_of_formation}} law.
+**Nombre de la compañía:** {{company_name}}  
+**Estado de constitución:** {{state_of_formation}}  
+**Fecha de vigencia:** {{effective_date}}
 
 ---
 
-## 2. Members and Membership Interests
+## 1. Información de la Compañía
 
-### 2.1 Initial Members
+### 1.1 Constitución y nombre
 
-The following are the initial Members of the Company:
+**Nombre de la LLC:** {{company_name}}  
+**Estado de constitución:** {{state_of_formation}}  
+**Domicilio de la oficina principal:** {{principal_office_address}}  
+**Agente registrado:** {{registered_agent_name}} en {{registered_agent_address}}  
+**EIN:** {{federal_ein}} (si corresponde)
 
-| Member Name       | Address              | Capital Contribution       | Ownership %              | Membership Units   |
-| ----------------- | -------------------- | -------------------------- | ------------------------ | ------------------ |
-| {{member_1_name}} | {{member_1_address}} | ${{member_1_contribution}} | {{member_1_percentage}}% | {{member_1_units}} |
-| {{member_2_name}} | {{member_2_address}} | ${{member_2_contribution}} | {{member_2_percentage}}% | {{member_2_units}} |
-| {{member_3_name}} | {{member_3_address}} | ${{member_3_contribution}} | {{member_3_percentage}}% | {{member_3_units}} |
+### 1.2 Artículos de Organización
 
-**Total Membership Units:** {{total_units}}  
-**Total Initial Capital:** ${{total_initial_capital}}
+Este Acuerdo Operativo complementa los Artículos de Organización presentados ante la Secretaría de Estado de {{state_of_formation}} el {{articles_filing_date}}.
 
-### 2.2 Additional Capital Contributions
+### 1.3 Objeto y actividad comercial
+
+**Objeto social:** {{business_purpose}}
+
+**Actividades permitidas:** La Compañía puede dedicarse a cualquier actividad comercial lícita permitida por las leyes de {{state_of_formation}}.
+
+---
+
+## 2. Miembros e intereses de membresía
+
+### 2.1 Miembros iniciales
+
+Los siguientes son los Miembros iniciales de la Compañía:
+
+| Nombre del miembro | Domicilio | Aportación de capital | Porcentaje de propiedad | Unidades de membresía |
+| ------------------ | --------- | --------------------- | ----------------------- | --------------------- |
+| {{member_1_name}}  | {{member_1_address}} | ${{member_1_contribution}} | {{member_1_percentage}}% | {{member_1_units}} |
+| {{member_2_name}}  | {{member_2_address}} | ${{member_2_contribution}} | {{member_2_percentage}}% | {{member_2_units}} |
+| {{member_3_name}}  | {{member_3_address}} | ${{member_3_contribution}} | {{member_3_percentage}}% | {{member_3_units}} |
+
+**Total de unidades de membresía:** {{total_units}}  
+**Capital inicial total:** ${{total_initial_capital}}
+
+### 2.2 Aportaciones adicionales de capital
 
 {{#if additional_contributions_allowed}}
-Additional capital contributions may be made with the consent of {{additional_contribution_approval}} of the Members.
+Se podrán realizar aportaciones de capital adicionales con el consentimiento de {{additional_contribution_approval}} de los Miembros.
 {{else}}
-No Member shall be required to make additional capital contributions without unanimous consent.
+Ningún Miembro estará obligado a realizar aportaciones adicionales de capital sin el consentimiento unánime.
 {{/if}}
 
-### 2.3 Return of Capital
+### 2.3 Reembolso de capital
 
-No Member has the right to demand return of capital contributions except upon liquidation of the Company.
+Ningún Miembro tiene derecho a exigir la devolución de sus aportaciones de capital excepto tras la liquidación de la Compañía.
 
 ---
 
-## 3. Management Structure
+## 3. Estructura de administración
 
-### 3.1 Management Type
+### 3.1 Tipo de administración
 
 {{#if member_managed}}
-**MEMBER-MANAGED LLC:** The Company shall be managed by its Members.
+**LLC ADMINISTRADA POR SUS MIEMBROS:** La Compañía será administrada por sus Miembros.
 
-**Management Authority:** All Members have equal management rights regardless of ownership percentage, unless otherwise specified below.
+**Autoridad de administración:** Todos los Miembros tienen iguales derechos de administración independientemente de su porcentaje de propiedad, salvo que se disponga lo contrario más adelante.
 
-**Decision Making:** Decisions requiring Member approval shall be made by {{decision_threshold}} vote of the Members.
+**Toma de decisiones:** Las decisiones que requieran la aprobación de los Miembros se adoptarán por el voto de {{decision_threshold}} de los Miembros.
 {{/if}}
 
 {{#if manager_managed}}
-**MANAGER-MANAGED LLC:** The Company shall be managed by one or more Managers.
+**LLC ADMINISTRADA POR GERENTES:** La Compañía será administrada por uno o más Gerentes.
 
-**Initial Manager(s):**
+**Gerente(s) inicial(es):**
 {{#each managers}}
+- {{name}} de {{address}}
+{{/each}}
 
-- {{name}} of {{address}}
-  {{/each}}
+**Autoridad de los gerentes:** Los Gerentes tienen plena autoridad para administrar las operaciones diarias de la Compañía.
 
-**Manager Authority:** Managers have full authority to manage the day-to-day operations of the Company.
-
-**Manager Appointment:** Managers are appointed by {{manager_appointment_process}} and serve until resignation, removal, or replacement.
+**Nombramiento de los gerentes:** Los Gerentes son designados por {{manager_appointment_process}} y permanecerán en el cargo hasta su renuncia, remoción o sustitución.
 {{/if}}
 
-### 3.2 Authority and Limitations
+### 3.2 Autoridad y limitaciones
 
-**Ordinary Business Decisions:** {{ordinary_decision_authority}}
+**Decisiones del giro ordinario:** {{ordinary_decision_authority}}
 
-**Major Decisions Requiring {{major_decision_threshold}} Approval:**
+**Decisiones mayores que requieren la aprobación de {{major_decision_threshold}}:**
 
-- Amendment of this Operating Agreement
-- Admission of new Members
-- Sale of substantially all Company assets
-- Merger or dissolution of the Company
+- Modificación de este Acuerdo Operativo
+- Admisión de nuevos Miembros
+- Venta de la totalidad o la mayor parte de los activos de la Compañía
+- Fusión o disolución de la Compañía
 - {{additional_major_decisions}}
 
-### 3.3 Meetings
+### 3.3 Reuniones
 
-**Annual Meetings:** {{#if annual_meetings_required}}Required annually on {{annual_meeting_date}}{{else}}Not required unless called by Members{{/if}}
+**Reuniones anuales:** {{#if annual_meetings_required}}Obligatorias anualmente el {{annual_meeting_date}}{{else}}No son obligatorias salvo que las convoquen los Miembros{{/if}}
 
-**Special Meetings:** May be called by {{special_meeting_authority}}
+**Reuniones extraordinarias:** Pueden ser convocadas por {{special_meeting_authority}}
 
-**Notice:** {{meeting_notice_days}} days written notice required for all meetings
+**Aviso:** Se requiere aviso por escrito con {{meeting_notice_days}} días de antelación para todas las reuniones
 
-**Quorum:** {{quorum_requirement}} constitute a quorum
+**Quórum:** {{quorum_requirement}} constituyen quórum
 
 ---
 
-## 4. Distributions and Allocations
+## 4. Distribuciones y asignaciones
 
-### 4.1 Distributions
+### 4.1 Distribuciones
 
-**Distribution Policy:** Distributions shall be made {{distribution_frequency}} based on {{distribution_criteria}}.
+**Política de distribución:** Las distribuciones se realizarán {{distribution_frequency}} con base en {{distribution_criteria}}.
 
-**Distribution Percentages:** Distributions shall be made to Members in proportion to their ownership percentages unless otherwise determined by {{distribution_decision_authority}}.
+**Porcentajes de distribución:** Las distribuciones se efectuarán a los Miembros en proporción a sus porcentajes de propiedad, salvo que {{distribution_decision_authority}} determine lo contrario.
 
-### 4.2 Tax Allocations
+### 4.2 Asignaciones fiscales
 
-**Income and Loss Allocation:** Profits and losses shall be allocated to Members in accordance with their ownership percentages.
+**Asignación de ingresos y pérdidas:** Las utilidades y pérdidas se asignarán a los Miembros conforme a sus porcentajes de propiedad.
 
-**Tax Elections:** The Company shall make the following tax elections:
+**Elecciones fiscales:** La Compañía adoptará las siguientes elecciones fiscales:
 {{tax_elections}}
 
-### 4.3 Capital Accounts
+### 4.3 Cuentas de capital
 
-Capital accounts shall be maintained for each Member in accordance with Treasury Regulations.
+Se mantendrán cuentas de capital para cada Miembro de acuerdo con la normativa del Tesoro.
 
 ---
 
-## 5. Transfer of Membership Interests
+## 5. Cesión de intereses de membresía
 
-### 5.1 Transfer Restrictions
+### 5.1 Restricciones a la transferencia
 
-**General Rule:** No Member may transfer all or part of their membership interest without {{transfer_approval_requirement}}.
+**Regla general:** Ningún Miembro podrá transferir la totalidad o parte de su interés de membresía sin {{transfer_approval_requirement}}.
 
-### 5.2 Right of First Refusal
+### 5.2 Derecho de preferencia
 
 {{#if right_of_first_refusal}}
-Before any Member may transfer their interest to a third party, they must first offer it to the other Members under the following terms:
+Antes de que un Miembro transfiera su interés a un tercero, deberá ofrecerlo primero a los demás Miembros bajo las siguientes condiciones:
 
-**Notice Period:** {{rofr_notice_days}} days written notice  
-**Terms:** Same price and terms as third-party offer  
-**Response Period:** {{rofr_response_days}} days to accept
+**Plazo de aviso:** Aviso por escrito con {{rofr_notice_days}} días de antelación  
+**Condiciones:** Mismo precio y términos que la oferta del tercero  
+**Plazo de respuesta:** {{rofr_response_days}} días para aceptar
 {{/if}}
 
-### 5.3 Buy-Sell Provisions
+### 5.3 Disposiciones de compra-venta
 
 {{#if buy_sell_provisions}}
-**Triggering Events:** {{buy_sell_triggers}}  
-**Valuation Method:** {{valuation_method}}  
-**Payment Terms:** {{buy_sell_payment_terms}}
+**Eventos que activan la cláusula:** {{buy_sell_triggers}}  
+**Método de valoración:** {{valuation_method}}  
+**Condiciones de pago:** {{buy_sell_payment_terms}}
 {{/if}}
 
 ---
 
-## 6. Member Rights and Obligations
+## 6. Derechos y obligaciones de los Miembros
 
-### 6.1 Member Rights
+### 6.1 Derechos de los Miembros
 
-Members have the right to:
+Los Miembros tienen derecho a:
 
-- Receive distributions when declared
-- Inspect Company books and records
-- Receive annual financial statements
-- Vote on matters requiring Member approval
+- Recibir distribuciones cuando se declaren
+- Examinar los libros y registros de la Compañía
+- Recibir estados financieros anuales
+- Votar en los asuntos que requieran aprobación de los Miembros
 - {{additional_member_rights}}
 
-### 6.2 Member Obligations
+### 6.2 Obligaciones de los Miembros
 
-Members shall:
+Los Miembros deberán:
 
-- Act in good faith toward the Company
-- Maintain confidentiality of Company information
-- {{#if non_compete}}Comply with non-compete restrictions: {{non_compete_terms}}{{/if}}
+- Actuar de buena fe hacia la Compañía
+- Mantener la confidencialidad de la información de la Compañía
+- {{#if non_compete}}Cumplir con las restricciones de no competencia: {{non_compete_terms}}{{/if}}
 - {{additional_member_obligations}}
 
-### 6.3 Fiduciary Duties
+### 6.3 Deberes fiduciarios
 
 {{fiduciary_duty_provisions}}
 
 ---
 
-## 7. Financial Provisions
+## 7. Disposiciones financieras
 
-### 7.1 Banking and Records
+### 7.1 Banca y registros
 
-**Bank Accounts:** Company funds shall be deposited in accounts designated by the {{banking_authority}}.
+**Cuentas bancarias:** Los fondos de la Compañía se depositarán en cuentas designadas por el {{banking_authority}}.
 
-**Records:** The Company shall maintain accurate books and records at its principal office.
+**Registros:** La Compañía mantendrá libros y registros precisos en su oficina principal.
 
-**Fiscal Year:** The Company's fiscal year shall be {{fiscal_year}}.
+**Ejercicio fiscal:** El ejercicio fiscal de la Compañía será {{fiscal_year}}.
 
-### 7.2 Financial Statements
+### 7.2 Estados financieros
 
-Annual financial statements shall be prepared and provided to Members within {{financial_statement_deadline}} after year-end.
+Los estados financieros anuales se prepararán y entregarán a los Miembros dentro de los {{financial_statement_deadline}} posteriores al cierre del ejercicio.
 
 ---
 
-## 8. Dissolution and Liquidation
+## 8. Disolución y liquidación
 
-### 8.1 Dissolution Events
+### 8.1 Supuestos de disolución
 
-The Company shall dissolve upon:
+La Compañía se disolverá cuando:
 
-- Unanimous vote of all Members
+- Todos los Miembros voten de manera unánime
 - {{dissolution_triggers}}
-- As required by law
+- Así lo exija la ley
 
-### 8.2 Liquidation Process
+### 8.2 Proceso de liquidación
 
-Upon dissolution:
+Al producirse la disolución:
 
-1. **Wind-up:** Company affairs shall be wound up by {{liquidation_authority}}
-2. **Asset Distribution Order:**
-   - Payment of debts and obligations
-   - Return of capital contributions (if any surplus)
-   - Distribution of remaining assets to Members per ownership percentages
+1. **Liquidación:** Los asuntos de la Compañía serán liquidados por {{liquidation_authority}}
+2. **Orden de distribución de activos:**
+   - Pago de deudas y obligaciones
+   - Reembolso de aportaciones de capital (si existe excedente)
+   - Distribución del remanente a los Miembros conforme a sus porcentajes de propiedad
 
 ---
 
-## 9. Dispute Resolution
+## 9. Resolución de disputas
 
-### 9.1 Dispute Resolution Process
+### 9.1 Proceso de resolución de disputas
 
 {{#if mediation_required}}
-**Mediation:** Disputes shall first be submitted to mediation in {{mediation_location}}.
+**Mediación:** Las disputas se someterán primero a mediación en {{mediation_location}}.
 {{/if}}
 
 {{#if arbitration_required}}
-**Arbitration:** Unresolved disputes shall be submitted to binding arbitration in {{arbitration_location}} under {{arbitration_rules}}.
+**Arbitraje:** Las disputas no resueltas se someterán a arbitraje vinculante en {{arbitration_location}} conforme a {{arbitration_rules}}.
 {{else}}
-**Litigation:** Disputes shall be resolved in the courts of {{litigation_jurisdiction}}.
+**Litigio:** Las disputas se resolverán ante los tribunales de {{litigation_jurisdiction}}.
 {{/if}}
 
 ---
 
-## 10. Miscellaneous Provisions
+## 10. Disposiciones misceláneas
 
-### 10.1 Governing Law
+### 10.1 Ley aplicable
 
-This Agreement shall be governed by the laws of {{governing_state}}.
+Este Acuerdo se regirá por las leyes de {{governing_state}}.
 
-### 10.2 Amendment
+### 10.2 Modificación
 
-This Agreement may be amended only by {{amendment_requirement}}.
+Este Acuerdo solo podrá modificarse mediante {{amendment_requirement}}.
 
-### 10.3 Severability
+### 10.3 Divisibilidad
 
-If any provision is held invalid, the remainder shall remain in full force and effect.
+Si alguna disposición se considera inválida, las restantes continuarán en pleno vigor y efecto.
 
-### 10.4 Binding Effect
+### 10.4 Efecto vinculante
 
-This Agreement binds Members, their heirs, successors, and assigns.
+Este Acuerdo obliga a los Miembros, sus herederos, sucesores y cesionarios.
 
-### 10.5 Counterparts
+### 10.5 Ejemplares
 
-This Agreement may be executed in counterparts, each deemed an original.
+Este Acuerdo podrá firmarse en ejemplares, cada uno de los cuales se considerará original.
 
 ---
 
-## 11. Additional Provisions
+## 11. Disposiciones adicionales
 
 {{additional_provisions}}
 
 ---
 
-## 12. Member Signatures
+## 12. Firmas de los Miembros
 
-**IN WITNESS WHEREOF**, the Members have executed this Operating Agreement as of {{effective_date}}.
+**EN FE DE LO CUAL**, los Miembros han firmado este Acuerdo Operativo a partir del {{effective_date}}.
 
-**MEMBERS:**
+**MIEMBROS:**
 
 **{{member_1_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{effective_date}} |
-| {{member_1_name}}                          |                    |
-| Print Name: {{member_1_name}}              |                    |
+| {{member_1_name}} | |
+| Nombre en letra de imprenta: {{member_1_name}} | |
 
 **{{member_2_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{effective_date}} |
-| {{member_2_name}}                          |                    |
-| Print Name: {{member_2_name}}              |                    |
+| {{member_2_name}} | |
+| Nombre en letra de imprenta: {{member_2_name}} | |
 
 {{#if member_3_name}}
 **{{member_3_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{effective_date}} |
-| {{member_3_name}}                          |                    |
-| Print Name: {{member_3_name}}              |                    |
+| {{member_3_name}} | |
+| Nombre en letra de imprenta: {{member_3_name}} | |
 
 {{/if}}
 
@@ -309,10 +307,8 @@ This Agreement may be executed in counterparts, each deemed an original.
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This LLC Operating Agreement should be reviewed by a qualified business attorney to ensure compliance with state laws and specific business requirements. Operating agreements should be tailored to the unique needs of each business and its members.
+**AVISO LEGAL IMPORTANTE:** Este Acuerdo Operativo de LLC debe ser revisado por un abogado empresarial calificado para garantizar el cumplimiento de las leyes estatales y los requisitos específicos del negocio. Los acuerdos operativos deben adaptarse a las necesidades particulares de cada empresa y de sus Miembros.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

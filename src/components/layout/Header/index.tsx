@@ -29,7 +29,7 @@ const Header = React.memo(function Header() {
   const clientLocale = params.locale ?? 'en';
   const router = useRouter();
   const { t: tHeader } = useTranslation('header');
-  const aiFinderDestination = `/${clientLocale}/marketplace`;
+  const aiFinderDestination = `/${clientLocale}/marketplace/`;
 
   // Component state
   const [mounted, setMounted] = useState(false);
@@ -166,6 +166,19 @@ const Header = React.memo(function Header() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Browse Documents (Mega Menu) */}
+            <HeaderMegaMenu
+              clientLocale={clientLocale}
+              mounted={mounted}
+              isMegaMenuOpen={isMegaMenuOpen && !activeCategoryId}
+              onOpenChange={(open) => {
+                setIsMegaMenuOpen(open);
+                if (open) {
+                  setIsMobileMenuOpen(false);
+                  setActiveCategoryId(null);
+                }
+              }}
+            />
             {/* AI Document Finder Button */}
             <button
               onClick={() => router.push(aiFinderDestination)}

@@ -1,391 +1,388 @@
-﻿# Revocable Living Trust
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Fideicomiso Revocable en Vida
 
 ---
 
-**REVOCABLE LIVING TRUST AGREEMENT**
+**ACUERDO DE FIDEICOMISO REVOCABLE EN VIDA**
 
-This Revocable Living Trust Agreement ("Trust Agreement") is made this **{{creation_date}}**, by **{{grantor_name}}**, as Grantor and initial Trustee.
-
----
-
-## 1. Trust Information
-
-### 1.1 Trust Name and Parties
-
-**Trust Name:** The {{trust_name}}  
-**Grantor/Settlor:** {{grantor_name}} of {{grantor_address}}  
-**Initial Trustee:** {{initial_trustee_name}} of {{initial_trustee_address}}  
-**Trust Date:** {{creation_date}}  
-**Governing Law:** {{governing_state}}
-
-### 1.2 Trust Identification
-
-**Trust Tax ID:** {{trust_tax_id}} (if applicable)  
-**Grantor SSN:** {{grantor_ssn}}
+Este Acuerdo de Fideicomiso Revocable en Vida ("Acuerdo de Fideicomiso") se celebra el **{{creation_date}}**, por **{{grantor_name}}**, como Fideicomitente y Fiduciario inicial.
 
 ---
 
-## 2. Trust Purpose and Intent
+## 1. Información del Fideicomiso
 
-### 2.1 Primary Purpose
+### 1.1 Nombre del Fideicomiso y partes
 
-The purpose of this Trust is to:
+**Nombre del Fideicomiso:** {{trust_name}}  
+**Fideicomitente/Constituyente:** {{grantor_name}} de {{grantor_address}}  
+**Fiduciario inicial:** {{initial_trustee_name}} de {{initial_trustee_address}}  
+**Fecha del Fideicomiso:** {{creation_date}}  
+**Ley aplicable:** {{governing_state}}
 
-- Provide for the management and distribution of the Grantor's assets
-- Avoid probate proceedings upon the Grantor's death
-- Provide for the Grantor's care during any period of incapacity
-- Ensure orderly succession of assets to beneficiaries
+### 1.2 Identificación del Fideicomiso
+
+**ID fiscal del Fideicomiso:** {{trust_tax_id}} (si corresponde)  
+**SSN del Fideicomitente:** {{grantor_ssn}}
+
+---
+
+## 2. Finalidad e intención del Fideicomiso
+
+### 2.1 Finalidad principal
+
+La finalidad de este Fideicomiso es:
+
+- Proporcionar la administración y distribución de los bienes del Fideicomitente
+- Evitar los procedimientos sucesorios tras el fallecimiento del Fideicomitente
+- Brindar cuidados al Fideicomitente durante cualquier periodo de incapacidad
+- Garantizar la sucesión ordenada de los bienes a los beneficiarios
 - {{additional_purposes}}
 
-### 2.2 Revocable Nature
+### 2.2 Naturaleza revocable
 
-This Trust is REVOCABLE and may be amended, modified, or revoked by the Grantor at any time during the Grantor's lifetime while the Grantor has capacity.
+Este Fideicomiso es REVOCABLE y podrá ser enmendado, modificado o revocado por el Fideicomitente en cualquier momento durante su vida mientras conserve capacidad.
 
 ---
 
-## 3. Trust Property
+## 3. Bienes del Fideicomiso
 
-### 3.1 Initial Trust Property
+### 3.1 Bienes iniciales del Fideicomiso
 
-The Grantor hereby transfers the following property to the Trust:
+El Fideicomitente transfiere al Fideicomiso los siguientes bienes:
 {{initial_trust_property}}
 
-### 3.2 Additional Property
+### 3.2 Bienes adicionales
 
-The Grantor may add additional property to this Trust at any time by:
+El Fideicomitente podrá añadir bienes adicionales a este Fideicomiso en cualquier momento mediante:
 
-- Transferring title to the Trustee
-- Recording a deed or assignment
-- Executing appropriate transfer documents
-- Pour-over provisions from the Grantor's Will
+- Transferir el título al Fiduciario
+- Inscribir una escritura o cesión
+- Ejecutar los documentos de traspaso correspondientes
+- Disposiciones vertedoras establecidas en el testamento del Fideicomitente
 
-### 3.3 Schedule of Assets
+### 3.3 Relación de activos
 
-A schedule of Trust assets is attached as Exhibit A and incorporated herein by reference. This schedule may be updated from time to time without amending this Trust Agreement.
-
----
-
-## 4. Trustee Provisions
-
-### 4.1 Initial Trustee
-
-{{grantor_name}} shall serve as the initial Trustee of this Trust.
-
-### 4.2 Successor Trustees
-
-Upon the Grantor's death, resignation, or incapacity, the following shall serve as successor Trustees in the order listed:
-
-**First Successor Trustee:** {{successor_trustee_1_name}} of {{successor_trustee_1_address}}
-
-**Second Successor Trustee:** {{successor_trustee_2_name}} of {{successor_trustee_2_address}}
-
-**Corporate Trustee:** {{#if corporate_trustee}}{{corporate_trustee_name}} of {{corporate_trustee_address}}{{else}}None designated{{/if}}
-
-### 4.3 Trustee Powers
-
-The Trustee shall have all powers necessary for Trust administration, including but not limited to:
-
-**Investment Powers:**
-
-- Buy, sell, exchange, and manage investments
-- Hold cash and invest in any type of property
-- Diversify or maintain concentrated investments
-- Employ investment advisers and delegate investment decisions
-
-**Real Estate Powers:**
-
-- Buy, sell, lease, and manage real property
-- Maintain, improve, and develop real estate
-- Grant easements and enter into development agreements
-- Handle all aspects of real property ownership
-
-**Business Powers:**
-
-- Continue, operate, or liquidate business interests
-- Form partnerships, corporations, or LLCs
-- Make business investments and decisions
-- Employ agents and professionals
-
-**General Powers:**
-
-- Distribute income and principal to beneficiaries
-- Make tax elections and file returns
-- Borrow money and grant security interests
-- Compromise claims and defend litigation
-- Employ attorneys, accountants, and other professionals
+Se adjunta como Anexo A una relación de los bienes del Fideicomiso, la cual se incorpora al presente por referencia. Esta relación podrá actualizarse periódicamente sin necesidad de modificar este Acuerdo de Fideicomiso.
 
 ---
 
-## 5. Distributions During Grantor's Lifetime
+## 4. Disposiciones sobre el Fiduciario
 
-### 5.1 Income and Principal
+### 4.1 Fiduciario inicial
 
-During the Grantor's lifetime, all Trust income and principal shall be distributed to or for the benefit of the Grantor as directed by the Grantor.
+{{grantor_name}} actuará como Fiduciario inicial de este Fideicomiso.
 
-### 5.2 Incapacity Distributions
+### 4.2 Fiduciarios sucesores
 
-If the Grantor becomes incapacitated, the Trustee shall distribute income and principal as necessary for the Grantor's:
+Tras el fallecimiento, renuncia o incapacidad del Fideicomitente, actuarán como Fiduciarios sucesores, en el orden indicado:
 
-- Health and medical care
-- Maintenance and support
-- General welfare and comfort
-- Customary standard of living
+**Primer Fiduciario sucesor:** {{successor_trustee_1_name}} de {{successor_trustee_1_address}}
 
-### 5.3 Determination of Incapacity
+**Segundo Fiduciario sucesor:** {{successor_trustee_2_name}} de {{successor_trustee_2_address}}
 
-The Grantor shall be deemed incapacitated when:
+**Fiduciario corporativo:** {{#if corporate_trustee}}{{corporate_trustee_name}} de {{corporate_trustee_address}}{{else}}Ninguno designado{{/if}}
+
+### 4.3 Facultades del Fiduciario
+
+El Fiduciario tendrá todas las facultades necesarias para la administración del Fideicomiso, incluidas, entre otras:
+
+**Facultades de inversión:**
+
+- Comprar, vender, intercambiar y administrar inversiones
+- Mantener efectivo e invertir en cualquier tipo de bien
+- Diversificar o mantener inversiones concentradas
+- Contratar asesores de inversión y delegar decisiones de inversión
+
+**Facultades sobre bienes raíces:**
+
+- Comprar, vender, arrendar y administrar bienes inmuebles
+- Mantener, mejorar y desarrollar bienes raíces
+- Otorgar servidumbres y celebrar convenios de desarrollo
+- Gestionar todos los aspectos relativos a la propiedad inmobiliaria
+
+**Facultades empresariales:**
+
+- Continuar, operar o liquidar participaciones empresariales
+- Constituir sociedades, corporaciones o LLC
+- Realizar inversiones y decisiones empresariales
+- Contratar agentes y profesionales
+
+**Facultades generales:**
+
+- Distribuir ingresos y principal a los beneficiarios
+- Realizar elecciones fiscales y presentar declaraciones
+- Obtener préstamos y otorgar garantías
+- Transigir reclamaciones y defender litigios
+- Contratar abogados, contadores y otros profesionales
+
+---
+
+## 5. Distribuciones durante la vida del Fideicomitente
+
+### 5.1 Ingresos y principal
+
+Durante la vida del Fideicomitente, todos los ingresos y el principal del Fideicomiso se distribuirán al Fideicomitente o para su beneficio según lo indique.
+
+### 5.2 Distribuciones en caso de incapacidad
+
+Si el Fideicomitente queda incapacitado, el Fiduciario distribuirá ingresos y principal según sea necesario para:
+
+- Salud y atención médica
+- Mantenimiento y sustento
+- Bienestar general y comodidad
+- Nivel de vida habitual
+
+### 5.3 Determinación de incapacidad
+
+El Fideicomitente se considerará incapacitado cuando:
 {{incapacity_determination}}
 
 ---
 
-## 6. Distributions After Grantor's Death
+## 6. Distribuciones tras el fallecimiento del Fideicomitente
 
-### 6.1 Immediate Distributions
+### 6.1 Distribuciones inmediatas
 
-Upon the Grantor's death, the Trustee shall:
+Al fallecer el Fideicomitente, el Fiduciario deberá:
 
-- Pay funeral and burial expenses
-- Pay debts and administration expenses
-- Pay estate and inheritance taxes
-- Make specific bequests as directed below
+- Pagar los gastos funerarios y de sepelio
+- Pagar las deudas y gastos de administración
+- Pagar los impuestos sucesorios y hereditarios
+- Realizar los legados específicos indicados a continuación
 
-### 6.2 Specific Bequests
+### 6.2 Legados específicos
 
-The Trustee shall distribute the following specific bequests:
+El Fiduciario distribuirá los siguientes legados específicos:
 
 {{#each specific_bequests}}
-**To {{beneficiary_name}}:** {{bequest_description}}
+**A {{beneficiary_name}}:** {{bequest_description}}
 {{/each}}
 
-### 6.3 Residuary Trust Distribution
+### 6.3 Distribución del remanente del Fideicomiso
 
-#### Option A: Outright Distribution
+#### Opción A: Distribución directa
 
 {{#if outright_distribution}}
-The remaining Trust assets shall be distributed outright as follows:
+Los bienes restantes del Fideicomiso se distribuirán directamente conforme a lo siguiente:
 {{outright_distribution_plan}}
 {{/if}}
 
-#### Option B: Continued Trust for Beneficiaries
+#### Opción B: Continuación del Fideicomiso para beneficiarios
 
 {{#if continuing_trust}}
-The remaining Trust assets shall continue in trust for the following beneficiaries:
+Los bienes restantes del Fideicomiso permanecerán en fideicomiso para los siguientes beneficiarios:
 
-**Primary Beneficiaries:**
+**Beneficiarios principales:**
 {{#each primary_beneficiaries}}
 
-- **{{name}}** ({{relationship}}): {{percentage}}% interest
+- **{{name}}** ({{relationship}}): participación del {{percentage}}%
   {{/each}}
 
-**Contingent Beneficiaries:**
+**Beneficiarios contingentes:**
 {{#each contingent_beneficiaries}}
 
-- **{{name}}** ({{relationship}}): {{percentage}}% interest
+- **{{name}}** ({{relationship}}): participación del {{percentage}}%
   {{/each}}
   {{/if}}
 
 ---
 
-## 7. Beneficiary Trust Provisions
+## 7. Disposiciones para los beneficiarios del Fideicomiso
 
 {{#if continuing_trust}}
 
-### 7.1 Distribution Standards
+### 7.1 Estándares de distribución
 
-For any continuing trusts, the Trustee may distribute income and principal for beneficiaries':
+Para cualquier fideicomiso continuo, el Fiduciario podrá distribuir ingresos y principal para:
 
-- Health, education, maintenance, and support (HEMS standard)
-- Best interests and welfare
+- Salud, educación, mantenimiento y sustento (estándar HEMS)
+- Mejores intereses y bienestar de los beneficiarios
 - {{additional_distribution_standards}}
 
-### 7.2 Age-Based Distributions
+### 7.2 Distribuciones según la edad
 
-**Mandatory Distributions:**
+**Distribuciones obligatorias:**
 
-- Age {{distribution_age_1}}: {{distribution_percentage_1}}% of the beneficiary's trust share
-- Age {{distribution_age_2}}: {{distribution_percentage_2}}% of the beneficiary's trust share
-- Age {{distribution_age_3}}: {{distribution_percentage_3}}% of the beneficiary's trust share (final distribution)
+- Edad {{distribution_age_1}}: {{distribution_percentage_1}}% de la porción del beneficiario
+- Edad {{distribution_age_2}}: {{distribution_percentage_2}}% de la porción del beneficiario
+- Edad {{distribution_age_3}}: {{distribution_percentage_3}}% de la porción del beneficiario (distribución final)
 
-### 7.3 Termination of Individual Trusts
+### 7.3 Terminación de los fideicomisos individuales
 
-Each beneficiary's trust shall terminate upon:
+El fideicomiso de cada beneficiario terminará cuando:
 
-- The beneficiary's death
-- Distribution of all trust assets
-- Age {{final_distribution_age}}
-- Other conditions: {{termination_conditions}}
+- Ocurra el fallecimiento del beneficiario
+- Se distribuyan todos los bienes del fideicomiso
+- El beneficiario alcance la edad de {{final_distribution_age}}
+- Se cumplan otras condiciones: {{termination_conditions}}
   {{/if}}
 
 ---
 
-## 8. Special Provisions
+## 8. Disposiciones especiales
 
-### 8.1 Spendthrift Protection
+### 8.1 Protección antialienación
 
-No beneficiary may assign, pledge, or encumber their interest in the Trust, nor shall such interest be subject to attachment, execution, or other legal process.
+Ningún beneficiario podrá ceder, pignorar o gravar su interés en el Fideicomiso, ni dicho interés estará sujeto a embargo, ejecución u otro procedimiento legal.
 
-### 8.2 No Contest Clause
+### 8.2 Cláusula de no impugnación
 
-If any beneficiary contests this Trust or aids in contesting its validity, such person shall forfeit any interest in the Trust.
+Si algún beneficiario impugna este Fideicomiso o ayuda a impugnar su validez, esa persona perderá cualquier interés en el Fideicomiso.
 
-### 8.3 Per Stirpes Distribution
+### 8.3 Distribución por estirpes
 
-Unless otherwise specified, distributions to descendants shall be made per stirpes (by right of representation).
+Salvo disposición en contrario, las distribuciones a los descendientes se realizarán por estirpes (por derecho de representación).
 
-### 8.4 Afterborn Children
+### 8.4 Hijos posteriores
 
-Any children born to or adopted by the Grantor after the date of this Trust shall be treated as beneficiaries under the same terms as existing children.
+Cualquier hijo nacido o adoptado por el Fideicomitente después de la fecha de este Fideicomiso será tratado como beneficiario en los mismos términos que los hijos existentes.
 
 ---
 
-## 9. Administrative Provisions
+## 9. Disposiciones administrativas
 
-### 9.1 Trustee Compensation
+### 9.1 Compensación del Fiduciario
 
 {{#if trustee_compensation}}
-The Trustee shall be entitled to reasonable compensation as follows: {{compensation_terms}}
+El Fiduciario tendrá derecho a una compensación razonable conforme a lo siguiente: {{compensation_terms}}
 {{else}}
-Individual Trustees shall serve without compensation. Corporate Trustees shall be entitled to their standard fees.
+Los Fiduciarios individuales prestarán sus servicios sin remuneración. Los Fiduciarios corporativos tendrán derecho a sus honorarios habituales.
 {{/if}}
 
-### 9.2 Accounting and Records
+### 9.2 Contabilidad y registros
 
-The Trustee shall:
+El Fiduciario deberá:
 
-- Keep accurate records of all transactions
-- Provide annual accountings to beneficiaries
-- File required tax returns
-- Maintain separate Trust bank accounts
+- Llevar registros precisos de todas las operaciones
+- Proporcionar estados contables anuales a los beneficiarios
+- Presentar las declaraciones fiscales requeridas
+- Mantener cuentas bancarias separadas del Fideicomiso
 
-### 9.3 Investment Standard
+### 9.3 Estándar de inversión
 
-The Trustee shall invest Trust assets as a prudent investor would, considering the purposes and terms of the Trust.
+El Fiduciario invertirá los bienes del Fideicomiso como lo haría un inversionista prudente, considerando los fines y términos del Fideicomiso.
 
-### 9.4 Liability and Indemnification
+### 9.4 Responsabilidad e indemnización
 
-The Trustee shall not be liable for losses except those resulting from bad faith, willful misconduct, or gross negligence.
-
----
-
-## 10. Tax Provisions
-
-### 10.1 Grantor Trust Status
-
-During the Grantor's lifetime, this Trust is intended to be treated as a "grantor trust" for income tax purposes, with all income taxable to the Grantor.
-
-### 10.2 Tax Elections
-
-The Trustee may make any tax elections deemed advisable, including:
-
-- Section 645 election (if applicable)
-- Generation-skipping tax elections
-- Income tax distribution elections
-
-### 10.3 Tax Payments
-
-The Trustee may pay taxes imposed on Trust income from Trust assets or request reimbursement from the Grantor.
+El Fiduciario no será responsable por pérdidas, salvo aquellas derivadas de mala fe, dolo o negligencia grave.
 
 ---
 
-## 11. Amendment and Revocation
+## 10. Disposiciones fiscales
 
-### 11.1 Amendment Rights
+### 10.1 Condición de fideicomiso del concedente
 
-The Grantor may amend this Trust at any time by:
+Durante la vida del Fideicomitente, este Fideicomiso se considera un "grantor trust" para efectos del impuesto sobre la renta, y todos los ingresos tributan al Fideicomitente.
 
-- Written instrument signed by the Grantor
-- Recording the amendment with this Trust Agreement
-- Delivering notice to the Trustee
+### 10.2 Elecciones fiscales
 
-### 11.2 Revocation Rights
+El Fiduciario podrá realizar las elecciones fiscales que considere convenientes, incluidas:
 
-The Grantor may revoke this Trust entirely by:
+- Elección conforme a la Sección 645 (si corresponde)
+- Elecciones relativas al impuesto sobre transferencias generacionales
+- Elecciones de distribución para efectos del impuesto sobre la renta
 
-- Written revocation delivered to the Trustee
-- Substantial compliance with revocation procedures
-- Express revocation in a subsequent will or trust
+### 10.3 Pago de impuestos
 
-### 11.3 Irrevocability After Death
-
-This Trust becomes irrevocable upon the Grantor's death and may not thereafter be amended or revoked.
+El Fiduciario podrá pagar con bienes del Fideicomiso los impuestos que graven los ingresos del Fideicomiso o solicitar reembolso al Fideicomitente.
 
 ---
 
-## 12. General Provisions
+## 11. Modificación y revocación
 
-### 12.1 Governing Law
+### 11.1 Derecho de modificación
 
-This Trust shall be governed by the laws of {{governing_state}}.
+El Fideicomitente podrá modificar este Fideicomiso en cualquier momento mediante:
 
-### 12.2 Severability
+- Instrumento escrito firmado por el Fideicomitente
+- Registro de la enmienda junto con este Acuerdo de Fideicomiso
+- Entrega de un aviso al Fiduciario
 
-If any provision is held invalid, the remaining provisions shall remain in full force and effect.
+### 11.2 Derecho de revocación
 
-### 12.3 Construction
+El Fideicomitente podrá revocar este Fideicomiso en su totalidad mediante:
 
-This Trust shall be liberally construed to carry out the Grantor's intent as expressed herein.
+- Revocación escrita entregada al Fiduciario
+- Cumplimiento sustancial de los procedimientos de revocación
+- Revocación expresa en un testamento o fideicomiso posterior
 
-### 12.4 Titles and Captions
+### 11.3 Irrevocabilidad después del fallecimiento
 
-Section titles are for convenience only and do not affect the meaning of provisions.
-
----
-
-## 13. Definitions
-
-**"Grantor"** means {{grantor_name}} and any successor grantor.  
-**"Trust"** means this Revocable Living Trust and any amendments thereto.  
-**"Trustee"** means the acting trustee or trustees of this Trust.  
-**"Beneficiary"** means any person entitled to distributions from this Trust.  
-**"Issue"** means descendants in any degree through legitimate and adopted children.
+Este Fideicomiso se vuelve irrevocable tras el fallecimiento del Fideicomitente y no podrá ser modificado ni revocado posteriormente.
 
 ---
 
-## 14. Execution
+## 12. Disposiciones generales
 
-**IN WITNESS WHEREOF**, the Grantor has executed this Revocable Living Trust Agreement on **{{creation_date}}**.
+### 12.1 Ley aplicable
 
-**GRANTOR:**
+Este Fideicomiso se regirá por las leyes de {{governing_state}}.
 
-| Signature                                  | Date              |
+### 12.2 Divisibilidad
+
+Si alguna disposición se considera inválida, las disposiciones restantes permanecerán en pleno vigor y efecto.
+
+### 12.3 Interpretación
+
+Este Fideicomiso se interpretará de forma amplia para cumplir con la intención del Fideicomitente expresada en el presente.
+
+### 12.4 Títulos y encabezados
+
+Los títulos de las secciones se incluyen solo para conveniencia y no afectan el significado de las disposiciones.
+
+---
+
+## 13. Definiciones
+
+**"Fideicomitente"** significa {{grantor_name}} y cualquier fideicomitente sucesor.  
+**"Fideicomiso"** significa este Fideicomiso Revocable en Vida y sus enmiendas.  
+**"Fiduciario"** significa el o los fiduciarios en funciones de este Fideicomiso.  
+**"Beneficiario"** significa toda persona con derecho a recibir distribuciones de este Fideicomiso.  
+**"Descendencia"** significa los descendientes en cualquier grado, ya sean biológicos o adoptados.
+
+---
+
+## 14. Ejecución
+
+**EN FE DE LO CUAL**, el Fideicomitente ha firmado este Acuerdo de Fideicomiso Revocable en Vida el **{{creation_date}}**.
+
+**FIDEICOMITENTE:**
+
+| Firma | Fecha |
 | ------------------------------------------ | ----------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{creation_date}} |
-| {{grantor_name}}                           |                   |
-| Print Name: {{grantor_name}}               |                   |
+| {{grantor_name}} | |
+| Nombre en letra de imprenta: {{grantor_name}} | |
 
-**TRUSTEE ACCEPTANCE:**
+**ACEPTACIÓN DEL FIDUCIARIO:**
 
-I accept the position of Trustee and agree to administer this Trust according to its terms.
+Acepto el cargo de Fiduciario y me comprometo a administrar este Fideicomiso conforme a sus términos.
 
-| Signature                                  | Date              |
+| Firma | Fecha |
 | ------------------------------------------ | ----------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{creation_date}} |
-| {{initial_trustee_name}}                   |                   |
-| Print Name: {{initial_trustee_name}}       |                   |
+| {{initial_trustee_name}} | |
+| Nombre en letra de imprenta: {{initial_trustee_name}} | |
 
 ---
 
-## 15. Notarization
+## 15. Notarización
 
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-On this **{{creation_date}}**, before me personally appeared {{grantor_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.
+En esta fecha **{{creation_date}}**, compareció personalmente ante mí {{grantor_name}}, quien demostró mediante pruebas satisfactorias ser la persona cuyo nombre figura en este instrumento y reconoció que lo firmó en su carácter autorizado, y que mediante su firma la persona, o la entidad en nombre de la cual actuó, ejecutó este instrumento.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+Certifico BAJO PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que el párrafo anterior es verdadero y correcto.
 
-**WITNESS** my hand and official seal.
+**DOY FE** con mi firma y sello oficial.
 
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notario Público:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Mi comisión expira:** ****\*\*\*\*****\_****\*\*\*\*****
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This Revocable Living Trust should be reviewed by a qualified estate planning attorney to ensure compliance with state laws and proper integration with your overall estate plan. Trust law varies significantly by state, and proper funding of the trust is essential for effectiveness.
+**AVISO LEGAL IMPORTANTE:** Este Fideicomiso Revocable en Vida debe ser revisado por un abogado calificado en planificación patrimonial para garantizar el cumplimiento de las leyes estatales y su correcta integración con su plan patrimonial general. La normativa de fideicomisos varía considerablemente entre estados, y la correcta aportación de bienes al fideicomiso es esencial para su eficacia.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

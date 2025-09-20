@@ -40,7 +40,7 @@ export const boatBillOfSaleMeta: LegalDocument = {
         'venta de barco',
         'compraventa de embarcación',
         'contrato de venta marina',
-        'bolsa de venta marina',
+        'factura de venta marítima',
       ],
     },
   },

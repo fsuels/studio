@@ -25,7 +25,6 @@ interface UserSession {
 }
 
 class IntelligentPreloader {
-  private initialized = false;
   private userSession: UserSession = {
     visitedRoutes: [],
     timeSpent: {},
@@ -35,6 +34,13 @@ class IntelligentPreloader {
 
   private preloadQueue: Set<string> = new Set();
   private preloadedModules: Set<string> = new Set();
+  private initialized = false;
+  private initCount = 0;
+  private cleanupCallbacks: Array<() => void> = [];
+
+  private registerCleanup(callback: () => void) {
+    this.cleanupCallbacks.push(callback);
+  }
 
   // Common navigation patterns
   private readonly PRELOAD_PATTERNS: PreloadConfig[] = [
@@ -84,9 +90,12 @@ class IntelligentPreloader {
    * Initialize preloader with user session tracking
    */
   initialize() {
+    this.initCount += 1;
+
     if (this.initialized) {
       return;
     }
+
     this.initialized = true;
 
     this.trackUserSession();
@@ -115,10 +124,19 @@ class IntelligentPreloader {
       this.userSession.timeSpent[currentPath] =
         (this.userSession.timeSpent[currentPath] || 0) + timeSpent;
     };
+    const visibilityHandler = () => {
+      if (document.hidden) {
+        updateTimeSpent();
+      }
+    };
 
     window.addEventListener('beforeunload', updateTimeSpent);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) updateTimeSpent();
+    document.addEventListener('visibilitychange', visibilityHandler);
+
+    this.registerCleanup(() => {
+      window.removeEventListener('beforeunload', updateTimeSpent);
+      document.removeEventListener('visibilitychange', visibilityHandler);
+      updateTimeSpent();
     });
   }
 
@@ -148,6 +166,10 @@ class IntelligentPreloader {
     document.querySelectorAll('[data-preload-route]').forEach((el) => {
       observer.observe(el);
     });
+
+    this.registerCleanup(() => {
+      observer.disconnect();
+    });
   }
 
   /**
@@ -156,7 +178,7 @@ class IntelligentPreloader {
   private setupHoverPreloading() {
     let hoverTimeout: NodeJS.Timeout;
 
-    document.addEventListener('mouseover', (e) => {
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const link = target.closest('a[href]') as HTMLAnchorElement;
 
@@ -171,9 +193,18 @@ class IntelligentPreloader {
           }
         }, 100);
       }
-    });
+    };
 
-    document.addEventListener('mouseout', () => {
+    const handleMouseOut = () => {
+      clearTimeout(hoverTimeout);
+    };
+
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+
+    this.registerCleanup(() => {
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
       clearTimeout(hoverTimeout);
     });
   }
@@ -191,13 +222,20 @@ class IntelligentPreloader {
       }, 2000); // 2 seconds of inactivity
     };
 
-    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(
-      (event) => {
-        document.addEventListener(event, resetIdleTimer, true);
-      }
-    );
+    const idleEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'] as const;
+
+    idleEvents.forEach((event) => {
+      document.addEventListener(event, resetIdleTimer, true);
+    });
 
     resetIdleTimer();
+
+    this.registerCleanup(() => {
+      idleEvents.forEach((event) => {
+        document.removeEventListener(event, resetIdleTimer, true);
+      });
+      clearTimeout(idleTimer);
+    });
   }
 
   /**
@@ -375,6 +413,29 @@ class IntelligentPreloader {
     return [...new Set(predictions)].filter(route => route !== currentPath);
   }
 
+  destroy() {
+    if (this.initCount > 0) {
+      this.initCount -= 1;
+    }
+
+    if (this.initCount > 0 || !this.initialized) {
+      return;
+    }
+
+    this.cleanupCallbacks.forEach((cleanup) => {
+      try {
+        cleanup();
+      } catch (error) {
+        console.warn('[Intelligent Preloader] cleanup failed', error);
+      }
+    });
+
+    this.cleanupCallbacks = [];
+    this.preloadQueue.clear();
+    this.preloadedModules.clear();
+    this.initialized = false;
+  }
+
   /**
    * Get preloading analytics
    */
@@ -405,6 +466,10 @@ export const intelligentPreloader = new IntelligentPreloader();
 export function useIntelligentPreloader() {
   React.useEffect(() => {
     intelligentPreloader.initialize();
+
+    return () => {
+      intelligentPreloader.destroy();
+    };
   }, []);
 
   return {
@@ -440,3 +505,4 @@ export function withPreloading<T extends Record<string, any>>(
 }
 
 export default intelligentPreloader;
+

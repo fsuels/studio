@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:poll": "WATCHPACK_POLLING=true next dev --turbopack",
     "dev:webpack": "next dev",
     "dev:alt": "next dev --turbopack -p 9003",
     "dev:collab": "ENABLE_COLLABORATION=true node collaboration-server.mjs",

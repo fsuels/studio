@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-09-20T05:34:05.900Z",
+  "timestamp": "2025-09-20T05:53:04.779Z",
   "summary": {
     "totalTemplates": 700,
     "validTemplates": 13,
     "invalidTemplates": 687,
-    "totalErrors": 3802,
-    "totalWarnings": 693
+    "totalErrors": 3516,
+    "totalWarnings": 689
   },
   "results": [
     {
@@ -388,8 +388,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: affidavit"
@@ -416,8 +415,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: affiliate-marketing-agreement"
@@ -444,8 +442,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: agricultural-agreement"
@@ -546,8 +543,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: architect-contract"
@@ -685,8 +681,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: articles-of-incorporation"
@@ -742,8 +737,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: athletic-scholarship-agreement"
@@ -770,8 +764,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: auto-repair-agreement"
@@ -798,8 +791,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: automotive-service-agreement"
@@ -826,8 +818,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: aviation-charter-agreement"
@@ -854,8 +845,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bar-agreement"
@@ -909,8 +899,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bid-proposal"
@@ -1062,8 +1051,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: boat-bill-of-sale"
@@ -1092,8 +1080,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bookkeeping-services-agreement"
@@ -1120,8 +1107,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: brand-ambassador-agreement"
@@ -1200,8 +1186,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: business-contract"
@@ -1373,8 +1358,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: certificate-substantial-completion"
@@ -1455,8 +1439,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-care-contract"
@@ -1714,8 +1697,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-support-agreement"
@@ -1742,8 +1724,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-travel-consent"
@@ -1770,8 +1751,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: clinical-trial-agreement"
@@ -1798,8 +1778,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cloud-services-agreement"
@@ -1822,8 +1801,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: coaching-agreement"
@@ -1850,8 +1828,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: codicil-to-will"
@@ -1878,8 +1855,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cohabitation-agreement"
@@ -2147,8 +2123,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: commission-agreement"
@@ -2230,8 +2205,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: consignment-agreement"
@@ -2260,8 +2234,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-bid-form"
@@ -2288,8 +2261,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-contract"
@@ -2312,8 +2284,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-management-agreement"
@@ -2340,8 +2311,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: consulting-agreement"
@@ -2490,8 +2460,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: copyright-assignment-agreement"
@@ -2519,8 +2488,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: copyright-assignment"
@@ -2603,8 +2571,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: court-filing-document"
@@ -2713,8 +2680,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cryptocurrency-agreement"
@@ -2768,8 +2734,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: data-processing-agreement"
@@ -2939,8 +2904,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: digital-asset-agreement"
@@ -3282,8 +3246,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: donation-agreement"
@@ -3364,8 +3327,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: ecommerce-terms-of-service"
@@ -3392,8 +3354,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: education-trust"
@@ -3420,8 +3381,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: elder-care-agreement"
@@ -3475,8 +3435,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employee-evaluation-form"
@@ -3499,8 +3458,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employee-handbook"
@@ -3576,8 +3534,7 @@
         "Missing required section: \"## Signatures\"",
         "Variable parity mismatch (missing in ES: additional_expectations, additional_non_compete_terms, annual_salary, arbitration_location, break_schedule, company_name, company_notice_period, company_representative_name, company_representative_title, confidential_information_types, department, employee_name, employee_notice_period, employment_classification, employment_type, final_pay_timeframe, flsa_status, geographic_restriction, governing_state, gross_pay_per_period, health_insurance_details, hourly_rate, job_description, non_compete_duration, non_solicitation_duration, other_benefits, overtime_rate, overtime_threshold, pay_frequency, position_title, pto_details, remote_work_policy, retirement_plan_details, review_frequency, sick_leave_details, sign_date, standard_hours, start_date, supervisor_name, termination_for_cause_reasons, work_days, work_location, work_schedule).",
         "Section count mismatch: EN has 11, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: employment-contract",
@@ -3883,8 +3840,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employment-verification-letter"
@@ -3938,8 +3894,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: environmental-agreement"
@@ -3966,8 +3921,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: equipment-rental-agreement"
@@ -4041,8 +3995,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: event-planning-contract"
@@ -4180,8 +4133,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: farm-lease-agreement"
@@ -4208,8 +4160,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: film-production-agreement"
@@ -4236,8 +4187,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: fitness-waiver"
@@ -4264,8 +4214,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: food-truck-agreement"
@@ -4320,8 +4269,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: franchise-agreement"
@@ -4344,8 +4292,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: franchise-disclosure-agreement"
@@ -4396,8 +4343,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: gaming-agreement"
@@ -4424,8 +4370,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: general-contractor-agreement"
@@ -4475,8 +4420,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: general-liability-waiver"
@@ -4503,8 +4447,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: government-contract-agreement"
@@ -4531,8 +4474,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: guardianship-agreement"
@@ -4559,8 +4501,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: health-care-directive"
@@ -4691,8 +4632,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hipaa-authorization-form"
@@ -4739,8 +4679,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: home-improvement-contract"
@@ -4767,8 +4706,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: horse-boarding-agreement"
@@ -4795,8 +4733,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hotel-agreement"
@@ -4823,8 +4760,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hunting-lease-agreement"
@@ -4851,8 +4787,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: immigration-affidavit"
@@ -5040,8 +4975,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: influencer-agreement"
@@ -5064,8 +4998,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: insurance-claim-form"
@@ -5092,8 +5025,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: international-trade-agreement"
@@ -5120,8 +5052,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: internship-agreement"
@@ -5192,7 +5123,9 @@
       "errors": [
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
-        "Missing required section: \"IMPORTANT LEGAL NOTICE\""
+        "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
+        "Variable parity mismatch (missing in ES: account_name, account_number, check_payment_address, early_payment_date, early_payment_discount_rate, invoice_notes, late_payment_fee_rate, online_payment_url, routing_number, swift_code, terms_and_conditions; missing in EN: accepted_payment_methods, bank_account_number, bank_routing_number, bank_swift, customer_message, online_payment_link, partial_payment_terms, payment_instructions, payment_reference, refund_policy, return_policy).",
+        "Section count mismatch: EN has 16, ES has 17."
       ],
       "warnings": [
         "Inconsistent markdown formatting detected"
@@ -5334,8 +5267,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: job-application-form"
@@ -5362,8 +5294,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: joint-living-trust"
@@ -5437,8 +5368,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: landscaping-contract"
@@ -5463,7 +5393,10 @@
       "errors": [
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
-        "Section numbering is not sequential"
+        "Section numbering is not sequential",
+        "Variable parity mismatch (missing in ES: amount, beneficiary_name, children_percentage, contingent_beneficiary_1, contingent_beneficiary_2, contingent_beneficiary_3, digital_asset_instructions, funeral_instructions, page_count, property_address, property_description, spouse_percentage, successor_trustee_address, survivorship_period, trust_age, trustee_address, ultimate_beneficiary, witness_1_address, witness_1_city, witness_1_name, witness_1_phone, witness_1_state, witness_1_zip, witness_2_address, witness_2_city, witness_2_name, witness_2_phone, witness_2_state, witness_2_zip; missing in EN: community_property_clause, digital_assets_clause, execution_city, execution_state, no_contest_clause, notary_commission_expiration, notary_commission_number, notary_date, notary_name, optional_annexes, organ_donation_clause, pet_provisions, relationship, residuary_contingency_plan, share_percentage, special_provisions, specific_bequests, spousal_rights_clause, trust_name, trust_termination_event, trust_terms, witness_one_address, witness_one_date, witness_one_name, witness_three_address, witness_three_date, witness_three_name, witness_two_address, witness_two_date, witness_two_name).",
+        "Section count mismatch: EN has 18, ES has 14.",
+        "Section numbering mismatch: EN 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 15, ES none."
       ],
       "warnings": [
         "Inconsistent markdown formatting detected"
@@ -5667,8 +5600,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-amendment"
@@ -5691,8 +5623,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-renewal-agreement"
@@ -5719,8 +5650,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-termination-letter"
@@ -5774,8 +5704,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: letter-of-intent"
@@ -5826,8 +5755,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: licensing-agreement-general"
@@ -5854,8 +5782,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: licensing-agreement"
@@ -5905,8 +5832,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: livestock-purchase-agreement"
@@ -5933,8 +5859,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: living-trust-amendment"
@@ -6291,8 +6216,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: loan-agreement"
@@ -6321,8 +6245,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: loan-modification-agreement"
@@ -6427,8 +6350,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: maritime-charter-agreement"
@@ -6557,8 +6479,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mechanics-lien-waiver"
@@ -6585,8 +6506,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mechanics-lien"
@@ -6677,8 +6597,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: medical-consent-form"
@@ -6894,8 +6813,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mining-agreement"
@@ -6922,8 +6840,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mining-lease-agreement"
@@ -6977,8 +6894,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mortgage-agreement"
@@ -7032,8 +6948,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: music-licensing-agreement"
@@ -7136,7 +7051,10 @@
       "path": "C:\\dev\\123legaldoc\\public\\templates\\en\\non-compete-agreement.md",
       "isValid": false,
       "errors": [
-        "Missing required section: \"## Signatures\""
+        "Missing required section: \"## Signatures\"",
+        "Variable parity mismatch (missing in ES: additional_damage_remedies, benefits_details, compensation_amount, compensation_conditions, compensation_payment_terms, compensation_period, jurisdiction, liquidated_damage_amount, permitted_activities, vendor_restriction_details, vendor_restriction_period; missing in EN: company_obligations, employee_declarations, ip_assignment_clause, notary_commission_expiration, notary_name, waiver_clause).",
+        "Section count mismatch: EN has 16, ES has 13.",
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ES 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12."
       ],
       "warnings": [
         "Inconsistent markdown formatting detected"
@@ -7236,8 +7154,7 @@
         "Missing required section: \"## Signatures\"",
         "Variable parity mismatch (missing in ES: additional_obligations, additional_terms, agreement_duration, authorized_recipients, confidential_information_types, confidentiality_survival_period, decision_timeline, disclosing_party_address, disclosing_party_contact, disclosing_party_name, disclosing_party_representative, disclosing_party_title, disclosing_party_type, disclosure_purpose, effective_date, evaluation_period_duration, governing_state, jurisdiction, liquidated_damages_amount, prohibited_use_restrictions, receiving_party_address, receiving_party_contact, receiving_party_name, receiving_party_representative, receiving_party_title, receiving_party_type, termination_notice_period).",
         "Section count mismatch: EN has 14, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: non-disclosure-agreement",
@@ -7318,8 +7235,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: nonprofit-bylaws"
@@ -7346,8 +7262,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: notarization-request"
@@ -7455,8 +7370,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: notice-to-proceed"
@@ -7483,8 +7397,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: offer-letter"
@@ -7534,8 +7447,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: oil-gas-lease-agreement"
@@ -7562,8 +7474,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: oil-gas-lease"
@@ -7961,8 +7872,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: patent-license-agreement"
@@ -7989,8 +7899,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: patent-licensing-agreement"
@@ -8017,8 +7926,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: payment-bond"
@@ -8072,8 +7980,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: performance-bond"
@@ -8100,8 +8007,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-care-agreement"
@@ -8128,8 +8034,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-loan-agreement"
@@ -8156,8 +8061,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-training-agreement"
@@ -8211,8 +8115,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pet-agreement"
@@ -8239,8 +8142,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pet-custody-agreement"
@@ -8294,8 +8196,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: photography-release"
@@ -8349,8 +8250,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pour-over-will"
@@ -8377,8 +8277,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: power-of-attorney-for-child"
@@ -8497,7 +8396,10 @@
       "path": "C:\\dev\\123legaldoc\\public\\templates\\en\\prenuptial-agreement.md",
       "isValid": false,
       "errors": [
-        "Missing required section: \"## Signatures\""
+        "Missing required section: \"## Signatures\"",
+        "Variable parity mismatch (missing in ES: amendment_process, arbitration_rules, attorney_fees_provision, business_division_terms, commingling_provisions, credit_protection_provisions, existing_children_support, future_children_provisions, future_real_estate_provisions, inheritance_provisions, jurisdiction, legal_counsel_waiver_terms, life_insurance_provisions, marital_debt_allocation, marital_property_division_method, marital_residence_provisions, marriage_deadline, mediation_location, party_1_attorney, party_1_attorney_bar, party_1_business_interests, party_1_children, party_1_separate_property, party_2_attorney, party_2_attorney_bar, party_2_business_interests, party_2_children, party_2_separate_property, residence_division_terms, retirement_benefits_provisions, retirement_division_terms, spousal_support_provisions, support_duration, support_maximum, support_modification_terms, vehicle_division_terms; missing in EN: additional_financial_statements, counsel_statements, dispute_resolution_clause, household_expense_clause, life_insurance_clause, marital_residence_clause, notary_commission_expiration, notary_commission_number, notary_date, notary_name, real_property_clause, retirement_accounts_clause, spousal_support_clause, witness_one_date, witness_one_name, witness_two_date, witness_two_name).",
+        "Section count mismatch: EN has 19, ES has 15.",
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ES 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14."
       ],
       "warnings": [
         "Inconsistent markdown formatting detected"
@@ -8686,8 +8588,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: product-liability-waiver"
@@ -8714,8 +8615,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: professional-liability-waiver"
@@ -8826,8 +8726,7 @@
         "Missing required variable: \"{{payment_schedule}}\"",
         "Variable parity mismatch (missing in ES: additionalBorrowerSignatures, additionalCovenants, additionalDefaultEvents, additionalRemedies, amountFinanced, apr, borrowerCity, borrowerEmail, borrowerPhone, borrowerPrintName, borrowerState, borrowerTaxId, borrowerTitle, borrowerZip, coSignerAcknowledgment, coSignerAddress, coSignerName, coSignerPrintName, coSignerRelationship, collateralDescription, collateralValue, compoundingFrequency, dayCountBasis, defaultInterestRate, disbursementDate, disbursementMethod, financeCharge, firstPaymentDate, gracePeriod, installmentAmount, insuranceRequirements, interestAccrualStartDate, interestType, jurisdiction, lateFeeAmount, lateFeeCalculation, lateFeePercentage, lenderCity, lenderEmail, lenderPhone, lenderPrintName, lenderState, lenderTitle, lenderZip, loanPurpose, maxLateFee, notaryAppearingParties, notaryCounty, notaryDate, notaryExpiration, notaryName, notaryState, noteDate, paymentAddress, paymentDueDay, paymentFrequency, paymentMethod, paymentRecordTable, paymentSchedule, prepaymentAllowed, prepaymentApplication, prepaymentPenalty, prepaymentTerms, principalAmountWords, reportingRequirements, rightToCancelNotice, securityAgreementRequired, securityType, specialConditions, stateSpecificDisclosures, totalPayments, truthInLendingDisclosures, uccFilingRequired; missing in EN: date, lateFeeRate, placeOfExecution, repaymentTerms).",
         "Section count mismatch: EN has 16, ES has 4.",
-        "Section numbering mismatch: EN none, ES 1, 2, 3, 4.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN none, ES 1, 2, 3, 4."
       ],
       "warnings": [
         "Inconsistent markdown formatting detected"
@@ -9229,8 +9128,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: real-estate-purchase-agreement"
@@ -9280,8 +9178,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: recording-artist-agreement"
@@ -9362,8 +9259,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: remodeling-contract"
@@ -9444,8 +9340,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: rental-agreement"
@@ -9468,8 +9363,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: research-agreement"
@@ -9543,8 +9437,7 @@
         "Missing required section: \"## Signatures\"",
         "Variable parity mismatch (missing in ES: additional_eviction_grounds, additional_lease_terms, agreement_date, application_fee, authorized_occupants, city, cleaning_fee, deposit_location, deposit_return_timeframe, early_termination_fee, early_termination_notice, email, emergency_contact, end_of_lease_procedure, entry_notice_period, fixture_installation_rules, governing_state, included_appliances, insurance_minimum_amount, internet_cable_arrangement, landlord_address, landlord_email, landlord_maintenance_items, landlord_name, landlord_phone, late_fee_amount, late_fee_grace_period, lead_paint_disclosure, lease_duration, lease_end_date, lease_start_date, lease_type, liability_provisions, max_occupants, modification_policy, monthly_rent, move_out_inspection_procedure, move_out_notice, name, noise_restrictions, occupancy_restrictions, other_fees, other_required_disclosures, parking_rules, parking_spaces, payment_method, pet_deposit, pet_policy_details, pet_restrictions, phone, prohibited_activities, property_address, property_description, rent_due_date, repair_request_method, repair_response_time, security_deposit, smoking_policy, state, tenant_maintenance_duties, tenant_names, unit_number, utilities_included, utilities_tenant_pays, visitor_parking, zip_code).",
         "Section count mismatch: EN has 15, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: residential-lease-agreement",
@@ -9851,8 +9744,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: retirement-plan-agreement"
@@ -9879,8 +9771,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: revocation-of-power-of-attorney"
@@ -9934,8 +9825,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: ride-sharing-agreement"
@@ -9962,8 +9852,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: roofing-contract"
@@ -9990,8 +9879,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: room-rental-agreement"
@@ -10018,8 +9906,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: roommate-agreement"
@@ -10151,8 +10038,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sales-agreement"
@@ -10179,8 +10065,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: security-agreement"
@@ -10370,8 +10255,7 @@
         "Missing main header (# Title)",
         "Variable parity mismatch (missing in ES: apology_terms, case_number, claim_summary_reference, corrective_actions, cure_period_days, dismissal_filing_days, dispute_description, effective_date, forum_name, governing_state, installment_1_amount, installment_1_due_date, installment_1_notes, installment_1_number, installment_2_amount, installment_2_due_date, installment_2_notes, installment_2_number, installment_3_amount, installment_3_due_date, installment_3_notes, installment_3_number, late_interest_rate, party_a_name, party_a_signature_date, party_a_signer_name, party_a_signer_title, party_b_name, party_b_signature_date, party_b_signer_name, party_b_signer_title, payment_due_date, payment_method, payment_recipient_details, property_transfer_terms, settlement_amount, third_party_release_section, venue_county, venue_state).",
         "Section count mismatch: EN has 9, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, ES none.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: settlement-agreement"
@@ -10454,8 +10338,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: severance-agreement"
@@ -10507,8 +10390,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: simple-will"
@@ -10617,8 +10499,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: social-media-management-agreement"
@@ -10669,8 +10550,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: software-license-agreement"
@@ -10717,8 +10597,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: solar-energy-agreement"
@@ -10745,8 +10624,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sponsorship-agreement"
@@ -10769,8 +10647,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sports-agreement"
@@ -10797,8 +10674,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: startup-equity-agreement"
@@ -10957,8 +10833,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: student-loan-agreement"
@@ -10985,8 +10860,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: subcontractor-agreement"
@@ -11013,8 +10887,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sublease-agreement"
@@ -11065,8 +10938,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: talent-agreement"
@@ -11093,8 +10965,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: talent-management-agreement"
@@ -11121,8 +10992,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tax-preparation-agreement"
@@ -11200,8 +11070,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: telemedicine-agreement"
@@ -11228,8 +11097,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tenant-maintenance-request"
@@ -11284,8 +11152,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: termination-letter"
@@ -11314,8 +11181,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: timber-sale-agreement"
@@ -11399,8 +11265,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: trademark-license-agreement"
@@ -11423,8 +11288,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: transportation-service-agreement"
@@ -11451,8 +11315,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: travel-insurance-agreement"
@@ -11533,8 +11396,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tutoring-agreement"
@@ -11588,8 +11450,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: vacation-rental-agreement"
@@ -11682,8 +11543,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: vehicle-lease-agreement"
@@ -11784,8 +11644,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: volunteer-agreement"
@@ -11812,8 +11671,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: warehouse-agreement"
@@ -11894,8 +11752,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: water-rights-agreement"
@@ -11949,8 +11806,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: website-development-agreement"
@@ -11997,8 +11853,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: work-from-home-agreement"
@@ -12397,8 +12252,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: affidavit"
@@ -12425,8 +12279,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: affiliate-marketing-agreement"
@@ -12453,8 +12306,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: agricultural-agreement"
@@ -12555,8 +12407,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: architect-contract"
@@ -12694,8 +12545,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: articles-of-incorporation"
@@ -12745,8 +12595,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: athletic-scholarship-agreement"
@@ -12773,8 +12622,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: auto-repair-agreement"
@@ -12801,8 +12649,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: automotive-service-agreement"
@@ -12829,8 +12676,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: aviation-charter-agreement"
@@ -12857,8 +12703,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bar-agreement"
@@ -12912,8 +12757,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bid-proposal"
@@ -13065,8 +12909,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: boat-bill-of-sale"
@@ -13089,8 +12932,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: bookkeeping-services-agreement"
@@ -13117,8 +12959,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: brand-ambassador-agreement"
@@ -13197,8 +13038,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: business-contract"
@@ -13370,8 +13210,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: certificate-substantial-completion"
@@ -13452,8 +13291,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-care-contract"
@@ -13711,8 +13549,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-support-agreement"
@@ -13739,8 +13576,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: child-travel-consent"
@@ -13767,8 +13603,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: clinical-trial-agreement"
@@ -13795,8 +13630,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cloud-services-agreement"
@@ -13819,8 +13653,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: coaching-agreement"
@@ -13847,8 +13680,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: codicil-to-will"
@@ -13875,8 +13707,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cohabitation-agreement"
@@ -14146,8 +13977,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: commission-agreement"
@@ -14229,8 +14059,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: consignment-agreement"
@@ -14253,8 +14082,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-bid-form"
@@ -14281,8 +14109,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-contract"
@@ -14305,8 +14132,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: construction-management-agreement"
@@ -14333,8 +14159,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: consulting-agreement"
@@ -14483,8 +14308,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: copyright-assignment-agreement"
@@ -14512,8 +14336,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: copyright-assignment"
@@ -14590,8 +14413,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: court-filing-document"
@@ -14700,8 +14522,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: cryptocurrency-agreement"
@@ -14755,8 +14576,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: data-processing-agreement"
@@ -14922,8 +14742,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: digital-asset-agreement"
@@ -15266,8 +15085,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: donation-agreement"
@@ -15348,8 +15166,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: ecommerce-terms-of-service"
@@ -15376,8 +15193,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: education-trust"
@@ -15404,8 +15220,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: elder-care-agreement"
@@ -15459,8 +15274,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employee-evaluation-form"
@@ -15483,8 +15297,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employee-handbook"
@@ -15564,8 +15377,7 @@
         "Too few variables: 0 (minimum: 5)",
         "Variable parity mismatch (missing in ES: additional_expectations, additional_non_compete_terms, annual_salary, arbitration_location, break_schedule, company_name, company_notice_period, company_representative_name, company_representative_title, confidential_information_types, department, employee_name, employee_notice_period, employment_classification, employment_type, final_pay_timeframe, flsa_status, geographic_restriction, governing_state, gross_pay_per_period, health_insurance_details, hourly_rate, job_description, non_compete_duration, non_solicitation_duration, other_benefits, overtime_rate, overtime_threshold, pay_frequency, position_title, pto_details, remote_work_policy, retirement_plan_details, review_frequency, sick_leave_details, sign_date, standard_hours, start_date, supervisor_name, termination_for_cause_reasons, work_days, work_location, work_schedule).",
         "Section count mismatch: EN has 11, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: employment-contract"
@@ -15806,8 +15618,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: employment-verification-letter"
@@ -15861,8 +15672,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: environmental-agreement"
@@ -15889,8 +15699,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: equipment-rental-agreement"
@@ -15964,8 +15773,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: event-planning-contract"
@@ -16097,8 +15905,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: farm-lease-agreement"
@@ -16125,8 +15932,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: film-production-agreement"
@@ -16153,8 +15959,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: fitness-waiver"
@@ -16181,8 +15986,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: food-truck-agreement"
@@ -16237,8 +16041,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: franchise-agreement"
@@ -16261,8 +16064,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: franchise-disclosure-agreement"
@@ -16313,8 +16115,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: gaming-agreement"
@@ -16341,8 +16142,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: general-contractor-agreement"
@@ -16392,8 +16192,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: general-liability-waiver"
@@ -16420,8 +16219,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: government-contract-agreement"
@@ -16448,8 +16246,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: guardianship-agreement"
@@ -16476,8 +16273,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: health-care-directive"
@@ -16590,8 +16386,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hipaa-authorization-form"
@@ -16638,8 +16433,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: home-improvement-contract"
@@ -16666,8 +16460,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: horse-boarding-agreement"
@@ -16694,8 +16487,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hotel-agreement"
@@ -16722,8 +16514,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: hunting-lease-agreement"
@@ -16750,8 +16541,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: immigration-affidavit"
@@ -16940,8 +16730,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: influencer-agreement"
@@ -16964,8 +16753,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: insurance-claim-form"
@@ -16992,8 +16780,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: international-trade-agreement"
@@ -17020,8 +16807,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: internship-agreement"
@@ -17093,17 +16879,16 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Missing main header (# Title)"
+        "Missing main header (# Title)",
+        "Variable parity mismatch (missing in ES: account_name, account_number, check_payment_address, early_payment_date, early_payment_discount_rate, invoice_notes, late_payment_fee_rate, online_payment_url, routing_number, swift_code, terms_and_conditions; missing in EN: accepted_payment_methods, bank_account_number, bank_routing_number, bank_swift, customer_message, online_payment_link, partial_payment_terms, payment_instructions, payment_reference, refund_policy, return_policy).",
+        "Section count mismatch: EN has 16, ES has 17."
       ],
-      "warnings": [
-        "Inconsistent markdown formatting detected"
-      ],
-      "contentHash": "e2eb951317401b361baef9cab6d3fb35",
+      "warnings": [],
+      "contentHash": "92c304274670b95b3c277f1100b1dc0d",
       "documentType": "invoice",
       "language": "es",
       "variables": [
-        "account_name",
-        "account_number",
+        "accepted_payment_methods",
         "additional_attachments",
         "additional_items",
         "additional_tax_amount",
@@ -17111,7 +16896,10 @@
         "attachment_1",
         "attachment_2",
         "attachment_3",
+        "bank_account_number",
         "bank_name",
+        "bank_routing_number",
+        "bank_swift",
         "billing_contact_email",
         "billing_contact_name",
         "billing_contact_phone",
@@ -17130,7 +16918,6 @@
         "business_tax_id",
         "business_website",
         "business_zip",
-        "check_payment_address",
         "client_address",
         "client_city",
         "client_country",
@@ -17143,19 +16930,17 @@
         "commission_rate",
         "created_by",
         "customer_id",
+        "customer_message",
         "discount_amount",
         "discount_description",
         "discount_percentage",
         "dispute_contact",
         "dispute_period",
         "due_date",
-        "early_payment_date",
-        "early_payment_discount_rate",
         "federal_tax_id",
         "governing_state",
         "handling_amount",
         "invoice_date",
-        "invoice_notes",
         "invoice_number",
         "item_1_amount",
         "item_1_description",
@@ -17177,17 +16962,20 @@
         "item_5_description",
         "item_5_quantity",
         "item_5_rate",
-        "late_payment_fee_rate",
-        "online_payment_url",
+        "online_payment_link",
         "other_fees_breakdown",
         "other_fees_total",
+        "partial_payment_terms",
+        "payment_instructions",
+        "payment_reference",
         "payment_terms",
         "professional_license_information",
         "project_name",
         "purchase_order_number",
         "reference_number",
+        "refund_policy",
         "remittance_address",
-        "routing_number",
+        "return_policy",
         "sales_rep_name",
         "sales_tax_amount",
         "sales_territory",
@@ -17195,37 +16983,36 @@
         "shipping_method",
         "state_of_incorporation",
         "subtotal",
-        "swift_code",
         "tax_jurisdiction",
         "tax_rate",
-        "terms_and_conditions",
         "total_amount_due",
         "total_shipping_amount",
         "total_tax_amount",
         "warranty_policy"
       ],
       "sectionHeadings": [
-        "Bill To:",
-        "Bill From:",
-        "Project/Order Information",
-        "Items/Services",
-        "Cost Breakdown",
-        "Total Amount Due",
-        "Payment Information",
-        "Additional Information",
-        "Contact Information",
-        "Business Information",
-        "Attachments",
-        "For Internal Use Only",
-        "Payment Record",
-        "Remittance Advice",
-        "Important Legal Notices",
-        "_Invoice generated by 123LegalDoc - Professional Legal Document Platform_"
+        "Cliente",
+        "Emisor",
+        "Información del proyecto o pedido",
+        "Conceptos y servicios",
+        "Desglose de costos",
+        "Importe total a pagar",
+        "Información de pago",
+        "Mensaje al cliente",
+        "Políticas y condiciones",
+        "Información de contacto",
+        "Información empresarial",
+        "Anexos",
+        "Uso interno",
+        "Registro de pagos",
+        "Talón de remisión",
+        "Avisos legales importantes",
+        "_Factura generada por 123LegalDoc - Plataforma Profesional de Documentos Legales_"
       ],
       "numberedSections": [],
-      "variableCount": 112,
+      "variableCount": 109,
       "sectionCount": 0,
-      "wordCount": 796
+      "wordCount": 738
     },
     {
       "path": "C:\\dev\\123legaldoc\\public\\templates\\es\\job-application-form.md",
@@ -17235,8 +17022,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: job-application-form"
@@ -17263,8 +17049,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: joint-living-trust"
@@ -17338,8 +17123,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: landscaping-contract"
@@ -17364,42 +17148,49 @@
       "errors": [
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
+        "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Missing main header (# Title)",
-        "Section numbering is not sequential"
+        "Variable parity mismatch (missing in ES: amount, beneficiary_name, children_percentage, contingent_beneficiary_1, contingent_beneficiary_2, contingent_beneficiary_3, digital_asset_instructions, funeral_instructions, page_count, property_address, property_description, spouse_percentage, successor_trustee_address, survivorship_period, trust_age, trustee_address, ultimate_beneficiary, witness_1_address, witness_1_city, witness_1_name, witness_1_phone, witness_1_state, witness_1_zip, witness_2_address, witness_2_city, witness_2_name, witness_2_phone, witness_2_state, witness_2_zip; missing in EN: community_property_clause, digital_assets_clause, execution_city, execution_state, no_contest_clause, notary_commission_expiration, notary_commission_number, notary_date, notary_name, optional_annexes, organ_donation_clause, pet_provisions, relationship, residuary_contingency_plan, share_percentage, special_provisions, specific_bequests, spousal_rights_clause, trust_name, trust_termination_event, trust_terms, witness_one_address, witness_one_date, witness_one_name, witness_three_address, witness_three_date, witness_three_name, witness_two_address, witness_two_date, witness_two_name).",
+        "Section count mismatch: EN has 18, ES has 14.",
+        "Section numbering mismatch: EN 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 15, ES none."
       ],
-      "warnings": [
-        "Inconsistent markdown formatting detected"
-      ],
-      "contentHash": "876deeec72f8af414fbf8e7107f62a7a",
+      "warnings": [],
+      "contentHash": "cf1adbb43b0930d4dd56af2aeb70da66",
       "documentType": "last-will-testament",
       "language": "es",
       "variables": [
-        "amount",
-        "beneficiary_name",
         "birth_date",
-        "children_percentage",
-        "contingent_beneficiary_1",
-        "contingent_beneficiary_2",
-        "contingent_beneficiary_3",
+        "community_property_clause",
         "county",
-        "digital_asset_instructions",
+        "digital_assets_clause",
+        "execution_city",
         "execution_date",
+        "execution_state",
         "executor_address",
         "executor_email",
         "executor_name",
         "executor_phone",
         "executor_relationship",
-        "funeral_instructions",
         "governing_state",
         "guardian_address",
         "guardian_name",
         "name",
-        "page_count",
-        "property_address",
-        "property_description",
+        "no_contest_clause",
+        "notary_commission_expiration",
+        "notary_commission_number",
+        "notary_date",
+        "notary_name",
+        "optional_annexes",
+        "organ_donation_clause",
+        "pet_provisions",
+        "relationship",
         "residence_duration",
+        "residuary_contingency_plan",
+        "share_percentage",
+        "special_provisions",
+        "specific_bequests",
+        "spousal_rights_clause",
         "spouse_name",
-        "spouse_percentage",
         "state",
         "successor_executor_address",
         "successor_executor_email",
@@ -17408,9 +17199,7 @@
         "successor_executor_relationship",
         "successor_guardian_address",
         "successor_guardian_name",
-        "successor_trustee_address",
         "successor_trustee_name",
-        "survivorship_period",
         "testator_address",
         "testator_city",
         "testator_county",
@@ -17419,60 +17208,41 @@
         "testator_ssn",
         "testator_state",
         "testator_zip",
-        "trust_age",
+        "trust_name",
         "trust_termination_age",
-        "trustee_address",
+        "trust_termination_event",
+        "trust_terms",
         "trustee_name",
-        "ultimate_beneficiary",
-        "witness_1_address",
-        "witness_1_city",
-        "witness_1_name",
-        "witness_1_phone",
-        "witness_1_state",
-        "witness_1_zip",
-        "witness_2_address",
-        "witness_2_city",
-        "witness_2_name",
-        "witness_2_phone",
-        "witness_2_state",
-        "witness_2_zip"
+        "witness_one_address",
+        "witness_one_date",
+        "witness_one_name",
+        "witness_three_address",
+        "witness_three_date",
+        "witness_three_name",
+        "witness_two_address",
+        "witness_two_date",
+        "witness_two_name"
       ],
       "sectionHeadings": [
-        "TESTATOR IDENTIFICATION",
-        "ARTICLE I: REVOCATION CLAUSE",
-        "ARTICLE II: FAMILY INFORMATION AND BENEFICIARY DESIGNATIONS",
-        "2. Family Information",
-        "ARTICLE III: EXECUTOR APPOINTMENT WITH COMPREHENSIVE POWERS",
-        "4. Guardian for Minor Children",
-        "5. Specific Bequests",
-        "ARTICLE VI: RESIDUARY CLAUSE (ESSENTIAL PROVISION)",
-        "7. Survivorship Clause",
-        "8. Per Stirpes Distribution",
-        "9. Trust Provisions for Minor Beneficiaries",
-        "10. Digital Assets",
-        "11. Debts and Taxes",
-        "12. No Contest Clause",
-        "13. Miscellaneous Provisions",
-        "ARTICLE XIV: EXECUTION AND ATTESTATION WITH PROPER WITNESS SIGNATURES",
-        "15. Notarization (if required by state law)",
-        "_Template generated by 123LegalDoc - Professional Legal Document Platform_"
+        "IDENTIFICACIÓN DE LA PERSONA TESTADORA",
+        "ARTÍCULO I: REVOCACIÓN",
+        "ARTÍCULO II: INFORMACIÓN FAMILIAR Y BENEFICIARIOS",
+        "ARTÍCULO III: NOMBRAMIENTO DE ALBACEA Y FACULTADES",
+        "ARTÍCULO IV: DISPOSICIONES DE BIENES",
+        "ARTÍCULO V: TUTELA DE HIJOS MENORES",
+        "ARTÍCULO VI: FIDEICOMISOS TESTAMENTARIOS",
+        "ARTÍCULO VII: IMPUESTOS Y GASTOS",
+        "ARTÍCULO VIII: DISPOSICIONES ADICIONALES",
+        "ARTÍCULO IX: INTERPRETACIÓN",
+        "ARTÍCULO X: FIRMA Y TESTIGOS",
+        "ARTÍCULO XI: DECLARACIÓN NOTARIAL",
+        "ANEXOS Y DISPOSICIONES OPCIONALES",
+        "_Documento generado por 123LegalDoc - Plataforma Profesional de Documentos Legales_"
       ],
-      "numberedSections": [
-        "2",
-        "4",
-        "5",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "15"
-      ],
-      "variableCount": 90,
-      "sectionCount": 11,
-      "wordCount": 2214
+      "numberedSections": [],
+      "variableCount": 77,
+      "sectionCount": 0,
+      "wordCount": 1069
     },
     {
       "path": "C:\\dev\\123legaldoc\\public\\templates\\es\\late-rent-notice.md",
@@ -17566,8 +17336,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-amendment"
@@ -17590,8 +17359,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-renewal-agreement"
@@ -17618,8 +17386,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: lease-termination-letter"
@@ -17673,8 +17440,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: letter-of-intent"
@@ -17725,8 +17491,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: licensing-agreement-general"
@@ -17753,8 +17518,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: licensing-agreement"
@@ -17804,8 +17568,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: livestock-purchase-agreement"
@@ -17832,8 +17595,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: living-trust-amendment"
@@ -18193,8 +17955,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: loan-agreement"
@@ -18217,8 +17978,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: loan-modification-agreement"
@@ -18323,8 +18083,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: maritime-charter-agreement"
@@ -18453,8 +18212,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mechanics-lien-waiver"
@@ -18481,8 +18239,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mechanics-lien"
@@ -18535,8 +18292,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: medical-consent-form"
@@ -18746,8 +18502,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mining-agreement"
@@ -18774,8 +18529,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mining-lease-agreement"
@@ -18829,8 +18583,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: mortgage-agreement"
@@ -18884,8 +18637,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: music-licensing-agreement"
@@ -18989,38 +18741,38 @@
       "isValid": false,
       "errors": [
         "Missing required section: \"## Signatures\"",
-        "Missing main header (# Title)"
+        "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
+        "Content does not match expected document type: non-compete-agreement",
+        "Content appears to be a lease-agreement instead of non-compete-agreement",
+        "Missing main header (# Title)",
+        "Variable parity mismatch (missing in ES: additional_damage_remedies, benefits_details, compensation_amount, compensation_conditions, compensation_payment_terms, compensation_period, jurisdiction, liquidated_damage_amount, permitted_activities, vendor_restriction_details, vendor_restriction_period; missing in EN: company_obligations, employee_declarations, ip_assignment_clause, notary_commission_expiration, notary_name, waiver_clause).",
+        "Section count mismatch: EN has 16, ES has 13.",
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ES 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12."
       ],
-      "warnings": [
-        "Inconsistent markdown formatting detected"
-      ],
-      "contentHash": "1ec284a7dfdd71f379db499579c31747",
+      "warnings": [],
+      "contentHash": "d774e8f6b2dc4ec46a42d5d024515045",
       "documentType": "non-compete-agreement",
       "language": "es",
       "variables": [
         "additional_confidential_info",
         "additional_consideration_details",
-        "additional_damage_remedies",
         "agreement_date",
-        "benefits_details",
         "business_sale_effect",
         "cause_termination_effect",
         "company_address",
         "company_entity_type",
         "company_name",
         "company_notice_address",
+        "company_obligations",
         "company_signatory_name",
         "company_signatory_title",
         "company_state",
-        "compensation_amount",
-        "compensation_conditions",
-        "compensation_payment_terms",
-        "compensation_period",
         "competitive_business_definition",
         "contractor_services",
         "county",
         "customer_nonsolicitation_period",
         "employee_address",
+        "employee_declarations",
         "employee_name",
         "employee_nonsolicitation_period",
         "employee_notice_address",
@@ -19029,37 +18781,33 @@
         "geographic_restrictions",
         "governing_state",
         "involuntary_termination_effect",
-        "jurisdiction",
-        "liquidated_damage_amount",
+        "ip_assignment_clause",
+        "notary_commission_expiration",
+        "notary_name",
         "passive_investment_threshold",
-        "permitted_activities",
         "restricted_period_duration",
         "restricted_territory_definition",
         "service_start_date",
         "specific_restrictions",
         "state",
         "state_law_requirements",
-        "vendor_restriction_details",
-        "vendor_restriction_period",
+        "waiver_clause",
         "witness_name"
       ],
       "sectionHeadings": [
-        "1. Background and Recitals",
-        "2. Definitions",
-        "3. Non-Compete Restrictions",
-        "4. Non-Solicitation Provisions",
-        "5. Confidentiality and Trade Secrets",
-        "6. Exceptions and Permitted Activities",
-        "7. Enforcement and Remedies",
-        "8. Reasonableness and Modification",
-        "9. Consideration and Compensation",
-        "10. Acknowledgments and Representations",
-        "11. General Provisions",
-        "12. Special Circumstances",
-        "13. State-Specific Provisions",
-        "14. Signatures",
-        "15. Witness/Notarization",
-        "_Template generated by 123LegalDoc - Professional Legal Document Platform_"
+        "1. Antecedentes",
+        "2. Definiciones",
+        "3. Restricciones de no competencia",
+        "4. No solicitación",
+        "5. Confidencialidad y propiedad intelectual",
+        "6. Compromisos adicionales",
+        "7. Recursos y cumplimiento",
+        "8. Terminación y eventos especiales",
+        "9. Disposiciones estatales específicas",
+        "10. Disposiciones generales",
+        "11. Ejecución",
+        "12. Testigos y notarización",
+        "_Documento generado por 123LegalDoc - Plataforma Profesional de Documentos Legales_"
       ],
       "numberedSections": [
         "1",
@@ -19073,14 +18821,11 @@
         "9",
         "10",
         "11",
-        "12",
-        "13",
-        "14",
-        "15"
+        "12"
       ],
-      "variableCount": 84,
-      "sectionCount": 15,
-      "wordCount": 1770
+      "variableCount": 60,
+      "sectionCount": 12,
+      "wordCount": 1064
     },
     {
       "path": "C:\\dev\\123legaldoc\\public\\templates\\es\\non-disclosure-agreement.md",
@@ -19093,8 +18838,7 @@
         "Too few variables: 0 (minimum: 5)",
         "Variable parity mismatch (missing in ES: additional_obligations, additional_terms, agreement_duration, authorized_recipients, confidential_information_types, confidentiality_survival_period, decision_timeline, disclosing_party_address, disclosing_party_contact, disclosing_party_name, disclosing_party_representative, disclosing_party_title, disclosing_party_type, disclosure_purpose, effective_date, evaluation_period_duration, governing_state, jurisdiction, liquidated_damages_amount, prohibited_use_restrictions, receiving_party_address, receiving_party_contact, receiving_party_name, receiving_party_representative, receiving_party_title, receiving_party_type, termination_notice_period).",
         "Section count mismatch: EN has 14, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: non-disclosure-agreement"
@@ -19117,8 +18861,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: nonprofit-bylaws"
@@ -19145,8 +18888,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: notarization-request"
@@ -19254,8 +18996,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: notice-to-proceed"
@@ -19282,8 +19023,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: offer-letter"
@@ -19333,8 +19073,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: oil-gas-lease-agreement"
@@ -19361,8 +19100,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: oil-gas-lease"
@@ -19761,8 +19499,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: patent-license-agreement"
@@ -19789,8 +19526,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: patent-licensing-agreement"
@@ -19817,8 +19553,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: payment-bond"
@@ -19872,8 +19607,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: performance-bond"
@@ -19900,8 +19634,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-care-agreement"
@@ -19928,8 +19661,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-loan-agreement"
@@ -19956,8 +19688,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: personal-training-agreement"
@@ -20011,8 +19742,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pet-agreement"
@@ -20039,8 +19769,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pet-custody-agreement"
@@ -20094,8 +19823,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: photography-release"
@@ -20149,8 +19877,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: pour-over-will"
@@ -20177,8 +19904,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: power-of-attorney-for-child"
@@ -20227,87 +19953,66 @@
       "isValid": false,
       "errors": [
         "Missing required section: \"## Signatures\"",
-        "Missing main header (# Title)"
+        "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
+        "Missing main header (# Title)",
+        "Variable parity mismatch (missing in ES: amendment_process, arbitration_rules, attorney_fees_provision, business_division_terms, commingling_provisions, credit_protection_provisions, existing_children_support, future_children_provisions, future_real_estate_provisions, inheritance_provisions, jurisdiction, legal_counsel_waiver_terms, life_insurance_provisions, marital_debt_allocation, marital_property_division_method, marital_residence_provisions, marriage_deadline, mediation_location, party_1_attorney, party_1_attorney_bar, party_1_business_interests, party_1_children, party_1_separate_property, party_2_attorney, party_2_attorney_bar, party_2_business_interests, party_2_children, party_2_separate_property, residence_division_terms, retirement_benefits_provisions, retirement_division_terms, spousal_support_provisions, support_duration, support_maximum, support_modification_terms, vehicle_division_terms; missing in EN: additional_financial_statements, counsel_statements, dispute_resolution_clause, household_expense_clause, life_insurance_clause, marital_residence_clause, notary_commission_expiration, notary_commission_number, notary_date, notary_name, real_property_clause, retirement_accounts_clause, spousal_support_clause, witness_one_date, witness_one_name, witness_two_date, witness_two_name).",
+        "Section count mismatch: EN has 19, ES has 15.",
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ES 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14."
       ],
-      "warnings": [
-        "Inconsistent markdown formatting detected"
-      ],
-      "contentHash": "72af828e6690e3fec0813bb3bf2be043",
+      "warnings": [],
+      "contentHash": "a4d97060c64c389b35f43068ce353f23",
       "documentType": "prenuptial-agreement",
       "language": "es",
       "variables": [
+        "additional_financial_statements",
         "agreement_date",
-        "amendment_process",
-        "arbitration_rules",
-        "attorney_fees_provision",
-        "business_division_terms",
-        "commingling_provisions",
+        "counsel_statements",
         "county",
-        "credit_protection_provisions",
-        "existing_children_support",
-        "future_children_provisions",
-        "future_real_estate_provisions",
+        "dispute_resolution_clause",
         "governing_state",
-        "inheritance_provisions",
-        "jurisdiction",
-        "legal_counsel_waiver_terms",
-        "life_insurance_provisions",
-        "marital_debt_allocation",
-        "marital_property_division_method",
-        "marital_residence_provisions",
-        "marriage_deadline",
-        "mediation_location",
+        "household_expense_clause",
+        "life_insurance_clause",
+        "marital_residence_clause",
+        "notary_commission_expiration",
+        "notary_commission_number",
+        "notary_date",
+        "notary_name",
         "party_1_address",
         "party_1_assets",
-        "party_1_attorney",
-        "party_1_attorney_bar",
-        "party_1_business_interests",
-        "party_1_children",
         "party_1_income",
         "party_1_liabilities",
         "party_1_name",
-        "party_1_separate_property",
         "party_2_address",
         "party_2_assets",
-        "party_2_attorney",
-        "party_2_attorney_bar",
-        "party_2_business_interests",
-        "party_2_children",
         "party_2_income",
         "party_2_liabilities",
         "party_2_name",
-        "party_2_separate_property",
         "planned_marriage_date",
-        "residence_division_terms",
-        "retirement_benefits_provisions",
-        "retirement_division_terms",
-        "spousal_support_provisions",
+        "real_property_clause",
+        "retirement_accounts_clause",
+        "spousal_support_clause",
         "state",
-        "support_duration",
-        "support_maximum",
-        "support_modification_terms",
-        "vehicle_division_terms"
+        "witness_one_date",
+        "witness_one_name",
+        "witness_two_date",
+        "witness_two_name"
       ],
       "sectionHeadings": [
-        "1. Recitals and Background",
-        "2. Assets and Liabilities Disclosure",
-        "3. Separate Property Designation",
-        "4. Marital Property and Income",
-        "5. Support and Alimony Provisions",
-        "6. Property Division Upon Divorce",
-        "7. Debt Allocation",
-        "8. Estate Planning and Death Benefits",
-        "9. Children and Family Matters",
-        "10. Disclosure and Representation",
-        "11. Modification and Amendment",
-        "12. Dispute Resolution",
-        "13. General Provisions",
-        "14. Effective Date",
-        "15. Acknowledgments",
-        "16. Signatures",
-        "17. Attorney Acknowledgments",
-        "18. Notarization",
-        "_Template generated by 123LegalDoc - Professional Legal Document Platform_"
+        "1. Antecedentes",
+        "2. Información financiera",
+        "3. Bienes separados y posteriores",
+        "4. Deudas y obligaciones",
+        "5. Apoyo económico y manutención",
+        "6. Propiedad conyugal y residencia",
+        "7. Planificación patrimonial",
+        "8. Administración de bienes",
+        "9. Controversias y resolución",
+        "10. Modificaciones y vigencia",
+        "11. Representación jurídica independiente",
+        "12. Declaraciones finales",
+        "13. Firmas",
+        "14. Testigos y notarización",
+        "_Documento generado por 123LegalDoc - Plataforma Profesional de Documentos Legales_"
       ],
       "numberedSections": [
         "1",
@@ -20323,15 +20028,11 @@
         "11",
         "12",
         "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18"
+        "14"
       ],
-      "variableCount": 84,
-      "sectionCount": 18,
-      "wordCount": 1422
+      "variableCount": 42,
+      "sectionCount": 14,
+      "wordCount": 868
     },
     {
       "path": "C:\\dev\\123legaldoc\\public\\templates\\es\\privacy-policy.md",
@@ -20416,8 +20117,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: product-liability-waiver"
@@ -20444,8 +20144,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: professional-liability-waiver"
@@ -20563,8 +20262,7 @@
         "Content appears to be a power-of-attorney instead of promissory-note",
         "Variable parity mismatch (missing in ES: additionalBorrowerSignatures, additionalCovenants, additionalDefaultEvents, additionalRemedies, amountFinanced, apr, borrowerCity, borrowerEmail, borrowerPhone, borrowerPrintName, borrowerState, borrowerTaxId, borrowerTitle, borrowerZip, coSignerAcknowledgment, coSignerAddress, coSignerName, coSignerPrintName, coSignerRelationship, collateralDescription, collateralValue, compoundingFrequency, dayCountBasis, defaultInterestRate, disbursementDate, disbursementMethod, financeCharge, firstPaymentDate, gracePeriod, installmentAmount, insuranceRequirements, interestAccrualStartDate, interestType, jurisdiction, lateFeeAmount, lateFeeCalculation, lateFeePercentage, lenderCity, lenderEmail, lenderPhone, lenderPrintName, lenderState, lenderTitle, lenderZip, loanPurpose, maxLateFee, notaryAppearingParties, notaryCounty, notaryDate, notaryExpiration, notaryName, notaryState, noteDate, paymentAddress, paymentDueDay, paymentFrequency, paymentMethod, paymentRecordTable, paymentSchedule, prepaymentAllowed, prepaymentApplication, prepaymentPenalty, prepaymentTerms, principalAmountWords, reportingRequirements, rightToCancelNotice, securityAgreementRequired, securityType, specialConditions, stateSpecificDisclosures, totalPayments, truthInLendingDisclosures, uccFilingRequired; missing in EN: date, lateFeeRate, placeOfExecution, repaymentTerms).",
         "Section count mismatch: EN has 16, ES has 4.",
-        "Section numbering mismatch: EN none, ES 1, 2, 3, 4.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN none, ES 1, 2, 3, 4."
       ],
       "warnings": [],
       "contentHash": "07ca03462a2424bd555463fa02e43ae6",
@@ -20877,8 +20575,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: real-estate-purchase-agreement"
@@ -20928,8 +20625,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: recording-artist-agreement"
@@ -21010,8 +20706,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: remodeling-contract"
@@ -21092,8 +20787,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: rental-agreement"
@@ -21116,8 +20810,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: research-agreement"
@@ -21195,8 +20888,7 @@
         "Too few variables: 0 (minimum: 5)",
         "Variable parity mismatch (missing in ES: additional_eviction_grounds, additional_lease_terms, agreement_date, application_fee, authorized_occupants, city, cleaning_fee, deposit_location, deposit_return_timeframe, early_termination_fee, early_termination_notice, email, emergency_contact, end_of_lease_procedure, entry_notice_period, fixture_installation_rules, governing_state, included_appliances, insurance_minimum_amount, internet_cable_arrangement, landlord_address, landlord_email, landlord_maintenance_items, landlord_name, landlord_phone, late_fee_amount, late_fee_grace_period, lead_paint_disclosure, lease_duration, lease_end_date, lease_start_date, lease_type, liability_provisions, max_occupants, modification_policy, monthly_rent, move_out_inspection_procedure, move_out_notice, name, noise_restrictions, occupancy_restrictions, other_fees, other_required_disclosures, parking_rules, parking_spaces, payment_method, pet_deposit, pet_policy_details, pet_restrictions, phone, prohibited_activities, property_address, property_description, rent_due_date, repair_request_method, repair_response_time, security_deposit, smoking_policy, state, tenant_maintenance_duties, tenant_names, unit_number, utilities_included, utilities_tenant_pays, visitor_parking, zip_code).",
         "Section count mismatch: EN has 15, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ES none.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: residential-lease-agreement"
@@ -21404,8 +21096,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: retirement-plan-agreement"
@@ -21432,8 +21123,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: revocation-of-power-of-attorney"
@@ -21487,8 +21177,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: ride-sharing-agreement"
@@ -21515,8 +21204,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: roofing-contract"
@@ -21543,8 +21231,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: room-rental-agreement"
@@ -21571,8 +21258,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: roommate-agreement"
@@ -21704,8 +21390,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sales-agreement"
@@ -21732,8 +21417,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: security-agreement"
@@ -21931,8 +21615,7 @@
         "Too few variables: 0 (minimum: 5)",
         "Variable parity mismatch (missing in ES: apology_terms, case_number, claim_summary_reference, corrective_actions, cure_period_days, dismissal_filing_days, dispute_description, effective_date, forum_name, governing_state, installment_1_amount, installment_1_due_date, installment_1_notes, installment_1_number, installment_2_amount, installment_2_due_date, installment_2_notes, installment_2_number, installment_3_amount, installment_3_due_date, installment_3_notes, installment_3_number, late_interest_rate, party_a_name, party_a_signature_date, party_a_signer_name, party_a_signer_title, party_b_name, party_b_signature_date, party_b_signer_name, party_b_signer_title, payment_due_date, payment_method, payment_recipient_details, property_transfer_terms, settlement_amount, third_party_release_section, venue_county, venue_state).",
         "Section count mismatch: EN has 9, ES has 0.",
-        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, ES none.",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Section numbering mismatch: EN 1, 2, 3, 4, 5, 6, 7, 8, ES none."
       ],
       "warnings": [
         "No content pattern defined for document type: settlement-agreement"
@@ -21956,8 +21639,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: severance-agreement"
@@ -22003,8 +21685,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: simple-will"
@@ -22113,8 +21794,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: social-media-management-agreement"
@@ -22165,8 +21845,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: software-license-agreement"
@@ -22213,8 +21892,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: solar-energy-agreement"
@@ -22241,8 +21919,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sponsorship-agreement"
@@ -22265,8 +21942,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sports-agreement"
@@ -22293,8 +21969,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: startup-equity-agreement"
@@ -22453,8 +22128,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: student-loan-agreement"
@@ -22481,8 +22155,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: subcontractor-agreement"
@@ -22509,8 +22182,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: sublease-agreement"
@@ -22561,8 +22233,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: talent-agreement"
@@ -22589,8 +22260,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: talent-management-agreement"
@@ -22617,8 +22287,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tax-preparation-agreement"
@@ -22696,8 +22365,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: telemedicine-agreement"
@@ -22724,8 +22392,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tenant-maintenance-request"
@@ -22780,8 +22447,7 @@
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
         "Too few variables: 0 (minimum: 5)",
-        "Section count mismatch: EN has 5, ES has 0.",
-        "Metadata alias count mismatch: EN has 4, ES has 3."
+        "Section count mismatch: EN has 5, ES has 0."
       ],
       "warnings": [
         "No content pattern defined for document type: termination-letter"
@@ -22804,8 +22470,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: timber-sale-agreement"
@@ -22883,8 +22548,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: trademark-license-agreement"
@@ -22907,8 +22571,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: transportation-service-agreement"
@@ -22935,8 +22598,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 2, ES has 1."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: travel-insurance-agreement"
@@ -23017,8 +22679,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: tutoring-agreement"
@@ -23072,8 +22733,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: vacation-rental-agreement"
@@ -23164,8 +22824,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: vehicle-lease-agreement"
@@ -23266,8 +22925,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: volunteer-agreement"
@@ -23294,8 +22952,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: warehouse-agreement"
@@ -23376,8 +23033,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: water-rights-agreement"
@@ -23431,8 +23087,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: website-development-agreement"
@@ -23479,8 +23134,7 @@
         "Missing required section: \"## 1.\"",
         "Missing required section: \"## Signatures\"",
         "Missing required section: \"IMPORTANT LEGAL NOTICE\"",
-        "Too few variables: 0 (minimum: 5)",
-        "Metadata alias count mismatch: EN has 3, ES has 2."
+        "Too few variables: 0 (minimum: 5)"
       ],
       "warnings": [
         "No content pattern defined for document type: work-from-home-agreement"

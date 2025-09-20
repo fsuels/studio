@@ -451,7 +451,7 @@ export default function ConsolidatedMegaMenuContent({
                             return (
                               <li key={docId}>
                                 <Link
-                                  href={`/${currentLocale}/docs/${resolveDocSlug(doc.id)}`}
+                                  href={`/${currentLocale}/docs/${resolveDocSlug(doc.id)}/`}
                                   onClick={handleDocumentClick}
                                   onMouseEnter={() => setHoveredDocument(doc.id)}
                                   onMouseLeave={() => setHoveredDocument(null)}
@@ -513,7 +513,7 @@ export default function ConsolidatedMegaMenuContent({
               {t('megaMenu.cantFind', { defaultValue: "Can't find what you're looking for?" })}
             </p>
             <Link
-              href={`/${currentLocale}/docs/general-inquiry`}
+              href={`/${currentLocale}/docs/general-inquiry/`}
               onClick={handleDocumentClick}
             >
               <Button variant="outline" size="sm">

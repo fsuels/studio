@@ -274,35 +274,41 @@ class TemplateVerifier {
       numberedSections: result.numberedSections,
     }));
 
+    const resultsByDocument = new Map<string, Map<string, TemplateValidationResult>>();
+    for (const result of this.validationResults) {
+      if (!resultsByDocument.has(result.documentType)) {
+        resultsByDocument.set(result.documentType, new Map());
+      }
+      resultsByDocument.get(result.documentType)!.set(result.language, result);
+    }
+
     const issues = findTranslationParityIssues(summaries, this.metadataIndex);
 
     for (const issue of issues) {
       let attached = false;
+      const documentResults = resultsByDocument.get(issue.documentType);
 
-      for (const language of issue.affectedLanguages) {
-        const target = this.validationResults.find(
-          (r) =>
-            r.documentType === issue.documentType && r.language === language,
-        );
+      if (documentResults) {
+        for (const language of issue.affectedLanguages) {
+          const target = documentResults.get(language);
 
-        if (target) {
-          this.raiseParityError(target, issue.message);
-          attached = true;
+          if (target) {
+            this.raiseParityError(target, issue.message);
+            attached = true;
+          }
         }
       }
 
       if (!attached) {
-        const fallback = this.validationResults.find(
-          (r) => r.documentType === issue.documentType,
-        );
-
-        if (fallback) {
+        if (documentResults && documentResults.size > 0) {
+          const fallback = documentResults.values().next().value;
           this.raiseParityError(fallback, issue.message);
         } else {
           console.log(chalk.red(`[PARITY] ${issue.documentType}: ${issue.message}`));
         }
       }
     }
+
   }
 
   /**

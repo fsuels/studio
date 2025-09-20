@@ -1,7 +1,7 @@
-﻿// src/app/[locale]/page.tsx
+// src/app/[locale]/(marketing)/page.tsx
 import type { Metadata } from 'next';
-import HomePageClient from './HomePageClient';
-import { HomePageStructuredData } from './HomePageStructuredData';
+import HomePageClient from '../HomePageClient';
+import { HomePageStructuredData } from '../HomePageStructuredData';
 import { defaultLocale, localizations } from '@/lib/localizations';
 import SEOConfig from '@/config/seo';
 import {
@@ -25,7 +25,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const siteUrl = getSiteUrl();
   const fallbackTitle = SEOConfig.title ?? '123LegalDoc';
-  const fallbackDescription = SEOConfig.description ?? 'Create legal documents tailored to your needs.';
+  const fallbackDescription =
+    SEOConfig.description ?? 'Create legal documents tailored to your needs.';
   const metadataBase = new URL(siteUrl + '/');
   const canonicalPath = getCanonicalPathForLocale(locale);
   const alternates = buildLanguageAlternates(supportedLocales, siteUrl);
@@ -63,12 +64,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  // 1) If LIMIT_SSG=true, only build 'en' (or any one locale you choose)
   if (process.env.LIMIT_SSG === 'true') {
     return [{ locale: 'en' }];
   }
-
-  // 2) Otherwise, build all locales as before
   return localizations.map((locale) => ({ locale }));
 }
 

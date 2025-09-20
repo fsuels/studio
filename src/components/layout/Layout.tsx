@@ -13,10 +13,10 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    // Use w-full max-w-screen to prevent exceeding screen width
-    <div className="flex min-h-screen flex-col w-full max-w-screen overflow-x-hidden mx-auto">
+    // Ensure layout spans full viewport width without horizontal scroll leaks
+    <div className="flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden bg-background">
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow w-full">{children}</main>
       <Footer />
     </div>
   );

@@ -54,14 +54,14 @@ export default async function TenantNotFoundPage({
 
             <div className="space-y-3">
               <Button asChild className="w-full">
-                <Link href="/">
+                <Link href="/en/">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Go to 123LegalDoc
                 </Link>
               </Button>
 
               <Button variant="outline" asChild className="w-full">
-                <Link href="/support">
+                <Link href="/en/support/">
                   <HelpCircle className="mr-2 h-4 w-4" />
                   Contact Support
                 </Link>

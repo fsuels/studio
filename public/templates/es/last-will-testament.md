@@ -1,381 +1,306 @@
-﻿# Last Will and Testament
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Última Voluntad y Testamento
 
 ---
 
-**LAST WILL AND TESTAMENT**
+**ÚLTIMA VOLUNTAD Y TESTAMENTO**
 
-I, **{{testator_name}}**, a resident of {{testator_city}}, {{testator_state}}, being of sound mind and memory, and being at least eighteen (18) years of age, do hereby make, publish, and declare this to be my Last Will and Testament, hereby expressly revoking all former wills and codicils by me made.
+Yo, **{{testator_name}}**, residente en {{testator_city}}, {{testator_state}}, mayor de dieciocho (18) años, en pleno uso de mis facultades mentales y sin coerción alguna, declaro este documento como mi Última Voluntad y Testamento, revocando expresamente cualquier testamento y codicilo anteriores.
 
-## TESTATOR IDENTIFICATION
+## IDENTIFICACIÓN DE LA PERSONA TESTADORA
 
-**Full Legal Name:** {{testator_name}}  
-**Date of Birth:** {{testator_dob}}  
-**Social Security Number:** {{testator_ssn}}  
-**Current Address:** {{testator_address}}  
-**County:** {{testator_county}}  
-**State:** {{testator_state}}  
-**Zip Code:** {{testator_zip}}  
-**Length of Residence:** {{residence_duration}}
+**Nombre legal completo:** {{testator_name}}  
+**Fecha de nacimiento:** {{testator_dob}}  
+**Número de Seguro Social:** {{testator_ssn}}  
+**Domicilio actual:** {{testator_address}}  
+**Condado:** {{testator_county}}  
+**Estado:** {{testator_state}}  
+**Código postal:** {{testator_zip}}  
+**Tiempo de residencia:** {{residence_duration}}
 
-I declare that I am of sound mind and memory, not under any duress, menace, fraud, or undue influence of any person, and that I am competent to make this Will.
-
----
-
-## ARTICLE I: REVOCATION CLAUSE
-
-I hereby expressly revoke all prior wills, codicils, and testamentary dispositions heretofore made by me. This Will supersedes and replaces all previous wills and codicils, and I declare this to be my only valid Last Will and Testament.
+Declaro que estoy en pleno uso de mis facultades y no actúo bajo coacción, fraude o influencia indebida. Soy legalmente competente para otorgar este testamento.
 
 ---
 
-## ARTICLE II: FAMILY INFORMATION AND BENEFICIARY DESIGNATIONS
+## ARTÍCULO I: REVOCACIÓN
 
-## 2. Family Information
+Revoco expresamente todo testamento, codicilo o disposición testamentaria previa. Este documento constituye mi única Última Voluntad y Testamento válido.
 
-### 2.1 Marital Status
+---
+
+## ARTÍCULO II: INFORMACIÓN FAMILIAR Y BENEFICIARIOS
+
+### 2.1 Estado civil
 
 {{#if married}}
-**Spouse:** I am married to {{spouse_name}}, and all references to "my spouse" refer to {{spouse_name}}.
+**Cónyuge:** Estoy casado/a con {{spouse_name}}; toda referencia a “mi cónyuge” corresponde a {{spouse_name}}.
 {{else}}
-**Marital Status:** I am not married at the time of executing this Will.
+**Estado civil:** No estoy casado/a al momento de firmar este testamento.
 {{/if}}
 
-### 2.2 Children
+### 2.2 Hijos
 
 {{#if has_children}}
-**Children:** I have the following children:
+**Hijos:** Tengo los siguientes hijos:
 {{#each children}}
+- {{name}}, nacido el {{birth_date}}
+{{/each}}
 
-- {{name}}, born {{birth_date}}
-  {{/each}}
-
-All references in this Will to "my children" refer to the individuals named above and any children hereafter born to or legally adopted by me.
+Toda referencia a “mis hijos” incluye a los mencionados y a cualquier hijo que nazca o adopte posteriormente.
 {{else}}
-**Children:** I have no children at the time of executing this Will.
+**Hijos:** No tengo hijos al momento de firmar este testamento.
 {{/if}}
 
 ---
 
-## ARTICLE III: EXECUTOR APPOINTMENT WITH COMPREHENSIVE POWERS
+## ARTÍCULO III: NOMBRAMIENTO DE ALBACEA Y FACULTADES
 
-### Section 3.1 Primary Personal Representative/Executor
+### 3.1 Albacea principal
 
-I hereby nominate, constitute, and appoint **{{executor_name}}** of {{executor_address}} to serve as the Personal Representative (Executor) of this Will and of my estate.
+Nombro como albacea y representante personal de mi sucesión a **{{executor_name}}**, con domicilio en {{executor_address}}.
 
-**Primary Executor Details:**
+**Datos del albacea:**
 
-- **Full Name:** {{executor_name}}
-- **Relationship:** {{executor_relationship}}
-- **Address:** {{executor_address}}
-- **Phone:** {{executor_phone}}
-- **Email:** {{executor_email}}
+- **Nombre completo:** {{executor_name}}  
+- **Relación:** {{executor_relationship}}  
+- **Domicilio:** {{executor_address}}  
+- **Teléfono:** {{executor_phone}}  
+- **Correo electrónico:** {{executor_email}}
 
-### Section 3.2 Successor Personal Representative/Executor
+### 3.2 Albacea suplente
 
-If {{executor_name}} is unable, unwilling, or fails to qualify to serve as Personal Representative, I nominate **{{successor_executor_name}}** of {{successor_executor_address}} as successor Personal Representative.
+Si {{executor_name}} no puede o no desea actuar, designo a **{{successor_executor_name}}**, domiciliado en {{successor_executor_address}}, como albacea suplente.
 
-**Successor Executor Details:**
+**Datos del albacea suplente:**
 
-- **Full Name:** {{successor_executor_name}}
-- **Relationship:** {{successor_executor_relationship}}
-- **Address:** {{successor_executor_address}}
-- **Phone:** {{successor_executor_phone}}
-- **Email:** {{successor_executor_email}}
+- **Nombre completo:** {{successor_executor_name}}  
+- **Relación:** {{successor_executor_relationship}}  
+- **Domicilio:** {{successor_executor_address}}  
+- **Teléfono:** {{successor_executor_phone}}  
+- **Correo electrónico:** {{successor_executor_email}}
 
-### Section 3.3 Bond Waiver
+### 3.3 Fianza
 
-I direct that no bond or other security shall be required of any Personal Representative appointed under this Will, unless required by applicable law.
+Dispongo que no se requiera fianza u otra garantía al albacea, salvo que la ley aplicable lo ordene.
 
-### Section 3.4 Comprehensive Powers of Personal Representative
+### 3.4 Facultades del albacea
 
-I grant my Personal Representative full power and authority to administer my estate, including but not limited to the following powers, all to be exercised in a fiduciary capacity:
+Otorgo a mi albacea plena autoridad fiduciaria para administrar mi patrimonio, incluyendo:
 
-**A. General Administrative Powers:**
+**A. Facultades administrativas generales**
 
-- To collect, receive, and take possession of all assets of my estate
-- To manage, control, and protect all estate assets
-- To invest and reinvest estate funds in any property or securities
-- To continue or terminate any business interests
-- To employ attorneys, accountants, investment advisors, and other professionals
-- To determine which assets are income or principal
+- Reunir, custodiar y proteger los bienes sucesorios
+- Gestionar, invertir o reinvertir activos
+- Continuar o liquidar negocios o inversiones
+- Contratar profesionales (abogados, contadores, asesores)
+- Determinar la clasificación entre ingresos y capital
 
-**B. Real Estate Powers:**
+**B. Bienes inmuebles**
 
-- To sell, exchange, lease, or mortgage any real property
-- To grant easements, restrictions, or other rights in real property
-- To subdivide, develop, or improve real property
-- To abandon property of little or no value
+- Vender, arrendar, permutar o hipotecar inmuebles
+- Otorgar servidumbres u otros derechos
+- Mejorar, subdividir o abandonar propiedades sin valor
 
-**C. Personal Property Powers:**
+**C. Bienes muebles**
 
-- To sell, exchange, or distribute any personal property
-- To store, insure, repair, or dispose of tangible personal property
-- To collect debts owed to the estate
-- To compromise, settle, or abandon claims
+- Vender o distribuir bienes personales
+- Guardar, asegurar o reparar bienes tangibles
+- Cobrar créditos y conciliar reclamaciones
 
-**D. Financial Powers:**
+**D. Finanzas**
 
-- To open, maintain, and close bank accounts and investment accounts
-- To borrow money and pledge estate assets as security
-- To make loans to beneficiaries or others
-- To purchase insurance or cease paying premiums on existing policies
+- Abrir o cerrar cuentas bancarias
+- Obtener préstamos y garantizar con bienes sucesorios
+- Conceder préstamos a beneficiarios cuando sea prudente
+- Contratar o cancelar pólizas de seguro
 
-**E. Tax and Legal Powers:**
+**E. Distribuciones**
 
-- To prepare, file, and pay all taxes
-- To make tax elections and allocations
-- To represent the estate in audits and proceedings
-- To settle, compromise, or litigate claims for or against the estate
-
-**F. Distribution Powers:**
-
-- To make distributions in cash or in kind
-- To allocate specific assets to satisfy general bequests
-- To value assets for distribution purposes
-- To establish trusts as provided in this Will
+- Realizar distribuciones parciales o finales en dinero o especie
+- Tomar decisiones de valoración y asignación de impuestos
 
 ---
 
-## 4. Guardian for Minor Children
+## ARTÍCULO IV: DISPOSICIONES DE BIENES
+
+### 4.1 Gastos funerarios y deudas
+
+Ordeno que se paguen mis gastos funerarios, médicos y de administración, así como cualquier deuda legítima, tan pronto sea razonable.
+
+### 4.2 Disposiciones específicas
+
+{{#if specific_bequests}}
+Lego los siguientes bienes:
+{{specific_bequests}}
+{{else}}
+No realizo legados específicos en este testamento.
+{{/if}}
+
+### 4.3 Patrimonio residual
+
+El remanente de mi patrimonio lo lego a:
+
+{{#each residuary_beneficiaries}}
+- {{name}} ({{relationship}}): {{share_percentage}}%
+{{/each}}
+
+Si algún beneficiario residual me predece, su porción se distribuirá conforme a {{residuary_contingency_plan}}.
+
+### 4.4 Cláusulas especiales
+
+{{special_provisions}}
+
+---
+
+## ARTÍCULO V: TUTELA DE HIJOS MENORES
 
 {{#if has_minor_children}}
+### 5.1 Tutor legal
 
-### 4.1 Guardian Appointment
+Nombro a **{{guardian_name}}** de {{guardian_address}} como tutor legal de mis hijos menores.
 
-If my spouse does not survive me, I nominate **{{guardian_name}}** of {{guardian_address}} as Guardian of the person and property of my minor children.
+### 5.2 Tutor suplente
 
-### 4.2 Successor Guardian
+Si {{guardian_name}} no puede servir, designo a **{{successor_guardian_name}}** de {{successor_guardian_address}} como tutor suplente.
 
-If {{guardian_name}} cannot serve, I nominate **{{successor_guardian_name}}** of {{successor_guardian_address}} as successor Guardian.
+### 5.3 Instrucciones
 
-### 4.3 Guardian Powers
-
-I grant the Guardian full authority to make decisions regarding my children's health, education, and welfare, and to manage their property until they reach majority.
+Solicito que el tutor fomente la educación, salud, desarrollo y valores familiares de mis hijos.
+{{else}}
+No es necesario nombrar tutor, ya que no tengo hijos menores.
 {{/if}}
 
 ---
 
-## 5. Specific Bequests
+## ARTÍCULO VI: FIDEICOMISOS TESTAMENTARIOS
 
-### 5.1 Personal Property Bequests
+{{#if testamentary_trust}}
+### 6.1 Creación del fideicomiso
 
-I make the following specific bequests of personal property:
+Creo el "{{trust_name}}" para los beneficiarios designados.
 
-{{#each specific_bequests}}
-**To {{beneficiary_name}}:** {{property_description}}
-{{/each}}
+### 6.2 Fiduciario
 
-### 5.2 Monetary Bequests
+Designo a **{{trustee_name}}** como fiduciario, con **{{successor_trustee_name}}** como suplente.
 
-I make the following monetary bequests:
+### 6.3 Propósito y administración
 
-{{#each monetary_bequests}}
-**To {{beneficiary_name}}:** ${{amount}}
-{{/each}}
+{{trust_terms}}
 
-### 5.3 Real Property Bequests
+### 6.4 Distribuciones
 
-{{#if real_property_bequests}}
-I make the following bequests of real property:
+- Distribuciones para educación, manutención, salud y bienestar
+- Distribución final al alcanzar {{trust_termination_age}} años o según {{trust_termination_event}}
 
-{{#each real_property_bequests}}
-**To {{beneficiary_name}}:** {{property_description}} located at {{property_address}}
-{{/each}}
+### 6.5 Poderes del fiduciario
+
+El fiduciario tendrá los poderes previstos por ley y por este documento para administrar el fideicomiso con prudencia.
+{{else}}
+No establezco fideicomisos en este testamento.
 {{/if}}
 
 ---
 
-## ARTICLE VI: RESIDUARY CLAUSE (ESSENTIAL PROVISION)
+## ARTÍCULO VII: IMPUESTOS Y GASTOS
 
-### Section 6.1 Primary Residuary Distribution
+### 7.1 Impuestos sucesorios
 
-I give, devise, and bequeath all the rest, residue, and remainder of my estate, both real and personal, of every kind and description, wherever located, including any property that I may acquire after the execution of this Will and any property as to which I or my estate may be entitled and any property over which I may have a power of appointment (collectively, my "residuary estate"), as follows:
+Dispongo que los impuestos federales y estatales sobre el patrimonio se paguen con cargo al patrimonio residual, salvo que la ley obligue otra cosa.
 
-{{#if married}}
-**First, to my spouse {{spouse_name}}:** {{spouse_percentage}}% of my residuary estate, if {{spouse_name}} survives me by {{survivorship_period}} days and is not divorced from me at the time of my death.
+### 7.2 Gastos administrativos
+
+Los costos de administración, honorarios profesionales y otros gastos se pagarán del patrimonio antes de realizar distribuciones.
+
+---
+
+## ARTÍCULO VIII: DISPOSICIONES ADICIONALES
+
+### 8.1 Cláusula de no impugnación
+
+{{no_contest_clause}}
+
+### 8.2 Derechos de la pareja
+
+{{spousal_rights_clause}}
+
+### 8.3 Propiedad comunitaria
+
+{{community_property_clause}}
+
+### 8.4 Animales de compañía
+
+{{pet_provisions}}
+
+### 8.5 Donación de órganos y restos
+
+{{organ_donation_clause}}
+
+### 8.6 Disposición digital
+
+{{digital_assets_clause}}
+
+---
+
+## ARTÍCULO IX: INTERPRETACIÓN
+
+Este testamento se interpreta conforme a las leyes de {{governing_state}}. Las palabras en género masculino o femenino incluyen ambos, y el singular incluye el plural, según corresponda.
+
+---
+
+## ARTÍCULO X: FIRMA Y TESTIGOS
+
+Firmado en {{execution_city}}, {{execution_state}}, el día **{{execution_date}}**.
+
+**Firma de la persona testadora:** _______________________________  
+**Nombre:** {{testator_name}}
+
+### Testigos
+
+Ratificamos que {{testator_name}} firmó este testamento voluntariamente en nuestra presencia, y que la persona testadora aparenta gozar de plena capacidad mental.
+
+**Testigo 1:**  
+Nombre: {{witness_one_name}}  
+Domicilio: {{witness_one_address}}  
+Firma: _______________________________  
+Fecha: {{witness_one_date}}
+
+**Testigo 2:**  
+Nombre: {{witness_two_name}}  
+Domicilio: {{witness_two_address}}  
+Firma: _______________________________  
+Fecha: {{witness_two_date}}
+
+{{#if additional_witness_required}}
+**Testigo 3:**  
+Nombre: {{witness_three_name}}  
+Domicilio: {{witness_three_address}}  
+Firma: _______________________________  
+Fecha: {{witness_three_date}}
 {{/if}}
 
-{{#if has_children}}
-**Second, to my children:** {{children_percentage}}% of my residuary estate, to be divided equally among all my children who survive me, per stirpes. If any child predeceases me but leaves descendants who survive me, such descendants shall take by representation.
-{{/if}}
+---
 
-### Section 6.2 Contingent Residuary Beneficiaries
+## ARTÍCULO XI: DECLARACIÓN NOTARIAL
 
-If none of the primary beneficiaries survive me, or if the primary residuary distribution fails for any reason, I give my entire residuary estate to:
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-**Primary Contingent:** {{contingent_beneficiary_1}}  
-**Secondary Contingent:** {{contingent_beneficiary_2}}  
-**Tertiary Contingent:** {{contingent_beneficiary_3}}
+El **{{notary_date}}**, compareció ante mí {{testator_name}}, a quien reconozco (o quien presentó identificación suficiente), y manifestó que firmó libremente este documento.
 
-### Section 6.3 Ultimate Contingent Disposition
-
-If all named beneficiaries predecease me or the gifts otherwise fail, I give my entire residuary estate to {{ultimate_beneficiary}} or, if no such organization exists at my death, to such charitable organizations as my Personal Representative may select in their absolute discretion.
-
-### Section 6.4 Anti-Lapse Protection
-
-This Will is intended to comply with anti-lapse statutes. If any beneficiary predeceases me but is survived by descendants, and if such beneficiary is my grandparent or a descendant of my grandparent, then such descendants shall take by representation the gift that would have been made to the predeceased beneficiary.
+**Firma del/de la notario/a:** _______________________________  
+**Nombre:** {{notary_name}}  
+**Número de comisión:** {{notary_commission_number}}  
+**Expiración de la comisión:** {{notary_commission_expiration}}
 
 ---
 
-## 7. Survivorship Clause
+## ANEXOS Y DISPOSICIONES OPCIONALES
 
-No person shall be deemed to have survived me unless such person survives me by at least {{survivorship_period}} days. Any person who dies within {{survivorship_period}} days after my death shall be deemed to have predeceased me.
-
----
-
-## 8. Per Stirpes Distribution
-
-Unless otherwise specified, all distributions to my descendants shall be made per stirpes, meaning that if any of my children predecease me, their share shall pass to their descendants by right of representation.
+{{optional_annexes}}
 
 ---
 
-## 9. Trust Provisions for Minor Beneficiaries
+**AVISO LEGAL IMPORTANTE:** Las leyes testamentarias varían por estado. Consulte a un abogado para asegurarse de que este documento cumpla con los requisitos de {{governing_state}}, especialmente en lo relativo a testigos, notarización, propiedad comunitaria y disposiciones especiales.
 
-### 9.1 Trust Creation
+## _Documento generado por 123LegalDoc - Plataforma Profesional de Documentos Legales_
 
-If any beneficiary is under the age of {{trust_age}} at the time of distribution, their share shall be held in trust under the following terms:
-
-### 9.2 Trustee Appointment
-
-**Trustee:** {{trustee_name}} of {{trustee_address}}  
-**Successor Trustee:** {{successor_trustee_name}} of {{successor_trustee_address}}
-
-### 9.3 Trust Distributions
-
-The Trustee may distribute income and principal for the beneficiary's health, education, maintenance, and support until the beneficiary reaches age {{trust_termination_age}}, at which time the trust shall terminate and all remaining assets shall be distributed outright.
-
----
-
-## 10. Digital Assets
-
-### 10.1 Digital Asset Authorization
-
-I authorize my Personal Representative to access, manage, and distribute my digital assets, including:
-
-- Social media accounts
-- Digital photographs and documents
-- Online financial accounts
-- Cryptocurrency and digital wallets
-- Email accounts and digital communications
-
-### 10.2 Digital Asset Instructions
-
-{{digital_asset_instructions}}
-
----
-
-## 11. Debts and Taxes
-
-### 11.1 Payment of Debts
-
-I direct my Personal Representative to pay all my just debts, funeral expenses, and costs of administration from my residuary estate.
-
-### 11.2 Tax Allocation
-
-All estate, inheritance, and other death taxes payable by reason of my death shall be paid from my residuary estate and shall not be apportioned among the beneficiaries.
-
----
-
-## 12. No Contest Clause
-
-If any beneficiary under this Will contests or aids in contesting the validity of this Will or any of its provisions, such person shall forfeit any benefit provided to them under this Will.
-
----
-
-## 13. Miscellaneous Provisions
-
-### 13.1 Governing Law
-
-This Will shall be governed by and construed under the laws of {{governing_state}}.
-
-### 13.2 Severability
-
-If any provision of this Will is held invalid, the remaining provisions shall remain in full force and effect.
-
-### 13.3 Gender and Number
-
-Words of one gender include the other gender, and words in the singular include the plural and vice versa.
-
-### 13.4 Funeral and Burial Instructions
-
-{{funeral_instructions}}
-
----
-
-## ARTICLE XIV: EXECUTION AND ATTESTATION WITH PROPER WITNESS SIGNATURES
-
-### Testator's Execution
-
-IN WITNESS WHEREOF, I, {{testator_name}}, the Testator, sign my name to this Will, consisting of {{page_count}} pages including this page, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my Last Will and Testament and that I sign it willingly, that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.
-
-**TESTATOR:**
-
-| Signature                                  | Date               |
-| ------------------------------------------ | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
-| {{testator_name}}                          |                    |
-| (Testator's Signature)                     |                    |
-
-### Witness Attestation Clause
-
-We, {{witness_1_name}} and {{witness_2_name}}, the witnesses, sign our names to this Will, being first duly sworn, and do hereby declare to the undersigned authority that the Testator signs and executes this instrument as the Testator's Last Will and Testament and that the Testator signs it willingly, and that each of us, in the presence and hearing of the Testator, hereby signs this Will as witness to the Testator's signing, and that to the best of our knowledge the Testator is eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.
-
-**WITNESS REQUIREMENTS:**
-
-- Witnesses must be at least 18 years of age
-- Witnesses should not be beneficiaries under this Will
-- Witnesses must be mentally competent
-- Witnesses must sign in the presence of the Testator and each other
-
-**WITNESS 1:**
-
-| Signature                                  | Print Name                 | Address                                                   | Date               |
-| ------------------------------------------ | -------------------------- | --------------------------------------------------------- | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | {{witness_1_name}}         | {{witness_1_address}}                                     | {{execution_date}} |
-| (Witness 1 Signature)                      |                            | {{witness_1_city}}, {{witness_1_state}} {{witness_1_zip}} |                    |
-|                                            | Phone: {{witness_1_phone}} |                                                           |                    |
-
-**WITNESS 2:**
-
-| Signature                                  | Print Name                 | Address                                                   | Date               |
-| ------------------------------------------ | -------------------------- | --------------------------------------------------------- | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\******* | {{witness_2_name}}         | {{witness_2_address}}                                     | {{execution_date}} |
-| (Witness 2 Signature)                      |                            | {{witness_2_city}}, {{witness_2_state}} {{witness_2_zip}} |                    |
-|                                            | Phone: {{witness_2_phone}} |                                                           |                    |
-
-### Attestation Affidavit
-
-The State of {{state}} requires that this Will be properly witnessed. By signing below, the witnesses attest to the following:
-
-1. The Testator declared this instrument to be their Will
-2. The Testator signed the Will in our presence or acknowledged their signature
-3. The Testator appeared to be of sound mind and not under duress
-4. We signed as witnesses in the presence of the Testator and each other
-5. We are both over 18 years of age and competent to witness
-6. To our knowledge, we are not named as beneficiaries in this Will
-
----
-
-## 15. Notarization (if required by state law)
-
-**State of {{state}}**  
-**County of {{county}}**
-
-On this **{{execution_date}}**, before me personally appeared {{testator_name}}, {{witness_1_name}}, and {{witness_2_name}}, who proved to me on the basis of satisfactory evidence to be the persons whose names are subscribed to the within instrument and acknowledged to me that they executed the same in their authorized capacities, and that by their signatures on the instrument the persons, or the entity upon behalf of which the persons acted, executed the instrument.
-
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
-
-**WITNESS** my hand and official seal.
-
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
-
----
-
-**IMPORTANT LEGAL NOTICE:** This Last Will and Testament should be reviewed by a qualified estate planning attorney to ensure compliance with state laws and proper estate planning strategies. Wills must meet specific legal requirements to be valid, and laws vary significantly by state.
-
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
-
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+(c) 2025 123LegalDoc · Documento de autoayuda · No constituye asesoría legal · Términos: 123LegalDoc.com/terms
