@@ -36,7 +36,11 @@ export const licensingAgreementGeneralMeta: LegalDocument = {
       name: 'Acuerdo General de Licencia',
       description:
         'Acuerdo integral de licencia para varios tipos de propiedad intelectual.',
-      aliases: ['contrato general de licencia', 'acuerdo de licenciamiento'],
+      aliases: [
+        'contrato general de licencia',
+        'acuerdo de licenciamiento',
+        'contrato de licencia',
+      ],
     },
   },
 };

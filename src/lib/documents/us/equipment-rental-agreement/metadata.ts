@@ -41,6 +41,7 @@ export const equipmentRentalAgreementMeta: LegalDocument = {
         'arrendamiento de equipos',
         'alquiler de maquinaria',
         'acuerdo de alquiler de herramientas',
+        'acuerdo de alquiler de equipos',
       ],
     },
   },

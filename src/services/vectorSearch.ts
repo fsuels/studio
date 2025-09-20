@@ -1,4 +1,4 @@
-
+ï»¿
 // Simplified vector search helper with in-memory caching. This keeps API routes
 // compiling without Redis or external vector services.
 
@@ -72,7 +72,7 @@ function buildMockResult(query: string): VectorSearchResult[] {
         category: 'general',
         tags: ['mock', 'autocomplete'],
       },
-      explanation: 'Stubbed response – replace with vector endpoint when available.',
+      explanation: 'Stubbed response - replace with vector endpoint when available.',
     },
   ];
 }

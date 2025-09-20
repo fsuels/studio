@@ -26,13 +26,21 @@ export const performanceBondMeta: LegalDocument = {
       name: 'Performance Bond',
       description:
         'Legal bond guaranteeing completion of contractual obligations and performance standards.',
-      aliases: ['contract performance bond', 'completion bond', 'surety bond'],
+      aliases: [
+        'contract performance bond',
+        'completion bond',
+        'surety bond',
+      ],
     },
     es: {
       name: 'Fianza de Cumplimiento',
       description:
         'Fianza legal que garantiza el cumplimiento de obligaciones contractuales y estándares de rendimiento.',
-      aliases: ['fianza de rendimiento de contrato', 'bono de cumplimiento'],
+      aliases: [
+        'fianza de rendimiento de contrato',
+        'bono de cumplimiento',
+        'bono de fianza',
+      ],
     },
   },
 };

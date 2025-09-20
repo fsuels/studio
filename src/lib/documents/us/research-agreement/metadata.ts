@@ -39,6 +39,7 @@ export const researchAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de colaboración de investigación',
         'contrato de investigación académica',
+        'acuerdo de estudio',
       ],
     },
   },

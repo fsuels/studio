@@ -36,7 +36,11 @@ export const maritimeCharterAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Flete Marítimo',
       description:
         'Acuerdo para fletar embarcaciones para transporte marítimo.',
-      aliases: ['contrato de fletamento', 'acuerdo naval'],
+      aliases: [
+        'contrato de fletamento',
+        'acuerdo naval',
+        'carta marina',
+      ],
     },
   },
 };

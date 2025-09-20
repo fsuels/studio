@@ -26,13 +26,21 @@ export const leaseTerminationLetterMeta: LegalDocument = {
       name: 'Lease Termination Letter',
       description:
         'Formally notify your landlord or tenant of lease termination.',
-      aliases: ['lease notice', 'termination notice', 'end lease letter'],
+      aliases: [
+        'lease notice',
+        'termination notice',
+        'end lease letter',
+      ],
     },
     es: {
       name: 'Carta de Terminación de Arrendamiento',
       description:
         'Termina tu contrato de renta legalmente. Avisa con anticipación adecuada para evitar problemas y recuperar depósitos.',
-      aliases: ['aviso de terminación', 'carta de fin de contrato'],
+      aliases: [
+        'aviso de terminación',
+        'carta de fin de contrato',
+        'carta de arrendamiento final',
+      ],
     },
   },
 };

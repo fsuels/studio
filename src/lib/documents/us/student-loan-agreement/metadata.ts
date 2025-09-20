@@ -36,7 +36,11 @@ export const studentLoanAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Préstamo Estudiantil',
       description:
         'Acuerdo para financiamiento educativo y términos de reembolso.',
-      aliases: ['préstamo educativo', 'financiamiento estudiantil'],
+      aliases: [
+        'préstamo educativo',
+        'financiamiento estudiantil',
+        'acuerdo de financiamiento educativo',
+      ],
     },
   },
 };

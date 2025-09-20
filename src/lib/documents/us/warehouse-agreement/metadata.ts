@@ -34,7 +34,11 @@ export const warehouseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Almacén',
       description: 'Acuerdo para servicios de almacenamiento y logística.',
-      aliases: ['contrato de almacenamiento', 'acuerdo logístico'],
+      aliases: [
+        'contrato de almacenamiento',
+        'acuerdo logístico',
+        'contrato de logística',
+      ],
     },
   },
 };

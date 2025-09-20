@@ -36,7 +36,11 @@ export const productLiabilityWaiverMeta: LegalDocument = {
       name: 'Exención de Responsabilidad de Producto',
       description:
         'Formulario de liberación que protege a fabricantes y vendedores de reclamos relacionados con productos.',
-      aliases: ['exención de producto', 'liberación de fabricante'],
+      aliases: [
+        'exención de producto',
+        'liberación de fabricante',
+        'liberación de productos',
+      ],
     },
   },
 };

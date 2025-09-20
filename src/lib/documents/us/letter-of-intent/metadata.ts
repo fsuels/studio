@@ -26,13 +26,21 @@ export const letterOfIntentMeta: LegalDocument = {
       name: 'Letter of Intent',
       description:
         'Express your intention to enter into a business agreement or transaction.',
-      aliases: ['LOI', 'intent letter', 'business intent'],
+      aliases: [
+        'LOI',
+        'intent letter',
+        'business intent',
+      ],
     },
     es: {
       name: 'Carta de Intención',
       description:
         'Expresa tu intención de entrar en un acuerdo comercial o transacción.',
-      aliases: ['carta de intenciones', 'LOI'],
+      aliases: [
+        'carta de intenciones',
+        'LOI',
+        'intención comercial',
+      ],
     },
   },
 };

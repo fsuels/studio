@@ -1,99 +1,367 @@
-# Contrato de Compraventa de Vehículo
+﻿# Independent Contractor Agreement
+> Nota: contenido temporal en inglés; se requiere localización.
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**INDEPENDENT CONTRACTOR AGREEMENT**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
+This Independent Contractor Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
 
-Referidos colectivamente en este documento como las “Partes”.
+- **Company:** {{company_name}}, a {{company_entity_type}} organized under the laws of {{company_state}}, with its principal place of business at {{company_address}}
+
+- **Contractor:** {{contractor_name}}, {{#if contractor_entity_type}}a {{contractor_entity_type}} organized under the laws of {{contractor_state}}{{else}}an individual{{/if}}, with address at {{contractor_address}}
+
+Collectively referred to herein as the "Parties."
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Services to be Provided
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+### 1.1 Scope of Work
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+The Contractor agrees to provide the following services ("Services") as an independent contractor:
 
-## 2. Precio de Compra y Pago
+**Primary Services:**
+{{service_description}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+**Specific Deliverables:**
+{{deliverables}}
 
-## 3. Condición del Vehículo
+### 1.2 Performance Standards
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+- **Quality Standards:** {{quality_standards}}
+- **Performance Metrics:** {{performance_metrics}}
+- **Completion Criteria:** {{completion_criteria}}
+
+---
+
+## 2. Term and Schedule
+
+### 2.1 Agreement Term
+
+**Start Date:** {{start_date}}  
+**End Date:** {{end_date}}  
+**Total Duration:** {{project_duration}}
+
+### 2.2 Work Schedule
+
+**Work Schedule:** {{work_schedule}}  
+**Estimated Hours:** {{estimated_hours}} hours {{time_period}}  
+**Deadline Requirements:** {{deadline_requirements}}
+
+### 2.3 Location of Work
+
+**Primary Work Location:** {{work_location}}  
+**Remote Work:** {{#if remote_allowed}}Permitted{{else}}Not permitted{{/if}}
+
+---
+
+## 3. Compensation and Payment
+
+### 3.1 Payment Structure
+
+**Compensation Type:** {{compensation_type}}
+
+{{#if hourly_rate}}
+
+- **Hourly Rate:** ${{hourly_rate}} per hour
+- **Maximum Hours:** {{max_hours}} hours per {{billing_period}}
+  {{/if}}
+
+{{#if project_fee}}
+
+- **Total Project Fee:** ${{project_fee}}
+- **Payment Schedule:** {{payment_schedule}}
+  {{/if}}
+
+{{#if monthly_retainer}}
+
+- **Monthly Retainer:** ${{retainer_amount}} per month
+  {{/if}}
+
+### 3.2 Payment Terms
+
+- **Invoice Frequency:** {{invoice_frequency}}
+- **Payment Due:** {{payment_terms}} days after invoice receipt
+- **Payment Method:** {{payment_method}}
+
+### 3.3 Expenses
+
+{{#if expenses_reimbursed}}
+**Reimbursable Expenses:** Company will reimburse pre-approved expenses: {{expense_categories}}
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**Expenses:** All expenses are the responsibility of Contractor unless specifically agreed otherwise in writing.
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 3.4 Late Payment
 
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+Invoices not paid within {{payment_terms}} days may incur a late fee of {{late_fee_rate}}% per month.
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Independent Contractor Relationship
+
+### 4.1 Independent Contractor Status
+
+Contractor is an independent contractor and not an employee, partner, or agent of Company. This relationship does not create:
+
+- An employer-employee relationship
+- A partnership or joint venture
+- Authority to bind Company to any obligation
+
+### 4.2 Control and Supervision
+
+- Contractor has the right to control the manner and means of performing the Services
+- Company's role is limited to specifying the desired results
+- Contractor may use their own methods, procedures, and techniques
+
+### 4.3 Business Operations
+
+Contractor:
+
+- Maintains their own business operations and workspace
+- Provides their own tools and equipment (unless specified otherwise)
+- May work for other clients during the term of this Agreement
+- Is responsible for their own business expenses
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Taxes and Benefits
+
+### 5.1 Tax Responsibilities
+
+- Contractor is responsible for all federal, state, and local taxes
+- Company will not withhold taxes from payments
+- Company will issue Form 1099-NEC if total payments exceed $600
+- Contractor must provide accurate tax identification information
+
+### 5.2 No Employee Benefits
+
+Contractor is not entitled to:
+
+- Health insurance, retirement plans, or other employee benefits
+- Workers' compensation coverage
+- Unemployment insurance benefits
+- Paid time off or sick leave
+
+### 5.3 Business License and Insurance
+
+Contractor warrants they maintain:
+
+- All necessary business licenses and permits
+- Professional liability insurance (if applicable): ${{insurance_minimum}}
+- General liability insurance: ${{general_liability_minimum}}
+
+---
+
+## 6. Intellectual Property
+
+### 6.1 Work Product Ownership
+
+{{#if company_owns_work_product}}
+All work products, deliverables, and intellectual property created under this Agreement shall be deemed "work made for hire" and owned by Company.
+{{else}}
+Contractor retains ownership of work products, with Company receiving the following license: {{license_terms}}
+{{/if}}
+
+### 6.2 Pre-Existing Intellectual Property
+
+Each Party retains ownership of their respective pre-existing intellectual property.
+
+### 6.3 Third-Party Materials
+
+Contractor warrants that all work will not infringe upon third-party intellectual property rights.
+
+---
+
+## 7. Confidentiality
+
+### 7.1 Confidential Information
+
+Contractor acknowledges access to Company's confidential information and agrees to:
+
+- Maintain strict confidentiality of all proprietary information
+- Use confidential information solely for performing Services
+- Not disclose confidential information to third parties
+
+### 7.2 Return of Information
+
+Upon termination, Contractor will return or destroy all confidential information and work products.
+
+### 7.3 Duration
+
+Confidentiality obligations survive termination for {{confidentiality_duration}} years.
+
+---
+
+## 8. Non-Compete and Non-Solicitation
+
+### 8.1 Non-Compete Restrictions
+
+{{#if non_compete_clause}}
+During the term and for {{non_compete_duration}} after termination, Contractor agrees not to engage in competing business activities: {{non_compete_restrictions}}
+{{else}}
+No non-compete restrictions apply to this Agreement.
+{{/if}}
+
+### 8.2 Non-Solicitation
+
+{{#if non_solicitation_clause}}
+Contractor agrees not to solicit Company's employees or customers for {{non_solicitation_duration}} after termination.
+{{/if}}
+
+---
+
+## 9. Warranties and Representations
+
+### 9.1 Contractor Warranties
+
+Contractor warrants:
+
+- Authority to enter into this Agreement
+- Services will be performed with professional skill and care
+- Work will be original and will not infringe third-party rights
+- Compliance with all applicable laws and regulations
+
+### 9.2 Company Warranties
+
+Company warrants:
+
+- Authority to enter into this Agreement
+- Will provide necessary information and cooperation
+- Will make timely payments as agreed
+
+---
+
+## 10. Limitation of Liability
+
+### 10.1 Liability Cap
+
+EXCEPT FOR BREACHES OF CONFIDENTIALITY, EACH PARTY'S TOTAL LIABILITY SHALL NOT EXCEED THE TOTAL AMOUNT PAID UNDER THIS AGREEMENT.
+
+### 10.2 Consequential Damages
+
+NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES.
+
+---
+
+## 11. Indemnification
+
+### 11.1 Contractor Indemnification
+
+Contractor shall indemnify Company against claims arising from:
+
+- Contractor's negligence or willful misconduct
+- Violation of third-party rights
+- Failure to pay taxes or comply with employment laws
+
+### 11.2 Company Indemnification
+
+Company shall indemnify Contractor against claims arising from:
+
+- Use of Company-provided materials
+- Company's breach of this Agreement
+
+---
+
+## 12. Termination
+
+### 12.1 Termination for Convenience
+
+Either Party may terminate this Agreement with {{termination_notice}} days written notice.
+
+### 12.2 Termination for Cause
+
+Either Party may terminate immediately for:
+
+- Material breach uncured after {{cure_period}} days notice
+- Insolvency or bankruptcy
+- Violation of confidentiality or non-compete provisions
+
+### 12.3 Effect of Termination
+
+Upon termination:
+
+- Company shall pay for Services performed through termination date
+- Contractor shall deliver all work products and confidential information
+- Survival provisions shall remain in effect
+
+---
+
+## 13. General Provisions
+
+### 13.1 Governing Law
+
+This Agreement shall be governed by the laws of {{governing_state}}.
+
+### 13.2 Dispute Resolution
+
+{{#if arbitration_clause}}
+Disputes shall be resolved through binding arbitration in {{arbitration_location}}.
+{{else}}
+Disputes shall be resolved in the courts of {{jurisdiction}}.
+{{/if}}
+
+### 13.3 Entire Agreement
+
+This Agreement constitutes the entire agreement and supersedes all prior negotiations.
+
+### 13.4 Amendment
+
+This Agreement may only be amended by written agreement signed by both Parties.
+
+### 13.5 Severability
+
+If any provision is held invalid, the remainder shall remain in full force and effect.
+
+### 13.6 Assignment
+
+This Agreement may not be assigned without the other Party's written consent.
+
+---
+
+## 14. Additional Terms
+
+{{additional_terms}}
+
+---
+
+## 15. Signatures
+
+**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
+
+**COMPANY:**
+
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
+| {{company_name}}                           |                    |
+| By: {{company_signatory}}                  |                    |
+| Title: {{company_title}}                   |                    |
+
+**CONTRACTOR:**
+
+{{#if contractor_entity_type}}
+| Signature | Date |
+|-----------|------|
+| ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
+| {{contractor_name}} | |
+| By: {{contractor_signatory}} | |
+| Title: {{contractor_title}} | |
+{{else}}
+| Signature | Date |
+|-----------|------|
+| ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
+| {{contractor_name}} | |
+| Social Security #: {{contractor_ssn}} | |
+{{/if}}
+
+---
+
+**IMPORTANT LEGAL NOTICE:** This independent contractor agreement should be reviewed by legal counsel to ensure compliance with federal, state, and local employment and tax laws. Proper classification of workers as independent contractors is crucial for legal and tax compliance.
+
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
+Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
+
+

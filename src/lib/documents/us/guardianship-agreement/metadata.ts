@@ -36,7 +36,11 @@ export const guardianshipAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Tutelá',
       description:
         'Acuerdo legal que establece responsabilidades y autoridad de tutelá.',
-      aliases: ['nombramiento de tutor', 'acuerdo de custodia'],
+      aliases: [
+        'nombramiento de tutor',
+        'acuerdo de custodia',
+        'tutela legal',
+      ],
     },
   },
 };

@@ -34,6 +34,7 @@ export const metadata = {
         'revocar poder',
         'cancelar poder notarial',
         'terminar autoridad agente',
+        'revocación de poa',
       ],
     },
   },

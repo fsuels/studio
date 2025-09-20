@@ -41,6 +41,7 @@ export const tenantMaintenanceRequestMeta: LegalDocument = {
         'solicitud de reparación',
         'formulario de mantenimiento',
         'solicitud de reparación del inquilino',
+        'solicitud de mantenimiento de la propiedad',
       ],
     },
   },

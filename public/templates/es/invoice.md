@@ -1,99 +1,320 @@
-# Contrato de Compraventa de Vehículo
+﻿# Invoice
+> Nota: contenido temporal en inglés; se requiere localización.
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**INVOICE**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**Invoice #:** {{invoice_number}}  
+**Date:** {{invoice_date}}  
+**Due Date:** {{due_date}}
 
 ---
 
-## 1. Descripción del Vehículo
+## Bill To:
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+**{{client_name}}**  
+{{client_address}}  
+{{client_city}}, {{client_state}} {{client_zip}}  
+{{client_country}}
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**Contact Information:**  
+**Email:** {{client_email}}  
+**Phone:** {{client_phone}}  
+**Tax ID/VAT:** {{client_tax_id}}
 
-## 2. Precio de Compra y Pago
+---
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+## Bill From:
 
-## 3. Condición del Vehículo
+**{{business_name}}**  
+{{business_address}}  
+{{business_city}}, {{business_state}} {{business_zip}}  
+{{business_country}}
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+**Contact Information:**  
+**Email:** {{business_email}}  
+**Phone:** {{business_phone}}  
+**Website:** {{business_website}}  
+**Tax ID/EIN:** {{business_tax_id}}
+
+---
+
+## Project/Order Information
+
+**Project Name:** {{project_name}}  
+**Purchase Order #:** {{purchase_order_number}}  
+**Reference #:** {{reference_number}}  
+**Sales Representative:** {{sales_rep_name}}
+
+---
+
+## Items/Services
+
+| Description                | Quantity               | Rate                | Amount             |
+| -------------------------- | ---------------------- | ------------------- | ------------------ | ------------------ | ------- |
+| {{item_1_description}}     | {{item_1_quantity}}    | ${{item_1_rate}}    | ${{item_1_amount}} |
+| {{#if item_2_description}} | {{item_2_description}} | {{item_2_quantity}} | ${{item_2_rate}}   | ${{item_2_amount}} | {{/if}} |
+| {{#if item_3_description}} | {{item_3_description}} | {{item_3_quantity}} | ${{item_3_rate}}   | ${{item_3_amount}} | {{/if}} |
+| {{#if item_4_description}} | {{item_4_description}} | {{item_4_quantity}} | ${{item_4_rate}}   | ${{item_4_amount}} | {{/if}} |
+| {{#if item_5_description}} | {{item_5_description}} | {{item_5_quantity}} | ${{item_5_rate}}   | ${{item_5_amount}} | {{/if}} |
+
+{{additional_items}}
+
+---
+
+## Cost Breakdown
+
+### Subtotal Calculations
+
+**Subtotal:** ${{subtotal}}
+
+### Discounts
+
+{{#if discount_applied}}
+**Discount ({{discount_percentage}}%):** -${{discount_amount}}  
+**Discount Description:** {{discount_description}}
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**Discount:** $0.00
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### Taxes
 
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
+{{#if tax_applicable}}
+**Sales Tax ({{tax_rate}}%):** ${{sales_tax_amount}}  
+**Tax Jurisdiction:** {{tax_jurisdiction}}  
+{{#if additional_taxes}}
+**Additional Taxes:** ${{additional_tax_amount}}  
+**Tax Description:** {{additional_tax_description}}
+{{/if}}
+{{else}}
+**Tax:** $0.00
 {{/if}}
 
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
+### Shipping & Handling
 
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
+{{#if shipping_charges}}
+**Shipping:** ${{shipping_amount}}  
+**Handling:** ${{handling_amount}}  
+**Shipping Method:** {{shipping_method}}
+{{else}}
+**Shipping & Handling:** $0.00
 {{/if}}
 
-### Reconocimiento Notarial
+### Other Fees
 
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+{{#if other_fees}}
+{{other_fees_breakdown}}
+{{else}}
+**Other Fees:** $0.00
+{{/if}}
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## Total Amount Due
+
+|                         | Amount                     |
+| ----------------------- | -------------------------- |
+| **Subtotal**            | ${{subtotal}}              |
+| **Discount**            | -${{discount_amount}}      |
+| **Tax**                 | ${{total_tax_amount}}      |
+| **Shipping & Handling** | ${{total_shipping_amount}} |
+| **Other Fees**          | ${{other_fees_total}}      |
+| **TOTAL DUE**           | **${{total_amount_due}}**  |
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## Payment Information
+
+### Payment Terms
+
+**Payment Terms:** {{payment_terms}}  
+**Due Date:** {{due_date}}
+
+{{#if early_payment_discount}}
+**Early Payment Discount:** {{early_payment_discount_rate}}% if paid by {{early_payment_date}}
+{{/if}}
+
+{{#if late_payment_fee}}
+**Late Payment Fee:** {{late_payment_fee_rate}}% per month on overdue amounts
+{{/if}}
+
+### Accepted Payment Methods
+
+{{#if accepts_cash}}â˜ Cash{{/if}}  
+{{#if accepts_check}}â˜ Check (payable to {{business_name}}){{/if}}  
+{{#if accepts_credit_card}}â˜ Credit Card{{/if}}  
+{{#if accepts_bank_transfer}}â˜ Bank Transfer/ACH{{/if}}  
+{{#if accepts_online_payment}}â˜ Online Payment{{/if}}
+
+### Payment Instructions
+
+{{#if bank_transfer_details}}
+**Bank Transfer Details:**  
+**Bank Name:** {{bank_name}}  
+**Account Name:** {{account_name}}  
+**Account Number:** {{account_number}}  
+**Routing Number:** {{routing_number}}  
+**SWIFT Code:** {{swift_code}}
+{{/if}}
+
+{{#if online_payment_url}}
+**Online Payment:** {{online_payment_url}}
+{{/if}}
+
+{{#if check_payment_address}}
+**Mail Checks To:**  
+{{check_payment_address}}
+{{/if}}
+
+---
+
+## Additional Information
+
+### Notes
+
+{{#if invoice_notes}}
+{{invoice_notes}}
+{{else}}
+Thank you for your business!
+{{/if}}
+
+### Terms and Conditions
+
+{{#if terms_and_conditions}}
+{{terms_and_conditions}}
+{{else}}
+
+1. Payment is due within {{payment_terms}} of invoice date
+2. Late payments may incur additional fees
+3. All work performed and materials provided are subject to our standard terms of service
+   {{/if}}
+
+### Warranty/Return Policy
+
+{{#if warranty_policy}}
+{{warranty_policy}}
+{{/if}}
+
+---
+
+## Contact Information
+
+### Questions About This Invoice?
+
+**Contact:** {{billing_contact_name}}  
+**Phone:** {{billing_contact_phone}}  
+**Email:** {{billing_contact_email}}  
+**Hours:** {{business_hours}}
+
+### Billing Department
+
+{{#if separate_billing_contact}}
+**Billing Contact:** {{billing_department_contact}}  
+**Billing Phone:** {{billing_department_phone}}  
+**Billing Email:** {{billing_department_email}}
+{{/if}}
+
+---
+
+## Business Information
+
+### Business Registration
+
+**Business License #:** {{business_license_number}}  
+**State of Incorporation:** {{state_of_incorporation}}  
+**Federal Tax ID:** {{federal_tax_id}}
+
+{{#if professional_licenses}}
+
+### Professional Licenses
+
+{{professional_license_information}}
+{{/if}}
+
+---
+
+## Attachments
+
+{{#if has_attachments}}
+**Supporting Documents:**
+
+- {{attachment_1}}
+- {{attachment_2}}
+- {{attachment_3}}
+  {{additional_attachments}}
+  {{else}}
+  No supporting documents attached.
+  {{/if}}
+
+---
+
+## For Internal Use Only
+
+**Customer ID:** {{customer_id}}  
+**Invoice Created By:** {{created_by}}  
+**Sales Territory:** {{sales_territory}}  
+**Commission Rate:** {{commission_rate}}%
+
+---
+
+## Payment Record
+
+**For Accounting Use:**
+
+| Payment Date | Amount Paid | Payment Method | Check/Transaction # | Balance Remaining     |
+| ------------ | ----------- | -------------- | ------------------- | --------------------- |
+|              |             |                |                     | ${{total_amount_due}} |
+|              |             |                |                     |                       |
+|              |             |                |                     |                       |
+
+---
+
+## Remittance Advice
+
+{{#if remittance_copy}}
+**REMITTANCE COPY - RETURN WITH PAYMENT**
+
+**Invoice #:** {{invoice_number}}  
+**Invoice Date:** {{invoice_date}}  
+**Amount Due:** ${{total_amount_due}}  
+**Due Date:** {{due_date}}
+
+**Remit To:**  
+{{business_name}}  
+{{remittance_address}}
+
+**Amount Paid:** $ **\*\***\_\_\_\_**\*\***  
+**Check #:** **\*\***\_\_\_\_**\*\***  
+**Date Paid:** **\*\***\_\_\_\_**\*\***
+{{/if}}
+
+---
+
+## Important Legal Notices
+
+### Collection Notice
+
+{{#if collection_notice}}
+**COLLECTION NOTICE:** Past due accounts may be subject to collection action, including but not limited to credit reporting, collection agency referral, and legal action. Additional collection costs may be added to your account.
+{{/if}}
+
+### Dispute Resolution
+
+{{#if dispute_procedure}}
+**Disputes:** Any disputes regarding this invoice must be raised within {{dispute_period}} days of the invoice date. Please contact {{dispute_contact}} to resolve billing questions.
+{{/if}}
+
+### Governing Law
+
+This invoice and any disputes arising from it shall be governed by the laws of {{governing_state}}.
+
+---
+
+**IMPORTANT NOTICE:** This invoice should be reviewed carefully for accuracy. Please contact us immediately if you notice any discrepancies. Payment of this invoice constitutes acceptance of the goods/services provided and the terms stated herein.
+
+## _Invoice generated by 123LegalDoc - Professional Legal Document Platform_
+
+Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
+
+

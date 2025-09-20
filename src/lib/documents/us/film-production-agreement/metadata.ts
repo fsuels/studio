@@ -36,7 +36,11 @@ export const filmProductionAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Producción Cinematográfica',
       description:
         'Acuerdo para servicios de producción de películas y videos.',
-      aliases: ['contrato de producción', 'acuerdo cinematográfico'],
+      aliases: [
+        'contrato de producción',
+        'acuerdo cinematográfico',
+        'contrato cinematográfico',
+      ],
     },
   },
 };

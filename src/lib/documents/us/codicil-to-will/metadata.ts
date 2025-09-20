@@ -26,13 +26,21 @@ export const codicilToWillMeta: LegalDocument = {
       name: 'Codicil to Will',
       description:
         'Make amendments to your existing will without rewriting the entire document.',
-      aliases: ['will amendment', 'will codicil', 'will modification'],
+      aliases: [
+        'will amendment',
+        'will codicil',
+        'will modification',
+      ],
     },
     es: {
       name: 'Codicilo al Testamento',
       description:
         'Mantén tu testamento actualizado sin costos legales excesivos. Adapta tu herencia a cambios familiares y financieros fácilmente.',
-      aliases: ['enmienda al testamento', 'modificación de testamento'],
+      aliases: [
+        'enmienda al testamento',
+        'modificación de testamento',
+        'modificación',
+      ],
     },
   },
 };

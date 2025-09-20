@@ -39,6 +39,7 @@ export const architectContractMeta: LegalDocument = {
       aliases: [
         'acuerdo de servicios arquitectónicos',
         'contrato de profesional de diseño',
+        'acuerdo de arquitecto',
       ],
     },
   },

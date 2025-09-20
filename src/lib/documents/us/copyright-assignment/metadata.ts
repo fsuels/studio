@@ -39,6 +39,7 @@ export const copyrightAssignmentMeta: LegalDocument = {
       aliases: [
         'contrato de asignación de derechos de autor',
         'transferencia de derechos de autor',
+        'asignación de propiedad intelectual',
       ],
     },
   },

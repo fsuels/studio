@@ -36,7 +36,11 @@ export const softwareLicenseAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Licencia de Software',
       description:
         'Licencia tu software a usuarios mientras proteges tus derechos de propiedad intelectual. Establece términos de uso y restricciones.',
-      aliases: ['acuerdo de licenciamiento de software', 'EULA'],
+      aliases: [
+        'acuerdo de licenciamiento de software',
+        'EULA',
+        'eula legal',
+      ],
     },
   },
 };

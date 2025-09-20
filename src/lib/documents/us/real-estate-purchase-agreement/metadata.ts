@@ -34,7 +34,11 @@ export const realEstatePurchaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Compra de Bienes Raíces',
       description: 'Acuerdo para la compra y venta de bienes inmuebles.',
-      aliases: ['contrato de compra de casa', 'acuerdo de venta de propiedad'],
+      aliases: [
+        'contrato de compra de casa',
+        'acuerdo de venta de propiedad',
+        'contrato de venta de bienes raíces',
+      ],
     },
   },
 };

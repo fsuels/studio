@@ -37,7 +37,12 @@ export const subleaseAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Subarriendo',
       description:
         'Renta tu apartamento a otra persona mientras sigues siendo responsable del contrato original. Útil cuando te mudas temporalmente.',
-      aliases: ['contrato de subarriendo', 'subarriendo', 'subarrendamiento'],
+      aliases: [
+        'contrato de subarriendo',
+        'subarriendo',
+        'subarrendamiento',
+        'contrato de subarrendamiento',
+      ],
     },
   },
 };

@@ -25,12 +25,18 @@ export const sponsorshipAgreementMeta: LegalDocument = {
     en: {
       name: 'Sponsorship Agreement',
       description: 'Agreement for event, sports, or business sponsorships.',
-      aliases: ['sponsor contract', 'sponsorship deal'],
+      aliases: [
+        'sponsor contract',
+        'sponsorship deal',
+      ],
     },
     es: {
       name: 'Acuerdo de Patrocinio',
       description: 'Acuerdo para patrocinios de eventos, deportes o negocios.',
-      aliases: ['contrato de patrocinio'],
+      aliases: [
+        'contrato de patrocinio',
+        'acuerdo de patrocinio',
+      ],
     },
   },
 };

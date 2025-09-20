@@ -223,7 +223,8 @@
           "statement under oath",
           "declaración jurada",
           "declaración oficial",
-          "declaración bajo juramento"
+          "declaración bajo juramento",
+          "declaraci?n juramentada"
         ],
         "requiresNotary": true,
         "states": [
@@ -246,7 +247,8 @@
             "aliases": [
               "declaración jurada",
               "declaración oficial",
-              "declaración bajo juramento"
+              "declaración bajo juramento",
+              "declaraci?n juramentada"
             ]
           }
         }

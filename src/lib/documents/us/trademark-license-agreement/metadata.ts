@@ -36,7 +36,11 @@ export const trademarkLicenseAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Licencia de Marca Registrada',
       description:
         'Acuerdo que otorga derechos para usar marcas registradas y nombres comerciales con control de calidad.',
-      aliases: ['acuerdo de licencia de marca', 'contrato de licencia'],
+      aliases: [
+        'acuerdo de licencia de marca',
+        'contrato de licencia',
+        'contrato de licencia legal',
+      ],
     },
   },
 };

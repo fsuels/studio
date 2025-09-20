@@ -26,13 +26,21 @@ export const generalLiabilityWaiverMeta: LegalDocument = {
       name: 'General Liability Waiver',
       description:
         'Comprehensive liability waiver and release form for activities and services.',
-      aliases: ['liability release', 'waiver of liability', 'release form'],
+      aliases: [
+        'liability release',
+        'waiver of liability',
+        'release form',
+      ],
     },
     es: {
       name: 'Exención de Responsabilidad General',
       description:
         'Protege tu negocio de demandas por accidentes en eventos, talleres o actividades peligrosas. Exención completa de responsabilidad.',
-      aliases: ['liberación de responsabilidad', 'exención de responsabilidad'],
+      aliases: [
+        'liberación de responsabilidad',
+        'exención de responsabilidad',
+        'formulario de liberación',
+      ],
     },
   },
 };

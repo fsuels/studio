@@ -99,6 +99,7 @@ class TemplateMonitor {
    */
   private async updateMetrics(): Promise<void> {
     try {
+      this.metrics.parityIssues = [];
       // Run verification silently
       const originalLog = console.log;
       console.log = () => {}; // Suppress output\n\n      try {\n        await this.verifier.verifyAllTemplates();\n      } finally {\n        console.log = originalLog; // Restore output\n      }
@@ -170,7 +171,30 @@ class TemplateMonitor {
     }
 
     // Update metrics
-    await this.updateMetrics();\n\n    const parityIssuesForDoc = documentType\n      ? this.metrics.parityIssues.filter((issue) => issue.documentType === documentType)\n      : [];\n\n    if (parityIssuesForDoc.length > 0) {\n      change.isValid = false;\n      console.log(chalk.red.bold(\n[PARITY]  translation parity issues detected:));\n      parityIssuesForDoc.forEach((issue) => {\n        console.log(chalk.red(  - ));\n      });\n      console.log('');\n    }\n\n    // Display alert for invalid changes
+    await this.updateMetrics();
+
+    const parityIssuesForDoc =
+      documentType && this.metrics.parityIssues.length > 0
+        ? this.metrics.parityIssues.filter(
+            (issue) => issue.documentType === documentType,
+          )
+        : [];
+
+    if (parityIssuesForDoc.length > 0) {
+      change.isValid = false;
+      console.log(
+        chalk.red.bold(
+          `
+[PARITY] ${documentType} translation parity issues detected:`,
+        ),
+      );
+      parityIssuesForDoc.forEach((issue) => {
+        console.log(chalk.red(`  - ${issue.message}`));
+      });
+      console.log('');
+    }
+
+    // Display alert for invalid changes
     if (change.isValid === false) {
       console.log(
         chalk.red.bold(`\n⚠️  ALERT: Invalid template detected: ${fileName}`),
@@ -257,8 +281,25 @@ class TemplateMonitor {
     }
 
     // Alerts
+    if (this.metrics.parityIssues.length > 0) {
+      console.log(chalk.red.bold('
+[PARITY ALERT] Translation parity issues detected'));
+      const preview = this.metrics.parityIssues.slice(0, 5);
+      preview.forEach((issue) => {
+        console.log(chalk.red(`  - ${issue.documentType}: ${issue.message}`));
+      });
+      if (this.metrics.parityIssues.length > preview.length) {
+        console.log(
+          chalk.red(
+            `  - ...${this.metrics.parityIssues.length - preview.length} more issues`,
+          ),
+        );
+      }
+    }
+
     if (this.metrics.qualityScore < 90) {
-      console.log(chalk.yellow.bold('\n⚠️  Quality Alert: Score below 90%'));
+      console.log(chalk.yellow.bold('
+??  Quality Alert: Score below 90%'));
       console.log(
         chalk.yellow('  Run npm run verify-templates for detailed report'),
       );

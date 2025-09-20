@@ -36,7 +36,11 @@ export const loanModificationAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Modificación de Préstamo',
       description:
         'Cambia los términos de un préstamo existente para evitar el impago. Reduce pagos, cambia tasas de interés o extiende el plazo de pago.',
-      aliases: ['enmienda de préstamo', 'acuerdo de reestructuración'],
+      aliases: [
+        'enmienda de préstamo',
+        'acuerdo de reestructuración',
+        'acuerdo de entrenamiento de préstamos',
+      ],
     },
   },
 };

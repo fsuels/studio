@@ -36,7 +36,11 @@ export const internshipAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Pasantía',
       description:
         'Acuerdo entre empresa y pasante para programas de pasantía y experiencia laboral.',
-      aliases: ['acuerdo de intern', 'contrato de experiencia laboral'],
+      aliases: [
+        'acuerdo de intern',
+        'contrato de experiencia laboral',
+        'contrato de pasantías para estudiantes',
+      ],
     },
   },
 };

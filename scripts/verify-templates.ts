@@ -216,6 +216,9 @@ class TemplateVerifier {
       chalk.blue.bold('\n[verify] Starting Template Verification System\n'),
     );
 
+    this.validationResults = [];
+    this.duplicateHashes.clear();
+
     const languages = ['en', 'es'];
     let allValid = true;
 

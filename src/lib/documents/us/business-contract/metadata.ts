@@ -36,7 +36,11 @@ export const businessContractMeta: LegalDocument = {
       name: 'Contrato Comercial',
       description:
         'Protege tu negocio y evita malentendidos costosos en transacciones comerciales. Establece términos que beneficien a ambas partes.',
-      aliases: ['contrato de negocios', 'acuerdo comercial'],
+      aliases: [
+        'contrato de negocios',
+        'acuerdo comercial',
+        'acuerdo comercial legal',
+      ],
     },
   },
 };

@@ -26,13 +26,21 @@ export const dataProcessingAgreementMeta: LegalDocument = {
       name: 'Data Processing Agreement',
       description:
         'Agreement governing the processing and handling of personal data and information.',
-      aliases: ['DPA', 'data handling agreement', 'privacy agreement'],
+      aliases: [
+        'DPA',
+        'data handling agreement',
+        'privacy agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Procesamiento de Datos',
       description:
         'Protege la privacidad de datos de clientes cuando trabajas con terceros. Define cómo se manejan y protegen datos personales.',
-      aliases: ['DPA', 'acuerdo de manejo de datos'],
+      aliases: [
+        'DPA',
+        'acuerdo de manejo de datos',
+        'acuerdo de privacidad',
+      ],
     },
   },
 };

@@ -26,13 +26,21 @@ export const consignmentAgreementMeta: LegalDocument = {
       name: 'Consignment Agreement',
       description:
         'Expand your sales reach without upfront costs. Sell products through other retailers while maintaining control over pricing and returns.',
-      aliases: ['consignment contract', 'consignment deal', 'sales agreement'],
+      aliases: [
+        'consignment contract',
+        'consignment deal',
+        'sales agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Consignación',
       description:
         'Vende productos a través de otra tienda o vendedor. Define quién recibe qué porcentaje de las ventas y qué pasa con productos no vendidos.',
-      aliases: ['contrato de consignación', 'acuerdo de ventas'],
+      aliases: [
+        'contrato de consignación',
+        'acuerdo de ventas',
+        'acuerdo de venta',
+      ],
     },
   },
 };

@@ -26,12 +26,20 @@ export const franchiseDisclosureAgreementMeta: LegalDocument = {
       name: 'Franchise Disclosure Agreement',
       description:
         'Comprehensive franchise disclosure document and agreement for franchisors and franchisees.',
-      aliases: ['fdd', 'franchise agreement', 'franchising contract'],
+      aliases: [
+        'fdd',
+        'franchise agreement',
+        'franchising contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Divulgación de Franquicia',
       description: 'Documento completo de divulgación y acuerdo de franquicia.',
-      aliases: ['contrato de franquicia', 'acuerdo de franquiciamiento'],
+      aliases: [
+        'contrato de franquicia',
+        'acuerdo de franquiciamiento',
+        'contrato de franquicia legal',
+      ],
     },
   },
 };

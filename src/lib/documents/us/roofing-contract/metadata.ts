@@ -39,6 +39,7 @@ export const roofingContractMeta: LegalDocument = {
       aliases: [
         'contrato de reparación de techo',
         'acuerdo de reemplazo de techo',
+        'contrato de servicio de techado',
       ],
     },
   },

@@ -34,7 +34,11 @@ export const livestockPurchaseAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Compra de Ganado',
       description: 'Compra o vende ganado (vacas, caballos, cerdos, etc.) de manera segura. Incluye historial de salud, garantías y condiciones de entrega.',
-      aliases: ['acuerdo de compra de ganado', 'contrato de venta de animales'],
+      aliases: [
+        'acuerdo de compra de ganado',
+        'contrato de venta de animales',
+        'bolsa de venta de ganado',
+      ],
     },
   },
 };

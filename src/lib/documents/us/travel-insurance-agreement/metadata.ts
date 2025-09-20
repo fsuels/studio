@@ -25,12 +25,18 @@ export const travelInsuranceAgreementMeta: LegalDocument = {
     en: {
       name: 'Travel Insurance Agreement',
       description: 'Agreement for travel insurance coverage and terms.',
-      aliases: ['travel insurance policy', 'trip insurance'],
+      aliases: [
+        'travel insurance policy',
+        'trip insurance',
+      ],
     },
     es: {
       name: 'Acuerdo de Seguro de Viaje',
       description: 'Acuerdo para cobertura y términos de seguro de viaje.',
-      aliases: ['póliza de seguro de viaje'],
+      aliases: [
+        'póliza de seguro de viaje',
+        'seguro de viaje',
+      ],
     },
   },
 };

@@ -1,99 +1,294 @@
-# Contrato de Compraventa de Vehículo
+﻿# Quitclaim Deed
+> Nota: contenido temporal en inglés; se requiere localización.
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**QUITCLAIM DEED**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**State of {{state}}**  
+**County of {{county}}**
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Property Transfer Information
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+**Document Date:** {{deed_date}}  
+**Recording Information:** {{recording_info}} (to be completed by recorder)
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+### 1.1 Parties
 
-## 2. Precio de Compra y Pago
+**Grantor (Current Owner):** {{grantor_name}}  
+**Grantor Address:** {{grantor_address}}  
+**Grantor Status:** {{grantor_marital_status}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+{{#if multiple_grantors}}
+**Additional Grantor:** {{grantor_2_name}}  
+**Additional Grantor Address:** {{grantor_2_address}}
+{{/if}}
 
-## 3. Condición del Vehículo
+**Grantee (New Owner):** {{grantee_name}}  
+**Grantee Address:** {{grantee_address}}  
+**Grantee Status:** {{grantee_marital_status}}
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+{{#if multiple_grantees}}
+**Additional Grantee:** {{grantee_2_name}}  
+**Additional Grantee Address:** {{grantee_2_address}}  
+**Ownership Type:** {{ownership_type}} (Joint Tenants/Tenants in Common/Community Property)
+{{/if}}
+
+---
+
+## 2. Property Description
+
+### 2.1 Property Address
+
+**Property Address:** {{property_address}}  
+**City:** {{city}}, **State:** {{state}}, **ZIP:** {{zip_code}}  
+**County:** {{county}}
+
+### 2.2 Legal Description
+
+{{legal_description}}
+
+**Assessor's Parcel Number (APN):** {{assessors_parcel_number}}
+
+### 2.3 Property Details
+
+**Property Type:** {{property_type}} (Residential/Commercial/Vacant Land)  
+**Approximate Size:** {{property_size}}  
+**Zoning:** {{zoning_designation}}
+
+---
+
+## 3. Consideration and Transfer
+
+### 3.1 Consideration
+
+{{#if nominal_consideration}}
+**Consideration:** For the sum of Ten Dollars ($10.00) and other good and valuable consideration, receipt of which is hereby acknowledged.
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+**Consideration:** For the sum of **${{consideration_amount}}\*\* and other good and valuable consideration, receipt of which is hereby acknowledged.
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 3.2 Transfer Statement
 
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+The Grantor(s) hereby remise, release, and forever quitclaim to the Grantee(s), their heirs and assigns, all right, title, interest, claim, and demand which the Grantor(s) have in and to the above-described property.
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Quitclaim Language and Warranties
+
+### 4.1 Nature of Quitclaim Deed
+
+**IMPORTANT:** This is a Quitclaim Deed. The Grantor makes NO WARRANTIES regarding title to the property. The Grantor conveys only whatever interest, if any, the Grantor may have in the property. The Grantee receives no guarantees about the quality or extent of the title being transferred.
+
+### 4.2 No Title Warranties
+
+The Grantor does NOT warrant or guarantee:
+
+- That the Grantor owns the property
+- That the title is clear and marketable
+- That there are no liens or encumbrances
+- That the property description is accurate
+- Protection against title defects
+
+### 4.3 "As-Is" Transfer
+
+The property is transferred in its current condition, "AS-IS," without any warranties or representations regarding:
+
+- Physical condition of the property
+- Compliance with building codes or zoning laws
+- Environmental conditions
+- Boundary disputes
+- Access rights
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Subject to Existing Conditions
+
+### 5.1 Existing Encumbrances
+
+This transfer is subject to:
+
+- All existing liens, mortgages, and encumbrances of record
+- Easements, restrictions, and covenants of record
+- Property taxes and assessments
+- {{existing_encumbrances}}
+
+### 5.2 Specific Reservations
+
+{{#if has_reservations}}
+The Grantor reserves the following rights:
+{{reserved_rights}}
+{{else}}
+The Grantor makes no reservations of rights in the property.
+{{/if}}
+
+---
+
+## 6. Common Uses for Quitclaim Deeds
+
+**Note:** This quitclaim deed is being used for the following purpose:
+{{quitclaim_purpose}}
+
+**Common Uses Include:**
+
+- Transfer between family members
+- Adding/removing spouse from title
+- Clearing title defects
+- Transfer to trust or LLC
+- Divorce property transfers
+- Correcting deed errors
+
+---
+
+## 7. Tax Information
+
+### 7.1 Property Tax Information
+
+**Current Year Taxes:** {{current_tax_amount}}  
+**Tax Year:** {{tax_year}}  
+**Tax Responsibility:** {{tax_responsibility}}
+
+### 7.2 Transfer Tax
+
+{{#if transfer_tax_applicable}}
+**Transfer Tax Due:** ${{transfer_tax_amount}}  
+**Transfer Tax Paid By:** {{transfer_tax_paid_by}}
+{{else}}
+**Transfer Tax:** Not applicable or exempt
+{{/if}}
+
+---
+
+## 8. Additional Provisions
+
+### 8.1 Special Conditions
+
+{{#if special_conditions}}
+{{special_conditions}}
+{{else}}
+No special conditions apply to this transfer.
+{{/if}}
+
+### 8.2 Effective Date
+
+This deed shall be effective as of {{effective_date}}.
+
+### 8.3 Governing Law
+
+This deed shall be governed by the laws of {{state}}.
+
+---
+
+## 9. Grantor Acknowledgment
+
+The Grantor(s) acknowledge that:
+
+- They understand the nature of a quitclaim deed
+- They are making no warranties regarding title
+- They have read and understand this document
+- They are executing this deed voluntarily
+
+---
+
+## 10. Execution and Signatures
+
+**IN WITNESS WHEREOF**, the Grantor(s) have executed this Quitclaim Deed on **{{deed_date}}**.
+
+**GRANTOR:**
+
+| Signature                                  | Date          |
+| ------------------------------------------ | ------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
+| {{grantor_name}}                           |               |
+| Print Name: {{grantor_name}}               |               |
+
+{{#if multiple_grantors}}
+**ADDITIONAL GRANTOR:**
+
+| Signature                                  | Date          |
+| ------------------------------------------ | ------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
+| {{grantor_2_name}}                         |               |
+| Print Name: {{grantor_2_name}}             |               |
+
+{{/if}}
+
+---
+
+## 11. Acknowledgment/Notarization
+
+**State of {{state}}**  
+**County of {{county}}**
+
+On this **{{deed_date}}**, before me personally appeared **{{grantor_name}}**{{#if multiple_grantors}} and **{{grantor_2_name}}**{{/if}}, who proved to me on the basis of satisfactory evidence to be the person(s) whose name(s) is/are subscribed to the within instrument and acknowledged to me that he/she/they executed the same in his/her/their authorized capacity(ies), and that by his/her/their signature(s) on the instrument the person(s), or the entity upon behalf of which the person(s) acted, executed the instrument.
+
+I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+
+**WITNESS** my hand and official seal.
+
+**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
+**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+
+**[Notary Seal]**
+
+---
+
+## 12. Recording Information
+
+**For Recorder's Use Only:**
+
+**Document Number:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recording Date:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recording Time:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recorded By:** **\*\*\*\***\_\_\_**\*\*\*\***
+
+**Recording Fees:**
+
+- Recording Fee: $\***\*\_\_\_\*\***
+- Transfer Tax: $\***\*\_\_\_\*\***
+- Other Fees: $\***\*\_\_\_\*\***
+- **Total:** $\***\*\_\_\_\*\***
+
+---
+
+## 13. Return Document To
+
+After recording, return this document to:
+
+**{{return_to_name}}**  
+{{return_to_address}}
+
+**Phone:** {{return_to_phone}}
+
+---
+
+## 14. Important Notices
+
+### 14.1 Title Insurance Recommendation
+
+**STRONGLY RECOMMENDED:** The Grantee should obtain title insurance to protect against title defects, liens, or other issues not revealed by this quitclaim deed.
+
+### 14.2 Professional Advice
+
+This deed should be reviewed by qualified legal and tax professionals before execution, especially for:
+
+- Tax implications of the transfer
+- Estate planning considerations
+- Potential liability issues
+- Recording requirements
+
+### 14.3 Recording Requirement
+
+This deed must be recorded in the county recorder's office where the property is located to provide public notice of the transfer.
+
+---
+
+**IMPORTANT LEGAL NOTICE:** This quitclaim deed should be reviewed by a qualified real estate attorney to ensure compliance with state and local laws. Quitclaim deeds provide no title warranties and should be used only when the parties understand the risks involved. Always obtain title insurance and professional legal advice before completing real estate transfers.
+
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
+Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
+
+

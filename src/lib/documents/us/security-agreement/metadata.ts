@@ -36,7 +36,11 @@ export const securityAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Garantía',
       description:
         'Acuerdo legal que crea un interés de garantía en propiedad personal para asegurar obligaciones de deuda.',
-      aliases: ['acuerdo de colateral', 'acuerdo de transacción garantizada'],
+      aliases: [
+        'acuerdo de colateral',
+        'acuerdo de transacción garantizada',
+        'acuerdo de seguridad de ucc',
+      ],
     },
   },
 };

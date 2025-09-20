@@ -39,6 +39,7 @@ export const bookkeepingServicesAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de servicios contables',
         'acuerdo de servicios financieros',
+        'contrato de contable',
       ],
     },
   },

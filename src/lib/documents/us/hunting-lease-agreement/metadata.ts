@@ -25,7 +25,11 @@ export const huntingLeaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Hunting Lease Agreement',
       description: 'Agreement for leasing hunting rights on private property.',
-      aliases: ['hunting rights lease', 'recreational lease', 'game lease'],
+      aliases: [
+        'hunting rights lease',
+        'recreational lease',
+        'game lease',
+      ],
     },
     es: {
       name: 'Acuerdo de Arrendamiento de Caza',
@@ -34,6 +38,7 @@ export const huntingLeaseAgreementMeta: LegalDocument = {
       aliases: [
         'arrendamiento de derechos de caza',
         'arrendamiento recreativo',
+        'arrendamiento del juego',
       ],
     },
   },

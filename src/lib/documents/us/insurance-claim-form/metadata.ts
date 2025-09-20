@@ -26,13 +26,21 @@ export const insuranceClaimFormMeta: LegalDocument = {
       name: 'Insurance Claim Form',
       description:
         'Form for filing insurance claims for various types of coverage.',
-      aliases: ['claim form', 'insurance claim', 'claim application'],
+      aliases: [
+        'claim form',
+        'insurance claim',
+        'claim application',
+      ],
     },
     es: {
       name: 'Formulario de Reclamo de Seguro',
       description:
         'Reclama dinero de tu seguro por daños, accidentes o pérdidas. Formato profesional que aumenta posibilidades de aprobación.',
-      aliases: ['formulario de reclamo', 'solicitud de seguro'],
+      aliases: [
+        'formulario de reclamo',
+        'solicitud de seguro',
+        'solicitud de reclamación',
+      ],
     },
   },
 };

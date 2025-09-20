@@ -36,7 +36,11 @@ export const notarizationRequestMeta: LegalDocument = {
       name: 'Solicitud de Notarización',
       description:
         'Formulario para solicitar servicios notariales para autenticación de documentos.',
-      aliases: ['solicitud notarial', 'notarización de documento'],
+      aliases: [
+        'solicitud notarial',
+        'notarización de documento',
+        'certificado notarial',
+      ],
     },
   },
 };

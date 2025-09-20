@@ -1,99 +1,190 @@
-# Contrato de Compraventa de Vehículo
+﻿# Poder Notarial para Atención Médica
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**PODER PARA DECISIONES MÉDICAS**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Datos de la Persona Otorgante
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+Yo, **{{principal_name}}**, residente de {{principal_city}}, {{principal_state}}, en pleno uso de mis facultades, nombro y designo a la(s) persona(s) indicada(s) a continuación como mi representante para decisiones médicas (apoderado/a de atención médica).
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**Información de la persona otorgante:**
 
-## 2. Precio de Compra y Pago
+- **Nombre completo:** {{principal_name}}  
+- **Domicilio:** {{principal_address}}  
+- **Fecha de nacimiento:** {{principal_dob}}  
+- **Número de Seguro Social:** {{principal_ssn}}  
+- **Teléfono:** {{principal_phone}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+---
 
-## 3. Condición del Vehículo
+## 2. Nombramiento de Representante Médico
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+### 2.1 Representante principal
+
+Por medio del presente nombro a **{{agent_name}}**, con domicilio en {{agent_address}}, como mi representante para decisiones médicas cuando yo no pueda tomarlas por mí misma/o.
+
+**Datos del representante:**
+
+- **Nombre completo:** {{agent_name}}  
+- **Domicilio:** {{agent_address}}  
+- **Teléfono:** {{agent_phone}}  
+- **Relación:** {{agent_relationship}}
+
+### 2.2 Representante suplente
+
+Si {{agent_name}} no puede o no desea actuar como mi representante, nombro a **{{successor_agent_name}}**, con domicilio en {{successor_agent_address}}, como representante suplente.
+
+**Datos del representante suplente:**
+
+- **Nombre completo:** {{successor_agent_name}}  
+- **Domicilio:** {{successor_agent_address}}  
+- **Teléfono:** {{successor_agent_phone}}  
+- **Relación:** {{successor_agent_relationship}}
+
+---
+
+## 3. Facultades Otorgadas
+
+### 3.1 Autoridad general en materia de salud
+
+Mi representante tendrá la autoridad para tomar todas las decisiones relacionadas con mi atención médica, incluyendo, de manera enunciativa más no limitativa:
+
+**Decisiones de tratamiento médico:**
+
+- Autorizar, rechazar o revocar tratamientos médicos, procedimientos quirúrgicos o diagnósticos
+- Aprobar medicamentos y terapias
+- Seleccionar y dar de alta a proveedores e instituciones médicas
+- Aprobar traslados a otras instalaciones
+- Acceder a mis expedientes médicos y a información protegida
+
+**Decisiones sobre el final de la vida:**
+
+- Determinar la continuidad o suspensión de tratamientos para mantener la vida
+- Autorizar cuidados paliativos y manejo del dolor
+- Decidir sobre nutrición e hidratación artificial
+- Autorizar cuidados de hospicio
+- Actuar de acuerdo con mi testamento en vida, en caso de existir
+
+### 3.2 Tratamiento de salud mental
+
+{{#if mental_health_authority}}
+Mi representante tendrá autoridad para decidir sobre tratamientos de salud mental, incluyendo:
+
+- Ingreso en instalaciones especializadas en salud mental
+- Consentir o rechazar medicación psiquiátrica
+- Autorizar terapias y planes de tratamiento en salud mental
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 3.3 Limitaciones específicas
 
-El Vendedor declara y garantiza que:
+{{specific_limitations}}
 
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+Si he expresado instrucciones específicas en un testamento en vida u otro documento, dichas instrucciones prevalecerán.
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Lista de Deseos Médicos y Éticos
+
+Es mi deseo que las decisiones médicas se tomen conforme a los siguientes principios:
+
+- {{medical_values_statement}}
+- {{religious_or_cultural_preferences}}
+- {{organ_donation_wishes}}
+- {{pain_management_preferences}}
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Declaraciones y Revocación
+
+### 5.1 Efecto inmediato
+
+Este poder surtirá efecto en el momento en que mi médico tratante determine que no puedo tomar decisiones por mí misma/o o cuando así lo indique por escrito.
+
+### 5.2 Revocación
+
+Podré revocar este poder en cualquier momento mediante:
+
+1. Notificación verbal o escrita a mi representante y a mi médico tratante.  
+2. Ejecución de un documento posterior que revoque el presente.  
+3. Destrucción física del documento original (cuando sea posible).
+
+### 5.3 Vigencia
+
+Este poder permanecerá vigente hasta que sea revocado conforme a lo anterior o hasta mi fallecimiento.
+
+---
+
+## 6. Declaración sobre Responsabilidad
+
+Mi representante actuará de buena fe y en mi mejor interés. Salvo dolo o negligencia grave, mi representante no será responsable por las decisiones tomadas conforme a este poder.
+
+---
+
+## 7. Firma y Reconocimiento
+
+Firmo este poder en {{execution_city}}, {{execution_state}}, el día **{{execution_date}}**.
+
+**Firma de la persona otorgante:** _______________________________  
+**Nombre completo:** {{principal_name}}
+
+---
+
+## 8. Testigos
+
+Firmamos como testigos que la persona otorgante, en nuestra presencia, declaró que este documento expresa su voluntad y lo firmó voluntariamente.
+
+**Testigo 1:**  
+Nombre: {{witness_one_name}}  
+Domicilio: {{witness_one_address}}  
+Firma: _______________________________  
+Fecha: {{witness_one_date}}
+
+**Testigo 2:**  
+Nombre: {{witness_two_name}}  
+Domicilio: {{witness_two_address}}  
+Firma: _______________________________  
+Fecha: {{witness_two_date}}
+
+{{#if third_witness_required}}
+**Testigo 3:**  
+Nombre: {{witness_three_name}}  
+Domicilio: {{witness_three_address}}  
+Firma: _______________________________  
+Fecha: {{witness_three_date}}
+{{/if}}
+
+---
+
+## 9. Certificación Notarial
+
+**Estado de {{state}}**  
+**Condado de {{county}}**
+
+El **{{notary_date}}**, ante mí compareció {{principal_name}}, persona a quien conozco (o que presentó identificación adecuada), y reconoció que firmó este documento libre y voluntariamente para los fines aquí expresados.
+
+**Firma del notario/a:** _______________________________  
+**Nombre del notario/a:** {{notary_name}}  
+**Número de comisión:** {{notary_commission_number}}  
+**Fecha de expiración de la comisión:** {{notary_commission_expiration}}
+
+---
+
+## 10. Instrucciones de Custodia
+
+- Entregar copias a mi representante, médico de cabecera y familiares cercanos.  
+- Guardar el original en un lugar seguro de fácil acceso.  
+- Llevar una copia cuando viaje o sea internado/a en un hospital.
+
+---
+
+**AVISO LEGAL IMPORTANTE:** Este documento debe revisarse con un abogado o profesional autorizado en {{state}}. Las leyes sobre poderes para decisiones médicas varían por estado; asegúrese de cumplir con los requisitos de firmas, testigos y notarización aplicables.
+
+## _Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales_
+
+(c) 2025 123LegalDoc · Documento de autoayuda · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

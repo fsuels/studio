@@ -36,7 +36,11 @@ export const noticetoproceedMeta: LegalDocument = {
       name: 'Aviso para Proceder',
       description:
         'Autorización oficial para que el contratista comience el trabajo de construcción en un proyecto.',
-      aliases: ['aviso de inicio', 'autorización de trabajo'],
+      aliases: [
+        'aviso de inicio',
+        'autorización de trabajo',
+        'orden de proceder',
+      ],
     },
   },
 };

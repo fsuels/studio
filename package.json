@@ -49,6 +49,7 @@
     "monitor-templates": "tsx scripts/template-monitor.ts",
     "fix-templates": "tsx scripts/auto-fix-templates.ts",
     "template-report": "tsx scripts/verify-templates.ts --report-only",
+    "verify-templates:report": "tsx scripts/verify-templates.ts --report-only",
     "quality-check": "node scripts/quality-verification-system.js",
     "legal-check": "node scripts/legal-compliance-validator.js",
     "translation-check": "node scripts/translation-validation-system.js",

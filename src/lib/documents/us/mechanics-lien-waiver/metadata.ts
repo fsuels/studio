@@ -26,13 +26,21 @@ export const mechanicslienwaiverMeta: LegalDocument = {
       name: 'Mechanics Lien Waiver',
       description:
         'Legal waiver releasing mechanics lien rights upon payment for construction work or materials.',
-      aliases: ['lien waiver', 'lien release', 'waiver of lien rights'],
+      aliases: [
+        'lien waiver',
+        'lien release',
+        'waiver of lien rights',
+      ],
     },
     es: {
       name: 'Renuncia de Gravamen de Mecánicos',
       description:
         'Renuncia legal que libera los derechos de gravamen de mecánicos al recibir el pago por trabajo de construcción o materiales.',
-      aliases: ['renuncia de gravamen', 'liberación de gravamen'],
+      aliases: [
+        'renuncia de gravamen',
+        'liberación de gravamen',
+        'renuncia de los derechos de gravamen',
+      ],
     },
   },
 };

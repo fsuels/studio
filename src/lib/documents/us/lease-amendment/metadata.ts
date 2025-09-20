@@ -41,6 +41,7 @@ export const leaseAmendmentMeta: LegalDocument = {
         'modificación de arrendamiento',
         'cambio de alquiler',
         'alteración de contrato',
+        'alteración del arrendamiento',
       ],
     },
   },

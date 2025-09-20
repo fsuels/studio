@@ -36,7 +36,11 @@ export const licensingAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Licencia',
       description:
         'Permite que otros usen tu marca, producto o tecnología a cambio de regalías. Define términos de uso y pagos.',
-      aliases: ['contrato de licencia', 'licencia de propiedad intelectual'],
+      aliases: [
+        'contrato de licencia',
+        'licencia de propiedad intelectual',
+        'licencia de propiedad intelectual legal',
+      ],
     },
   },
 };

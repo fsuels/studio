@@ -39,6 +39,7 @@ export const childTravelConsentMeta: LegalDocument = {
       aliases: [
         'consentimiento de viaje menor',
         'autorización de viaje infantil',
+        'carta de permiso de viaje',
       ],
     },
   },

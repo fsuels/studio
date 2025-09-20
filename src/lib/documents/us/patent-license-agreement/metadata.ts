@@ -39,6 +39,7 @@ export const patentLicenseAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de licencia de patente',
         'acuerdo de licencia tecnológica',
+        'acuerdo de uso de patentes',
       ],
     },
   },

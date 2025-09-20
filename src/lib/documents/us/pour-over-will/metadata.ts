@@ -34,6 +34,7 @@ export const metadata = {
         'testamento fideicomiso',
         'testamento de transferencia',
         'testamento de administración',
+        'planificación patrimonial will',
       ],
     },
   },

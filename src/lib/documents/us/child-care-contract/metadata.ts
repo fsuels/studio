@@ -36,7 +36,11 @@ export const childCareContractMeta: LegalDocument = {
       name: 'Contrato de Cuidado Infantil',
       description:
         'Asegura el cuidado seguro de tus hijos y establece expectativas claras con cuidadoras. Protege a tu familia con reglas y protocolos de emergencia.',
-      aliases: ['contrato de niñera', 'acuerdo de cuidado de niños'],
+      aliases: [
+        'contrato de niñera',
+        'acuerdo de cuidado de niños',
+        'acuerdo de cuidado infantil',
+      ],
     },
   },
 };

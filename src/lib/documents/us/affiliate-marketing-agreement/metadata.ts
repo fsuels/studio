@@ -1,4 +1,4 @@
-// src/lib/documents/us/affiliate-marketing-agreement/metadata.ts
+﻿// src/lib/documents/us/affiliate-marketing-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
 import { AffiliateMarketingAgreementSchema } from './schema';
 import { affiliateMarketingAgreementQuestions } from './questions';
@@ -35,8 +35,12 @@ export const affiliateMarketingAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Marketing de Afiliados',
       description:
-        'Establece términos de comisión y protege tu negocio al trabajar con afiliados que promocionan tus productos por un porcentaje de las ventas.',
-      aliases: ['acuerdo de programa de afiliados', 'acuerdo de comisiones'],
+        'Establece terminos de comision y protege tu negocio al trabajar con afiliados que promocionan tus productos por un porcentaje de las ventas.',
+      aliases: [
+        'acuerdo de programa de afiliados',
+        'acuerdo de comisiones',
+        'acuerdo de marketing de socios',
+      ],
     },
   },
 };

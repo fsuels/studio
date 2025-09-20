@@ -36,7 +36,11 @@ export const childSupportAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Manutención Infantil',
       description:
         'Asegura el futuro financiero de tus hijos y evita disputas sobre gastos. Establece pagos justos que cubran todas las necesidades de los menores.',
-      aliases: ['contrato de manutención', 'acuerdo de apoyo financiero'],
+      aliases: [
+        'contrato de manutención',
+        'acuerdo de apoyo financiero',
+        'acuerdo de soporte de custodia',
+      ],
     },
   },
 };

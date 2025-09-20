@@ -36,7 +36,12 @@ export const offerLetterMeta: LegalDocument = {
       name: 'Carta de Oferta Laboral',
       description:
         'Crea una carta de oferta de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
-      aliases: ['oferta de trabajo', 'carta de trabajo', 'oferta de empleo'],
+      aliases: [
+        'oferta de trabajo',
+        'carta de trabajo',
+        'oferta de empleo',
+        'oferta de trabajo legal',
+      ],
     },
   },
 };

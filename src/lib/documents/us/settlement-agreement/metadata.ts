@@ -39,6 +39,7 @@ export const settlementAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de resolución de disputas',
         'acuerdo de liquidación de reclamos',
+        'liberación y liquidación',
       ],
     },
   },

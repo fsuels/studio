@@ -36,7 +36,11 @@ export const remodelingContractMeta: LegalDocument = {
       name: 'Contrato de Remodelación',
       description:
         'Contrato para proyectos de remodelación y renovación residencial incluyendo cocinas, baños y adiciones de habitaciones.',
-      aliases: ['contrato de renovación', 'contrato de mejoras para el hogar'],
+      aliases: [
+        'contrato de renovación',
+        'contrato de mejoras para el hogar',
+        'acuerdo de remodelación',
+      ],
     },
   },
 };

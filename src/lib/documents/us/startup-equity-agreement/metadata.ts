@@ -36,7 +36,11 @@ export const startupEquityAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Participación en Startup',
       description:
         'Acuerdo para distribución de participaciones en empresas emergentes.',
-      aliases: ['acuerdo de fundadores', 'contrato de participación'],
+      aliases: [
+        'acuerdo de fundadores',
+        'contrato de participación',
+        'acuerdo de adjudicación de capital',
+      ],
     },
   },
 };

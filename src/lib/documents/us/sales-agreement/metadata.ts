@@ -35,7 +35,11 @@ export const salesAgreementMeta: LegalDocument = {
     es: {
       name: 'Acuerdo de Venta',
       description: 'Crea un acuerdo de venta integral para bienes o productos.',
-      aliases: ['contrato de venta', 'acuerdo de compraventa'],
+      aliases: [
+        'contrato de venta',
+        'acuerdo de compraventa',
+        'acuerdo de bienes',
+      ],
     },
   },
 };

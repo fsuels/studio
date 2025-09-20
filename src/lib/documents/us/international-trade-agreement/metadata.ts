@@ -38,6 +38,7 @@ export const internationalTradeAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de importación exportación',
         'acuerdo comercial global',
+        'contrato comercial global',
       ],
     },
   },

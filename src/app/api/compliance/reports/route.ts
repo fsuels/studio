@@ -78,8 +78,6 @@ export async function GET(request: NextRequest) {
   }
 
   const report = buildReport(reportType, startDate, endDate);
-  const responsePayload = wrapReport(report);
-  return NextResponse.json(responsePayload);
   return NextResponse.json(report);
 }
 
@@ -108,8 +106,6 @@ export async function POST(request: NextRequest) {
   }
 
   const report = buildReport(reportType, body.startDate, body.endDate);
-  const responsePayload = wrapReport(report);
-  const format = body.format ?? "json";
   const format = body.format ?? 'json';
 
   if (format === 'csv') {

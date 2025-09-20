@@ -36,7 +36,11 @@ export const elderCareAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Cuidado de Ancianos',
       description:
         'Acuerdo para proporcionar servicios de cuidado a personas mayores.',
-      aliases: ['contrato de cuidador', 'acuerdo de cuidado'],
+      aliases: [
+        'contrato de cuidador',
+        'acuerdo de cuidado',
+        'contrato de atención de ancianos',
+      ],
     },
   },
 };

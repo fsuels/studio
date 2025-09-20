@@ -36,7 +36,11 @@ export const retirementPlanAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Plan de Jubilación',
       description:
         'Acuerdo para participación en plan de jubilación patrocinado por empleador.',
-      aliases: ['plan de pensiones', 'acuerdo de beneficios'],
+      aliases: [
+        'plan de pensiones',
+        'acuerdo de beneficios',
+        'plan de beneficios de jubilación',
+      ],
     },
   },
 };

@@ -93,6 +93,8 @@ npm run fix-templates
 ### Generate Verification Report
 
 ```bash
+npm run verify-templates:report
+# alias
 npm run template-report
 # or
 npm run verify-templates -- --report-only

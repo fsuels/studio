@@ -1,99 +1,528 @@
-# Contrato de Compraventa de Vehículo
+﻿# Living Will (Advance Healthcare Directive)
+> Nota: contenido temporal en inglés; se requiere localización.
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**LIVING WILL**  
+**ADVANCE HEALTHCARE DIRECTIVE**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
+**State of {{state}}**
 
 ---
 
-## 1. Descripción del Vehículo
+## 1. Personal Information
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+**I, {{declarant_name}}**, being of sound mind and at least 18 years of age, voluntarily make this Living Will and Advance Healthcare Directive.
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+**Personal Information:**
 
-## 2. Precio de Compra y Pago
+- **Full Name:** {{declarant_name}}
+- **Date of Birth:** {{declarant_dob}}
+- **Address:** {{declarant_address}}
+- **Phone:** {{declarant_phone}}
+- **Social Security #:** {{declarant_ssn}}
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+---
 
-## 3. Condición del Vehículo
+## 2. Purpose and Intent
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
+### 2.1 Declaration of Intent
+
+This Living Will is intended to provide guidance to my family, physicians, and other healthcare providers regarding my wishes for medical treatment in the event I become unable to communicate my decisions about my medical care.
+
+### 2.2 Legal Authority
+
+This document is created under the authority of {{state}} law and is intended to be legally binding under state and federal law.
+
+### 2.3 Scope of Directive
+
+This directive applies when:
+
+- I am in a terminal condition
+- I am permanently unconscious
+- I am in an end-stage condition
+- I am otherwise unable to communicate my healthcare decisions
+
+---
+
+## 3. Definition of Terms
+
+### 3.1 Terminal Condition
+
+A terminal condition means an incurable condition caused by injury, disease, or illness that, according to reasonable medical judgment, will cause death within a relatively short time with or without the application of life-sustaining treatment.
+
+### 3.2 Permanently Unconscious State
+
+A permanently unconscious state means an incurable condition in which I am not aware of myself or my environment and show no behavioral response to the environment.
+
+### 3.3 End-Stage Condition
+
+An end-stage condition means an incurable condition that has resulted in progressively severe and permanent deterioration, and for which treatment would be ineffective.
+
+### 3.4 Life-Sustaining Treatment
+
+Life-sustaining treatment means any medical intervention, technology, procedure, or medication that is administered to delay the moment of death.
+
+---
+
+## 4. Healthcare Directives
+
+### 4.1 Terminal Condition Directives
+
+{{#if terminal_condition_directive}}
+**If I am in a terminal condition:** {{terminal_condition_wishes}}
+
+{{#if withhold_life_sustaining_treatment}}
+â˜ **WITHHOLD** life-sustaining treatment, including but not limited to:
+
+- Mechanical ventilation/respirators
+- Artificial nutrition and hydration
+- Cardiopulmonary resuscitation (CPR)
+- Dialysis
+- Antibiotics for life-threatening infections
+- {{additional_treatments_to_withhold}}
+  {{/if}}
+
+{{#if provide_comfort_care}}
+â˜ **PROVIDE** comfort care and pain relief, even if it may hasten death
+{{/if}}
+{{/if}}
+
+### 4.2 Permanently Unconscious State Directives
+
+{{#if unconscious_state_directive}}
+**If I am in a permanently unconscious state:** {{unconscious_state_wishes}}
+
+{{#if withhold_life_sustaining_unconscious}}
+â˜ **WITHHOLD** life-sustaining treatment
+â˜ **PROVIDE** comfort care only
+{{/if}}
+{{/if}}
+
+### 4.3 End-Stage Condition Directives
+
+{{#if end_stage_directive}}
+**If I am in an end-stage condition:** {{end_stage_wishes}}
+{{/if}}
+
+---
+
+## 5. Specific Medical Instructions
+
+### 5.1 Cardiopulmonary Resuscitation (CPR)
+
+{{#if cpr_wishes}}
+**CPR Instructions:** {{cpr_directive}}
 {{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+â˜ I DO want CPR attempted
+â˜ I DO NOT want CPR attempted
+â˜ I want CPR attempted only if the situation allows for a reasonable chance of recovery
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+### 5.2 Mechanical Ventilation
 
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
+{{#if ventilation_wishes}}
+**Ventilation Instructions:** {{ventilation_directive}}
+{{else}}
+â˜ I DO want mechanical ventilation
+â˜ I DO NOT want mechanical ventilation
+â˜ I want mechanical ventilation for a trial period of {{trial_period}} days
 {{/if}}
 
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
+### 5.3 Artificial Nutrition and Hydration
 
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
+{{#if nutrition_wishes}}
+**Nutrition/Hydration Instructions:** {{nutrition_directive}}
+{{else}}
+â˜ I DO want artificial nutrition and hydration
+â˜ I DO NOT want artificial nutrition and hydration
+â˜ I want artificial nutrition and hydration for a limited time period
 {{/if}}
 
-### Reconocimiento Notarial
+### 5.4 Dialysis
 
-Estado de **{{state}}**
-Condado de **{{county}}**
+{{#if dialysis_wishes}}
+**Dialysis Instructions:** {{dialysis_directive}}
+{{else}}
+â˜ I DO want dialysis
+â˜ I DO NOT want dialysis
+â˜ I want dialysis only if there is a reasonable chance of recovery
+{{/if}}
 
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
+### 5.5 Antibiotics
 
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+{{#if antibiotics_wishes}}
+**Antibiotic Instructions:** {{antibiotics_directive}}
+{{else}}
+â˜ I DO want antibiotics for life-threatening infections
+â˜ I DO NOT want antibiotics for life-threatening infections
+â˜ I want antibiotics for comfort purposes only
+{{/if}}
+
+### 5.6 Surgery
+
+{{#if surgery_wishes}}
+**Surgery Instructions:** {{surgery_directive}}
+{{else}}
+â˜ I DO want surgery if it may be beneficial
+â˜ I DO NOT want surgery
+â˜ I want surgery only for comfort purposes
+{{/if}}
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 6. Pain Management and Comfort Care
+
+### 6.1 Pain Relief
+
+{{#if pain_relief_directive}}
+**Pain Management Instructions:** {{pain_relief_wishes}}
+{{else}}
+â˜ I want all necessary pain medication, even if it shortens my life
+â˜ I want pain medication that does not shorten my life
+â˜ I want minimal pain medication
+{{/if}}
+
+### 6.2 Comfort Measures
+
+**Comfort Care Instructions:** {{comfort_care_wishes}}
+
+I want the following comfort measures:
+
+- Keep me clean and comfortable
+- Provide emotional and spiritual support
+- Allow family and friends to visit
+- {{additional_comfort_measures}}
+
+### 6.3 Palliative Care
+
+{{#if palliative_care_wishes}}
+**Palliative Care:** {{palliative_care_directive}}
+{{/if}}
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 7. Organ and Tissue Donation
+
+### 7.1 Donation Wishes
+
+{{#if organ_donation}}
+**Organ Donation:** {{organ_donation_wishes}}
+
+{{#if donate_all_organs}}
+â˜ I want to donate all suitable organs and tissues
+{{/if}}
+
+{{#if specific_organ_donation}}
+â˜ I want to donate only the following organs/tissues: {{specific_organs}}
+{{/if}}
+
+{{#if no_organ_donation}}
+â˜ I DO NOT want to donate any organs or tissues
+{{/if}}
+{{else}}
+â˜ I want to donate all suitable organs and tissues
+â˜ I want to donate specific organs: **\*\***\_\_\_\_**\*\***
+â˜ I DO NOT want to donate organs or tissues
+{{/if}}
+
+### 7.2 Donation Procedures
+
+{{#if donation_procedures}}
+**Special Instructions for Donation:** {{donation_instructions}}
+{{/if}}
+
+---
+
+## 8. Pregnancy Considerations
+
+{{#if pregnancy_directive}}
+
+### 8.1 Pregnancy Instructions
+
+**If I am pregnant:** {{pregnancy_wishes}}
+{{else}}
+**If I am pregnant when this directive would otherwise take effect, I direct that:**
+â˜ This directive should be followed regardless of pregnancy
+â˜ Life-sustaining treatment should be provided until the fetus is viable
+â˜ Other instructions: ******\*\*******\_\_\_\_******\*\*******
+{{/if}}
+
+---
+
+## 9. Religious and Spiritual Considerations
+
+### 9.1 Religious Preferences
+
+{{#if religious_preferences}}
+**Religious/Spiritual Instructions:** {{religious_wishes}}
+
+**Religious Leader to Contact:**
+
+- **Name:** {{religious_leader_name}}
+- **Title:** {{religious_leader_title}}
+- **Phone:** {{religious_leader_phone}}
+- **Religious Affiliation:** {{religious_affiliation}}
+  {{/if}}
+
+### 9.2 Spiritual Care
+
+{{#if spiritual_care_wishes}}
+**Spiritual Care Instructions:** {{spiritual_care_directive}}
+{{/if}}
+
+---
+
+## 10. Duration and Revocation
+
+### 10.1 Effective Period
+
+This Living Will shall remain in effect until:
+
+- I revoke it in writing
+- I create a new Living Will that supersedes this one
+- {{additional_termination_conditions}}
+
+### 10.2 Revocation Process
+
+I may revoke this Living Will at any time by:
+
+- Destroying this document
+- Writing a new Living Will
+- Orally expressing my intent to revoke in the presence of witnesses
+- Any other method recognized under {{state}} law
+
+### 10.3 Updates and Modifications
+
+I should review and update this document:
+
+- Every 5 years
+- After major life changes
+- After changes in my health status
+- When laws change
+
+---
+
+## 11. Healthcare Agent/Proxy Designation
+
+{{#if healthcare_agent_designated}}
+
+### 11.1 Primary Healthcare Agent
+
+I designate the following person as my healthcare agent to make medical decisions for me if I cannot make them myself:
+
+**Primary Agent:**
+
+- **Name:** {{primary_agent_name}}
+- **Relationship:** {{primary_agent_relationship}}
+- **Address:** {{primary_agent_address}}
+- **Phone:** {{primary_agent_phone}}
+- **Email:** {{primary_agent_email}}
+
+### 11.2 Alternate Healthcare Agent
+
+If my primary agent is unavailable, I designate:
+
+**Alternate Agent:**
+
+- **Name:** {{alternate_agent_name}}
+- **Relationship:** {{alternate_agent_relationship}}
+- **Address:** {{alternate_agent_address}}
+- **Phone:** {{alternate_agent_phone}}
+
+### 11.3 Agent Authority
+
+My healthcare agent has authority to:
+
+- Make medical treatment decisions according to this Living Will
+- Access my medical records
+- Communicate with healthcare providers
+- {{additional_agent_powers}}
+
+### 11.4 Agent Limitations
+
+My healthcare agent may NOT:
+
+- Override my specific directives in this document
+- {{agent_limitations}}
+  {{else}}
+  **I have NOT designated a healthcare agent.** Medical decisions should be made according to this Living Will and applicable law.
+  {{/if}}
+
+---
+
+## 12. Family Notification
+
+### 12.1 People to Notify
+
+**Please notify the following people of my condition:**
+
+**Primary Contact:**
+
+- **Name:** {{primary_contact_name}}
+- **Relationship:** {{primary_contact_relationship}}
+- **Phone:** {{primary_contact_phone}}
+
+**Additional Contacts:**
+
+- {{contact_2_name}} ({{contact_2_relationship}}) - {{contact_2_phone}}
+- {{contact_3_name}} ({{contact_3_relationship}}) - {{contact_3_phone}}
+- {{additional_contacts}}
+
+### 12.2 Visitation Wishes
+
+{{#if visitation_wishes}}
+**Visitation Instructions:** {{visitation_directive}}
+{{/if}}
+
+---
+
+## 13. Additional Instructions
+
+### 13.1 Special Circumstances
+
+{{#if special_circumstances}}
+**Special Medical Circumstances:** {{special_circumstances_directive}}
+{{/if}}
+
+### 13.2 Location Preferences
+
+{{#if location_preferences}}
+**Preferred Location for Care:** {{care_location_wishes}}
+{{/if}}
+
+### 13.3 Other Wishes
+
+{{#if other_wishes}}
+**Additional Instructions:** {{other_instructions}}
+{{/if}}
+
+---
+
+## 14. Legal Acknowledgments
+
+### 14.1 Mental Competency
+
+I am of sound mind and under no duress, fraud, or undue influence. I understand the nature and consequences of this Living Will.
+
+### 14.2 Medical Understanding
+
+I understand that my condition may change and that medical technology may advance. This directive reflects my wishes based on my current understanding.
+
+### 14.3 Legal Effect
+
+I understand that this document has legal force and effect under the laws of {{state}}.
+
+### 14.4 Healthcare Provider Instructions
+
+I direct that healthcare providers who are unwilling or unable to comply with this directive transfer my care to providers who will honor my wishes.
+
+---
+
+## 15. Signatures and Witnesses
+
+### 15.1 Declarant Signature
+
+**EXECUTED** on **{{execution_date}}** at {{execution_location}}.
+
+**DECLARANT:**
+
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
+| {{declarant_name}}                         |                    |
+| Print Name: {{declarant_name}}             |                    |
+
+### 15.2 Witness Requirements
+
+{{#if witnesses_required}}
+**WITNESSES:**
+
+This document was signed in our presence. We believe the declarant to be of sound mind and under no duress.
+
+**WITNESS 1:**
+
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
+| {{witness_1_name}}                         |                    |
+| Address: {{witness_1_address}}             |                    |
+
+**WITNESS 2:**
+
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
+| {{witness_2_name}}                         |                    |
+| Address: {{witness_2_address}}             |                    |
+
+**Witness Qualifications:**
+
+- Neither witness is related to the declarant
+- Neither witness stands to inherit from the declarant
+- Neither witness is directly involved in the declarant's medical care
+  {{/if}}
+
+---
+
+## 16. Notarization
+
+{{#if notarization_required}}
+**State of {{state}}**  
+**County of {{county}}**
+
+On this **{{execution_date}}**, before me personally appeared {{declarant_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity.
+
+I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+
+**WITNESS** my hand and official seal.
+
+**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
+**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+
+**[Notary Seal]**
+{{/if}}
+
+---
+
+## 17. Healthcare Provider Acknowledgment
+
+{{#if provider_acknowledgment}}
+**HEALTHCARE PROVIDER ACKNOWLEDGMENT:**
+
+I have received a copy of this Living Will and have placed it in the patient's medical record. I understand and will comply with the directives contained herein.
+
+**Provider:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Title:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Date:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Medical Facility:** ******\*\*\*\*******\_******\*\*\*\*******
+{{/if}}
+
+---
+
+## 18. Distribution and Storage
+
+### 18.1 Copies Provided To:
+
+â˜ Primary healthcare agent  
+â˜ Alternate healthcare agent  
+â˜ Primary care physician  
+â˜ Hospital/medical facility  
+â˜ Family members  
+â˜ Attorney  
+â˜ {{additional_copy_recipients}}
+
+### 18.2 Storage Location
+
+**Original Document Stored At:** {{storage_location}}  
+**Additional Copies At:** {{additional_storage_locations}}
+
+---
+
+**IMPORTANT LEGAL NOTICE:** This living will should be reviewed by qualified legal and medical professionals to ensure compliance with state advance directive laws and to address individual medical circumstances. Living will laws vary significantly by state, and this document should be reviewed with healthcare providers to ensure it can be properly implemented.
+
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
+Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
+
+

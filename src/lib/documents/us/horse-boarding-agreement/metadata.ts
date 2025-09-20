@@ -25,12 +25,20 @@ export const horseBoardingAgreementMeta: LegalDocument = {
     en: {
       name: 'Horse Boarding Agreement',
       description: 'Agreement for horse boarding and stable services.',
-      aliases: ['stable boarding', 'equine boarding', 'horse care agreement'],
+      aliases: [
+        'stable boarding',
+        'equine boarding',
+        'horse care agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Pensión de Caballos',
       description: 'Acuerdo para pensión de caballos y servicios de establo.',
-      aliases: ['pensión de caballos', 'cuidado equino'],
+      aliases: [
+        'pensión de caballos',
+        'cuidado equino',
+        'acuerdo de cuidado de caballos',
+      ],
     },
   },
 };

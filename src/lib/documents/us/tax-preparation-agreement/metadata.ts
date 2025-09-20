@@ -39,6 +39,7 @@ export const taxPreparationAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de servicios fiscales',
         'contrato de preparador de impuestos',
+        'acuerdo de presentación de impuestos',
       ],
     },
   },

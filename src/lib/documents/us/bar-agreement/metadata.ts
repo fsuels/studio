@@ -25,12 +25,20 @@ export const barAgreementMeta: LegalDocument = {
     en: {
       name: 'Bar Agreement',
       description: 'Agreement for bar operations, partnerships, or management.',
-      aliases: ['bar partnership', 'tavern agreement', 'pub agreement'],
+      aliases: [
+        'bar partnership',
+        'tavern agreement',
+        'pub agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Bar',
       description: 'Maximiza las ganancias de tu negocio de hospitalidad y evita conflictos entre socios. Establece operaciones eficientes que impulsen el éxito.',
-      aliases: ['sociedad de bar', 'acuerdo de taberna'],
+      aliases: [
+        'sociedad de bar',
+        'acuerdo de taberna',
+        'acuerdo de pub',
+      ],
     },
   },
 };

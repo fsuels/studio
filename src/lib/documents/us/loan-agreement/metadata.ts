@@ -40,6 +40,7 @@ export const loanAgreementMeta: LegalDocument = {
         'contrato de préstamo',
         'préstamo personal',
         'acuerdo de préstamo',
+        'contrato de préstamo legal',
       ],
     },
   },

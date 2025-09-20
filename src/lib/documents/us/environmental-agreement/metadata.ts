@@ -36,7 +36,11 @@ export const environmentalAgreementMeta: LegalDocument = {
       name: 'Acuerdo Ambiental',
       description:
         'Acuerdo para cumplimiento ambiental, conservación y proyectos de sostenibilidad.',
-      aliases: ['acuerdo de cumplimiento ambiental', 'acuerdo de conservación'],
+      aliases: [
+        'acuerdo de cumplimiento ambiental',
+        'acuerdo de conservación',
+        'contrato de sostenibilidad',
+      ],
     },
   },
 };

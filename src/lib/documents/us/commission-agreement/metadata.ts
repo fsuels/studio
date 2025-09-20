@@ -36,7 +36,11 @@ export const commissionAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Comisión',
       description:
         'Paga vendedores según lo que vendan. Define porcentajes de comisión, metas de ventas y cuándo se pagan las comisiones.',
-      aliases: ['acuerdo de comisión de ventas', 'contrato de comisión'],
+      aliases: [
+        'acuerdo de comisión de ventas',
+        'contrato de comisión',
+        'acuerdo de compensación',
+      ],
     },
   },
 };

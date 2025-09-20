@@ -36,7 +36,11 @@ export const oilGasLeaseAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Arrendamiento de Petróleo y Gas',
       description:
         'Acuerdo para arrendar derechos minerales para exploración y producción de petróleo y gas.',
-      aliases: ['arrendamiento petrolero', 'acuerdo de perforación'],
+      aliases: [
+        'arrendamiento petrolero',
+        'acuerdo de perforación',
+        'arrendamiento de hidrocarburos',
+      ],
     },
   },
 };

@@ -26,13 +26,21 @@ export const bidproposalMeta: LegalDocument = {
       name: 'Bid Proposal',
       description:
         'Professional contractor bid proposal for construction projects with detailed pricing and terms.',
-      aliases: ['construction bid', 'contractor proposal', 'project bid'],
+      aliases: [
+        'construction bid',
+        'contractor proposal',
+        'project bid',
+      ],
     },
     es: {
       name: 'Propuesta de Oferta',
       description:
         'Aumenta tus posibilidades de ganar contratos lucrativos con propuestas profesionales. Destaca sobre la competencia y justifica tus precios.',
-      aliases: ['oferta de construcción', 'propuesta de contratista'],
+      aliases: [
+        'oferta de construcción',
+        'propuesta de contratista',
+        'oferta del proyecto',
+      ],
     },
   },
 };

@@ -39,6 +39,7 @@ export const petCustodyAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de custodia de mascotas',
         'acuerdo de cuidado animal',
+        'acuerdo de intercambio de mascotas',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const jobApplicationFormMeta: LegalDocument = {
       name: 'Formulario de Solicitud de Empleo',
       description:
         'Formulario profesional de solicitud de empleo para recopilar información de candidatos.',
-      aliases: ['solicitud de trabajo', 'formulario de contratación'],
+      aliases: [
+        'solicitud de trabajo',
+        'formulario de contratación',
+        'solicitud de candidato',
+      ],
     },
   },
 };

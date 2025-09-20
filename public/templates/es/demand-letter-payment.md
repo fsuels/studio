@@ -1,99 +1,64 @@
-# Contrato de Compraventa de Vehículo
+﻿# Carta de Demanda de Pago
+
+Esta Carta de Demanda de Pago ("Carta") es emitida por **{{creditor_name}}** de **{{creditor_company}}**, con domicilio en **{{creditor_address}}**, a **{{debtor_name}}** de **{{debtor_company}}**, con domicilio en **{{debtor_address}}**. El objetivo de esta Carta es exigir el pago inmediato de las obligaciones pendientes descritas a continuación.
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+## 1. Historial de Cuenta y Monto Adeudado
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
-
-Referidos colectivamente en este documento como las “Partes”.
-
----
-
-## 1. Descripción del Vehículo
-
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
-
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
-
-## 2. Precio de Compra y Pago
-
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
-
-## 3. Condición del Vehículo
-
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
-{{/if}}
-
-## 4. Declaraciones y Garantías del Vendedor
-
-El Vendedor declara y garantiza que:
-
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
-
-## 5. Ley Aplicable
-
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
-
-## 6. Firmas
-
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
-
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
-
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
-
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+1.1 **Detalles de la Factura.** El Acreedor emitió la Factura **{{invoice_number}}** el **{{invoice_date}}** por bienes/servicios descritos como "{{invoice_description}}".
+1.2 **Monto Original.** El total adeudado bajo la Factura asciende a **${{invoice_amount}}**.
+1.3 **Pagos Recibidos.** El Acreedor ha recibido pagos por **${{payments_received}}**, dejando un saldo principal pendiente de **${{principal_balance}}**.
+1.4 **Interés Contractual.** Conforme al acuerdo entre las partes, el interés devenga a una tasa del **{{interest_rate}}%** anual desde **{{interest_start_date}}** hasta que se reciba el pago.
+1.5 **Cargos por Mora y Costas.** Se han acumulado cargos adicionales por **${{late_fees}}** conforme al contrato. Se adjunta como Anexo A un estado de cuenta detallado.
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 2. Exigencia de Pago
+
+2.1 **Monto Total Exigido.** Al **{{calculation_date}}**, el monto total exigido es **${{total_amount_due}}** (principal, intereses y cargos).
+2.2 **Fecha Límite de Pago.** El Acreedor exige que el Deudor efectúe el pago total a más tardar el **{{payment_deadline}}** (la "Fecha Límite").
+2.3 **Métodos de Pago Autorizados.** El pago podrá realizarse mediante {{payment_methods}} a la cuenta siguiente: {{payment_instructions}}.
+2.4 **Pagos Parciales.** No se aceptarán pagos parciales salvo que se convenga por escrito en un acuerdo separado.
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 3. Consecuencias del Incumplimiento
+
+3.1 **Acciones Adicionales.** Si el pago no se recibe antes de la Fecha Límite, el Acreedor podrá ejercer todos los recursos legales disponibles, incluyendo acciones de cobro, litigio o remisión a una agencia de cobranza.
+3.2 **Gastos Adicionales.** El Deudor será responsable de los honorarios de abogados, costas judiciales y gastos de cobranza incurridos por falta de pago, conforme a la ley y a las disposiciones contractuales.
+3.3 **Reporte Crediticio.** El Acreedor se reserva el derecho de reportar la morosidad a burós de crédito o registros industriales según lo permita la ley.
+
+---
+
+## 4. Oportunidad de Subsanar y Comunicaciones
+
+4.1 **Disputas o Preguntas.** El Deudor deberá notificar por escrito cualquier disputa legítima sobre el monto adeudado a más tardar el **{{dispute_notice_deadline}}**. Los avisos deberán enviarse a {{dispute_contact_information}}.
+4.2 **Solicitudes de Plan de Pago.** Cualquier solicitud de plan de pagos o descuentos deberá presentarse por escrito antes de la Fecha Límite y quedará sujeta a la aprobación del Acreedor.
+4.3 **Información de Contacto.** El representante del Acreedor para este asunto es {{creditor_contact_name}}, disponible en {{creditor_contact_phone}} o {{creditor_contact_email}}.
+
+---
+
+## 5. Reserva de Derechos
+
+5.1 **No Renuncia.** La falta o demora en ejercer un derecho bajo esta Carta no constituye renuncia a dicho derecho.
+5.2 **Recursos Adicionales.** El Acreedor se reserva todos los derechos y recursos disponibles conforme al acuerdo aplicable, a la ley y en equidad.
+5.3 **Ley Aplicable.** Esta Carta se rige por las leyes de {{governing_state}}, sin atender a sus normas sobre conflicto de leyes.
+
+---
+
+## Firmas
+
+El Acreedor certifica que los montos antes detallados son exactos y exigibles a la fecha.
+
+| Representante del Acreedor | Cargo | Firma | Fecha |
+|----------------------------|-------|-------|-------|
+| {{creditor_signer_name}}   | {{creditor_signer_title}} | __________________________ | {{creditor_signer_date}} |
+
+| Representante del Deudor (reconocimiento opcional) | Cargo | Firma | Fecha |
+|----------------------------------------------------|-------|-------|-------|
+| {{debtor_signer_name}}                              | {{debtor_signer_title}} | __________________________ | {{debtor_signer_date}} |
+
+---
+
+**AVISO LEGAL IMPORTANTE:** Esta carta de demanda comunica una reclamación de pago y puede constituir un requisito previo al litigio. Las leyes que regulan intereses, avisos de cobro y protecciones al consumidor varían por jurisdicción. Consulte a un profesional legal calificado antes de utilizar esta plantilla para asegurar el cumplimiento con las normas locales, estatales y federales.

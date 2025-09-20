@@ -26,13 +26,21 @@ export const coachingAgreementMeta: LegalDocument = {
       name: 'Coaching Agreement',
       description:
         'Agreement for professional coaching and mentoring services.',
-      aliases: ['life coaching', 'business coaching', 'mentor agreement'],
+      aliases: [
+        'life coaching',
+        'business coaching',
+        'mentor agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Coaching',
       description:
         'Acelera tu crecimiento personal o profesional con mentoría estructurada. Establece metas claras y mide progreso hacia el éxito.',
-      aliases: ['coaching de vida', 'coaching empresarial'],
+      aliases: [
+        'coaching de vida',
+        'coaching empresarial',
+        'acuerdo de mentor',
+      ],
     },
   },
 };

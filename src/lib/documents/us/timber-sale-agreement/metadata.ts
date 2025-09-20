@@ -36,7 +36,11 @@ export const timberSaleAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Venta de Madera',
       description:
         'Acuerdo para la venta y cosecha de madera de tierras forestales.',
-      aliases: ['acuerdo de tala', 'contrato de cosecha forestal'],
+      aliases: [
+        'acuerdo de tala',
+        'contrato de cosecha forestal',
+        'acuerdo de corte de árboles',
+      ],
     },
   },
 };

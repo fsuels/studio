@@ -39,6 +39,7 @@ export const eventPlanningContractMeta: LegalDocument = {
       aliases: [
         'acuerdo de planificador de eventos',
         'contrato de planificación de bodas',
+        'contrato de planificación de bodas legal',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const roommateAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Compañeros de Cuarto',
       description:
         'Establece reglas claras y responsabilidades para arreglos de vida compartida.',
-      aliases: ['contrato de compañeros de cuarto', 'acuerdo de convivencia'],
+      aliases: [
+        'contrato de compañeros de cuarto',
+        'acuerdo de convivencia',
+        'acuerdo de compañeros de casa',
+      ],
     },
   },
 };

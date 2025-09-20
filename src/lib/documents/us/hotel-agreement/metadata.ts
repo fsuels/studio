@@ -36,7 +36,11 @@ export const hotelAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Hotel',
       description:
         'Acuerdo para operaciones, asociaciones o gestión de hoteles.',
-      aliases: ['sociedad hotelera', 'acuerdo de hospitalidad'],
+      aliases: [
+        'sociedad hotelera',
+        'acuerdo de hospitalidad',
+        'acuerdo de alojamiento',
+      ],
     },
   },
 };

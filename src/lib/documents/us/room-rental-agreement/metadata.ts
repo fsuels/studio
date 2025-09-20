@@ -41,6 +41,7 @@ export const roomRentalAgreementMeta: LegalDocument = {
         'arrendamiento de habitación',
         'alquiler de dormitorio',
         'acuerdo de vivienda compartida',
+        'contrato de intercambio de habitaciones',
       ],
     },
   },

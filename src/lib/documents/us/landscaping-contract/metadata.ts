@@ -39,6 +39,7 @@ export const landscapingContractMeta: LegalDocument = {
       aliases: [
         'contrato de diseño de paisaje',
         'acuerdo de trabajo de jardín',
+        'contrato de servicios de jardín',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const workFromHomeAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Trabajo desde Casa',
       description:
         'Acuerdo integral que establece términos y condiciones para arreglos de trabajo remoto.',
-      aliases: ['acuerdo de trabajo remoto', 'acuerdo de teletrabajo'],
+      aliases: [
+        'acuerdo de trabajo remoto',
+        'acuerdo de teletrabajo',
+        'acuerdo de la oficina en el hogar',
+      ],
     },
   },
 };

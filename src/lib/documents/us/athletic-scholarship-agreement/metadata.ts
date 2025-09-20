@@ -36,7 +36,11 @@ export const athleticScholarshipAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Beca Atlética',
       description:
         'Asegura tu beca deportiva y protege tu futuro educativo. Establece expectativas claras que beneficien tanto al estudiante como a la institución.',
-      aliases: ['contrato de beca deportiva', 'acuerdo de atleta estudiantil'],
+      aliases: [
+        'contrato de beca deportiva',
+        'acuerdo de atleta estudiantil',
+        'acuerdo de ayuda atlética',
+      ],
     },
   },
 };

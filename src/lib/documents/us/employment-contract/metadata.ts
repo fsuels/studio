@@ -36,7 +36,12 @@ export const employmentContractMeta: LegalDocument = {
       name: 'Contrato de Empleo',
       description:
         'Protege tu negocio y establece expectativas claras con nuevos empleados. Evita malentendidos sobre salario, beneficios y responsabilidades laborales.',
-      aliases: ['acuerdo de empleo', 'contrato laboral', 'acuerdo de trabajo'],
+      aliases: [
+        'acuerdo de empleo',
+        'contrato laboral',
+        'acuerdo de trabajo',
+        'contrato de empleados',
+      ],
     },
   },
 };

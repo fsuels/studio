@@ -36,7 +36,11 @@ export const aviationCharterAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Flete Aéreo',
       description:
         'Viaja con comodidad y eficiencia mientras proteges tu inversión. Asegura servicios de aviación premium con términos claros y seguros adecuados.',
-      aliases: ['contrato de vuelo charter', 'acuerdo de jet privado'],
+      aliases: [
+        'contrato de vuelo charter',
+        'acuerdo de jet privado',
+        'contrato de la carta de vuelo',
+      ],
     },
   },
 };

@@ -25,13 +25,19 @@ export const franchiseAgreementMeta: LegalDocument = {
     en: {
       name: 'Franchise Agreement',
       description: 'Build your business empire by expanding through franchising with clear operational guidelines and brand protection.',
-      aliases: ['franchise contract', 'franchising agreement'],
+      aliases: [
+        'franchise contract',
+        'franchising agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Franquicia',
       description:
         'Acuerdo para operaciones comerciales y licencias de franquicia.',
-      aliases: ['contrato de franquicia'],
+      aliases: [
+        'contrato de franquicia',
+        'acuerdo de franquicia',
+      ],
     },
   },
 };

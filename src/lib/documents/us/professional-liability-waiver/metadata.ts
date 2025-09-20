@@ -39,6 +39,7 @@ export const professionalLiabilityWaiverMeta: LegalDocument = {
       aliases: [
         'exención de negligencia profesional',
         'exención de servicios profesionales',
+        'renuncia de responsabilidad del servicio',
       ],
     },
   },

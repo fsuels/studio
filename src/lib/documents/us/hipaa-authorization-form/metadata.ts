@@ -39,6 +39,7 @@ export const hipaaAuthorizationFormMeta: LegalDocument = {
       aliases: [
         'liberación de registros médicos',
         'autorización de información de salud',
+        'formulario de liberación de hipaa',
       ],
     },
   },

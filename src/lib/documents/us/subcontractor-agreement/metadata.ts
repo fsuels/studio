@@ -39,6 +39,7 @@ export const subcontractorAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de subcontrato',
         'contrato de contratista especializado',
+        'acuerdo de contratista de especialidad',
       ],
     },
   },

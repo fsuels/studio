@@ -36,7 +36,11 @@ export const constructionContractMeta: LegalDocument = {
       name: 'Contrato de Construcción',
       description:
         'Protege tu inversión en construcción y evita sobrecostos inesperados. Asegura trabajo de calidad con cronogramas claros y responsabilidades definidas.',
-      aliases: ['contrato de construcción', 'acuerdo de contratista general'],
+      aliases: [
+        'contrato de construcción',
+        'acuerdo de contratista general',
+        'acuerdo de construcción',
+      ],
     },
   },
 };

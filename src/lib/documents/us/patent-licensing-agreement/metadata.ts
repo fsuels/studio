@@ -36,7 +36,11 @@ export const patentLicensingAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Licencia de Patente',
       description:
         'Acuerdo para licenciar derechos de patente y uso de propiedad intelectual.',
-      aliases: ['licencia de patente', 'contrato de propiedad intelectual'],
+      aliases: [
+        'licencia de patente',
+        'contrato de propiedad intelectual',
+        'contrato de licencia de tecnología',
+      ],
     },
   },
 };

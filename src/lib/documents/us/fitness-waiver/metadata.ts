@@ -26,7 +26,11 @@ export const fitnessWaiverMeta: LegalDocument = {
       name: 'Fitness Waiver',
       description:
         'Liability waiver for fitness activities, gyms, and personal training.',
-      aliases: ['gym waiver', 'fitness liability waiver', 'exercise waiver'],
+      aliases: [
+        'gym waiver',
+        'fitness liability waiver',
+        'exercise waiver',
+      ],
     },
     es: {
       name: 'Exención de Fitness',
@@ -35,6 +39,7 @@ export const fitnessWaiverMeta: LegalDocument = {
       aliases: [
         'exención de gimnasio',
         'renuncia de responsabilidad de ejercicio',
+        'renuncia de ejercicio',
       ],
     },
   },

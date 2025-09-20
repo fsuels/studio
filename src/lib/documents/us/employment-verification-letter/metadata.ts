@@ -36,7 +36,11 @@ export const employmentVerificationLetterMeta: LegalDocument = {
       name: 'Carta de Verificación de Empleo',
       description:
         'Carta oficial que confirma el estado del empleado, salario y detalles del empleo.',
-      aliases: ['carta de empleo', 'verificación de empleo'],
+      aliases: [
+        'carta de empleo',
+        'verificación de empleo',
+        'verificación salarial',
+      ],
     },
   },
 };

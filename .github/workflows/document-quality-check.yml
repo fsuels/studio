@@ -63,7 +63,7 @@ jobs:
       - name: Template Verification
         run: |
           echo "🔍 Verifying document templates..."
-          npm run verify-templates || true
+          npm run verify-templates:report
 
       - name: Generate Summary Report
         if: always()

@@ -36,7 +36,11 @@ export const personalCareAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Cuidado Personal',
       description:
         'Acuerdo para servicios de cuidado personal incluyendo cuidado, asistencia y apoyo.',
-      aliases: ['acuerdo de cuidador', 'contrato de asistencia personal'],
+      aliases: [
+        'acuerdo de cuidador',
+        'contrato de asistencia personal',
+        'acuerdo de servicios de atención',
+      ],
     },
   },
 };

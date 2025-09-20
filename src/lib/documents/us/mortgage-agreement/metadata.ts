@@ -26,13 +26,21 @@ export const mortgageAgreementMeta: LegalDocument = {
       name: 'Mortgage Agreement',
       description:
         "Achieve homeownership with structured financing backed by real estate. Build equity while securing your family's future.",
-      aliases: ['mortgage contract', 'home loan agreement', 'mortgage note'],
+      aliases: [
+        'mortgage contract',
+        'home loan agreement',
+        'mortgage note',
+      ],
     },
     es: {
       name: 'Acuerdo de Hipoteca',
       description:
         'Formaliza el préstamo para comprar una casa. Establece pagos mensuales, tasa de interés y qué pasa si no puedes pagar.',
-      aliases: ['contrato de hipoteca', 'acuerdo de préstamo'],
+      aliases: [
+        'contrato de hipoteca',
+        'acuerdo de préstamo',
+        'nota de la hipoteca',
+      ],
     },
   },
 };

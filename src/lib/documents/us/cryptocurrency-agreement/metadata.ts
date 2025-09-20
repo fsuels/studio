@@ -36,7 +36,11 @@ export const cryptocurrencyAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Criptomonedas',
       description:
         'Acuerdo para transacciones de criptomonedas, comercio y servicios de activos digitales.',
-      aliases: ['acuerdo crypto', 'acuerdo de activos digitales'],
+      aliases: [
+        'acuerdo crypto',
+        'acuerdo de activos digitales',
+        'acuerdo de blockchain',
+      ],
     },
   },
 };

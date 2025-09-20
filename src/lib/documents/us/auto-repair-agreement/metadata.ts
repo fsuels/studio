@@ -39,6 +39,7 @@ export const autoRepairAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de reparación de vehículos',
         'contrato de servicio automotriz',
+        'contrato de reparación del automóvil',
       ],
     },
   },

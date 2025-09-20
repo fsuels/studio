@@ -3,7 +3,12 @@ import path from 'node:path';
 import prettier from 'prettier';
 import ts from 'typescript';
 
-const PROJECT_ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const scriptDirUrl = new URL(import.meta.url);
+let scriptDir = path.dirname(scriptDirUrl.pathname);
+if (process.platform === 'win32' && /^\\[A-Za-z]:/.test(scriptDir)) {
+  scriptDir = scriptDir.slice(1);
+}
+const PROJECT_ROOT = path.resolve(scriptDir, '..');
 const DOCUMENTS_DIR = path.resolve(PROJECT_ROOT, 'src', 'lib', 'documents');
 const OUTPUT_FILE = path.resolve(DOCUMENTS_DIR, 'manifest.generated.ts');
 const OUTPUT_JSON_FILE = path.resolve(DOCUMENTS_DIR, 'manifest.generated.json');

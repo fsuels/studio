@@ -39,6 +39,7 @@ export const paymentbondMeta: LegalDocument = {
       aliases: [
         'fianza de trabajo y materiales',
         'fianza de pago de subcontratistas',
+        'bono de proveedor',
       ],
     },
   },

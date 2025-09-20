@@ -39,6 +39,7 @@ export const personalTrainingAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de entrenamiento físico',
         'acuerdo de entrenador personal',
+        'contrato de servicios de capacitación',
       ],
     },
   },

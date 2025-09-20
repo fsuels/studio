@@ -39,6 +39,7 @@ export const generalContractorAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de construcción general',
         'acuerdo de gestión de obra',
+        'acuerdo de contratista principal',
       ],
     },
   },

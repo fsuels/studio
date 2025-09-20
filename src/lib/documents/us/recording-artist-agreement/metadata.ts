@@ -26,13 +26,21 @@ export const recordingArtistAgreementMeta: LegalDocument = {
       name: 'Recording Artist Agreement',
       description:
         'Agreement between recording artists and record labels or producers.',
-      aliases: ['record deal', 'music contract', 'artist recording contract'],
+      aliases: [
+        'record deal',
+        'music contract',
+        'artist recording contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Artista de Grabación',
       description:
         'Acuerdo entre artistas de grabación y sellos discográficos.',
-      aliases: ['contrato discográfico', 'acuerdo musical'],
+      aliases: [
+        'contrato discográfico',
+        'acuerdo musical',
+        'contrato de grabación de artistas',
+      ],
     },
   },
 };

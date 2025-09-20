@@ -39,6 +39,7 @@ export const clinicalTrialAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de investigación clínica',
         'acuerdo de estudio médico',
+        'acuerdo de participación en el juicio',
       ],
     },
   },

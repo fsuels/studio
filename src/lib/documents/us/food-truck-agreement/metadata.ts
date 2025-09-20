@@ -36,7 +36,11 @@ export const foodTruckAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Food Truck',
       description:
         'Acuerdo para operaciones de food truck, venta y servicios de ubicación.',
-      aliases: ['contrato de vendedor ambulante', 'acuerdo de comida móvil'],
+      aliases: [
+        'contrato de vendedor ambulante',
+        'acuerdo de comida móvil',
+        'acuerdo de comida callejera',
+      ],
     },
   },
 };

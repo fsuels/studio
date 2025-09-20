@@ -36,7 +36,11 @@ export const homeImprovementContractMeta: LegalDocument = {
       name: 'Contrato de Mejoras del Hogar',
       description:
         'Contrato integral para proyectos de renovación, remodelación y mejoras del hogar.',
-      aliases: ['contrato de renovación', 'acuerdo de remodelación'],
+      aliases: [
+        'contrato de renovación',
+        'acuerdo de remodelación',
+        'acuerdo de contratista',
+      ],
     },
   },
 };

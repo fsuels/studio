@@ -34,6 +34,7 @@ export const metadata = {
         'fideicomiso conjunto',
         'fideicomiso de pareja',
         'fideicomiso familiar',
+        'family trust',
       ],
     },
   },

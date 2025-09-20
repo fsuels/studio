@@ -1,4 +1,4 @@
-# document-intel-cycle-0011 Intake Checklist
+﻿# document-intel-cycle-0011 Intake Checklist
 
 - **Prepared By**: Agent 3 (Document Intelligence Ops)
 - **Date**: 2025-09-20
@@ -12,7 +12,7 @@
 ## Required Inputs & Owners
 | Item | Owner | Source | Status |
 | --- | --- | --- | --- |
-| verify-templates parity run (advance-directive focus) | Document Intelligence QA | `npm run verify-templates -- --filter advance-directive` | Pending |
+| verify-templates parity run (advance-directive focus) | Document Intelligence QA | `npm run verify-templates -- --filter advance-directive` | Complete (report archived 2025-09-20) |
 | Georgia T-7 PDF validation (sale date, buyer address) | Overlay QA | Georgia T-7 overlay assets (PNG/PDF) in this folder | In Progress |
 | Compliance briefing acknowledgments | Compliance Lead | ops/artifacts/document-intel-cycle-0010/compliance-briefing-spanish-metadata.md | Ready |
 | Washington localization insert draft | Compliance & Localization | ops/compliance/state-disclaimer-inserts.md | Ready for review |

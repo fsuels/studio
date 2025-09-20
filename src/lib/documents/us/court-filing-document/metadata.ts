@@ -26,13 +26,21 @@ export const courtFilingDocumentMeta: LegalDocument = {
       name: 'Court Filing Document',
       description:
         'Present your case professionally with properly formatted court documents that meet legal requirements.',
-      aliases: ['legal pleading', 'court document', 'legal filing'],
+      aliases: [
+        'legal pleading',
+        'court document',
+        'legal filing',
+      ],
     },
     es: {
       name: 'Documento de Presentación Judicial',
       description:
         'Plantilla general para documentos de presentación judicial y alegatos legales.',
-      aliases: ['alegato legal', 'documento judicial'],
+      aliases: [
+        'alegato legal',
+        'documento judicial',
+        'presentación legal',
+      ],
     },
   },
 };

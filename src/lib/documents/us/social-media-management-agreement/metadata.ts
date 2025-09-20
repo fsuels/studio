@@ -36,7 +36,11 @@ export const socialMediaManagementAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Gestión de Redes Sociales',
       description:
         'Acuerdo profesional para servicios de marketing y gestión de redes sociales entre agencia y cliente.',
-      aliases: ['contrato de redes sociales', 'acuerdo de marketing digital'],
+      aliases: [
+        'contrato de redes sociales',
+        'acuerdo de marketing digital',
+        'contrato de servicios de redes sociales',
+      ],
     },
   },
 };

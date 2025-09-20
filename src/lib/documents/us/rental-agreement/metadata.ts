@@ -40,6 +40,7 @@ export const rentalAgreementMeta: LegalDocument = {
         'contrato de alquiler',
         'contrato de renta',
         'acuerdo de arrendamiento',
+        'acuerdo de arrendamiento legal',
       ],
     },
   },

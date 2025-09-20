@@ -26,13 +26,21 @@ export const gamingAgreementMeta: LegalDocument = {
       name: 'Gaming Agreement',
       description:
         'Agreement for esports, gaming tournaments, and professional gaming contracts.',
-      aliases: ['esports contract', 'gaming contract', 'tournament agreement'],
+      aliases: [
+        'esports contract',
+        'gaming contract',
+        'tournament agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Gaming',
       description:
         'Acuerdo para esports, torneos de juegos y contratos de gaming profesional.',
-      aliases: ['contrato de esports', 'acuerdo de torneo'],
+      aliases: [
+        'contrato de esports',
+        'acuerdo de torneo',
+        'acuerdo de torneo legal',
+      ],
     },
   },
 };

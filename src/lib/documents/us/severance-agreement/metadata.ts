@@ -40,6 +40,7 @@ export const severanceAgreementMeta: LegalDocument = {
         'contrato de indemnización',
         'acuerdo de separación',
         'paquete de indemnización',
+        'paquete de indemnización legal',
       ],
     },
   },

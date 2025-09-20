@@ -40,6 +40,7 @@ export const terminationLetterMeta: LegalDocument = {
         'aviso de terminación',
         'carta de despido',
         'terminación laboral',
+        'carta de despido legal',
       ],
     },
   },

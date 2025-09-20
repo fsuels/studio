@@ -26,13 +26,21 @@ export const leaseRenewalAgreementMeta: LegalDocument = {
       name: 'Lease Renewal Agreement',
       description:
         'Extend your existing lease with updated terms and conditions.',
-      aliases: ['lease extension', 'rental renewal', 'lease continuation'],
+      aliases: [
+        'lease extension',
+        'rental renewal',
+        'lease continuation',
+      ],
     },
     es: {
       name: 'Acuerdo de Renovación de Arrendamiento',
       description:
         'Extiende tu arrendamiento existente con términos y condiciones actualizados.',
-      aliases: ['extensión de arrendamiento', 'renovación de alquiler'],
+      aliases: [
+        'extensión de arrendamiento',
+        'renovación de alquiler',
+        'continuación del arrendamiento',
+      ],
     },
   },
 };

@@ -40,6 +40,7 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
         'contrato de arrendamiento residencial',
         'arrendamiento de apartamento',
         'contrato de alquiler',
+        'acuerdo de alquiler de viviendas',
       ],
     },
   },

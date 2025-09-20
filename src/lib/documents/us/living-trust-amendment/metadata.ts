@@ -34,6 +34,7 @@ export const metadata = {
         'enmienda fideicomiso',
         'modificar fideicomiso',
         'actualizar fideicomiso',
+        'modificación de confianza',
       ],
     },
   },

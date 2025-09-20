@@ -25,6 +25,7 @@ interface UserSession {
 }
 
 class IntelligentPreloader {
+  private initialized = false;
   private userSession: UserSession = {
     visitedRoutes: [],
     timeSpent: {},
@@ -83,6 +84,11 @@ class IntelligentPreloader {
    * Initialize preloader with user session tracking
    */
   initialize() {
+    if (this.initialized) {
+      return;
+    }
+    this.initialized = true;
+
     this.trackUserSession();
     this.setupIntersectionObserver();
     this.setupHoverPreloading();

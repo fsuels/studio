@@ -26,13 +26,21 @@ export const constructionbidformMeta: LegalDocument = {
       name: 'Construction Bid Form',
       description:
         'Standardized construction bid form for contractors to submit project bids.',
-      aliases: ['bid form', 'contractor bid form', 'project bid form'],
+      aliases: [
+        'bid form',
+        'contractor bid form',
+        'project bid form',
+      ],
     },
     es: {
       name: 'Formulario de Oferta de Construcción',
       description:
         'Formulario estandarizado de oferta de construcción para que los contratistas presenten ofertas de proyectos.',
-      aliases: ['formulario de oferta', 'formulario de oferta de contratista'],
+      aliases: [
+        'formulario de oferta',
+        'formulario de oferta de contratista',
+        'formulario de oferta del proyecto',
+      ],
     },
   },
 };

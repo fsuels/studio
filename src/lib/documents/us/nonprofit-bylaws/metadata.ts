@@ -26,13 +26,21 @@ export const nonprofitBylawsMeta: LegalDocument = {
       name: 'Nonprofit Bylaws',
       description:
         'Establish strong governance for your nonprofit organization with bylaws that ensure proper operations and compliance.',
-      aliases: ['501c3 bylaws', 'charity bylaws', 'nonprofit constitution'],
+      aliases: [
+        '501c3 bylaws',
+        'charity bylaws',
+        'nonprofit constitution',
+      ],
     },
     es: {
       name: 'Estatutos de Organización Sin Fines de Lucro',
       description:
         'Estatutos para organizaciones sin fines de lucro y entidades caritativas.',
-      aliases: ['estatutos 501c3', 'reglamento de ONG'],
+      aliases: [
+        'estatutos 501c3',
+        'reglamento de ONG',
+        'constitución sin fines de lucro',
+      ],
     },
   },
 };

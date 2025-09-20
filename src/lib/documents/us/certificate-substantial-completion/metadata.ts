@@ -39,6 +39,7 @@ export const certificatesubstantialcompletionMeta: LegalDocument = {
       aliases: [
         'certificado de finalización sustancial',
         'certificado de finalización',
+        'documento de finalización del proyecto',
       ],
     },
   },

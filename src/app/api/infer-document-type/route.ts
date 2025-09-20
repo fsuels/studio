@@ -29,7 +29,15 @@ type InferenceSuggestionResponse = {
   reasoning?: string;
 };
 
-type InferDocumentTypeApiResponse = {\n  suggestions: InferenceSuggestionResponse[];\n};\n\ntype ErrorResponse = {\n  error: string;\n  code: string;\n  details?: unknown;\n};
+type InferDocumentTypeApiResponse = {
+  suggestions: InferenceSuggestionResponse[];
+};
+
+type ErrorResponse = {
+  error: string;
+  code: string;
+  details?: unknown;
+};
 
 type DocumentIndex = {
   lookup: Map<string, DocumentMetadata>;

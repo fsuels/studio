@@ -39,6 +39,7 @@ export const constructionmanagementagreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de gestión de construcción',
         'contrato de gestor de construcción',
+        'acuerdo de gestión de proyectos',
       ],
     },
   },

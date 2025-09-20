@@ -41,6 +41,7 @@ export const affidavitGeneralMeta: LegalDocument = {
         'declaración jurada',
         'declaración oficial',
         'declaración bajo juramento',
+        'declaración juramentada',
       ],
     },
   },

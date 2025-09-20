@@ -34,6 +34,7 @@ export const metadata = {
         'poder para menor',
         'autorización cuidado menor',
         'tutela temporal',
+        'autorización de cuidado infantil',
       ],
     },
   },

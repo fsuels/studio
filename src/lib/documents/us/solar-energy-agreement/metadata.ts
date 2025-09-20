@@ -36,7 +36,11 @@ export const solarEnergyAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Energía Solar',
       description:
         'Acuerdo para instalación de paneles solares y servicios energéticos.',
-      aliases: ['contrato de instalación solar', 'acuerdo fotovoltaico'],
+      aliases: [
+        'contrato de instalación solar',
+        'acuerdo fotovoltaico',
+        'contrato fotovoltaico',
+      ],
     },
   },
 };

@@ -25,12 +25,20 @@ export const tutoringAgreementMeta: LegalDocument = {
     en: {
       name: 'Tutoring Agreement',
       description: 'Agreement for private tutoring and educational services.',
-      aliases: ['private tutoring', 'academic tutoring', 'tutor contract'],
+      aliases: [
+        'private tutoring',
+        'academic tutoring',
+        'tutor contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Tutoría',
       description: 'Acuerdo para tutoría privada y servicios educativos.',
-      aliases: ['tutoría privada', 'tutoría académica'],
+      aliases: [
+        'tutoría privada',
+        'tutoría académica',
+        'contrato de tutor',
+      ],
     },
   },
 };

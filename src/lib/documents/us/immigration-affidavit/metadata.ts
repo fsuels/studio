@@ -36,7 +36,11 @@ export const immigrationAffidavitMeta: LegalDocument = {
       name: 'Declaración Jurada de Inmigración',
       description:
         'Declaración jurada para procedimientos y aplicaciones de inmigración.',
-      aliases: ['declaración de apoyo', 'declaración de inmigración'],
+      aliases: [
+        'declaración de apoyo',
+        'declaración de inmigración',
+        'declaración de inmigración jurada',
+      ],
     },
   },
 };

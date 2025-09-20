@@ -36,7 +36,11 @@ export const websiteDevelopmentAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Desarrollo de Sitio Web',
       description:
         'Acuerdo integral para servicios de diseño y desarrollo de sitios web entre desarrollador y cliente.',
-      aliases: ['contrato de desarrollo web', 'acuerdo de diseño web'],
+      aliases: [
+        'contrato de desarrollo web',
+        'acuerdo de diseño web',
+        'contrato de servicios web',
+      ],
     },
   },
 };

@@ -39,6 +39,7 @@ export const medicalConsentFormMeta: LegalDocument = {
       aliases: [
         'formulario de autorización médica',
         'consentimiento de tratamiento',
+        'consentimiento de la salud',
       ],
     },
   },

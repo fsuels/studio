@@ -25,12 +25,20 @@ export const donationAgreementMeta: LegalDocument = {
     en: {
       name: 'Donation Agreement',
       description: 'Agreement for charitable donations and gifts.',
-      aliases: ['gift agreement', 'charitable donation', 'pledge agreement'],
+      aliases: [
+        'gift agreement',
+        'charitable donation',
+        'pledge agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Donación',
       description: 'Acuerdo para donaciones caritativas y regalos.',
-      aliases: ['acuerdo de regalo', 'donación caritativa'],
+      aliases: [
+        'acuerdo de regalo',
+        'donación caritativa',
+        'acuerdo de compromiso',
+      ],
     },
   },
 };

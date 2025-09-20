@@ -34,6 +34,7 @@ export const metadata = {
         'directiva anticipada',
         'directiva médica',
         'directiva de tratamiento',
+        'directiva de tratamiento legal',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const transportationServiceAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Servicio de Transporte',
       description:
         'Acuerdo para servicios de transporte y entrega entre proveedor y cliente.',
-      aliases: ['acuerdo de servicio de entrega', 'contrato de transporte'],
+      aliases: [
+        'acuerdo de servicio de entrega',
+        'contrato de transporte',
+        'acuerdo de servicio logístico',
+      ],
     },
   },
 };

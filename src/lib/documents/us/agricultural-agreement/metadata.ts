@@ -36,7 +36,11 @@ export const agriculturalAgreementMeta: LegalDocument = {
       name: 'Acuerdo Agrícola',
       description:
         'Maximiza la rentabilidad de tu tierra agrícola y reduce riesgos operativos. Establece asociaciones que beneficien a todos los participantes.',
-      aliases: ['acuerdo de agricultura', 'contrato de servicios agrícolas'],
+      aliases: [
+        'acuerdo de agricultura',
+        'contrato de servicios agrícolas',
+        'contrato de servicios agrícolas legal',
+      ],
     },
   },
 };

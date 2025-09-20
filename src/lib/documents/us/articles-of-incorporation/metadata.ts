@@ -40,6 +40,7 @@ export const articlesOfIncorporationMeta: LegalDocument = {
         'incorporación de negocio',
         'estatutos corporativos',
         'documentos de incorporación',
+        'formación de la empresa',
       ],
     },
   },

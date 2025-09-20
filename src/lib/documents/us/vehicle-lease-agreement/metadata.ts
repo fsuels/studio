@@ -38,6 +38,7 @@ export const vehicleLeaseAgreementMeta: LegalDocument = {
       aliases: [
         'contrato de arrendamiento de auto',
         'acuerdo de alquiler de vehículo',
+        'acuerdo de alquiler de vehículos',
       ],
     },
   },

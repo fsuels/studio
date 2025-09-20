@@ -41,6 +41,7 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
         'acuerdo de no divulgación',
         'contrato de confidencialidad',
         'documento comercial',
+        'acuerdo de confidencialidad',
       ],
     },
   },

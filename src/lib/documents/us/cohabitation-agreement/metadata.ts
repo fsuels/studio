@@ -41,6 +41,7 @@ export const cohabitationAgreementMeta: LegalDocument = {
         'acuerdo de pareja de hecho',
         'acuerdo de convivencia',
         'acuerdo de unión libre',
+        'acuerdo de derecho consuetudinario',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const consultingAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Consultoría',
       description:
         'Obten experiencia especializada sin contratar empleados de tiempo completo. Establece objetivos claros y protege la propiedad intelectual de tu empresa.',
-      aliases: ['contrato de consultor', 'acuerdo de asesoría'],
+      aliases: [
+        'contrato de consultor',
+        'acuerdo de asesoría',
+        'acuerdo de servicios profesionales',
+      ],
     },
   },
 };

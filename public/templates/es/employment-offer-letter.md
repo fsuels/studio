@@ -1,99 +1,198 @@
-# Contrato de Compraventa de Vehículo
+﻿# Carta de Oferta de Empleo
 
 ---
 
-Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
+**CARTA DE OFERTA LABORAL**
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:** {{buyer_name}}, de {{buyer_address}}
+**Fecha:** {{offer_date}}
 
-Referidos colectivamente en este documento como las “Partes”.
+**Para:** {{candidate_name}}  
+**Domicilio:** {{candidate_address}}
+
+**De:** {{company_name}}  
+**Domicilio:** {{company_address}}
 
 ---
 
-## 1. Descripción del Vehículo
+## Estimada/o {{candidate_name}},
 
-El Vendedor por el presente vende al Comprador, y el Comprador por el presente compra al Vendedor, el siguiente vehículo motorizado (el “Vehículo”):
+Nos complace ofrecerle el puesto de **{{job_title}}** en {{company_name}}. Estamos convencidos de que sus habilidades y experiencia serán una valiosa incorporación para nuestro equipo.
 
-| Campo                                       | Descripción         |
-| ------------------------------------------- | ------------------- |
-| Año                                         | {{year}}            |
-| Marca                                       | {{make}}            |
-| Modelo                                      | {{model}}           |
-| Color                                       | {{color}}           |
-| Número de Identificación del Vehículo (VIN) | {{vin}}             |
-| Lectura del Odómetro                        | {{odometer}} millas |
+---
 
-## 2. Precio de Compra y Pago
+## 1. Datos del Puesto
 
-1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
-2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
-3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
+**Título del puesto:** {{job_title}}  
+**Departamento:** {{department}}  
+**Reporta a:** {{supervisor_name}}, {{supervisor_title}}  
+**Tipo de empleo:** {{employment_type}} (Tiempo completo/Medio tiempo/Contrato)  
+**Fecha de inicio:** {{start_date}}  
+**Lugar de trabajo:** {{work_location}}
 
-## 3. Condición del Vehículo
+---
 
-{{#if as_is}}
-El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{else}}
-**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
-{{warranty_text}}
+## 2. Paquete de Compensación
+
+### 2.1 Sueldo base
+
+Su salario base anual será de **${{annual_salary}}**, pagado {{pay_frequency}} (quincenal/mensual) mediante depósito directo, sujeto a las retenciones y deducciones aplicables.
+
+### 2.2 Compensación adicional
+
+{{#if bonus_eligible}}
+- **Bono anual:** Elegible para un bono de desempeño de hasta {{bonus_percentage}}% del salario base, según los resultados de la empresa y su desempeño individual.
+{{/if}}
+{{#if commission_eligible}}
+- **Comisiones:** {{commission_structure}}
+{{/if}}
+{{#if equity_eligible}}
+- **Participación accionaria:** {{equity_details}}
 {{/if}}
 
-## 4. Declaraciones y Garantías del Vendedor
+---
 
-El Vendedor declara y garantiza que:
+## 3. Prestaciones
 
-1. El Vendedor es el propietario legal del Vehículo y tiene plena autoridad para venderlo.
-2. El Vehículo está libre de todo gravamen, carga e interés de seguridad, excepto según se divulga:
-   - {{existing_liens}}
-3. A leal saber y entender del Vendedor, la lectura del odómetro es precisa.
+Será elegible para las siguientes prestaciones, sujetas a los términos de cada plan:
 
-## 5. Ley Aplicable
+### 3.1 Cobertura médica
 
-Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
+- **Seguro médico:** {{health_insurance_details}}
+- **Seguro dental:** {{dental_insurance_details}}
+- **Seguro de visión:** {{vision_insurance_details}}
+- **Cuenta de ahorro para la salud (HSA):** {{hsa_details}}
 
-## 6. Firmas
+### 3.2 Tiempo libre
 
-**EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
+- **Vacaciones/PTO:** {{pto_days}} días al año
+- **Permiso por enfermedad:** {{sick_leave_days}} días al año
+- **Días personales:** {{personal_days}} días al año
+- **Días festivos:** {{holiday_policy}}
 
-| Firma del Vendedor                                    | Fecha                              |
-| ----------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{seller_name}})                                     |                                    |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
+### 3.3 Ahorro para el retiro
 
-{{#if seller2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
+- **Plan 401(k):** {{retirement_plan_details}}
+- **Aportación patronal:** {{company_match_details}}
 
-| Firma del Comprador                                 | Fecha                              |
-| --------------------------------------------------- | ---------------------------------- |
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
-| ({{buyer_name}})                                    |                                    |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
+### 3.4 Prestaciones adicionales
 
-{{#if buyer2_name}}
-| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Reconocimiento Notarial
-
-Estado de **{{state}}**
-Condado de **{{county}}**
-
-En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
-
-**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
-Mi Comisión Expira: **\*\***\_\_**\*\***
+{{additional_benefits}}
 
 ---
 
-_Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
+## 4. Términos y Condiciones de Empleo
+
+### 4.1 Relación laboral
+
+Esta oferta corresponde a una relación laboral {{employment_status}} (a voluntad/por contrato). Cualquiera de las partes puede terminar la relación laboral en cualquier momento, con o sin causa o aviso, salvo que se especifique lo contrario en un acuerdo independiente.
+
+### 4.2 Horario de trabajo
+
+Su horario habitual será {{work_schedule}} (por ejemplo, lunes a viernes de 9:00 a 17:00). {{#if remote_work}}Opciones de trabajo remoto: {{remote_work_policy}}{{/if}}
+
+### 4.3 Periodo de prueba
+
+{{#if probationary_period}}
+Su empleo estará sujeto a un periodo de prueba de {{probationary_length}}, durante el cual se evaluará su desempeño.
+{{/if}}
+
+### 4.4 Verificaciones previas
+
+Esta oferta está condicionada a la aprobación satisfactoria de una verificación de antecedentes y {{#if drug_test}}examen toxicológico{{/if}}{{#if reference_check}} verificación de referencias{{/if}}.
 
 ---
 
-© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms
+## 5. Confidencialidad y No Competencia
+
+### 5.1 Confidencialidad
+
+Deberá firmar un Acuerdo de Confidencialidad para proteger la información propietaria y los secretos comerciales.
+
+### 5.2 No competencia / No captación
+
+{{#if non_compete}}
+Estará sujeto/a a restricciones de no competencia y no captación según se detalla en un acuerdo separado.
+{{/if}}
+
+### 5.3 Propiedad intelectual
+
+Todo producto de trabajo, invención o propiedad intelectual creado durante su empleo será propiedad de {{company_name}}.
+
+---
+
+## 6. Términos Adicionales
+
+### 6.1 Políticas de la empresa
+
+Su empleo estará regulado por las políticas y procedimientos establecidos en el Manual del Empleado, el cual recibirá durante la orientación inicial.
+
+### 6.2 Desarrollo profesional
+
+{{#if professional_development}}
+{{company_name}} apoya el desarrollo profesional mediante: {{professional_development_details}}
+{{/if}}
+
+### 6.3 Equipo y recursos
+
+{{equipment_provided}}
+
+---
+
+## 7. Aceptación de la Oferta
+
+Esta oferta es válida hasta el **{{offer_expiration_date}}**. Para aceptarla, por favor:
+
+1. Firme y feche ambas copias de esta carta.  
+2. Devuelva una copia a {{contact_person}} en {{contact_email}}.  
+3. Complete y devuelva la documentación de nuevo ingreso adjunta.  
+4. Proporcione la documentación requerida para la verificación del formulario I-9.
+
+---
+
+## 8. Próximos Pasos
+
+Una vez que acepte la oferta:
+
+1. **Orientación:** Su primer día comenzará con la orientación a las {{orientation_time}} el {{start_date}}.  
+2. **Documentación:** Lleve la documentación requerida para el I-9 y los formularios firmados.  
+3. **Contacto:** Para dudas, comuníquese con {{hr_contact_name}} al {{hr_contact_phone}} o {{hr_contact_email}}.
+
+---
+
+## 9. ¡Bienvenida/o al equipo!
+
+Estamos entusiasmados con la posibilidad de que se una a nuestro equipo y contribuya al éxito continuo de {{company_name}}. ¡Esperamos trabajar con usted!
+
+**Atentamente,**
+
+**{{hiring_manager_name}}**  
+{{hiring_manager_title}}  
+{{company_name}}
+
+---
+
+## Aceptación
+
+Yo, {{candidate_name}}, acepto los términos y condiciones de empleo descritos en esta carta de oferta.
+
+**Firma del empleado:** ******_**_******_**_******  
+**Fecha:** ******_**_******_**_******
+
+**Nombre en letra de imprenta:** {{candidate_name}}
+
+---
+
+**Representante de la empresa:**
+
+**Firma:** ******_**_******_**_******  
+**Fecha:** ******_**_******_**_******  
+**Nombre:** {{hiring_manager_name}}  
+**Cargo:** {{hiring_manager_title}}
+
+---
+
+**AVISO LEGAL IMPORTANTE:** Esta carta de oferta debe ser revisada por un asesor legal para asegurar el cumplimiento con las leyes laborales federales, estatales y locales. Adapte los términos a la jurisdicción y políticas específicas de su empresa.
+
+## _Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales_
+
+(c) 2025 123LegalDoc · Documento de autoayuda · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

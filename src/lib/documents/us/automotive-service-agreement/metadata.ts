@@ -38,6 +38,7 @@ export const automotiveServiceAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de reparación de autos',
         'contrato de servicio vehicular',
+        'acuerdo de mantenimiento automático',
       ],
     },
   },

@@ -36,7 +36,11 @@ export const talentManagementAgreementMeta: LegalDocument = {
       name: 'Acuerdo de Representación de Talento',
       description:
         'Acuerdo entre talento y representación para gestión de carrera.',
-      aliases: ['contrato de management', 'acuerdo de representación'],
+      aliases: [
+        'contrato de management',
+        'acuerdo de representación',
+        'acuerdo de gestión de intérpretes',
+      ],
     },
   },
 };

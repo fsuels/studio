@@ -1,351 +1,435 @@
-# Contrato de Arrendamiento Comercial / Commercial Lease Agreement
+﻿# Commercial Lease Agreement
+> Nota: contenido temporal en inglés; se requiere localización.
 
 ---
 
-**CONTRATO DE ARRENDAMIENTO COMERCIAL**
+**COMMERCIAL LEASE AGREEMENT**
 
-Este Contrato de Arrendamiento Comercial ("Arrendamiento") se celebra el **{{lease_date}}**, entre:
+This Commercial Lease Agreement ("Lease") is made and entered into on **{{lease_date}}**, by and between:
 
-- **Arrendador:** {{landlord_name}}, entidad {{landlord_entity_type}} organizada conforme a las leyes de {{landlord_state}}, con domicilio principal en {{landlord_address}}
-- **Arrendatario:** {{tenant_name}}, entidad {{tenant_entity_type}} organizada conforme a las leyes de {{tenant_state}}, con domicilio principal en {{tenant_address}}
+- **Landlord:** {{landlord_name}}, a {{landlord_entity_type}} organized under the laws of {{landlord_state}}, with its principal place of business at {{landlord_address}}
 
-En adelante, las "Partes".
+- **Tenant:** {{tenant_name}}, a {{tenant_entity_type}} organized under the laws of {{tenant_state}}, with its principal place of business at {{tenant_address}}
 
----
-
-## 1. Descripcion del Inmueble / Premises Description
-
-### 1.1 Inmueble Arrendado / Leased Premises
-
-**Direccion:** {{property_address}}  
-**Ciudad:** {{city}}, **Estado:** {{state}}, **Codigo Postal:** {{zip_code}}  
-**Descripcion legal / Legal Description:** {{legal_description}}
-
-### 1.2 Detalles del Edificio / Property Details
-
-**Nombre del edificio:** {{building_name}}  
-**Unidad o suite:** {{suite_number}}  
-**Superficie total:** {{total_square_feet}} pies cuadrados  
-**Superficie util:** {{usable_square_feet}} pies cuadrados  
-**Tipo de inmueble / Property Type:** {{property_type}} (Oficina/Comercial/Industrial/Almacen/Otro)
-
-### 1.3 Areas incluidas / Included Areas
-
-**Areas comunes:** {{common_areas}}  
-**Estacionamientos asignados:** {{parking_spaces}}  
-**Bodegas/almacenaje:** {{storage_areas}}  
-**Otras inclusiones:** {{other_inclusions}}
+Collectively referred to herein as the "Parties."
 
 ---
 
-## 2. Plazo del Arrendamiento / Lease Terms
+## 1. Premises Description
 
-### 2.1 Periodo del arrendamiento / Lease Period
+### 1.1 Leased Premises
 
-**Tipo de arrendamiento:** {{lease_type}} (Gross/Net/Modified Gross/Triple Net)  
-**Inicio:** {{commencement_date}}  
-**Vencimiento:** {{expiration_date}}  
-**Duracion total:** {{lease_term_years}} anos y {{lease_term_months}} meses
+**Property Address:** {{property_address}}  
+**City:** {{city}}, **State:** {{state}}, **ZIP:** {{zip_code}}  
+**Legal Description:** {{legal_description}}
 
-### 2.2 Opciones de renovacion / Renewal Options
+### 1.2 Property Details
+
+**Building Name:** {{building_name}}  
+**Suite/Unit Number:** {{suite_number}}  
+**Total Square Footage:** {{total_square_feet}} square feet  
+**Usable Square Footage:** {{usable_square_feet}} square feet  
+**Property Type:** {{property_type}} (Office/Retail/Industrial/Warehouse/Other)
+
+### 1.3 Included Areas
+
+**Common Areas:** {{common_areas}}  
+**Parking Spaces:** {{parking_spaces}} spaces  
+**Storage Areas:** {{storage_areas}}  
+**Other Inclusions:** {{other_inclusions}}
+
+---
+
+## 2. Lease Terms
+
+### 2.1 Lease Period
+
+**Lease Type:** {{lease_type}} (Gross/Net/Modified Gross/Triple Net)  
+**Lease Commencement Date:** {{commencement_date}}  
+**Lease Expiration Date:** {{expiration_date}}  
+**Total Lease Term:** {{lease_term_years}} years, {{lease_term_months}} months
+
+### 2.2 Renewal Options
 
 {{#if renewal_options}}
-**Opciones:** El Arrendatario podra renovar {{renewal_option_count}} vez/veces por {{renewal_term}}, sujeto a {{renewal_terms}}.  
-**Aviso de renovacion:** {{renewal_notice_days}} dias de anticipacion por escrito.  
-**Renta durante renovacion:** {{renewal_rent_terms}}
+**Renewal Terms:** Tenant has {{renewal_option_count}} option(s) to renew for {{renewal_term}} each, subject to {{renewal_terms}}.  
+**Renewal Notice:** {{renewal_notice_days}} days written notice required.  
+**Renewal Rent:** {{renewal_rent_terms}}
 {{else}}
-**No existen opciones de renovacion** en este Arrendamiento.
+**No renewal options** are provided under this Lease.
 {{/if}}
 
 ---
 
-## 3. Renta y Cargos Adicionales / Rent and Additional Charges
+## 3. Rent and Additional Charges
 
-### 3.1 Renta base / Base Rent
+### 3.1 Base Rent
 
-**Renta anual:** ${{annual_base_rent}}  
-**Renta mensual:** ${{monthly_base_rent}}  
-**Tarifa por pie cuadrado:** ${{rent_per_sq_ft}} por pie cuadrado anual  
-**Inicio de renta:** {{rent_commencement_date}}
+**Annual Base Rent:** ${{annual_base_rent}}  
+**Monthly Base Rent:** ${{monthly_base_rent}}  
+**Per Square Foot Rate:** ${{rent_per_sq_ft}} per square foot annually  
+**Rent Commencement Date:** {{rent_commencement_date}}
 
-### 3.2 Condiciones de pago / Rent Payment Terms
+### 3.2 Rent Payment Terms
 
-**Fecha de pago:** {{rent_due_date}} de cada mes  
-**Metodo de pago:** {{payment_method}}  
-**Direccion de pago:** {{payment_address}}  
-**Recargo por mora:** {{late_fee_percentage}}% o ${{late_fee_amount}} (lo que sea mayor)  
-**Periodo de gracia:** {{grace_period}} dias
+**Due Date:** {{rent_due_date}} of each month  
+**Payment Method:** {{payment_method}}  
+**Payment Address:** {{payment_address}}  
+**Late Fee:** {{late_fee_percentage}}% of monthly rent or ${{late_fee_amount}}, whichever is greater  
+**Grace Period:** {{grace_period}} days
 
-### 3.3 Incrementos de renta / Rent Increases
+### 3.3 Rent Increases
 
 {{#if rent_increases}}
-**Ajustes de renta:** {{rent_escalation_type}}
+**Rent Escalation:** {{rent_escalation_type}}
 
-- **Incremento anual:** {{annual_increase_percentage}}% anual
-- **Ajuste CPI:** {{#if cpi_adjustment}}Basado en el Indice de Precios al Consumidor{{/if}}
-- **Revision a mercado:** {{#if market_rate_review}}Cada {{market_review_years}} anos{{/if}}
-{{/if}}
+- **Annual Increase:** {{annual_increase_percentage}}% per year
+- **CPI Adjustment:** {{#if cpi_adjustment}}Based on Consumer Price Index{{/if}}
+- **Market Rate Review:** {{#if market_rate_review}}Every {{market_review_years}} years{{/if}}
+  {{/if}}
 
-### 3.4 Gastos operativos / Operating Expenses
+### 3.4 Additional Rent and Operating Expenses
 
 {{#if operating_expenses}}
-**Porcentaje del Arrendatario:** {{tenant_expense_percentage}}%
+**Operating Expenses:** Tenant's proportionate share: {{tenant_expense_percentage}}%
 
-**Gastos incluidos:** impuestos, seguros, mantenimiento de areas comunes (CAM), servicios comunes, honorarios de administracion, reparaciones y {{additional_operating_expenses}}.
+**Included Operating Expenses:**
 
-**Tope de gastos (Expense Stop):** ${{expense_stop}} por pie cuadrado anual  
-**Conciliacion:** Informe anual antes de {{reconciliation_date}}
+- Property taxes and assessments
+- Insurance premiums
+- Common area maintenance (CAM)
+- Utilities for common areas
+- Property management fees
+- Repairs and maintenance
+- {{additional_operating_expenses}}
+
+**Expense Stop:** ${{expense_stop}} per square foot annually  
+**Reconciliation:** Annual reconciliation provided by {{reconciliation_date}}
 {{/if}}
 
 ---
 
-## 4. Depositos / Security Deposit and Additional Deposits
+## 4. Security Deposit and Additional Deposits
 
-### 4.1 Deposito en garantia / Security Deposit
+### 4.1 Security Deposit
 
-**Monto:** ${{security_deposit}}  
-**Aplicacion:** Garantizar el cumplimiento de obligaciones.  
-**Devolucion:** Dentro de {{deposit_return_days}} dias tras la entrega, menos cargos autorizados.
+**Security Deposit Amount:** ${{security_deposit}}  
+**Purpose:** Secure faithful performance of Tenant's obligations  
+**Return Terms:** Within {{deposit_return_days}} days after lease termination, less lawful deductions
 
-### 4.2 Otros depositos / Additional Deposits
+### 4.2 Additional Deposits
 
 {{#if additional_deposits}}
-- **Primer mes de renta:** ${{monthly_base_rent}}  
-- **Ultimo mes de renta:** {{#if last_month_required}}${{monthly_base_rent}}{{else}}No requerido{{/if}}  
-- **Depositos de servicios:** {{utility_deposits}}  
-- **Deposito por llaves:** ${{key_deposit}}
+**First Month's Rent:** ${{monthly_base_rent}}  
+**Last Month's Rent:** {{#if last_month_required}}${{monthly_base_rent}}{{else}}Not required{{/if}}  
+**Utility Deposits:** {{utility_deposits}}  
+**Key Deposit:** ${{key_deposit}}
 {{/if}}
 
 ---
 
-## 5. Uso y Operacion / Use and Operation
+## 5. Permitted Use and Restrictions
 
-### 5.1 Uso autorizado / Permitted Use
+### 5.1 Permitted Use
 
-{{permitted_use}}
+**Primary Use:** {{permitted_use}}  
+**Business Type:** {{business_type}}  
+**Operating Hours:** {{operating_hours}}  
+**Zoning Classification:** {{zoning_classification}}
 
-### 5.2 Reglas del edificio / Building Rules
+### 5.2 Prohibited Uses
 
-{{building_rules}}
+Tenant shall not use the premises for:
+{{prohibited_uses}}
 
-### 5.3 Licencias y cumplimiento normativo / Compliance
+### 5.3 Exclusive Use Provisions
 
-El Arrendatario obtendra licencias aplicables y cumplira todas las leyes y ordenanzas.
-
----
-
-## 6. Servicios y Mantenimiento / Services and Maintenance
-
-### 6.1 Servicios incluidos / Included Services
-
-{{utilities_and_services}}
-
-### 6.2 Mantenimiento del Arrendatario / Tenant Maintenance
-
-{{tenant_maintenance_obligations}}
-
-### 6.3 Mantenimiento del Arrendador / Landlord Maintenance
-
-{{landlord_maintenance_obligations}}
+{{#if exclusive_use}}
+**Exclusive Rights:** {{exclusive_use_description}}
+{{/if}}
 
 ---
 
-## 7. Mejoras y Alteraciones / Improvements and Alterations
+## 6. Utilities and Services
 
-### 7.1 Condicion inicial / Condition of Premises
+### 6.1 Utilities Provided by Landlord
 
-{{initial_condition}}
+{{landlord_utilities}}
 
-### 7.2 Alteraciones / Alterations
+### 6.2 Utilities Provided by Tenant
 
-{{alterations_clause}}
+{{tenant_utilities}}
 
-### 7.3 Mejoras permanentes / Leasehold Improvements
+### 6.3 After-Hours HVAC
 
-{{leasehold_improvements}}
-
----
-
-## 8. Seguros e Indemnizacion / Insurance and Indemnification
-
-### 8.1 Seguro del Arrendatario / Tenant Insurance
-
-{{tenant_insurance_requirements}}
-
-### 8.2 Seguro del Arrendador / Landlord Insurance
-
-{{landlord_insurance_requirements}}
-
-### 8.3 Indemnizacion / Indemnity
-
-{{indemnification_clause}}
+{{#if after_hours_hvac}}
+**Rate:** ${{hvac_hourly_rate}} per hour  
+**Notice Required:** {{hvac_notice_hours}} hours advance notice
+{{/if}}
 
 ---
 
-## 9. Cesion y Subarrendamiento / Assignment and Subletting
+## 7. Maintenance and Repairs
 
-{{assignment_subletting_clause}}
+### 7.1 Landlord Responsibilities
 
----
+Landlord shall maintain and repair:
 
-## 10. Incumplimiento y Recursos / Default and Remedies
+- Structural components of the building
+- Roof and exterior walls
+- Common areas and facilities
+- Building systems (HVAC, electrical, plumbing) serving multiple tenants
+- {{landlord_maintenance_items}}
 
-### 10.1 Eventos de incumplimiento
+### 7.2 Tenant Responsibilities
 
-{{events_of_default}}
+Tenant shall maintain and repair:
 
-### 10.2 Recursos del Arrendador
+- Interior of the premises
+- Fixtures and equipment installed by Tenant
+- HVAC systems serving only the premises
+- {{tenant_maintenance_items}}
 
-{{landlord_remedies}}
+### 7.3 Emergency Repairs
 
-### 10.3 Recursos del Arrendatario
-
-{{tenant_remedies}}
-
----
-
-## 11. Terminacion y Rescision / Termination
-
-### 11.1 Terminacion anticipada
-
-{{early_termination_clause}}
-
-### 11.2 Desocupacion
-
-{{surrender_clause}}
+**Emergency Contact:** {{emergency_contact}}  
+**Emergency Phone:** {{emergency_phone}}
 
 ---
 
-## 12. Notificaciones / Notices
+## 8. Insurance Requirements
 
-**Direcciones de notificacion:**
+### 8.1 Landlord's Insurance
 
-- Arrendador: {{landlord_notice_address}}
-- Arrendatario: {{tenant_notice_address}}
+Landlord shall maintain:
 
-Metodo autorizado: {{notice_delivery_methods}}
+- Property insurance covering the building
+- General liability insurance: ${{landlord_liability_minimum}}
+- {{landlord_additional_insurance}}
+
+### 8.2 Tenant's Insurance
+
+Tenant shall maintain:
+
+- **General Liability:** ${{tenant_liability_minimum}} per occurrence
+- **Property Insurance:** Full replacement cost of Tenant's property
+- **Business Interruption:** {{#if business_interruption_required}}${{business_interruption_amount}}{{else}}Not required{{/if}}
+- **Workers' Compensation:** As required by law
+
+### 8.3 Additional Insured
+
+{{#if additional_insured_required}}
+Landlord shall be named as additional insured on Tenant's liability policies.
+{{/if}}
 
 ---
 
-## 13. Cumplimiento Ambiental y Seguridad / Environmental and Safety Compliance
+## 9. Alterations and Improvements
 
-### 13.1 Cumplimiento ambiental
+### 9.1 Tenant Improvements
 
-{{environmental_compliance_clause}}
+**Approval Required:** All alterations require Landlord's prior written consent  
+**Permitted Improvements:** {{permitted_improvements}}  
+**Improvement Standards:** {{improvement_standards}}
 
-### 13.2 Materiales peligrosos
+### 9.2 Restoration Requirements
 
-{{hazardous_materials_policy}}
+{{#if restoration_required}}
+Upon lease termination, Tenant shall restore premises to original condition, except for normal wear and tear.
+{{/if}}
 
-### 13.3 Cumplimiento ADA
+### 9.3 Landlord Improvements
+
+{{#if landlord_improvements}}
+**Tenant Improvement Allowance:** ${{improvement_allowance}} per square foot  
+**Completion Date:** {{improvement_completion_date}}
+{{/if}}
+
+---
+
+## 10. Assignment and Subletting
+
+### 10.1 Assignment Restrictions
+
+**General Rule:** Tenant may not assign this Lease without Landlord's prior written consent.
+
+### 10.2 Subletting Restrictions
+
+**Subletting:** Permitted with {{subletting_approval_requirement}}  
+**Subletting Fee:** ${{subletting_fee}}  
+**Profit Sharing:** {{#if profit_sharing}}{{profit_sharing_percentage}}% of profits to Landlord{{/if}}
+
+---
+
+## 11. Default and Remedies
+
+### 11.1 Events of Default
+
+The following constitute default by Tenant:
+
+- Non-payment of rent for {{default_cure_period}} days after written notice
+- Violation of lease terms that remains uncured for {{lease_violation_cure_period}} days after written notice
+- Bankruptcy or insolvency of Tenant
+- {{additional_default_events}}
+
+### 11.2 Landlord's Remedies
+
+Upon default, Landlord may:
+
+- Terminate this Lease
+- Re-enter and re-let the premises
+- Collect all unpaid rent and damages
+- Pursue any other legal or equitable remedies
+
+### 11.3 Late Payment
+
+**Late Fee:** {{late_fee_percentage}}% of overdue amount  
+**Interest Rate:** {{interest_rate}}% per annum on overdue amounts
+
+---
+
+## 12. Property Access and Inspections
+
+### 12.1 Landlord Access Rights
+
+Landlord may enter the premises:
+
+- With {{inspection_notice_hours}} hours notice for inspections
+- For emergency situations without notice
+- To show premises to prospective tenants/buyers with reasonable notice
+- {{additional_access_rights}}
+
+### 12.2 Access Hours
+
+**Normal Business Hours:** {{access_hours}}  
+**After-Hours Access:** {{after_hours_access_policy}}
+
+---
+
+## 13. Environmental and Safety Compliance
+
+### 13.1 Environmental Compliance
+
+Both parties agree to comply with all environmental laws and regulations.
+
+### 13.2 Hazardous Materials
+
+**Prohibition:** {{hazardous_materials_policy}}  
+**Tenant Certification:** Tenant certifies no hazardous materials will be used, stored, or disposed of on premises without proper permits.
+
+### 13.3 ADA Compliance
 
 {{ada_compliance_responsibility}}
 
 ---
 
-## 14. Siniestra y Expropiacion / Casualty and Condemnation
+## 14. Casualty and Condemnation
 
-### 14.1 Danos por siniestro
+### 14.1 Casualty Damage
 
+If premises are damaged by fire or other casualty:
 {{casualty_provisions}}
 
-### 14.2 Expropiacion
+### 14.2 Condemnation
 
+If premises are taken by eminent domain:
 {{condemnation_provisions}}
 
 ---
 
-## 15. Estacionamiento / Parking
+## 15. Parking
 
-### 15.1 Asignacion
+### 15.1 Parking Allocation
 
-- Espacios asignados: {{assigned_parking_spaces}}  
-- Espacios para visitantes: {{visitor_parking_spaces}}  
-- Cuota de estacionamiento: {{#if parking_fee}}${{parking_fee_amount}} por espacio al mes{{else}}Incluido en la renta{{/if}}
+**Assigned Spaces:** {{assigned_parking_spaces}}  
+**Visitor Spaces:** {{visitor_parking_spaces}}  
+**Parking Fee:** {{#if parking_fee}}${{parking_fee_amount}} per space per month{{else}}Included in rent{{/if}}
 
-### 15.2 Normas de estacionamiento
+### 15.2 Parking Rules
 
 {{parking_rules}}
 
 ---
 
-## 16. Rotulacion / Signage
+## 16. Signage
 
-### 16.1 Rotulos permitidos
+### 16.1 Permitted Signage
 
 {{signage_rights}}
 
-### 16.2 Aprobacion
+### 16.2 Signage Approval
 
-Todo rotulo requiere aprobacion previa escrita del Arrendador y cumplimiento con normas locales.
-
----
-
-## 17. Disposiciones Generales / General Provisions
-
-### 17.1 Ley aplicable / Governing Law
-
-Este contrato se rige por las leyes de {{governing_state}}.
-
-### 17.2 Acuerdo integro / Entire Agreement
-
-Este documento constituye el acuerdo completo entre las Partes.
-
-### 17.3 Modificaciones / Amendment
-
-Solo podra modificarse por escrito firmado por ambas Partes.
-
-### 17.4 Divisibilidad / Severability
-
-Si alguna clausula es invalida, las demas continuaran vigentes.
-
-### 17.5 Obligaciones vinculantes / Binding Effect
-
-Vincula a las Partes y a sus sucesores y cesionarios.
+All signage requires Landlord's prior written approval and must comply with local ordinances.
 
 ---
 
-## 18. Disposiciones Especiales / Special Provisions
+## 17. General Provisions
+
+### 17.1 Governing Law
+
+This Lease shall be governed by the laws of {{governing_state}}.
+
+### 17.2 Entire Agreement
+
+This Lease constitutes the entire agreement between the parties.
+
+### 17.3 Amendment
+
+This Lease may only be amended by written agreement signed by both parties.
+
+### 17.4 Severability
+
+If any provision is held invalid, the remainder shall remain in full force and effect.
+
+### 17.5 Binding Effect
+
+This Lease binds the parties, their heirs, successors, and assigns.
+
+---
+
+## 18. Special Provisions
 
 {{special_provisions}}
 
 ---
 
-## Signatures / Firmas
+## Signatures
 
-## 19. Firmas / Signatures
+## 19. Signatures
 
-**EN FE DE LO CUAL**, las Partes firman este Arrendamiento en la fecha indicada.
+**IN WITNESS WHEREOF**, the parties have executed this Commercial Lease Agreement as of the date first written above.
 
-**ARRENDADOR / LANDLORD:**
+**LANDLORD:**
 
-| Firma                                   | Fecha           |
-| --------------------------------------- | -------------- |
-| ****************_****************       | {{lease_date}} |
-| {{landlord_name}}                       |                |
-| Por: {{landlord_signatory}}             |                |
-| Cargo: {{landlord_title}}               |                |
+| Signature                                  | Date           |
+| ------------------------------------------ | -------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{lease_date}} |
+| {{landlord_name}}                          |                |
+| By: {{landlord_signatory}}                 |                |
+| Title: {{landlord_title}}                  |                |
 
-**ARRENDATARIO / TENANT:**
+**TENANT:**
 
-| Firma                                   | Fecha           |
-| --------------------------------------- | -------------- |
-| ****************_****************       | {{lease_date}} |
-| {{tenant_name}}                         |                |
-| Por: {{tenant_signatory}}               |                |
-| Cargo: {{tenant_title}}                 |                |
-
----
-
-### Reconocimiento Notarial / Notarization
-
-**Estado de {{state}}**  
-**Condado de {{county}}**
-
-[Incluir bloque notarial conforme a la ley aplicable]
+| Signature                                  | Date           |
+| ------------------------------------------ | -------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{lease_date}} |
+| {{tenant_name}}                            |                |
+| By: {{tenant_signatory}}                   |                |
+| Title: {{tenant_title}}                    |                |
 
 ---
 
-**IMPORTANT LEGAL NOTICE / AVISO LEGAL IMPORTANTE:** Este contrato debe revisarse con un profesional legal para asegurar cumplimiento con las normas locales y las necesidades comerciales especificas. Los arrendamientos comerciales varian segun la jurisdiccion y el tipo de inmueble.
+### Notarization
 
-_Ac 2025 123LegalDoc - Formulario de autoservicio - No es asesoramiento legal - Terminos: 123LegalDoc.com/terms_
+**State of {{state}}**  
+**County of {{county}}**
+
+[Standard notarization block as required by state law]
+
+---
+
+**IMPORTANT LEGAL NOTICE:** This commercial lease agreement should be reviewed by qualified legal counsel to ensure compliance with local laws and specific business requirements. Commercial lease terms vary significantly by location and property type.
+
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
+Ã‚Â© 2025 123LegalDoc Ã‚Â· DIY form Ã‚Â· Not legal advice Ã‚Â· Terms: 123LegalDoc.com/terms

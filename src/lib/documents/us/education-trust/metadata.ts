@@ -34,6 +34,7 @@ export const metadata = {
         'fideicomiso educacional',
         'fideicomiso de matrícula',
         'fideicomiso de beca',
+        '529 alternativa de confianza',
       ],
     },
   },
