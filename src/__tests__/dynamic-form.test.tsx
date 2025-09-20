@@ -48,35 +48,83 @@ jest.mock('@/components/ui/popover', () => ({
   PopoverTrigger: ({ children }: any) => <div>{children}</div>,
 }));
 
-jest.mock('@/components/ui/select', () => ({
-  Select: ({ children, onValueChange, value, ...props }: any) => {
+jest.mock('canvas', () => ({}));
+
+jest.mock('@/components/ui/select', () => {
+  const React = require('react');
+
+  const SelectContentContext = React.createContext([]);
+
+  const Select = ({ children, onValueChange, value, name, ...props }) => {
     const ariaLabelledby = props['aria-labelledby'] ?? props['ariaLabelledby'];
+    const ariaLabel = props['aria-label'];
     const rest = { ...props };
     delete rest['aria-labelledby'];
     delete rest['ariaLabelledby'];
+    delete rest['aria-label'];
     delete rest['onValueChange'];
     delete rest['value'];
+    delete rest['name'];
+
+    const items = [];
+    let placeholder = '';
+
+    React.Children.forEach(children, (child) => {
+      if (!React.isValidElement(child)) return;
+      if (child.type === SelectTrigger) {
+        React.Children.forEach(child.props.children, (nested) => {
+          if (React.isValidElement(nested) && nested.type === SelectValue) {
+            placeholder = nested.props.placeholder ?? '';
+          }
+        });
+      }
+      if (child.type === SelectContent) {
+        React.Children.forEach(child.props.children, (nested) => {
+          if (React.isValidElement(nested) && nested.type === SelectItem) {
+            items.push(nested);
+          }
+        });
+      }
+    });
 
     return (
-      <div
+      <select
         role="combobox"
         aria-labelledby={ariaLabelledby}
-        data-value={value ?? ''}
+        aria-label={ariaLabel}
+        value={value ?? ''}
+        name={name}
+        onChange={(event) => onValueChange?.(event.target.value)}
         {...rest}
       >
-        {children}
-      </div>
+        {placeholder ? <option value="">{placeholder}</option> : null}
+        {items.map((item, index) =>
+          React.cloneElement(item, { key: item.key ?? index })
+        )}
+      </select>
     );
-  },
-  SelectContent: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-  SelectItem: ({ children, value }: any) => (
-    <div data-value={value}>{children}</div>
-  ),
-  SelectTrigger: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-  SelectValue: ({ placeholder, ...props }: any) => (
-    <div {...props}>{placeholder}</div>
-  ),
-}));
+  };
+
+  const SelectTrigger = ({ children }) => <>{children}</>;
+  const SelectContent = ({ children }) => <>{children}</>;
+  const SelectItem = ({ children, value }) => <option value={value}>{children}</option>;
+  const SelectValue = ({ placeholder }) => null;
+
+  const SelectGroup = ({ children }) => <>{children}</>;
+  const SelectLabel = ({ children }) => <label>{children}</label>;
+  const SelectSeparator = () => <hr />;
+
+  return {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+    SelectGroup,
+    SelectLabel,
+    SelectSeparator,
+  };
+});
 
 jest.mock('@/components/ui/tooltip', () => ({
   TooltipProvider: ({ children }: any) => <div>{children}</div>,

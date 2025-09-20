@@ -619,7 +619,8 @@ export function createMonitoringMiddleware() {
       const success = res.statusCode < 400;
 
       // Record metrics
-      monitor.recordLatency(req.path || req.url, duration, success);
+      const endpoint = req.path || req.url || 'unknown';
+      monitor.recordLatency(endpoint, duration, success);
 
       return originalSend.call(this, data);
     };

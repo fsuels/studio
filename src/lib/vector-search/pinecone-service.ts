@@ -7,7 +7,13 @@ import type {
 } from '@pinecone-database/pinecone';
 import embeddingService from './embedding-service';
 
-interface PineconeMetadata extends Record<string, RecordMetadataValue> {
+export type PineconeMetadataPrimitive = RecordMetadataValue;
+export type PineconeMetadataValue =
+  | PineconeMetadataPrimitive
+  | PineconeMetadataPrimitive[];
+
+export interface PineconeMetadata
+  extends Record<string, PineconeMetadataValue> {
   docId: string;
   title: string;
   category: string;
@@ -45,7 +51,7 @@ export interface SearchFilters {
 export interface SearchResult {
   id: string;
   score: number;
-  metadata: PineconeMetadata;
+  metadata: PineconeMetadata | null;
   explanation?: string;
 }
 
@@ -136,7 +142,7 @@ export class PineconeService {
     while (attempts < maxAttempts) {
       try {
         const indexStats = await this.getIndex().describeIndexStats();
-        if (indexStats.totalVectorCount !== undefined) {
+        if (typeof indexStats.totalRecordCount === 'number') {
           console.log('Pinecone index is ready');
           return;
         }
@@ -159,7 +165,62 @@ export class PineconeService {
       throw new Error('Pinecone client not initialized');
     }
 
-    return this.pinecone.index(this.indexName);
+    return this.pinecone.index<PineconeMetadata>(this.indexName);
+  }
+
+  private getNamespace() {
+    return this.getIndex().namespace(this.namespace);
+  }
+
+  private sanitizeMetadata(metadata: PineconeMetadata): PineconeMetadata {
+    const cleaned: Record<string, PineconeMetadataValue> = {};
+
+    for (const [key, value] of Object.entries(metadata)) {
+      if (value === undefined || value === null) {
+        continue;
+      }
+
+      if (Array.isArray(value)) {
+        const filtered = value.filter(
+          (item): item is PineconeMetadataPrimitive =>
+            item !== undefined && item !== null,
+        );
+
+        cleaned[key] = filtered as PineconeMetadataPrimitive[];
+      } else {
+        cleaned[key] = value;
+      }
+    }
+
+    return cleaned as PineconeMetadata;
+  }
+
+  private ensureMetadata(
+    id: string,
+    metadata?: Partial<PineconeMetadata>,
+  ): PineconeMetadata {
+    const timestamp = new Date().toISOString();
+
+    const normalized: PineconeMetadata = {
+      docId: metadata?.docId ?? id,
+      title:
+        metadata?.title ??
+        metadata?.content?.slice(0, 120) ??
+        id,
+      category: metadata?.category ?? 'uncategorized',
+      complexity: metadata?.complexity ?? 'unknown',
+      jurisdiction: metadata?.jurisdiction,
+      governingLaw: metadata?.governingLaw,
+      createdAt: metadata?.createdAt ?? timestamp,
+      lastModified: metadata?.lastModified ?? timestamp,
+      tags: metadata?.tags ?? [],
+      parties: metadata?.parties,
+      amounts: metadata?.amounts,
+      dates: metadata?.dates,
+      content: metadata?.content,
+    };
+
+    return this.sanitizeMetadata(normalized);
   }
 
   /**
@@ -178,15 +239,15 @@ export class PineconeService {
       const record: VectorRecord = {
         id: docId,
         values: embedding,
-        metadata: {
+        metadata: this.ensureMetadata(docId, {
           ...metadata,
           docId,
           content: content.slice(0, 1000), // Store truncated content for display
-        },
+        }),
       };
 
-      const index = this.getIndex();
-      await index.namespace(this.namespace).upsert([record]);
+      const namespace = this.getNamespace();
+      await namespace.upsert([record]);
 
       console.log(`Indexed document: ${docId}`);
     } catch (error) {
@@ -220,18 +281,25 @@ export class PineconeService {
         const embeddingResponse =
           await embeddingService.generateBatchEmbeddings(contents);
 
-        const records: VectorRecord[] = batch.map((doc, index) => ({
-          id: doc.docId,
-          values: embeddingResponse.embeddings[index],
-          metadata: {
-            ...doc.metadata,
-            docId: doc.docId,
-            content: doc.content.slice(0, 1000),
-          },
-        }));
+        const records: VectorRecord[] = batch.map((doc, index) => {
+          const values = embeddingResponse.embeddings[index];
+          if (!values) {
+            throw new Error('Missing embedding for batch item ' + doc.docId);
+          }
 
-        const index = this.getIndex();
-        await index.namespace(this.namespace).upsert(records);
+          return {
+            id: doc.docId,
+            values,
+            metadata: this.ensureMetadata(doc.docId, {
+              ...doc.metadata,
+              docId: doc.docId,
+              content: doc.content.slice(0, 1000),
+            }),
+          };
+        });
+
+        const namespace = this.getNamespace();
+        await namespace.upsert(records);
 
         console.log(`Indexed batch of ${records.length} documents`);
 
@@ -276,8 +344,7 @@ export class PineconeService {
       const pineconeFilter = this.buildPineconeFilter(filters);
 
       // Perform vector search
-      const index = this.getIndex();
-      const namespace = index.namespace(this.namespace);
+      const namespace = this.getNamespace();
       const searchResponse = (await namespace.query({
         vector: queryEmbedding,
         topK: Math.min(topK * 2, 100), // Fetch more for better faceting
@@ -288,12 +355,17 @@ export class PineconeService {
       const matches = searchResponse.matches ?? [];
       const filteredResults: SearchResult[] = matches
         .filter((match) => match.score !== undefined && match.score >= minScore)
-        .map((match) => ({
-          id: match.id,
-          score: match.score ?? 0,
-          metadata: match.metadata,
-          explanation: this.generateExplanation(query, match.metadata, match.score ?? 0),
-        }));
+        .map((match) => {
+          const score = match.score ?? 0;
+          const metadata = this.ensureMetadata(match.id, match.metadata ?? undefined);
+
+          return {
+            id: match.id,
+            score,
+            metadata,
+            explanation: this.generateExplanation(query, metadata, score),
+          };
+        });
 
       // Limit to requested topK
       const results = filteredResults.slice(0, topK);
@@ -361,6 +433,10 @@ export class PineconeService {
       pineconeFilter.tags = { $in: filters.tags };
     }
 
+    if (filters.parties && filters.parties.length > 0) {
+      pineconeFilter.parties = { $in: filters.parties };
+    }
+
     return Object.keys(pineconeFilter).length > 0 ? pineconeFilter : undefined;
   }
 
@@ -378,6 +454,9 @@ export class PineconeService {
 
     results.forEach((result) => {
       const { metadata } = result;
+      if (!metadata) {
+        return;
+      }
 
       // Count categories
       if (metadata.category) {
@@ -419,10 +498,10 @@ export class PineconeService {
    */
   private generateExplanation(
     query: string,
-    metadata: PineconeMetadata,
+    metadata: PineconeMetadata | null,
     score: number,
   ): string {
-    const reasons = [];
+    const reasons: string[] = [];
 
     if (score > 0.9) {
       reasons.push('Highly relevant semantic match');
@@ -432,10 +511,13 @@ export class PineconeService {
       reasons.push('Semantic relevance detected');
     }
 
-    // Check for keyword matches
+    if (!metadata) {
+      return reasons.join(', ');
+    }
+
     const queryLower = query.toLowerCase();
     const titleLower = metadata.title.toLowerCase();
-    const contentLower = metadata.content?.toLowerCase() || '';
+    const contentLower = metadata.content?.toLowerCase() ?? '';
 
     if (titleLower.includes(queryLower)) {
       reasons.push('title contains query terms');
@@ -445,11 +527,7 @@ export class PineconeService {
       reasons.push('relevant tags found');
     }
 
-    if (
-      metadata.parties?.some((party) =>
-        party.toLowerCase().includes(queryLower),
-      )
-    ) {
+    if (metadata.parties?.some((party) => party.toLowerCase().includes(queryLower))) {
       reasons.push('party name match');
     }
 
@@ -467,40 +545,45 @@ export class PineconeService {
     query: string,
     results: SearchResult[],
   ): Promise<string[]> {
-    const suggestions: Set<string> = new Set();
+    const suggestions = new Set<string>();
+    const resultsWithMetadata = results.filter((result) => result.metadata);
 
-    // Add category-based suggestions
-    const topCategories = Object.entries(
-      results.reduce(
-        (acc, result) => {
-          const category = result.metadata.category;
-          acc[category] = (acc[category] || 0) + 1;
-          return acc;
-        },
-        {} as { [key: string]: number },
-      ),
-    )
+    if (resultsWithMetadata.length === 0) {
+      return [];
+    }
+
+    const categoryCounts = resultsWithMetadata.reduce((acc, result) => {
+      const category = result.metadata?.category;
+      if (category) {
+        acc.set(category, (acc.get(category) ?? 0) + 1);
+      }
+      return acc;
+    }, new Map<string, number>());
+
+    Array.from(categoryCounts.entries())
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
-      .map(([category]) => category);
+      .forEach(([category]) => {
+        suggestions.add(`${query} ${category}`);
+      });
 
-    topCategories.forEach((category) => {
-      suggestions.add(`${query} ${category}`);
-    });
+    Array.from(
+      new Set(
+        resultsWithMetadata
+          .map((result) => result.metadata?.jurisdiction)
+          .filter((value): value is string => Boolean(value)),
+      ),
+    )
+      .slice(0, 2)
+      .forEach((jurisdiction) => {
+        suggestions.add(`${query} in ${jurisdiction}`);
+      });
 
-    // Add jurisdiction-based suggestions
-    const jurisdictions = [
-      ...new Set(results.map((r) => r.metadata.jurisdiction).filter(Boolean)),
-    ];
-    jurisdictions.slice(0, 2).forEach((jurisdiction) => {
-      suggestions.add(`${query} in ${jurisdiction}`);
-    });
-
-    // Add complexity-based suggestions
-    if (results.some((r) => r.metadata.complexity === 'easy')) {
+    if (resultsWithMetadata.some((result) => result.metadata?.complexity === 'easy')) {
       suggestions.add(`simple ${query}`);
     }
-    if (results.some((r) => r.metadata.complexity === 'advanced')) {
+
+    if (resultsWithMetadata.some((result) => result.metadata?.complexity === 'advanced')) {
       suggestions.add(`advanced ${query}`);
     }
 
@@ -550,8 +633,7 @@ export class PineconeService {
       // First, fetch the document to get its embedding
       await this.initialize();
 
-      const index = this.getIndex();
-      const namespace = index.namespace(this.namespace);
+      const namespace = this.getNamespace();
       const fetchResponse = (await namespace.fetch([docId])) as FetchResponse<PineconeMetadata>;
 
       const docRecord = fetchResponse.records[docId];
@@ -568,11 +650,16 @@ export class PineconeService {
 
       const matches = searchResponse.matches ?? [];
       const results = matches
-        .filter((match) => match.id !== docId && match.score !== undefined && match.score >= minScore)
+        .filter(
+          (match) =>
+            match.id !== docId &&
+            match.score !== undefined &&
+            match.score >= minScore,
+        )
         .map((match) => ({
           id: match.id,
           score: match.score ?? 0,
-          metadata: match.metadata,
+          metadata: this.ensureMetadata(match.id, match.metadata ?? undefined),
         }));
 
       return results.slice(0, topK);

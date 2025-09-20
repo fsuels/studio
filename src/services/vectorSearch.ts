@@ -2,20 +2,14 @@
 // Vector index query helper with Redis caching, latency fallback, and HTTP endpoint integration
 
 import type { SearchResult } from '@/lib/vector-search/pinecone-service';
+import type { Redis } from 'ioredis';
 
-// Conditional imports for server-side only
-let crypto: unknown = null;
-let Redis: unknown = null;
+// Module loaders are initialized lazily to avoid bundling server-only dependencies on the client
+type NodeCrypto = typeof import('node:crypto');
+type RedisConstructor = typeof import('ioredis')['default'];
 
-// Initialize server-side modules only when running on server
-if (typeof window === 'undefined') {
-  try {
-    crypto = require('crypto');
-    Redis = require('ioredis').default || require('ioredis');
-  } catch (error) {
-    console.warn('[Vector Search] Server-side modules not available:', error);
-  }
-}
+let cryptoModulePromise: Promise<NodeCrypto | null> | null = null;
+let redisConstructorPromise: Promise<RedisConstructor | null> | null = null;
 
 // Logger interface - adapt to your logging system
 interface Logger {
@@ -31,6 +25,44 @@ const logger: Logger = {
   warn: (message: string, data?: unknown) => console.warn(message, data),
 };
 
+async function loadCrypto(): Promise<NodeCrypto | null> {
+  if (typeof window !== 'undefined') {
+    return null;
+  }
+
+  if (!cryptoModulePromise) {
+    cryptoModulePromise = import('node:crypto')
+      .then((module) => module)
+      .catch((error) => {
+        logger.warn('[Vector Search] Unable to load crypto module', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return null;
+      });
+  }
+
+  return cryptoModulePromise;
+}
+
+async function loadRedisConstructor(): Promise<RedisConstructor | null> {
+  if (typeof window !== 'undefined') {
+    return null;
+  }
+
+  if (!redisConstructorPromise) {
+    redisConstructorPromise = import('ioredis')
+      .then((module) => (module.default ?? module) as RedisConstructor)
+      .catch((error) => {
+        logger.warn('[Vector Search] Redis module unavailable, using fallback cache', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return null;
+      });
+  }
+
+  return redisConstructorPromise;
+}
+
 // Vector search result interface aligned with Pinecone search results
 export interface VectorSearchResult
   extends Pick<SearchResult, 'id' | 'score'> {
@@ -43,155 +75,222 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 const CACHE_TTL_SECONDS = 24 * 60 * 60; // 24 hours in seconds for Redis
 const HTTP_TIMEOUT_MS = 300; // 300ms timeout for vector endpoint
 
+const FALLBACK_MAX_ENTRIES = 1000;
+
 // Redis and fallback cache instances
-type RedisLike = {
-  ping: () => Promise<unknown>;
-  get: (key: string) => Promise<string | null>;
-  setex: (key: string, ttl: number, value: string) => Promise<unknown>;
-  keys: (pattern: string) => Promise<string[]>;
-  del: (...keys: string[]) => Promise<unknown>;
-  info: (section?: string) => Promise<string>;
-  disconnect: () => Promise<void>;
-  on: (event: string, handler: (err: unknown) => void) => void;
-};
+type RedisLike = Pick<
+  Redis,
+  'ping' | 'get' | 'setex' | 'keys' | 'del' | 'info' | 'disconnect' | 'on' | 'connect'
+>;
 let redisClient: RedisLike | null = null;
+let redisClientPromise: Promise<RedisLike | null> | null = null;
 type SimpleCache<T> = {
   get: (key: string) => T | undefined;
   set: (key: string, value: T) => void;
   clear: () => void;
   delete: (key: string) => void;
-  size: number;
+  readonly size: number;
 };
+class MemoryResultCache implements SimpleCache<VectorSearchResult[]> {
+  private readonly store = new Map<string, { value: VectorSearchResult[]; timestamp: number }>();
+
+  constructor(private readonly ttlMs: number, private readonly maxEntries: number) {}
+
+  get size(): number {
+    return this.store.size;
+  }
+
+  get(key: string): VectorSearchResult[] | undefined {
+    const entry = this.store.get(key);
+    if (!entry) {
+      return undefined;
+    }
+
+    if (Date.now() - entry.timestamp > this.ttlMs) {
+      this.store.delete(key);
+      return undefined;
+    }
+
+    return entry.value.map((item) => ({
+      ...item,
+      metadata: item.metadata ? { ...item.metadata } : item.metadata ?? null,
+    }));
+  }
+
+  set(key: string, value: VectorSearchResult[]): void {
+    this.store.set(key, {
+      value: value.map((item) => ({
+        ...item,
+        metadata: item.metadata ? { ...item.metadata } : item.metadata ?? null,
+      })),
+      timestamp: Date.now(),
+    });
+
+    this.prune();
+  }
+
+  clear(): void {
+    this.store.clear();
+  }
+
+  delete(key: string): void {
+    this.store.delete(key);
+  }
+
+  get maxSize(): number {
+    return this.maxEntries;
+  }
+
+  private prune(): void {
+    const now = Date.now();
+    for (const [key, entry] of this.store.entries()) {
+      if (now - entry.timestamp > this.ttlMs) {
+        this.store.delete(key);
+      }
+    }
+
+    if (this.store.size <= this.maxEntries) {
+      return;
+    }
+
+    const sortedKeys = [...this.store.entries()].sort((a, b) => a[1].timestamp - b[1].timestamp);
+    for (const [key] of sortedKeys) {
+      if (this.store.size <= this.maxEntries) {
+        break;
+      }
+      this.store.delete(key);
+    }
+  }
+}
+
 let fallbackCache: SimpleCache<VectorSearchResult[]> | null = null;
 
 /**
  * Initialize Redis client (server-side only)
  */
 async function getRedisClient(): Promise<RedisLike | null> {
-  // Return null if we're on the client side or Redis is not available
-  if (typeof window !== 'undefined' || !Redis) {
+  if (typeof window !== 'undefined') {
     return null;
   }
-  
-  if (redisClient === null) {
-    const redisUrl = process.env.REDIS_URL;
-    
-    if (!redisUrl) {
-      logger.warn('No REDIS_URL configured, using fallback cache');
+
+  if (redisClient) {
+    return redisClient;
+  }
+
+  if (redisClientPromise) {
+    return redisClientPromise;
+  }
+
+  const redisUrl = process.env.REDIS_URL;
+
+  if (!redisUrl) {
+    logger.warn('No REDIS_URL configured, using fallback cache');
+    return null;
+  }
+
+  redisClientPromise = (async () => {
+    const RedisCtor = await loadRedisConstructor();
+    if (!RedisCtor) {
       return null;
     }
-    
+
     try {
-      // Using dynamic import without runtime types; narrow to RedisLike
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      redisClient = new (Redis as any)(redisUrl, {
+      const client = new RedisCtor(redisUrl, {
         maxRetriesPerRequest: 3,
         connectTimeout: 5000,
         commandTimeout: 2000,
         lazyConnect: true,
+      }) as RedisLike;
+
+      if (typeof client.connect === 'function') {
+        try {
+          await client.connect();
+        } catch (connectError) {
+          logger.warn('Redis lazy connect failed, continuing with ping', {
+            error:
+              connectError instanceof Error
+                ? connectError.message
+                : String(connectError),
+          });
+        }
+      }
+
+      await client.ping();
+
+      client.on('error', (error) => {
+        logger.error('Redis error, falling back to local cache', {
+          error: error instanceof Error ? error.message : String(error),
+        });
       });
-      
-      // Test connection
-      await redisClient.ping();
-      
+
+      redisClient = client;
       logger.info('Redis client initialized for vector search cache', {
-        url: redisUrl.replace(/:\/\/[^@]+@/, '://***:***@'), // Hide credentials
-        ttlSeconds: CACHE_TTL_SECONDS
+        url: redisUrl.replace(/:\/\/[^@]+@/, '://***:***@'),
+        ttlSeconds: CACHE_TTL_SECONDS,
       });
-      
-      // Handle Redis errors gracefully
-      redisClient.on('error', (error) => {
-        logger.error('Redis error, will fall back to local cache', { error: error.message });
-      });
-      
+
+      return redisClient;
     } catch (error) {
-      logger.error('Failed to initialize Redis client, falling back to local cache', { error });
+      logger.error('Failed to initialize Redis client, falling back to local cache', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       redisClient = null;
+      return null;
+    } finally {
+      redisClientPromise = null;
     }
-  }
-  
-  return redisClient;
+  })();
+
+  return redisClientPromise;
 }
 
 /**
- * Get fallback LRU cache
+ * Get fallback cache instance
  */
-async function getFallbackCache(): Promise<SimpleCache<VectorSearchResult[]>> {
+function getFallbackCache(): SimpleCache<VectorSearchResult[]> {
   if (!fallbackCache) {
-    try {
-      // Use a simple Map-based cache instead of tiny-lru for better compatibility
-      const cache = new Map<string, { value: VectorSearchResult[]; timestamp: number }>();
-      fallbackCache = {
-        get: (key: string) => {
-          const entry = cache.get(key);
-          if (!entry) return undefined;
-          if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
-            cache.delete(key);
-            return undefined;
-          }
-          return entry.value;
-        },
-        set: (key: string, value: VectorSearchResult[]) => {
-          cache.set(key, { value, timestamp: Date.now() });
-          // Simple cleanup: remove old entries if cache gets too large
-          if (cache.size > 1000) {
-            const entries = Array.from(cache.entries());
-            const now = Date.now();
-            entries.forEach(([k, entry]) => {
-              if (now - entry.timestamp > CACHE_TTL_MS) {
-                cache.delete(k);
-              }
-            });
-          }
-        },
-        clear: () => cache.clear(),
-        delete: (key: string) => cache.delete(key),
-        size: cache.size,
-      };
-      logger.info('Vector search fallback cache initialized', { 
-        maxSize: 1000, 
-        ttlMs: CACHE_TTL_MS 
-      });
-    } catch (error) {
-      logger.error('Failed to initialize fallback cache, using no-cache mode', { error });
-      // Mock cache that doesn't actually cache
-      fallbackCache = {
-        get: () => undefined,
-        set: () => {},
-        clear: () => {},
-        delete: () => {},
-        size: 0,
-      };
-    }
+    fallbackCache = new MemoryResultCache(CACHE_TTL_MS, FALLBACK_MAX_ENTRIES);
+    logger.info('Vector search fallback cache initialized', {
+      maxSize: FALLBACK_MAX_ENTRIES,
+      ttlMs: CACHE_TTL_MS,
+    });
   }
+
   return fallbackCache;
 }
 
 /**
  * Generate cache key from query embedding using MD5 hash (or fallback)
  */
-function generateCacheKey(queryEmbedding: Float32Array, k: number): string {
-  // Use crypto hash if available (server-side)
-  if (crypto && typeof Buffer !== 'undefined') {
+function generateCacheKey(
+  queryEmbedding: Float32Array,
+  k: number,
+  cryptoModule: NodeCrypto | null,
+): string {
+  if (cryptoModule && typeof Buffer !== 'undefined') {
     try {
       const buffer = Buffer.from(queryEmbedding.buffer);
-      const embeddingHash = crypto.createHash('md5').update(buffer).digest('hex');
-      return `vector:${embeddingHash}:k${k}`;
+      const embeddingHash = cryptoModule
+        .createHash('md5')
+        .update(buffer)
+        .digest('hex');
+      return 'vector:' + embeddingHash + ':k' + k;
     } catch (error) {
-      logger.warn('Failed to generate crypto hash, using fallback', { error });
+      logger.warn('Failed to generate crypto hash, using fallback', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
-  
-  // Fallback: simple string hash for client-side
+
   const embeddingStr = Array.from(queryEmbedding).join(',');
   let hash = 0;
   for (let i = 0; i < embeddingStr.length; i++) {
-    const char = embeddingStr.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
+    hash = (hash << 5) - hash + embeddingStr.charCodeAt(i);
+    hash |= 0;
   }
   const embeddingHash = Math.abs(hash).toString(16);
-  return `vector:${embeddingHash}:k${k}`;
+  return 'vector:' + embeddingHash + ':k' + k;
+}
 }
 
 /**
@@ -221,7 +320,7 @@ async function getCachedResults(cacheKey: string): Promise<VectorSearchResult[] 
     }
     
     // Fall back to local cache
-    const localCache = await getFallbackCache();
+    const localCache = getFallbackCache();
     const cached = localCache.get(cacheKey);
     
     if (cached) {
@@ -272,8 +371,14 @@ async function setCachedResults(cacheKey: string, results: VectorSearchResult[])
     }
     
     // Also cache locally as backup
-    const localCache = await getFallbackCache();
-    localCache.set(cacheKey, results.slice());
+    const localCache = getFallbackCache();
+    localCache.set(
+      cacheKey,
+      results.map((result) => ({
+        ...result,
+        metadata: result.metadata ? { ...result.metadata } : result.metadata ?? null,
+      })),
+    );
     
   } catch (error) {
     const duration = Date.now() - startTime;
@@ -285,10 +390,21 @@ async function setCachedResults(cacheKey: string, results: VectorSearchResult[])
     
     // Try local cache as fallback
     try {
-      const localCache = await getFallbackCache();
-      localCache.set(cacheKey, results.slice());
+      const localCache = getFallbackCache();
+      localCache.set(
+        cacheKey,
+        results.map((result) => ({
+          ...result,
+          metadata: result.metadata ? { ...result.metadata } : result.metadata ?? null,
+        })),
+      );
     } catch (fallbackError) {
-      logger.error('Fallback cache set also failed', { fallbackError });
+      logger.error('Fallback cache set also failed', {
+        fallbackError:
+          fallbackError instanceof Error
+            ? fallbackError.message
+            : String(fallbackError),
+      });
     }
   }
 }
@@ -474,7 +590,8 @@ export async function vectorSearch(
     }
     
     // Generate cache key
-    const cacheKey = generateCacheKey(queryEmbedding, k);
+    const cryptoModule = await loadCrypto();
+    const cacheKey = generateCacheKey(queryEmbedding, k, cryptoModule);
     
     // Check cache (Redis + fallback)
     const cachedResult = await getCachedResults(cacheKey);
@@ -563,7 +680,7 @@ export async function clearVectorSearchCache(): Promise<void> {
   
   try {
     // Clear fallback cache
-    const cache = await getFallbackCache();
+    const cache = getFallbackCache();
     cache.clear();
     logger.info('Fallback vector search cache cleared');
   } catch (error) {
@@ -633,7 +750,7 @@ export async function getVectorSearchCacheStats(): Promise<{
   
   try {
     // Fallback cache stats
-    const cache = await getFallbackCache();
+    const cache = getFallbackCache();
     stats.fallback.size = cache.size || 0;
   } catch (error) {
     logger.error('Failed to get fallback cache stats', { error });
@@ -668,11 +785,9 @@ export async function disconnectVectorSearchCache(): Promise<void> {
     try {
       await redisClient.disconnect();
       redisClient = null;
+      redisClientPromise = null;
       logger.info('Redis client disconnected');
     } catch (error) {
       logger.error('Failed to disconnect Redis client', { error });
     }
   }
-}
-
-export default vectorSearch;

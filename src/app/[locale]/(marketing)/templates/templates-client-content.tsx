@@ -3,18 +3,45 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
-const SearchBar = dynamic(() => import('@/components/shared/SearchBar'));
-import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
+import Link from 'next/link';
+import { FileText, FileCheck, Mail, Users, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { track } from '@/lib/analytics';
+import TrustBadges from '@/components/shared/TrustBadges';
+import AutoImage from '@/components/shared/media/AutoImage';
+
+const SearchBar = dynamic(() => import('@/components/shared/SearchBar'));
 const TopDocsChips = dynamic(() => import('@/components/shared/TopDocsChips'), {
   loading: () => null,
 });
-import { TrustBadges } from '@/components/shared';
-import { FileText } from 'lucide-react';
-import { AutoImage } from '@/components/shared';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
+const TEMPLATE_CATEGORIES = [
+  {
+    id: 'agreements-contracts',
+    labelKey: 'agreements',
+    icon: FileText,
+  },
+  {
+    id: 'letters-notices',
+    labelKey: 'letters',
+    icon: Mail,
+  },
+  {
+    id: 'forms-authorizations',
+    labelKey: 'forms',
+    icon: FileCheck,
+  },
+  {
+    id: 'family-personal',
+    labelKey: 'family',
+    icon: Users,
+  },
+  {
+    id: 'business-commercial',
+    labelKey: 'business',
+    icon: Building,
+  },
+];
 
 interface Props {
   locale: 'en' | 'es';
@@ -22,7 +49,6 @@ interface Props {
 
 export default function TemplatesClientContent({ locale }: Props) {
   const { t } = useTranslation('common');
-  const _router = useRouter();
 
   const categoryHref = (key: string) =>
     `/${locale}/marketplace?category=${encodeURIComponent(key)}`;
@@ -90,7 +116,7 @@ export default function TemplatesClientContent({ locale }: Props) {
           {t('browseTemplates.whatDo', 'What do you want to accomplish?')}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {CATEGORY_LIST.map((cat) => (
+          {TEMPLATE_CATEGORIES.map((cat) => (
             <Button
               asChild
               key={cat.key}

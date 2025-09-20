@@ -1,6 +1,72 @@
 // src/app/api/legal-updates/email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+type LegalUpdateEmailService = (typeof import('@/lib/legal-updates/email-service'))['legalUpdateEmailService'];
+type AuditServiceInstance = (typeof import('@/services/firebase-audit-service'))['auditService'];
+
+const DIGEST_FREQUENCIES = ['immediate', 'daily', 'weekly'] as const;
+type LegalUpdateDigestFrequency = (typeof DIGEST_FREQUENCIES)[number];
+const DEFAULT_DIGEST_FREQUENCY: LegalUpdateDigestFrequency = 'daily';
+const DIGEST_FREQUENCY_SET = new Set<string>(DIGEST_FREQUENCIES);
+
+const LEGAL_UPDATE_SERVICE = {
+  EMAIL_DIGEST: 'legal-updates-email',
+} as const;
+
+const LEGAL_UPDATE_EMAIL_EVENTS = {
+  DIGEST_TRIGGERED: 'legal_update_digest_triggered',
+  DIGEST_COMPLETED: 'legal_update_digest_completed',
+  DIGEST_FAILED: 'legal_update_digest_failed',
+  DIGEST_TEST_SENT: 'legal_update_digest_test_sent',
+} as const;
+type LegalUpdateEmailEvent =
+  (typeof LEGAL_UPDATE_EMAIL_EVENTS)[keyof typeof LEGAL_UPDATE_EMAIL_EVENTS];
+
+let emailServicePromise: Promise<LegalUpdateEmailService> | null = null;
+async function getEmailService(): Promise<LegalUpdateEmailService> {
+  if (!emailServicePromise) {
+    emailServicePromise = import('@/lib/legal-updates/email-service').then(
+      (mod) => mod.legalUpdateEmailService,
+    );
+  }
+  return emailServicePromise;
+}
+
+let auditServicePromise: Promise<AuditServiceInstance> | null = null;
+async function getAuditService(): Promise<AuditServiceInstance> {
+  if (!auditServicePromise) {
+    auditServicePromise = import('@/services/firebase-audit-service').then(
+      (mod) => mod.auditService,
+    );
+  }
+  return auditServicePromise;
+}
+
+function resolveDigestFrequency(
+  value: string | null,
+): LegalUpdateDigestFrequency {
+  if (value && DIGEST_FREQUENCY_SET.has(value)) {
+    return value as LegalUpdateDigestFrequency;
+  }
+  return DEFAULT_DIGEST_FREQUENCY;
+}
+
+async function logEmailDigestEvent(
+  event: LegalUpdateEmailEvent,
+  metadata: Record<string, unknown>,
+): Promise<void> {
+  try {
+    const audit = await getAuditService();
+    await audit.logEvent(event, {
+      ...metadata,
+      service: LEGAL_UPDATE_SERVICE.EMAIL_DIGEST,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (loggingError) {
+    console.error('Failed to log legal update email event:', loggingError);
+  }
+}
+
 // Authentication helper
 function validateSchedulerRequest(request: NextRequest): boolean {
   // For Cloud Scheduler requests, validate the header
@@ -21,6 +87,8 @@ function validateSchedulerRequest(request: NextRequest): boolean {
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
+  const searchParams = request.nextUrl.searchParams;
+  const frequency = resolveDigestFrequency(searchParams.get('frequency'));
 
   try {
     // Validate authentication
@@ -28,29 +96,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const searchParams = request.nextUrl.searchParams;
-    const frequency =
-      (searchParams.get('frequency') as 'immediate' | 'daily' | 'weekly') ||
-      'daily';
-
     console.log(`Starting ${frequency} legal update email digest...`);
 
-    // Send email digest (lazy import heavy email service)
-    const { legalUpdateEmailService } = await import(
-      '@/lib/legal-updates/email-service'
-    );
-    const results = await legalUpdateEmailService.sendLegalUpdateDigest(
+    await logEmailDigestEvent(LEGAL_UPDATE_EMAIL_EVENTS.DIGEST_TRIGGERED, {
       frequency,
-    );
+    });
 
-    // Log audit event (lazy import)
-    const { auditService } = await import('@/services/firebase-audit-service');
-    await auditService.logComplianceEvent('legal_update_emails_sent', {
+    const emailService = await getEmailService();
+    const results = await emailService.sendLegalUpdateDigest(frequency);
+
+    await logEmailDigestEvent(LEGAL_UPDATE_EMAIL_EVENTS.DIGEST_COMPLETED, {
       frequency,
       emailsSent: results.sent,
       emailsFailed: results.failed,
       processingTime: Date.now() - startTime,
-      timestamp: new Date().toISOString(),
     });
 
     console.log(
@@ -71,12 +130,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Legal update email API error:', error);
 
-    // Log error event (lazy import)
-    const { auditService } = await import('@/services/firebase-audit-service');
-    await auditService.logComplianceEvent('legal_update_email_error', {
+    await logEmailDigestEvent(LEGAL_UPDATE_EMAIL_EVENTS.DIGEST_FAILED, {
       error: error instanceof Error ? error.message : 'Unknown error',
+      frequency,
       processingTime: Date.now() - startTime,
-      timestamp: new Date().toISOString(),
     });
 
     return NextResponse.json(

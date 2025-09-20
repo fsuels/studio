@@ -63,41 +63,31 @@ export function getAdmin(): typeof admin {
 
 // Provide safe, lazy proxies so importing modules don't eagerly initialize Admin.
 // This avoids build-time crashes when env is missing and keeps API usage unchanged.
-export const auth: admin.auth.Auth = new Proxy({} as admin.auth.Auth, {
-  get(_target, prop: string, _receiver) {
-    // @ts-expect-error - dynamic forwarding
-    return (getAdmin().auth() as any)[prop];
-  },
-});
-
-export const adminDb: FirebaseFirestore.Firestore = new Proxy(
-  {} as FirebaseFirestore.Firestore,
-  {
-    get(_target, prop: string, _receiver) {
-      // @ts-expect-error - dynamic forwarding
-      return (getAdmin().firestore() as any)[prop];
+function createLazyProxy<T extends object>(resolve: () => T): T {
+  return new Proxy({} as T, {
+    get(_target, prop, _receiver) {
+      const instance = resolve();
+      return Reflect.get(
+        instance as Record<PropertyKey, unknown>,
+        prop,
+        instance,
+      );
     },
-  },
+  });
+}
+
+export const auth: admin.auth.Auth = createLazyProxy(() => getAdmin().auth());
+
+export const adminDb: FirebaseFirestore.Firestore = createLazyProxy(() =>
+  getAdmin().firestore(),
 );
 
 // Direct firestore proxy for code importing { firestore } from this module
-export const firestore: FirebaseFirestore.Firestore = new Proxy(
-  {} as FirebaseFirestore.Firestore,
-  {
-    get(_target, prop: string, _receiver) {
-      // @ts-expect-error - dynamic forwarding
-      return (getAdmin().firestore() as any)[prop];
-    },
-  },
+export const firestore: FirebaseFirestore.Firestore = createLazyProxy(() =>
+  getAdmin().firestore(),
 );
 
 // Storage proxy (for code expecting { adminStorage })
-export const adminStorage: admin.storage.Storage = new Proxy(
-  {} as admin.storage.Storage,
-  {
-    get(_target, prop: string, _receiver) {
-      // @ts-expect-error - dynamic forwarding
-      return (getAdmin().storage() as any)[prop];
-    },
-  },
+export const adminStorage: admin.storage.Storage = createLazyProxy(() =>
+  getAdmin().storage(),
 );

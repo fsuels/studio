@@ -18,7 +18,7 @@
     "baseUrl": ".",
     "types": [
       "node",
-      "fuse.js",
+      "fuse",
       "stream-chat"
     ],
     "paths": {

@@ -7,8 +7,8 @@ import {
   buildSitemapStructuredData,
   getLocalizedSections,
   localizedContent,
-  SitemapLocale,
 } from './utils';
+import type { SitemapLocale } from './utils';
 
 export async function generateMetadata({
   params,

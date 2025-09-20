@@ -1,5 +1,5 @@
 // src/middleware/health-monitoring.ts
-import React from 'react';
+import { createElement, type ComponentType } from 'react';
 import { NextRequest, NextResponse } from 'next/server';
 import { operationalHealth } from '@/lib/operational-health';
 
@@ -24,9 +24,12 @@ export function withHealthMonitoring(
 
     // Store request start data
     const userAgent = req.headers.get('user-agent') ?? 'unknown';
-    const forwardedIp =
-      req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip');
-    const clientIp = forwardedIp ?? 'unknown';
+    const forwardedHeader = req.headers.get('x-forwarded-for');
+    const realIpHeader = req.headers.get('x-real-ip');
+    const clientIp =
+      forwardedHeader?.split(',')[0]?.trim() ??
+      realIpHeader?.trim() ??
+      'unknown';
 
     performanceStore.set(requestId, {
       startTime,
@@ -96,7 +99,7 @@ async function recordRequestMetrics(
         endpoint,
         metadata: {
           statusCode,
-          errorMessage: error?.message,
+          errorMessage: error?.message ?? 'Unknown error',
           errorType: 'server_error',
         },
       });
@@ -193,7 +196,7 @@ export function healthMonitoringMiddleware() {
     const startTime = performance.now();
     const originalSend = res.send;
     const originalJson = res.json;
-    const route = req.route?.path || req.path || req.url;
+    const route = req.route?.path ?? req.path ?? req.url ?? 'unknown';
 
     // Override response methods to capture metrics
     res.send = function (data: unknown) {
@@ -228,7 +231,7 @@ function recordResponseMetrics(
 
 // Error boundary wrapper for React components
 export function withErrorTracking<T extends object>(
-  Component: React.ComponentType<T>,
+  Component: ComponentType<T>,
   componentName?: string,
 ) {
   return function WrappedComponent(props: T) {
@@ -240,7 +243,9 @@ export function withErrorTracking<T extends object>(
         await operationalHealth.recordMetric({
           metricType: 'error_rate',
           value: 1,
-          endpoint: `component:${componentName || Component.name}`,
+          endpoint: `component:${
+            componentName ?? Component.displayName ?? Component.name
+          }`,
           metadata: {
             errorMessage: error.message,
             errorStack: error.stack,
@@ -255,9 +260,9 @@ export function withErrorTracking<T extends object>(
 
     // Simple error boundary logic
     try {
-      return React.createElement(Component, props);
+      return createElement(Component, props);
     } catch (error) {
-      handleError(error as Error, { componentStack: 'Unknown' });
+      void handleError(error as Error, { componentStack: 'Unknown' });
       throw error;
     }
   };
@@ -332,5 +337,3 @@ export function monitorClientPerformance() {
     }).catch(console.error);
   });
 }
-
-

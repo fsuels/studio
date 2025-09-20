@@ -7,6 +7,7 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
+  setupFiles: ['<rootDir>/tests/setup-tests.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jsdom',
   testMatch: [
@@ -17,6 +18,10 @@ const customJestConfig = {
   testPathIgnorePatterns: ['<rootDir>/tests/e2e', '<rootDir>/__tests__/.*\\.(e2e|playwright)\\.ts$'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^canvas$': '<rootDir>/tests/__mocks__/canvas.js',
+    '^canvas/(.*)$': '<rootDir>/tests/__mocks__/canvas.js',
+    '^debug$': '<rootDir>/tests/__mocks__/debug.js',
+    '^canvas$': '<rootDir>/tests/__mocks__/canvas.js',
   },
   transformIgnorePatterns: [
     'node_modules/(?!(lucide-react|@radix-ui|embla-carousel|@use-gesture|framer-motion|@next|next)/)',

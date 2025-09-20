@@ -11,6 +11,66 @@ import {
   getAmberStates,
 } from '@/lib/state-regulations';
 
+type ComplianceAlertType = 'warning' | 'error' | 'info';
+
+type ComplianceAlertAction =
+  | 'Review Regulations'
+  | 'Check Service Status'
+  | 'View Waitlist'
+  | 'Boost Marketing';
+
+type ServiceStatus = 'online' | 'offline' | 'maintenance';
+
+type HealthRating = 'good' | 'warning' | 'critical';
+
+interface ComplianceAlert {
+  type: ComplianceAlertType;
+  title: string;
+  message: string;
+  action: ComplianceAlertAction;
+  timestamp: string;
+}
+
+interface HourlyTrendPoint {
+  hour: number;
+  checks: number;
+  allowed: number;
+  blocked: number;
+}
+
+interface ComplianceStateBreakdown {
+  green: string[];
+  amber: string[];
+  red: string[];
+}
+
+interface ComplianceTrends {
+  hourly: HourlyTrendPoint[];
+  blockedStates: string[];
+}
+
+interface ComplianceHealthSnapshot {
+  geolocationService: ServiceStatus;
+  complianceAPI: ServiceStatus;
+  failureRate: HealthRating;
+  uptime: string;
+}
+
+interface ComplianceStatsResponse {
+  success: true;
+  data: {
+    metrics: ComplianceMetrics & {
+      conversionRate: number;
+      blockRate: number;
+    };
+    stateBreakdown: ComplianceStateBreakdown;
+    trends: ComplianceTrends;
+    health: ComplianceHealthSnapshot;
+    alerts: ComplianceAlert[];
+    lastUpdated: string;
+  };
+}
+
 export async function GET(request: NextRequest) {
   // Require admin authentication
   const adminResult = await requireAdmin(request);
@@ -23,7 +83,7 @@ export async function GET(request: NextRequest) {
     const metrics = complianceMonitor.getMetrics();
 
     // Get state classifications
-    const stateBreakdown = {
+    const stateBreakdown: ComplianceStateBreakdown = {
       green: getGreenStates(),
       amber: getAmberStates(),
       red: getRedStates(),
@@ -41,49 +101,44 @@ export async function GET(request: NextRequest) {
         : '0.0';
 
     // Get top blocked states
-    const blockedStates = complianceMonitor.getBlockedStates();
+    const blockedStates: string[] = complianceMonitor.getBlockedStates();
 
     // Generate trending data (mock for now - you'd store historical data)
-    const hourlyTrend = Array.from({ length: 24 }, (_, i) => ({
-      hour: i,
-      checks: Math.floor(Math.random() * 50) + 10,
-      allowed: Math.floor(Math.random() * 40) + 8,
-      blocked: Math.floor(Math.random() * 10) + 2,
-    }));
+    const hourlyTrend: HourlyTrendPoint[] = Array.from(
+      { length: 24 },
+      (_: unknown, hour) => ({
+        hour,
+        checks: Math.floor(Math.random() * 50) + 10,
+        allowed: Math.floor(Math.random() * 40) + 8,
+        blocked: Math.floor(Math.random() * 10) + 2,
+      }),
+    );
 
-    return NextResponse.json({
+    const response: ComplianceStatsResponse = {
       success: true,
       data: {
-        // Current metrics
         metrics: {
           ...metrics,
           conversionRate: parseFloat(conversionRate),
           blockRate: parseFloat(blockRate),
         },
-
-        // State breakdown
         stateBreakdown,
-
-        // Trending data
         trends: {
           hourly: hourlyTrend,
           blockedStates: blockedStates.slice(0, 10),
         },
-
-        // System health
         health: {
           geolocationService: 'online',
           complianceAPI: 'online',
           failureRate: metrics.geolocationFailures > 10 ? 'warning' : 'good',
           uptime: '99.9%',
         },
-
-        // Real-time alerts
         alerts: generateComplianceAlerts(metrics, blockedStates),
-
         lastUpdated: new Date().toISOString(),
       },
-    });
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error('Admin compliance stats error:', error);
 
@@ -98,15 +153,10 @@ export async function GET(request: NextRequest) {
 }
 
 // Generate real-time compliance alerts
-type ComplianceAlert = {
-  type: 'warning' | 'error' | 'info';
-  title: string;
-  message: string;
-  action: string;
-  timestamp: string;
-};
-
-function generateComplianceAlerts(metrics: ComplianceMetrics, blockedStates: string[]): ComplianceAlert[] {
+function generateComplianceAlerts(
+  metrics: ComplianceMetrics,
+  blockedStates: string[],
+): ComplianceAlert[] {
   const alerts: ComplianceAlert[] = [];
 
   // High block rate alert

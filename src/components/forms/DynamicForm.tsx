@@ -3,7 +3,7 @@
 // Dynamic form renderer that creates forms from JSON configuration
 // This enables document creation without writing React components
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -120,17 +120,21 @@ export default function DynamicForm({
   }, [config.questions]);
   
   // Initialize form with validation
-  const initialValues = useMemo(() => initialData ?? {}, [initialData]);
-
   const form = useForm({
     resolver: zodResolver(validationSchema),
-    defaultValues: initialValues,
+    defaultValues: initialData ?? {},
     mode: 'onChange'
   });
 
+  const previousInitialRef = useRef<typeof initialData>();
+
   useEffect(() => {
-    form.reset(initialValues);
-  }, [initialValues, form]);
+    if (!initialData) return;
+    if (previousInitialRef.current === initialData) return;
+
+    form.reset(initialData);
+    previousInitialRef.current = initialData;
+  }, [initialData, form]);
   
   const { watch, handleSubmit, formState: { errors, isValid, isDirty } } = form;
   

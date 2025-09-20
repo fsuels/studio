@@ -1,7 +1,18 @@
-﻿export type HeuristicRule = {
+import type { GuardrailVerdict } from './types';
+
+type HeuristicVerdict = Extract<GuardrailVerdict, 'review' | 'block'>;
+
+export type HeuristicRule = {
   id: string;
   pattern: RegExp;
-  verdict: 'review' | 'block';
+  verdict: HeuristicVerdict;
+  reason: string;
+  severity?: 'low' | 'medium' | 'high';
+};
+
+export type HeuristicEvaluation = {
+  id: string;
+  verdict: HeuristicVerdict;
   reason: string;
   severity?: 'low' | 'medium' | 'high';
 };
@@ -30,11 +41,18 @@ export const HEURISTIC_RULES: HeuristicRule[] = [
   },
 ];
 
-export function evaluateHeuristics(text: string): HeuristicRule | undefined {
+export function evaluateHeuristics(text: string): HeuristicEvaluation | null {
   for (const rule of HEURISTIC_RULES) {
     if (rule.pattern.test(text)) {
-      return rule;
+      rule.pattern.lastIndex = 0;
+      return {
+        id: rule.id,
+        verdict: rule.verdict,
+        reason: rule.reason,
+        severity: rule.severity,
+      };
     }
   }
-  return undefined;
+
+  return null;
 }

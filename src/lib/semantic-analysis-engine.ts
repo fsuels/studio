@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import type { IFuseOptions } from 'fuse.js';
 import { allDocuments } from '@/lib/document-library';
 import type { LegalDocument } from '@/lib/document-library';
 import { taxonomy } from '@/config/taxonomy';
@@ -92,17 +93,19 @@ export class SemanticAnalysisEngine {
     const { locale, maxResults = 8 } = options;
     const expandedQueries = this.expandQuery(userInput);
 
-    const fuse = new Fuse(allDocuments, {
+    const fuseOptions: IFuseOptions<LegalDocument> = {
       keys: [
         { name: `translations.${locale}.name`, weight: 0.6 },
         { name: `translations.${locale}.description`, weight: 0.3 },
         { name: `translations.${locale}.aliases`, weight: 0.2 },
-        { name: 'seoMetadata.keywords', weight: 0.1 }
+        { name: 'seoMetadata.keywords', weight: 0.1 },
       ],
       includeScore: true,
       threshold: 0.4,
       ignoreLocation: true,
-    });
+    };
+
+    const fuse = new Fuse(allDocuments, fuseOptions);
 
     const fuseMap = new Map<string, Fuse.FuseResult<LegalDocument>>();
     for (const q of expandedQueries) {

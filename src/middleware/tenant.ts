@@ -55,6 +55,7 @@ const FALLBACK_TENANT_SETTINGS: Tenant['settings'] = {
     enforcePasswordPolicy: false,
     sessionTimeoutMinutes: 60,
     ipWhitelist: [],
+    twoFactorRequired: false,
   },
 };
 
@@ -256,9 +257,4 @@ export function useTenant() {
   // For now, return null
   return null;
 }
-
-
-
-
-
 

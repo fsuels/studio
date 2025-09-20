@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { documentAnalyzer } from '@/lib/vector-search/document-analyzer';
 import { pineconeService } from '@/lib/vector-search/pinecone-service';
+import { z } from 'zod';
 
 // Run dynamically at request time (SSR)
 export const dynamic = 'force-dynamic';
@@ -13,69 +14,39 @@ interface IndexingJob {
   totalDocuments: number;
   processedDocuments: number;
   successful: string[];
-  failed: Array<{ docId: string; error: string }>;
+  failed: { docId: string; error: string }[];
   startedAt: string;
   completedAt?: string;
 }
 
-type SupportedLocale = 'en' | 'es';
+const localeSchema = z.enum(['en', 'es']);
+type SupportedLocale = z.infer<typeof localeSchema>;
 
-interface StartBulkIndexingParams {
-  locale?: SupportedLocale;
-  batchSize?: number;
-  force?: boolean;
-}
+const postActionSchema = z.discriminatedUnion('action', [
+  z.object({
+    action: z.literal('start_bulk_indexing'),
+    locale: localeSchema.optional(),
+    batchSize: z.coerce.number().int().min(1).max(500).optional(),
+    force: z.boolean().optional(),
+  }),
+  z.object({
+    action: z.literal('index_single_document'),
+    docId: z.string().min(1),
+    locale: localeSchema.optional(),
+    force: z.boolean().optional(),
+  }),
+  z.object({ action: z.literal('initialize_index') }),
+  z.object({ action: z.literal('get_index_stats') }),
+  z.object({ action: z.literal('cleanup_index') }),
+]);
+type PostAction = z.infer<typeof postActionSchema>;
 
-interface IndexSingleDocumentParams {
-  docId: string;
-  locale?: SupportedLocale;
-  force?: boolean;
-}
-
-type IndexingRequestBody =
-  | ({ action: 'start_bulk_indexing' } & StartBulkIndexingParams)
-  | ({ action: 'index_single_document' } & IndexSingleDocumentParams)
-  | { action: 'initialize_index' }
-  | { action: 'get_index_stats' }
-  | { action: 'cleanup_index' };
-
-function isSupportedLocale(value: unknown): value is SupportedLocale {
-  return value === 'en' || value === 'es';
-}
-
-function isIndexingRequestBody(value: unknown): value is IndexingRequestBody {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const body = value as Record<string, unknown>;
-  const action = body.action;
-
-  if (action === 'start_bulk_indexing') {
-    const { locale, batchSize, force } = body;
-    const localeValid =
-      locale === undefined || isSupportedLocale(locale);
-    const batchSizeValid =
-      batchSize === undefined || typeof batchSize === 'number';
-    const forceValid = force === undefined || typeof force === 'boolean';
-    return localeValid && batchSizeValid && forceValid;
-  }
-
-  if (action === 'index_single_document') {
-    const { docId, locale, force } = body;
-    const docIdValid = typeof docId === 'string' && docId.length > 0;
-    const localeValid =
-      locale === undefined || isSupportedLocale(locale);
-    const forceValid = force === undefined || typeof force === 'boolean';
-    return docIdValid && localeValid && forceValid;
-  }
-
-  return (
-    action === 'initialize_index' ||
-    action === 'get_index_stats' ||
-    action === 'cleanup_index'
-  );
-}
+const getActionSchema = z.discriminatedUnion('action', [
+  z.object({ action: z.literal('job_status'), jobId: z.string().min(1) }),
+  z.object({ action: z.literal('list_jobs') }),
+  z.object({ action: z.literal('index_stats') }),
+]);
+type GetAction = z.infer<typeof getActionSchema>;
 
 const activeJobs = new Map<string, IndexingJob>();
 
@@ -103,17 +74,24 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    const parsed = postActionSchema.safeParse(body);
 
-    if (!isIndexingRequestBody(body)) {
-      return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    if (!parsed.success) {
+      console.warn('[admin/indexing] Invalid POST payload', parsed.error.flatten());
+      return NextResponse.json(
+        { error: 'Invalid request payload', issues: parsed.error.issues },
+        { status: 400 },
+      );
     }
 
-    switch (body.action) {
+    const payload = parsed.data;
+
+    switch (payload.action) {
       case 'start_bulk_indexing':
-        return await handleStartBulkIndexing(body);
+        return await handleStartBulkIndexing(payload);
 
       case 'index_single_document':
-        return await handleIndexSingleDocument(body);
+        return await handleIndexSingleDocument(payload);
 
       case 'initialize_index':
         return await handleInitializeIndex();
@@ -143,12 +121,30 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const action = searchParams.get('action');
-    const jobId = searchParams.get('jobId');
+    const rawAction = searchParams.get('action');
 
-    switch (action) {
+    if (!rawAction) {
+      return NextResponse.json({ error: 'Action is required' }, { status: 400 });
+    }
+
+    const parsed = getActionSchema.safeParse({
+      action: rawAction,
+      jobId: searchParams.get('jobId') ?? undefined,
+    });
+
+    if (!parsed.success) {
+      console.warn('[admin/indexing] Invalid GET query', parsed.error.flatten());
+      return NextResponse.json(
+        { error: 'Invalid query parameters', issues: parsed.error.issues },
+        { status: 400 },
+      );
+    }
+
+    const payload = parsed.data;
+
+    switch (payload.action) {
       case 'job_status':
-        return await handleGetJobStatus(jobId);
+        return await handleGetJobStatus(payload.jobId);
 
       case 'list_jobs':
         return await handleListJobs();
@@ -175,9 +171,11 @@ export async function GET(request: NextRequest) {
 /**
  * Start bulk indexing of all documents
  */
-async function handleStartBulkIndexing(params: StartBulkIndexingParams) {
+async function handleStartBulkIndexing(
+  params: Extract<PostAction, { action: 'start_bulk_indexing' }>,
+) {
   const locale: SupportedLocale = params.locale ?? 'en';
-  const batchSize = Math.max(1, params.batchSize ?? 10);
+  const batchSize = params.batchSize ?? 10;
   const force = params.force ?? false;
 
   try {
@@ -302,7 +300,9 @@ async function processBulkIndexing(
 /**
  * Index a single document
  */
-async function handleIndexSingleDocument(params: IndexSingleDocumentParams) {
+async function handleIndexSingleDocument(
+  params: Extract<PostAction, { action: 'index_single_document' }>,
+) {
   const docId = params.docId;
   const locale: SupportedLocale = params.locale ?? 'en';
   const force = params.force ?? false;
@@ -428,11 +428,7 @@ async function handleCleanupIndex() {
 /**
  * Get job status
  */
-async function handleGetJobStatus(jobId: string | null) {
-  if (!jobId) {
-    return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
-  }
-
+async function handleGetJobStatus(jobId: string) {
   const job = activeJobs.get(jobId);
   if (!job) {
     return NextResponse.json({ error: 'Job not found' }, { status: 404 });

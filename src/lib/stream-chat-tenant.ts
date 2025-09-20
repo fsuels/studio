@@ -1,5 +1,6 @@
 // Stream Chat integration for tenant-specific chat rooms
-import { StreamChat, Channel, User as StreamUser } from 'stream-chat';
+import { StreamChat } from 'stream-chat';
+import type { Channel, UserResponse } from 'stream-chat';
 import { TenantChatRoom, Tenant, TenantUser } from '@/types/tenant';
 
 interface StreamChatConfig {
@@ -7,7 +8,9 @@ interface StreamChatConfig {
   apiSecret: string;
 }
 
-interface TenantChatUser extends StreamUser {
+type BaseStreamUser = UserResponse;
+
+interface TenantChatUser extends BaseStreamUser {
   id: string;
   name: string;
   email: string;
