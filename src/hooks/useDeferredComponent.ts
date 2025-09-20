@@ -11,24 +11,14 @@ type IdleCapableWindow = Window & {
 };
 
 interface UseDeferredComponentOptions {
-  /**
-   * When true, start loading the component immediately.
-   * Useful for imperative triggers (e.g. modal opens).
-   */
   trigger?: boolean;
-  /**
-   * When true, schedule an idle-time preload so the chunk is ready before trigger.
-   */
   preload?: boolean;
-  /**
-   * Milliseconds to wait before falling back to setTimeout when requestIdleCallback is unavailable.
-   */
   idleDelay?: number;
 }
 
 /**
- * Defers loading a dynamically imported component until it is actually needed.
- * Reduces main bundle size and network contention from eager dynamic() calls.
+ * Defers loading of a dynamically imported component until it is explicitly needed.
+ * Useful for lightweight placeholders while heavy chunks hydrate.
  */
 export function useDeferredComponent<T>(
   loader: () => Promise<{ default: ComponentType<T> }>,
@@ -43,9 +33,7 @@ export function useDeferredComponent<T>(
   }, [loader]);
 
   useEffect(() => {
-    if (Component) {
-      return;
-    }
+    if (Component) return;
 
     let cancelled = false;
     let timeoutId: number | undefined;
@@ -101,3 +89,4 @@ export function useDeferredComponent<T>(
 
   return Component;
 }
+

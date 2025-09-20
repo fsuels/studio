@@ -47,7 +47,7 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
           className,
         )}
       >
-        <span className="truncate">Search documents…</span>
+        <span className="truncate">Search documents...</span>
       </div>
     );
   }
