@@ -151,9 +151,10 @@ export default function HomePageClient() {
   const [ctaVariant, setCtaVariant] = useState<'A' | 'B' | 'C'>('A');
   
   const heroCtaDestination = `/${locale}/generate/`;
-
-  useEffect(() => {
-    router.prefetch(heroCtaDestination);
+  const prefetchHeroCta = useCallback(() => {
+    try {
+      router.prefetch(heroCtaDestination);
+    } catch {}
   }, [heroCtaDestination, router]);
 
   const handleHeroCtaClick = useCallback(() => {
@@ -287,6 +288,7 @@ export default function HomePageClient() {
                 <div className="flex justify-start">
                   <button 
                     onClick={handleHeroCtaClick}
+                    onMouseEnter={prefetchHeroCta}
                     className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
                     suppressHydrationWarning
                   >
@@ -375,14 +377,20 @@ export default function HomePageClient() {
       </section>
 
       {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
-      <HowItWorks />
+      <div className="cv-auto">
+        <HowItWorks />
+      </div>
 
       {/* Popular Documents by Category */}
-      <TopDocsChips />
+      <div className="cv-auto">
+        <TopDocsChips />
+      </div>
 
 
       {/* "Trust and Testimonials" section */}
-      <TrustAndTestimonialsSection />
+      <div className="cv-auto">
+        <TrustAndTestimonialsSection />
+      </div>
 
       <Separator className="my-12" />
 
