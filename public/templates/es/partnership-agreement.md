@@ -1,111 +1,110 @@
-﻿# Partnership Agreement
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Contrato de Sociedad
 
 ---
 
-**PARTNERSHIP AGREEMENT**
+**CONTRATO DE SOCIEDAD**
 
-This Partnership Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
+Este Contrato de Sociedad ("Contrato") se celebra el **{{agreement_date}}** entre:
 
-**Partners:**
+**Socios:**
 
-- **{{partner_1_name}}**, residing at {{partner_1_address}}
-- **{{partner_2_name}}**, residing at {{partner_2_address}}
+- **{{partner_1_name}}**, con domicilio en {{partner_1_address}}
+- **{{partner_2_name}}**, con domicilio en {{partner_2_address}}
   {{#if partner_3_name}}
-- **{{partner_3_name}}**, residing at {{partner_3_address}}
+- **{{partner_3_name}}**, con domicilio en {{partner_3_address}}
   {{/if}}
   {{additional_partners}}
 
-Collectively referred to herein as the "Partners."
+Denominados conjuntamente los "Socios".
 
 ---
 
-## 1. Formation and General Information
+## 1. Constitución e información general
 
-### 1.1 Partnership Name and Purpose
+### 1.1 Nombre y objeto de la sociedad
 
-**Partnership Name:** {{partnership_name}}
+**Nombre de la sociedad:** {{partnership_name}}
 
-**Business Purpose:** {{business_purpose}}
+**Objeto comercial:** {{business_purpose}}
 
-**Principal Place of Business:** {{principal_address}}
+**Domicilio principal de la sociedad:** {{principal_address}}
 
-### 1.2 Partnership Type
+### 1.2 Tipo de sociedad
 
 {{#if general_partnership}}
-This Agreement creates a General Partnership under the laws of {{state}}.
+Este Contrato crea una sociedad general conforme a las leyes de {{state}}.
 {{/if}}
 
 {{#if limited_partnership}}
-This Agreement creates a Limited Partnership under the laws of {{state}}.
-**General Partner(s):** {{general_partners}}
-**Limited Partner(s):** {{limited_partners}}
+Este Contrato crea una sociedad limitada conforme a las leyes de {{state}}.
+**Socio(s) general(es):** {{general_partners}}
+**Socio(s) comanditario(s):** {{limited_partners}}
 {{/if}}
 
-### 1.3 Term of Partnership
+### 1.3 Duración de la sociedad
 
 {{#if definite_term}}
-The Partnership shall commence on {{commencement_date}} and shall continue until {{termination_date}}, unless sooner terminated in accordance with this Agreement.
+La sociedad comenzará el {{commencement_date}} y continuará hasta el {{termination_date}}, salvo terminación anticipada conforme a este Contrato.
 {{else}}
-The Partnership shall commence on {{commencement_date}} and shall continue until terminated in accordance with this Agreement.
+La sociedad comenzará el {{commencement_date}} y continuará hasta su terminación conforme a este Contrato.
 {{/if}}
 
-### 1.4 Business Registration
+### 1.4 Registro empresarial
 
-The Partnership shall be registered with appropriate state and local authorities and shall obtain all necessary licenses and permits.
+La sociedad se registrará ante las autoridades estatales y locales correspondientes y obtendrá todas las licencias y permisos necesarios.
 
 ---
 
-## 2. Capital Contributions
+## 2. Aportaciones de capital
 
-### 2.1 Initial Contributions
+### 2.1 Aportaciones iniciales
 
-Each Partner shall contribute the following to the Partnership:
+Cada Socio aportará a la sociedad lo siguiente:
 
 **{{partner_1_name}}:**
 
-- **Cash:** ${{partner_1_cash_contribution}}
-- **Property:** {{partner_1_property_contribution}}
-- **Services/Labor:** {{partner_1_service_contribution}}
-- **Total Value:** ${{partner_1_total_contribution}}
+- **Efectivo:** ${{partner_1_cash_contribution}}
+- **Bienes:** {{partner_1_property_contribution}}
+- **Servicios/Trabajo:** {{partner_1_service_contribution}}
+- **Valor total:** ${{partner_1_total_contribution}}
 
 **{{partner_2_name}}:**
 
-- **Cash:** ${{partner_2_cash_contribution}}
-- **Property:** {{partner_2_property_contribution}}
-- **Services/Labor:** {{partner_2_service_contribution}}
-- **Total Value:** ${{partner_2_total_contribution}}
+- **Efectivo:** ${{partner_2_cash_contribution}}
+- **Bienes:** {{partner_2_property_contribution}}
+- **Servicios/Trabajo:** {{partner_2_service_contribution}}
+- **Valor total:** ${{partner_2_total_contribution}}
 
 {{#if partner_3_name}}
 **{{partner_3_name}}:**
 
-- **Cash:** ${{partner_3_cash_contribution}}
-- **Property:** {{partner_3_property_contribution}}
-- **Services/Labor:** {{partner_3_service_contribution}}
-- **Total Value:** ${{partner_3_total_contribution}}
+- **Efectivo:** ${{partner_3_cash_contribution}}
+- **Bienes:** {{partner_3_property_contribution}}
+- **Servicios/Trabajo:** {{partner_3_service_contribution}}
+- **Valor total:** ${{partner_3_total_contribution}}
   {{/if}}
 
-**Total Partnership Capital:** ${{total_partnership_capital}}
+**Capital total de la sociedad:** ${{total_partnership_capital}}
 
-### 2.2 Additional Contributions
+### 2.2 Aportaciones adicionales
 
 {{#if additional_contributions_required}}
-Additional capital contributions may be required as follows: {{additional_contribution_terms}}
+Se podrán requerir aportaciones de capital adicionales conforme a: {{additional_contribution_terms}}
 {{else}}
-Additional capital contributions shall only be made with unanimous consent of all Partners.
+Las aportaciones de capital adicionales solo se realizarán con el consentimiento unánime de todos los Socios.
 {{/if}}
 
-### 2.3 Failure to Contribute
+### 2.3 Incumplimiento de aportación
 
-If a Partner fails to make required contributions, {{contribution_default_remedy}}.
+Si un Socio no realiza las aportaciones requeridas, {{contribution_default_remedy}}.
 
 ---
 
-## 3. Ownership Interests and Profit Sharing
+## 3. Participaciones y distribución de utilidades
 
-### 3.1 Ownership Percentages
+### 3.1 Porcentajes de participación
 
-Based on capital contributions and other considerations, ownership interests are:
+Con base en las aportaciones de capital y otros factores, las participaciones son:
 
 - **{{partner_1_name}}:** {{partner_1_ownership_percentage}}%
 - **{{partner_2_name}}:** {{partner_2_ownership_percentage}}%
@@ -114,351 +113,351 @@ Based on capital contributions and other considerations, ownership interests are
   {{/if}}
   {{additional_partner_ownership}}
 
-### 3.2 Profit and Loss Distribution
+### 3.2 Distribución de utilidades y pérdidas
 
-**Profits** shall be distributed as follows:
+**Utilidades** se distribuirán de la siguiente manera:
 {{profit_distribution_method}}
 
-**Losses** shall be allocated as follows:
+**Pérdidas** se asignarán de la siguiente manera:
 {{loss_allocation_method}}
 
-### 3.3 Distribution Schedule
+### 3.3 Calendario de distribuciones
 
 {{#if regular_distributions}}
-Distributions shall be made {{distribution_frequency}} based on available cash flow.
+Las distribuciones se realizarán {{distribution_frequency}} en función del flujo de efectivo disponible.
 {{else}}
-Distributions shall be made as determined by the Partners.
+Las distribuciones se realizarán conforme determinen los Socios.
 {{/if}}
 
-### 3.4 Tax Allocations
+### 3.4 Asignaciones fiscales
 
-For tax purposes, income, gains, losses, deductions, and credits shall be allocated in accordance with ownership percentages unless otherwise required by tax law.
+Para efectos fiscales, los ingresos, ganancias, pérdidas, deducciones y créditos se asignarán conforme a los porcentajes de participación, salvo que la normativa fiscal disponga otra cosa.
 
 ---
 
-## 4. Management and Operations
+## 4. Administración y operaciones
 
-### 4.1 Management Structure
+### 4.1 Estructura de administración
 
 {{#if equal_management}}
-All Partners shall have equal rights in the management and conduct of Partnership business.
+Todos los Socios tendrán derechos iguales en la administración y conducción del negocio de la sociedad.
 {{else}}
-**Managing Partner(s):** {{managing_partners}}
-**Management Authority:** {{management_authority_description}}
+**Socio(s) administrador(es):** {{managing_partners}}
+**Autoridad de administración:** {{management_authority_description}}
 {{/if}}
 
-### 4.2 Decision Making
+### 4.2 Toma de decisiones
 
-**Unanimous Consent Required For:**
+**Requieren consentimiento unánime:**
 
-- Admission of new Partners
-- Amendment of this Agreement
-- Sale of Partnership assets exceeding ${{major_decision_threshold}}
-- Taking on debt exceeding ${{debt_threshold}}
+- Admisión de nuevos Socios
+- Modificación de este Contrato
+- Venta de activos de la sociedad que excedan ${{major_decision_threshold}}
+- Contratación de deudas que excedan ${{debt_threshold}}
 - {{additional_unanimous_matters}}
 
-**Majority Vote Required For:**
+**Requieren voto mayoritario:**
 
-- Day-to-day business decisions
-- Hiring and firing employees
-- Entering contracts under ${{majority_decision_threshold}}
+- Decisiones operativas cotidianas
+- Contratación y despido de empleados
+- Celebración de contratos por debajo de ${{majority_decision_threshold}}
 - {{additional_majority_matters}}
 
-### 4.3 Partner Duties and Responsibilities
+### 4.3 Deberes y responsabilidades de los Socios
 
-**{{partner_1_name}} Responsibilities:**
+**Responsabilidades de {{partner_1_name}}:**
 {{partner_1_duties}}
 
-**{{partner_2_name}} Responsibilities:**
+**Responsabilidades de {{partner_2_name}}:**
 {{partner_2_duties}}
 
 {{#if partner_3_name}}
-**{{partner_3_name}} Responsibilities:**
+**Responsabilidades de {{partner_3_name}}:**
 {{partner_3_duties}}
 {{/if}}
 
-### 4.4 Time Commitment
+### 4.4 Compromiso de tiempo
 
 {{#if time_commitment_required}}
-Each Partner agrees to devote {{required_time_commitment}} to Partnership business.
+Cada Socio se compromete a dedicar {{required_time_commitment}} a las actividades de la sociedad.
 {{/if}}
 
 ---
 
-## 5. Financial Management
+## 5. Gestión financiera
 
-### 5.1 Banking and Accounts
+### 5.1 Banca y cuentas
 
-**Primary Bank:** {{primary_bank}}
-**Account Signatories:** {{account_signatories}}
-**Signature Requirements:** {{signature_requirements}}
+**Banco principal:** {{primary_bank}}
+**Firmantes autorizados:** {{account_signatories}}
+**Requisitos de firma:** {{signature_requirements}}
 
-### 5.2 Books and Records
+### 5.2 Libros y registros
 
-The Partnership shall maintain accurate books and records in accordance with generally accepted accounting principles. Books shall be kept at {{books_location}} and be available for inspection by any Partner.
+La sociedad llevará libros y registros exactos conforme a principios de contabilidad generalmente aceptados. Los libros se mantendrán en {{books_location}} y estarán disponibles para inspección por cualquier Socio.
 
-### 5.3 Accounting Period
+### 5.3 Periodo contable
 
-The Partnership's fiscal year shall be {{fiscal_year_period}}.
+El ejercicio fiscal de la sociedad será {{fiscal_year_period}}.
 
-### 5.4 Financial Reporting
+### 5.4 Reportes financieros
 
 {{#if financial_reporting_required}}
-Financial statements shall be prepared {{financial_reporting_frequency}} and provided to all Partners.
+Se prepararán estados financieros {{financial_reporting_frequency}} y se entregarán a todos los Socios.
 {{/if}}
 
-### 5.5 Partner Draws and Salaries
+### 5.5 Sueldos y retiros de socios
 
 {{#if partner_salaries}}
-**Partner Salaries:**
+**Sueldos de socios:**
 
-- {{partner_1_name}}: ${{partner_1_salary}} per {{salary_period}}
-- {{partner_2_name}}: ${{partner_2_salary}} per {{salary_period}}
+- {{partner_1_name}}: ${{partner_1_salary}} por {{salary_period}}
+- {{partner_2_name}}: ${{partner_2_salary}} por {{salary_period}}
   {{#if partner_3_name}}
-- {{partner_3_name}}: ${{partner_3_salary}} per {{salary_period}}
+- {{partner_3_name}}: ${{partner_3_salary}} por {{salary_period}}
   {{/if}}
   {{/if}}
 
 {{#if partner_draws}}
-**Partner Draws:** Each Partner may draw up to ${{maximum_draw_amount}} per {{draw_period}} against their share of profits.
+**Retiros de socios:** Cada Socio podrá retirar hasta ${{maximum_draw_amount}} por {{draw_period}} contra su participación en las utilidades.
 {{/if}}
 
 ---
 
-## 6. Partner Rights and Restrictions
+## 6. Derechos y restricciones de los Socios
 
-### 6.1 Information Rights
+### 6.1 Derechos de información
 
-Each Partner has the right to:
+Cada Socio tiene derecho a:
 
-- Inspect Partnership books and records
-- Receive annual financial statements
-- Receive information about Partnership affairs
+- Inspeccionar los libros y registros de la sociedad
+- Recibir estados financieros anuales
+- Recibir información sobre los asuntos de la sociedad
 - {{additional_information_rights}}
 
-### 6.2 Competing Business Restrictions
+### 6.2 Restricciones de competencia
 
 {{#if non_compete_clause}}
-Partners are prohibited from engaging in competing businesses as follows: {{non_compete_terms}}
+Los Socios tienen prohibido participar en negocios que compitan con la sociedad según: {{non_compete_terms}}
 {{else}}
-Partners may engage in other business activities provided they do not interfere with Partnership duties.
+Los Socios pueden realizar otras actividades comerciales siempre que no interfieran con sus deberes societarios.
 {{/if}}
 
-### 6.3 Confidentiality
+### 6.3 Confidencialidad
 
-Partners agree to maintain confidentiality of Partnership information and trade secrets.
+Los Socios se comprometen a mantener la confidencialidad de la información y secretos comerciales de la sociedad.
 
-### 6.4 Non-Solicitation
+### 6.4 No solicitación
 
 {{#if non_solicitation_clause}}
-Partners agree not to solicit Partnership employees or customers for {{non_solicitation_period}} after leaving the Partnership.
+Los Socios acuerdan no solicitar empleados ni clientes de la sociedad durante {{non_solicitation_period}} después de su salida.
 {{/if}}
 
 ---
 
-## 7. Transfer of Partnership Interests
+## 7. Cesión de participaciones
 
-### 7.1 Transfer Restrictions
+### 7.1 Restricciones a la transferencia
 
-No Partner may transfer, sell, or assign their Partnership interest without:
+Ningún Socio podrá transferir, vender o ceder su participación sin:
 {{transfer_restriction_requirements}}
 
-### 7.2 Right of First Refusal
+### 7.2 Derecho de preferencia
 
 {{#if right_of_first_refusal}}
-Before any Partner may sell their interest to a third party, they must first offer it to the remaining Partners under the same terms and conditions.
+Antes de vender su participación a un tercero, el Socio deberá ofrecerla a los Socios restantes en los mismos términos y condiciones.
 {{/if}}
 
-### 7.3 Valuation Method
+### 7.3 Método de valuación
 
-Partnership interests shall be valued using the following method: {{valuation_method}}
+Las participaciones se valuarán utilizando el siguiente método: {{valuation_method}}
 
-### 7.4 Permitted Transfers
+### 7.4 Transferencias permitidas
 
-The following transfers are permitted without restriction:
+Las siguientes transferencias se permiten sin restricción:
 {{permitted_transfers}}
 
 ---
 
-## 8. Admission of New Partners
+## 8. Admisión de nuevos Socios
 
-### 8.1 Admission Requirements
+### 8.1 Requisitos de admisión
 
-New Partners may be admitted only with {{admission_vote_requirement}} of existing Partners.
+Nuevos Socios solo podrán admitirse con {{admission_vote_requirement}} de los Socios actuales.
 
-### 8.2 New Partner Contributions
+### 8.2 Aportaciones de nuevos Socios
 
-New Partners must contribute {{new_partner_contribution_requirements}}.
+Los nuevos Socios deberán aportar {{new_partner_contribution_requirements}}.
 
-### 8.3 Effect on Existing Interests
+### 8.3 Efecto sobre las participaciones existentes
 
-Upon admission of new Partners, existing ownership percentages shall be adjusted as follows: {{ownership_adjustment_method}}.
+Al admitirse nuevos Socios, los porcentajes de participación existente se ajustarán de la siguiente manera: {{ownership_adjustment_method}}.
 
 ---
 
-## 9. Withdrawal and Dissolution
+## 9. Retiro y disolución
 
-### 9.1 Voluntary Withdrawal
+### 9.1 Retiro voluntario
 
 {{#if voluntary_withdrawal_allowed}}
-A Partner may voluntarily withdraw from the Partnership by giving {{withdrawal_notice_period}} written notice.
+Un Socio podrá retirarse voluntariamente dando aviso escrito con {{withdrawal_notice_period}} de anticipación.
 {{else}}
-Voluntary withdrawal is not permitted without consent of all other Partners.
+El retiro voluntario no está permitido sin el consentimiento de todos los demás Socios.
 {{/if}}
 
-### 9.2 Involuntary Withdrawal
+### 9.2 Retiro involuntario
 
-A Partner may be expelled for:
+Un Socio podrá ser excluido por:
 
-- Breach of this Agreement
-- Conviction of a felony
-- Bankruptcy or insolvency
-- Incapacity lasting more than {{incapacity_period}}
+- Incumplimiento de este Contrato
+- Condena por delito grave
+- Bancarrota o insolvencia
+- Incapacidad que se prolongue más de {{incapacity_period}}
 - {{additional_expulsion_grounds}}
 
-**Expulsion Process:** {{expulsion_process}}
+**Proceso de expulsión:** {{expulsion_process}}
 
-### 9.3 Death or Disability
+### 9.3 Fallecimiento o incapacidad
 
 {{#if death_disability_provision}}
-Upon death or permanent disability of a Partner:
+En caso de fallecimiento o incapacidad permanente de un Socio:  
 {{death_disability_terms}}
 {{/if}}
 
-### 9.4 Partnership Dissolution
+### 9.4 Disolución de la sociedad
 
-The Partnership shall dissolve upon:
+La sociedad se disolverá cuando ocurra:
 
-- Expiration of the term (if applicable)
-- Unanimous agreement of Partners
+- Vencimiento del plazo (si aplica)
+- Acuerdo unánime de los Socios
 - {{dissolution_events}}
 
-### 9.5 Winding Up and Liquidation
+### 9.5 Liquidación
 
-Upon dissolution, Partnership assets shall be distributed in the following order:
+Al disolverse, los activos se distribuirán en el siguiente orden:
 
-1. Payment of Partnership debts and obligations
-2. Repayment of Partner loans to Partnership
-3. Return of Partner capital contributions
-4. Distribution of remaining assets according to ownership percentages
+1. Pago de deudas y obligaciones de la sociedad
+2. Reembolso de préstamos de los Socios a la sociedad
+3. Devolución de las aportaciones de capital
+4. Distribución del remanente conforme a los porcentajes de participación
 
 ---
 
-## 10. Dispute Resolution
+## 10. Resolución de disputas
 
-### 10.1 Mediation
+### 10.1 Mediación
 
 {{#if mediation_required}}
-Disputes shall first be submitted to mediation with a qualified mediator agreed upon by the Partners.
+Las disputas se someterán primero a mediación con un mediador calificado elegido por los Socios.
 {{/if}}
 
-### 10.2 Arbitration
+### 10.2 Arbitraje
 
 {{#if arbitration_required}}
-Unresolved disputes shall be submitted to binding arbitration under {{arbitration_rules}}.
+Las controversias no resueltas se someterán a arbitraje vinculante conforme a {{arbitration_rules}}.
 {{else}}
-Unresolved disputes shall be resolved in the courts of {{jurisdiction}}.
+Las controversias no resueltas se resolverán ante los tribunales de {{jurisdiction}}.
 {{/if}}
 
-### 10.3 Deadlock Resolution
+### 10.3 Resolución de empates
 
 {{#if deadlock_provision}}
-In case of management deadlock: {{deadlock_resolution_mechanism}}
+En caso de empate en la administración: {{deadlock_resolution_mechanism}}
 {{/if}}
 
 ---
 
-## 11. Insurance and Liability
+## 11. Seguro y responsabilidad
 
-### 11.1 Partnership Insurance
+### 11.1 Seguros de la sociedad
 
-The Partnership shall maintain the following insurance:
+La sociedad mantendrá los siguientes seguros:
 
-- General liability insurance: ${{liability_insurance_amount}}
-- Property insurance: ${{property_insurance_amount}}
+- Seguro de responsabilidad civil general: ${{liability_insurance_amount}}
+- Seguro de propiedad: ${{property_insurance_amount}}
 - {{additional_insurance_requirements}}
 
-### 11.2 Partner Liability
+### 11.2 Responsabilidad de los Socios
 
 {{#if limited_liability}}
-Partner liability is limited as provided by state limited partnership law.
+La responsabilidad de los Socios se limita según lo previsto por la ley estatal de sociedades limitadas.
 {{else}}
-Partners have unlimited personal liability for Partnership debts and obligations.
+Los Socios tienen responsabilidad personal ilimitada por las deudas y obligaciones de la sociedad.
 {{/if}}
 
-### 11.3 Indemnification
+### 11.3 Indemnización
 
-The Partnership shall indemnify Partners for losses incurred in the ordinary course of Partnership business, except for willful misconduct or breach of this Agreement.
+La sociedad indemnizará a los Socios por pérdidas incurridas en el curso ordinario del negocio, excepto por dolo o incumplimiento de este Contrato.
 
 ---
 
-## 12. Intellectual Property
+## 12. Propiedad intelectual
 
-### 12.1 Partnership IP
+### 12.1 Propiedad intelectual de la sociedad
 
-All intellectual property created in connection with Partnership business shall belong to the Partnership, including:
+Toda propiedad intelectual creada en relación con el negocio de la sociedad pertenecerá a la sociedad, incluyendo:
 
-- Patents and patent applications
-- Trademarks and service marks
-- Copyrights
-- Trade secrets
+- Patentes y solicitudes de patente
+- Marcas y marcas de servicio
+- Derechos de autor
+- Secretos comerciales
 - {{additional_ip_categories}}
 
-### 12.2 Pre-Existing IP
+### 12.2 Propiedad intelectual preexistente
 
-Partners retain ownership of intellectual property owned prior to formation of the Partnership: {{pre_existing_ip_terms}}
+Los Socios conservan la titularidad de la propiedad intelectual previa a la formación de la sociedad: {{pre_existing_ip_terms}}
 
-### 12.3 IP License
+### 12.3 Licencia de propiedad intelectual
 
 {{#if ip_license_terms}}
-Partners grant the Partnership the following license to use their pre-existing intellectual property: {{ip_license_details}}
+Los Socios otorgan a la sociedad la siguiente licencia para utilizar su propiedad intelectual preexistente: {{ip_license_details}}
 {{/if}}
 
 ---
 
-## 13. Employment and Benefits
+## 13. Empleo y prestaciones
 
-### 13.1 Employee Hiring
+### 13.1 Contratación de personal
 
 {{#if employee_hiring_authority}}
-Authority to hire employees: {{hiring_authority_terms}}
+La facultad para contratar personal será: {{hiring_authority_terms}}
 {{/if}}
 
-### 13.2 Employee Benefits
+### 13.2 Prestaciones para empleados
 
 {{#if employee_benefits}}
-The Partnership shall provide the following employee benefits: {{benefit_details}}
+La sociedad proporcionará las siguientes prestaciones a los empleados: {{benefit_details}}
 {{/if}}
 
-### 13.3 Partner Benefits
+### 13.3 Prestaciones para socios
 
 {{#if partner_benefits}}
-Partners are entitled to the following benefits: {{partner_benefit_details}}
+Los Socios tendrán derecho a las siguientes prestaciones: {{partner_benefit_details}}
 {{/if}}
 
 ---
 
-## 14. Miscellaneous Provisions
+## 14. Disposiciones varias
 
-### 14.1 Governing Law
+### 14.1 Ley aplicable
 
-This Agreement shall be governed by the laws of {{governing_state}}.
+Este Contrato se regirá por las leyes de {{governing_state}}.
 
-### 14.2 Entire Agreement
+### 14.2 Contrato íntegro
 
-This Agreement constitutes the entire agreement among the Partners and supersedes all prior negotiations and agreements.
+Este Contrato constituye el acuerdo completo entre los Socios y sustituye cualquier negociación o acuerdo previo.
 
-### 14.3 Amendment
+### 14.3 Modificaciones
 
-This Agreement may only be amended by written agreement signed by all Partners.
+Este Contrato solo podrá modificarse mediante acuerdo escrito firmado por todos los Socios.
 
-### 14.4 Severability
+### 14.4 Divisibilidad
 
-If any provision is held invalid, the remainder shall remain in full force and effect.
+Si alguna disposición se considera inválida, las restantes continuarán en pleno vigor y efecto.
 
-### 14.5 Notice Requirements
+### 14.5 Avisos
 
-All notices must be in writing and delivered to:
+Todos los avisos deberán hacerse por escrito y entregarse a:
 
 **{{partner_1_name}}:** {{partner_1_notice_address}}
 **{{partner_2_name}}:** {{partner_2_notice_address}}
@@ -466,68 +465,68 @@ All notices must be in writing and delivered to:
 **{{partner_3_name}}:** {{partner_3_notice_address}}
 {{/if}}
 
-### 14.6 Binding Effect
+### 14.6 Fuerza vinculante
 
-This Agreement shall be binding upon Partners, their heirs, executors, administrators, and assigns.
+Este Contrato será vinculante para los Socios, sus herederos, albaceas, administradores y cesionarios.
 
-### 14.7 Counterparts
+### 14.7 Copias
 
-This Agreement may be executed in counterparts, each deemed an original.
+Este Contrato podrá firmarse en ejemplares, cada uno considerado original.
 
 ---
 
-## 15. Tax Elections and Considerations
+## 15. Elecciones y consideraciones fiscales
 
-### 15.1 Tax Elections
+### 15.1 Elecciones fiscales
 
 {{#if tax_elections}}
-The Partnership hereby makes the following tax elections: {{tax_election_details}}
+La sociedad realiza las siguientes elecciones fiscales: {{tax_election_details}}
 {{/if}}
 
-### 15.2 Tax Matters Partner
+### 15.2 Socio representante fiscal
 
 {{#if tax_matters_partner}}
-{{tax_matters_partner_name}} is designated as the Tax Matters Partner for purposes of federal tax law.
+{{tax_matters_partner_name}} se designa como socio encargado de asuntos fiscales para efectos de la ley federal.
 {{/if}}
 
-### 15.3 Tax Distributions
+### 15.3 Distribuciones para impuestos
 
 {{#if tax_distributions}}
-The Partnership shall make distributions to cover Partners' tax obligations as follows: {{tax_distribution_terms}}
+La sociedad realizará distribuciones para cubrir las obligaciones fiscales de los Socios conforme a: {{tax_distribution_terms}}
 {{/if}}
 
 ---
 
-## 16. Signatures
+## 16. Firmas
 
-**IN WITNESS WHEREOF**, the Partners have executed this Partnership Agreement as of the date first written above.
+**EN FE DE LO CUAL**, los Socios firman este Contrato de Sociedad en la fecha indicada al inicio.
 
-**PARTNERS:**
+**SOCIOS:**
 
 **{{partner_1_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
-| {{partner_1_name}}                         |                    |
-| Print Name: {{partner_1_name}}             |                    |
+| {{partner_1_name}} | |
+| Nombre en letra de imprenta: {{partner_1_name}} | |
 
 **{{partner_2_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
-| {{partner_2_name}}                         |                    |
-| Print Name: {{partner_2_name}}             |                    |
+| {{partner_2_name}} | |
+| Nombre en letra de imprenta: {{partner_2_name}} | |
 
 {{#if partner_3_name}}
 **{{partner_3_name}}:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
-| {{partner_3_name}}                         |                    |
-| Print Name: {{partner_3_name}}             |                    |
+| {{partner_3_name}} | |
+| Nombre en letra de imprenta: {{partner_3_name}} | |
 
 {{/if}}
 
@@ -535,43 +534,41 @@ The Partnership shall make distributions to cover Partners' tax obligations as f
 
 ---
 
-## 17. Notarization
+## 17. Notarización
 
 {{#if notarization_required}}
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-On this **{{agreement_date}}**, before me personally appeared {{partner_1_name}}, {{partner_2_name}}{{#if partner_3_name}}, and {{partner_3_name}}{{/if}}, who proved to me on the basis of satisfactory evidence to be the persons whose names are subscribed to the within instrument and acknowledged to me that they executed the same in their authorized capacities.
+En esta fecha **{{agreement_date}}**, comparecieron personalmente ante mí {{partner_1_name}}, {{partner_2_name}}{{#if partner_3_name}} y {{partner_3_name}}{{/if}}, quienes acreditaron con pruebas satisfactorias ser las personas cuyos nombres suscriben este instrumento y reconocieron haberlo firmado en sus calidades autorizadas.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+Certifico BAJO PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que el párrafo anterior es verdadero y correcto.
 
-**WITNESS** my hand and official seal.
+**DOY FE** con mi firma y sello oficial.
 
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notario Público:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Mi comisión expira:** ****\*\*\*\*****\_****\*\*\*\*****
 {{/if}}
 
 ---
 
-## 18. Attorney Acknowledgment
+## 18. Reconocimiento del abogado
 
 {{#if attorney_prepared}}
-**ATTORNEY CERTIFICATION:**
+**CERTIFICACIÓN DEL ABOGADO:**
 
-I certify that I have advised the Partners regarding this Partnership Agreement and believe it to be properly executed and in compliance with applicable law.
+Certifico que he asesorado a los Socios respecto de este Contrato de Sociedad y considero que se ha ejecutado correctamente y cumple con la legislación aplicable.
 
-**Attorney:** {{attorney_name}}  
-**State Bar Number:** {{attorney_bar_number}}  
-**Signature:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Date:** {{agreement_date}}
+**Abogado:** {{attorney_name}}  
+**Número de licencia profesional:** {{attorney_bar_number}}  
+**Firma:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Fecha:** {{agreement_date}}
 {{/if}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This partnership agreement should be reviewed by qualified legal and tax professionals to ensure compliance with state partnership laws and to address specific business and tax considerations. Partnership laws vary by state, and this agreement should be tailored to the specific needs and circumstances of the partners and their business. Consider whether a limited liability company (LLC) or corporation might better serve the partners' needs.
+**AVISO LEGAL IMPORTANTE:** Este contrato de sociedad debe ser revisado por profesionales legales y fiscales calificados para garantizar el cumplimiento con las leyes estatales de sociedades y para abordar las consideraciones comerciales y fiscales específicas. Las leyes de sociedades varían por estado, y este contrato debe adaptarse a las necesidades particulares de los Socios y de su negocio. Considere si una sociedad de responsabilidad limitada (LLC) o una corporación podrían ajustarse mejor a las necesidades de los Socios.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

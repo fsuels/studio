@@ -189,10 +189,6 @@ const TrustAndTestimonialsSection = React.memo(
     const router = useRouter();
     const locale = (i18n.language === 'es' ? 'es' : 'en') as 'en' | 'es';
     const exploreTemplatesDestination = `/${locale}/marketplace/`;
-
-    useEffect(() => {
-      router.prefetch(exploreTemplatesDestination);
-    }, [exploreTemplatesDestination, router]);
     const tSimple = React.useCallback(
       (key: string, fallback?: string | object): string =>
         typeof fallback === 'string'
@@ -416,3 +412,4 @@ const TrustAndTestimonialsSection = React.memo(
   },
 );
 export default TrustAndTestimonialsSection;
+

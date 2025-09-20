@@ -121,7 +121,7 @@ export default function TemplatesClientContent({
         <h2 className="text-2xl font-semibold text-center mb-6 text-foreground">
           {t("browseTemplates.whatDo", "What do you want to accomplish?")}
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {TEMPLATE_CATEGORIES.map((category) => (
             <Button
               asChild

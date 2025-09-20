@@ -48,8 +48,14 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   const exploreAllDestination = `/${locale}/marketplace/`;
 
-  useEffect(() => {
-    router.prefetch(exploreAllDestination);
+  const prefetchExplore = React.useCallback(() => {
+    try {
+      router.prefetch(exploreAllDestination);
+    } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.debug('Explore all prefetch failed', error);
+      }
+    }
   }, [exploreAllDestination, router]);
 
   const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);

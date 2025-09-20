@@ -138,6 +138,28 @@ class TemplateMonitor {
           );
         }
 
+        // Calculate quality score (0-100)
+        const totalTemplates = this.metrics.totalTemplates;
+        this.metrics.qualityScore =
+          totalTemplates === 0
+            ? 0
+            : Math.round((this.metrics.validTemplates / totalTemplates) * 100);
+
+        const results = Array.isArray(report.results) ? report.results : [];
+        const summaries: BilingualTemplateSummary[] = results
+          .filter((r: any) => r?.documentType && r?.language)
+          .map((r: any) => ({
+            documentType: r.documentType,
+            language: r.language,
+            variables: Array.isArray(r.variables) ? r.variables : [],
+            sectionHeadings: Array.isArray(r.sectionHeadings)
+              ? r.sectionHeadings
+              : [],
+            numberedSections: Array.isArray(r.numberedSections)
+              ? r.numberedSections
+              : [],
+          }));
+
         const parityIssues = findTranslationParityIssues(
           summaries,
           DOCUMENT_METADATA,
@@ -149,6 +171,9 @@ class TemplateMonitor {
           acc[issue.documentType] = list;
           return acc;
         }, {});
+      }
+    } catch (error) {
+      console.error(chalk.red('Error updating metrics:'), error);
     }
   }
 

@@ -74,10 +74,11 @@ class SessionRecorder {
   private isRecording = false;
   private debounceTimer?: NodeJS.Timeout;
   private eventBuffer: SessionEvent[] = [];
+  private listenersAttached = false;
+  private cleanupCallbacks: Array<() => void> = [];
 
   constructor() {
     this.sessionId = this.generateSessionId();
-    this.setupEventListeners();
   }
 
   private generateSessionId(): string {
@@ -87,6 +88,7 @@ class SessionRecorder {
   startRecording(userId?: string) {
     this.userId = userId;
     this.isRecording = true;
+    this.attachEventListeners();
     this.recordEvent('navigation', {
       url: window.location.href,
       viewport: {
@@ -99,11 +101,15 @@ class SessionRecorder {
   stopRecording() {
     this.isRecording = false;
     this.flushEvents();
+    this.detachEventListeners();
   }
 
-  private setupEventListeners() {
-    // Mouse clicks
-    document.addEventListener('click', (e) => {
+  private attachEventListeners() {
+    if (this.listenersAttached || typeof window === 'undefined') {
+      return;
+    }
+
+    const handleClick = (e: MouseEvent) => {
       if (!this.isRecording) return;
 
       const target = e.target as HTMLElement;
@@ -116,10 +122,14 @@ class SessionRecorder {
           textContent: target.textContent?.slice(0, 100),
         },
       });
+    };
+
+    document.addEventListener('click', handleClick);
+    this.cleanupCallbacks.push(() => {
+      document.removeEventListener('click', handleClick);
     });
 
-    // Form inputs
-    document.addEventListener('input', (e) => {
+    const handleInput = (e: Event) => {
       if (!this.isRecording) return;
 
       const target = e.target as HTMLInputElement;
@@ -133,10 +143,14 @@ class SessionRecorder {
           name: target.name,
         },
       });
+    };
+
+    document.addEventListener('input', handleInput);
+    this.cleanupCallbacks.push(() => {
+      document.removeEventListener('input', handleInput);
     });
 
-    // Scroll events (debounced)
-    document.addEventListener('scroll', () => {
+    const handleScroll = () => {
       if (!this.isRecording) return;
 
       clearTimeout(this.debounceTimer);
@@ -145,19 +159,27 @@ class SessionRecorder {
           coordinates: { x: window.scrollX, y: window.scrollY },
         });
       }, 100);
+    };
+
+    document.addEventListener('scroll', handleScroll, { passive: true });
+    this.cleanupCallbacks.push(() => {
+      document.removeEventListener('scroll', handleScroll);
     });
 
-    // Navigation changes
-    window.addEventListener('popstate', () => {
+    const handlePopState = () => {
       if (!this.isRecording) return;
 
       this.recordEvent('navigation', {
         url: window.location.href,
       });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    this.cleanupCallbacks.push(() => {
+      window.removeEventListener('popstate', handlePopState);
     });
 
-    // Error tracking
-    window.addEventListener('error', (e) => {
+    const handleError = (e: ErrorEvent) => {
       if (!this.isRecording) return;
 
       this.recordEvent('error', {
@@ -169,10 +191,14 @@ class SessionRecorder {
           stack: e.error?.stack,
         },
       });
+    };
+
+    window.addEventListener('error', handleError);
+    this.cleanupCallbacks.push(() => {
+      window.removeEventListener('error', handleError);
     });
 
-    // Form submissions
-    document.addEventListener('submit', (e) => {
+    const handleSubmit = (e: Event) => {
       if (!this.isRecording) return;
 
       const form = e.target as HTMLFormElement;
@@ -183,9 +209,37 @@ class SessionRecorder {
           method: form.method,
         },
       });
+    };
+
+    document.addEventListener('submit', handleSubmit);
+    this.cleanupCallbacks.push(() => {
+      document.removeEventListener('submit', handleSubmit);
     });
+
+    this.listenersAttached = true;
   }
 
+  private detachEventListeners() {
+    if (!this.listenersAttached) {
+      return;
+    }
+
+    this.cleanupCallbacks.forEach((cleanup) => {
+      try {
+        cleanup();
+      } catch (error) {
+        console.warn('[SessionRecorder] listener cleanup failed', error);
+      }
+    });
+
+    this.cleanupCallbacks = [];
+    this.listenersAttached = false;
+
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = undefined;
+    }
+  }
   private recordEvent(type: SessionEvent['type'], data: SessionEvent['data']) {
     const event: SessionEvent = {
       id: `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

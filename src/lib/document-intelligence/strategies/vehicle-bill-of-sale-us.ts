@@ -156,6 +156,7 @@ const baseVehicleBillOfSaleFlow: FormSection[] = [
           { value: 'NOT_ACTUAL', label: { en: 'Not Actual Mileage (Warning)', es: 'Millaje no real (advertencia)' } }
         ]
       }
+    ]
   },
   {
     id: 'seller_information',

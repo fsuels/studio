@@ -43,9 +43,6 @@ const initializeIndexSchema = z.object({ action: z.literal('initialize_index') }
 const getIndexStatsSchema = z.object({ action: z.literal('get_index_stats') });
 const cleanupIndexSchema = z.object({ action: z.literal('cleanup_index') });
 
-type InitializeIndexAction = z.infer<typeof initializeIndexSchema>;
-type GetIndexStatsAction = z.infer<typeof getIndexStatsSchema>;
-type CleanupIndexAction = z.infer<typeof cleanupIndexSchema>;
 
 const postActionSchema = z.discriminatedUnion('action', [
   startBulkIndexingSchema,
@@ -54,14 +51,12 @@ const postActionSchema = z.discriminatedUnion('action', [
   getIndexStatsSchema,
   cleanupIndexSchema,
 ]);
-type PostAction = z.infer<typeof postActionSchema>;
 
 const getActionSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('job_status'), jobId: z.string().min(1) }),
   z.object({ action: z.literal('list_jobs') }),
   z.object({ action: z.literal('index_stats') }),
 ]);
-type GetAction = z.infer<typeof getActionSchema>;
 
 const activeJobs = new Map<string, IndexingJob>();
 

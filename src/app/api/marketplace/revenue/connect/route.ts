@@ -1,6 +1,5 @@
 // src/app/api/marketplace/revenue/connect/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getStripeServerClient } from '@/lib/stripe-server';
 
 /**
  * POST /api/marketplace/revenue/connect

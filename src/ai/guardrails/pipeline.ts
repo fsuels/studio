@@ -60,7 +60,7 @@ async function callGuardrailModel(
   stage: 'prompt_guard' | 'llama_guard',
   model: string | undefined,
   messages: { role: 'system' | 'user'; content: string }[],
-  timeoutMs: number,
+  _timeoutMs: number,
 ): Promise<GuardrailModelResult | null> {
   if (!model) {
     return null;

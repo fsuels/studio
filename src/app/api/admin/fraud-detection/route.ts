@@ -18,7 +18,6 @@ type SuccessDoc =
   | 'fraud.trends'
   | 'fraud.rules';
 
-type FraudDocType = SuccessDoc | 'fraud.error';
 
 type SuccessResponse<
   TDoc extends SuccessDoc,

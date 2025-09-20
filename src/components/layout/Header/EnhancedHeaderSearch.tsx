@@ -164,7 +164,7 @@ export default function EnhancedHeaderSearch({
     e.preventDefault();
     if (searchResults.length > 0) {
       const firstResult = searchResults[0];
-      window.location.href = `/${clientLocale}/docs/${resolveDocSlug(firstResult.slug)}`;
+      window.location.href = `/${clientLocale}/docs/${resolveDocSlug(firstResult.slug)}/`;
     }
   };
 
@@ -261,7 +261,7 @@ export default function EnhancedHeaderSearch({
             {resultsToShow.map((result) => (
               <li key={result.slug}>
                 <Link
-                  href={`/${clientLocale}/docs/${resolveDocSlug(result.slug)}`}
+                  href={`/${clientLocale}/docs/${resolveDocSlug(result.slug)}/`}
                   className="flex items-start gap-3 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left group"
                   prefetch
                   onClick={() => setShowResults(false)}

@@ -1,7 +1,7 @@
 // src/components/SearchBar.tsx
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
@@ -18,8 +18,14 @@ const SearchBar = React.memo(function SearchBar() {
   const locale = (params.locale as 'en' | 'es') || 'en';
   const marketplaceDestination = `/${locale}/marketplace/`;
 
-  useEffect(() => {
-    router.prefetch(marketplaceDestination);
+  const prefetchMarketplace = React.useCallback(() => {
+    try {
+      router.prefetch(marketplaceDestination);
+    } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.debug('Prefetch failed', error);
+      }
+    }
   }, [marketplaceDestination, router]);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,6 +34,7 @@ const SearchBar = React.memo(function SearchBar() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -36,7 +43,7 @@ const SearchBar = React.memo(function SearchBar() {
   const hydratedSuggestions = useMemo(() => {
     if (!isHydrated) return [] as DocumentSummary[];
 
-    const term = searchTerm.trim();
+    const term = deferredSearchTerm.trim();
     if (term.length <= 1) return [];
 
     const results = searchWorkflowDocuments(term, {
@@ -45,12 +52,13 @@ const SearchBar = React.memo(function SearchBar() {
     });
 
     return results.slice(0, 5);
-  }, [isHydrated, locale, searchTerm]);
+  }, [deferredSearchTerm, isHydrated, locale]);
 
   useEffect(() => {
     setSuggestions(hydratedSuggestions);
-    setShowSuggestions(isHydrated && hydratedSuggestions.length > 0);
-  }, [hydratedSuggestions, isHydrated]);
+    const hasQuery = deferredSearchTerm.trim().length > 1;
+    setShowSuggestions(isHydrated && hasQuery && hydratedSuggestions.length > 0);
+  }, [deferredSearchTerm, hydratedSuggestions, isHydrated]);
 
   // Close on outside click
   useEffect(() => {
@@ -112,12 +120,16 @@ const SearchBar = React.memo(function SearchBar() {
           type="search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() =>
-            isHydrated &&
-            searchTerm.trim().length > 1 &&
-            suggestions.length > 0 &&
-            setShowSuggestions(true)
-          }
+          onFocus={() => {
+            prefetchMarketplace();
+            if (
+              isHydrated &&
+              searchTerm.trim().length > 1 &&
+              suggestions.length > 0
+            ) {
+              setShowSuggestions(true);
+            }
+          }}
           placeholder={placeholderText}
           className="flex-grow pl-10 pr-32 py-3 h-12 text-base rounded-full border-none placeholder-gray-400 focus:border-[#006EFF] focus:ring-2 focus:ring-offset-2 focus:ring-[#00C3A3]"
           aria-label={placeholderText}
@@ -125,6 +137,7 @@ const SearchBar = React.memo(function SearchBar() {
         />
         <button
           type="submit"
+          onMouseEnter={prefetchMarketplace}
           className="absolute right-1.5 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-medium text-white px-3 py-2 rounded-full bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600"
         >
           {tHeader('SearchBar.cta', { defaultValue: 'Find Template' })}

@@ -1,367 +1,364 @@
-﻿# Independent Contractor Agreement
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Contrato de Prestación de Servicios Independientes
 
 ---
 
-**INDEPENDENT CONTRACTOR AGREEMENT**
+**CONTRATO DE PRESTACIÓN DE SERVICIOS INDEPENDIENTES**
 
-This Independent Contractor Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
+Este Contrato de Prestación de Servicios Independientes ("Contrato") se celebra el **{{agreement_date}}**, entre:
 
-- **Company:** {{company_name}}, a {{company_entity_type}} organized under the laws of {{company_state}}, with its principal place of business at {{company_address}}
+- **Empresa:** {{company_name}}, una {{company_entity_type}} constituida conforme a las leyes de {{company_state}}, con domicilio principal en {{company_address}}
 
-- **Contractor:** {{contractor_name}}, {{#if contractor_entity_type}}a {{contractor_entity_type}} organized under the laws of {{contractor_state}}{{else}}an individual{{/if}}, with address at {{contractor_address}}
+- **Contratista:** {{contractor_name}}, {{#if contractor_entity_type}}una {{contractor_entity_type}} constituida conforme a las leyes de {{contractor_state}}{{else}}una persona física{{/if}}, con domicilio en {{contractor_address}}
 
-Collectively referred to herein as the "Parties."
+En lo sucesivo, las "Partes".
 
 ---
 
-## 1. Services to be Provided
+## 1. Servicios a prestar
 
-### 1.1 Scope of Work
+### 1.1 Alcance del trabajo
 
-The Contractor agrees to provide the following services ("Services") as an independent contractor:
+El Contratista se compromete a prestar los siguientes servicios ("Servicios") como contratista independiente:
 
-**Primary Services:**
+**Servicios principales:**  
 {{service_description}}
 
-**Specific Deliverables:**
+**Entregables específicos:**  
 {{deliverables}}
 
-### 1.2 Performance Standards
+### 1.2 Estándares de desempeño
 
-- **Quality Standards:** {{quality_standards}}
-- **Performance Metrics:** {{performance_metrics}}
-- **Completion Criteria:** {{completion_criteria}}
-
----
-
-## 2. Term and Schedule
-
-### 2.1 Agreement Term
-
-**Start Date:** {{start_date}}  
-**End Date:** {{end_date}}  
-**Total Duration:** {{project_duration}}
-
-### 2.2 Work Schedule
-
-**Work Schedule:** {{work_schedule}}  
-**Estimated Hours:** {{estimated_hours}} hours {{time_period}}  
-**Deadline Requirements:** {{deadline_requirements}}
-
-### 2.3 Location of Work
-
-**Primary Work Location:** {{work_location}}  
-**Remote Work:** {{#if remote_allowed}}Permitted{{else}}Not permitted{{/if}}
+- **Parámetros de calidad:** {{quality_standards}}
+- **Indicadores de desempeño:** {{performance_metrics}}
+- **Criterios de finalización:** {{completion_criteria}}
 
 ---
 
-## 3. Compensation and Payment
+## 2. Plazo y cronograma
 
-### 3.1 Payment Structure
+### 2.1 Vigencia del Contrato
 
-**Compensation Type:** {{compensation_type}}
+**Fecha de inicio:** {{start_date}}  
+**Fecha de término:** {{end_date}}  
+**Duración total:** {{project_duration}}
+
+### 2.2 Horario de trabajo
+
+**Horario de trabajo:** {{work_schedule}}  
+**Horas estimadas:** {{estimated_hours}} horas {{time_period}}  
+**Requisitos de entrega:** {{deadline_requirements}}
+
+### 2.3 Lugar de prestación
+
+**Lugar principal de trabajo:** {{work_location}}  
+**Trabajo remoto:** {{#if remote_allowed}}Permitido{{else}}No permitido{{/if}}
+
+---
+
+## 3. Compensación y pagos
+
+### 3.1 Estructura de pago
+
+**Modalidad de compensación:** {{compensation_type}}
 
 {{#if hourly_rate}}
 
-- **Hourly Rate:** ${{hourly_rate}} per hour
-- **Maximum Hours:** {{max_hours}} hours per {{billing_period}}
+- **Tarifa por hora:** ${{hourly_rate}} por hora
+- **Máximo de horas:** {{max_hours}} horas por {{billing_period}}
   {{/if}}
 
 {{#if project_fee}}
 
-- **Total Project Fee:** ${{project_fee}}
-- **Payment Schedule:** {{payment_schedule}}
+- **Honorarios totales del proyecto:** ${{project_fee}}
+- **Calendario de pagos:** {{payment_schedule}}
   {{/if}}
 
 {{#if monthly_retainer}}
 
-- **Monthly Retainer:** ${{retainer_amount}} per month
+- **Cuota mensual fija:** ${{retainer_amount}} por mes
   {{/if}}
 
-### 3.2 Payment Terms
+### 3.2 Condiciones de pago
 
-- **Invoice Frequency:** {{invoice_frequency}}
-- **Payment Due:** {{payment_terms}} days after invoice receipt
-- **Payment Method:** {{payment_method}}
+- **Frecuencia de facturación:** {{invoice_frequency}}
+- **Plazo de pago:** {{payment_terms}} días después de recibir la factura
+- **Método de pago:** {{payment_method}}
 
-### 3.3 Expenses
+### 3.3 Gastos
 
 {{#if expenses_reimbursed}}
-**Reimbursable Expenses:** Company will reimburse pre-approved expenses: {{expense_categories}}
+**Gastos reembolsables:** La Empresa reembolsará los gastos preaprobados: {{expense_categories}}
 {{else}}
-**Expenses:** All expenses are the responsibility of Contractor unless specifically agreed otherwise in writing.
+**Gastos:** Todos los gastos correrán por cuenta del Contratista salvo acuerdo escrito en contrario.
 {{/if}}
 
-### 3.4 Late Payment
+### 3.4 Pago tardío
 
-Invoices not paid within {{payment_terms}} days may incur a late fee of {{late_fee_rate}}% per month.
-
----
-
-## 4. Independent Contractor Relationship
-
-### 4.1 Independent Contractor Status
-
-Contractor is an independent contractor and not an employee, partner, or agent of Company. This relationship does not create:
-
-- An employer-employee relationship
-- A partnership or joint venture
-- Authority to bind Company to any obligation
-
-### 4.2 Control and Supervision
-
-- Contractor has the right to control the manner and means of performing the Services
-- Company's role is limited to specifying the desired results
-- Contractor may use their own methods, procedures, and techniques
-
-### 4.3 Business Operations
-
-Contractor:
-
-- Maintains their own business operations and workspace
-- Provides their own tools and equipment (unless specified otherwise)
-- May work for other clients during the term of this Agreement
-- Is responsible for their own business expenses
+Las facturas no pagadas dentro de {{payment_terms}} días podrán generar un recargo moratorio del {{late_fee_rate}}% mensual.
 
 ---
 
-## 5. Taxes and Benefits
+## 4. Relación de contratista independiente
 
-### 5.1 Tax Responsibilities
+### 4.1 Naturaleza independiente
 
-- Contractor is responsible for all federal, state, and local taxes
-- Company will not withhold taxes from payments
-- Company will issue Form 1099-NEC if total payments exceed $600
-- Contractor must provide accurate tax identification information
+El Contratista actúa como contratista independiente y no como empleado, socio o agente de la Empresa. Esta relación no crea:
 
-### 5.2 No Employee Benefits
+- Una relación laboral empleador-empleado
+- Una sociedad o empresa conjunta
+- Autoridad para obligar a la Empresa frente a terceros
 
-Contractor is not entitled to:
+### 4.2 Control y supervisión
 
-- Health insurance, retirement plans, or other employee benefits
-- Workers' compensation coverage
-- Unemployment insurance benefits
-- Paid time off or sick leave
+- El Contratista tiene derecho a determinar la forma y los medios para prestar los Servicios
+- La Empresa se limita a especificar los resultados deseados
+- El Contratista puede utilizar sus propios métodos, procedimientos y técnicas
 
-### 5.3 Business License and Insurance
+### 4.3 Operaciones comerciales
 
-Contractor warrants they maintain:
+El Contratista:
 
-- All necessary business licenses and permits
-- Professional liability insurance (if applicable): ${{insurance_minimum}}
-- General liability insurance: ${{general_liability_minimum}}
+- Mantiene sus propias operaciones comerciales y espacio de trabajo
+- Proporciona sus propias herramientas y equipos (salvo que se estipule lo contrario)
+- Puede trabajar para otros clientes durante la vigencia de este Contrato
+- Es responsable de sus propios gastos comerciales
 
 ---
 
-## 6. Intellectual Property
+## 5. Impuestos y prestaciones
 
-### 6.1 Work Product Ownership
+### 5.1 Responsabilidades fiscales
+
+- El Contratista es responsable de todos los impuestos federales, estatales y locales
+- La Empresa no retendrá impuestos de los pagos
+- La Empresa emitirá el Formulario 1099-NEC si los pagos totales superan $600
+- El Contratista debe proporcionar información fiscal veraz y actualizada
+
+### 5.2 Ausencia de prestaciones
+
+El Contratista no tiene derecho a:
+
+- Seguro de salud, planes de retiro u otras prestaciones para empleados
+- Cobertura de compensación laboral
+- Beneficios de seguro de desempleo
+- Tiempo libre o licencias pagadas
+
+### 5.3 Licencias comerciales y seguros
+
+El Contratista declara que mantiene:
+
+- Todas las licencias y permisos comerciales necesarios
+- Seguro de responsabilidad profesional (si corresponde): ${{insurance_minimum}}
+- Seguro de responsabilidad civil general: ${{general_liability_minimum}}
+
+---
+
+## 6. Propiedad intelectual
+
+### 6.1 Titularidad de los entregables
 
 {{#if company_owns_work_product}}
-All work products, deliverables, and intellectual property created under this Agreement shall be deemed "work made for hire" and owned by Company.
+Todo producto, entregable y derecho de propiedad intelectual creado en virtud de este Contrato se considerará "obra por encargo" y pertenecerá a la Empresa.
 {{else}}
-Contractor retains ownership of work products, with Company receiving the following license: {{license_terms}}
+El Contratista conserva la titularidad de los entregables, y la Empresa recibe la siguiente licencia: {{license_terms}}
 {{/if}}
 
-### 6.2 Pre-Existing Intellectual Property
+### 6.2 Propiedad intelectual preexistente
 
-Each Party retains ownership of their respective pre-existing intellectual property.
+Cada Parte conserva la titularidad de su respectiva propiedad intelectual preexistente.
 
-### 6.3 Third-Party Materials
+### 6.3 Materiales de terceros
 
-Contractor warrants that all work will not infringe upon third-party intellectual property rights.
-
----
-
-## 7. Confidentiality
-
-### 7.1 Confidential Information
-
-Contractor acknowledges access to Company's confidential information and agrees to:
-
-- Maintain strict confidentiality of all proprietary information
-- Use confidential information solely for performing Services
-- Not disclose confidential information to third parties
-
-### 7.2 Return of Information
-
-Upon termination, Contractor will return or destroy all confidential information and work products.
-
-### 7.3 Duration
-
-Confidentiality obligations survive termination for {{confidentiality_duration}} years.
+El Contratista garantiza que ningún trabajo infringirá derechos de propiedad intelectual de terceros.
 
 ---
 
-## 8. Non-Compete and Non-Solicitation
+## 7. Confidencialidad
 
-### 8.1 Non-Compete Restrictions
+### 7.1 Información confidencial
+
+El Contratista reconoce que tendrá acceso a información confidencial de la Empresa y acuerda:
+
+- Mantener estricta confidencialidad de toda información propietaria
+- Utilizar la información confidencial únicamente para prestar los Servicios
+- No divulgar información confidencial a terceros
+
+### 7.2 Devolución de información
+
+Al terminar el Contrato, el Contratista devolverá o destruirá toda información confidencial y los productos de trabajo.
+
+### 7.3 Vigencia
+
+Las obligaciones de confidencialidad sobrevivirán a la terminación por {{confidentiality_duration}} años.
+
+---
+
+## 8. No competencia y no solicitación
+
+### 8.1 Restricciones de no competencia
 
 {{#if non_compete_clause}}
-During the term and for {{non_compete_duration}} after termination, Contractor agrees not to engage in competing business activities: {{non_compete_restrictions}}
+Durante la vigencia y por {{non_compete_duration}} posteriores a la terminación, el Contratista se abstendrá de realizar actividades comerciales en competencia: {{non_compete_restrictions}}
 {{else}}
-No non-compete restrictions apply to this Agreement.
+Este Contrato no incluye restricciones de no competencia.
 {{/if}}
 
-### 8.2 Non-Solicitation
+### 8.2 No solicitación
 
 {{#if non_solicitation_clause}}
-Contractor agrees not to solicit Company's employees or customers for {{non_solicitation_duration}} after termination.
+El Contratista se compromete a no solicitar a empleados ni clientes de la Empresa durante {{non_solicitation_duration}} después de la terminación.
 {{/if}}
 
 ---
 
-## 9. Warranties and Representations
+## 9. Garantías y manifestaciones
 
-### 9.1 Contractor Warranties
+### 9.1 Garantías del Contratista
 
-Contractor warrants:
+El Contratista garantiza:
 
-- Authority to enter into this Agreement
-- Services will be performed with professional skill and care
-- Work will be original and will not infringe third-party rights
-- Compliance with all applicable laws and regulations
+- Tener facultades para celebrar este Contrato
+- Que los Servicios se prestarán con pericia y cuidado profesionales
+- Que el trabajo será original y no infringirá derechos de terceros
+- Cumplir todas las leyes y regulaciones aplicables
 
-### 9.2 Company Warranties
+### 9.2 Garantías de la Empresa
 
-Company warrants:
+La Empresa garantiza:
 
-- Authority to enter into this Agreement
-- Will provide necessary information and cooperation
-- Will make timely payments as agreed
-
----
-
-## 10. Limitation of Liability
-
-### 10.1 Liability Cap
-
-EXCEPT FOR BREACHES OF CONFIDENTIALITY, EACH PARTY'S TOTAL LIABILITY SHALL NOT EXCEED THE TOTAL AMOUNT PAID UNDER THIS AGREEMENT.
-
-### 10.2 Consequential Damages
-
-NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES.
+- Tener facultades para celebrar este Contrato
+- Que proporcionará la información y cooperación necesarias
+- Que realizará los pagos oportunamente según lo acordado
 
 ---
 
-## 11. Indemnification
+## 10. Limitación de responsabilidad
 
-### 11.1 Contractor Indemnification
+### 10.1 Tope de responsabilidad
 
-Contractor shall indemnify Company against claims arising from:
+SALVO POR INCUMPLIMIENTOS DE CONFIDENCIALIDAD, LA RESPONSABILIDAD TOTAL DE CADA PARTE NO EXCEDERÁ EL MONTO TOTAL PAGADO EN VIRTUD DE ESTE CONTRATO.
 
-- Contractor's negligence or willful misconduct
-- Violation of third-party rights
-- Failure to pay taxes or comply with employment laws
+### 10.2 Daños indirectos
 
-### 11.2 Company Indemnification
-
-Company shall indemnify Contractor against claims arising from:
-
-- Use of Company-provided materials
-- Company's breach of this Agreement
+NINGUNA DE LAS PARTES SERÁ RESPONSABLE POR DAÑOS INDIRECTOS, INCIDENTALES, ESPECIALES O CONSECUENCIALES.
 
 ---
 
-## 12. Termination
+## 11. Indemnización
 
-### 12.1 Termination for Convenience
+### 11.1 Indemnización del Contratista
 
-Either Party may terminate this Agreement with {{termination_notice}} days written notice.
+El Contratista indemnizará a la Empresa frente a reclamaciones derivadas de:
 
-### 12.2 Termination for Cause
+- Negligencia o dolo del Contratista
+- Violación de derechos de terceros
+- Incumplimiento de obligaciones fiscales o laborales
 
-Either Party may terminate immediately for:
+### 11.2 Indemnización de la Empresa
 
-- Material breach uncured after {{cure_period}} days notice
-- Insolvency or bankruptcy
-- Violation of confidentiality or non-compete provisions
+La Empresa indemnizará al Contratista frente a reclamaciones derivadas de:
 
-### 12.3 Effect of Termination
-
-Upon termination:
-
-- Company shall pay for Services performed through termination date
-- Contractor shall deliver all work products and confidential information
-- Survival provisions shall remain in effect
+- Uso de materiales proporcionados por la Empresa
+- Incumplimiento de la Empresa de este Contrato
 
 ---
 
-## 13. General Provisions
+## 12. Terminación
 
-### 13.1 Governing Law
+### 12.1 Terminación por conveniencia
 
-This Agreement shall be governed by the laws of {{governing_state}}.
+Cualquiera de las Partes podrá terminar este Contrato mediante aviso escrito con {{termination_notice}} días de anticipación.
 
-### 13.2 Dispute Resolution
+### 12.2 Terminación por causa
+
+Cualquiera de las Partes podrá terminar de inmediato en caso de:
+
+- Incumplimiento material no subsanado tras {{cure_period}} días de aviso
+- Insolvencia o bancarrota
+- Violación de las obligaciones de confidencialidad o no competencia
+
+### 12.3 Efectos de la terminación
+
+Al terminar el Contrato:
+
+- La Empresa pagará los Servicios prestados hasta la fecha de terminación
+- El Contratista entregará todos los productos de trabajo e información confidencial
+- Las cláusulas que por su naturaleza deban sobrevivir permanecerán vigentes
+
+---
+
+## 13. Disposiciones generales
+
+### 13.1 Ley aplicable
+
+Este Contrato se regirá por las leyes de {{governing_state}}.
+
+### 13.2 Resolución de disputas
 
 {{#if arbitration_clause}}
-Disputes shall be resolved through binding arbitration in {{arbitration_location}}.
+Las controversias se resolverán mediante arbitraje vinculante en {{arbitration_location}}.
 {{else}}
-Disputes shall be resolved in the courts of {{jurisdiction}}.
+Las controversias se resolverán ante los tribunales de {{jurisdiction}}.
 {{/if}}
 
-### 13.3 Entire Agreement
+### 13.3 Acuerdo íntegro
 
-This Agreement constitutes the entire agreement and supersedes all prior negotiations.
+Este Contrato constituye el acuerdo íntegro entre las Partes y sustituye negociaciones previas.
 
-### 13.4 Amendment
+### 13.4 Modificaciones
 
-This Agreement may only be amended by written agreement signed by both Parties.
+Este Contrato solo podrá modificarse mediante acuerdo escrito firmado por ambas Partes.
 
-### 13.5 Severability
+### 13.5 Divisibilidad
 
-If any provision is held invalid, the remainder shall remain in full force and effect.
+Si alguna disposición se declara inválida, las restantes permanecerán en pleno vigor y efecto.
 
-### 13.6 Assignment
+### 13.6 Cesión
 
-This Agreement may not be assigned without the other Party's written consent.
+Este Contrato no podrá cederse sin el consentimiento previo y por escrito de la otra Parte.
 
 ---
 
-## 14. Additional Terms
+## 14. Términos adicionales
 
 {{additional_terms}}
 
 ---
 
-## 15. Signatures
+## 15. Firmas
 
-**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
+**EN FE DE LO CUAL**, las Partes firman este Contrato en la fecha indicada al inicio.
 
-**COMPANY:**
+**EMPRESA:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
-| {{company_name}}                           |                    |
-| By: {{company_signatory}}                  |                    |
-| Title: {{company_title}}                   |                    |
+| {{company_name}} | |
+| Por: {{company_signatory}} | |
+| Cargo: {{company_title}} | |
 
-**CONTRACTOR:**
+**CONTRATISTA:**
 
 {{#if contractor_entity_type}}
-| Signature | Date |
+| Firma | Fecha |
 |-----------|------|
 | ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
 | {{contractor_name}} | |
-| By: {{contractor_signatory}} | |
-| Title: {{contractor_title}} | |
+| Por: {{contractor_signatory}} | |
+| Cargo: {{contractor_title}} | |
 {{else}}
-| Signature | Date |
+| Firma | Fecha |
 |-----------|------|
 | ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
 | {{contractor_name}} | |
-| Social Security #: {{contractor_ssn}} | |
+| Número de Seguro Social: {{contractor_ssn}} | |
 {{/if}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This independent contractor agreement should be reviewed by legal counsel to ensure compliance with federal, state, and local employment and tax laws. Proper classification of workers as independent contractors is crucial for legal and tax compliance.
+**AVISO LEGAL IMPORTANTE:** Este contrato de prestación de servicios independientes debe ser revisado por asesores legales para garantizar el cumplimiento de las leyes laborales y fiscales federales, estatales y locales. La correcta clasificación de los trabajadores como contratistas independientes es esencial para cumplir con las obligaciones legales y tributarias.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

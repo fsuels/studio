@@ -1,401 +1,398 @@
-﻿# Employment Termination Letter
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Carta de Terminación de Empleo
 
 ---
 
-**EMPLOYMENT TERMINATION LETTER**
+**CARTA DE TERMINACIÓN DE EMPLEO**
 
-**Date:** {{termination_date}}
+**Fecha:** {{termination_date}}
 
-**To:** {{employee_name}}  
-**Employee ID:** {{employee_id}}  
-**Department:** {{department}}  
-**Position:** {{job_title}}
+**Para:** {{employee_name}}  
+**ID del empleado:** {{employee_id}}  
+**Departamento:** {{department}}  
+**Puesto:** {{job_title}}
 
-**From:** {{company_name}}  
-**Address:** {{company_address}}
-
----
-
-## 1. Notice of Termination
-
-Dear {{employee_name}},
-
-This letter serves as formal notification that your employment with {{company_name}} will be terminated effective **{{effective_date}}**.
-
-### 1.1 Termination Details
-
-**Reason for Termination:** {{termination_reason}}  
-**Termination Type:** {{termination_type}} (Voluntary/Involuntary/Layoff/Resignation)  
-**Effective Date:** {{effective_date}}  
-**Last Working Day:** {{last_working_day}}
+**De:** {{company_name}}  
+**Domicilio:** {{company_address}}
 
 ---
 
-## 2. Reason for Termination
+## 1. Aviso de terminación
+
+Estimado(a) {{employee_name}}:
+
+Mediante la presente notificamos formalmente que su relación laboral con {{company_name}} finalizará con efecto a partir del **{{effective_date}}**.
+
+### 1.1 Detalles de la terminación
+
+**Motivo de terminación:** {{termination_reason}}  
+**Tipo de terminación:** {{termination_type}} (Voluntaria/Involuntaria/Despido/Resignación)  
+**Fecha de efectividad:** {{effective_date}}  
+**Último día laborado:** {{last_working_day}}
+
+---
+
+## 2. Motivo de la terminación
 
 {{#if performance_related}}
 
-### Performance-Related Termination
+### Terminación por desempeño
 
-Your employment is being terminated due to performance issues, specifically:
+Su empleo se termina debido a asuntos de desempeño, específicamente:
 {{performance_issues}}
 
-Previous disciplinary actions taken:
+Acciones disciplinarias previas:
 {{disciplinary_history}}
 {{/if}}
 
 {{#if misconduct}}
 
-### Misconduct Termination
+### Terminación por conducta indebida
 
-Your employment is being terminated due to misconduct, specifically:
+Su empleo se termina debido a conducta indebida, específicamente:
 {{misconduct_details}}
 {{/if}}
 
 {{#if layoff}}
 
-### Layoff/Reduction in Force
+### Terminación por despido/reducción de personal
 
-Your position is being eliminated due to:
+Su puesto se elimina debido a:
 {{layoff_reason}}
 
-This decision is not related to your individual performance and is part of a company-wide restructuring.
+Esta decisión no está relacionada con su desempeño individual y forma parte de una reestructuración organizacional.
 {{/if}}
 
 {{#if voluntary}}
 
-### Voluntary Termination
+### Terminación voluntaria
 
-We acknowledge receipt of your resignation letter dated {{resignation_date}}. Your voluntary termination is accepted effective {{effective_date}}.
+Acusamos recibo de su carta de renuncia con fecha {{resignation_date}}. Su baja voluntaria se hará efectiva el {{effective_date}}.
 {{/if}}
 
 ---
 
-## 3. Final Compensation and Benefits
+## 3. Compensación y prestaciones finales
 
-### 3.1 Final Paycheck
+### 3.1 Pago final
 
-**Final Pay Date:** {{final_pay_date}}  
-**Final Pay Amount:** ${{final_pay_amount}}  
-**Pay Period Covered:** {{final_pay_period}}
+**Fecha de pago final:** {{final_pay_date}}  
+**Monto del pago final:** ${{final_pay_amount}}  
+**Periodo cubierto:** {{final_pay_period}}
 
-**Final Pay Includes:**
+**El pago final incluye:**
 
-- Regular wages through {{last_working_day}}
-- {{#if overtime_owed}}Overtime compensation: ${{overtime_amount}}{{/if}}
-- {{#if vacation_payout}}Accrued vacation pay: {{vacation_days}} days = ${{vacation_payout}}{{/if}}
-- {{#if sick_leave_payout}}Accrued sick leave (where applicable): ${{sick_leave_amount}}{{/if}}
-- {{#if commission_owed}}Outstanding commission: ${{commission_amount}}{{/if}}
-- {{#if bonus_owed}}Pro-rated bonus: ${{bonus_amount}}{{/if}}
+- Salarios ordinarios hasta {{last_working_day}}
+- {{#if overtime_owed}}Pago de horas extras: ${{overtime_amount}}{{/if}}
+- {{#if vacation_payout}}Pago de vacaciones acumuladas: {{vacation_days}} días = ${{vacation_payout}}{{/if}}
+- {{#if sick_leave_payout}}Pago de licencias por enfermedad acumuladas (cuando corresponda): ${{sick_leave_amount}}{{/if}}
+- {{#if commission_owed}}Comisiones pendientes: ${{commission_amount}}{{/if}}
+- {{#if bonus_owed}}Bono prorrateado: ${{bonus_amount}}{{/if}}
 
-### 3.2 Deductions
+### 3.2 Deducciones
 
-The following deductions will be made from your final pay:
+Las siguientes deducciones se realizarán de su pago final:
 {{final_pay_deductions}}
 
-### 3.3 Severance Package
+### 3.3 Paquete de liquidación
 
 {{#if severance_offered}}
-**Severance Payment:** ${{severance_amount}}  
-**Severance Period:** {{severance_weeks}} weeks  
-**Payment Schedule:** {{severance_payment_schedule}}  
-**Severance Conditions:** {{severance_conditions}}
+**Pago por separación:** ${{severance_amount}}  
+**Periodo de separación:** {{severance_weeks}} semanas  
+**Calendario de pago:** {{severance_payment_schedule}}  
+**Condiciones de la separación:** {{severance_conditions}}
 {{else}}
-**No severance package** is provided with this termination.
+**No se ofrece** un paquete de liquidación con esta terminación.
 {{/if}}
 
 ---
 
-## 4. Benefits Information
+## 4. Información sobre prestaciones
 
-### 4.1 Health Insurance
+### 4.1 Seguro médico
 
-**COBRA Eligibility:** {{#if cobra_eligible}}You are eligible for COBRA continuation coverage{{else}}You are not eligible for COBRA{{/if}}  
-**Coverage End Date:** {{health_insurance_end_date}}  
-**COBRA Information:** You will receive separate COBRA documentation within {{cobra_notice_days}} days
+**Elegibilidad COBRA:** {{#if cobra_eligible}}Es elegible para continuar su cobertura médica mediante COBRA{{else}}No es elegible para COBRA{{/if}}  
+**Fecha de finalización de la cobertura:** {{health_insurance_end_date}}  
+**Información de COBRA:** Recibirá por separado la documentación de COBRA dentro de {{cobra_notice_days}} días
 
-### 4.2 Retirement Benefits
+### 4.2 Prestaciones de retiro
 
-**401(k) Plan:** {{retirement_plan_status}}  
-**Vesting Status:** {{vesting_status}}  
-**Contact Information:** {{retirement_plan_contact}}
+**Plan 401(k):** {{retirement_plan_status}}  
+**Estatus de consolidación (vesting):** {{vesting_status}}  
+**Contacto:** {{retirement_plan_contact}}
 
-### 4.3 Other Benefits
+### 4.3 Otras prestaciones
 
-**Life Insurance:** Terminates on {{life_insurance_end_date}}  
-**Disability Insurance:** Terminates on {{disability_insurance_end_date}}  
-**Flexible Spending Account:** {{fsa_status}}  
-**Stock Options:** {{stock_option_status}}
+**Seguro de vida:** Finaliza el {{life_insurance_end_date}}  
+**Seguro por incapacidad:** Finaliza el {{disability_insurance_end_date}}  
+**Cuenta de gastos flexibles:** {{fsa_status}}  
+**Opciones sobre acciones:** {{stock_option_status}}
 
 ---
 
-## 5. Company Property Return
+## 5. Devolución de bienes de la empresa
 
-You must return the following company property by {{property_return_deadline}}:
+Debe devolver los siguientes bienes de la empresa a más tardar el {{property_return_deadline}}:
 
-**Items to Return:**
+**Elementos a devolver:**
 
-- [ ] Company laptop/computer: {{laptop_details}}
-- [ ] Mobile phone: {{phone_details}}
-- [ ] Security badge/access cards
-- [ ] Company credit cards
-- [ ] Office keys
-- [ ] Company vehicle (if applicable)
-- [ ] Confidential documents and files
+- [ ] Computadora portátil/equipo de la empresa: {{laptop_details}}
+- [ ] Teléfono móvil: {{phone_details}}
+- [ ] Gafete/carnés de acceso
+- [ ] Tarjetas de crédito corporativas
+- [ ] Llaves de la oficina
+- [ ] Vehículo de la empresa (si aplica)
+- [ ] Documentos y archivos confidenciales
 - [ ] {{additional_company_property}}
 
-**Return Location:** {{property_return_location}}  
-**Contact Person:** {{property_return_contact}}
+**Lugar de entrega:** {{property_return_location}}  
+**Persona de contacto:** {{property_return_contact}}
 
 ---
 
-## 6. Confidentiality and Non-Disclosure
+## 6. Confidencialidad y no divulgación
 
-### 6.1 Ongoing Obligations
+### 6.1 Obligaciones vigentes
 
-Your confidentiality and non-disclosure obligations continue after termination, including:
+Sus obligaciones de confidencialidad y no divulgación continúan después de la terminación e incluyen:
 
-- Protection of company trade secrets and proprietary information
-- Non-disclosure of customer lists and confidential business information
+- Protección de secretos comerciales e información propietaria de la empresa
+- No divulgación de listas de clientes e información comercial confidencial
 - {{additional_confidentiality_obligations}}
 
-### 6.2 Non-Compete Agreement
+### 6.2 Acuerdo de no competencia
 
 {{#if non_compete_applies}}
-Your non-compete agreement dated {{non_compete_date}} remains in effect for {{non_compete_duration}} following your termination.
+Su acuerdo de no competencia fechado el {{non_compete_date}} permanece vigente durante {{non_compete_duration}} posteriores a su terminación.
 {{else}}
-No non-compete restrictions apply to your termination.
+Esta terminación no está sujeta a restricciones de no competencia.
 {{/if}}
 
 ---
 
-## 7. Final Work Requirements
+## 7. Requisitos finales de trabajo
 
-### 7.1 Knowledge Transfer
+### 7.1 Transferencia de conocimiento
 
 {{#if knowledge_transfer_required}}
-You are required to complete the following knowledge transfer activities:
+Debe completar las siguientes actividades de transferencia de conocimiento:
 {{knowledge_transfer_tasks}}
 
-**Completion Deadline:** {{knowledge_transfer_deadline}}
+**Fecha límite de cumplimiento:** {{knowledge_transfer_deadline}}
 {{/if}}
 
-### 7.2 Final Projects
+### 7.2 Proyectos pendientes
 
 {{#if final_projects}}
-**Outstanding Projects:** {{final_project_list}}  
-**Transition Plan:** {{project_transition_plan}}
+**Proyectos en curso:** {{final_project_list}}  
+**Plan de transición:** {{project_transition_plan}}
 {{/if}}
 
 ---
 
-## 8. References and Future Employment
+## 8. Referencias y empleo futuro
 
-### 8.1 Reference Policy
+### 8.1 Política de referencias
 
 {{reference_policy}}
 
-### 8.2 Employment Verification
+### 8.2 Verificación de empleo
 
-Future employment verifications will confirm:
+Las futuras verificaciones de empleo confirmarán:
 
-- Dates of employment: {{employment_start_date}} to {{effective_date}}
-- Position held: {{job_title}}
+- Fechas de empleo: {{employment_start_date}} a {{effective_date}}
+- Puesto desempeñado: {{job_title}}
 - {{employment_verification_details}}
 
 ---
 
-## 9. State-Specific Employment Law Compliance
+## 9. Cumplimiento con leyes laborales estatales
 
-### 9.1 Final Pay Requirements
+### 9.1 Requisitos sobre pago final
 
 {{#if state_california}}
-**California Law:** Final pay must be provided immediately upon termination for involuntary terminations, or within 72 hours for voluntary resignations without notice.
+**Ley de California:** El pago final debe entregarse inmediatamente en terminaciones involuntarias o dentro de 72 horas en renuncias voluntarias sin aviso.
 {{/if}}
 {{#if state_new_york}}
-**New York Law:** Final pay must be provided by the next regular payday following termination.
+**Ley de Nueva York:** El pago final debe realizarse en el siguiente día de pago regular posterior a la terminación.
 {{/if}}
 {{#if state_texas}}
-**Texas Law:** Final pay must be provided within 6 days of termination.
+**Ley de Texas:** El pago final debe proporcionarse dentro de los 6 días posteriores a la terminación.
 {{/if}}
 {{#if state_florida}}
-**Florida Law:** Final pay must be provided by the next regular payday following termination.
+**Ley de Florida:** El pago final debe realizarse en el siguiente día de pago regular posterior a la terminación.
 {{/if}}
-**{{state}} Requirements:** {{state_final_pay_requirements}}
+**Requisitos de {{state}}:** {{state_final_pay_requirements}}
 
-### 9.2 State Vacation Pay Laws
+### 9.2 Leyes estatales sobre pago de vacaciones
 
 {{#if state_california}}
-**California Law:** Accrued vacation must be paid out upon termination. "Use it or lose it" policies are prohibited.
+**Ley de California:** Las vacaciones acumuladas deben pagarse al momento de la terminación. Las políticas de "úsalo o piérdelo" están prohibidas.
 {{/if}}
 {{#if state_massachusetts}}
-**Massachusetts Law:** Accrued vacation must be paid if company policy provides for such payment.
+**Ley de Massachusetts:** Las vacaciones acumuladas deben pagarse si la política de la empresa lo prevé.
 {{/if}}
-**{{state}} Vacation Laws:** {{state_vacation_payout_requirements}}
+**Leyes de vacaciones en {{state}}:** {{state_vacation_payout_requirements}}
 
-### 9.3 WARN Act Compliance
+### 9.3 Cumplimiento de la Ley WARN
 
 {{#if warn_act_applicable}}
-**Worker Adjustment and Retraining Notification (WARN) Act:** This termination {{#if warn_notice_given}}has been preceded by the required 60-day notice{{else}}does not trigger WARN Act requirements{{/if}}.
+**Ley WARN (Worker Adjustment and Retraining Notification):** Esta terminación {{#if warn_notice_given}}se ha precedido del aviso requerido de 60 días{{else}}no activa las obligaciones de la Ley WARN{{/if}}.
 {{/if}}
 
-### 9.4 State Mini-WARN Laws
+### 9.4 Leyes estatales tipo Mini-WARN
 
 {{#if state_warn_law}}
-**{{state}} WARN Requirements:** {{state_warn_law_details}}
+**Requisitos WARN de {{state}}:** {{state_warn_law_details}}
 {{/if}}
 
-### 9.5 At-Will Employment Acknowledgment
+### 9.5 Reconocimiento de empleo a voluntad
 
 {{#if at_will_employment}}
-This termination is consistent with the at-will employment relationship. Either party may terminate the employment relationship at any time, with or without cause, and with or without notice.
+Esta terminación es consistente con la relación laboral a voluntad. Cualquiera de las partes puede terminar la relación laboral en cualquier momento, con o sin causa y con o sin aviso.
 {{/if}}
 
-### 9.6 State Discrimination Laws
+### 9.6 Leyes estatales contra la discriminación
 
-This termination is not based on any protected characteristic under federal, state, or local anti-discrimination laws, including but not limited to:
+Esta terminación no se basa en ninguna característica protegida conforme a las leyes federales, estatales o locales contra la discriminación, incluyendo entre otras:
 
-- Race, color, religion, sex, national origin, age, disability (federal protections)
+- Raza, color, religión, sexo, origen nacional, edad, discapacidad (protecciones federales)
 - {{state_protected_classes}}
 
-### 9.7 State Whistleblower Protections
+### 9.7 Protección a denunciantes
 
 {{#if whistleblower_protections}}
-This termination is not in retaliation for any protected whistleblower activity under {{state}} law.
+Esta terminación no constituye represalia por actividades protegidas de denuncia (whistleblower) bajo la ley de {{state}}.
 {{/if}}
 
-### 9.8 Right to Work Laws
+### 9.8 Leyes de derecho al trabajo
 
 {{#if right_to_work_state}}
-**{{state}} Right to Work:** This state has right-to-work laws. Union membership is not required for employment.
+**Derecho al trabajo en {{state}}:** Este estado cuenta con leyes de derecho al trabajo. La afiliación sindical no es requisito para el empleo.
 {{/if}}
 
 ---
 
-## 10. Federal Employment Law Compliance
+## 10. Cumplimiento con leyes laborales federales
 
-### 10.1 COBRA Notification Requirements
+### 10.1 Requisitos de notificación COBRA
 
 {{#if cobra_eligible}}
-**Federal COBRA Requirements:** You have the right to continue health insurance coverage under COBRA for up to 18 months (or 36 months for certain qualifying events). You must be provided written notice of COBRA rights within 44 days of termination.
+**Requisitos federales de COBRA:** Usted tiene derecho a continuar su cobertura de salud bajo COBRA hasta por 18 meses (o 36 meses en ciertos eventos). Debe recibir una notificación escrita de sus derechos COBRA dentro de los 44 días posteriores a la terminación.
 {{/if}}
 
-### 10.2 Equal Employment Opportunity
+### 10.2 Igualdad de oportunidades de empleo
 
-This termination complies with all federal EEO laws and is not based on any protected characteristic under Title VII, ADA, ADEA, or other federal anti-discrimination statutes.
+Esta terminación cumple con todas las leyes federales de igualdad de oportunidades y no se basa en ninguna característica protegida por el Título VII, la ADA, la ADEA u otros estatutos federales contra la discriminación.
 
-### 10.3 Family and Medical Leave Act (FMLA)
+### 10.3 Ley de Licencia Médica y Familiar (FMLA)
 
 {{#if fmla_eligible}}
-This termination does not violate your rights under the Family and Medical Leave Act.
+Esta terminación no afecta sus derechos conforme a la Ley de Licencia Médica y Familiar (FMLA).
 {{/if}}
 
-### 10.4 Worker Classification
+### 10.4 Clasificación de trabajadores
 
 {{#if contractor_classification}}
-**Independent Contractor Notice:** Please note that post-termination work arrangements must comply with proper worker classification laws.
+**Aviso al contratista independiente:** Cualquier relación de trabajo posterior a la terminación debe cumplir con las leyes de correcta clasificación de trabajadores.
 {{/if}}
 
 ---
 
-## 11. Legal Considerations
+## 11. Consideraciones legales
 
-### 11.1 Separation Agreement
+### 11.1 Acuerdo de separación
 
 {{#if separation_agreement}}
-A separation agreement is attached that addresses additional terms of your termination. Please review and sign if you agree to the terms.
+Se adjunta un acuerdo de separación que aborda términos adicionales de su terminación. Revíselo y fírmelo si está de acuerdo.
 {{/if}}
 
-### 11.2 Unemployment Benefits
+### 11.2 Beneficios de desempleo
 
 {{unemployment_benefits_info}}
 
-**State Requirements:** Under {{state}} law, we are required to provide information about unemployment benefits. Contact your state unemployment office at {{state_unemployment_contact}}.
+**Requisitos estatales:** Conforme a la ley de {{state}}, debemos proporcionarle información sobre los beneficios de desempleo. Comuníquese con la oficina estatal de desempleo en {{state_unemployment_contact}}.
 
-### 11.3 Dispute Resolution
+### 11.3 Resolución de disputas
 
 {{dispute_resolution_clause}}
 
-### 11.4 Legal Time Limits
+### 11.4 Plazos legales
 
 {{#if legal_time_limits}}
-**Important:** Certain legal claims have time limits. For example:
+**Importante:** Ciertas reclamaciones legales tienen plazos específicos. Por ejemplo:
 
-- Federal discrimination claims: 180 days (300 days in states with approved agencies)
-- State discrimination claims: {{state_discrimination_deadline}}
-- Wage and hour claims: {{state_wage_hour_deadline}}
+- Reclamaciones federales por discriminación: 180 días (300 días en estados con agencias autorizadas)
+- Reclamaciones estatales por discriminación: {{state_discrimination_deadline}}
+- Reclamaciones salariales y de horas: {{state_wage_hour_deadline}}
   {{/if}}
 
 ---
 
-## 12. Contact Information
+## 12. Información de contacto
 
-For questions regarding this termination or your final benefits, please contact:
+Para preguntas relacionadas con esta terminación o sus prestaciones finales, comuníquese con:
 
-**HR Contact:** {{hr_contact_name}}  
-**Phone:** {{hr_contact_phone}}  
-**Email:** {{hr_contact_email}}  
-**Office Hours:** {{hr_office_hours}}
+**Contacto de RR. HH.:** {{hr_contact_name}}  
+**Teléfono:** {{hr_contact_phone}}  
+**Correo electrónico:** {{hr_contact_email}}  
+**Horario de atención:** {{hr_office_hours}}
 
-**Payroll Questions:** {{payroll_contact}}  
-**Benefits Questions:** {{benefits_contact}}
+**Preguntas sobre nómina:** {{payroll_contact}}  
+**Preguntas sobre prestaciones:** {{benefits_contact}}
 
 ---
 
-## 13. Acknowledgment
+## 13. Acuse de recibo
 
-Please sign and return one copy of this letter to acknowledge receipt.
+Por favor, firme y devuelva una copia de esta carta para confirmar su recepción.
 
-I acknowledge that I have received and understand this Employment Termination Letter and the information contained herein.
+Reconozco que he recibido y entiendo esta Carta de Terminación de Empleo y la información contenida en ella.
 
-**Employee Acknowledgment:**
+**Acuse del empleado:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
-| {{employee_name}}                          |                    |
-| Print Name: {{employee_name}}              |                    |
+| {{employee_name}} | |
+| Nombre en letra de imprenta: {{employee_name}} | |
 
 ---
 
-## 14. Company Representative
+## 14. Representante de la empresa
 
-**Issued By:**
+**Emitido por:**
 
-| Signature                                  | Date                 |
+| Firma | Fecha |
 | ------------------------------------------ | -------------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{termination_date}} |
-| {{hr_representative_name}}                 |                      |
-| Title: {{hr_representative_title}}         |                      |
+| {{hr_representative_name}} | |
+| Cargo: {{hr_representative_title}} | |
 
 {{#if supervisor_signature_required}}
 **Supervisor:**
 
-| Signature                                  | Date                 |
+| Firma | Fecha |
 | ------------------------------------------ | -------------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{termination_date}} |
-| {{supervisor_name}}                        |                      |
-| Title: {{supervisor_title}}                |                      |
+| {{supervisor_name}} | |
+| Cargo: {{supervisor_title}} | |
 
 {{/if}}
 
 ---
 
-## 15. Important Reminders
+## 15. Recordatorios importantes
 
-- Return all company property by {{property_return_deadline}}
-- Review and retain this letter for your records
-- Contact HR with any questions about your final pay or benefits
-- {{#if cobra_eligible}}Watch for COBRA documentation in the mail{{/if}}
+- Devuelva toda la propiedad de la empresa a más tardar el {{property_return_deadline}}
+- Conserve esta carta para sus registros
+- Comuníquese con RR. HH. ante cualquier duda sobre su pago final o prestaciones
+- {{#if cobra_eligible}}Esté atento a la documentación de COBRA que llegará por correo{{/if}}
 - {{additional_reminders}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This employment termination letter should be reviewed by qualified legal counsel to ensure compliance with federal, state, and local employment laws. Termination procedures vary by jurisdiction and should follow proper legal protocols.
+**AVISO LEGAL IMPORTANTE:** Esta carta de terminación de empleo debe ser revisada por asesores legales calificados para garantizar el cumplimiento de las leyes laborales federales, estatales y locales. Los procedimientos de terminación varían según la jurisdicción y deben seguir los protocolos legales correspondientes.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

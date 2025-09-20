@@ -3,8 +3,6 @@
 
 import './globals.css';
 import localFont from 'next/font/local';
-import Script from 'next/script';
-import Head from 'next/head';
 import SEOConfig from '../../next-seo.config';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -19,7 +17,19 @@ const criticalCSS = (() => {
 })();
 
 export const metadata = {
-  title: SEOConfig.title, // Use imported config
+  title: SEOConfig.title,
+  description: SEOConfig.description,
+  alternates: {
+    languages: {
+      en: '/en/',
+      es: '/es/',
+    },
+  },
+} as const;
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 /* ------------------------------------------------------------------
@@ -44,80 +54,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Use the preview or production origin from env
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
-
-  const headElements = [
-    <meta
-      key="viewport"
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />,
-    <meta
-      key="description"
-      name="description"
-      content={SEOConfig.description}
-    />,
-    <title key="title">{SEOConfig.title}</title>,
-    // Enhanced font preloading for critical performance
-    <link
-      key="preload-inter"
-      rel="preload"
-      href="/fonts/Inter-Variable.woff2"
-      as="font"
-      type="font/woff2"
-      crossOrigin="anonymous"
-    />,
-    <link
-      key="preload-merriweather"
-      rel="preload"
-      href="/fonts/Merriweather-Variable.woff2"
-      as="font"
-      type="font/woff2"
-      crossOrigin="anonymous"
-    />,
-    // DNS prefetch for external resources
-    <link key="dns-firebase" rel="dns-prefetch" href="//firebasestorage.googleapis.com" />,
-    <link key="dns-google" rel="dns-prefetch" href="//fonts.googleapis.com" />,
-    <Script key="defer-css" id="defer-layout-css" strategy="beforeInteractive">
-      {`
-        const setup = () => {
-          const link = document.querySelector('link[href*="layout.css"]');
-          if (!link || link.dataset.processed) return;
-          link.dataset.processed = 'true';
-          const href = link.href;
-          const preload = document.createElement('link');
-          preload.rel = 'preload';
-          preload.as = 'style';
-          preload.href = href;
-          preload.fetchPriority = 'high';
-          document.head.appendChild(preload);
-          const style = document.createElement('link');
-          style.rel = 'stylesheet';
-          style.href = href;
-          style.media = 'print';
-          style.onload = () => (style.media = 'all');
-          document.head.appendChild(style);
-          link.remove();
-        };
-        (document.readyState === 'loading')
-          ? document.addEventListener('DOMContentLoaded', setup)
-          : setup();
-      `}
-    </Script>,
-    <link key="alt-en" rel="alternate" href={`${siteUrl}/en/`} hrefLang="en" />,
-    <link key="alt-es" rel="alternate" href={`${siteUrl}/es/`} hrefLang="es" />,
-    // Inline critical CSS for immediate rendering
-    criticalCSS && <style key="critical-css" dangerouslySetInnerHTML={{ __html: criticalCSS }} />,
-  ].filter(Boolean);
-
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
-      <Head>{headElements}</Head>
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
         suppressHydrationWarning
       >
+        {criticalCSS && (
+          <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
+        )}
         <script
           dangerouslySetInnerHTML={{
             __html: `

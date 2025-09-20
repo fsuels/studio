@@ -1,20 +1,62 @@
 // src/app/[locale]/HomePageClient.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
-import { Loader2 } from 'lucide-react';
-import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
 
+const SpinnerIcon = () => (
+  <svg
+    className="h-8 w-8 animate-spin text-primary"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+      fill="none"
+    />
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+    />
+  </svg>
+);
+
+const CheckIcon = ({ className = 'w-4 h-4 text-green-500' }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const CATEGORY_KEYS = new Set([
+  'Finance',
+  'Business',
+  'Real Estate',
+  'Family',
+  'Personal',
+  'Estate Planning',
+  'Employment',
+  'Miscellaneous',
+]);
+
 // Minimal loading spinner without text
 const _MinimalLoadingSpinner = () => (
-  <div className="flex justify-center items-center h-32">
-    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  <div className="flex justify-center items-center h-32" role="status" aria-live="polite">
+    <SpinnerIcon />
   </div>
 );
 
@@ -154,13 +196,12 @@ export default function HomePageClient() {
       setGlobalSearchTerm(searchFromQuery);
     }
 
-    if (categoryFromQuery && !selectedCategoryForFilter) {
-      const isValidCategory = CATEGORY_LIST.some(
-        (cat) => cat.key === categoryFromQuery,
-      );
-      if (isValidCategory) {
-        setSelectedCategoryForFilter(categoryFromQuery);
-      }
+    if (
+      categoryFromQuery &&
+      !selectedCategoryForFilter &&
+      CATEGORY_KEYS.has(categoryFromQuery)
+    ) {
+      setSelectedCategoryForFilter(categoryFromQuery);
     }
 
     // If a docId is provided, we could set a default category via a lightweight map.
@@ -235,7 +276,7 @@ export default function HomePageClient() {
                     </span>
                                     <span className="inline-flex items-center gap-1 text-green-700">
                   <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   <span>No questions asked</span>
                 </span>
@@ -295,19 +336,19 @@ export default function HomePageClient() {
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   <span>Smart Legal Templates</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   <span>Fast & Secure</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   <span>Editable in Real Time</span>
                 </div>

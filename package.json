@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:poll": "WATCHPACK_POLLING=true next dev --turbopack",
-    "dev:webpack": "next dev",
+    "dev": "cross-env WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=1 next dev",
+    "dev:poll": "cross-env WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=1 next dev --turbopack",
+    "dev:webpack": "cross-env WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=1 next dev",
+    "dev:turbopack": "cross-env WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=1 next dev --turbopack",
     "dev:alt": "next dev --turbopack -p 9003",
     "dev:collab": "ENABLE_COLLABORATION=true node collaboration-server.mjs",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 next build",

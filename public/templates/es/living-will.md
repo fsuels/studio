@@ -1,528 +1,525 @@
-﻿# Living Will (Advance Healthcare Directive)
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Testamento Vital (Directiva Anticipada de Atención Médica)
 
 ---
 
-**LIVING WILL**  
-**ADVANCE HEALTHCARE DIRECTIVE**
+**TESTAMENTO VITAL**  
+**DIRECTIVA ANTICIPADA DE ATENCIÓN MÉDICA**
 
-**State of {{state}}**
-
----
-
-## 1. Personal Information
-
-**I, {{declarant_name}}**, being of sound mind and at least 18 years of age, voluntarily make this Living Will and Advance Healthcare Directive.
-
-**Personal Information:**
-
-- **Full Name:** {{declarant_name}}
-- **Date of Birth:** {{declarant_dob}}
-- **Address:** {{declarant_address}}
-- **Phone:** {{declarant_phone}}
-- **Social Security #:** {{declarant_ssn}}
+**Estado de {{state}}**
 
 ---
 
-## 2. Purpose and Intent
+## 1. Información personal
 
-### 2.1 Declaration of Intent
+**Yo, {{declarant_name}}**, en pleno uso de mis facultades mentales y con al menos 18 años de edad, otorgo voluntariamente este Testamento Vital y Directiva Anticipada de Atención Médica.
 
-This Living Will is intended to provide guidance to my family, physicians, and other healthcare providers regarding my wishes for medical treatment in the event I become unable to communicate my decisions about my medical care.
+**Información personal:**
 
-### 2.2 Legal Authority
-
-This document is created under the authority of {{state}} law and is intended to be legally binding under state and federal law.
-
-### 2.3 Scope of Directive
-
-This directive applies when:
-
-- I am in a terminal condition
-- I am permanently unconscious
-- I am in an end-stage condition
-- I am otherwise unable to communicate my healthcare decisions
+- **Nombre completo:** {{declarant_name}}
+- **Fecha de nacimiento:** {{declarant_dob}}
+- **Domicilio:** {{declarant_address}}
+- **Teléfono:** {{declarant_phone}}
+- **Número de Seguro Social:** {{declarant_ssn}}
 
 ---
 
-## 3. Definition of Terms
+## 2. Finalidad e intención
 
-### 3.1 Terminal Condition
+### 2.1 Declaración de intención
 
-A terminal condition means an incurable condition caused by injury, disease, or illness that, according to reasonable medical judgment, will cause death within a relatively short time with or without the application of life-sustaining treatment.
+Este Testamento Vital tiene como objetivo orientar a mi familia, médicos y demás proveedores de salud sobre mis deseos de tratamiento médico en caso de que no pueda comunicar mis decisiones sobre mi atención médica.
 
-### 3.2 Permanently Unconscious State
+### 2.2 Autoridad legal
 
-A permanently unconscious state means an incurable condition in which I am not aware of myself or my environment and show no behavioral response to the environment.
+Este documento se emite al amparo de la legislación de {{state}} y está destinado a tener fuerza legal conforme a las leyes estatales y federales.
 
-### 3.3 End-Stage Condition
+### 2.3 Alcance de la directiva
 
-An end-stage condition means an incurable condition that has resulted in progressively severe and permanent deterioration, and for which treatment would be ineffective.
+Esta directiva se aplica cuando:
 
-### 3.4 Life-Sustaining Treatment
-
-Life-sustaining treatment means any medical intervention, technology, procedure, or medication that is administered to delay the moment of death.
+- Me encuentro en una condición terminal
+- Estoy en un estado de inconsciencia permanente
+- Presento una condición en etapa terminal
+- De otro modo no puedo comunicar mis decisiones de atención médica
 
 ---
 
-## 4. Healthcare Directives
+## 3. Definición de términos
 
-### 4.1 Terminal Condition Directives
+### 3.1 Condición terminal
+
+Una condición terminal es una afección incurable causada por lesión, enfermedad o dolencia que, según el juicio médico razonable, provocará la muerte en un plazo relativamente corto con o sin la aplicación de tratamientos para sostener la vida.
+
+### 3.2 Estado de inconsciencia permanente
+
+Un estado de inconsciencia permanente es una condición incurable en la que no tengo conciencia de mí mismo ni de mi entorno y no muestro respuesta conductual ante el entorno.
+
+### 3.3 Condición en etapa terminal
+
+Una condición en etapa terminal es una afección incurable que ha provocado un deterioro progresivo, grave y permanente, y para la cual el tratamiento sería ineficaz.
+
+### 3.4 Tratamiento para sostener la vida
+
+Tratamiento para sostener la vida significa cualquier intervención, tecnología, procedimiento o medicamento administrado para retrasar el momento de la muerte.
+
+---
+
+## 4. Directivas de atención médica
+
+### 4.1 Directivas en caso de condición terminal
 
 {{#if terminal_condition_directive}}
-**If I am in a terminal condition:** {{terminal_condition_wishes}}
+**Si me encuentro en una condición terminal:** {{terminal_condition_wishes}}
 
 {{#if withhold_life_sustaining_treatment}}
-â˜ **WITHHOLD** life-sustaining treatment, including but not limited to:
+- [ ] **SUSPENDER** los tratamientos para sostener la vida, incluyendo entre otros:
 
-- Mechanical ventilation/respirators
-- Artificial nutrition and hydration
-- Cardiopulmonary resuscitation (CPR)
-- Dialysis
-- Antibiotics for life-threatening infections
+- Ventilación mecánica/respiradores
+- Nutrición e hidratación artificial
+- Reanimación cardiopulmonar (RCP)
+- Diálisis
+- Antibióticos para infecciones potencialmente mortales
 - {{additional_treatments_to_withhold}}
   {{/if}}
 
 {{#if provide_comfort_care}}
-â˜ **PROVIDE** comfort care and pain relief, even if it may hasten death
+- [ ] **PROPORCIONAR** cuidados paliativos y alivio del dolor, aun si ello pudiera acelerar la muerte
 {{/if}}
 {{/if}}
 
-### 4.2 Permanently Unconscious State Directives
+### 4.2 Directivas en caso de inconsciencia permanente
 
 {{#if unconscious_state_directive}}
-**If I am in a permanently unconscious state:** {{unconscious_state_wishes}}
+**Si me encuentro en un estado de inconsciencia permanente:** {{unconscious_state_wishes}}
 
 {{#if withhold_life_sustaining_unconscious}}
-â˜ **WITHHOLD** life-sustaining treatment
-â˜ **PROVIDE** comfort care only
+- [ ] **SUSPENDER** los tratamientos para sostener la vida
+- [ ] **PROPORCIONAR** únicamente cuidados de confort
 {{/if}}
 {{/if}}
 
-### 4.3 End-Stage Condition Directives
+### 4.3 Directivas en caso de condición en etapa terminal
 
 {{#if end_stage_directive}}
-**If I am in an end-stage condition:** {{end_stage_wishes}}
+**Si me encuentro en una condición en etapa terminal:** {{end_stage_wishes}}
 {{/if}}
 
 ---
 
-## 5. Specific Medical Instructions
+## 5. Instrucciones médicas específicas
 
-### 5.1 Cardiopulmonary Resuscitation (CPR)
+### 5.1 Reanimación cardiopulmonar (RCP)
 
 {{#if cpr_wishes}}
-**CPR Instructions:** {{cpr_directive}}
+**Instrucciones sobre RCP:** {{cpr_directive}}
 {{else}}
-â˜ I DO want CPR attempted
-â˜ I DO NOT want CPR attempted
-â˜ I want CPR attempted only if the situation allows for a reasonable chance of recovery
+- [ ] Quiero que se intente la RCP
+- [ ] NO quiero que se intente la RCP
+- [ ] Deseo que se intente la RCP solo si la situación ofrece una posibilidad razonable de recuperación
 {{/if}}
 
-### 5.2 Mechanical Ventilation
+### 5.2 Ventilación mecánica
 
 {{#if ventilation_wishes}}
-**Ventilation Instructions:** {{ventilation_directive}}
+**Instrucciones sobre ventilación:** {{ventilation_directive}}
 {{else}}
-â˜ I DO want mechanical ventilation
-â˜ I DO NOT want mechanical ventilation
-â˜ I want mechanical ventilation for a trial period of {{trial_period}} days
+- [ ] Deseo ventilación mecánica
+- [ ] NO deseo ventilación mecánica
+- [ ] Deseo ventilación mecánica por un periodo de prueba de {{trial_period}} días
 {{/if}}
 
-### 5.3 Artificial Nutrition and Hydration
+### 5.3 Nutrición e hidratación artificial
 
 {{#if nutrition_wishes}}
-**Nutrition/Hydration Instructions:** {{nutrition_directive}}
+**Instrucciones sobre nutrición/hidratación:** {{nutrition_directive}}
 {{else}}
-â˜ I DO want artificial nutrition and hydration
-â˜ I DO NOT want artificial nutrition and hydration
-â˜ I want artificial nutrition and hydration for a limited time period
+- [ ] Deseo nutrición e hidratación artificial
+- [ ] NO deseo nutrición e hidratación artificial
+- [ ] Deseo nutrición e hidratación artificial por un periodo limitado
 {{/if}}
 
-### 5.4 Dialysis
+### 5.4 Diálisis
 
 {{#if dialysis_wishes}}
-**Dialysis Instructions:** {{dialysis_directive}}
+**Instrucciones sobre diálisis:** {{dialysis_directive}}
 {{else}}
-â˜ I DO want dialysis
-â˜ I DO NOT want dialysis
-â˜ I want dialysis only if there is a reasonable chance of recovery
+- [ ] Deseo recibir diálisis
+- [ ] NO deseo recibir diálisis
+- [ ] Deseo diálisis solo si existe una probabilidad razonable de recuperación
 {{/if}}
 
-### 5.5 Antibiotics
+### 5.5 Antibióticos
 
 {{#if antibiotics_wishes}}
-**Antibiotic Instructions:** {{antibiotics_directive}}
+**Instrucciones sobre antibióticos:** {{antibiotics_directive}}
 {{else}}
-â˜ I DO want antibiotics for life-threatening infections
-â˜ I DO NOT want antibiotics for life-threatening infections
-â˜ I want antibiotics for comfort purposes only
+- [ ] Deseo antibióticos para infecciones potencialmente mortales
+- [ ] NO deseo antibióticos para infecciones potencialmente mortales
+- [ ] Deseo antibióticos únicamente con fines de confort
 {{/if}}
 
-### 5.6 Surgery
+### 5.6 Cirugía
 
 {{#if surgery_wishes}}
-**Surgery Instructions:** {{surgery_directive}}
+**Instrucciones sobre cirugía:** {{surgery_directive}}
 {{else}}
-â˜ I DO want surgery if it may be beneficial
-â˜ I DO NOT want surgery
-â˜ I want surgery only for comfort purposes
+- [ ] Deseo cirugía si puede resultar beneficiosa
+- [ ] NO deseo cirugía
+- [ ] Deseo cirugía solo con fines de confort
 {{/if}}
 
 ---
 
-## 6. Pain Management and Comfort Care
+## 6. Manejo del dolor y cuidados de confort
 
-### 6.1 Pain Relief
+### 6.1 Alivio del dolor
 
 {{#if pain_relief_directive}}
-**Pain Management Instructions:** {{pain_relief_wishes}}
+**Instrucciones sobre manejo del dolor:** {{pain_relief_wishes}}
 {{else}}
-â˜ I want all necessary pain medication, even if it shortens my life
-â˜ I want pain medication that does not shorten my life
-â˜ I want minimal pain medication
+- [ ] Deseo todos los medicamentos necesarios para el dolor, aun si acortan mi vida
+- [ ] Deseo medicación para el dolor que no acorte mi vida
+- [ ] Deseo la mínima medicación posible para el dolor
 {{/if}}
 
-### 6.2 Comfort Measures
+### 6.2 Medidas de confort
 
-**Comfort Care Instructions:** {{comfort_care_wishes}}
+**Instrucciones de cuidados de confort:** {{comfort_care_wishes}}
 
-I want the following comfort measures:
+Deseo las siguientes medidas de confort:
 
-- Keep me clean and comfortable
-- Provide emotional and spiritual support
-- Allow family and friends to visit
+- Mantenerme limpio(a) y cómodo(a)
+- Brindar apoyo emocional y espiritual
+- Permitir visitas de familiares y amigos
 - {{additional_comfort_measures}}
 
-### 6.3 Palliative Care
+### 6.3 Cuidados paliativos
 
 {{#if palliative_care_wishes}}
-**Palliative Care:** {{palliative_care_directive}}
+**Cuidados paliativos:** {{palliative_care_directive}}
 {{/if}}
 
 ---
 
-## 7. Organ and Tissue Donation
+## 7. Donación de órganos y tejidos
 
-### 7.1 Donation Wishes
+### 7.1 Deseos de donación
 
 {{#if organ_donation}}
-**Organ Donation:** {{organ_donation_wishes}}
+**Donación de órganos:** {{organ_donation_wishes}}
 
 {{#if donate_all_organs}}
-â˜ I want to donate all suitable organs and tissues
+- [ ] Deseo donar todos los órganos y tejidos adecuados
 {{/if}}
 
 {{#if specific_organ_donation}}
-â˜ I want to donate only the following organs/tissues: {{specific_organs}}
+- [ ] Deseo donar únicamente los siguientes órganos/tejidos: {{specific_organs}}
 {{/if}}
 
 {{#if no_organ_donation}}
-â˜ I DO NOT want to donate any organs or tissues
+- [ ] NO deseo donar órganos ni tejidos
 {{/if}}
 {{else}}
-â˜ I want to donate all suitable organs and tissues
-â˜ I want to donate specific organs: **\*\***\_\_\_\_**\*\***
-â˜ I DO NOT want to donate organs or tissues
+- [ ] Deseo donar todos los órganos y tejidos adecuados
+- [ ] Deseo donar órganos específicos: **\*\***\_\_\_\_**\*\***
+- [ ] NO deseo donar órganos ni tejidos
 {{/if}}
 
-### 7.2 Donation Procedures
+### 7.2 Procedimientos de donación
 
 {{#if donation_procedures}}
-**Special Instructions for Donation:** {{donation_instructions}}
+**Instrucciones especiales para la donación:** {{donation_instructions}}
 {{/if}}
 
 ---
 
-## 8. Pregnancy Considerations
+## 8. Consideraciones sobre embarazo
 
 {{#if pregnancy_directive}}
 
-### 8.1 Pregnancy Instructions
+### 8.1 Instrucciones durante el embarazo
 
-**If I am pregnant:** {{pregnancy_wishes}}
+**Si estoy embarazada:** {{pregnancy_wishes}}
 {{else}}
-**If I am pregnant when this directive would otherwise take effect, I direct that:**
-â˜ This directive should be followed regardless of pregnancy
-â˜ Life-sustaining treatment should be provided until the fetus is viable
-â˜ Other instructions: ******\*\*******\_\_\_\_******\*\*******
+**Si estoy embarazada cuando esta directiva deba surtir efecto, dispongo que:**
+- [ ] Esta directiva se aplique sin importar el embarazo
+- [ ] Se proporcionen tratamientos para sostener la vida hasta que el feto sea viable
+- [ ] Otras instrucciones: ******\*\*******\_\_\_\_******\*\*******
 {{/if}}
 
 ---
 
-## 9. Religious and Spiritual Considerations
+## 9. Consideraciones religiosas y espirituales
 
-### 9.1 Religious Preferences
+### 9.1 Preferencias religiosas
 
 {{#if religious_preferences}}
-**Religious/Spiritual Instructions:** {{religious_wishes}}
+**Instrucciones religiosas/espirituales:** {{religious_wishes}}
 
-**Religious Leader to Contact:**
+**Líder religioso a contactar:**
 
-- **Name:** {{religious_leader_name}}
-- **Title:** {{religious_leader_title}}
-- **Phone:** {{religious_leader_phone}}
-- **Religious Affiliation:** {{religious_affiliation}}
+- **Nombre:** {{religious_leader_name}}
+- **Título:** {{religious_leader_title}}
+- **Teléfono:** {{religious_leader_phone}}
+- **Afiliación religiosa:** {{religious_affiliation}}
   {{/if}}
 
-### 9.2 Spiritual Care
+### 9.2 Atención espiritual
 
 {{#if spiritual_care_wishes}}
-**Spiritual Care Instructions:** {{spiritual_care_directive}}
+**Instrucciones de atención espiritual:** {{spiritual_care_directive}}
 {{/if}}
 
 ---
 
-## 10. Duration and Revocation
+## 10. Duración y revocación
 
-### 10.1 Effective Period
+### 10.1 Periodo de vigencia
 
-This Living Will shall remain in effect until:
+Este Testamento Vital permanecerá vigente hasta que:
 
-- I revoke it in writing
-- I create a new Living Will that supersedes this one
+- Lo revoque por escrito
+- Elabore un nuevo Testamento Vital que lo sustituya
 - {{additional_termination_conditions}}
 
-### 10.2 Revocation Process
+### 10.2 Proceso de revocación
 
-I may revoke this Living Will at any time by:
+Puedo revocar este Testamento Vital en cualquier momento mediante:
 
-- Destroying this document
-- Writing a new Living Will
-- Orally expressing my intent to revoke in the presence of witnesses
-- Any other method recognized under {{state}} law
+- Destruir este documento
+- Redactar un nuevo Testamento Vital
+- Expresar oralmente mi intención de revocarlo ante testigos
+- Cualquier otro método reconocido por la ley de {{state}}
 
-### 10.3 Updates and Modifications
+### 10.3 Actualizaciones y modificaciones
 
-I should review and update this document:
+Debo revisar y actualizar este documento:
 
-- Every 5 years
-- After major life changes
-- After changes in my health status
-- When laws change
+- Cada 5 años
+- Después de cambios importantes en mi vida
+- Tras cambios en mi estado de salud
+- Cuando cambie la legislación aplicable
 
 ---
 
-## 11. Healthcare Agent/Proxy Designation
+## 11. Designación de representante o apoderado para la atención médica
 
 {{#if healthcare_agent_designated}}
 
-### 11.1 Primary Healthcare Agent
+### 11.1 Representante principal de atención médica
 
-I designate the following person as my healthcare agent to make medical decisions for me if I cannot make them myself:
+Designo a la siguiente persona como mi representante para tomar decisiones médicas en mi nombre si yo no puedo tomarlas:
 
-**Primary Agent:**
+**Representante principal:**
 
-- **Name:** {{primary_agent_name}}
-- **Relationship:** {{primary_agent_relationship}}
-- **Address:** {{primary_agent_address}}
-- **Phone:** {{primary_agent_phone}}
-- **Email:** {{primary_agent_email}}
+- **Nombre:** {{primary_agent_name}}
+- **Relación:** {{primary_agent_relationship}}
+- **Domicilio:** {{primary_agent_address}}
+- **Teléfono:** {{primary_agent_phone}}
+- **Correo electrónico:** {{primary_agent_email}}
 
-### 11.2 Alternate Healthcare Agent
+### 11.2 Representante alterno de atención médica
 
-If my primary agent is unavailable, I designate:
+Si mi representante principal no está disponible, designo a:
 
-**Alternate Agent:**
+**Representante alterno:**
 
-- **Name:** {{alternate_agent_name}}
-- **Relationship:** {{alternate_agent_relationship}}
-- **Address:** {{alternate_agent_address}}
-- **Phone:** {{alternate_agent_phone}}
+- **Nombre:** {{alternate_agent_name}}
+- **Relación:** {{alternate_agent_relationship}}
+- **Domicilio:** {{alternate_agent_address}}
+- **Teléfono:** {{alternate_agent_phone}}
 
-### 11.3 Agent Authority
+### 11.3 Facultades del representante
 
-My healthcare agent has authority to:
+Mi representante de atención médica tiene la facultad de:
 
-- Make medical treatment decisions according to this Living Will
-- Access my medical records
-- Communicate with healthcare providers
+- Tomar decisiones de tratamiento médico conforme a este Testamento Vital
+- Acceder a mis expedientes médicos
+- Comunicarse con los proveedores de servicios de salud
 - {{additional_agent_powers}}
 
-### 11.4 Agent Limitations
+### 11.4 Limitaciones del representante
 
-My healthcare agent may NOT:
+Mi representante de atención médica NO puede:
 
-- Override my specific directives in this document
+- Contravenir las directrices específicas de este documento
 - {{agent_limitations}}
   {{else}}
-  **I have NOT designated a healthcare agent.** Medical decisions should be made according to this Living Will and applicable law.
+  **NO he designado un representante de atención médica.** Las decisiones médicas deberán tomarse conforme a este Testamento Vital y a la legislación aplicable.
   {{/if}}
 
 ---
 
-## 12. Family Notification
+## 12. Notificación a la familia
 
-### 12.1 People to Notify
+### 12.1 Personas a notificar
 
-**Please notify the following people of my condition:**
+**Por favor, notificar a las siguientes personas sobre mi condición:**
 
-**Primary Contact:**
+**Contacto principal:**
 
-- **Name:** {{primary_contact_name}}
-- **Relationship:** {{primary_contact_relationship}}
-- **Phone:** {{primary_contact_phone}}
+- **Nombre:** {{primary_contact_name}}
+- **Relación:** {{primary_contact_relationship}}
+- **Teléfono:** {{primary_contact_phone}}
 
-**Additional Contacts:**
+**Contactos adicionales:**
 
 - {{contact_2_name}} ({{contact_2_relationship}}) - {{contact_2_phone}}
 - {{contact_3_name}} ({{contact_3_relationship}}) - {{contact_3_phone}}
 - {{additional_contacts}}
 
-### 12.2 Visitation Wishes
+### 12.2 Deseos sobre visitas
 
 {{#if visitation_wishes}}
-**Visitation Instructions:** {{visitation_directive}}
+**Instrucciones sobre visitas:** {{visitation_directive}}
 {{/if}}
 
 ---
 
-## 13. Additional Instructions
+## 13. Instrucciones adicionales
 
-### 13.1 Special Circumstances
+### 13.1 Circunstancias especiales
 
 {{#if special_circumstances}}
-**Special Medical Circumstances:** {{special_circumstances_directive}}
+**Circunstancias médicas especiales:** {{special_circumstances_directive}}
 {{/if}}
 
-### 13.2 Location Preferences
+### 13.2 Preferencias de ubicación
 
 {{#if location_preferences}}
-**Preferred Location for Care:** {{care_location_wishes}}
+**Lugar preferido para recibir atención:** {{care_location_wishes}}
 {{/if}}
 
-### 13.3 Other Wishes
+### 13.3 Otros deseos
 
 {{#if other_wishes}}
-**Additional Instructions:** {{other_instructions}}
+**Instrucciones adicionales:** {{other_instructions}}
 {{/if}}
 
 ---
 
-## 14. Legal Acknowledgments
+## 14. Declaraciones legales
 
-### 14.1 Mental Competency
+### 14.1 Capacidad mental
 
-I am of sound mind and under no duress, fraud, or undue influence. I understand the nature and consequences of this Living Will.
+Estoy en pleno uso de mis facultades y no actúo bajo coacción, fraude ni influencia indebida. Comprendo la naturaleza y las consecuencias de este Testamento Vital.
 
-### 14.2 Medical Understanding
+### 14.2 Comprensión médica
 
-I understand that my condition may change and that medical technology may advance. This directive reflects my wishes based on my current understanding.
+Entiendo que mi condición puede cambiar y que la tecnología médica puede avanzar. Esta directiva refleja mis deseos según mi entendimiento actual.
 
-### 14.3 Legal Effect
+### 14.3 Efecto legal
 
-I understand that this document has legal force and effect under the laws of {{state}}.
+Comprendo que este documento tiene fuerza y efecto legales conforme a las leyes de {{state}}.
 
-### 14.4 Healthcare Provider Instructions
+### 14.4 Instrucciones para proveedores de salud
 
-I direct that healthcare providers who are unwilling or unable to comply with this directive transfer my care to providers who will honor my wishes.
+Ordeno que cualquier proveedor de salud que no pueda o no desee cumplir esta directiva transfiera mi atención a profesionales que respeten mis deseos.
 
 ---
 
-## 15. Signatures and Witnesses
+## 15. Firmas y testigos
 
-### 15.1 Declarant Signature
+### 15.1 Firma del declarante
 
-**EXECUTED** on **{{execution_date}}** at {{execution_location}}.
+**FIRMADO** el **{{execution_date}}** en {{execution_location}}.
 
-**DECLARANT:**
+**DECLARANTE:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
-| {{declarant_name}}                         |                    |
-| Print Name: {{declarant_name}}             |                    |
+| {{declarant_name}} | |
+| Nombre en letra de imprenta: {{declarant_name}} | |
 
-### 15.2 Witness Requirements
+### 15.2 Requisitos de los testigos
 
 {{#if witnesses_required}}
-**WITNESSES:**
+**TESTIGOS:**
 
-This document was signed in our presence. We believe the declarant to be of sound mind and under no duress.
+Este documento fue firmado en nuestra presencia. Consideramos que el declarante está en pleno uso de sus facultades y no actúa bajo coacción.
 
-**WITNESS 1:**
+**TESTIGO 1:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
-| {{witness_1_name}}                         |                    |
-| Address: {{witness_1_address}}             |                    |
+| {{witness_1_name}} | |
+| Domicilio: {{witness_1_address}} | |
 
-**WITNESS 2:**
+**TESTIGO 2:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{execution_date}} |
-| {{witness_2_name}}                         |                    |
-| Address: {{witness_2_address}}             |                    |
+| {{witness_2_name}} | |
+| Domicilio: {{witness_2_address}} | |
 
-**Witness Qualifications:**
+**Calificaciones de los testigos:**
 
-- Neither witness is related to the declarant
-- Neither witness stands to inherit from the declarant
-- Neither witness is directly involved in the declarant's medical care
+- Ninguno de los testigos está relacionado con el declarante
+- Ninguno de los testigos tiene derecho a heredar del declarante
+- Ninguno de los testigos participa directamente en la atención médica del declarante
   {{/if}}
 
 ---
 
-## 16. Notarization
+## 16. Notarización
 
 {{#if notarization_required}}
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-On this **{{execution_date}}**, before me personally appeared {{declarant_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity.
+En esta fecha **{{execution_date}}**, compareció personalmente ante mí {{declarant_name}}, quien demostró mediante pruebas satisfactorias ser la persona cuyo nombre aparece en este instrumento y reconoció que lo firmó en su carácter autorizado.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+Certifico BAJO PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que el párrafo anterior es verdadero y correcto.
 
-**WITNESS** my hand and official seal.
+**DOY FE** con mi firma y sello oficial.
 
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notario Público:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Mi comisión expira:** ****\*\*\*\*****\_****\*\*\*\*****
 
-**[Notary Seal]**
+**[Sello del notario]**
 {{/if}}
 
 ---
 
-## 17. Healthcare Provider Acknowledgment
+## 17. Reconocimiento del proveedor de atención médica
 
 {{#if provider_acknowledgment}}
-**HEALTHCARE PROVIDER ACKNOWLEDGMENT:**
+**RECONOCIMIENTO DEL PROVEEDOR DE SALUD:**
 
-I have received a copy of this Living Will and have placed it in the patient's medical record. I understand and will comply with the directives contained herein.
+He recibido una copia de este Testamento Vital y la he incorporado al expediente médico del paciente. Entiendo y cumpliré las directivas aquí contenidas.
 
-**Provider:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Title:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Date:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Medical Facility:** ******\*\*\*\*******\_******\*\*\*\*******
+**Proveedor:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Cargo:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Fecha:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Centro médico:** ******\*\*\*\*******\_******\*\*\*\*******
 {{/if}}
 
 ---
 
-## 18. Distribution and Storage
+## 18. Distribución y resguardo
 
-### 18.1 Copies Provided To:
+### 18.1 Copias entregadas a:
 
-â˜ Primary healthcare agent  
-â˜ Alternate healthcare agent  
-â˜ Primary care physician  
-â˜ Hospital/medical facility  
-â˜ Family members  
-â˜ Attorney  
-â˜ {{additional_copy_recipients}}
+- [ ] Agente principal de atención médica  
+- [ ] Agente de atención médica alterno  
+- [ ] Médico de cabecera  
+- [ ] Hospital/centro médico  
+- [ ] Miembros de la familia  
+- [ ] Abogado  
+- [ ] {{additional_copy_recipients}}
 
-### 18.2 Storage Location
+### 18.2 Lugar de resguardo
 
-**Original Document Stored At:** {{storage_location}}  
-**Additional Copies At:** {{additional_storage_locations}}
+**Documento original resguardado en:** {{storage_location}}  
+**Copias adicionales en:** {{additional_storage_locations}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This living will should be reviewed by qualified legal and medical professionals to ensure compliance with state advance directive laws and to address individual medical circumstances. Living will laws vary significantly by state, and this document should be reviewed with healthcare providers to ensure it can be properly implemented.
+**AVISO LEGAL IMPORTANTE:** Este testamento vital debe ser revisado por profesionales legales y médicos calificados para garantizar el cumplimiento con las leyes estatales sobre directivas anticipadas y para atender circunstancias médicas particulares. La normativa sobre testamentos vitales varía significativamente entre estados, y este documento debe revisarse con los proveedores de salud para asegurar su correcta implementación.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

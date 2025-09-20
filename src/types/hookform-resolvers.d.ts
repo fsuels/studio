@@ -1,4 +1,4 @@
-import type { ZodTypeAny } from 'zod';
+import type { ZodTypeAny, infer as ZodInfer } from 'zod';
 import type { Resolver } from 'react-hook-form';
 
 declare module '@hookform/resolvers/zod' {
@@ -6,5 +6,5 @@ declare module '@hookform/resolvers/zod' {
     schema: TSchema,
     schemaOptions?: unknown,
     resolverOptions?: unknown
-  ): Resolver<any, any>;
+  ): Resolver<ZodInfer<TSchema>, Record<string, unknown>>;
 }

@@ -34,7 +34,7 @@ const nextConfig = {
 
   /* —──────── Enhanced image optimization —──────── */
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: process.env.USE_NEXT_IMAGE_OPTIMIZATION === 'true' ? false : true, // Required for static export
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
@@ -396,3 +396,5 @@ if (process.env.NODE_ENV === 'production' && !process.env.NEXT_TURBOPACK) {
 }
 
 export default withBundleAnalyzer(nextConfig);
+
+

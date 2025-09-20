@@ -1,665 +1,662 @@
-﻿# Divorce Settlement Agreement
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Acuerdo de Liquidación de Divorcio
 
 ---
 
-**DIVORCE SETTLEMENT AGREEMENT**
+**ACUERDO DE LIQUIDACIÓN DE DIVORCIO**
 
-This Divorce Settlement Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
+Este Acuerdo de Liquidación de Divorcio ("Acuerdo") se celebra el **{{agreement_date}}** entre:
 
-- **Petitioner/Plaintiff:** {{petitioner_name}}, residing at {{petitioner_address}}
-- **Respondent/Defendant:** {{respondent_name}}, residing at {{respondent_address}}
+- **Parte demandante/peticionaria:** {{petitioner_name}}, con domicilio en {{petitioner_address}}
+- **Parte demandada/respondente:** {{respondent_name}}, con domicilio en {{respondent_address}}
 
-Collectively referred to herein as the "Parties."
-
----
-
-## 1. Party Identification
-
-### 1.1 Petitioner/Plaintiff Identification
-
-**Full Legal Name:** {{petitioner_name}}  
-**Date of Birth:** {{petitioner_dob}}  
-**Social Security Number:** {{petitioner_ssn}}  
-**Driver's License:** {{petitioner_license}}  
-**Current Address:** {{petitioner_address}}  
-**Phone Number:** {{petitioner_phone}}  
-**Email Address:** {{petitioner_email}}  
-**Occupation:** {{petitioner_occupation}}  
-**Employer:** {{petitioner_employer}}
-
-### 1.2 Respondent/Defendant Identification
-
-**Full Legal Name:** {{respondent_name}}  
-**Date of Birth:** {{respondent_dob}}  
-**Social Security Number:** {{respondent_ssn}}  
-**Driver's License:** {{respondent_license}}  
-**Current Address:** {{respondent_address}}  
-**Phone Number:** {{respondent_phone}}  
-**Email Address:** {{respondent_email}}  
-**Occupation:** {{respondent_occupation}}  
-**Employer:** {{respondent_employer}}
+Denominadas conjuntamente las "Partes".
 
 ---
 
-## 2. Background and Recitals
+## 1. Identificación de las Partes
 
-### 2.1 Marriage Information
+### 1.1 Identificación de la parte demandante/peticionaria
 
-**Date of Marriage:** {{marriage_date}}  
-**Place of Marriage:** {{marriage_location}}  
-**Marriage Certificate Number:** {{marriage_certificate_number}}
+**Nombre legal completo:** {{petitioner_name}}  
+**Fecha de nacimiento:** {{petitioner_dob}}  
+**Número de Seguro Social:** {{petitioner_ssn}}  
+**Licencia de conducir:** {{petitioner_license}}  
+**Domicilio actual:** {{petitioner_address}}  
+**Número telefónico:** {{petitioner_phone}}  
+**Correo electrónico:** {{petitioner_email}}  
+**Ocupación:** {{petitioner_occupation}}  
+**Empleador:** {{petitioner_employer}}
 
-### 1.2 Separation Information
+### 1.2 Identificación de la parte demandada/respondente
 
-**Date of Separation:** {{separation_date}}  
-**Reason for Separation:** {{separation_reason}}
+**Nombre legal completo:** {{respondent_name}}  
+**Fecha de nacimiento:** {{respondent_dob}}  
+**Número de Seguro Social:** {{respondent_ssn}}  
+**Licencia de conducir:** {{respondent_license}}  
+**Domicilio actual:** {{respondent_address}}  
+**Número telefónico:** {{respondent_phone}}  
+**Correo electrónico:** {{respondent_email}}  
+**Ocupación:** {{respondent_occupation}}  
+**Empleador:** {{respondent_employer}}
 
-### 1.3 Divorce Proceeding
+---
 
-**Court:** {{court_name}}  
-**Case Number:** {{case_number}}  
-**Filing Date:** {{filing_date}}  
-**Divorce Type:** {{divorce_type}} (Contested/Uncontested/No-Fault)
+## 2. Antecedentes y declaraciones
 
-### 1.4 Legal Representation
+### 2.1 Información matrimonial
+
+**Fecha del matrimonio:** {{marriage_date}}  
+**Lugar del matrimonio:** {{marriage_location}}  
+**Número del acta de matrimonio:** {{marriage_certificate_number}}
+
+### 1.2 Información sobre la separación
+
+**Fecha de separación:** {{separation_date}}  
+**Motivo de la separación:** {{separation_reason}}
+
+### 1.3 Procedimiento de divorcio
+
+**Tribunal:** {{court_name}}  
+**Número de expediente:** {{case_number}}  
+**Fecha de presentación:** {{filing_date}}  
+**Tipo de divorcio:** {{divorce_type}} (Contencioso/No contencioso/Sin culpa)
+
+### 1.4 Representación legal
 
 {{#if legal_representation}}
-**Petitioner's Attorney:** {{petitioner_attorney}}  
-**Respondent's Attorney:** {{respondent_attorney}}
+**Abogado(a) de la parte peticionaria:** {{petitioner_attorney}}  
+**Abogado(a) de la parte respondente:** {{respondent_attorney}}
 {{else}}
-Both parties are representing themselves pro se in this matter.
+Ambas Partes se representan a sí mismas (pro se) en este asunto.
 {{/if}}
 
 ---
 
-## 3. Children of the Marriage
+## 3. Hijos del matrimonio
 
-### 2.1 Minor Children
+### 2.1 Hijos menores
 
 {{#if minor_children}}
-The Parties have the following minor child(ren):
+Las Partes tienen los siguientes hijos menores:
 
-**Child 1:**
+**Hijo(a) 1:**
 
-- **Name:** {{child_1_name}}
-- **Date of Birth:** {{child_1_dob}}
-- **Age:** {{child_1_age}}
-- **Social Security #:** {{child_1_ssn}}
+- **Nombre:** {{child_1_name}}
+- **Fecha de nacimiento:** {{child_1_dob}}
+- **Edad:** {{child_1_age}}
+- **Número de Seguro Social:** {{child_1_ssn}}
 
 {{#if child_2_name}}
-**Child 2:**
+**Hijo(a) 2:**
 
-- **Name:** {{child_2_name}}
-- **Date of Birth:** {{child_2_dob}}
-- **Age:** {{child_2_age}}
-- **Social Security #:** {{child_2_ssn}}
+- **Nombre:** {{child_2_name}}
+- **Fecha de nacimiento:** {{child_2_dob}}
+- **Edad:** {{child_2_age}}
+- **Número de Seguro Social:** {{child_2_ssn}}
   {{/if}}
 
 {{#if child_3_name}}
-**Child 3:**
+**Hijo(a) 3:**
 
-- **Name:** {{child_3_name}}
-- **Date of Birth:** {{child_3_dob}}
-- **Age:** {{child_3_age}}
-- **Social Security #:** {{child_3_ssn}}
+- **Nombre:** {{child_3_name}}
+- **Fecha de nacimiento:** {{child_3_dob}}
+- **Edad:** {{child_3_age}}
+- **Número de Seguro Social:** {{child_3_ssn}}
   {{/if}}
 
 {{additional_children}}
 {{else}}
-The Parties have no minor children together.
+Las Partes no tienen hijos menores en común.
 {{/if}}
 
-### 2.2 Adult Children
+### 2.2 Hijos mayores
 
 {{#if adult_children}}
-**Adult Children:** {{adult_children_details}}
+**Hijos mayores:** {{adult_children_details}}
 {{else}}
-The Parties have no adult children together.
+Las Partes no tienen hijos mayores en común.
 {{/if}}
 
 ---
 
-## 4. Child Custody and Visitation
+## 4. Custodia y visitas de los hijos
 
 {{#if minor_children}}
 
-### 3.1 Legal Custody
+### 3.1 Custodia legal
 
 {{#if joint_legal_custody}}
-**Joint Legal Custody:** Both Parties shall share joint legal custody of the minor child(ren). All major decisions regarding the child(ren)'s health, education, and welfare shall be made jointly.
+**Custodia legal compartida:** Ambas Partes compartirán la custodia legal de los hijos menores. Todas las decisiones importantes sobre salud, educación y bienestar se tomarán de manera conjunta.
 {{else}}
-**Sole Legal Custody:** {{sole_custody_parent}} shall have sole legal custody of the minor child(ren).
+**Custodia legal exclusiva:** {{sole_custody_parent}} tendrá la custodia legal exclusiva de los hijos menores.
 {{/if}}
 
-### 3.2 Physical Custody
+### 3.2 Custodia física
 
 {{#if joint_physical_custody}}
-**Joint Physical Custody:** Both Parties shall share joint physical custody according to the following schedule:
+**Custodia física compartida:** Las Partes compartirán la custodia física conforme al siguiente calendario:
 {{custody_schedule}}
 {{else}}
-**Primary Physical Custody:** {{primary_custody_parent}} shall have primary physical custody.  
-**Visitation Schedule:** {{visitation_schedule}}
+**Custodia física principal:** {{primary_custody_parent}} tendrá la custodia física principal.  
+**Régimen de visitas:** {{visitation_schedule}}
 {{/if}}
 
-### 3.3 Holiday and Vacation Schedule
+### 3.3 Calendario de días festivos y vacaciones
 
-**Holiday Schedule:** {{holiday_schedule}}  
-**Summer Vacation:** {{summer_vacation_schedule}}  
-**School Breaks:** {{school_break_schedule}}
+**Días festivos:** {{holiday_schedule}}  
+**Vacaciones de verano:** {{summer_vacation_schedule}}  
+**Recesos escolares:** {{school_break_schedule}}
 
-### 3.4 Transportation and Exchange
+### 3.4 Transporte e intercambio
 
-**Exchange Location:** {{exchange_location}}  
-**Transportation Responsibility:** {{transportation_responsibility}}
+**Lugar de intercambio:** {{exchange_location}}  
+**Responsable del transporte:** {{transportation_responsibility}}
 
 {{else}}
-**No Minor Children:** This section is not applicable as the Parties have no minor children together.
+**Sin hijos menores:** Esta sección no aplica porque las Partes no tienen hijos menores en común.
 {{/if}}
 
 ---
 
-## 5. Child Support
+## 5. Pensión alimenticia para los hijos
 
 {{#if minor_children}}
 
-### 4.1 Support Obligation
+### 4.1 Obligación de manutención
 
 {{#if child_support_required}}
-**Support Amount:** {{support_paying_parent}} shall pay ${{monthly_support_amount}} per month in child support to {{support_receiving_parent}}.
+**Monto de manutención:** {{support_paying_parent}} pagará ${{monthly_support_amount}} mensuales en concepto de manutención infantil a {{support_receiving_parent}}.
 
-**Payment Schedule:** Child support shall be paid {{support_payment_schedule}}.  
-**Payment Method:** {{support_payment_method}}  
-**First Payment Due:** {{first_payment_date}}
+**Frecuencia de pago:** La manutención se pagará {{support_payment_schedule}}.  
+**Método de pago:** {{support_payment_method}}  
+**Primer pago vence:** {{first_payment_date}}
 
-### 4.2 Income Information
+### 4.2 Información de ingresos
 
-**{{support_paying_parent}}'s Gross Monthly Income:** ${{paying_parent_income}}  
-**{{support_receiving_parent}}'s Gross Monthly Income:** ${{receiving_parent_income}}
+**Ingreso bruto mensual de {{support_paying_parent}}:** ${{paying_parent_income}}  
+**Ingreso bruto mensual de {{support_receiving_parent}}:** ${{receiving_parent_income}}
 
-### 4.3 Additional Expenses
+### 4.3 Gastos adicionales
 
-**Medical/Dental Insurance:** {{medical_insurance_responsibility}}  
-**Unreimbursed Medical Expenses:** {{medical_expense_allocation}}  
-**Childcare Expenses:** {{childcare_expense_allocation}}  
-**Educational Expenses:** {{educational_expense_allocation}}  
-**Extracurricular Activities:** {{extracurricular_expense_allocation}}
+**Seguro médico/odontológico:** {{medical_insurance_responsibility}}  
+**Gastos médicos no reembolsados:** {{medical_expense_allocation}}  
+**Gastos de cuidado infantil:** {{childcare_expense_allocation}}  
+**Gastos educativos:** {{educational_expense_allocation}}  
+**Actividades extracurriculares:** {{extracurricular_expense_allocation}}
 
-### 4.4 Support Modification
+### 4.4 Modificación de la manutención
 
-Child support may be modified upon substantial change in circumstances in accordance with {{state}} law.
+La manutención infantil podrá modificarse ante un cambio sustancial en las circunstancias conforme a la ley de {{state}}.
 
-### 4.5 Support Termination
+### 4.5 Terminación de la manutención
 
-Child support shall terminate when the child reaches age {{support_termination_age}} or upon {{support_termination_conditions}}.
+La manutención infantil terminará cuando el menor alcance la edad de {{support_termination_age}} o ante {{support_termination_conditions}}.
 {{else}}
-**No Child Support:** No child support is required based on the custody arrangement and income of both parties.
+**Sin manutención infantil:** No se requiere manutención infantil considerando el régimen de custodia y los ingresos de ambas Partes.
 {{/if}}
 
 {{else}}
-**No Minor Children:** Child support provisions are not applicable.
+**Sin hijos menores:** No aplican disposiciones de manutención infantil.
 {{/if}}
 
 ---
 
-## 6. Spousal Support/Alimony
+## 6. Pensión conyugal/alimentos
 
-### 5.1 Spousal Support Award
+### 5.1 Concesión de pensión conyugal
 
 {{#if spousal_support_awarded}}
-**Support Amount:** {{support_paying_spouse}} shall pay ${{spousal_support_amount}} per month in spousal support to {{support_receiving_spouse}}.
+**Monto de pensión:** {{support_paying_spouse}} pagará ${{spousal_support_amount}} mensuales en concepto de pensión conyugal a {{support_receiving_spouse}}.
 
-**Payment Schedule:** {{spousal_support_schedule}}  
-**Payment Method:** {{spousal_support_payment_method}}  
-**Duration:** {{spousal_support_duration}}  
-**Termination Date:** {{spousal_support_end_date}}
+**Frecuencia de pago:** {{spousal_support_schedule}}  
+**Método de pago:** {{spousal_support_payment_method}}  
+**Duración:** {{spousal_support_duration}}  
+**Fecha de terminación:** {{spousal_support_end_date}}
 
-### 5.2 Termination Events
+### 5.2 Eventos de terminación
 
-Spousal support shall terminate upon:
+La pensión conyugal terminará por:
 
-- Death of either party
-- Remarriage of the receiving spouse
-- Cohabitation of the receiving spouse with a romantic partner for more than {{cohabitation_period}}
+- Fallecimiento de cualquiera de las Partes
+- Nuevo matrimonio del cónyuge beneficiario
+- Convivencia del cónyuge beneficiario con una pareja sentimental por más de {{cohabitation_period}}
 - {{additional_termination_events}}
 
-### 5.3 Modification
+### 5.3 Modificación
 
 {{spousal_support_modification_terms}}
 {{else}}
-**Spousal Support Waived:** Both Parties hereby waive any right to spousal support, maintenance, or alimony from the other Party, both now and in the future.
+**Renuncia a pensión conyugal:** Ambas Partes renuncian al derecho presente y futuro de solicitar pensión conyugal, manutención o alimentos de la otra Parte.
 {{/if}}
 
 ---
 
-## 7. Property Division
+## 7. División de bienes
 
-### 6.1 Marital Home
+### 6.1 Vivienda conyugal
 
-**Property Address:** {{marital_home_address}}  
-**Current Value:** ${{home_current_value}}  
-**Mortgage Balance:** ${{mortgage_balance}}  
-**Equity:** ${{home_equity}}
+**Domicilio del inmueble:** {{marital_home_address}}  
+**Valor actual:** ${{home_current_value}}  
+**Saldo hipotecario:** ${{mortgage_balance}}  
+**Equidad:** ${{home_equity}}
 
-**Disposition:** {{home_disposition}}
+**Disposición:** {{home_disposition}}
 
 {{#if home_sale_required}}
-**Sale Terms:** {{home_sale_terms}}  
-**Listing Agent:** {{listing_agent}}  
-**Minimum Sale Price:** ${{minimum_sale_price}}  
-**Closing Date Deadline:** {{sale_deadline}}
+**Condiciones de venta:** {{home_sale_terms}}  
+**Agente de listado:** {{listing_agent}}  
+**Precio mínimo de venta:** ${{minimum_sale_price}}  
+**Fecha límite de cierre:** {{sale_deadline}}
 {{/if}}
 
-### 6.2 Other Real Estate
+### 6.2 Otros bienes inmuebles
 
 {{#if other_real_estate}}
 {{other_property_details}}
 {{else}}
-The Parties own no other real estate.
+Las Partes no poseen otros bienes inmuebles.
 {{/if}}
 
-### 6.3 Vehicles
+### 6.3 Vehículos
 
-**Vehicle 1:** {{vehicle_1_description}}  
-**Awarded to:** {{vehicle_1_recipient}}  
-**Current Value:** ${{vehicle_1_value}}  
-**Loan Balance:** ${{vehicle_1_loan_balance}}
+**Vehículo 1:** {{vehicle_1_description}}  
+**Adjudicado a:** {{vehicle_1_recipient}}  
+**Valor actual:** ${{vehicle_1_value}}  
+**Saldo del préstamo:** ${{vehicle_1_loan_balance}}
 
 {{#if vehicle_2_description}}
-**Vehicle 2:** {{vehicle_2_description}}  
-**Awarded to:** {{vehicle_2_recipient}}  
-**Current Value:** ${{vehicle_2_value}}  
-**Loan Balance:** ${{vehicle_2_loan_balance}}
+**Vehículo 2:** {{vehicle_2_description}}  
+**Adjudicado a:** {{vehicle_2_recipient}}  
+**Valor actual:** ${{vehicle_2_value}}  
+**Saldo del préstamo:** ${{vehicle_2_loan_balance}}
 {{/if}}
 
 {{additional_vehicles}}
 
-### 6.4 Bank Accounts and Financial Assets
+### 6.4 Cuentas bancarias y activos financieros
 
-**Joint Checking Account:** {{joint_checking_details}}  
-**Joint Savings Account:** {{joint_savings_details}}  
-**{{petitioner_name}}'s Individual Accounts:** {{petitioner_accounts}}  
-**{{respondent_name}}'s Individual Accounts:** {{respondent_accounts}}
+**Cuenta corriente conjunta:** {{joint_checking_details}}  
+**Cuenta de ahorros conjunta:** {{joint_savings_details}}  
+**Cuentas individuales de {{petitioner_name}}:** {{petitioner_accounts}}  
+**Cuentas individuales de {{respondent_name}}:** {{respondent_accounts}}
 
-### 6.5 Retirement Accounts
+### 6.5 Cuentas de retiro
 
-**{{petitioner_name}}'s Retirement Accounts:** {{petitioner_retirement}}  
-**{{respondent_name}}'s Retirement Accounts:** {{respondent_retirement}}
+**Cuentas de retiro de {{petitioner_name}}:** {{petitioner_retirement}}  
+**Cuentas de retiro de {{respondent_name}}:** {{respondent_retirement}}
 
 {{#if qdro_required}}
-**QDRO Required:** A Qualified Domestic Relations Order will be prepared for the division of {{qdro_account_details}}.
+**QDRO requerido:** Se preparará una Orden Calificada de Relaciones Domésticas (QDRO) para dividir {{qdro_account_details}}.
 {{/if}}
 
-### 6.6 Personal Property
+### 6.6 Bienes personales
 
-**Household Items:** {{household_items_division}}  
-**Jewelry:** {{jewelry_division}}  
-**Electronics:** {{electronics_division}}  
-**Collections/Antiques:** {{collections_division}}
+**Bienes del hogar:** {{household_items_division}}  
+**Joyería:** {{jewelry_division}}  
+**Electrónicos:** {{electronics_division}}  
+**Colecciones/antigüedades:** {{collections_division}}
 
-### 6.7 Business Interests
+### 6.7 Intereses empresariales
 
 {{#if business_interests}}
 {{business_division_details}}
 {{else}}
-Neither Party owns any business interests.
+Ninguna de las Partes posee intereses empresariales.
 {{/if}}
 
 ---
 
-## 8. Debt Allocation
+## 8. Asignación de deudas
 
-### 7.1 Joint Debts
+### 7.1 Deudas conjuntas
 
-**Mortgage:** {{mortgage_responsibility}}  
-**Credit Cards:** {{credit_card_responsibility}}  
-**Auto Loans:** {{auto_loan_responsibility}}  
-**Student Loans:** {{student_loan_responsibility}}
+**Hipoteca:** {{mortgage_responsibility}}  
+**Tarjetas de crédito:** {{credit_card_responsibility}}  
+**Préstamos para vehículos:** {{auto_loan_responsibility}}  
+**Préstamos estudiantiles:** {{student_loan_responsibility}}
 
-### 7.2 Individual Debts
+### 7.2 Deudas individuales
 
-**{{petitioner_name}}'s Individual Debts:** {{petitioner_debts}}  
-**{{respondent_name}}'s Individual Debts:** {{respondent_debts}}
+**Deudas individuales de {{petitioner_name}}:** {{petitioner_debts}}  
+**Deudas individuales de {{respondent_name}}:** {{respondent_debts}}
 
-### 7.3 Debt Responsibility
+### 7.3 Responsabilidad por las deudas
 
-Each Party shall be responsible for debts allocated to them and shall hold the other Party harmless from such debts.
+Cada Parte será responsable de las deudas que se le asignan y mantendrá indemne a la otra Parte frente a dichas obligaciones.
 
 ---
 
-## 9. Insurance
+## 9. Seguros
 
-### 8.1 Health Insurance
+### 8.1 Seguro de salud
 
 {{#if minor_children}}
-**Children's Health Insurance:** {{children_health_insurance}}  
-**Cost Responsibility:** {{health_insurance_cost_allocation}}
+**Seguro médico de los hijos:** {{children_health_insurance}}  
+**Responsabilidad por el costo:** {{health_insurance_cost_allocation}}
 {{/if}}
 
-**{{petitioner_name}}'s Health Insurance:** {{petitioner_health_insurance}}  
-**{{respondent_name}}'s Health Insurance:** {{respondent_health_insurance}}
+**Seguro de salud de {{petitioner_name}}:** {{petitioner_health_insurance}}  
+**Seguro de salud de {{respondent_name}}:** {{respondent_health_insurance}}
 
-### 8.2 Life Insurance
+### 8.2 Seguro de vida
 
 {{#if life_insurance_required}}
 {{#if minor_children}}
-**Life Insurance for Children:** Both Parties shall maintain life insurance of at least ${{life_insurance_amount}} with the minor child(ren) as beneficiaries until the youngest child reaches age {{life_insurance_termination_age}}.
+**Seguro de vida para los hijos:** Ambas Partes mantendrán un seguro de vida mínimo de ${{life_insurance_amount}} con los hijos menores como beneficiarios hasta que el más joven alcance la edad de {{life_insurance_termination_age}}.
 {{/if}}
 
 {{#if spousal_support_awarded}}
-**Life Insurance for Spousal Support:** {{support_paying_spouse}} shall maintain life insurance of at least ${{spousal_support_life_insurance}} with {{support_receiving_spouse}} as beneficiary during the period of spousal support.
+**Seguro de vida para garantizar la pensión conyugal:** {{support_paying_spouse}} mantendrá un seguro de vida mínimo de ${{spousal_support_life_insurance}} designando a {{support_receiving_spouse}} como beneficiario mientras dure la pensión conyugal.
 {{/if}}
 {{else}}
-No life insurance requirements.
+No se establecen requisitos de seguro de vida.
 {{/if}}
 
 ---
 
-## 10. Tax Considerations
+## 10. Consideraciones fiscales
 
-### 9.1 Federal and State Tax Returns
+### 9.1 Declaraciones de impuestos federales y estatales
 
-**Prior Year Returns ({{prior_tax_year}}):** {{prior_tax_returns}}  
-**Current Year Return ({{current_tax_year}}):** {{current_year_tax_filing}}  
-**Filing Status:** {{tax_filing_status}}  
-**Preparation Responsibility:** {{tax_preparation_responsibility}}  
-**Cost Allocation:** {{tax_preparation_cost_allocation}}
+**Declaraciones del año anterior ({{prior_tax_year}}):** {{prior_tax_returns}}  
+**Declaración del año en curso ({{current_tax_year}}):** {{current_year_tax_filing}}  
+**Estatus de presentación:** {{tax_filing_status}}  
+**Responsable de preparación:** {{tax_preparation_responsibility}}  
+**Distribución del costo:** {{tax_preparation_cost_allocation}}
 
-### 9.2 Tax Refunds and Liabilities
+### 9.2 Reembolsos y obligaciones tributarias
 
-**Outstanding Federal Refunds:** {{federal_tax_refunds_allocation}}  
-**Outstanding State Refunds:** {{state_tax_refunds_allocation}}  
-**Outstanding Federal Liabilities:** {{federal_tax_liabilities_allocation}}  
-**Outstanding State Liabilities:** {{state_tax_liabilities_allocation}}  
-**Payment Responsibility:** {{tax_payment_responsibility}}
+**Reembolsos federales pendientes:** {{federal_tax_refunds_allocation}}  
+**Reembolsos estatales pendientes:** {{state_tax_refunds_allocation}}  
+**Obligaciones federales pendientes:** {{federal_tax_liabilities_allocation}}  
+**Obligaciones estatales pendientes:** {{state_tax_liabilities_allocation}}  
+**Responsabilidad de pago:** {{tax_payment_responsibility}}
 
-### 9.3 Dependency Exemptions and Tax Credits
+### 9.3 Exenciones y créditos fiscales por dependientes
 
 {{#if minor_children}}
-**Child Tax Exemptions:** {{tax_exemption_allocation}}  
-**Child Tax Credit:** {{child_tax_credit_allocation}}  
-**Earned Income Tax Credit:** {{eitc_allocation}}  
-**Child and Dependent Care Credit:** {{child_care_credit_allocation}}  
-**Education Credits:** {{education_credit_allocation}}
+**Exenciones fiscales por hijos:** {{tax_exemption_allocation}}  
+**Crédito tributario por hijos:** {{child_tax_credit_allocation}}  
+**Crédito por ingreso del trabajo (EITC):** {{eitc_allocation}}  
+**Crédito por cuidado de dependientes:** {{child_care_credit_allocation}}  
+**Créditos educativos:** {{education_credit_allocation}}
 {{/if}}
 
-### 9.4 Property Transfer Tax Implications
+### 9.4 Implicaciones fiscales de transferencias de bienes
 
-**Real Estate Transfer Tax:** {{real_estate_transfer_tax}}  
-**Capital Gains Considerations:** {{capital_gains_implications}}  
-**Basis Step-Up:** {{property_basis_considerations}}  
-**Section 1041 Treatment:** Property transfers between spouses pursuant to divorce are generally non-taxable under IRC Section 1041.
+**Impuesto por transferencia de bienes raíces:** {{real_estate_transfer_tax}}  
+**Consideraciones sobre ganancias de capital:** {{capital_gains_implications}}  
+**Ajuste de base fiscal:** {{property_basis_considerations}}  
+**Tratamiento conforme a la Sección 1041:** Las transferencias de bienes entre cónyuges como parte del divorcio generalmente no generan impuestos conforme al IRC Sección 1041.
 
-### 9.5 Retirement Account Tax Implications
+### 9.5 Implicaciones fiscales de cuentas de retiro
 
-**401(k)/403(b) Division:** {{retirement_division_tax_implications}}  
-**IRA Division:** {{ira_division_tax_implications}}  
-**Pension Division:** {{pension_division_tax_implications}}  
-**QDRO Tax Treatment:** {{qdro_tax_implications}}  
-**Early Withdrawal Penalties:** {{early_withdrawal_considerations}}
+**División de 401(k)/403(b):** {{retirement_division_tax_implications}}  
+**División de IRA:** {{ira_division_tax_implications}}  
+**División de pensiones:** {{pension_division_tax_implications}}  
+**Tratamiento fiscal del QDRO:** {{qdro_tax_implications}}  
+**Multas por retiro anticipado:** {{early_withdrawal_considerations}}
 
-### 9.6 Spousal Support Tax Treatment
+### 9.6 Tratamiento fiscal de la pensión conyugal
 
 {{#if spousal_support_awarded}}
-**Deductibility for Payor:** {{spousal_support_deduction}}  
-**Taxability for Recipient:** {{spousal_support_income_tax}}  
-**Alimony Recapture Rules:** {{alimony_recapture_provisions}}  
-**Tax Compliance:** Both parties acknowledge understanding of current federal tax treatment of spousal support payments.
+**Deducibilidad para quien paga:** {{spousal_support_deduction}}  
+**Imposición para quien recibe:** {{spousal_support_income_tax}}  
+**Reglas de recaptura de alimentos:** {{alimony_recapture_provisions}}  
+**Cumplimiento fiscal:** Ambas Partes reconocen haber comprendido el tratamiento fiscal federal vigente de los pagos de pensión conyugal.
 {{/if}}
 
-### 9.7 Business Interest Tax Implications
+### 9.7 Implicaciones fiscales de intereses empresariales
 
 {{#if business_interests}}
-**Business Valuation Date:** {{business_valuation_date}}  
-**Tax Basis:** {{business_tax_basis}}  
-**Depreciation Recapture:** {{depreciation_recapture_implications}}  
-**Future Tax Obligations:** {{business_future_tax_obligations}}
+**Fecha de valuación del negocio:** {{business_valuation_date}}  
+**Base fiscal:** {{business_tax_basis}}  
+**Recuperación de depreciación:** {{depreciation_recapture_implications}}  
+**Obligaciones fiscales futuras:** {{business_future_tax_obligations}}
 {{/if}}
 
-### 9.8 Debt Forgiveness and Tax Consequences
+### 9.8 Cancelación de deudas y consecuencias fiscales
 
-**Cancelled Debt Income:** {{cancelled_debt_tax_implications}}  
-**Insolvency Exception:** {{insolvency_considerations}}  
-**Form 1099-C Reporting:** {{debt_forgiveness_reporting}}
+**Ingresos por condonación de deuda:** {{cancelled_debt_tax_implications}}  
+**Excepción por insolvencia:** {{insolvency_considerations}}  
+**Reporte en Formulario 1099-C:** {{debt_forgiveness_reporting}}
 
-### 9.9 State-Specific Tax Considerations
+### 9.9 Consideraciones fiscales específicas del estado
 
-**State Income Tax:** {{state_income_tax_implications}}  
-**State Property Tax:** {{state_property_tax_allocation}}  
-**Local Tax Obligations:** {{local_tax_considerations}}  
-**Multi-State Issues:** {{multi_state_tax_implications}}
+**Impuesto estatal sobre la renta:** {{state_income_tax_implications}}  
+**Impuesto estatal sobre la propiedad:** {{state_property_tax_allocation}}  
+**Obligaciones fiscales locales:** {{local_tax_considerations}}  
+**Cuestiones multiestatales:** {{multi_state_tax_implications}}
 
-### 9.10 Future Tax Cooperation
+### 9.10 Cooperación fiscal futura
 
-**Document Sharing:** Both parties agree to provide tax-related documents upon reasonable request for five (5) years following the divorce.  
-**Amendment Cooperation:** Both parties agree to cooperate in any future tax audits or amendments related to joint returns.  
-**Indemnification:** {{tax_indemnification_provisions}}
+**Intercambio de documentos:** Ambas Partes proporcionarán documentos fiscales cuando sea razonablemente solicitado durante cinco (5) años posteriores al divorcio.  
+**Cooperación en enmiendas:** Ambas Partes cooperarán en auditorías o enmiendas posteriores vinculadas a declaraciones conjuntas.  
+**Indemnización:** {{tax_indemnification_provisions}}
 
-### 9.11 Tax Professional Consultation
+### 9.11 Consulta con profesionales fiscales
 
-Both parties acknowledge they have been advised to consult with qualified tax professionals regarding the tax implications of this divorce settlement.
+Ambas Partes reconocen que se les ha aconsejado consultar con profesionales de impuestos calificados respecto de las implicaciones fiscales de este acuerdo.
 
 ---
 
-## 11. Name Change
+## 11. Cambio de nombre
 
-### 10.1 Name Restoration
+### 10.1 Restitución de nombre
 
 {{#if name_change_requested}}
-{{name_change_petitioner}} requests that their name be restored to {{restored_name}}.
+{{name_change_petitioner}} solicita restituir su nombre a {{restored_name}}.
 {{else}}
-Neither Party requests a name change.
+Ninguna de las Partes solicita un cambio de nombre.
 {{/if}}
 
 ---
 
-## 12. Restraining Orders and Protection
+## 12. Órdenes de restricción y protección
 
-### 11.1 Mutual Restraining Orders
+### 11.1 Órdenes de restricción mutuas
 
 {{#if restraining_orders}}
 {{restraining_order_details}}
 {{else}}
-No restraining orders are in effect between the Parties.
+No existen órdenes de restricción vigentes entre las Partes.
 {{/if}}
 
-### 11.2 Harassment Protection
+### 11.2 Protección contra hostigamiento
 
-Both Parties agree to refrain from harassing, threatening, or bothering the other Party.
+Ambas Partes se comprometen a no hostigar, amenazar ni molestar a la otra Parte.
 
 ---
 
-## 13. Dispute Resolution
+## 13. Resolución de disputas
 
-### 12.1 Mediation
+### 12.1 Mediación
 
 {{#if mediation_required}}
-Before filing any court action to modify this Agreement, the Parties agree to attempt mediation.  
-**Mediator Selection:** {{mediator_selection_process}}  
-**Mediation Cost:** {{mediation_cost_allocation}}
+Antes de presentar cualquier acción judicial para modificar este Acuerdo, las Partes intentarán resolver la disputa mediante mediación.  
+**Selección del mediador:** {{mediator_selection_process}}  
+**Costos de mediación:** {{mediation_cost_allocation}}
 {{/if}}
 
-### 12.2 Court Jurisdiction
+### 12.2 Jurisdicción judicial
 
-This Agreement shall be subject to the jurisdiction of {{court_name}} for enforcement and modification purposes.
+Este Acuerdo estará sujeto a la jurisdicción de {{court_name}} para efectos de ejecución y modificación.
 
-### 12.3 Attorney Fees
+### 12.3 Honorarios de abogados
 
 {{attorney_fees_provision}}
 
 ---
 
-## 14. General Provisions
+## 14. Disposiciones generales
 
-### 13.1 Full Disclosure
+### 13.1 Divulgación completa
 
-Each Party represents that they have made full disclosure of all assets, debts, income, and liabilities to the other Party.
+Cada Parte declara haber revelado por completo todos sus bienes, deudas, ingresos y obligaciones a la otra Parte.
 
-### 13.2 Voluntary Agreement
+### 13.2 Acuerdo voluntario
 
-Both Parties enter into this Agreement voluntarily and acknowledge that they have had the opportunity to consult with independent legal counsel.
+Ambas Partes celebran este Acuerdo de manera voluntaria y reconocen que han tenido la oportunidad de consultar con asesor legal independiente.
 
-### 13.3 Entire Agreement
+### 13.3 Acuerdo íntegro
 
-This Agreement constitutes the entire agreement between the Parties and supersedes all prior negotiations and agreements.
+Este Acuerdo constituye el entendimiento total entre las Partes y sustituye toda negociación o acuerdo previo.
 
-### 13.4 Modification
+### 13.4 Modificación
 
-This Agreement may only be modified by written agreement signed by both Parties or by court order.
+Este Acuerdo solo podrá modificarse mediante convenio escrito firmado por ambas Partes o por orden judicial.
 
-### 13.5 Binding Effect
+### 13.5 Efecto vinculante
 
-This Agreement shall be binding upon the Parties, their heirs, executors, administrators, and assigns.
+Este Acuerdo obligará a las Partes y a sus herederos, albaceas, administradores y cesionarios.
 
-### 13.6 Severability
+### 13.6 Divisibilidad
 
-If any provision is held invalid, the remainder shall remain in full force and effect.
+Si alguna disposición se considera inválida, el resto permanecerá en pleno vigor y efecto.
 
-### 13.7 Governing Law
+### 13.7 Ley aplicable
 
-This Agreement shall be governed by the laws of {{state}}.
+Este Acuerdo se regirá por las leyes de {{state}}.
 
-### 13.8 Court Approval
+### 13.8 Aprobación judicial
 
-This Agreement shall be incorporated into the final divorce decree.
+Este Acuerdo se incorporará al decreto final de divorcio.
 
 ---
 
-## 15. Mutual Releases
+## 15. Renuncias mutuas
 
-### 14.1 General Release
+### 14.1 Renuncia general
 
-Except as provided in this Agreement, each Party releases and forever discharges the other from all claims, demands, and causes of action arising from the marriage relationship.
+Salvo lo dispuesto en este Acuerdo, cada Parte libera y descarga para siempre a la otra de toda reclamación, demanda o acción derivada de la relación matrimonial.
 
-### 14.2 Property Rights Release
+### 14.2 Renuncia a derechos sobre bienes
 
-Each Party releases all rights in the property awarded to the other Party under this Agreement.
+Cada Parte renuncia a cualquier derecho sobre los bienes adjudicados a la otra Parte en este Acuerdo.
 
-### 14.3 Estate Rights Release
+### 14.3 Renuncia a derechos sucesorios
 
 {{#if estate_rights_waived}}
-Each Party waives all rights to inherit from the other Party's estate, except as specifically provided herein.
+Cada Parte renuncia a todo derecho sucesorio respecto de la herencia de la otra Parte, salvo lo dispuesto expresamente en este documento.
 {{/if}}
 
 ---
 
-## 16. Enforcement
+## 16. Ejecución
 
-### 15.1 Contempt of Court
+### 15.1 Desacato
 
-Violation of this Agreement may result in contempt of court proceedings.
+La violación de este Acuerdo puede generar procedimientos por desacato ante el tribunal.
 
-### 15.2 Specific Performance
+### 15.2 Cumplimiento específico
 
-This Agreement may be enforced through specific performance remedies.
+Este Acuerdo podrá ejecutarse mediante recursos de cumplimiento específico.
 
-### 15.3 Damages
+### 15.3 Daños y perjuicios
 
-In addition to other remedies, the non-breaching Party may seek monetary damages for any breach of this Agreement.
-
----
-
-## 17. Acknowledgments
-
-### 16.1 Party Acknowledgments
-
-Each Party acknowledges:
-
-- They have read and understand this Agreement
-- They have had adequate time to consider the terms
-- They enter into this Agreement voluntarily
-- {{#if legal_representation}}They have been advised by independent legal counsel{{else}}They have had the opportunity to consult with legal counsel{{/if}}
-- They believe the terms are fair and reasonable
-
-### 16.2 Financial Information
-
-Each Party has provided complete and accurate financial information to the other Party.
+Además de otros recursos, la Parte cumplidora puede solicitar daños monetarios por cualquier incumplimiento de este Acuerdo.
 
 ---
 
-## 18. Signatures
+## 17. Declaraciones
 
-**IN WITNESS WHEREOF**, the Parties have executed this Divorce Settlement Agreement as of the date first written above.
+### 16.1 Reconocimientos de las Partes
 
-**PETITIONER/PLAINTIFF:**
+Cada Parte reconoce que:
 
-| Signature                                  | Date               |
+- Ha leído y comprende este Acuerdo
+- Ha tenido tiempo suficiente para considerar sus términos
+- Suscribe este Acuerdo de manera voluntaria
+- {{#if legal_representation}}Ha recibido asesoría de un abogado independiente{{else}}Ha tenido la oportunidad de consultar con un abogado{{/if}}
+- Considera que los términos son justos y razonables
+
+### 16.2 Información financiera
+
+Cada Parte ha proporcionado información financiera completa y exacta a la otra Parte.
+
+---
+
+## 18. Firmas
+
+**EN FE DE LO CUAL**, las Partes firman este Acuerdo de Liquidación de Divorcio en la fecha indicada al inicio.
+
+**PARTE DEMANDANTE/PETICIONARIA:**
+
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
-| {{petitioner_name}}                        |                    |
-| Print Name: {{petitioner_name}}            |                    |
+| {{petitioner_name}} | |
+| Nombre en letra de imprenta: {{petitioner_name}} | |
 
-**RESPONDENT/DEFENDANT:**
+**PARTE DEMANDADA/RESPONDENTE:**
 
-| Signature                                  | Date               |
+| Firma | Fecha |
 | ------------------------------------------ | ------------------ |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
-| {{respondent_name}}                        |                    |
-| Print Name: {{respondent_name}}            |                    |
+| {{respondent_name}} | |
+| Nombre en letra de imprenta: {{respondent_name}} | |
 
 ---
 
-## 19. Attorney Acknowledgments
+## 19. Reconocimiento de los abogados
 
 {{#if legal_representation}}
-**ATTORNEY FOR PETITIONER:**
+**ABOGADO(A) DE LA PARTE PETICIONARIA:**
 
-I have advised my client regarding this Agreement and believe it to be fair and reasonable.
+He asesorado a mi cliente respecto de este Acuerdo y considero que es justo y razonable.
 
-| Signature                                     | Date               |
+| Firma | Fecha |
 | --------------------------------------------- | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\*******    | {{agreement_date}} |
-| {{petitioner_attorney}}                       |                    |
-| State Bar Number: {{petitioner_attorney_bar}} |                    |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
+| {{petitioner_attorney}} | |
+| Número de licencia profesional: {{petitioner_attorney_bar}} | |
 
-**ATTORNEY FOR RESPONDENT:**
+**ABOGADO(A) DE LA PARTE RESPONDENTE:**
 
-I have advised my client regarding this Agreement and believe it to be fair and reasonable.
+He asesorado a mi cliente respecto de este Acuerdo y considero que es justo y razonable.
 
-| Signature                                     | Date               |
+| Firma | Fecha |
 | --------------------------------------------- | ------------------ |
-| ******\*\*\*\*******\_******\*\*\*\*******    | {{agreement_date}} |
-| {{respondent_attorney}}                       |                    |
-| State Bar Number: {{respondent_attorney_bar}} |                    |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{agreement_date}} |
+| {{respondent_attorney}} | |
+| Número de licencia profesional: {{respondent_attorney_bar}} | |
 
 {{/if}}
 
 ---
 
-## 20. Notarization
+## 20. Notarización
 
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-On this **{{agreement_date}}**, before me personally appeared {{petitioner_name}} and {{respondent_name}}, who proved to me on the basis of satisfactory evidence to be the persons whose names are subscribed to the within instrument and acknowledged to me that they executed the same in their authorized capacities.
+En esta fecha **{{agreement_date}}**, comparecieron personalmente ante mí {{petitioner_name}} y {{respondent_name}}, quienes acreditaron con pruebas satisfactorias ser las personas cuyos nombres suscriben este instrumento y reconocieron haberlo firmado en sus calidades autorizadas.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+Certifico BAJO PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que el párrafo anterior es verdadero y correcto.
 
-**WITNESS** my hand and official seal.
+**DOY FE** con mi firma y sello oficial.
 
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
-
----
-
-## 21. Court Approval
-
-**FOR COURT USE ONLY:**
-
-This Divorce Settlement Agreement is:
-â˜ APPROVED and INCORPORATED into the Judgment of Divorce
-â˜ REJECTED by the Court
-
-**Judge:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Date:** ******\*\*\*\*******\_******\*\*\*\*******  
-**Court:** {{court_name}}
+**Notario Público:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Mi comisión expira:** ****\*\*\*\*****\_****\*\*\*\*****
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This divorce settlement agreement should be reviewed by qualified family law attorneys for both parties to ensure compliance with state divorce laws and protection of individual rights. Divorce laws vary significantly by state, and this agreement must be approved by the court to become legally binding. Both parties should have independent legal representation.
+## 21. Aprobación judicial
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+**PARA USO DEL TRIBUNAL ÚNICAMENTE:**
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
+Este Acuerdo de Liquidación de Divorcio queda:  
+- [ ] APROBADO e INCORPORADO al fallo de divorcio  
+- [ ] RECHAZADO por el tribunal
 
+**Juez:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Fecha:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Tribunal:** {{court_name}}
 
+---
+
+**AVISO LEGAL IMPORTANTE:** Este acuerdo de liquidación de divorcio debe ser revisado por abogados de derecho familiar calificados que representen a cada Parte para garantizar el cumplimiento de las leyes de divorcio del estado y la protección de los derechos individuales. Las leyes de divorcio varían considerablemente entre estados, y este acuerdo debe ser aprobado por el tribunal para que sea jurídicamente vinculante. Se recomienda que ambas Partes cuenten con representación legal independiente.
+
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
+
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

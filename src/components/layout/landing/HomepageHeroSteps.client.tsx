@@ -62,9 +62,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
     }
   }, []);
 
-  useEffect(() => {
-    router.prefetch(primaryCtaDestination);
-  }, [primaryCtaDestination, router]);
+  
 
   const handleStartClick = useCallback(() => {
     track('cta_click', { variant, label: 'start_button' });
@@ -181,3 +179,4 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
   );
 });
 export default HomepageHeroSteps;
+

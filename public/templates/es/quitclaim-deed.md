@@ -1,294 +1,292 @@
-﻿# Quitclaim Deed
-> Nota: contenido temporal en inglés; se requiere localización.
+﻿# Escritura de Renuncia de Derechos (Quitclaim)
 
 ---
 
-**QUITCLAIM DEED**
+**ESCRITURA DE RENUNCIA DE DERECHOS (QUITCLAIM)**
 
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
 ---
 
-## 1. Property Transfer Information
+## 1. Información de la transferencia
 
-**Document Date:** {{deed_date}}  
-**Recording Information:** {{recording_info}} (to be completed by recorder)
+**Fecha del documento:** {{deed_date}}  
+**Datos de registro:** {{recording_info}} (para uso del registrador)
 
-### 1.1 Parties
+### 1.1 Partes
 
-**Grantor (Current Owner):** {{grantor_name}}  
-**Grantor Address:** {{grantor_address}}  
-**Grantor Status:** {{grantor_marital_status}}
+**Cedente (propietario actual):** {{grantor_name}}  
+**Domicilio del cedente:** {{grantor_address}}  
+**Estado civil del cedente:** {{grantor_marital_status}}
 
 {{#if multiple_grantors}}
-**Additional Grantor:** {{grantor_2_name}}  
-**Additional Grantor Address:** {{grantor_2_address}}
+**Cedente adicional:** {{grantor_2_name}}  
+**Domicilio del cedente adicional:** {{grantor_2_address}}
 {{/if}}
 
-**Grantee (New Owner):** {{grantee_name}}  
-**Grantee Address:** {{grantee_address}}  
-**Grantee Status:** {{grantee_marital_status}}
+**Cesionario (nuevo propietario):** {{grantee_name}}  
+**Domicilio del cesionario:** {{grantee_address}}  
+**Estado civil del cesionario:** {{grantee_marital_status}}
 
 {{#if multiple_grantees}}
-**Additional Grantee:** {{grantee_2_name}}  
-**Additional Grantee Address:** {{grantee_2_address}}  
-**Ownership Type:** {{ownership_type}} (Joint Tenants/Tenants in Common/Community Property)
+**Cesionario adicional:** {{grantee_2_name}}  
+**Domicilio del cesionario adicional:** {{grantee_2_address}}  
+**Tipo de titularidad:** {{ownership_type}} (Copropietarios con derecho de supervivencia/Inquilinos en común/Bienes gananciales)
 {{/if}}
 
 ---
 
-## 2. Property Description
+## 2. Descripción del inmueble
 
-### 2.1 Property Address
+### 2.1 Domicilio del inmueble
 
-**Property Address:** {{property_address}}  
-**City:** {{city}}, **State:** {{state}}, **ZIP:** {{zip_code}}  
-**County:** {{county}}
+**Dirección:** {{property_address}}  
+**Ciudad:** {{city}}, **Estado:** {{state}}, **ZIP:** {{zip_code}}  
+**Condado:** {{county}}
 
-### 2.2 Legal Description
+### 2.2 Descripción legal
 
 {{legal_description}}
 
-**Assessor's Parcel Number (APN):** {{assessors_parcel_number}}
+**Número de parcela del catastro (APN):** {{assessors_parcel_number}}
 
-### 2.3 Property Details
+### 2.3 Detalles del inmueble
 
-**Property Type:** {{property_type}} (Residential/Commercial/Vacant Land)  
-**Approximate Size:** {{property_size}}  
-**Zoning:** {{zoning_designation}}
+**Tipo de propiedad:** {{property_type}} (Residencial/Comercial/Terreno baldío)  
+**Tamaño aproximado:** {{property_size}}  
+**Zonificación:** {{zoning_designation}}
 
 ---
 
-## 3. Consideration and Transfer
+## 3. Contraprestación y transferencia
 
-### 3.1 Consideration
+### 3.1 Contraprestación
 
 {{#if nominal_consideration}}
-**Consideration:** For the sum of Ten Dollars ($10.00) and other good and valuable consideration, receipt of which is hereby acknowledged.
+**Contraprestación:** Por la suma de Diez Dólares ($10.00) y otros valores y consideraciones, cuyo recibo se reconoce por la presente.
 {{else}}
-**Consideration:** For the sum of **${{consideration_amount}}\*\* and other good and valuable consideration, receipt of which is hereby acknowledged.
+**Contraprestación:** Por la suma de **${{consideration_amount}}** y otros valores y consideraciones, cuyo recibo se reconoce por la presente.
 {{/if}}
 
-### 3.2 Transfer Statement
+### 3.2 Declaración de transferencia
 
-The Grantor(s) hereby remise, release, and forever quitclaim to the Grantee(s), their heirs and assigns, all right, title, interest, claim, and demand which the Grantor(s) have in and to the above-described property.
-
----
-
-## 4. Quitclaim Language and Warranties
-
-### 4.1 Nature of Quitclaim Deed
-
-**IMPORTANT:** This is a Quitclaim Deed. The Grantor makes NO WARRANTIES regarding title to the property. The Grantor conveys only whatever interest, if any, the Grantor may have in the property. The Grantee receives no guarantees about the quality or extent of the title being transferred.
-
-### 4.2 No Title Warranties
-
-The Grantor does NOT warrant or guarantee:
-
-- That the Grantor owns the property
-- That the title is clear and marketable
-- That there are no liens or encumbrances
-- That the property description is accurate
-- Protection against title defects
-
-### 4.3 "As-Is" Transfer
-
-The property is transferred in its current condition, "AS-IS," without any warranties or representations regarding:
-
-- Physical condition of the property
-- Compliance with building codes or zoning laws
-- Environmental conditions
-- Boundary disputes
-- Access rights
+El/Los Cedente(s) ceden, liberan y renuncian de manera irrevocable al/los Cesionario(s), sus herederos y cesionarios, todo derecho, título, interés y reclamación que el/los Cedente(s) tengan sobre el inmueble descrito anteriormente.
 
 ---
 
-## 5. Subject to Existing Conditions
+## 4. Alcance de la renuncia y garantías
 
-### 5.1 Existing Encumbrances
+### 4.1 Naturaleza de la escritura de renuncia
 
-This transfer is subject to:
+**IMPORTANTE:** Esta es una escritura de renuncia (Quitclaim). El Cedente NO ofrece GARANTÍAS sobre el título de la propiedad. El Cedente transmite únicamente el interés que tenga, si alguno, sobre el inmueble. El Cesionario no recibe garantía alguna sobre la calidad o extensión del título transferido.
 
-- All existing liens, mortgages, and encumbrances of record
-- Easements, restrictions, and covenants of record
-- Property taxes and assessments
+### 4.2 Ausencia de garantías de título
+
+El Cedente NO garantiza ni asegura:
+
+- Que sea propietario del inmueble
+- Que el título esté libre de gravámenes
+- Que no existan hipotecas o cargas
+- Que la descripción del inmueble sea exacta
+- Protección contra defectos de título
+
+### 4.3 Transferencia "tal como está"
+
+El inmueble se transfiere en su condición actual, "TAL COMO ESTÁ", sin garantías ni representaciones respecto a:
+
+- Condición física del inmueble
+- Cumplimiento con códigos de construcción o normas de zonificación
+- Condiciones ambientales
+- Conflictos de linderos
+- Derechos de acceso
+
+---
+
+## 5. Sujeción a condiciones existentes
+
+### 5.1 Gravámenes existentes
+
+Esta transferencia queda sujeta a:
+
+- Todos los gravámenes, hipotecas y cargas registradas
+- Servidumbres, restricciones y convenios inscritos
+- Impuestos y contribuciones sobre la propiedad
 - {{existing_encumbrances}}
 
-### 5.2 Specific Reservations
+### 5.2 Reservas específicas
 
 {{#if has_reservations}}
-The Grantor reserves the following rights:
+El Cedente se reserva los siguientes derechos:
 {{reserved_rights}}
 {{else}}
-The Grantor makes no reservations of rights in the property.
+El Cedente no reserva derechos sobre la propiedad.
 {{/if}}
 
 ---
 
-## 6. Common Uses for Quitclaim Deeds
+## 6. Declaraciones complementarias
 
-**Note:** This quitclaim deed is being used for the following purpose:
-{{quitclaim_purpose}}
+### 6.1 Declaración de impuestos sobre transferencia
 
-**Common Uses Include:**
-
-- Transfer between family members
-- Adding/removing spouse from title
-- Clearing title defects
-- Transfer to trust or LLC
-- Divorce property transfers
-- Correcting deed errors
-
----
-
-## 7. Tax Information
-
-### 7.1 Property Tax Information
-
-**Current Year Taxes:** {{current_tax_amount}}  
-**Tax Year:** {{tax_year}}  
-**Tax Responsibility:** {{tax_responsibility}}
-
-### 7.2 Transfer Tax
-
-{{#if transfer_tax_applicable}}
-**Transfer Tax Due:** ${{transfer_tax_amount}}  
-**Transfer Tax Paid By:** {{transfer_tax_paid_by}}
+{{#if transfer_tax_exempt}}
+Esta transferencia está exenta del impuesto de transferencia por la siguiente razón: {{transfer_tax_exemption_reason}}
 {{else}}
-**Transfer Tax:** Not applicable or exempt
+El impuesto de transferencia aplicable será pagado conforme a la ley.
+{{/if}}
+
+### 6.2 Declaración de ocupación
+
+{{#if grantor_is_owner_occupied}}
+El inmueble era ocupado por el Cedente como residencia principal.
+{{else}}
+El inmueble no era ocupado por el Cedente como residencia principal.
 {{/if}}
 
 ---
 
-## 8. Additional Provisions
+## 7. Declaraciones tributarias
 
-### 8.1 Special Conditions
+{{#if tax_declarations}}
+{{tax_declarations}}
+{{/if}}
+
+### 7.1 Declaración del cedente
+
+El Cedente certifica que la información proporcionada es exacta y completa.
+
+### 7.2 Declaración del cesionario
+
+El Cesionario reconoce que recibe la propiedad sin garantías de título.
+
+---
+
+## 8. Condiciones adicionales
+
+### 8.1 Condiciones especiales
 
 {{#if special_conditions}}
 {{special_conditions}}
 {{else}}
-No special conditions apply to this transfer.
+No aplican condiciones especiales a esta transferencia.
 {{/if}}
 
-### 8.2 Effective Date
+### 8.2 Fecha de vigencia
 
-This deed shall be effective as of {{effective_date}}.
+Esta escritura surtirá efecto a partir de {{effective_date}}.
 
-### 8.3 Governing Law
+### 8.3 Ley aplicable
 
-This deed shall be governed by the laws of {{state}}.
-
----
-
-## 9. Grantor Acknowledgment
-
-The Grantor(s) acknowledge that:
-
-- They understand the nature of a quitclaim deed
-- They are making no warranties regarding title
-- They have read and understand this document
-- They are executing this deed voluntarily
+Esta escritura se regirá por las leyes del Estado de {{state}}.
 
 ---
 
-## 10. Execution and Signatures
+## 9. Reconocimiento del cedente
 
-**IN WITNESS WHEREOF**, the Grantor(s) have executed this Quitclaim Deed on **{{deed_date}}**.
+El/Los Cedente(s) reconocen que:
 
-**GRANTOR:**
+- Comprenden la naturaleza de una escritura de renuncia
+- No otorgan garantías sobre el título
+- Han leído y entienden este documento
+- Firman esta escritura de manera voluntaria
 
-| Signature                                  | Date          |
+---
+
+## 10. Ejecución y firmas
+
+**EN TESTIMONIO DE LO CUAL**, el/los Cedente(s) suscriben esta Escritura de Renuncia de Derechos el **{{deed_date}}**.
+
+**CEDENTE:**
+
+| Firma | Fecha |
 | ------------------------------------------ | ------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
-| {{grantor_name}}                           |               |
-| Print Name: {{grantor_name}}               |               |
+| {{grantor_name}} | |
+| Nombre en letra de imprenta: {{grantor_name}} | |
 
 {{#if multiple_grantors}}
-**ADDITIONAL GRANTOR:**
+**CEDENTE ADICIONAL:**
 
-| Signature                                  | Date          |
+| Firma | Fecha |
 | ------------------------------------------ | ------------- |
 | ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
-| {{grantor_2_name}}                         |               |
-| Print Name: {{grantor_2_name}}             |               |
+| {{grantor_2_name}} | |
+| Nombre en letra de imprenta: {{grantor_2_name}} | |
 
 {{/if}}
 
 ---
 
-## 11. Acknowledgment/Notarization
+## 11. Reconocimiento/Notarización
 
-**State of {{state}}**  
-**County of {{county}}**
+**Estado de {{state}}**  
+**Condado de {{county}}**
 
-On this **{{deed_date}}**, before me personally appeared **{{grantor_name}}**{{#if multiple_grantors}} and **{{grantor_2_name}}**{{/if}}, who proved to me on the basis of satisfactory evidence to be the person(s) whose name(s) is/are subscribed to the within instrument and acknowledged to me that he/she/they executed the same in his/her/their authorized capacity(ies), and that by his/her/their signature(s) on the instrument the person(s), or the entity upon behalf of which the person(s) acted, executed the instrument.
+En esta fecha **{{deed_date}}**, compareció/comparecieron personalmente ante mí **{{grantor_name}}**{{#if multiple_grantors}} y **{{grantor_2_name}}**{{/if}}, quienes acreditaron mediante pruebas satisfactorias ser la(s) persona(s) cuyo(s) nombre(s) aparece(n) en este instrumento y reconocieron haberlo firmado en su carácter autorizado, y que mediante su firma dicho instrumento fue ejecutado por la(s) persona(s) o la entidad en cuyo nombre actuaron.
 
-I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+Certifico BAJO PENA DE PERJURIO conforme a las leyes del Estado de {{state}} que el párrafo anterior es verdadero y correcto.
 
-**WITNESS** my hand and official seal.
+**DOY FE** con mi firma y sello oficial.
 
-**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
-**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
+**Notario Público:** ******\*\*\*\*******\_******\*\*\*\*******  
+**Mi comisión expira:** ****\*\*\*\*****\_****\*\*\*\*****
 
-**[Notary Seal]**
+**[Sello del notario]**
 
 ---
 
-## 12. Recording Information
+## 12. Información para el registro
 
-**For Recorder's Use Only:**
+**Solo para uso del registrador:**
 
-**Document Number:** **\*\*\*\***\_\_\_**\*\*\*\***  
-**Recording Date:** **\*\*\*\***\_\_\_**\*\*\*\***  
-**Recording Time:** **\*\*\*\***\_\_\_**\*\*\*\***  
-**Recorded By:** **\*\*\*\***\_\_\_**\*\*\*\***
+**Número de documento:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Fecha de registro:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Hora de registro:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Registrado por:** **\*\*\*\***\_\_\_**\*\*\*\***
 
-**Recording Fees:**
+**Honorarios de registro:**
 
-- Recording Fee: $\***\*\_\_\_\*\***
-- Transfer Tax: $\***\*\_\_\_\*\***
-- Other Fees: $\***\*\_\_\_\*\***
+- Cuota de registro: $\***\*\_\_\_\*\***
+- Impuesto de transferencia: $\***\*\_\_\_\*\***
+- Otros cargos: $\***\*\_\_\_\*\***
 - **Total:** $\***\*\_\_\_\*\***
 
 ---
 
-## 13. Return Document To
+## 13. Devolver el documento a
 
-After recording, return this document to:
+Después del registro, devuélvase este documento a:
 
 **{{return_to_name}}**  
 {{return_to_address}}
 
-**Phone:** {{return_to_phone}}
+**Teléfono:** {{return_to_phone}}
 
 ---
 
-## 14. Important Notices
+## 14. Avisos importantes
 
-### 14.1 Title Insurance Recommendation
+### 14.1 Recomendación sobre seguro de título
 
-**STRONGLY RECOMMENDED:** The Grantee should obtain title insurance to protect against title defects, liens, or other issues not revealed by this quitclaim deed.
+**SE RECOMIENDA ENÉRGICAMENTE:** El Cesionario debe obtener un seguro de título para protegerse contra defectos, gravámenes u otros problemas no revelados por esta escritura de renuncia.
 
-### 14.2 Professional Advice
+### 14.2 Asesoría profesional
 
-This deed should be reviewed by qualified legal and tax professionals before execution, especially for:
+Esta escritura debe ser revisada por profesionales legales y fiscales calificados antes de su firma, especialmente en lo relativo a:
 
-- Tax implications of the transfer
-- Estate planning considerations
-- Potential liability issues
-- Recording requirements
+- Implicaciones fiscales de la transferencia
+- Consideraciones de planificación patrimonial
+- Posibles responsabilidades
+- Requisitos de registro
 
-### 14.3 Recording Requirement
+### 14.3 Requisito de registro
 
-This deed must be recorded in the county recorder's office where the property is located to provide public notice of the transfer.
+Esta escritura debe registrarse en la oficina del registrador del condado donde se ubica el inmueble para dar aviso público de la transferencia.
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This quitclaim deed should be reviewed by a qualified real estate attorney to ensure compliance with state and local laws. Quitclaim deeds provide no title warranties and should be used only when the parties understand the risks involved. Always obtain title insurance and professional legal advice before completing real estate transfers.
+**AVISO LEGAL IMPORTANTE:** Esta escritura de renuncia debe ser revisada por un abogado inmobiliario calificado para asegurar el cumplimiento con las leyes estatales y locales. Las escrituras de renuncia no otorgan garantías de título y deben utilizarse solo cuando las partes comprenden los riesgos involucrados. Obtenga siempre seguro de título y asesoría legal profesional antes de completar transferencias inmobiliarias.
 
-## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+## _Plantilla generada por 123LegalDoc - Plataforma profesional de documentos legales_
 
-Â© 2025 123LegalDoc Â· DIY form Â· Not legal advice Â· Terms: 123LegalDoc.com/terms
-
-
+© 2025 123LegalDoc · Formulario DIY · No constituye asesoría legal · Términos: 123LegalDoc.com/terms

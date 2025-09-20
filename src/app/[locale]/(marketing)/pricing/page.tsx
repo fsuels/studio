@@ -165,6 +165,28 @@ export default async function PricingPage({
   const { locale } = await params;
   const pricingJsonLd = buildPricingStructuredData(locale);
   const t = (en: string, es?: string) => (locale === 'es' && es ? es : en);
+  const comparisonRows = [
+    {
+      feature: t('AI-Powered Drafting', 'Redacción con IA'),
+      ourValue: t('Automated with built-in AI', 'Automatizado con IA integrada'),
+      traditionalValue: t('Manual drafting, billed hourly', 'Redacción manual con facturación por hora'),
+    },
+    {
+      feature: t('Instant Document Download', 'Descarga Instantánea'),
+      ourValue: t('Ready in minutes', 'Listo en minutos'),
+      traditionalValue: t('Days or weeks of turnaround', 'Días o semanas de espera'),
+    },
+    {
+      feature: t('Fully Bilingual Support', 'Soporte Bilingüe'),
+      ourValue: t('Included in every plan', 'Incluido en cada plan'),
+      traditionalValue: t('Limited or add-on service', 'Servicio limitado o adicional'),
+    },
+    {
+      feature: t('One-Time Payment Option', 'Pago Único'),
+      ourValue: t('Flat fee, no subscriptions', 'Pago fijo, sin suscripciones'),
+      traditionalValue: t('Retainers and ongoing fees', 'Retenedores y cargos continuos'),
+    },
+  ] as const;
 
   const Plan = ({ title, price, period, features, cta, planId }: { title: string; price: string; period?: string; features: string[]; cta: { href: string; label: string; variant?: 'primary' | 'outline'; analyticsId?: string }; planId: string }) => (
     <div className="shadow-lg rounded-xl bg-card border border-border transition-all hover:shadow-xl p-8">
@@ -255,38 +277,44 @@ export default async function PricingPage({
 
       <section className="mt-16 md:mt-24 max-w-4xl mx-auto text-left">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-foreground">{t('How We Compare', 'Cómo nos Comparamos')}</h2>
-        <div className="shadow-xl border border-border rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="text-left p-3 w-[200px]">{t('Feature', 'Característica')}</th>
-                <th className="text-center p-3 text-primary">123LegalDoc</th>
-                <th className="text-center p-3 text-muted-foreground">{t('Traditional Lawyer', 'Abogado Tradicional')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-t">
-                <td className="p-3">{t('AI-Powered Drafting', 'Redacción con IA')}</td>
-                <td className="text-center p-3">✅</td>
-                <td className="text-center p-3">❌</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-3">{t('Instant Document Download', 'Descarga Instantánea')}</td>
-                <td className="text-center p-3">✅</td>
-                <td className="text-center p-3">❌</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-3">{t('Fully Bilingual Support', 'Soporte Bilingüe')}</td>
-                <td className="text-center p-3">✅</td>
-                <td className="text-center p-3">❌</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-3">{t('One-Time Payment Option', 'Pago Único')}</td>
-                <td className="text-center p-3">✅</td>
-                <td className="text-center p-3">❌</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="space-y-6">
+          <div className="hidden overflow-x-auto rounded-lg border border-border shadow-xl md:block">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="text-left p-3 w-[200px]">{t('Feature', 'Característica')}</th>
+                  <th className="text-center p-3 text-primary">123LegalDoc</th>
+                  <th className="text-center p-3 text-muted-foreground">{t('Traditional Lawyer', 'Abogado Tradicional')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((row) => (
+                  <tr key={row.feature} className="border-t">
+                    <td className="p-3">{row.feature}</td>
+                    <td className="p-3 text-center text-sm font-semibold text-primary">{row.ourValue}</td>
+                    <td className="p-3 text-center text-sm text-muted-foreground">{row.traditionalValue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid gap-4 md:hidden">
+            {comparisonRows.map((row) => (
+              <div key={row.feature} className="rounded-lg border border-border bg-card p-4 shadow-sm">
+                <h3 className="text-base font-semibold text-foreground">{row.feature}</h3>
+                <dl className="mt-3 space-y-2 text-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <dt className="font-medium text-primary">123LegalDoc</dt>
+                    <dd className="text-right text-foreground">{row.ourValue}</dd>
+                  </div>
+                  <div className="flex items-start justify-between gap-3">
+                    <dt className="font-medium text-muted-foreground">{t('Traditional Lawyer', 'Abogado Tradicional')}</dt>
+                    <dd className="text-right text-muted-foreground">{row.traditionalValue}</dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

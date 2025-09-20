@@ -1,7 +1,6 @@
 // src/app/[locale]/partners/page.tsx
 import React from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, Building2, Plug, Users } from 'lucide-react';
 import SEOConfig from '@/config/seo';
 import { localizations } from '@/lib/localizations';

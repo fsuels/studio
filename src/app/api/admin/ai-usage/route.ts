@@ -505,9 +505,9 @@ function getEndpointComparison(
 
 function getSpendingPatterns(
   analytics: AIUsageAnalytics,
-): SpendingPatterns | {} {
+): SpendingPatterns | null {
   const dailyCosts = analytics.trends.dailyCosts;
-  if (dailyCosts.length === 0) return {};
+  if (dailyCosts.length === 0) return null;
 
   // Calculate spending patterns
   const totalCost = dailyCosts.reduce(

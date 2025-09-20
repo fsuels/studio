@@ -2,14 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { aiInstance, GuardrailViolationError } from '@/ai/ai-instance';
 
-interface LegalTerm {
-  term: string;
-  definition: string;
-  jurisdiction: string[];
-  confidence: number;
-  context: string;
-  alternatives?: string[];
-}
 
 type TranslationContext = {
   sourceLanguage: string;

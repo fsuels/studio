@@ -1,7 +1,7 @@
 // src/components/layout/Header/index.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@/components/layout/Logo';
@@ -64,10 +64,16 @@ const Header = React.memo(function Header() {
       setIsMobileMenuOpen(false);
     }
   }, [isMegaMenuOpen]);
-
-  useEffect(() => {
-    router.prefetch(aiFinderDestination);
+  const prefetchAIFinder = useCallback(() => {
+    try {
+      router.prefetch(aiFinderDestination);
+    } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.debug('AI finder prefetch failed', error);
+      }
+    }
   }, [aiFinderDestination, router]);
+
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -137,6 +143,7 @@ const Header = React.memo(function Header() {
             {/* Mobile AI Document Finder Button */}
             <button
               onClick={() => router.push(aiFinderDestination)}
+              onMouseEnter={prefetchAIFinder}
               className="inline-flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-md shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
               title="🤖 AI Document Finder"
             >
@@ -182,6 +189,7 @@ const Header = React.memo(function Header() {
             {/* AI Document Finder Button */}
             <button
               onClick={() => router.push(aiFinderDestination)}
+              onMouseEnter={prefetchAIFinder}
               className="ai-finder-btn group relative inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
               title="🤖 AI Document Finder - Describe what you need and let AI find the perfect document!"
             >

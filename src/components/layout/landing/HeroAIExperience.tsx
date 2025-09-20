@@ -34,9 +34,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
     setIsHydrated(true);
   }, []);
 
-  useEffect(() => {
-    router.prefetch(primaryCtaDestination);
-  }, [primaryCtaDestination, router]);
+  
 
   const handleSamplePrompt = (prompt: string) => {
     setSearchQuery(prompt);
@@ -228,3 +226,4 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
   );
 });
 export default HeroAIExperience;
+

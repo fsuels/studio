@@ -203,7 +203,7 @@ export function TenantHeader() {
           <div className="max-w-7xl mx-auto">
             <p className="text-xs text-gray-500 text-center">
               Powered by{' '}
-              <Link href="/" className="text-blue-600 hover:text-blue-800">
+              <Link href="/en/" className="text-blue-600 hover:text-blue-800">
                 123LegalDoc
               </Link>
             </p>

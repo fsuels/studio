@@ -31,7 +31,6 @@ let lastEvent: CspAlertMetricEvent | undefined;
 let promClient: typeof import('prom-client') | null = null;
 if (typeof window === 'undefined') {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
     promClient = require('prom-client') as typeof import('prom-client');
   } catch (_error) {
     promClient = null;
