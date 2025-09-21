@@ -776,8 +776,8 @@ describe('useDiscoverySearch', () => {
         await result.current.hybridSearch('test query'); // No embedding provided
       });
 
-      // Verify vector search was not called
-      expect(mockVectorSearch).not.toHaveBeenCalled();
+      // Verify vector search was called with the raw query
+      expect(mockVectorSearch).toHaveBeenCalledWith('test query', { topK: 20, queryEmbedding: undefined });
 
       // Verify keyword-only results
       const { results } = result.current;
@@ -820,3 +820,4 @@ describe('useDiscoverySearch', () => {
     });
   });
 });
+

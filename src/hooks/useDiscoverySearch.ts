@@ -435,11 +435,11 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       }
       promises.push(keywordSearchPromise);
       
-      // 2. Vector search promise (if embedding provided)
-      let vectorSearchPromise: Promise<VectorSearchResult[]> = Promise.resolve([]);
-      if (queryEmbedding) {
-        vectorSearchPromise = vectorSearch(rawQuery, { topK: 20, queryEmbedding }); // Get top 20 semantic matches
-      }
+      // 2. Vector search (local semantic relevance)
+      const vectorSearchPromise: Promise<VectorSearchResult[]> = vectorSearch(rawQuery, {
+        topK: 20,
+        queryEmbedding,
+      }); // Get top 20 semantic matches
       promises.push(vectorSearchPromise);
       
       // Execute searches in parallel
@@ -627,3 +627,4 @@ export function logFirestoreReads(count: number = 1): void {
     warnLog('[Discovery Search] Firestore read logger not available');
   }
 }
+
