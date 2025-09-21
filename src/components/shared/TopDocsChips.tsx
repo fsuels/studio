@@ -31,10 +31,8 @@ import {
   Copyright,
   type LucideIcon,
 } from 'lucide-react';
-import {
-  getWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 // (No need for mobile-only dropdown after redesign)
 
 const TopDocsChips = React.memo(function TopDocsChips() {
@@ -61,6 +59,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [tax, setTax] = useState<any | null>(null);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
   // Progressive reveal: start with NO selection (only category cards)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showAllForCategory, setShowAllForCategory] = useState(false);
@@ -239,14 +238,16 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
     (async () => {
       try {
-        const [{ taxonomy }] = await Promise.all([
+        const [{ taxonomy }, module] = await Promise.all([
           import('@/config/taxonomy'),
+          loadWorkflowModule(),
         ]);
 
         if (cancelled) return;
 
         setTax(taxonomy);
-        const docs = getWorkflowDocuments({ jurisdiction: 'us' });
+        setWorkflowModule(module);
+        const docs = module.getWorkflowDocuments({ jurisdiction: 'us' });
         setTopDocs(docs);
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
@@ -308,8 +309,14 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       return candidateDocs;
     }
 
-    return getWorkflowDocuments({ jurisdiction: 'us' }).filter(matches);
-  }, [selectedCategory, taxonomyToDocCategory, topDocs]);
+    if (!workflowModule) {
+      return [] as DocumentSummary[];
+    }
+
+    return workflowModule
+      .getWorkflowDocuments({ jurisdiction: 'us' })
+      .filter(matches);
+  }, [selectedCategory, taxonomyToDocCategory, topDocs, workflowModule]);
 
   const handleExploreAll = () => {
     router.push(exploreAllDestination);

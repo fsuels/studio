@@ -1,7 +1,7 @@
 // src/components/layout/Header/CategoryMegaMenuContent.tsx
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
@@ -10,11 +10,8 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { X, Search, ChevronRight, FileText } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import {
-  getWorkflowDocuments,
-  searchWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface CategoryMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -127,11 +124,31 @@ export default function CategoryMegaMenuContent({
 }: CategoryMegaMenuContentProps) {
   const { t } = useTranslation('common');
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+  const [documents, setDocuments] = useState<DocumentSummary[]>([]);
 
-  const documents = useMemo(
-    () => getWorkflowDocuments({ jurisdiction: 'us' }),
-    [],
-  );
+  useEffect(() => {
+    if (workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setWorkflowModule(module);
+        setDocuments(module.getWorkflowDocuments({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load workflow module for CategoryMegaMenuContent:', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
 
   // Handle global keyboard events
   React.useEffect(() => {
@@ -157,13 +174,15 @@ export default function CategoryMegaMenuContent({
   // Search functionality
   const searchResults = useMemo(() => {
     const trimmedQuery = searchQuery.trim();
-    if (!trimmedQuery) return [];
+    if (!trimmedQuery || !workflowModule) return [];
 
-    return searchWorkflowDocuments(trimmedQuery, {
-      jurisdiction: 'us',
-      language: locale,
-    }).filter((doc) => doc.id !== 'general-inquiry');
-  }, [searchQuery, locale]);
+    return workflowModule
+      .searchWorkflowDocuments(trimmedQuery, {
+        jurisdiction: 'us',
+        language: locale,
+      })
+      .filter((doc) => doc.id !== 'general-inquiry');
+  }, [searchQuery, locale, workflowModule]);
 
   // Group search results by category
   const groupedSearchResults = useMemo(() => {
@@ -304,6 +323,16 @@ export default function CategoryMegaMenuContent({
       </div>
     );
   };
+
+  if (!workflowModule || documents.length === 0) {
+    return (
+      <div className="fixed inset-0 z-40 flex items-center justify-center">
+        <div className="bg-background border border-border rounded-md px-6 py-4 shadow-lg text-sm text-muted-foreground">
+          Loading document catalog…
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in-0 slide-in-from-top-2 duration-300 ease-out">

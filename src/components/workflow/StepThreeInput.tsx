@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
 import type { FieldSuggestion } from '@/ai/flows/analyze-form-data';
 import type { FormField } from '@/data/formSchemas';
-import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface Props {
   templateId: string;
@@ -21,7 +21,8 @@ export function StepThreeInput({ templateId }: Props) {
     (async () => {
       try {
         setTemplateError(null);
-        const loaded = await loadWorkflowDocument(templateId);
+        const module = await loadWorkflowModule();
+        const loaded = await module.loadWorkflowDocument(templateId);
         if (!cancelled) {
           setTemplate(loaded);
           if (!loaded) {

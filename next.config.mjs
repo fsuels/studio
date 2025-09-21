@@ -97,6 +97,25 @@ const nextConfig = {
         destination: '/en/auth/action?mode=verifyEmail&oobCode=:oobCode&continueUrl=:continueUrl',
         permanent: false,
       },
+      {
+        source: '/docs/:docId/:state',
+        destination: '/en/docs/:docId/:state',
+        permanent: true,
+      },
+      {
+        source: '/docs/:docId/view',
+        destination: '/en/docs/:docId/view',
+        permanent: true,
+      },
+    ];
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: '/share/:linkId',
+        destination: '/share?linkId=:linkId',
+      },
     ];
   },
 };
@@ -305,7 +324,7 @@ if (process.env.NODE_ENV === 'production' && !process.env.NEXT_TURBOPACK) {
               maxSize: 250000,
             },
             vendorsAnalytics: {
-              test: /[\\/]node_modules[\\/](@sentry|@opentelemetry|prom-client)[\\/]/,
+              test: /[\\/]node_modules[\\/](@opentelemetry|prom-client)[\\/]/,
               name: 'vendors-analytics',
               priority: 5,
               chunks: 'async',

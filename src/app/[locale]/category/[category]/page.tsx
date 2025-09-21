@@ -15,7 +15,7 @@ import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
 export async function generateStaticParams() {
   const categories = Object.keys(taxonomy.categories);
   const locales = ['en', 'es'];
-  
+
   return locales.flatMap(locale =>
     categories.map(category => ({
       locale,
@@ -23,6 +23,8 @@ export async function generateStaticParams() {
     }))
   );
 }
+
+export const dynamicParams = false;
 
 // Generate metadata for each category
 export async function generateMetadata({

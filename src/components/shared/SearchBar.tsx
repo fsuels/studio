@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
-import { searchWorkflowDocuments, type DocumentSummary } from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 const SearchBar = React.memo(function SearchBar() {
   const { t: tHeader } = useTranslation('header');
@@ -35,18 +36,42 @@ const SearchBar = React.memo(function SearchBar() {
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const deferredSearchTerm = useDeferredValue(searchTerm);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
+  useEffect(() => {
+    if (!isHydrated || workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (!cancelled) {
+          setWorkflowModule(module);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load workflow module for search bar:', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isHydrated, workflowModule]);
+
   const hydratedSuggestions = useMemo(() => {
-    if (!isHydrated) return [] as DocumentSummary[];
+    if (!isHydrated || !workflowModule) return [] as DocumentSummary[];
 
     const term = deferredSearchTerm.trim();
     if (term.length <= 1) return [];
 
-    const results = searchWorkflowDocuments(term, {
+    const results = workflowModule.searchWorkflowDocuments(term, {
       jurisdiction: 'us',
       language: locale === 'es' ? 'es' : 'en',
     });

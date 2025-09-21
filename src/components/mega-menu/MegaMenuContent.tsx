@@ -1,13 +1,11 @@
 // src/components/mega-menu/MegaMenuContent.tsx
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import {
-  getWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import {
   Briefcase,
@@ -195,14 +193,39 @@ export default function MegaMenuContent({
   onLinkClick,
 }: MegaMenuContentProps) {
   const { t } = useTranslation('common');
-  const docs = useMemo(
-    () => getWorkflowDocuments({ jurisdiction: 'us' }),
-    [],
-  );
+  const [docs, setDocs] = useState<DocumentSummary[]>([]);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+
+  useEffect(() => {
+    if (workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setWorkflowModule(module);
+        setDocs(module.getWorkflowDocuments({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for MegaMenuContent', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
 
   // Get all documents and categorize them
   const categorizedDocuments = useMemo(() => {
     const categories: Record<string, DocumentSummary[]> = {};
+
+    CATEGORIES.forEach((category) => {
+      categories[category.key] = [];
+    });
 
     docs
       .filter((doc) => doc.id !== 'general-inquiry')

@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -22,12 +23,8 @@ import {
 } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import { usStates } from '@/lib/usStates';
-import {
-  getWorkflowCategories,
-  getWorkflowDocuments,
-  searchWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface Props {
   onSelect: (_documentId: string) => void; // Now accepts the document ID
@@ -43,10 +40,36 @@ export default function DocumentTypeSelector({
   const [selectedState, setSelectedState] = useState<string | undefined>(
     undefined,
   );
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+
+  useEffect(() => {
+    if (workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (!cancelled) {
+          setWorkflowModule(module);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for DocumentTypeSelector', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
 
   const language = useMemo(() => (i18n.language === 'es' ? 'es' : 'en'), [i18n.language]) as 'en' | 'es';
 
   const filteredDocuments: DocumentSummary[] = useMemo(() => {
+    if (!workflowModule) return [];
+
     const baseOptions = {
       jurisdiction: 'us',
       state: selectedState || undefined,
@@ -54,14 +77,16 @@ export default function DocumentTypeSelector({
     } as const;
 
     if (!searchQuery.trim()) {
-      return getWorkflowDocuments(baseOptions);
+      return workflowModule.getWorkflowDocuments(baseOptions);
     }
 
-    return searchWorkflowDocuments(searchQuery, baseOptions);
-  }, [language, searchQuery, selectedState]);
+    return workflowModule.searchWorkflowDocuments(searchQuery, baseOptions);
+  }, [language, searchQuery, selectedState, workflowModule]);
 
   const categories = useMemo(() => {
-    const availableCategories = getWorkflowCategories({
+    if (!workflowModule) return [] as string[];
+    
+    const availableCategories = workflowModule.getWorkflowCategories({
       jurisdiction: 'us',
       state: selectedState || undefined,
     });
@@ -74,7 +99,7 @@ export default function DocumentTypeSelector({
     return availableCategories.filter((category) =>
       categoriesInResults.includes(category),
     );
-  }, [filteredDocuments, selectedState]);
+  }, [filteredDocuments, selectedState, workflowModule]);
 
   const docsByCategory = useMemo(() => {
     const map = new Map<string, DocumentSummary[]>();
@@ -103,6 +128,19 @@ export default function DocumentTypeSelector({
     if (!activeCategory) return [];
     return docsByCategory.get(activeCategory) ?? [];
   }, [docsByCategory, activeCategory]);
+
+  if (!workflowModule) {
+    return (
+      <Card className="mt-6">
+        <CardContent className="py-12 flex flex-col items-center gap-3">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">
+            {t('docTypeSelector.loading', 'Loading templates…')}
+          </span>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="mt-6">

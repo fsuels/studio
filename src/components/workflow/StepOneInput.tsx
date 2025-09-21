@@ -1,20 +1,36 @@
 // src/components/StepOneInput.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { File } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getWorkflowCategories } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface StepOneInputProps {
   onSelectCategory: (_category: string) => void;
 }
 
 export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
-  const categories = React.useMemo(
-    () => getWorkflowCategories({ jurisdiction: 'us' }),
-    [],
-  );
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setCategories(module.getWorkflowCategories({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load categories for StepOneInput', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto py-8 overflow-x-hidden">

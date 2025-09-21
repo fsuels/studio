@@ -3,7 +3,8 @@
 
 import React, { useState } from 'react';
 import { usStates } from '@/lib/usStates';
-import { getWorkflowDocumentsByCategory, type DocumentSummary } from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface StepTwoInputProps {
   category: string;
@@ -17,15 +18,39 @@ export function StepTwoInput({
   onSelectTemplate,
 }: StepTwoInputProps) {
   const [stateCode, setStateCode] = useState<string>('');
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+
+  React.useEffect(() => {
+    if (workflowModule) return;
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (!cancelled) {
+          setWorkflowModule(module);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for StepTwoInput', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
 
   // Memoize list of docs in this category
   const docsInCategory: DocumentSummary[] = React.useMemo(
     () =>
-      getWorkflowDocumentsByCategory(category, {
-        jurisdiction: 'us',
-        state: stateCode || undefined,
-      }),
-    [category, stateCode],
+      workflowModule
+        ? workflowModule.getWorkflowDocumentsByCategory(category, {
+            jurisdiction: 'us',
+            state: stateCode || undefined,
+          })
+        : [],
+    [category, stateCode, workflowModule],
   );
 
   // Handle state dropdown change

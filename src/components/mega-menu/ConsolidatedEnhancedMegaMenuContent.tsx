@@ -7,7 +7,7 @@ import ConsolidatedMegaMenuContent from '@/components/layout/mega-menu/Consolida
 import { trackMegaMenu } from '@/lib/taxonomy-analytics';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { createPortal } from 'react-dom';
-import { getWorkflowDocuments } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface ConsolidatedEnhancedMegaMenuContentProps {
   locale: 'en' | 'es';
@@ -34,8 +34,23 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
       structure: 'document_type_grouped'
     });
     // Hydrate documents when menu opens on client
-    const docs = getWorkflowDocuments({ jurisdiction: 'us' });
-    setDocuments(docs);
+    let cancelled = false;
+
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        const docs = module.getWorkflowDocuments({ jurisdiction: 'us' });
+        setDocuments(docs);
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow documents for consolidated mega menu', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [locale]);
 
   const handleLinkClick = React.useCallback(() => {

@@ -39,12 +39,8 @@ import {
   languageSupportsSpanish,
   buildCategoryInfo,
 } from './constants';
-import {
-  getWorkflowDocuments,
-  searchWorkflowDocuments,
-  getWorkflowCategories,
-  loadWorkflowDocument,
-} from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   selectedCategory: initialSelectedCategory,
@@ -124,14 +120,51 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   const searchLanguage: 'en' | 'es' =
     i18n.language === 'es' ? 'es' : 'en';
 
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+
+  useEffect(() => {
+    if (workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (!cancelled) {
+          setWorkflowModule(module);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for Step1 selector', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
+
   const workflowDocuments = useMemo(
-    () => getWorkflowDocuments({ jurisdiction: 'us', state: stateFilter }),
-    [stateFilter],
+    () =>
+      workflowModule
+        ? workflowModule.getWorkflowDocuments({
+            jurisdiction: 'us',
+            state: stateFilter,
+          })
+        : [],
+    [stateFilter, workflowModule],
   );
 
   const manifestCategories = useMemo(
-    () => getWorkflowCategories({ jurisdiction: 'us', state: stateFilter }),
-    [stateFilter],
+    () =>
+      workflowModule
+        ? workflowModule.getWorkflowCategories({
+            jurisdiction: 'us',
+            state: stateFilter,
+          })
+        : [],
+    [stateFilter, workflowModule],
   );
 
   const sortedCategories = useMemo(() => {
@@ -178,7 +211,11 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
         return [];
       }
 
-      return searchWorkflowDocuments(trimmedQuery, {
+      if (!workflowModule) {
+        return [] as DocumentSummary[];
+      }
+
+      return workflowModule.searchWorkflowDocuments(trimmedQuery, {
         jurisdiction: 'us',
         state: stateFilter,
         language: searchLanguage,
@@ -312,9 +349,20 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       return;
     }
 
+    if (!workflowModule) {
+      toast({
+        title: t('Templates still loading'),
+        description: t(
+          'One moment while we finish loading the document library.',
+        ),
+        variant: 'default',
+      });
+      return;
+    }
+
     try {
       setLoadingDocId(doc.id);
-      const loadedDoc = await loadWorkflowDocument(doc.id);
+      const loadedDoc = await workflowModule.loadWorkflowDocument(doc.id);
 
       if (!loadedDoc) {
         toast({

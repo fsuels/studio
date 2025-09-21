@@ -1,15 +1,13 @@
 // src/components/mega-menu/MegaMenuContent.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
-import {
-  getWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { FileText } from 'lucide-react';
 import {
@@ -77,10 +75,35 @@ export default function MegaMenuContent({
     [t],
   );
   const currentLocale = i18n.language as 'en' | 'es';
+  const [fallbackDocuments, setFallbackDocuments] = useState<DocumentSummary[]>([]);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+
+  useEffect(() => {
+    if (documents || workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setWorkflowModule(module);
+        setFallbackDocuments(module.getWorkflowDocuments({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load workflow module for mega menu:', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [documents, workflowModule]);
 
   const documentsToUse = React.useMemo(
-    () => documents ?? getWorkflowDocuments({ jurisdiction: 'us' }),
-    [documents],
+    () => documents ?? fallbackDocuments,
+    [documents, fallbackDocuments],
   );
 
   const getDocumentsForCategory = (categoryKey: string) => {

@@ -7,7 +7,7 @@ import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from './StepTwoInput';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
-import { getWorkflowDocumentById } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 // ✅ Correct dynamic import for default export to support preload
 const StepThreeInput = dynamic(() => import('./StepThreeInput'), {
@@ -28,19 +28,45 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
   const [step, setStep] = useState(initialDocId ? 2 : 1);
-  const [category, setCategory] = useState<string>(() => {
-    if (!initialDocId) return '';
-    return getWorkflowDocumentById(initialDocId)?.category ?? '';
-  });
+  const [category, setCategory] = useState<string>('');
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
 
   useEffect(() => {
-    if (!initialDocId) {
-      setCategory('');
+    if (workflowModule) {
       return;
     }
-    const doc = getWorkflowDocumentById(initialDocId);
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setWorkflowModule(module);
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for DocumentFlow', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
+
+  useEffect(() => {
+    if (!initialDocId || !workflowModule) return;
+    const doc = workflowModule.getWorkflowDocumentById(initialDocId);
     setCategory(doc?.category ?? '');
-  }, [initialDocId]);
+  }, [initialDocId, workflowModule]);
+
+  useEffect(() => {
+    if (!initialDocId || !workflowModule) {
+      if (!initialDocId) setCategory('');
+      return;
+    }
+    const doc = workflowModule.getWorkflowDocumentById(initialDocId);
+    setCategory(doc?.category ?? '');
+  }, [initialDocId, workflowModule]);
 
   const advanceTo = (next: number) => {
     setStep(next);

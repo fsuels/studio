@@ -29,10 +29,8 @@ import {
 } from 'lucide-react'; // Updated icons and custom icon
 import { useToast } from '@/hooks/use-toast';
 import type { Question, LegalDocument } from '@/types/documents';
-import {
-  getWorkflowDocuments,
-  loadWorkflowDocument,
-} from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
@@ -56,10 +54,31 @@ export function Questionnaire({
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const { toast } = useToast();
 
-  const documentsMetadata = useMemo(
-    () => getWorkflowDocuments({ jurisdiction: 'us' }),
-    [],
-  );
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+  const [documentsMetadata, setDocumentsMetadata] = useState<DocumentSummary[]>([]);
+
+  useEffect(() => {
+    if (workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setWorkflowModule(module);
+        setDocumentsMetadata(module.getWorkflowDocuments({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (!cancelled && process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load workflow module for questionnaire', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workflowModule]);
 
   const loadedDocumentsRef = useRef(new Map<string, LegalDocument | null>());
 
@@ -86,14 +105,14 @@ export function Questionnaire({
 
   const ensureDocument = useCallback(
     async (docId: string | null): Promise<LegalDocument | null> => {
-      if (!docId) return null;
+      if (!docId || !workflowModule) return null;
 
       if (loadedDocumentsRef.current.has(docId)) {
         return loadedDocumentsRef.current.get(docId) ?? null;
       }
 
       try {
-        const doc = await loadWorkflowDocument(docId);
+        const doc = await workflowModule.loadWorkflowDocument(docId);
         loadedDocumentsRef.current.set(docId, doc);
         return doc ?? null;
       } catch (error) {
@@ -101,7 +120,7 @@ export function Questionnaire({
         return null;
       }
     },
-    [],
+    [workflowModule],
   );
 
   const applyStateFilter = useCallback(

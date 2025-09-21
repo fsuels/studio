@@ -1,17 +1,15 @@
 // src/components/layout/Header/CategoryDropdown.tsx
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight, Loader2 } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import {
-  getWorkflowDocuments,
-  type DocumentSummary,
-} from '@/lib/workflow/document-workflow';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 
 interface CategoryDropdownProps {
@@ -348,10 +346,37 @@ export default function CategoryDropdown({
   isOpen
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
-  const documents = useMemo(
-    () => getWorkflowDocuments({ jurisdiction: 'us' }),
-    [],
-  );
+  const [documents, setDocuments] = useState<DocumentSummary[]>([]);
+  const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen || documents.length > 0 || isLoadingDocuments) {
+      return;
+    }
+
+    let cancelled = false;
+    setIsLoadingDocuments(true);
+
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        setDocuments(module.getWorkflowDocuments({ jurisdiction: 'us' }));
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load workflow documents for CategoryDropdown:', error);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoadingDocuments(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, documents.length, isLoadingDocuments]);
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
   const { setShowDiscoveryModal } = useDiscoveryModal();
@@ -390,6 +415,19 @@ export default function CategoryDropdown({
 
   const content = categoryContent[activeCategory as keyof typeof categoryContent];
   if (!content) return null;
+
+  if (documents.length === 0) {
+    return (
+      <div className="fixed inset-0 z-40 flex items-start justify-center pt-24">
+        <div className="bg-background border border-border rounded-md px-6 py-8 shadow-lg text-center">
+          <Loader2 className="mx-auto h-5 w-5 animate-spin text-muted-foreground" />
+          <p className="mt-3 text-sm text-muted-foreground">
+            {t('categoryDropdown.loading', { defaultValue: 'Loading documents…' })}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

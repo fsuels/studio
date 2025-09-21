@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { Skeleton } from '@/components/ui/skeleton';
-import { searchWorkflowDocuments } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 
 interface HeaderSearchProps {
   clientLocale: 'en' | 'es';
@@ -27,6 +27,7 @@ export default function HeaderSearch({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<DocumentSummary[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
@@ -35,15 +36,38 @@ export default function HeaderSearch({
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
     : 'Search documents...';
 
+  useEffect(() => {
+    if (!mounted || workflowModule) {
+      return;
+    }
+
+    let cancelled = false;
+    loadWorkflowModule()
+      .then((module) => {
+        if (!cancelled) {
+          setWorkflowModule(module);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load workflow module for header search:', error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [mounted, workflowModule]);
+
   // Search functionality backed by manifest metadata
   useEffect(() => {
-    if (!mounted) {
+    if (!mounted || !workflowModule) {
       return;
     }
 
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery.length > 1) {
-      const results = searchWorkflowDocuments(trimmedQuery, {
+      const results = workflowModule.searchWorkflowDocuments(trimmedQuery, {
         jurisdiction: 'us',
         language: clientLocale,
       }).slice(0, 8);
