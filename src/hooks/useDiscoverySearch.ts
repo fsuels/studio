@@ -438,7 +438,7 @@ export function useDiscoverySearch(): UseDiscoverySearchReturn {
       // 2. Vector search promise (if embedding provided)
       let vectorSearchPromise: Promise<VectorSearchResult[]> = Promise.resolve([]);
       if (queryEmbedding) {
-        vectorSearchPromise = vectorSearch(queryEmbedding, 20); // Get top 20 semantic matches
+        vectorSearchPromise = vectorSearch(rawQuery, { topK: 20, queryEmbedding }); // Get top 20 semantic matches
       }
       promises.push(vectorSearchPromise);
       

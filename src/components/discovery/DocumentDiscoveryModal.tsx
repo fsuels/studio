@@ -296,14 +296,14 @@ export default function DocumentDiscoveryModal() {
   return (
     <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
       <DialogContent 
-        className="max-w-6xl h-[95vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 [&>button:last-child]:hidden"
+        className="ai-finder-modal w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100vh-1.5rem)] sm:h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl [&>button:last-child]:hidden"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Smart Document Finder</DialogTitle>
         </DialogHeader>
         
         {/* Enhanced Header */}
-        <div className="relative overflow-hidden rounded-t-lg header-gradient">
+        <div className="relative overflow-hidden rounded-none sm:rounded-t-3xl header-gradient">
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-white/20"></div>
           {/* Contrast overlay for WCAG compliance - 40% for H1 contrast ≈ 5.8:1 */}
@@ -311,11 +311,11 @@ export default function DocumentDiscoveryModal() {
           <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse"></div>
           <div className="absolute -bottom-2 -left-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
           
-          <div className="relative px-5 py-4 pb-5">
-            <h2 className="text-3xl font-bold text-white flex items-center gap-4">
+          <div className="relative px-4 py-4 pb-5 sm:px-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3 sm:gap-4">
               <div className="relative">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-                  <Brain className="h-8 w-8 text-white drop-shadow-lg" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
+                <div className="p-2.5 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+                  <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-white drop-shadow-lg" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full animate-ping"></div>
               </div>
@@ -326,7 +326,7 @@ export default function DocumentDiscoveryModal() {
             
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
               aria-label="Close modal"
             >
               <X className="h-5 w-5 text-white" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
@@ -336,7 +336,7 @@ export default function DocumentDiscoveryModal() {
         
         {/* Content Container */}
         <div className="flex-1 flex flex-col bg-gray-50/50 dark:bg-gray-800/50 overflow-hidden">
-          <div className="flex-shrink-0 px-6 py-4 pb-3 sticky top-0 bg-gray-50/50 dark:bg-gray-800/50 z-10 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex-shrink-0 px-4 py-4 pb-3 sm:px-6 sticky top-0 bg-gray-50/50 dark:bg-gray-800/50 z-10 border-b border-gray-200 dark:border-gray-700">
             <SearchInput
               value={searchInput}
               onChange={(value) => {
@@ -351,7 +351,7 @@ export default function DocumentDiscoveryModal() {
 
             {/* Enhanced Voice feedback */}
             {isListening && (
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center px-1">
                 <div className="w-full max-w-md">
                   <div className="bg-red-50 dark:bg-red-950/50 rounded-lg p-4 shadow-sm border border-red-200 dark:border-red-700">
                     <div className="flex items-center gap-3">
@@ -377,7 +377,7 @@ export default function DocumentDiscoveryModal() {
 
             {/* Voice transcript with correction option */}
             {transcript && !isListening && (
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center px-1">
                 <div className="w-full max-w-md">
                   <div className="bg-emerald-50 dark:bg-emerald-950/50 rounded-lg p-4 shadow-sm border border-emerald-200 dark:border-emerald-700">
                     <div className="flex items-start gap-3">
@@ -434,7 +434,7 @@ export default function DocumentDiscoveryModal() {
           {/* Scrollable Results */}
           <div 
             ref={scrollContainerRef}
-            className={`flex-1 overflow-y-auto px-6 relative ${
+            className={`flex-1 overflow-y-auto px-4 sm:px-6 relative ${
               isOverflowing ? 'scroll-fade-out' : ''
             }`}
             aria-live="polite"
@@ -484,7 +484,7 @@ export default function DocumentDiscoveryModal() {
           </div>
 
           {/* Subtle disclaimer at bottom */}
-          <div className="flex-shrink-0 px-6 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+          <div className="flex-shrink-0 px-4 py-3 sm:px-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)]">
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
               <span className="font-medium">Disclaimer:</span> Not legal advice; consult an attorney for personalized guidance.
             </p>

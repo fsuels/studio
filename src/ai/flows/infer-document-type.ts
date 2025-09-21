@@ -207,7 +207,7 @@ export const inferDocumentTypeFlow = async (
     let candidate: unknown;
     try {
       candidate = JSON.parse(raw);
-    } catch (parseError) {
+    } catch (_parseError) {
       throw new Error(`Failed to parse AI response as JSON: ${raw}`);
     }
 

@@ -406,11 +406,13 @@ export class RevenueSharingSystem {
       throw new Error('Creator has not connected a Stripe account');
     }
 
+    const transferDescription = `Marketplace payout for ${params.payoutPeriod}`;
+
     const transfer = await stripe.transfers.create({
       amount: params.amount,
       currency: params.currency,
       destination: profileData.stripeConnectAccountId,
-      description: Marketplace payout for ,
+      description: transferDescription,
       metadata: {
         creatorId: params.creatorId,
         payoutPeriod: params.payoutPeriod,

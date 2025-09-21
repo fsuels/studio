@@ -585,7 +585,7 @@ describe('useDiscoverySearch', () => {
       });
 
       // Verify vector search was called
-      expect(mockVectorSearch).toHaveBeenCalledWith(queryEmbedding, 20);
+      expect(mockVectorSearch).toHaveBeenCalledWith('employment contract', { topK: 20, queryEmbedding });
 
       // Verify results contain expected items
       const { results } = result.current;

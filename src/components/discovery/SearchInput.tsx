@@ -10,6 +10,7 @@ interface SearchInputProps {
   onVoiceToggle: () => void;
   isListening: boolean;
   isVoiceSupported: boolean;
+  voiceError?: string | null;
   placeholder?: string;
   showHelpText?: boolean;
 }
@@ -20,6 +21,7 @@ export function SearchInput({
   onVoiceToggle,
   isListening,
   isVoiceSupported,
+  voiceError,
   placeholder = "Describe your legal situation...",
   showHelpText = true
 }: SearchInputProps) {
@@ -57,6 +59,7 @@ export function SearchInput({
         
         <div className="flex gap-2">
           <button
+            type="button"
             onClick={onVoiceToggle}
             onKeyDown={handleKeyDown}
             disabled={!isVoiceSupported}
@@ -105,6 +108,18 @@ export function SearchInput({
           </div>
         </div>
       </div>
+
+      {!isVoiceSupported && (
+        <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-800 dark:text-amber-200 rounded-lg px-3 py-2 text-sm" role="status" aria-live="polite">
+          Voice search needs a supported browser such as Chrome, Edge, or Safari.
+        </div>
+      )}
+
+      {voiceError && isVoiceSupported && (
+        <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-lg px-3 py-2 text-sm" role="status" aria-live="assertive">
+          {voiceError}
+        </div>
+      )}
     </div>
   );
 }
