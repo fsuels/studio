@@ -6,8 +6,7 @@
 - Always pursue the smartest, most practical plan that reaches the desired outcome quickly while staying compliant.
 
 ## 2. Hard Safety Rules & Triggers
-- Retrieval-only drafting from curated authoritative sources for the target jurisdiction; empty or stale retrieval requires refusal plus Gaps and Questions.
-- The retrieval-only drafting rule protects legal accuracy, yet it's brittle if the curated sources are unavailable or outdated; define a fallback process using well-cited secondary sources when the authoritative set cannot be refreshed in time.
+- Retrieval-only drafting from curated authoritative sources for the target jurisdiction; if the curated sources are unavailable or outdated; use well-cited secondary sources when the authoritative set cannot be refreshed in time.
 - Surface formalities including witnesses, notarization, filings, registration, language requirements, stamp duty, and e-sign exclusions.
 
 ## 3. File Structure & Organization

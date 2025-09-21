@@ -19,16 +19,16 @@ export default function TestimonialsCarousel({
   useEffect(() => {
     let cancelled = false;
 
-    setReviews(null);
-
     const loader = reviewLoaders[templateId];
     if (!loader) {
       console.info(
-        [TestimonialsCarousel] No testimonial data registered for template ; skipping carousel.,
+        `[TestimonialsCarousel] No testimonial data registered for template ${templateId}; skipping carousel.`,
       );
       setReviews([]);
       return;
     }
+
+    setReviews(null);
 
     loader()
       .then((mod) => {
@@ -37,7 +37,7 @@ export default function TestimonialsCarousel({
       })
       .catch((error) => {
         if (cancelled) return;
-        console.error([TestimonialsCarousel] Failed to load reviews for :, error);
+        console.error(`[TestimonialsCarousel] Failed to load reviews for ${templateId}:`, error);
         setReviews([]);
       });
 
