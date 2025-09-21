@@ -14,46 +14,74 @@ interface I18nProviderProps {
   namespaces?: string[];
 }
 
+const isServerEnvironment = typeof window === 'undefined';
+
 const I18nClientProvider: React.FC<I18nProviderProps> = ({
   children,
   locale,
   fallback,
   namespaces,
 }) => {
-  // i18nInstance from i18n.ts is already initialized (or being initialized).
-  // We just need to ensure the language is correctly set.
-  const [isLanguageSynced, setIsLanguageSynced] = useState(false);
-  // Safety net: ensure we never block rendering indefinitely
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isLanguageSynced) {
-        console.warn('[I18nClientProvider] Timeout waiting for i18n; rendering anyway');
-        setIsLanguageSynced(true);
+  const [isLanguageSynced, setIsLanguageSynced] = useState(() => {
+    if (isServerEnvironment) {
+      if (!i18nInstance.isInitialized) {
+        void ensureI18nInitialized({ locale, namespaces }).catch((err) => {
+          console.error('[I18nClientProvider] ensureI18nInitialized (ssr) error:', err);
+        });
+      } else if (i18nInstance.language !== locale) {
+        void i18nInstance.changeLanguage(locale).catch((err) => {
+          console.error('[I18nClientProvider] changeLanguage (ssr) error:', err);
+        });
       }
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [isLanguageSynced]);
+      return true;
+    }
+
+    return i18nInstance.isInitialized && i18nInstance.language === locale;
+  });
 
   useEffect(() => {
     let cancelled = false;
-    const sync = async () => {
+
+    const syncLocale = async () => {
       try {
         await ensureI18nInitialized({ locale, namespaces });
         if (cancelled) return;
+
         if (i18nInstance.language !== locale) {
           await i18nInstance.changeLanguage(locale);
         }
       } catch (err) {
         console.error('[I18nClientProvider] init/changeLanguage error:', err);
       } finally {
-        if (!cancelled) setIsLanguageSynced(true);
+        if (!cancelled) {
+          setIsLanguageSynced(true);
+        }
       }
     };
-    sync();
+
+    if (!isLanguageSynced || i18nInstance.language !== locale) {
+      void syncLocale();
+    }
+
     return () => {
       cancelled = true;
     };
-  }, [locale]);
+  }, [locale, namespaces, isLanguageSynced]);
+
+  useEffect(() => {
+    if (isLanguageSynced || typeof window === 'undefined') {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (!isLanguageSynced) {
+        console.warn('[I18nClientProvider] Timeout waiting for i18n; rendering anyway');
+        setIsLanguageSynced(true);
+      }
+    }, 4000);
+
+    return () => window.clearTimeout(timer);
+  }, [isLanguageSynced]);
 
   if (!isLanguageSynced) {
     return <>{fallback || null}</>;

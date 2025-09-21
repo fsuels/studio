@@ -11,7 +11,7 @@ Primary references:
 - TEAM/Compliance-Legal/complaint.json (if present)
 
 Flow:
-1. Load AGENT.md to anchor automation mandates, then review REMEMBER.md and ops/Memory.md as read-only sources for global priorities and outstanding risks. Capture new legal signals as handoff notes for the CEO orchestrator.
+1. Load AGENTS.md to anchor automation mandates, then review REMEMBER.md and ops/Memory.md as read-only sources for global priorities and outstanding risks. Capture new legal signals as handoff notes for the CEO orchestrator.
 2. Study TEAM/Compliance-Legal/Compliance-Legal.md to revisit charters, KPIs, and immediate compliance actions.
 3. Open TEAM/Compliance-Legal/memory.json. If `cycle_id`/`last_updated` are null or entries are empty, run a comprehensive audit: policy freshness (disclaimers, ToS, privacy, refund), jurisdiction knowledge base status, release gate coverage, legal incident logs, and international readiness. Summarize results. Review `TEAM/Compliance-Legal/complaint.json` (if present) and elevate any `open` or `in_progress` complaints as the first items to address.
 4. Craft a deterministic plan consistent with the playbook and backlog; use the plan tool and document legal references for each step.

@@ -47,9 +47,9 @@ export default function DocumentDiscoveryModal() {
   } = useDiscoveryModal();
 
   const {
-    results: firestoreResults,
+    results: discoveryResults,
     loading: isSearching,
-    searchFirestore,
+    hybridSearch,
     resetMetrics,
   } = useDiscoverySearch();
   
@@ -138,7 +138,7 @@ export default function DocumentDiscoveryModal() {
         setIsUsingLocalFallback(convertedResults.length > 0);
       }
 
-      searchFirestore(query)
+      hybridSearch(query)
         .then(() => {
           if (latestQueryRef.current === query) {
             setRemoteQuery(query);
@@ -148,7 +148,7 @@ export default function DocumentDiscoveryModal() {
           // Firestore search is best-effort; fallback already populated.
         });
     },
-    [locale, searchFirestore],
+    [locale, hybridSearch],
   );
   
   // Combined results - prefer Firestore when available
@@ -158,18 +158,18 @@ export default function DocumentDiscoveryModal() {
     }
 
     const hasRemoteForActive =
-      remoteQuery === activeQuery && firestoreResults.length > 0;
+      remoteQuery === activeQuery && discoveryResults.length > 0;
 
     if (hasRemoteForActive && !isUsingLocalFallback) {
-      return firestoreResults;
+      return discoveryResults;
     }
 
     if (isUsingLocalFallback && localResults.length > 0) {
       return localResults;
     }
 
-    return hasRemoteForActive ? firestoreResults : localResults;
-  }, [activeQuery, firestoreResults, isUsingLocalFallback, localResults, remoteQuery]);
+    return hasRemoteForActive ? discoveryResults : localResults;
+  }, [activeQuery, discoveryResults, isUsingLocalFallback, localResults, remoteQuery]);
 
   const {
     isListening,
@@ -194,10 +194,10 @@ export default function DocumentDiscoveryModal() {
     if (!activeQuery || remoteQuery !== activeQuery) {
       return;
     }
-    if (firestoreResults.length > 0) {
+    if (discoveryResults.length > 0) {
       setIsUsingLocalFallback(false);
     }
-  }, [activeQuery, firestoreResults, remoteQuery]);
+  }, [activeQuery, discoveryResults, remoteQuery]);
 
   // Trigger search when debounced input changes
   useEffect(() => {

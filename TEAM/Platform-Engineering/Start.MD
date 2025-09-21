@@ -11,7 +11,7 @@ Primary references:
 - TEAM/Platform-Engineering/complaint.json (if present)
 
 Flow:
-1. Load AGENT.md to honor automation rules, then review REMEMBER.md and ops/Memory.md as read-only global context. Record any new risks or asks as handoff notes for the CEO orchestrator.
+1. Load AGENTS.md to honor automation rules, then review REMEMBER.md and ops/Memory.md as read-only global context. Record any new risks or asks as handoff notes for the CEO orchestrator.
 2. Read TEAM/Platform-Engineering/Platform-Engineering.md to ground mission, KPIs, and immediate actions.
 3. Read TEAM/Platform-Engineering/memory.json. If `cycle_id` or `last_updated` is null (or `notes`/`todos` are empty), run an in-depth audit of Platform responsibilities (Next.js infrastructure, Firebase, security headers, CWV, telemetry, CI/CD, incident readiness). Summarize current state and high-risk gaps. Review `TEAM/Platform-Engineering/complaint.json` (if it exists) and treat any `open` or `in_progress` complaints as the first items to resolve.
 4. Produce a deterministic plan aligned with the playbook. Use the plan tool, respect backlog priorities in REMEMBER.md, and keep steps idempotent.

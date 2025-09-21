@@ -11,7 +11,7 @@ Primary references:
 - TEAM/AI-Automation/complaint.json (if present)
 
 Flow:
-1. Load AGENT.md to respect global automation rules; review REMEMBER.md and ops/Memory.md as read-only context for cross-pod signals and backlog dependencies. Capture any new insights as handoff notes for the CEO orchestrator.
+1. Load AGENTS.md to respect global automation rules; review REMEMBER.md and ops/Memory.md as read-only context for cross-pod signals and backlog dependencies. Capture any new insights as handoff notes for the CEO orchestrator.
 2. Read TEAM/AI-Automation/AI-Automation.md to refresh mission, KPIs, guardrails, and immediate objectives.
 3. Inspect TEAM/AI-Automation/memory.json. If `cycle_id`/`last_updated` are null or notes/todos are empty, perform an in-depth audit of AI systems: Genkit pipelines, prompt safety, evaluation harness, escalation triggers, logging, and bilingual coverage. Capture gaps and risks. Confirm `AI_GATEWAY_URL` and `AI_GATEWAY_API_KEY` are present (server-only) and note gaps for LiteLLM/vLLM provisioning or `AI_GATEWAY_*_MODEL` overrides. Review `TEAM/AI-Automation/complaint.json` (if present) and treat any `open` or `in_progress` complaints as top-priority work before selecting new tasks.
 4. Produce a deterministic, playbook-aligned plan using the plan tool; prioritize safety and compliance guardrails.

@@ -5,18 +5,36 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { loadLocaleResources } from './i18nResources';
 import type { Resource } from 'i18next';
 
-let initPromise: Promise<void> | null = null;
-
 type SupportedLocale = 'en' | 'es';
 interface InitOptions {
   locale?: SupportedLocale;
   namespaces?: string[];
 }
 
+const runtimeFlags = i18n as typeof i18n & {
+  __hasBoundReact?: boolean;
+  __hasLanguageDetector?: boolean;
+};
+
+const ensurePluginsBound = () => {
+  if (!runtimeFlags.__hasBoundReact) {
+    i18n.use(initReactI18next);
+    runtimeFlags.__hasBoundReact = true;
+  }
+
+  if (typeof window !== 'undefined' && !runtimeFlags.__hasLanguageDetector) {
+    i18n.use(LanguageDetector);
+    runtimeFlags.__hasLanguageDetector = true;
+  }
+};
+
+let initPromise: Promise<void> | null = null;
+
 export async function ensureI18nInitialized(
   options: InitOptions = {},
 ): Promise<void> {
-  // If already initialized, optionally just change language below
+  ensurePluginsBound();
+
   if (i18n.isInitialized && options.locale) {
     if (i18n.language !== options.locale) {
       await i18n.changeLanguage(options.locale);
@@ -24,20 +42,18 @@ export async function ensureI18nInitialized(
     return;
   }
 
-  if (initPromise) return initPromise;
+  if (initPromise) {
+    return initPromise;
+  }
 
   initPromise = (async () => {
     try {
-      // Bridge adapters only in the browser
-      if (typeof window !== 'undefined') {
-        i18n.use(LanguageDetector).use(initReactI18next);
-      }
+      ensurePluginsBound();
 
       const locale: SupportedLocale = options.locale ?? 'en';
 
       let localeResources: Resource[string] | null = null;
       try {
-        // Load only the current locale and requested namespaces to reduce payload
         localeResources = await loadLocaleResources(locale, options.namespaces);
       } catch (err) {
         console.error(
@@ -58,7 +74,6 @@ export async function ensureI18nInitialized(
         } as unknown as Resource[string];
       }
 
-      // Default to a minimal set unless explicitly expanded by callers
       const ns = options.namespaces ?? ['common', 'header', 'footer'];
 
       const resources: Resource = {
@@ -98,7 +113,7 @@ export async function ensureI18nInitialized(
           console.error('i18n init error', err);
         });
     } finally {
-      // no-op
+      initPromise = null;
     }
   })();
 

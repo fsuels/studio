@@ -8,7 +8,7 @@ Primary references:
 - TEAM/Document-Intelligence/memory.json
 
 Flow:
-1. Load AGENT.md for automation rules.
+1. Load AGENTS.md for automation rules.
 2. Study TEAM/Document-Intelligence/Document-Intelligence.md to realign on charter, KPIs, and immediate actions.
 3. Read TEAM/Document-Intelligence/memory.json. If `cycle_id`/`last_updated` are null or content is empty, run an in-depth audit of catalog coverage: template parity, outstanding TODOs (schemas/questions), translation deficits, placeholder registry health, and overlay accuracy. Summarize findings. Review `TEAM/Document-Intelligence/complaint.json` (if present) and prioritize any `open` or `in_progress` complaints before new catalog work.
 4. Build a deterministic plan consistent with the playbook and mission. Use the plan tool and keep actions idempotent.

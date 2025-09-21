@@ -11,7 +11,7 @@ Primary references:
 - TEAM/Growth-Customer-Learning/complaint.json (if present)
 
 Flow:
-1. Load AGENT.md for automation requirements, then review REMEMBER.md and ops/Memory.md as read-only context to capture global initiatives and dependencies. Record new growth insights as handoff notes for the CEO orchestrator.
+1. Load AGENTS.md for automation requirements, then review REMEMBER.md and ops/Memory.md as read-only context to capture global initiatives and dependencies. Record new growth insights as handoff notes for the CEO orchestrator.
 2. Read TEAM/Growth-Customer-Learning/Growth-Customer-Learning.md to align on funnel KPIs, messaging guardrails, and immediate priorities.
 3. Check TEAM/Growth-Customer-Learning/memory.json. If `cycle_id`/`last_updated` are null or content is empty, perform an in-depth audit: marketing route coverage (SEO/structured data), conversion metrics, localization status, analytics instrumentation, experiment backlog, and feedback loops. Summarize findings. Review `TEAM/Growth-Customer-Learning/complaint.json` (if present) and tackle any `open` or `in_progress` complaints before pursuing new initiatives.
 4. Formulate a deterministic, playbook-aligned plan using the plan tool, incorporating compliance-approved messaging standards.

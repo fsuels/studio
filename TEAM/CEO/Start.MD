@@ -12,7 +12,7 @@ Primary references:
 - All TEAM/*/memory.json files for cross-pod awareness
 
 Flow:
-1. Load AGENT.md to honor automation rules; review REMEMBER.md and ops/Memory.md to capture the latest global state and backlog, then skim pod `memory.json` handoff notes queued for consolidation. Check `TEAM/CEO/complaint.json` and ensure every escalated critical issue has an owner and timeline before proceeding.
+1. Load AGENTS.md to honor automation rules; review REMEMBER.md and ops/Memory.md to capture the latest global state and backlog, then skim pod `memory.json` handoff notes queued for consolidation. Check `TEAM/CEO/complaint.json` and ensure every escalated critical issue has an owner and timeline before proceeding.
 2. Study TEAM/CEO/CEO.md to reinforce mission, north-star metrics, pod structure, and quarterly milestones.
 3. Read TEAM/CEO/memory.json. If `cycle_id`/`last_updated` are null or content is empty, conduct an executive audit: summarize each pod's memory.json, highlight risks, blockers, and upcoming milestones; map them to KPIs in the CEO playbook. Regardless, ingest the latest pod handoff notes to prioritize what gets merged into global state.
 4. Draft a deterministic plan that sequences executive-level actions (unblocking pods, aligning priorities, updating strategy documents). Use the plan tool and ensure decisions trace back to REMEMBER.md backlog items.

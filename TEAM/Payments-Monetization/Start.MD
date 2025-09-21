@@ -11,7 +11,7 @@ Primary references:
 - TEAM/Payments-Monetization/complaint.json (if present)
 
 Flow:
-1. Load AGENT.md to adhere to automation rules; review REMEMBER.md and ops/Memory.md as read-only context for global dependencies (e.g., security headers, AI upsells). Capture monetization updates as handoff notes for the CEO orchestrator.
+1. Load AGENTS.md to adhere to automation rules; review REMEMBER.md and ops/Memory.md as read-only context for global dependencies (e.g., security headers, AI upsells). Capture monetization updates as handoff notes for the CEO orchestrator.
 2. Read TEAM/Payments-Monetization/Payments-Monetization.md to refresh mission, pricing strategy, KPIs, and immediate actions.
 3. Inspect TEAM/Payments-Monetization/memory.json. If `cycle_id`/`last_updated` are null or content is empty, run a thorough audit: Stripe integration status (client/server/webhooks), subscription provisioning, tax/refund policy alignment, financial reporting pipelines, and monitoring. Summarize gaps. Review `TEAM/Payments-Monetization/complaint.json` (if present) and prioritize any `open` or `in_progress` complaints before broader monetization work.
 4. Develop a deterministic plan aligned with the playbook and backlogged commitments; use the plan tool and account for compliance requirements.
