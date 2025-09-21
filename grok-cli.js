@@ -20,7 +20,7 @@ async function callGrok4(prompt) {
     const response = await axios.post(
       API_URL,
       {
-        model: 'grok-4',
+        model: 'grok-4-fast-reasoning',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 4096,  // Higher for code fixes
       },

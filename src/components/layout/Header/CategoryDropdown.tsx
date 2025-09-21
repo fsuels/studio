@@ -3,7 +3,6 @@
 
 import React, { useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
@@ -13,6 +12,7 @@ import {
   getWorkflowDocuments,
   type DocumentSummary,
 } from '@/lib/workflow/document-workflow';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 
 interface CategoryDropdownProps {
   locale: 'en' | 'es';
@@ -354,12 +354,7 @@ export default function CategoryDropdown({
   );
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
-  const router = useRouter();
-  const exploreDestination = `/${locale}/marketplace/`;
-
-  React.useEffect(() => {
-    router.prefetch(exploreDestination);
-  }, [exploreDestination, router]);
+  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => ({
@@ -434,11 +429,11 @@ export default function CategoryDropdown({
                 </p>
               </div>
             </div>
-            <div className="ml-4 text-right">
+              <div className="ml-4 text-right">
               <button 
                 onClick={() => {
-                  router.push(exploreDestination);
-                  onLinkClick(); // Close the dropdown
+                  setShowDiscoveryModal(true);
+                  onLinkClick();
                 }}
                 className="group relative overflow-hidden inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5"
                 title="AI-powered document finder - describe what you need in plain English!"

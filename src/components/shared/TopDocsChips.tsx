@@ -32,7 +32,6 @@ import {
 } from 'lucide-react';
 import {
   getWorkflowDocuments,
-  getWorkflowDocumentsByCategory,
   type DocumentSummary,
 } from '@/lib/workflow/document-workflow';
 // (No need for mobile-only dropdown after redesign)
@@ -60,7 +59,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false);
   const [tax, setTax] = useState<any | null>(null);
   // Progressive reveal: start with NO selection (only category cards)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -73,6 +71,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   // Get all categories from taxonomy (loaded lazily)
   const allCategories = useMemo(() => Object.keys(tax?.categories || {}), [tax]);
   const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams?.get('category');
   
   // Category display names and icons - using all your categories
   const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = tax ? {
@@ -226,32 +225,43 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     }),
   } : {} as any;
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
   // If URL contains ?category=<key>, preselect it
   useEffect(() => {
-    if (!isHydrated) return;
-    const catFromUrl = searchParams?.get('category');
-    if (catFromUrl && allCategories.includes(catFromUrl)) {
-      setSelectedCategory(catFromUrl);
-    }
-  }, [isHydrated, searchParams, allCategories]);
+    if (!categoryFromUrl) return;
+    if (!allCategories.includes(categoryFromUrl)) return;
+    if (selectedCategory === categoryFromUrl) return;
+    setSelectedCategory(categoryFromUrl);
+  }, [categoryFromUrl, allCategories, selectedCategory]);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    let cancelled = false;
 
     (async () => {
-      const [{ taxonomy }] = await Promise.all([
-        import('@/config/taxonomy'),
-      ]);
-      setTax(taxonomy);
-      const docs = getWorkflowDocuments({ jurisdiction: 'us' });
-      setTopDocs(docs);
-      setIsLoading(false);
+      try {
+        const [{ taxonomy }] = await Promise.all([
+          import('@/config/taxonomy'),
+        ]);
+
+        if (cancelled) return;
+
+        setTax(taxonomy);
+        const docs = getWorkflowDocuments({ jurisdiction: 'us' });
+        setTopDocs(docs);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to load popular documents', error);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
     })();
-  }, [isHydrated]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categories = useMemo(
     () => allCategories.filter((cat) => categoryMeta[cat]),
@@ -304,7 +314,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     router.push(exploreAllDestination);
   };
 
-  if (isLoading && isHydrated) {
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
@@ -317,8 +327,8 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     );
   }
 
-  if (!isHydrated || topDocs.length === 0) {
-    return isHydrated ? null : <div className="h-20" />;
+  if (topDocs.length === 0) {
+    return null;
   }
 
   return (
@@ -376,7 +386,12 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               })}
             </div>
             <div className="text-center mt-2">
-              <Button variant="link" onClick={handleExploreAll} className="text-primary text-sm">
+              <Button
+                variant="link"
+                onClick={handleExploreAll}
+                onMouseEnter={prefetchExplore}
+                className="text-primary text-sm"
+              >
                 {tCommon('stepOne.exploreAllCategoriesButton', {
                   defaultValue: 'Explore All Document Categories',
                 })} →
@@ -400,11 +415,11 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
                 const Icon = categoryMeta[selectedCategory]?.icon || FileText;
                 const badge = badges[doc.id];
+                const href = `/${locale}/docs/${resolveDocSlug(doc.id)}/`;
                 return (
                   <Link
                     key={doc.id}
-                    href={`/${locale}/docs/${resolveDocSlug(doc.id)}/`}
-                    prefetch
+                    href={href}
                     className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
                   >
                     <div className="flex items-start justify-between">

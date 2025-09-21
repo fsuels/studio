@@ -10,7 +10,7 @@ interface DocPageParams {
 export default async function Head({
   params,
 }: {
-  params: Promise<DocPageParams>;
+  params: DocPageParams;
 }) {
   const { locale, docId } = params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;

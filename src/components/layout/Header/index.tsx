@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@/components/layout/Logo';
 import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
@@ -13,7 +13,6 @@ const HeaderUserMenu = dynamic(() => import('./HeaderUserMenu'), {
   ssr: false,
   loading: () => null,
 });
-import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
 import DirectCategoryNav from './DirectCategoryNav';
 import dynamic from 'next/dynamic';
@@ -21,15 +20,15 @@ const CategoryDropdown = dynamic(() => import('./CategoryDropdown'), {
   ssr: false,
 });
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 
 const Header = React.memo(function Header() {
   const params = (useParams<{ locale?: string }>() ?? {}) as {
     locale?: 'en' | 'es';
   };
   const clientLocale = params.locale ?? 'en';
-  const router = useRouter();
   const { t: tHeader } = useTranslation('header');
-  const aiFinderDestination = `/${clientLocale}/marketplace/`;
+  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   // Component state
   const [mounted, setMounted] = useState(false);
@@ -37,6 +36,13 @@ const Header = React.memo(function Header() {
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+
+  const openAIFinder = useCallback(() => {
+    setShowDiscoveryModal(true);
+    setIsMegaMenuOpen(false);
+    setActiveCategoryId(null);
+    setIsMobileMenuOpen(false);
+  }, [setShowDiscoveryModal]);
 
   // Mount and scroll effects
   useEffect(() => {
@@ -64,16 +70,6 @@ const Header = React.memo(function Header() {
       setIsMobileMenuOpen(false);
     }
   }, [isMegaMenuOpen]);
-  const prefetchAIFinder = useCallback(() => {
-    try {
-      router.prefetch(aiFinderDestination);
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.debug('AI finder prefetch failed', error);
-      }
-    }
-  }, [aiFinderDestination, router]);
-
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -142,8 +138,7 @@ const Header = React.memo(function Header() {
           <div className="md:hidden flex items-center gap-2">
             {/* Mobile AI Document Finder Button */}
             <button
-              onClick={() => router.push(aiFinderDestination)}
-              onMouseEnter={prefetchAIFinder}
+              onClick={openAIFinder}
               className="inline-flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-md shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
               title="🤖 AI Document Finder"
             >
@@ -173,23 +168,9 @@ const Header = React.memo(function Header() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Browse Documents (Mega Menu) */}
-            <HeaderMegaMenu
-              clientLocale={clientLocale}
-              mounted={mounted}
-              isMegaMenuOpen={isMegaMenuOpen && !activeCategoryId}
-              onOpenChange={(open) => {
-                setIsMegaMenuOpen(open);
-                if (open) {
-                  setIsMobileMenuOpen(false);
-                  setActiveCategoryId(null);
-                }
-              }}
-            />
             {/* AI Document Finder Button */}
             <button
-              onClick={() => router.push(aiFinderDestination)}
-              onMouseEnter={prefetchAIFinder}
+              onClick={openAIFinder}
               className="ai-finder-btn group relative inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
               title="🤖 AI Document Finder - Describe what you need and let AI find the perfect document!"
             >

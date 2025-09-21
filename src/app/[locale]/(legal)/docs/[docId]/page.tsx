@@ -20,7 +20,7 @@ export interface DocPageParams {
 }
 
 interface DocPageProps {
-  params: Promise<DocPageParams>;
+  params: DocPageParams;
 }
 
 export async function generateStaticParams(): Promise<DocPageParams[]> {
@@ -59,7 +59,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // Normalize legacy aliases to canonical slug and redirect if needed
   const canonical = resolveDocSlug(docId);
   if (canonical !== docId) {
-    redirect(`/${locale}/docs/${canonical}`);
+    redirect(`/${locale}/docs/${canonical}/`);
   }
 
   const markdownContent = await getMarkdown(locale, docId);
