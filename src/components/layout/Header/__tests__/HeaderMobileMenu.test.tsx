@@ -122,9 +122,9 @@ describe('HeaderMobileMenu', () => {
 
   it('applies menu button styling and renders overlay when open', async () => {
     const { rerender } = render(<HeaderMobileMenu {...baseProps} />);
-    expect(screen.getByRole('button')).toHaveClass('p-2');
+    expect(screen.getByRole('button', { name: /open menu/i })).toHaveClass('p-2');
     rerender(<HeaderMobileMenu {...baseProps} isMobileMenuOpen />);
-    const overlay = await screen.findByRole('dialog', { hidden: true });
+    const overlay = await screen.findByRole('dialog', { name: /mobile navigation/i });
     expect(overlay.className).toContain('fixed');
   });
 });

@@ -25,14 +25,14 @@ Design safe, high-accuracy AI experiences that classify matters, guide intake, p
 - Gateway helpers exist in `src/ai/gateway.ts`, but inference is disabled through stubs; LiteLLM and vLLM are not yet provisioned.
 - No guardrail stack is active (Llama Guard 3, Prompt Guard 2, refusal taxonomy, or heuristics).
 - Intake and drafting flows lack bilingual (EN and ES) prompts, disclaimers, and evaluation fixtures.
-- Observability (Langfuse, Prometheus, Sentry AI dashboards) is not connected; no AI incident escalation telemetry exists.
+- Observability (Langfuse, Prometheus, and AI dashboards) is not connected; no AI incident escalation telemetry exists.
 - Secrets for `AI_GATEWAY_URL` and `AI_GATEWAY_API_KEY` remain informational only; rotations and health probes are undefined.
 
 ## 90-Day Objectives
 1. Ship the intake assistant with greater than 92% top-1 classification on priority categories and bilingual prompts and disclaimers.
 2. Launch the safety framework in production (Llama Guard 3 + Prompt Guard 2 + NeMo Guardrails rules) with less than 1% hallucination-induced defects.
 3. Stand up the evaluation harness: lm-evaluation-harness (tasks) plus Ragas (RAG) with weekly scorecards.
-4. Deliver observability: Langfuse traces, Prometheus and Grafana metrics, Sentry errors, and privacy-safe logs.
+4. Deliver observability: Langfuse traces, Prometheus and Grafana metrics, and privacy-safe logs.
 
 ## KPIs and Targets
 - Classification accuracy >=92% top-1 and >=98% top-3.
@@ -50,14 +50,14 @@ Design safe, high-accuracy AI experiences that classify matters, guide intake, p
 | Vector store | Pinecone | Qdrant or Milvus (or Weaviate for hybrid) | Run as managed cluster with TLS. |
 | Guardrails | OpenAI Moderation | Llama Guard 3, Prompt Guard 2, NeMo Guardrails | Chain policy -> prompt -> heuristics. |
 | Eval harness | OpenAI eval suite | lm-evaluation-harness, Ragas | Seed with synthetic bilingual datasets. |
-| Observability | OpenAI usage dashboards | Langfuse, Prometheus, Grafana, Sentry | Redact PII at source. |
+| Observability | OpenAI usage dashboards | Langfuse, Prometheus, Grafana | Redact PII at source. |
 
 ## Architecture Overview (OpenAI-Compatible)
 - **Gateway:** LiteLLM fronts vLLM, Ollama, and future backends. Provides routing, quotas, model selection, and audit logs.
 - **Inference Workers:** vLLM on GPU nodes hosts gpt-oss-* models; optional nodes host Llama 3.1, Qwen2.5, or DeepSeek-R1 for A/B and fallbacks.
 - **Embeddings Service:** Text-Embeddings-Inference (TEI) exposes BGE-M3 and other embedding models; integrates with Qdrant.
 - **Guardrail Pipeline:** Prompt Guard 2 filters input, Llama Guard 3 validates output intent, heuristics (regex/scoring) enforce UPL avoidance, and NeMo Guardrails manages conversation rules and refusals.
-- **Telemetry:** Langfuse captures traces and prompt metadata; Prometheus scrapes LiteLLM, vLLM, and TEI metrics; Grafana dashboards visualize KPIs; Sentry collects application errors with redaction middleware.
+- **Telemetry:** Langfuse captures traces and prompt metadata; Prometheus scrapes LiteLLM, vLLM, and TEI metrics; Grafana dashboards visualize KPIs; application errors are logged via internal handlers with redaction middleware.
 - **Storage:** Qdrant handles vector retrieval; Postgres/Firestore store guardrail audit logs and incident tracking; logs remain inside VPC with retention policies.
 - **Orchestration:** Cloud scheduler runs evaluation harness jobs; CI validates prompts, JSON schemas, and guardrail coverage before deploy.
 
@@ -71,7 +71,7 @@ Design safe, high-accuracy AI experiences that classify matters, guide intake, p
   - Seed lm-evaluation-harness tasks (classification EN/ES) and Ragas scenarios for RAG usage.
   - Automate weekly eval jobs and publish Langfuse dashboards.
 - **Phase 3 (Weeks 7-9): Observability and Scaling**
-  - Roll out Prometheus metrics for LiteLLM, vLLM, TEI; Wire Grafana SLO boards and Sentry alerts.
+  - Roll out Prometheus metrics for LiteLLM, vLLM, TEI; wire Grafana SLO boards and alerting pipelines.
   - Expand bilingual prompts, disclaimers, and refusal taxonomy across drafting/summarization flows.
   - Pilot alternate models (Llama 3.1, DeepSeek-R1) behind feature flags with compliance approval.
 
@@ -88,7 +88,6 @@ Design safe, high-accuracy AI experiences that classify matters, guide intake, p
 - **Ragas:** Score RAG pipelines for hallucination rate and answer correctness; integrate with Langfuse experiment tracking.
 - **Langfuse:** Capture trace spans (gateway, guardrails, model); require PII redaction middleware and sampling strategy.
 - **Prometheus/Grafana:** Monitor latency, token throughput, guardrail pass rates, and error codes. Define SLO alerts (<1.5 s p95 classification, <3 s p95 drafting).
-- **Sentry:** Log inference errors with scrubbed prompts; tag by model and guardrail outcome for triage.
 - **Incident Runbooks:** Escalate via Opsgenie/Slack when hallucination or UPL incident occurs; auto-create ticket with trace link.
 
 ## Operating Cadence
@@ -160,7 +159,7 @@ Design safe, high-accuracy AI experiences that classify matters, guide intake, p
 3. **Gateway hardening.** Stand up LiteLLM, route `/v1/*` to vLLM/Ollama, enforce per-route auth and quotas, configure secrets, and document rotation.
 4. **Safety pipeline.** Chain Prompt Guard 2 -> Llama Guard 3 -> refusal taxonomy; inject EN/ES disclaimers and log guardrail decisions with incident IDs.
 5. **Evaluation harness.** Seed gold sets (top 50 templates in EN/ES), automate weekly lm-evaluation-harness and Ragas runs, store artifacts in `ops/artifacts/ai-automation-cycle-*/evals/`.
-6. **Observability.** Enable Langfuse traces, Prometheus scrapers, Grafana dashboards, and Sentry AI alerts; define latency and error SLOs with alert thresholds.
+6. **Observability.** Enable Langfuse traces, Prometheus scrapers, and Grafana dashboards; define latency and error SLOs with alert thresholds.
 
 ## Dependencies and Open Questions
 - Await compliance sign-off on refusal taxonomy wording and bilingual disclaimers.

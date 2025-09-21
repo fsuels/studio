@@ -7,6 +7,7 @@ import { Brain, Check, X } from 'lucide-react';
 import { getDocumentTitle } from '@/lib/format-utils';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -171,6 +172,9 @@ export default function DocumentDiscoveryModal() {
     return hasRemoteForActive ? discoveryResults : localResults;
   }, [activeQuery, discoveryResults, isUsingLocalFallback, localResults, remoteQuery]);
 
+  const hasResults = results.length > 0;
+  const showLoadingState = isSearching && !hasResults;
+
   const {
     isListening,
     isSupported: isVoiceSupported,
@@ -277,24 +281,40 @@ export default function DocumentDiscoveryModal() {
   }, [results]);
 
 
-  const handleDocumentClick = (docId: string) => {
-    setShowDiscoveryModal(false);
+  const handleDismiss = useCallback(() => {
     clearResults();
     setDiscoveryInput('');
-  };
+  }, [clearResults, setDiscoveryInput]);
 
-  const handleClose = () => {
+  const handleDocumentClick = useCallback(
+    (_docId: string) => {
+      setShowDiscoveryModal(false);
+      handleDismiss();
+    },
+    [handleDismiss, setShowDiscoveryModal],
+  );
+
+  const handleClose = useCallback(() => {
     setShowDiscoveryModal(false);
-    clearResults();
-    setDiscoveryInput('');
-  };
+    handleDismiss();
+  }, [handleDismiss, setShowDiscoveryModal]);
+
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setShowDiscoveryModal(open);
+      if (!open) {
+        handleDismiss();
+      }
+    },
+    [handleDismiss, setShowDiscoveryModal],
+  );
 
   if (!isHydrated) {
     return null;
   }
 
   return (
-    <Dialog open={showDiscoveryModal} onOpenChange={setShowDiscoveryModal}>
+    <Dialog open={showDiscoveryModal} onOpenChange={handleOpenChange}>
       <DialogContent 
         className="ai-finder-modal w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100vh-1.5rem)] sm:h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl [&>button:last-child]:hidden"
       >
@@ -304,13 +324,13 @@ export default function DocumentDiscoveryModal() {
         
         {/* Enhanced Header */}
         <div className="relative overflow-hidden rounded-none sm:rounded-t-3xl header-gradient">
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-white/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-white/20 pointer-events-none"></div>
           {/* Contrast overlay for WCAG compliance - 40% for H1 contrast ≈ 5.8:1 */}
           <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
-          <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute -bottom-2 -left-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-          
+          <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse pointer-events-none"></div>
+          <div className="absolute -bottom-2 -left-4 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
           <div className="relative px-4 py-4 pb-5 sm:px-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3 sm:gap-4">
               <div className="relative">
@@ -324,13 +344,16 @@ export default function DocumentDiscoveryModal() {
               </div>
             </h2>
             
-            <button
-              onClick={handleClose}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-              aria-label="Close modal"
-            >
-              <X className="h-5 w-5 text-white" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
-            </button>
+            <DialogClose asChild>
+              <button
+                onClick={handleClose}
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                aria-label="Close modal"
+                type="button"
+              >
+                <X className="h-5 w-5 text-white" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
+              </button>
+            </DialogClose>
           </div>
         </div>
         
@@ -440,13 +463,13 @@ export default function DocumentDiscoveryModal() {
             aria-live="polite"
             aria-label="Search results"
           >
-            {isSearching || !results ? (
+            {showLoadingState ? (
               <div className="space-y-4 pb-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {[...Array(4)].map((_, i) => <ResultCardSkeleton key={i} />)}
                 </div>
               </div>
-            ) : results.length > 0 ? (
+            ) : hasResults ? (
               <React.Suspense fallback={
                 <div className="space-y-4 pb-8">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

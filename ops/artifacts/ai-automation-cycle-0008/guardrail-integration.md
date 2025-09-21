@@ -11,7 +11,7 @@
 
 ## Follow-Ups
 - Extend integration to intake classification once LiteLLM-backed flow replaces Genkit stubs.
-- Emit guardrail decisions to Langfuse/Sentry for observability once telemetry hooks land.
+- Emit guardrail decisions to Langfuse/internal instrumentation for observability once telemetry hooks land.
 - Localize refusal messaging (ES) and incorporate compliance-approved refusal taxonomy.
 
 ## Referenced Assets

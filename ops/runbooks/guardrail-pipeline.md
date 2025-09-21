@@ -32,7 +32,7 @@ Update `ops/ai/guardrails/config.ts` when adding new knobs. Always rotate guardr
 ## Integration Steps
 1. Import `evaluateGuardrails` from `src/ai/guardrails` and run before sending prompts to LiteLLM.
 2. Provide `assistantResponse` to `evaluateGuardrails` when validating completions before delivery.
-3. Log `decision.events` to Langfuse and Sentry for observability.
+3. Log `decision.events` to Langfuse and internal instrumentation for observability.
 4. When `decision.escalate` is `true`, store the trace and route to human reviewers.
 
 ## Failure Handling

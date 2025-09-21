@@ -18,7 +18,7 @@ Provide AI & Platform engineering with a deterministic checklist to deploy LiteL
 ```
 Client -> LiteLLM (CPU) -> vLLM (GPU) -> Guardrail Pipeline (Prompt Guard 2 -> Llama Guard 3 -> heuristics) -> Response
                                |
-                               +-> Langfuse tracer + Prometheus exporter + Sentry instrumentation
+                               +-> Langfuse tracer + Prometheus exporter + internal instrumentation
 ```
 - LiteLLM runs as stateless service with autoscaling (HPA or equivalent) behind internal load balancer.
 - Each vLLM worker exposes `/health` and `/metrics` when launched with `--metrics-port`.
@@ -94,7 +94,7 @@ Client -> LiteLLM (CPU) -> vLLM (GPU) -> Guardrail Pipeline (Prompt Guard 2 -> L
      1. Run Prompt Guard 2 on user prompt before forwarding to LiteLLM.
      2. Invoke LiteLLM for completion.
      3. Run Llama Guard 3 + heuristic refusal checks on the response before returning to client.
-   - Log guardrail outcomes with trace IDs in Langfuse and Sentry breadcrumbs.
+   - Log guardrail outcomes with trace IDs in Langfuse and internal breadcrumbs.
 
 6. **Smoke Test**
    - Execute `curl` with staged API key:
@@ -165,7 +165,6 @@ fallbacks:
 - **Langfuse:** Confirm traces include `environment`, `model`, `guardrail_outcome`, and `latency_ms` properties.
 - **Prometheus:** Scrape LiteLLM `/metrics` (port 9100) and vLLM `/metrics` (port 8001). Alert if p95 latency >1.5 s (classification) or error rate >1%.
 - **Grafana:** Add dashboards for `litellm_request_latency_seconds` and `vllm_inference_latency_seconds` histograms.
-- **Sentry:** Ensure inference errors include sanitized prompt hashes and guardrail decision tags.
 
 ## Compliance & Security
 - Run refusal taxonomy through Compliance for bilingual approval before production rollout.
@@ -193,7 +192,6 @@ fallbacks:
 - [ ] Guardrail chain logs each request with trace ID.
 - [ ] Prometheus scraping LiteLLM (9100) and vLLM (8001).
 - [ ] Langfuse dashboard shows live traces within 5 minutes.
-- [ ] Sentry captures synthetic refusal + success events.
 - [ ] Evaluation harness results archived in `ops/artifacts/<cycle>/evals/`.
 - [ ] Compliance sign-off documented for refusals/disclaimers.
 

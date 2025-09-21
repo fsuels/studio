@@ -9,7 +9,7 @@ export default function GlobalError({
 }: {
   error: Error & { digest?: string };
 }) {
-  // Sentry capture removed
+  // External error capture hooks disabled
 
   return (
     <html lang="en">

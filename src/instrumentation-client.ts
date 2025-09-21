@@ -1,7 +1,6 @@
 // src/instrumentation-client.ts
-
-// Sentry initialization removed. This file no longer configures Sentry on the client.
+// Client-side instrumentation disabled; placeholder retained for compatibility.
 
 export const onRouterTransitionStart = () => {
-  // No-op: Sentry captureRouterTransitionStart removed
+  // No-op router transition hook placeholder.
 };

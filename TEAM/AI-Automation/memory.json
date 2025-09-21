@@ -16,10 +16,10 @@
                   "LegalTranslator UI now raises a fallback banner and surfaces guardrail detail when LiteLLM blocks output (src/components/translation/LegalTranslator.tsx, __tests__/LegalTranslator.guardrails.test.tsx)."
               ],
     "todos":  [
-                  "Emit guardrail events to Langfuse/Sentry for legal update summarizer responses.",
+                  "Emit guardrail events to Langfuse/internal instrumentation for legal update summarizer responses.",
                   "Evaluate OSS summarizer accuracy/latency and tune model parameters or fallback heuristics.",
                   "Add unit tests/fixtures for legal update summarizer once synthetic data is prepared.",
-                  "Plumb guardrail decision telemetry from aiInstance.generateText into Langfuse/Prometheus/Sentry once those stacks are ready.",
+                  "Plumb guardrail decision telemetry from aiInstance.generateText into Langfuse/Prometheus/internal instrumentation once those stacks are ready.",
                   "Validate new guardrail banners with intake UX testing dataset."
               ]
 }

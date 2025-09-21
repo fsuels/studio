@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { Skeleton } from './skeleton';
 
@@ -21,6 +22,26 @@ export function MobileNavigation({
   overlay = true,
   slideDirection = 'right',
 }: MobileNavigationProps) {
+  const [mounted, setMounted] = React.useState(false);
+  const panelRef = React.useRef<HTMLDivElement>(null);
+  const previouslyFocusedElement = React.useRef<Element | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      previouslyFocusedElement.current = document.activeElement;
+      panelRef.current?.focus();
+    } else if (
+      previouslyFocusedElement.current instanceof HTMLElement
+    ) {
+      previouslyFocusedElement.current.focus();
+      previouslyFocusedElement.current = null;
+    }
+  }, [isOpen]);
+
   // Prevent body scroll when menu is open
   React.useEffect(() => {
     if (isOpen) {
@@ -91,14 +112,18 @@ export function MobileNavigation({
 
   if (!isOpen && !overlay) return null;
 
-  return (
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
     <>
       {/* Backdrop overlay */}
       {overlay && (
         <div
           className={cn(
-            'fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300',
-            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
+            'fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-in-out z-[80]',
+            isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
           )}
           onClick={onClose}
           aria-hidden="true"
@@ -106,24 +131,29 @@ export function MobileNavigation({
       )}
 
       {/* Navigation panel */}
-      <dialog
-        open={isOpen}
+      <div
+        ref={panelRef}
+        role="dialog"
+        tabIndex={-1}
+        data-state={isOpen ? 'open' : 'closed'}
+        aria-modal="true"
+        aria-label="Mobile navigation"
         className={cn(
           slideClasses.base,
           isOpen ? slideClasses.open : slideClasses.closed,
-          'bg-background border-border shadow-2xl z-50 w-80 max-w-[85vw]',
+          'bg-background border-border shadow-2xl z-[90] w-80 max-w-[85vw] focus:outline-none',
+          isOpen ? 'pointer-events-auto' : 'pointer-events-none',
           slideDirection === 'left' && 'border-r',
           slideDirection === 'right' && 'border-l',
           slideDirection === 'top' && 'border-b',
           slideDirection === 'bottom' && 'border-t',
           className,
         )}
-        aria-modal="true"
-        aria-label="Mobile navigation"
       >
         {children}
-      </dialog>
-    </>
+      </div>
+    </>,
+    document.body,
   );
 }
 

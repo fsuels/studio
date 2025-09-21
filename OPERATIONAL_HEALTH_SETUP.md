@@ -22,12 +22,6 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
 SLACK_ALERT_CHANNEL=#alerts
 ALERT_WEBHOOK_URL=https://your-webhook-endpoint.com/alerts
 
-# Sentry Error Tracking (currently disabled)
-NEXT_PUBLIC_SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
-SENTRY_ORG=your-org
-SENTRY_PROJECT=your-project
-SENTRY_AUTH_TOKEN=your-auth-token
-
 # Admin Access Control
 ADMIN_EMAIL_DOMAIN=@123legaldoc.com
 ```
@@ -314,5 +308,4 @@ For operational health monitoring support:
 1. **Configure Slack/webhook URLs** in environment variables
 2. **Test alert system** using admin dashboard
 3. **Set up monitoring schedule** for regular health checks
-4. **Enable Sentry** for enhanced error tracking (currently disabled)
 5. **Customize thresholds** based on your traffic patterns

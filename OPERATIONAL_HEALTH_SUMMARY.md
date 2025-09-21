@@ -18,7 +18,6 @@ Your 123LegalDoc platform now has **enterprise-grade operational health monitori
 - ✅ **Cryptographic integrity** for all operational events
 - ✅ **Admin dashboard** with real-time monitoring at `/admin/operational-health`
 - ✅ **Automatic health scoring** (0-100) with trend analysis
-- ✅ **Enhanced Sentry integration** (ready to enable)
 
 ### **Compliance & Security**
 
@@ -201,8 +200,6 @@ SLACK_ALERT_CHANNEL=#alerts
 # External Webhooks
 ALERT_WEBHOOK_URL=https://your-system.com/alerts
 
-# Sentry (enhanced error tracking)
-NEXT_PUBLIC_SENTRY_DSN=https://your-dsn@sentry.io/project
 ```
 
 ### **Alert Thresholds** (customizable)

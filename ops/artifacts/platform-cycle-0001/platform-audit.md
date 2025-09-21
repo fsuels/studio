@@ -20,7 +20,7 @@
 - No Lighthouse budgets or INP/LCP thresholds enforced in CI despite playbook requirement; Next.js build configuration relaxes asset limits (`maxEntrypointSize` 1.2MB) without alerting.
 
 ## Telemetry & Observability
-- Sentry initialization gated on `NEXT_PUBLIC_SENTRY_DSN`, but there is no `ops/telemetry` documentation or default DSN for staging; no OpenTelemetry wiring despite dependencies.
+- Error instrumentation depends on deprecated environment placeholders with no `ops/telemetry` documentation or staging defaults; OpenTelemetry wiring is also missing despite dependencies.
 - `prom-client` is installed yet unused; there is no metrics exporter or health-endpoint surfacing runtime stats.
 - No central log aggregation or structured logging strategy beyond scattered `console.log` calls (many include garbled characters from encoding issues).
 
@@ -34,7 +34,7 @@
 - `server.mjs` assumes local TLS certs (`./cert/server.key`) without bundling instructions, preventing quick local incident drills; no fallback to HTTP for emergency use.
 
 ## High-Risk Summary
-1. Security header stack violates guardrail (enforced HSTS/preload, CSP disabled, no telemetry) — immediate fix required.
+1. Security header stack violates guardrail (enforced HSTS/preload, CSP disabled, no telemetry)  immediate fix required.
 2. Configuration drift between `next.config.mjs` / `next.config.ts` and duplicate middleware risks undefined routing/security behavior.
 3. Lack of observability (no CSP report sink, no metrics pipeline, sparse CWV evidence) blocks compliance with Platform KPIs.
 4. Firestore rules + functions lack hardened validation/logging, exposing audit trail integrity risk.

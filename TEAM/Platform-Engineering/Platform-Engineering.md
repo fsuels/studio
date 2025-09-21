@@ -39,7 +39,7 @@ Enable a resilient, performant Next.js + Firebase platform that delivers bilingu
 ## Tooling & Integrations
 - CI: GitHub Actions, Playwright, Jest, Lighthouse CI, axe.
 - Infra scripts: `scripts/`, Terraform (if introduced), Firebase CLI, Stripe webhooks sandbox for E2E.
-- Monitoring: Sentry, Log aggregation (e.g., BigQuery/Elastic), uptime checks.
+- Monitoring: Log aggregation (e.g., BigQuery/Elastic), uptime checks, and OpenTelemetry-based alerts.
 - Collaboration: Linear/Jira for workload, Notion/Confluence or `ops/` docs for runbooks.
 
 ## Collaboration Map

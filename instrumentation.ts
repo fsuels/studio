@@ -1,11 +1,10 @@
 // instrumentation.ts (root)
-// Ensure Next.js can load the instrumentation hook in dev and prod.
+// Minimal instrumentation hook kept for compatibility.
 
 export async function register() {
-  // No-op: Sentry instrumentation removed
+  // No-op instrumentation hook retained for compatibility.
 }
 
 export const onRequestError = () => {
-  // No-op error handler (Sentry removed)
+  // Error handler intentionally left blank; no external SDK integration.
 };
-
