@@ -23,9 +23,11 @@ export function Logo({
   const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
   const locale = (params.locale as 'en' | 'es') || 'en';
 
+  const homepageHref = locale === 'en' ? '/' : `/${locale}`;
+
   return (
     <Link
-      href={`/${locale}/`}
+      href={homepageHref}
       className={cn(
         'flex flex-col items-center gap-1 text-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm',
         wrapperClassName,

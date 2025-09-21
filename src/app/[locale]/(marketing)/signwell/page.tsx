@@ -1,4 +1,4 @@
-// src/app/[locale]/signwell/page.tsx
+﻿// src/app/[locale]/(marketing)/signwell/page.tsx
 export const revalidate = 3600; // Revalidate every hour
 
 import type { Metadata } from 'next';
@@ -34,7 +34,11 @@ const META = {
 type SupportedLocale = keyof typeof META;
 
 interface SignWellPageProps {
-  params: { locale: SupportedLocale } & Record<string, string>>;
+  params: { locale: SupportedLocale } & Record<string, string>;
+}
+
+function resolveLocale(locale?: string): SupportedLocale {
+  return locale && locale in META ? (locale as SupportedLocale) : 'en';
 }
 
 function buildSignWellStructuredData(locale: SupportedLocale): string {
@@ -61,8 +65,7 @@ function buildSignWellStructuredData(locale: SupportedLocale): string {
           locale === 'es'
             ? 'Servicio de firma electrónica con soporte de SignWell'
             : 'Electronic signature service with SignWell support',
-        serviceType:
-          locale === 'es' ? 'Firma electrónica' : 'Electronic signature',
+        serviceType: locale === 'es' ? 'Firma electrónica' : 'Electronic signature',
         provider: {
           '@type': 'Organization',
           name: '123LegalDoc',
@@ -72,41 +75,35 @@ function buildSignWellStructuredData(locale: SupportedLocale): string {
         availableChannel: {
           '@type': 'ServiceChannel',
           serviceUrl: `${siteUrl}/${locale}/signup`,
-          name:
-            locale === 'es'
-              ? 'Canal de autoayuda en línea'
-              : 'Online self-help channel',
+          name: locale === 'es' ? 'Canal de autoayuda en línea' : 'Online self-help channel',
         },
       },
       potentialAction: {
         '@type': 'Action',
-        name:
-          locale === 'es'
-            ? 'Comenzar firma electrónica segura'
-            : 'Start secure electronic signing',
+        name: locale === 'es' ? 'Comenzar firma electrónica segura' : 'Start secure electronic signing',
         target: `${siteUrl}/${locale}/signup`,
       },
     },
     null,
     0,
-  ).replace(/</g, '\\u003c');
+  ).replace(/</g, '\u003c');
 }
 
-export async function generateStaticParams() {
-  return (localizations as SupportedLocale[]).map((locale) => ({ locale }));
+export async function generateStaticParams(): Promise<Array<{ locale: SupportedLocale }>> {
+  return localizations.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: SupportedLocale };
+  params: { locale: SupportedLocale };
 }): Promise<Metadata> {
-  const { locale } = params;
-  const copy = META[locale] ?? META.en;
+  const localeKey = resolveLocale(params?.locale);
+  const copy = META[localeKey];
 
   const siteUrl = getSiteUrl();
-  const metadataBase = new URL(siteUrl + '/');
-  const canonicalPath = `/${locale}/signwell/`;
+  const metadataBase = new URL(siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`);
+  const canonicalPath = `/${localeKey}/signwell/`;
   const supportedLocales = localizations as readonly SupportedLocale[];
   const languageAlternates = supportedLocales.reduce<Record<string, string>>(
     (accumulator, supportedLocale) => {
@@ -117,7 +114,7 @@ export async function generateMetadata({
   );
   languageAlternates['x-default'] = `${siteUrl}/en/signwell/`;
   const alternateOgLocales = supportedLocales
-    .filter((supportedLocale) => supportedLocale !== locale)
+    .filter((supportedLocale) => supportedLocale !== localeKey)
     .map((supportedLocale) => LOCALE_LANGUAGE_TAGS[supportedLocale]);
 
   return {
@@ -135,7 +132,7 @@ export async function generateMetadata({
       type: 'website',
       url: siteUrl + canonicalPath,
       siteName: SEOConfig.openGraph?.site_name ?? '123LegalDoc',
-      locale: LOCALE_LANGUAGE_TAGS[locale],
+      locale: LOCALE_LANGUAGE_TAGS[localeKey],
       alternateLocale: alternateOgLocales,
     },
     twitter: {
@@ -147,8 +144,7 @@ export async function generateMetadata({
 }
 
 export default async function SignWellPage({ params }: SignWellPageProps) {
-  const { locale } = params;
-  const localeKey: SupportedLocale = locale in META ? locale : 'en';
+  const localeKey = resolveLocale(params?.locale);
   const structuredData = buildSignWellStructuredData(localeKey);
 
   return (

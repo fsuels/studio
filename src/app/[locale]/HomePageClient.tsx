@@ -5,9 +5,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
+import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 
 const SpinnerIcon = () => (
   <svg
@@ -138,7 +139,6 @@ const AnnouncementBar = lazyOnView(
 export default function HomePageClient() {
   const { t } = useTranslation('common');
   const searchParams = useSearchParams();
-  const router = useRouter();
   const params = useParams();
   const locale = (params!.locale as 'en' | 'es') || 'en';
 
@@ -148,43 +148,22 @@ export default function HomePageClient() {
   >(null);
   // Removed selectedDocument to avoid importing the full document library on client
   const [isHydrated, setIsHydrated] = useState(false);
-  const [ctaVariant, setCtaVariant] = useState<'A' | 'B' | 'C'>('A');
   
-  const heroCtaDestination = `/${locale}/generate/`;
-  const prefetchHeroCta = useCallback(() => {
-    try {
-      router.prefetch(heroCtaDestination);
-    } catch {}
-  }, [heroCtaDestination, router]);
+  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const handleHeroCtaClick = useCallback(() => {
     track('home_cta_click', {
       locale,
       surface: 'hero',
-      destination: heroCtaDestination,
-      cta_variant: ctaVariant,
+      action: 'open_discovery_modal',
     });
-    router.push(heroCtaDestination);
-  }, [ctaVariant, heroCtaDestination, locale, router]);
+    setShowDiscoveryModal(true);
+  }, [locale, setShowDiscoveryModal]);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  useEffect(() => {
-    // A/B Test CTA variants - only after hydration to avoid SSR mismatch
-    if (!isHydrated) return;
-    
-    const stored = localStorage.getItem('ctaVariant');
-    if (stored === 'A' || stored === 'B' || stored === 'C') {
-      setCtaVariant(stored as 'A' | 'B' | 'C');
-    } else {
-      const variants: ('A' | 'B' | 'C')[] = ['A', 'B', 'C'];
-      const chosen = variants[Math.floor(Math.random() * variants.length)];
-      localStorage.setItem('ctaVariant', chosen);
-      setCtaVariant(chosen);
-    }
-  }, [isHydrated]);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -288,7 +267,6 @@ export default function HomePageClient() {
                 <div className="flex justify-start">
                   <button 
                     onClick={handleHeroCtaClick}
-                    onMouseEnter={prefetchHeroCta}
                     className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
                     suppressHydrationWarning
                   >
@@ -297,14 +275,7 @@ export default function HomePageClient() {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
-                      {!isHydrated 
-                        ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
-                        : ctaVariant === 'A' 
-                        ? t('home.hero2.cta.primary', { defaultValue: 'Generate Your First Form Free' })
-                        : ctaVariant === 'B'
-                        ? t('home.hero2.cta.primaryB', { defaultValue: 'Start Creating Documents' })
-                        : t('home.hero2.cta.primaryC', { defaultValue: 'Create Legal Forms Now' })
-                      }
+                      {t('home.hero2.cta.primaryC', { defaultValue: 'Create Legal Forms Now' })}
                     </span>
                     <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-500/20 to-blue-600/20 blur-xl"></div>
                   </button>

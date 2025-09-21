@@ -2,6 +2,7 @@
 import { z } from 'zod';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
 import { preprocessQuery } from './search/comprehensive-synonym-map';
+import { rankDocumentsSemantically } from './search/semantic-search';
 import {
   getAllDocumentMetadata,
   searchDocumentMetadata,
@@ -296,76 +297,72 @@ export async function findMatchingDocuments(
   lang: 'en' | 'es',
   state?: string,
 ): Promise<LegalDocument[]> {
-  const allDocuments = await getAllDocuments();
+  const trimmedQuery = query.trim();
+  const allDocuments = (await getAllDocuments()).filter((doc) => doc.id !== 'general-inquiry');
 
-  if (!query && !state) {
-    return allDocuments.filter((d) => d.id !== 'general-inquiry');
+  const matchesState = (doc: LegalDocument) => {
+    if (!state || state === 'all') return true;
+    if (doc.states === 'all') return true;
+    if (!doc.states || doc.states.length === 0) return true;
+    return Array.isArray(doc.states) ? doc.states.includes(state) : false;
+  };
+
+  const filteredByState = allDocuments.filter(matchesState);
+
+  if (!trimmedQuery) {
+    return filteredByState;
   }
 
-  const originalTokens = query.toLowerCase().split(/\s+/).filter(t => t.length > 1);
-  const expandedTokens = preprocessQuery(query, lang);
+  const originalTokens = trimmedQuery
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((token) => token.length > 1);
+  const expandedTokens = preprocessQuery(trimmedQuery, lang);
+  const fullQuery = trimmedQuery.toLowerCase();
 
-  const results: Array<{ document: LegalDocument; score: number }> = [];
+  const keywordResults: Array<{ document: LegalDocument; score: number }> = [];
 
-  allDocuments.forEach((d) => {
-    if (d.id === 'general-inquiry') return;
+  filteredByState.forEach((doc) => {
+    const translation = doc.translations?.[lang] || doc.translations?.en;
+    if (!translation) return;
 
-    const t = d.translations?.[lang] || d.translations?.en;
-    if (!t) return;
-
-    // Collect all searchable text
     const searchableFields = [
-      t.name?.toLowerCase() || '',
-      t.description?.toLowerCase() || '',
-      ...(t.aliases || []).map(a => a.toLowerCase()),
-      ...(d.keywords || []).map(k => k.toLowerCase()),
-      ...(lang === 'es' ? (d.keywords_es || []) : []).map(k => k.toLowerCase()),
-      ...(d.searchTerms || []).map(s => s.toLowerCase()),
-      d.category.toLowerCase(),
-      d.id.toLowerCase().replace(/-/g, ' ')
+      translation.name?.toLowerCase() || '',
+      translation.description?.toLowerCase() || '',
+      ...(translation.aliases || []).map((alias) => alias.toLowerCase()),
+      ...(doc.keywords || []).map((keyword) => keyword.toLowerCase()),
+      ...(lang === 'es' && doc.keywords_es ? doc.keywords_es.map((k) => k.toLowerCase()) : []),
+      ...(doc.searchTerms || []).map((term) => term.toLowerCase()),
+      doc.category.toLowerCase(),
+      doc.id.toLowerCase().replace(/-/g, ' '),
     ].filter(Boolean);
 
-    // Check state filter
-    const matchesState =
-      !state ||
-      state === 'all' ||
-      d.states === 'all' ||
-      (Array.isArray(d.states) && d.states.includes(state));
-
-    if (!matchesState) return;
-
-    // Calculate relevance score
     let score = 0;
     let hasMatch = false;
 
-    // Exact phrase match (highest priority)
-    const fullQuery = query.toLowerCase();
-    if (searchableFields.some(field => field.includes(fullQuery))) {
+    if (searchableFields.some((field) => field.includes(fullQuery))) {
       score += 50;
       hasMatch = true;
     }
 
-    // Original token matches (high priority)
-    originalTokens.forEach(token => {
-      if (searchableFields.some(field => field.includes(token))) {
+    originalTokens.forEach((token) => {
+      if (searchableFields.some((field) => field.includes(token))) {
         score += 10;
         hasMatch = true;
       }
     });
 
-    // Expanded synonym matches (medium priority)
-    expandedTokens.forEach(token => {
-      if (searchableFields.some(field => field.includes(token))) {
+    expandedTokens.forEach((token) => {
+      if (searchableFields.some((field) => field.includes(token))) {
         score += 3;
         hasMatch = true;
       }
     });
 
-    // Partial word matches (low priority)
-    expandedTokens.forEach(token => {
-      searchableFields.forEach(field => {
+    expandedTokens.forEach((token) => {
+      searchableFields.forEach((field) => {
         const words = field.split(/\s+/);
-        words.forEach(word => {
+        words.forEach((word) => {
           if (word.startsWith(token) || word.endsWith(token)) {
             score += 1;
             hasMatch = true;
@@ -374,27 +371,69 @@ export async function findMatchingDocuments(
       });
     });
 
-    // Boost score for category matches
-    if (d.category.toLowerCase().includes(fullQuery)) {
+    if (doc.category.toLowerCase().includes(fullQuery)) {
       score += 20;
     }
 
-    // Boost for exact ID matches
-    if (d.id.toLowerCase().replace(/-/g, ' ').includes(fullQuery)) {
+    if (doc.id.toLowerCase().replace(/-/g, ' ').includes(fullQuery)) {
       score += 15;
     }
 
     if (hasMatch && score > 0) {
-      results.push({ document: d, score });
+      keywordResults.push({ document: doc, score });
     }
   });
 
-  // Sort by relevance score (descending)
-  results.sort((a, b) => b.score - a.score);
-  
-  return results.map(r => r.document);
-}
+  const semanticRanking = await rankDocumentsSemantically(trimmedQuery, {
+    locale: lang,
+    documents: allDocuments,
+    limit: 120,
+  });
 
+  const documentsById = new Map(allDocuments.map((doc) => [doc.id, doc] as const));
+  const combined = new Map<string, { doc: LegalDocument; keywordScore: number; semanticScore: number }>();
+
+  keywordResults.forEach(({ document, score }) => {
+    const existing = combined.get(document.id) || {
+      doc: document,
+      keywordScore: 0,
+      semanticScore: 0,
+    };
+    existing.keywordScore = Math.max(existing.keywordScore, score);
+    combined.set(document.id, existing);
+  });
+
+  semanticRanking.forEach(({ docId, score }) => {
+    const doc = documentsById.get(docId);
+    if (!doc || !matchesState(doc)) return;
+
+    const existing = combined.get(docId) || {
+      doc,
+      keywordScore: 0,
+      semanticScore: 0,
+    };
+    existing.semanticScore = Math.max(existing.semanticScore, score);
+    combined.set(docId, existing);
+  });
+
+  if (combined.size === 0) {
+    return keywordResults.map((item) => item.document);
+  }
+
+  const ranked = Array.from(combined.values())
+    .map(({ doc, keywordScore, semanticScore }) => {
+      const semanticComponent = Math.max(0, semanticScore) * 100;
+      const combinedScore = semanticComponent + keywordScore;
+      return {
+        doc,
+        combinedScore,
+      };
+    })
+    .sort((a, b) => b.combinedScore - a.combinedScore)
+    .map((item) => item.doc);
+
+  return ranked;
+}
 export async function search(
   query: string,
   lang: 'en' | 'es',
@@ -497,3 +536,5 @@ export {
 
 export type { LegalDocument, LocalizedText };
 export { usStates } from './usStates';
+
+
