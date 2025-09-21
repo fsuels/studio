@@ -1,7 +1,6 @@
 'use client';
 
-import { NextSeo } from 'next-seo';
-import { useTranslation } from 'react-i18next';
+import Head from 'next/head';
 
 interface MetaTagsProps {
   title: string;
@@ -21,9 +20,9 @@ interface MetaTagsProps {
     description?: string;
     images?: Array<{
       url: string;
-      width: number;
-      height: number;
-      alt: string;
+      width?: number;
+      height?: number;
+      alt?: string;
     }>;
     type?: string;
   };
@@ -41,164 +40,50 @@ export function MetaTags({
   structuredData,
   openGraph,
 }: MetaTagsProps) {
-  const { i18n } = useTranslation();
-  const currentLocale = i18n.language || 'en';
-
-  // Generate enhanced keywords based on document and location
-  const generateKeywords = () => {
-    const baseKeywords = [...keywords];
-
-    if (documentType) {
-      baseKeywords.push(
-        `${documentType} template`,
-        `free ${documentType}`,
-        `${documentType} form`,
-        `${documentType} generator`,
-      );
-
-      if (state) {
-        baseKeywords.push(
-          `${state} ${documentType}`,
-          `${documentType} ${state}`,
-          `${state} legal forms`,
-        );
-      }
-
-      if (city) {
-        baseKeywords.push(
-          `${documentType} ${city}`,
-          `legal documents ${city}`,
-          `${documentType} near me`,
-        );
-      }
-    }
-
-    return baseKeywords.slice(0, 15); // Limit to 15 keywords for best practices
-  };
-
-  // Generate enhanced title with location and branding
-  const enhanceTitle = () => {
-    let enhancedTitle = title;
-
-    if (state && documentType && !title.includes(state)) {
-      enhancedTitle = `${state} ${documentType} - Free Template 2025 | 123LegalDoc`;
-    } else if (!title.includes('123LegalDoc')) {
-      enhancedTitle = `${title} | 123LegalDoc`;
-    }
-
-    return enhancedTitle;
-  };
-
-  // Generate enhanced description with local SEO
-  const enhanceDescription = () => {
-    let enhancedDescription = description;
-
-    if (state && documentType && !description.includes(state)) {
-      enhancedDescription = `Create your ${state} ${documentType.toLowerCase()} instantly. Free template with state-specific requirements. ${description}`;
-    }
-
-    // Ensure description is under 160 characters
-    return enhancedDescription.length > 160
-      ? enhancedDescription.substring(0, 157) + '...'
-      : enhancedDescription;
-  };
-
-  const finalTitle = enhanceTitle();
-  const finalDescription = enhanceDescription();
-  const finalKeywords = generateKeywords();
+  const keywordContent = keywords.filter(Boolean).join(', ');
+  const geoRegion = state || 'US';
+  const geoPlacename = city || state || 'United States';
+  const ogTitle = openGraph?.title || title;
+  const ogDescription = openGraph?.description || description;
+  const ogType = openGraph?.type || 'website';
+  const ogImage = openGraph?.images?.[0]?.url;
 
   return (
     <>
-      <NextSeo
-        title={finalTitle}
-        description={finalDescription}
-        canonical={canonical}
-        languageAlternates={alternateLanguages}
-        openGraph={{
-          title: openGraph?.title || finalTitle,
-          description: openGraph?.description || finalDescription,
-          type: openGraph?.type || 'website',
-          locale: currentLocale,
-          site_name: '123LegalDoc',
-          images: openGraph?.images || [
-            {
-              url: 'https://123legaldoc.com/images/og-default.png',
-              width: 1200,
-              height: 630,
-              alt: '123LegalDoc - Free Legal Document Templates',
-            },
-          ],
-        }}
-        twitter={{
-          handle: '@123legaldoc',
-          site: '@123legaldoc',
-          cardType: 'summary_large_image',
-        }}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: finalKeywords.join(', '),
-          },
-          {
-            name: 'author',
-            content: '123LegalDoc',
-          },
-          {
-            name: 'robots',
-            content:
-              'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
-          },
-          {
-            name: 'googlebot',
-            content: 'index, follow',
-          },
-          {
-            property: 'article:publisher',
-            content: 'https://123legaldoc.com',
-          },
-          {
-            name: 'geo.region',
-            content: state || 'US',
-          },
-          {
-            name: 'geo.placename',
-            content: city || state || 'United States',
-          },
-          ...(documentType
-            ? [
-                {
-                  name: 'document-type',
-                  content: documentType,
-                },
-              ]
-            : []),
-          ...(state
-            ? [
-                {
-                  name: 'geo.region',
-                  content: state,
-                },
-              ]
-            : []),
-        ]}
-        additionalLinkTags={[
-          {
-            rel: 'dns-prefetch',
-            href: '//fonts.googleapis.com',
-          },
-          {
-            rel: 'dns-prefetch',
-            href: '//www.google-analytics.com',
-          },
-          {
-            rel: 'preconnect',
-            href: 'https://fonts.gstatic.com',
-            crossOrigin: 'anonymous',
-          },
-        ]}
-      />
+      <Head>
+        {canonical && <link rel="canonical" href={canonical} />}
+        {alternateLanguages.map((lang) => (
+          <link
+            key={lang.hrefLang}
+            rel="alternate"
+            hrefLang={lang.hrefLang}
+            href={lang.href}
+          />
+        ))}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="author" content="123LegalDoc" />
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
+        <meta name="googlebot" content="index, follow" />
+        <meta property="article:publisher" content="https://123legaldoc.com" />
+        <meta name="geo.region" content={geoRegion} />
+        <meta name="geo.placename" content={geoPlacename} />
+        {documentType && <meta name="document-type" content={documentType} />}
+        {keywordContent && <meta name="keywords" content={keywordContent} />}
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:site_name" content="123LegalDoc" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@123legaldoc" />
+        <meta name="twitter:creator" content="@123legaldoc" />
+      </Head>
 
-      {/* Structured Data */}
       {structuredData && (
         <script
           type="application/ld+json"
@@ -207,19 +92,6 @@ export function MetaTags({
           }}
         />
       )}
-
-      {/* Hreflang tags for international SEO */}
-      {alternateLanguages.map((lang) => (
-        <link
-          key={lang.hrefLang}
-          rel="alternate"
-          hrefLang={lang.hrefLang}
-          href={lang.href}
-        />
-      ))}
     </>
   );
 }
-
-// Helper function to generate meta tags for document pages
-// Note: helper moved to server-safe module at src/lib/seo/meta.ts

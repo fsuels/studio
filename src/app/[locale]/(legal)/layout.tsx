@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ClientProviders } from '@/components/providers/ClientProviders';
 import LanguageSwitch from '@/components/global/LanguageSwitch';
 import { Layout } from '@/components/layout/Layout';
@@ -11,8 +11,12 @@ export default async function LegalGroupLayout({ children, params }: Props) {
 
   return (
     <ClientProviders locale={detectedLocale}>
-      <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
-      <Layout>{children}</Layout>
+      <Suspense fallback={null}>
+        <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Layout>{children}</Layout>
+      </Suspense>
     </ClientProviders>
   );
 }

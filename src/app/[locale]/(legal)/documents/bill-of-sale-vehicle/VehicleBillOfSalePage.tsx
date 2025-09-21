@@ -193,14 +193,6 @@ export default function VehicleBillOfSalePage() {
           </Accordion>
         </section>
 
-        <section className="max-w-xl mx-auto mb-12">
-          <Progress value={33} className="mb-4" aria-label="Progress" />
-          <p className="text-sm text-muted-foreground text-center">
-            {t(
-              'vehicleBillOfSale.progressText',
-              'Step 1 of 3: Answer a few questions',
-            )}
-          </p>
         </section>
 
         <section className="text-center mb-20">
