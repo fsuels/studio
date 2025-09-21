@@ -2,7 +2,8 @@
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { toast } from 'sonner';
@@ -21,7 +22,7 @@ const localeNames: Record<'en' | 'es', string> = {
 export default function LanguageSwitch({ currentLocale, showToast = true }: LanguageSwitchProps) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const { t } = useTranslation('common');
 
   const switchLanguage = useCallback(
@@ -79,7 +80,7 @@ export default function LanguageSwitch({ currentLocale, showToast = true }: Lang
 export function useLanguageSwitch(currentLocale: 'en' | 'es') {
   const router = useRouter();
   const pathname = usePathname() ?? '';
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const { t } = useTranslation('common');
 
   const switchLanguage = useCallback(

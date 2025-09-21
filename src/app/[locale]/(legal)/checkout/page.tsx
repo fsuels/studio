@@ -1,7 +1,8 @@
 // src/app/[locale]/checkout/page.tsx
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ const CONFIG_ERROR_MESSAGE =
   'Payments are temporarily unavailable while we finalize Stripe setup. Please contact support if this persists.';
 
 export default function CheckoutPage() {
-  const search = useSearchParams();
+  const search = useCurrentSearchParams();
   const router = useRouter();
 
   const locale = search?.get('locale') ?? 'en';

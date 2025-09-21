@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { useTranslation } from 'react-i18next';
 import { Command } from 'cmdk';
 import {
@@ -73,7 +74,7 @@ export default function CommandPalette({
 }: CommandPaletteProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const { t } = useTranslation(['common', 'header']);
   const { switchLanguage, availableLocales, localeNames, nextLocale } =
     useLanguageSwitch(locale);

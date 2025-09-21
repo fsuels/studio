@@ -5,7 +5,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
@@ -128,7 +129,7 @@ const AnnouncementBar = lazyOnView(
 
 export default function HomePageClient() {
   const { t } = useTranslation('common');
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const params = useParams();
   const locale = (params!.locale as 'en' | 'es') || 'en';
 

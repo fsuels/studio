@@ -1,7 +1,6 @@
 // src/components/GooglePlacesLoader.tsx
 'use client';
-import React from 'react';
-import { APILoader } from '@googlemaps/extended-component-library/react';
+import React, { useEffect, useState } from 'react';
 import { getPublicGoogleMapsApiKey } from '@/lib/env';
 
 declare global {
@@ -16,6 +15,27 @@ declare global {
 
 export default function GooglePlacesLoader() {
   const apiKey = getPublicGoogleMapsApiKey();
+  const [Loader, setLoader] = useState<React.ComponentType<{ apiKey: string }> | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    let cancelled = false;
+
+    import('@googlemaps/extended-component-library/react')
+      .then((mod) => {
+        if (!cancelled) {
+          setLoader(() => mod.APILoader);
+        }
+      })
+      .catch((error) => {
+        console.warn('GooglePlacesLoader: failed to load maps library', error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   if (!apiKey) {
     console.warn(
@@ -24,5 +44,9 @@ export default function GooglePlacesLoader() {
     return null;
   }
 
-  return <APILoader apiKey={apiKey} />;
+  if (!isClient || !Loader) {
+    return null;
+  }
+
+  return <Loader apiKey={apiKey} />;
 }

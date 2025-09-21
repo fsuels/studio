@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -62,7 +63,7 @@ interface WizardCoreProps {
 export default function WizardCore({ locale, docId, docMeta }: WizardCoreProps) {
   const { t, ready } = useTranslation('common');
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
   const resumeId = searchParams.get('resumeId');

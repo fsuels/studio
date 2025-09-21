@@ -2,7 +2,8 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   funnelAnalytics,
   createFunnelStep,
@@ -13,7 +14,7 @@ import {
 // Main funnel tracking hook
 export function useFunnelTracking() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
 
   const sessionIdRef = useRef<string | null>(null);
   const stepTimerRef = useRef<number | null>(null);

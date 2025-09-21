@@ -13,7 +13,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   Loader2,
   FileText,
@@ -70,7 +71,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   
   // Get all categories from taxonomy (loaded lazily)
   const allCategories = useMemo(() => Object.keys(tax?.categories || {}), [tax]);
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const categoryFromUrl = searchParams?.get('category');
   
   // Category display names and icons - using all your categories

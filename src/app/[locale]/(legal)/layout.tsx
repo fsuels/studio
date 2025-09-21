@@ -10,13 +10,15 @@ export default async function LegalGroupLayout({ children, params }: Props) {
     pathLocale === 'es' || pathLocale === 'en' ? (pathLocale as 'en' | 'es') : 'en';
 
   return (
-    <ClientProviders locale={detectedLocale}>
-      <Suspense fallback={null}>
-        <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Layout>{children}</Layout>
-      </Suspense>
-    </ClientProviders>
+    <Suspense fallback={null}>
+      <ClientProviders locale={detectedLocale}>
+        <Suspense fallback={null}>
+          <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <Layout>{children}</Layout>
+        </Suspense>
+      </ClientProviders>
+    </Suspense>
   );
 }

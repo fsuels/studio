@@ -1,7 +1,7 @@
 // src/components/layout/Header/index.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@/components/layout/Logo';
@@ -182,7 +182,9 @@ const Header = React.memo(function Header() {
               </span>
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
             </button>
-            <LanguageSwitcher />
+            <Suspense fallback={null}>
+              <LanguageSwitcher />
+            </Suspense>
             <ThemeToggleButton />
             <HeaderUserMenu clientLocale={clientLocale} mounted={mounted} />
           </div>

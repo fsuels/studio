@@ -12,13 +12,15 @@ export default function StateLayout({ children, params }: StateLayoutProps) {
   const detectedLocale = params.locale === "es" ? "es" : "en";
 
   return (
-    <ClientProviders locale={detectedLocale}>
-      <Suspense fallback={null}>
-        <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Layout>{children}</Layout>
-      </Suspense>
-    </ClientProviders>
+    <Suspense fallback={null}>
+      <ClientProviders locale={detectedLocale}>
+        <Suspense fallback={null}>
+          <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <Layout>{children}</Layout>
+        </Suspense>
+      </ClientProviders>
+    </Suspense>
   );
 }

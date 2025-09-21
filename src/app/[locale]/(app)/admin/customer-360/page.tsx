@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import Customer360Timeline from '@/components/admin/Customer360Timeline';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -56,7 +56,7 @@ const mockCustomers = Array.from({ length: 50 }, () => {
 });
 
 export default function Customer360Page() {
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
     searchParams.get('customerId'),
   );

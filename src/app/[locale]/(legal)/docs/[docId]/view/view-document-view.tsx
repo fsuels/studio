@@ -5,7 +5,8 @@ import React, { useState, useEffect } from 'react';
 import EmptyState from '@/components/shared/EmptyState';
 import { renderMarkdown } from '@/lib/markdown-renderer';
 import { serverTimestamp, setDoc } from 'firebase/firestore';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import DocumentDetail from '@/components/document/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
 import { getSignWellUrl } from '@/services/signwell';
@@ -32,7 +33,7 @@ interface ViewDocumentViewProps {
 }
 
 export default function ViewDocumentView({ locale, docId, actualDocId }: ViewDocumentViewProps) {
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   /* Dashboard passes ?docId=abc123, but direct navigation (or refresh)
      gives you only the route param.  */
   const savedDocId = actualDocId || searchParams.get('docId') || docId;

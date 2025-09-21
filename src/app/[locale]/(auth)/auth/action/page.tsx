@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   Card,
   CardContent,
@@ -31,7 +32,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function AuthActionPage() {
   const { t } = useTranslation('common');
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();

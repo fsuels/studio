@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { createPaymentRecord } from '@/lib/firestore/paymentActions';
@@ -8,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 export default function CheckoutSuccessPage() {
   const { locale } = useParams() as { locale: string };
-  const search = useSearchParams();
+  const search = useCurrentSearchParams();
   const docId = search.get('docId');
   const session_id = search.get('session_id');
   const [paid, setPaid] = useState(false);

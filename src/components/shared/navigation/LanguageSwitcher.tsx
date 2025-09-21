@@ -1,9 +1,9 @@
 // src/components/LanguageSwitcher.tsx
 'use client';
 
+import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   usePathname,
-  useSearchParams,
   useRouter,
   useParams,
 } from 'next/navigation';
@@ -65,7 +65,7 @@ const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
 const LanguageSwitcher = React.memo(function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname() ?? '';
-  const searchParams = useSearchParams();
+  const searchParams = useCurrentSearchParams();
   const params = (useParams<{ locale?: string }>() ?? {}) as {
     locale?: string;
   };
