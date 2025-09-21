@@ -1,7 +1,7 @@
 // src/components/providers/I18nProvider.tsx
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18nInstance, { ensureI18nInitialized } from '@/lib/i18n'; // Import the server-safe and client-configured instance
 
@@ -33,11 +33,11 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
           console.error('[I18nClientProvider] changeLanguage (ssr) error:', err);
         });
       }
-      return true;
     }
 
-    return i18nInstance.isInitialized && i18nInstance.language === locale;
+    return true;
   });
+  const syncInFlightRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -54,20 +54,37 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
         console.error('[I18nClientProvider] init/changeLanguage error:', err);
       } finally {
         if (!cancelled) {
+          syncInFlightRef.current = false;
           setIsLanguageSynced(true);
         }
       }
     };
 
-    if (!isLanguageSynced || i18nInstance.language !== locale) {
-      void syncLocale();
+    const needsSync =
+      !i18nInstance.isInitialized || i18nInstance.language !== locale;
+
+    if (!needsSync) {
+      syncInFlightRef.current = false;
+      setIsLanguageSynced(true);
+      return () => {
+        cancelled = true;
+      };
     }
+
+    if (syncInFlightRef.current) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    syncInFlightRef.current = true;
+    setIsLanguageSynced(false);
+    void syncLocale();
 
     return () => {
       cancelled = true;
     };
-  }, [locale, namespaces, isLanguageSynced]);
-
+  }, [locale, namespaces]);
   useEffect(() => {
     if (isLanguageSynced || typeof window === 'undefined') {
       return;
