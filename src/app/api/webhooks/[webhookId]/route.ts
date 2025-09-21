@@ -44,7 +44,7 @@ interface RouteParams {
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<RouteParams> },
+  context: { params: RouteParams },
 ) {
   try {
     // Validate authentication
@@ -100,7 +100,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<RouteParams> },
+  context: { params: RouteParams },
 ) {
   try {
     // Validate authentication
@@ -181,7 +181,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<RouteParams> },
+  context: { params: RouteParams },
 ) {
   try {
     // Validate authentication

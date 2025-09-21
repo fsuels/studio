@@ -15,7 +15,7 @@ interface RouteParams {
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<RouteParams> },
+  context: { params: RouteParams },
 ) {
   try {
     // Validate authentication

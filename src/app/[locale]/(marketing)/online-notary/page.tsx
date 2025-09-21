@@ -150,7 +150,7 @@ function buildOnlineNotaryStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<OnlineNotaryPageParams>;
+  params: OnlineNotaryPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -202,7 +202,7 @@ export async function generateStaticParams() {
 export default async function OnlineNotaryPage({
   params,
 }: {
-  params: Promise<OnlineNotaryPageParams>;
+  params: OnlineNotaryPageParams;
 }) {
   const { locale } = params;
   const content = localizedContent[locale];

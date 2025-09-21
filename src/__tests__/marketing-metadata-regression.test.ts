@@ -40,63 +40,63 @@ const routeDefinitions: RouteDefinition[] = [
   {
     name: 'homepage',
     canonical: (locale) => '/' + locale + '/',
-    getMetadata: (locale) => generateHomeMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateHomeMetadata({ params: { locale } }),
   },
   {
     name: 'pricing',
     canonical: (locale) => '/' + locale + '/pricing/',
-    getMetadata: (locale) => generatePricingMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generatePricingMetadata({ params: { locale } }),
   },
   {
     name: 'features',
     canonical: (locale) => '/' + locale + '/features/',
-    getMetadata: (locale) => generateFeaturesMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateFeaturesMetadata({ params: { locale } }),
   },
   {
     name: 'templates',
     canonical: (locale) => '/' + locale + '/templates/',
-    getMetadata: (locale) => generateTemplatesMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateTemplatesMetadata({ params: { locale } }),
   },
   {
     name: 'blog index',
     canonical: (locale) => '/' + locale + '/blog/',
-    getMetadata: (locale) => generateBlogIndexMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateBlogIndexMetadata({ params: { locale } }),
   },
   {
     name: 'blog article',
     canonical: (locale) => '/' + locale + '/blog/' + sampleSlug + '/',
     getMetadata: (locale) =>
-      generateBlogArticleMetadata({ params: Promise.resolve({ locale, slug: sampleSlug }) }),
+      generateBlogArticleMetadata({ params: { locale, slug: sampleSlug } }),
   },
   {
     name: 'signwell landing',
     canonical: (locale) => '/' + locale + '/signwell/',
-    getMetadata: (locale) => generateSignwellMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateSignwellMetadata({ params: { locale } }),
   },
   {
     name: 'online notary landing',
     canonical: (locale) => '/' + locale + '/online-notary/',
-    getMetadata: (locale) => generateOnlineNotaryMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateOnlineNotaryMetadata({ params: { locale } }),
   },
   {
     name: 'partners landing',
     canonical: (locale) => '/' + locale + '/partners/',
-    getMetadata: (locale) => generatePartnersMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generatePartnersMetadata({ params: { locale } }),
   },
   {
     name: 'support page',
     canonical: (locale) => '/' + locale + '/support/',
-    getMetadata: (locale) => generateSupportMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateSupportMetadata({ params: { locale } }),
   },
   {
     name: 'faq page',
     canonical: (locale) => '/' + locale + '/faq/',
-    getMetadata: (locale) => generateFaqMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateFaqMetadata({ params: { locale } }),
   },
   {
     name: 'sitemap',
     canonical: (locale) => '/' + locale + '/sitemap/',
-    getMetadata: (locale) => generateSitemapMetadata({ params: Promise.resolve({ locale }) }),
+    getMetadata: (locale) => generateSitemapMetadata({ params: { locale } }),
   },
 ];
 
@@ -143,3 +143,4 @@ describe('Marketing metadata localization', () => {
     });
   }
 });
+

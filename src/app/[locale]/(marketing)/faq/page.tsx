@@ -128,7 +128,7 @@ function buildFaqStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<FaqPageParams>;
+  params: FaqPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -177,7 +177,7 @@ export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
 }
 
-export default async function FAQPage({ params }: { params: Promise<FaqPageParams> }) {
+export default async function FAQPage({ params }: { params: FaqPageParams }) {
   const { locale } = params;
   const content = localizedContent[locale];
 

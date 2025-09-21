@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       offset,
     };
 
-    let userPreferences: UserLegalUpdatePreferences | null = null;
+    let userPreferences: (UserLegalUpdatePreferences & { id: string }) | null = null;
     if (feedRequest.userId && feedRequest.userId !== 'anonymous') {
       const prefDoc = await getAdmin()
         .firestore()
@@ -239,3 +239,4 @@ async function getFeedStatistics(_userId?: string) {
     };
   }
 }
+

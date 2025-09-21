@@ -2,7 +2,7 @@ import { buildSitemapStructuredData, generateMetadata, localizedContent } from '
 
 describe('marketing sitemap localization', () => {
   it('returns localized metadata and hreflang alternates for Spanish locale', async () => {
-    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'es' }) });
+    const metadata = await generateMetadata({ params: { locale: 'es' } });
 
     expect(metadata.title).toBe(localizedContent.es.metadata.title);
     expect(metadata.description).toBe(localizedContent.es.metadata.description);
@@ -26,3 +26,4 @@ describe('marketing sitemap localization', () => {
     expect(productList?.itemListElement[0].url).toBe('https://123legaldoc.com/es');
   });
 });
+

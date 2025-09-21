@@ -73,7 +73,7 @@ function buildBlogPostStructuredData(locale: 'en' | 'es', article: BlogArticle, 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<BlogRouteParams>;
+  params: BlogRouteParams;
 }): Promise<Metadata> {
   const { locale, slug } = params;
   const article = blogArticles.find((entry) => entry.slug === slug);
@@ -160,7 +160,7 @@ export async function generateStaticParams() {
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<BlogRouteParams>;
+  params: BlogRouteParams;
 }) {
   const { locale, slug } = params;
   const backToBlogLabel = locale === 'es' ? 'Volver al blog' : 'Back to Blog';

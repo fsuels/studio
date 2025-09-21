@@ -32,7 +32,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<StateRouteParams>;
+  params: StateRouteParams;
 }): Promise<Metadata> {
   const { state: stateSlug, locale } = params;
   const localeTyped = locale;
@@ -95,7 +95,7 @@ export async function generateMetadata({
 export default async function StatePage({
   params,
 }: {
-  params: Promise<StateRouteParams>;
+  params: StateRouteParams;
 }) {
   const { state: stateSlug, locale } = params;
   const localeTyped = locale;

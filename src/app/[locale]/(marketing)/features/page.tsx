@@ -224,7 +224,7 @@ function buildFeaturesStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<FeaturesPageParams>;
+  params: FeaturesPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -286,7 +286,7 @@ export async function generateStaticParams() {
 export default async function FeaturesPage({
   params,
 }: {
-  params: Promise<FeaturesPageParams>;
+  params: FeaturesPageParams;
 }) {
   const { locale } = params;
   const content = localizedContent[locale];
@@ -403,4 +403,3 @@ export default async function FeaturesPage({
     </>
   );
 }
-

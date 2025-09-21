@@ -124,7 +124,7 @@ function buildTemplatesStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<TemplatesPageParams>;
+  params: TemplatesPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -177,7 +177,7 @@ export async function generateStaticParams() {
 export default async function TemplatesPage({
   params,
 }: {
-  params: Promise<TemplatesPageParams>;
+  params: TemplatesPageParams;
 }) {
   const { locale } = params;
   const structuredData = buildTemplatesStructuredData(locale);
@@ -194,3 +194,4 @@ export default async function TemplatesPage({
     </>
   );
 }
+

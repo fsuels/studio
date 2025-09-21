@@ -9,7 +9,7 @@ interface RouteParams {
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<RouteParams> },
+  context: { params: RouteParams },
 ) {
   try {
     // Validate authentication

@@ -13,7 +13,7 @@ type BlogPageParams = {
 };
 
 type BlogPageProps = {
-  params: Promise<BlogPageParams>;
+  params: BlogPageParams;
 };
 
 const localizedContent = {
@@ -81,7 +81,7 @@ function buildBlogStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<BlogPageParams>;
+  params: BlogPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -177,4 +177,3 @@ export default async function BlogPage({ params }: BlogPageProps) {
     </>
   );
 }
-

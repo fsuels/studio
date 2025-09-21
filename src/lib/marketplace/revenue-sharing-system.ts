@@ -1,1 +1,559 @@
-// src/lib/marketplace/revenue-sharing-system.ts // This module uses Stripe server-side API and should only run on the server  import { getDb } from '@/lib/firebase'; import {   collection,   doc,   getDoc,   getDocs,   setDoc,   updateDoc,   query,   where,   orderBy,   limit,   serverTimestamp,   writeBatch,   Timestamp, } from 'firebase/firestore'; import { getStripeServerClient } from '@/lib/stripe-server'; import { STRIPE_API_VERSION } from '@/lib/stripe-config'; import type {   MarketplaceTemplate,   TemplateInstallation,   CreatorProfile, } from '@/types/marketplace';  /**  * Revenue Sharing System for Template Marketplace  * Handles payouts, commission tracking, and financial reporting for creators  */ export class RevenueSharingSystem {   private db: ReturnType<typeof getDb> | null = null;    constructor() {     this.initDb();   }    private async initDb() {     this.db = await getDb();   }    private async ensureDb() {     if (!this.db) {       await this.initDb();     }     return this.db!;   }    /**    * Process revenue share for a template purchase    */   async setupCreatorAccount({     userId,     email,     country,   }: {     userId: string;     email: string;     country: string;   }): Promise<{ accountId: string; onboardingUrl: string | null }> {     const stripe = getStripeServerClient({ apiVersion: STRIPE_API_VERSION });     const account = await stripe.accounts.create({       type: 'express',       email,       country,       capabilities: {         card_payments: { requested: true },         transfers: { requested: true },       },       metadata: {         marketplace_user_id: userId,       },     });      const onboardingLink = await stripe.accountLinks.create({       account: account.id,       refresh_url: process.env.STRIPE_ACCOUNT_LINK_REFRESH_URL || 'https://example.com/account/refresh',       return_url: process.env.STRIPE_ACCOUNT_LINK_RETURN_URL || 'https://example.com/account/return',       type: 'account_onboarding',     });      const db = await this.ensureDb();     await setDoc(doc(collection(db, 'marketplace-creators'), userId), {       stripeAccountId: account.id,       onboardingUrl: onboardingLink.url,       status: 'pending',       updatedAt: serverTimestamp(),     }, { merge: true });      return {       accountId: account.id,       onboardingUrl: onboardingLink.url,     };   }     async requestPayout({     creatorId,     amount,     currency,     destinationAccount,   }: {     creatorId: string;     amount: number;     currency: string;     destinationAccount: string;   }): Promise<{ payoutId: string; status: string }> {     const stripe = getStripeServerClient({ apiVersion: STRIPE_API_VERSION });      const payout = await stripe.transfers.create({       amount,       currency,       destination: destinationAccount,       metadata: {         marketplace_creator_id: creatorId,       },     });      const db = await this.ensureDb();     await setDoc(doc(collection(db, 'marketplace-payouts'), payout.id), {       creatorId,       amount,       currency,       destinationAccount,       stripeTransferId: payout.id,       status: payout.status,       createdAt: serverTimestamp(),     });      return {       payoutId: payout.id,       status: payout.status,     };   }    async processRevenueShare(params: {     templateId: string;     installationId: string;     totalAmount: number;     currency: string;     paymentIntentId: string;     buyerId: string;   }): Promise<{ creatorShare: number; platformFee: number; transactionId: string }> {      templateId: string;     installationId: string;     totalAmount: number; // in cents     currency: string;     paymentIntentId: string;     buyerId: string;   }): Promise<{     creatorShare: number;     platformFee: number;     transactionId: string;   }> {     const db = await this.ensureDb();      // Get template information     const templateRef = doc(db, 'marketplace-templates', params.templateId);     const templateSnap = await getDoc(templateRef);      if (!templateSnap.exists()) {       throw new Error('Template not found');     }      const template = templateSnap.data() as MarketplaceTemplate;      // Calculate revenue split     const creatorSharePercent = template.pricing.creatorShare || 70;     const platformFeePercent = template.pricing.platformFee || 30;      const creatorShare = Math.round(       (params.totalAmount * creatorSharePercent) / 100,     );     const platformFee = params.totalAmount - creatorShare;      // Create transaction record     const transactionRef = doc(collection(db, 'revenue-transactions'));     const transaction = {       id: transactionRef.id,       templateId: params.templateId,       installationId: params.installationId,       creatorId: template.createdBy,       buyerId: params.buyerId,        // Financial details       totalAmount: params.totalAmount,       creatorShare,       platformFee,       currency: params.currency,        // Share percentages       creatorSharePercent,       platformFeePercent,        // Payment references       paymentIntentId: params.paymentIntentId,       stripeTransferId: null, // Will be set when transfer is created        // Status tracking       status: 'pending_transfer',       createdAt: serverTimestamp(),        // Metadata       templateName: template.name,       templateVersion: template.currentVersion,     };      await setDoc(transactionRef, transaction);      // Update creator's pending earnings     await this.updateCreatorEarnings(template.createdBy, {       pendingAmount: creatorShare,       currency: params.currency,       transactionId: transaction.id,     });      // Update template revenue stats     await this.updateTemplateRevenue(params.templateId, {       totalRevenue: creatorShare + platformFee,       creatorRevenue: creatorShare,       platformRevenue: platformFee,     });      return {       creatorShare,       platformFee,       transactionId: transaction.id,     };   }    /**    * Process payout to creator via Stripe Connect    */   async processCreatorPayout(params: {     creatorId: string;     amount: number; // in cents     currency: string;     payoutPeriod: string; // e.g., "2024-01"     transactionIds: string[];   }): Promise<{     transferId: string;     payoutId: string;     amount: number;     fees: number;   }> {     const db = await this.ensureDb();      // Get creator's Stripe Connect account     const creatorProfile = await this.getCreatorProfile(params.creatorId);     if (!creatorProfile.stripeConnectAccountId) {       throw new Error('Creator does not have a connected Stripe account');     }      // Calculate Stripe fees (2.9% + 30├é┬ó for transfers)     const stripeFee = Math.round(params.amount * 0.029) + 30;     const netAmount = params.amount - stripeFee;      try {       const stripe = getStripeServerClient();       // Create Stripe transfer to creator's connected account       const transfer = await stripe.transfers.create({         amount: netAmount,         currency: params.currency,         destination: creatorProfile.stripeConnectAccountId,         metadata: {           creator_id: params.creatorId,           payout_period: params.payoutPeriod,           transaction_count: params.transactionIds.length.toString(),         },       });        // Create payout record       const payoutRef = doc(collection(db, 'creator-payouts'));       const payout = {         id: payoutRef.id,         creatorId: params.creatorId,         amount: params.amount,         netAmount,         stripeFee,         currency: params.currency,         payoutPeriod: params.payoutPeriod,         transactionIds: params.transactionIds,          // Stripe references         stripeTransferId: transfer.id,          // Status         status: 'completed',         createdAt: serverTimestamp(),         processedAt: serverTimestamp(),          // Metadata         transactionCount: params.transactionIds.length,         averageTransactionValue: Math.round(           params.amount / params.transactionIds.length,         ),       };        await setDoc(payoutRef, payout);        // Update transaction records with payout reference       const batch = writeBatch(db);       for (const transactionId of params.transactionIds) {         const transactionRef = doc(db, 'revenue-transactions', transactionId);         batch.update(transactionRef, {           status: 'paid_out',           payoutId: payout.id,           paidOutAt: serverTimestamp(),           stripeTransferId: transfer.id,         });       }       await batch.commit();        // Update creator earnings       await this.updateCreatorEarnings(params.creatorId, {         paidAmount: params.amount,         pendingAmount: -params.amount, // Reduce pending         totalEarnings: params.amount,         lastPayoutDate: new Date(),       });        return {         transferId: transfer.id,         payoutId: payout.id,         amount: netAmount,         fees: stripeFee,       };     } catch (error) {       // Handle payout failure       await this.handlePayoutFailure({         creatorId: params.creatorId,         amount: params.amount,         currency: params.currency,         error: error instanceof Error ? error.message : 'Unknown error',         transactionIds: params.transactionIds,       });        throw error;     }   }    /**    * Get creator earnings summary    */   async getCreatorEarnings(     creatorId: string,     period?: {       startDate: Date;       endDate: Date;     },   ): Promise<{     totalEarnings: number;     pendingEarnings: number;     paidEarnings: number;     currentMonthEarnings: number;     transactionCount: number;     averageTransactionValue: number;     topTemplates: Array<{       templateId: string;       templateName: string;       revenue: number;       sales: number;     }>;     recentTransactions: any[];     nextPayoutDate: Date;     nextPayoutAmount: number;   }> {     const db = await this.ensureDb();      // Build query for creator's transactions     let transactionsQuery = query(       collection(db, 'revenue-transactions'),       where('creatorId', '==', creatorId),       orderBy('createdAt', 'desc'),     );      // Apply date filter if provided     if (period) {       transactionsQuery = query(         transactionsQuery,         where('createdAt', '>=', period.startDate),         where('createdAt', '<=', period.endDate),       );     }      const transactionsSnap = await getDocs(transactionsQuery);     const transactions = transactionsSnap.docs.map((doc) => doc.data());      // Calculate aggregated metrics     const totalEarnings = transactions.reduce(       (sum, t) => sum + (t.creatorShare || 0),       0,     );     const pendingEarnings = transactions       .filter((t) => t.status === 'pending_transfer')       .reduce((sum, t) => sum + (t.creatorShare || 0), 0);     const paidEarnings = totalEarnings - pendingEarnings;      // Current month earnings     const currentMonth = new Date();     currentMonth.setDate(1);     const currentMonthEarnings = transactions       .filter((t) => new Date(t.createdAt.toDate()) >= currentMonth)       .reduce((sum, t) => sum + (t.creatorShare || 0), 0);      // Transaction metrics     const transactionCount = transactions.length;     const averageTransactionValue =       transactionCount > 0 ? totalEarnings / transactionCount : 0;      // Top performing templates     const templateRevenue = new Map<       string,       { revenue: number; sales: number; name: string }     >();     transactions.forEach((t) => {       const existing = templateRevenue.get(t.templateId) || {         revenue: 0,         sales: 0,         name: t.templateName || '',       };       templateRevenue.set(t.templateId, {         revenue: existing.revenue + (t.creatorShare || 0),         sales: existing.sales + 1,         name: t.templateName || existing.name,       });     });      const topTemplates = Array.from(templateRevenue.entries())       .map(([templateId, data]) => ({         templateId,         templateName: data.name,         revenue: data.revenue,         sales: data.sales,       }))       .sort((a, b) => b.revenue - a.revenue)       .slice(0, 5);      // Recent transactions (last 10)     const recentTransactions = transactions.slice(0, 10);      // Next payout calculation (assuming monthly payouts on the 1st)     const nextPayoutDate = new Date();     nextPayoutDate.setMonth(nextPayoutDate.getMonth() + 1);     nextPayoutDate.setDate(1);      return {       totalEarnings,       pendingEarnings,       paidEarnings,       currentMonthEarnings,       transactionCount,       averageTransactionValue,       topTemplates,       recentTransactions,       nextPayoutDate,       nextPayoutAmount: pendingEarnings,     };   }    /**    * Set up Stripe Connect for creator    */   async setupStripeConnect(     creatorId: string,     params: {       email: string;       businessType: 'individual' | 'company';       country: string;       returnUrl: string;       refreshUrl: string;     },   ): Promise<{     accountId: string;     onboardingUrl: string;   }> {     try {       const stripe = getStripeServerClient();       // Create Stripe Express account       const account = await stripe.accounts.create({         type: 'express',         email: params.email,         business_type: params.businessType,         country: params.country,         metadata: {           creator_id: creatorId,         },       });        // Create account link for onboarding       const accountLink = await stripe.accountLinks.create({         account: account.id,         refresh_url: params.refreshUrl,         return_url: params.returnUrl,         type: 'account_onboarding',       });        // Update creator profile with Stripe account ID       const db = await this.ensureDb();       const profileRef = doc(db, 'creator-profiles', creatorId);       await updateDoc(profileRef, {         stripeConnectAccountId: account.id,         stripeOnboardingStatus: 'pending',         stripeOnboardingUrl: accountLink.url,         updatedAt: serverTimestamp(),       });        return {         accountId: account.id,         onboardingUrl: accountLink.url,       };     } catch (error) {       console.error('Stripe Connect setup error:', error);       throw new Error('Failed to set up payment processing');     }   }    /**    * Generate revenue report for admin/creator    */   async generateRevenueReport(params: {     creatorId?: string; // If provided, report for specific creator     period: {       startDate: Date;       endDate: Date;     };     includeBreakdown?: boolean;   }): Promise<{     summary: {       totalRevenue: number;       creatorRevenue: number;       platformRevenue: number;       transactionCount: number;       uniqueCreators: number;       uniqueBuyers: number;       averageTransactionValue: number;     };     breakdown?: {       byTemplate: Array<{         templateId: string;         templateName: string;         revenue: number;         sales: number;         uniqueBuyers: number;       }>;       byCreator: Array<{         creatorId: string;         creatorName: string;         revenue: number;         templates: number;         sales: number;       }>;       byPeriod: Array<{         date: string;         revenue: number;         sales: number;       }>;     };   }> {     const db = await this.ensureDb();      // Build query     let q = query(       collection(db, 'revenue-transactions'),       where('createdAt', '>=', params.period.startDate),       where('createdAt', '<=', params.period.endDate),       orderBy('createdAt', 'desc'),     );      // Filter by creator if specified     if (params.creatorId) {       q = query(q, where('creatorId', '==', params.creatorId));     }      const transactionsSnap = await getDocs(q);     const transactions = transactionsSnap.docs.map((doc) => doc.data());      // Calculate summary metrics     const totalRevenue = transactions.reduce(       (sum, t) => sum + (t.totalAmount || 0),       0,     );     const creatorRevenue = transactions.reduce(       (sum, t) => sum + (t.creatorShare || 0),       0,     );     const platformRevenue = transactions.reduce(       (sum, t) => sum + (t.platformFee || 0),       0,     );     const transactionCount = transactions.length;     const uniqueCreators = new Set(transactions.map((t) => t.creatorId)).size;     const uniqueBuyers = new Set(transactions.map((t) => t.buyerId)).size;     const averageTransactionValue =       transactionCount > 0 ? totalRevenue / transactionCount : 0;      const summary = {       totalRevenue,       creatorRevenue,       platformRevenue,       transactionCount,       uniqueCreators,       uniqueBuyers,       averageTransactionValue,     };      // Generate detailed breakdown if requested     let breakdown;     if (params.includeBreakdown) {       breakdown = {         byTemplate: this.calculateTemplateBreakdown(transactions),         byCreator: this.calculateCreatorBreakdown(transactions),         byPeriod: this.calculatePeriodBreakdown(transactions),       };     }      return {       summary,       breakdown,     };   }    /**    * Private helper methods    */    private async getCreatorProfile(creatorId: string): Promise<any> {     const db = await this.ensureDb();     const profileRef = doc(db, 'creator-profiles', creatorId);     const profileSnap = await getDoc(profileRef);      if (!profileSnap.exists()) {       throw new Error('Creator profile not found');     }      return profileSnap.data();   }    private async updateCreatorEarnings(creatorId: string, updates: any) {     const db = await this.ensureDb();     const profileRef = doc(db, 'creator-profiles', creatorId);      // Get current values     const profileSnap = await getDoc(profileRef);     const currentData = profileSnap.data() || {};      const updateData: any = {};      if (updates.pendingAmount !== undefined) {       updateData.pendingEarnings =         (currentData.pendingEarnings || 0) + updates.pendingAmount;     }      if (updates.paidAmount !== undefined) {       updateData.totalEarnings =         (currentData.totalEarnings || 0) + updates.paidAmount;     }      if (updates.totalEarnings !== undefined) {       updateData.totalRevenue =         (currentData.totalRevenue || 0) + updates.totalEarnings;     }      if (updates.lastPayoutDate) {       updateData.lastPayoutDate = updates.lastPayoutDate;     }      updateData.updatedAt = serverTimestamp();      await updateDoc(profileRef, updateData);   }    private async updateTemplateRevenue(templateId: string, revenue: any) {     const db = await this.ensureDb();     const templateRef = doc(db, 'marketplace-templates', templateId);      await updateDoc(templateRef, {       'stats.totalRevenue': revenue.totalRevenue,       'stats.revenueThisMonth': revenue.totalRevenue, // Simplified       lastUpdated: serverTimestamp(),     });   }    private async handlePayoutFailure(params: any) {     const db = await this.ensureDb();      // Log the failure     const failureRef = doc(collection(db, 'payout-failures'));     await setDoc(failureRef, {       ...params,       failedAt: serverTimestamp(),       retryCount: 0,       status: 'failed',     });      // TODO: Implement retry logic and notifications   }    private calculateTemplateBreakdown(transactions: any[]) {     const breakdown = new Map();      transactions.forEach((t) => {       const existing = breakdown.get(t.templateId) || {         templateId: t.templateId,         templateName: t.templateName || 'Unknown',         revenue: 0,         sales: 0,         uniqueBuyers: new Set(),       };        existing.revenue += t.totalAmount || 0;       existing.sales += 1;       existing.uniqueBuyers.add(t.buyerId);        breakdown.set(t.templateId, existing);     });      return Array.from(breakdown.values())       .map((item) => ({         ...item,         uniqueBuyers: item.uniqueBuyers.size,       }))       .sort((a, b) => b.revenue - a.revenue);   }    private calculateCreatorBreakdown(transactions: any[]) {     const breakdown = new Map();      transactions.forEach((t) => {       const existing = breakdown.get(t.creatorId) || {         creatorId: t.creatorId,         creatorName: 'Creator', // TODO: Get from profile         revenue: 0,         templates: new Set(),         sales: 0,       };        existing.revenue += t.creatorShare || 0;       existing.templates.add(t.templateId);       existing.sales += 1;        breakdown.set(t.creatorId, existing);     });      return Array.from(breakdown.values())       .map((item) => ({         ...item,         templates: item.templates.size,       }))       .sort((a, b) => b.revenue - a.revenue);   }    private calculatePeriodBreakdown(transactions: any[]) {     const breakdown = new Map();      transactions.forEach((t) => {       const date = new Date(t.createdAt.toDate()).toISOString().split('T')[0];       const existing = breakdown.get(date) || { date, revenue: 0, sales: 0 };        existing.revenue += t.totalAmount || 0;       existing.sales += 1;        breakdown.set(date, existing);     });      return Array.from(breakdown.values()).sort((a, b) =>       a.date.localeCompare(b.date),     );   } }  /**  * Singleton instance for easy access  */ export const revenueShareSystem = new RevenueServingSystem();
+// src/lib/marketplace/revenue-sharing-system.ts
+import type Stripe from 'stripe';
+import { getDb } from '@/lib/firebase';
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  writeBatch,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+  type QueryConstraint,
+} from 'firebase/firestore';
+import { getStripeServerClient } from '@/lib/stripe-server';
+
+type DateRange = {
+  startDate: Date;
+  endDate: Date;
+};
+
+interface RevenueTransaction {
+  id: string;
+  creatorId: string;
+  templateId: string;
+  installationId: string;
+  buyerId: string;
+  totalAmount: number;
+  creatorShare: number;
+  platformFee: number;
+  currency: string;
+  creatorSharePercent?: number;
+  platformFeePercent?: number;
+  paymentIntentId?: string;
+  stripeTransferId?: string | null;
+  payoutPeriod?: string;
+  status?: string;
+  createdAt: Timestamp;
+  paidAt?: Timestamp;
+}
+
+interface CreatorPayout {
+  id: string;
+  creatorId: string;
+  amount: number;
+  currency: string;
+  payoutPeriod: string;
+  stripeTransferId: string | null;
+  status: string;
+  fees: number;
+  transactionIds: string[];
+  createdAt: Timestamp;
+}
+
+interface CreatorEarningsSummary {
+  creatorId: string;
+  totalEarnings: number;
+  pendingEarnings: number;
+  paidEarnings: number;
+  platformFees: number;
+  transactionCount: number;
+  averageTransactionValue: number;
+  topTemplates: Array<{ templateId: string; revenue: number; transactionCount: number }>;
+  nextPayoutDate: Date | null;
+  nextPayoutAmount: number;
+  currency: string;
+}
+
+interface RevenueReportSummary {
+  totalRevenue: number;
+  creatorRevenue: number;
+  platformRevenue: number;
+  transactionCount: number;
+  averageTransactionValue: number;
+  currency: string;
+}
+
+interface RevenueReportBreakdown {
+  byCreator: Array<{ creatorId: string; revenue: number; transactionCount: number }>;
+  byTemplate: Array<{ templateId: string; revenue: number; transactionCount: number }>;
+  byCurrency: Array<{ currency: string; revenue: number; transactionCount: number }>;
+}
+
+interface RevenueReport {
+  summary: RevenueReportSummary;
+  breakdown?: RevenueReportBreakdown;
+}
+
+const DEFAULT_CURRENCY = 'usd';
+const DEFAULT_PLATFORM_FEE_PERCENT = 30;
+const DEFAULT_CREATOR_SHARE_PERCENT = 70;
+
+const MIN_PAYOUT_FEE = 50; // .50 in cents
+const DEFAULT_PAYOUT_FEE_PERCENT = 0.015;
+
+const toTimestamp = (date: Date): Timestamp => Timestamp.fromDate(date);
+
+const sum = (values: number[]): number =>
+  values.reduce((acc, value) => acc + value, 0);
+
+export class RevenueSharingSystem {
+  private dbPromise: Promise<ReturnType<typeof getDb>> | null = null;
+
+  private async getDbInstance() {
+    if (!this.dbPromise) {
+      this.dbPromise = getDb();
+    }
+    return this.dbPromise;
+  }
+
+  private async getStripe(): Promise<Stripe> {
+    return getStripeServerClient();
+  }
+
+  private buildDateConstraints(period?: DateRange): QueryConstraint[] {
+    if (!period) {
+      return [];
+    }
+    return [
+      where('createdAt', '>=', toTimestamp(period.startDate)),
+      where('createdAt', '<=', toTimestamp(period.endDate)),
+    ];
+  }
+
+  private getEstimatedFees(amountInCents: number): number {
+    const percent =
+      Number(process.env.MARKETPLACE_PAYOUT_FEE_PERCENT ?? DEFAULT_PAYOUT_FEE_PERCENT);
+    const estimated = Math.round(amountInCents * percent);
+    return Math.max(estimated, MIN_PAYOUT_FEE);
+  }
+
+  async setupStripeConnect(
+    userId: string,
+    options: {
+      email: string;
+      businessType?: 'individual' | 'company';
+      country?: string;
+      returnUrl: string;
+      refreshUrl: string;
+    },
+  ): Promise<{ accountId: string; onboardingUrl: string }> {
+    const stripe = await this.getStripe();
+
+    const account = await stripe.accounts.create({
+      type: 'express',
+      email: options.email,
+      country: options.country ?? 'US',
+      business_type: options.businessType ?? 'individual',
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+      metadata: {
+        marketplace_user_id: userId,
+      },
+    });
+
+    const onboardingLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: options.refreshUrl,
+      return_url: options.returnUrl,
+      type: 'account_onboarding',
+    });
+
+    const db = await this.getDbInstance();
+    const profileRef = doc(db, 'creator-profiles', userId);
+    await setDoc(
+      profileRef,
+      {
+        stripeConnectAccountId: account.id,
+        stripeConnectOnboardingUrl: onboardingLink.url,
+        stripeAccountStatus: account.details_submitted ? 'active' : 'pending',
+        businessType: options.businessType ?? 'individual',
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true },
+    );
+
+    return {
+      accountId: account.id,
+      onboardingUrl: onboardingLink.url,
+    };
+  }
+
+  async setupCreatorAccount(params: {
+    userId: string;
+    email: string;
+    country: string;
+  }): Promise<{ accountId: string; onboardingUrl: string | null }> {
+    const returnUrl =
+      process.env.STRIPE_ACCOUNT_LINK_RETURN_URL ??
+      'https://example.com/account/return';
+    const refreshUrl =
+      process.env.STRIPE_ACCOUNT_LINK_REFRESH_URL ??
+      'https://example.com/account/refresh';
+
+    const result = await this.setupStripeConnect(params.userId, {
+      email: params.email,
+      country: params.country,
+      returnUrl,
+      refreshUrl,
+      businessType: 'individual',
+    });
+
+    return {
+      accountId: result.accountId,
+      onboardingUrl: result.onboardingUrl ?? null,
+    };
+  }
+
+  async processRevenueShare(params: {
+    templateId: string;
+    installationId: string;
+    totalAmount: number;
+    currency: string;
+    paymentIntentId: string;
+    buyerId: string;
+    creatorId?: string;
+    creatorSharePercent?: number;
+    platformFeePercent?: number;
+    createdAt?: Date;
+  }): Promise<{ transactionId: string; creatorShare: number; platformFee: number }> {
+    const db = await this.getDbInstance();
+
+    let creatorId = params.creatorId;
+    let creatorSharePercent = params.creatorSharePercent;
+    let platformFeePercent = params.platformFeePercent;
+
+    if (!creatorId || creatorSharePercent === undefined || platformFeePercent === undefined) {
+      const templateSnap = await getDoc(
+        doc(db, 'marketplace-templates', params.templateId),
+      );
+      if (templateSnap.exists()) {
+        const templateData = templateSnap.data() as {
+          createdBy?: string;
+          pricing?: { creatorShare?: number; platformFee?: number };
+        };
+        creatorId ??= templateData.createdBy ?? '';
+        creatorSharePercent ??=
+          templateData.pricing?.creatorShare ?? DEFAULT_CREATOR_SHARE_PERCENT;
+        platformFeePercent ??=
+          templateData.pricing?.platformFee ?? DEFAULT_PLATFORM_FEE_PERCENT;
+      } else {
+        creatorSharePercent ??= DEFAULT_CREATOR_SHARE_PERCENT;
+        platformFeePercent ??= DEFAULT_PLATFORM_FEE_PERCENT;
+      }
+    }
+
+    if (!creatorId) {
+      throw new Error('Unable to determine template creator for revenue share');
+    }
+
+    const creatorShare = Math.round(
+      (params.totalAmount * creatorSharePercent) / 100,
+    );
+    const platformFee = params.totalAmount - creatorShare;
+
+    const transactionRef = doc(collection(db, 'revenue-transactions'));
+    await setDoc(transactionRef, {
+      creatorId,
+      templateId: params.templateId,
+      installationId: params.installationId,
+      buyerId: params.buyerId,
+      totalAmount: params.totalAmount,
+      creatorShare,
+      platformFee,
+      currency: params.currency || DEFAULT_CURRENCY,
+      creatorSharePercent,
+      platformFeePercent,
+      paymentIntentId: params.paymentIntentId,
+      stripeTransferId: null,
+      status: 'pending_transfer',
+      createdAt: params.createdAt ? Timestamp.fromDate(params.createdAt) : serverTimestamp(),
+    });
+
+    return {
+      transactionId: transactionRef.id,
+      creatorShare,
+      platformFee,
+    };
+  }
+
+  private async getTransactions(
+    period: DateRange,
+    creatorId?: string,
+  ): Promise<RevenueTransaction[]> {
+    const db = await this.getDbInstance();
+
+    const constraints: QueryConstraint[] = [
+      where('createdAt', '>=', toTimestamp(period.startDate)),
+      where('createdAt', '<=', toTimestamp(period.endDate)),
+      orderBy('createdAt', 'desc'),
+    ];
+
+    if (creatorId) {
+      constraints.unshift(where('creatorId', '==', creatorId));
+    }
+
+    const snapshot = await getDocs(
+      query(collection(db, 'revenue-transactions'), ...constraints),
+    );
+
+    return snapshot.docs.map<RevenueTransaction>((docSnap) => ({
+      id: docSnap.id,
+      ...(docSnap.data() as RevenueTransaction),
+    }));
+  }
+
+  private buildTopTemplates(transactions: RevenueTransaction[]) {
+    const map = new Map<string, { templateId: string; revenue: number; transactionCount: number }>();
+    transactions.forEach((txn) => {
+      const entry =
+        map.get(txn.templateId) ?? {
+          templateId: txn.templateId,
+          revenue: 0,
+          transactionCount: 0,
+        };
+      entry.revenue += txn.creatorShare ?? 0;
+      entry.transactionCount += 1;
+      map.set(txn.templateId, entry);
+    });
+    return Array.from(map.values()).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
+  }
+
+  async getCreatorEarnings(
+    creatorId: string,
+    period?: DateRange,
+  ): Promise<CreatorEarningsSummary> {
+    const effectivePeriod =
+      period ??
+      {
+        startDate: new Date(0),
+        endDate: new Date(),
+      };
+
+    const transactions = await this.getTransactions(effectivePeriod, creatorId);
+
+    const currency = transactions[0]?.currency ?? DEFAULT_CURRENCY;
+    const pendingTransactions = transactions.filter(
+      (txn) => (txn.status ?? 'pending_transfer') !== 'paid',
+    );
+
+    const pendingEarnings = sum(
+      pendingTransactions.map((txn) => txn.creatorShare ?? 0),
+    );
+    const paidEarnings = sum(
+      transactions
+        .filter((txn) => (txn.status ?? 'pending_transfer') === 'paid')
+        .map((txn) => txn.creatorShare ?? 0),
+    );
+    const totalEarnings = pendingEarnings + paidEarnings;
+    const platformFees = sum(transactions.map((txn) => txn.platformFee ?? 0));
+    const transactionCount = transactions.length;
+    const averageTransactionValue = transactionCount
+      ? Math.round(sum(transactions.map((txn) => txn.totalAmount ?? 0)) / transactionCount)
+      : 0;
+
+    const nextPayoutDate = pendingTransactions
+      .map((txn) => txn.createdAt?.toDate?.())
+      .filter((value): value is Date => value instanceof Date)
+      .sort((a, b) => a.getTime() - b.getTime())[0] ?? null;
+
+    return {
+      creatorId,
+      totalEarnings,
+      pendingEarnings,
+      paidEarnings,
+      platformFees,
+      transactionCount,
+      averageTransactionValue,
+      topTemplates: this.buildTopTemplates(transactions),
+      nextPayoutDate,
+      nextPayoutAmount: pendingEarnings,
+      currency,
+    };
+  }
+
+  async processCreatorPayout(params: {
+    creatorId: string;
+    amount: number;
+    currency: string;
+    payoutPeriod: string;
+    transactionIds: string[];
+  }): Promise<{
+    payoutId: string;
+    transferId: string | null;
+    amount: number;
+    fees: number;
+    currency: string;
+  }> {
+    const db = await this.getDbInstance();
+    const stripe = await this.getStripe();
+
+    const profileSnap = await getDoc(doc(db, 'creator-profiles', params.creatorId));
+    if (!profileSnap.exists()) {
+      throw new Error('Creator profile not found');
+    }
+    const profileData = profileSnap.data() as {
+      stripeConnectAccountId?: string;
+    };
+
+    if (!profileData.stripeConnectAccountId) {
+      throw new Error('Creator has not connected a Stripe account');
+    }
+
+    const transfer = await stripe.transfers.create({
+      amount: params.amount,
+      currency: params.currency,
+      destination: profileData.stripeConnectAccountId,
+      description: Marketplace payout for ,
+      metadata: {
+        creatorId: params.creatorId,
+        payoutPeriod: params.payoutPeriod,
+      },
+    });
+
+    const fees = this.getEstimatedFees(params.amount);
+    const payoutRef = doc(collection(db, 'creator-payouts'));
+    await setDoc(payoutRef, {
+      creatorId: params.creatorId,
+      amount: params.amount,
+      currency: params.currency,
+      payoutPeriod: params.payoutPeriod,
+      stripeTransferId: transfer.id,
+      status: transfer.status ?? 'pending',
+      fees,
+      transactionIds: params.transactionIds,
+      createdAt: serverTimestamp(),
+    });
+
+    if (params.transactionIds.length > 0) {
+      const batch = writeBatch(db);
+      params.transactionIds.forEach((transactionId) => {
+        const txnRef = doc(db, 'revenue-transactions', transactionId);
+        batch.update(txnRef, {
+          status: 'paid',
+          stripeTransferId: transfer.id,
+          payoutId: payoutRef.id,
+          paidAt: serverTimestamp(),
+        });
+      });
+      await batch.commit();
+    }
+
+    return {
+      payoutId: payoutRef.id,
+      transferId: transfer.id,
+      amount: params.amount,
+      fees,
+      currency: params.currency,
+    };
+  }
+
+  async generateRevenueReport(params: {
+    creatorId?: string;
+    period: DateRange;
+    includeBreakdown?: boolean;
+  }): Promise<RevenueReport> {
+    const transactions = await this.getTransactions(params.period, params.creatorId);
+
+    if (transactions.length === 0) {
+      return {
+        summary: {
+          totalRevenue: 0,
+          creatorRevenue: 0,
+          platformRevenue: 0,
+          transactionCount: 0,
+          averageTransactionValue: 0,
+          currency: DEFAULT_CURRENCY,
+        },
+        breakdown: params.includeBreakdown
+          ? {
+              byCreator: [],
+              byTemplate: [],
+              byCurrency: [],
+            }
+          : undefined,
+      };
+    }
+
+    const totalRevenue = sum(transactions.map((txn) => txn.totalAmount ?? 0));
+    const creatorRevenue = sum(transactions.map((txn) => txn.creatorShare ?? 0));
+    const platformRevenue = sum(transactions.map((txn) => txn.platformFee ?? 0));
+    const transactionCount = transactions.length;
+    const averageTransactionValue = Math.round(totalRevenue / transactionCount);
+    const currency = transactions[0]?.currency ?? DEFAULT_CURRENCY;
+
+    const report: RevenueReport = {
+      summary: {
+        totalRevenue,
+        creatorRevenue,
+        platformRevenue,
+        transactionCount,
+        averageTransactionValue,
+        currency,
+      },
+    };
+
+    if (params.includeBreakdown) {
+      const byCreatorMap = new Map<
+        string,
+        { creatorId: string; revenue: number; transactionCount: number }
+      >();
+      const byTemplateMap = new Map<
+        string,
+        { templateId: string; revenue: number; transactionCount: number }
+      >();
+      const byCurrencyMap = new Map<
+        string,
+        { currency: string; revenue: number; transactionCount: number }
+      >();
+
+      transactions.forEach((txn) => {
+        const creatorEntry =
+          byCreatorMap.get(txn.creatorId) ?? {
+            creatorId: txn.creatorId,
+            revenue: 0,
+            transactionCount: 0,
+          };
+        creatorEntry.revenue += txn.creatorShare ?? 0;
+        creatorEntry.transactionCount += 1;
+        byCreatorMap.set(txn.creatorId, creatorEntry);
+
+        const templateEntry =
+          byTemplateMap.get(txn.templateId) ?? {
+            templateId: txn.templateId,
+            revenue: 0,
+            transactionCount: 0,
+          };
+        templateEntry.revenue += txn.creatorShare ?? 0;
+        templateEntry.transactionCount += 1;
+        byTemplateMap.set(txn.templateId, templateEntry);
+
+        const currencyEntry =
+          byCurrencyMap.get(txn.currency) ?? {
+            currency: txn.currency,
+            revenue: 0,
+            transactionCount: 0,
+          };
+        currencyEntry.revenue += txn.totalAmount ?? 0;
+        currencyEntry.transactionCount += 1;
+        byCurrencyMap.set(txn.currency, currencyEntry);
+      });
+
+      report.breakdown = {
+        byCreator: Array.from(byCreatorMap.values()),
+        byTemplate: Array.from(byTemplateMap.values()),
+        byCurrency: Array.from(byCurrencyMap.values()),
+      };
+    }
+
+    return report;
+  }
+}
+
+export const revenueShareSystem = new RevenueSharingSystem();

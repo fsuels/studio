@@ -174,7 +174,7 @@ function buildPartnersStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<PartnersPageParams>;
+  params: PartnersPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -226,7 +226,7 @@ export async function generateStaticParams() {
 export default async function PartnersPage({
   params,
 }: {
-  params: Promise<PartnersPageParams>;
+  params: PartnersPageParams;
 }) {
   const { locale } = params;
   const content = localizedContent[locale];

@@ -360,6 +360,9 @@ export async function findMatchingDocuments(
     });
 
     expandedTokens.forEach((token) => {
+      if (token.length <= 3) {
+        return;
+      }
       searchableFields.forEach((field) => {
         const words = field.split(/\s+/);
         words.forEach((word) => {
@@ -536,5 +539,4 @@ export {
 
 export type { LegalDocument, LocalizedText };
 export { usStates } from './usStates';
-
 

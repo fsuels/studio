@@ -101,7 +101,7 @@ function buildSupportStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<SupportPageParams>;
+  params: SupportPageParams;
 }): Promise<Metadata> {
   const { locale } = params;
 
@@ -153,7 +153,7 @@ export async function generateStaticParams() {
 export default async function SupportPage({
   params,
 }: {
-  params: Promise<SupportPageParams>;
+  params: SupportPageParams;
 }) {
   const { locale } = params;
   const content = localizedContent[locale];
