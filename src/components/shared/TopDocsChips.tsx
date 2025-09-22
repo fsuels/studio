@@ -1,4 +1,4 @@
-// src/components/TopDocsChips.tsx
+// src/components/shared/TopDocsChips.tsx
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   Loader2,
@@ -32,20 +32,76 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
-import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
-// (No need for mobile-only dropdown after redesign)
+import { CURATED_CATEGORY_KEYS, CATEGORY_MATCHES } from '@/lib/homepage/popular-docs-config';
 
-const TopDocsChips = React.memo(function TopDocsChips() {
-  // Use 'common' namespace for shared UI text
+type TopDocsChipsProps = {
+  locale: 'en' | 'es';
+  initialDocs?: DocumentSummary[];
+};
+
+type CategoryMeta = {
+  labelKey: string;
+  icon: LucideIcon;
+};
+
+const CATEGORY_DISPLAY_META: Record<string, CategoryMeta> = {
+  'real-estate-property': { labelKey: 'categories.realEstate', icon: Home },
+  'employment-hr': { labelKey: 'categories.employment', icon: Briefcase },
+  'personal-family': { labelKey: 'categories.personalFamily', icon: Users },
+  'health-care': { labelKey: 'categories.healthCare', icon: Shield },
+  'finance-lending': { labelKey: 'categories.finance', icon: BadgeDollarSign },
+  'business-startups': { labelKey: 'categories.businessStartups', icon: Building2 },
+  'ip-creative': { labelKey: 'categories.ipCreative', icon: Copyright },
+  'legal-process-disputes': { labelKey: 'categories.legalProcessDisputes', icon: Gavel },
+};
+
+const CATEGORY_DESCRIPTION_KEYS: Record<string, string> = {
+  'real-estate-property': 'categoryDescriptions.realEstate',
+  'employment-hr': 'categoryDescriptions.employment',
+  'personal-family': 'categoryDescriptions.personalFamily',
+  'health-care': 'categoryDescriptions.healthCare',
+  'finance-lending': 'categoryDescriptions.finance',
+  'business-startups': 'categoryDescriptions.businessStartups',
+  'ip-creative': 'categoryDescriptions.ipCreative',
+  'legal-process-disputes': 'categoryDescriptions.legalProcessDisputes',
+};
+
+const CATEGORY_DESCRIPTION_DEFAULTS: Record<string, string> = {
+  'real-estate-property': 'Leases, deeds, eviction notices and more.',
+  'employment-hr': 'Contracts, policies, termination letters, and more.',
+  'personal-family': 'Wills, powers of attorney, prenuptial agreements.',
+  'health-care': 'Living wills, HIPAA, healthcare proxies, medical forms.',
+  'finance-lending': 'Loans, promissory notes, bills of sale.',
+  'business-startups': 'NDAs, partnership agreements, operating agreements.',
+  'ip-creative': 'Copyright, trademarks, licensing agreements.',
+  'legal-process-disputes': 'Cease & desist, affidavits, demand letters.',
+};
+
+const DOC_BADGES: Record<string, 'new' | 'updated'> = {
+  powerOfAttorney: 'new',
+  leaseAgreement: 'updated',
+};
+
+function matchesCategory(doc: DocumentSummary, categoryKey: string): boolean {
+  const synonyms = CATEGORY_MATCHES[categoryKey] ?? [];
+  const categoryLabel = doc.category.toLowerCase();
+
+  if (synonyms.length === 0) {
+    return categoryLabel.includes(categoryKey.replace(/-/g, ' '));
+  }
+
+  return synonyms.some((value) => categoryLabel.includes(value.toLowerCase()));
+}
+
+const TopDocsChips = React.memo(function TopDocsChips({
+  locale,
+  initialDocs = [],
+}: TopDocsChipsProps) {
   const { t: tCommon } = useTranslation('common');
-  const params = (useParams<{ locale?: string }>() ?? {}) as {
-    locale?: string;
-  };
   const router = useRouter();
-  const locale = (params.locale as 'en' | 'es') || 'en';
+  const searchParams = useCurrentSearchParams();
 
-  const exploreAllDestination = `/${locale}/marketplace/`;
-
+  const exploreAllDestination = `/${locale}/marketplace`;
   const prefetchExplore = React.useCallback(() => {
     try {
       router.prefetch(exploreAllDestination);
@@ -56,197 +112,22 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     }
   }, [exploreAllDestination, router]);
 
-  const [topDocs, setTopDocs] = useState<DocumentSummary[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [tax, setTax] = useState<any | null>(null);
-  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
-  // Progressive reveal: start with NO selection (only category cards)
+  const [topDocs, setTopDocs] = useState<DocumentSummary[]>(initialDocs);
+  const [isLoading, setIsLoading] = useState(initialDocs.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showAllForCategory, setShowAllForCategory] = useState(false);
-  const badges: Record<string, 'new' | 'updated'> = {
-    powerOfAttorney: 'new',
-    leaseAgreement: 'updated',
-  };
-  
-  // Get all categories from taxonomy (loaded lazily)
-  const allCategories = useMemo(() => Object.keys(tax?.categories || {}), [tax]);
-  const searchParams = useCurrentSearchParams();
-  const categoryFromUrl = searchParams?.get('category');
-  
-  // Category display names and icons - using all your categories
-  const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = tax ? {
-    'real-estate-property': {
-      label: tCommon('categories.realEstate', {
-        defaultValue: 'Real Estate & Property',
-      }),
-      icon: Home,
-    },
-    'employment-hr': {
-      label: tCommon('categories.employment', {
-        defaultValue: 'Employment & HR',
-      }),
-      icon: Briefcase,
-    },
-    'personal-family': {
-      label: tCommon('categories.personalFamily', {
-        defaultValue: 'Personal & Family',
-      }),
-      icon: Users,
-    },
-    'health-care': {
-      label: tCommon('categories.healthCare', {
-        defaultValue: 'Health & Care',
-      }),
-      icon: Shield,
-    },
-    'finance-lending': {
-      label: tCommon('categories.finance', {
-        defaultValue: 'Finance & Lending',
-      }),
-      icon: BadgeDollarSign,
-    },
-    'business-startups': {
-      label: tCommon('categories.businessStartups', {
-        defaultValue: 'Business & Start-ups',
-      }),
-      icon: Building2,
-    },
-    'ip-creative': {
-      label: tCommon('categories.ipCreative', {
-        defaultValue: 'IP & Creative Works',
-      }),
-      icon: Copyright,
-    },
-    'legal-process-disputes': {
-      label: tCommon('categories.legalProcessDisputes', {
-        defaultValue: 'Legal Process & Disputes',
-      }),
-      icon: Gavel,
-    },
-    'estate-planning': {
-      label: tCommon('categories.estatePlanning', {
-        defaultValue: 'Estate Planning',
-      }),
-      icon: FileText,
-    },
-    'construction-trades': {
-      label: tCommon('categories.constructionTrades', {
-        defaultValue: 'Construction & Trades',
-      }),
-      icon: FileText,
-    },
-    'technology-digital': {
-      label: tCommon('categories.technologyDigital', {
-        defaultValue: 'Technology & Digital',
-      }),
-      icon: FileText,
-    },
-    'agriculture-energy': {
-      label: tCommon('categories.agricultureEnergy', {
-        defaultValue: 'Agriculture & Energy',
-      }),
-      icon: FileText,
-    },
-    'vehicles-equipment': {
-      label: tCommon('categories.vehiclesEquipment', {
-        defaultValue: 'Vehicles & Equipment',
-      }),
-      icon: FileText,
-    },
-    'general-forms': {
-      label: tCommon('categories.generalForms', {
-        defaultValue: 'General Forms',
-      }),
-      icon: FileText,
-    },
-    'ip-creative-works': {
-      label: tCommon('categories.ipCreativeWorksMedia', {
-        defaultValue: 'IP & Creative Works (Media)',
-      }),
-      icon: FileText,
-    },
-    'assets-gear': {
-      label: tCommon('categories.assetsGear', {
-        defaultValue: 'Assets & Gear',
-      }),
-      icon: FileText,
-    },
-  } : {} as any;
-
-  // Short descriptions for category cards (shown in the new grid)
-  const categoryDescriptions: Record<string, string> = tax ? {
-    'real-estate-property': tCommon('categoryDescriptions.realEstate', {
-      defaultValue: 'Leases, deeds, eviction notices and more.',
-    }),
-    'employment-hr': tCommon('categoryDescriptions.employment', {
-      defaultValue: 'Contracts, policies, termination letters, and more.',
-    }),
-    'personal-family': tCommon('categoryDescriptions.personalFamily', {
-      defaultValue: 'Wills, powers of attorney, prenuptial agreements.',
-    }),
-    'health-care': tCommon('categoryDescriptions.healthCare', {
-      defaultValue: 'Living wills, HIPAA, healthcare proxies, medical forms.',
-    }),
-    'finance-lending': tCommon('categoryDescriptions.finance', {
-      defaultValue: 'Loans, promissory notes, bills of sale.',
-    }),
-    'business-startups': tCommon('categoryDescriptions.businessStartups', {
-      defaultValue: 'NDAs, partnership agreements, operating agreements.',
-    }),
-    'ip-creative': tCommon('categoryDescriptions.ipCreative', {
-      defaultValue: 'Copyright, trademarks, licensing agreements.',
-    }),
-    'legal-process-disputes': tCommon('categoryDescriptions.legalProcessDisputes', {
-      defaultValue: 'Cease & desist, affidavits, demand letters.',
-    }),
-    'estate-planning': tCommon('categoryDescriptions.estatePlanning', {
-      defaultValue: 'Estate plans, trusts, guardianship, beneficiary forms.',
-    }),
-    'construction-trades': tCommon('categoryDescriptions.constructionTrades', {
-      defaultValue: 'Construction contracts, bids, lien waivers.',
-    }),
-    'technology-digital': tCommon('categoryDescriptions.technologyDigital', {
-      defaultValue: 'SaaS, terms, data processing, licensing.',
-    }),
-    'agriculture-energy': tCommon('categoryDescriptions.agricultureEnergy', {
-      defaultValue: 'Farm leases, supply, energy services.',
-    }),
-    'vehicles-equipment': tCommon('categoryDescriptions.vehiclesEquipment', {
-      defaultValue: 'Vehicle sale, title transfer, equipment leases.',
-    }),
-    'general-forms': tCommon('categoryDescriptions.generalForms', {
-      defaultValue: 'General purpose contracts, notices, letters.',
-    }),
-    'ip-creative-works': tCommon('categoryDescriptions.ipCreativeWorksMedia', {
-      defaultValue: 'Media releases, content licenses, collaboration.',
-    }),
-    'assets-gear': tCommon('categoryDescriptions.assetsGear', {
-      defaultValue: 'Purchase, loan, rental and lease forms.',
-    }),
-  } : {} as any;
-
-  // If URL contains ?category=<key>, preselect it
-  useEffect(() => {
-    if (!categoryFromUrl) return;
-    if (!allCategories.includes(categoryFromUrl)) return;
-    if (selectedCategory === categoryFromUrl) return;
-    setSelectedCategory(categoryFromUrl);
-  }, [categoryFromUrl, allCategories, selectedCategory]);
 
   useEffect(() => {
+    if (initialDocs.length > 0) {
+      setIsLoading(false);
+      return;
+    }
+
     let cancelled = false;
-
     (async () => {
       try {
-        const [{ taxonomy }, module] = await Promise.all([
-          import('@/config/taxonomy'),
-          loadWorkflowModule(),
-        ]);
-
+        const module = await import('@/lib/workflow/document-workflow');
         if (cancelled) return;
-
-        setTax(taxonomy);
-        setWorkflowModule(module);
         const docs = module.getWorkflowDocuments({ jurisdiction: 'us' });
         setTopDocs(docs);
       } catch (error) {
@@ -263,60 +144,56 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initialDocs]);
+
+  useEffect(() => {
+    if (!searchParams) return;
+    const categoryFromUrl = searchParams.get('category');
+    if (
+      categoryFromUrl &&
+      CURATED_CATEGORY_KEYS.includes(categoryFromUrl) &&
+      categoryFromUrl !== selectedCategory
+    ) {
+      setSelectedCategory(categoryFromUrl);
+      setShowAllForCategory(false);
+    }
+  }, [searchParams, selectedCategory]);
 
   const categories = useMemo(
-    () => allCategories.filter((cat) => categoryMeta[cat]),
-    [allCategories, categoryMeta],
+    () => CURATED_CATEGORY_KEYS.filter((key) => CATEGORY_DISPLAY_META[key]),
+    [],
   );
-  // After redesign we show the full category grid responsively
-  // Create mapping from taxonomy keys to document category names
-  const taxonomyToDocCategory: Record<string, string[]> = tax ? {
-    'real-estate-property': ['Real Estate', 'Property'],
-    'employment-hr': ['Employment', 'HR'],
-    'personal-family': ['Personal', 'Family'],
-    'health-care': ['Health', 'Healthcare', 'Medical'],
-    'finance-lending': ['Finance', 'Financial', 'Lending'],
-    'business-startups': ['Business', 'Corporate'],
-    'ip-creative': ['Intellectual Property', 'IP', 'Creative'],
-    'legal-process-disputes': ['Legal', 'Disputes'],
-    'estate-planning': ['Estate Planning', 'Estate'],
-    'construction-trades': ['Construction', 'Trades'],
-    'technology-digital': ['Technology', 'Digital'],
-    'agriculture-energy': ['Agriculture', 'Energy'],
-    'vehicles-equipment': ['Vehicles', 'Equipment'],
-    'general-forms': ['General', 'Forms'],
-    'ip-creative-works': ['Creative Works', 'Media'],
-    'assets-gear': ['Assets', 'Gear'],
-  } : {} as any;
 
-  // Filter documents by selected category
+  const categoryMeta = useMemo(() => {
+    return categories.reduce<Record<string, { label: string; icon: LucideIcon }>>(
+      (acc, key) => {
+        const meta = CATEGORY_DISPLAY_META[key];
+        acc[key] = {
+          label: tCommon(meta.labelKey, {
+            defaultValue: meta.labelKey.replace('categories.', '').replace(/-/g, ' '),
+          }),
+          icon: meta.icon ?? FileText,
+        };
+        return acc;
+      },
+      {},
+    );
+  }, [categories, tCommon]);
+
+  const categoryDescriptions = useMemo(() => {
+    return categories.reduce<Record<string, string>>((acc, key) => {
+      const translationKey = CATEGORY_DESCRIPTION_KEYS[key];
+      acc[key] = tCommon(translationKey, {
+        defaultValue: CATEGORY_DESCRIPTION_DEFAULTS[key] || '',
+      });
+      return acc;
+    }, {});
+  }, [categories, tCommon]);
+
   const filteredDocs = useMemo(() => {
     if (!selectedCategory) return [] as DocumentSummary[];
-    const validCategories = taxonomyToDocCategory[selectedCategory] || [];
-
-    const normalized = validCategories.map((value) => value.toLowerCase());
-    const matches = (doc: DocumentSummary) => {
-      if (normalized.length === 0) {
-        return doc.category.toLowerCase() === selectedCategory.toLowerCase();
-      }
-      const categoryLabel = doc.category.toLowerCase();
-      return normalized.some((value) => categoryLabel.includes(value));
-    };
-
-    const candidateDocs = topDocs.filter(matches);
-    if (candidateDocs.length > 0) {
-      return candidateDocs;
-    }
-
-    if (!workflowModule) {
-      return [] as DocumentSummary[];
-    }
-
-    return workflowModule
-      .getWorkflowDocuments({ jurisdiction: 'us' })
-      .filter(matches);
-  }, [selectedCategory, taxonomyToDocCategory, topDocs, workflowModule]);
+    return topDocs.filter((doc) => matchesCategory(doc, selectedCategory));
+  }, [selectedCategory, topDocs]);
 
   const handleExploreAll = () => {
     router.push(exploreAllDestination);
@@ -347,23 +224,14 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             defaultValue: 'Popular Legal Documents',
           })}
         </h2>
-        {/* Phase 1: Show a small, curated category grid first */}
+
         {!selectedCategory && categories.length > 0 && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-              {/* Curated set to reduce overwhelm */}
-              {[
-                'real-estate-property',
-                'employment-hr',
-                'personal-family',
-                'health-care',
-                'finance-lending',
-                'business-startups',
-                'ip-creative',
-                'legal-process-disputes',
-              ].map((cat) => {
-                if (!categoryMeta[cat]) return null;
-                const Icon = categoryMeta[cat]?.icon || FileText;
+              {categories.map((cat) => {
+                const meta = categoryMeta[cat];
+                if (!meta) return null;
+                const Icon = meta.icon || FileText;
                 return (
                   <button
                     key={cat}
@@ -375,14 +243,12 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                     className="text-left rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-sky-300 hover:bg-white/90"
                   >
                     <div className="flex items-start gap-3">
-                      {Icon && (
-                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
-                          <Icon className="h-6 w-6" />
-                        </span>
-                      )}
+                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                        <Icon className="h-6 w-6" />
+                      </span>
                       <div>
                         <div className="font-semibold text-[15px] text-slate-900">
-                          {categoryMeta[cat]?.label || cat}
+                          {meta.label}
                         </div>
                         <p className="mt-1 text-[12.5px] leading-5 text-slate-600">
                           {categoryDescriptions[cat] || ''}
@@ -402,13 +268,13 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               >
                 {tCommon('stepOne.exploreAllCategoriesButton', {
                   defaultValue: 'Explore All Document Categories',
-                })} →
+                })}{' '}
+                →
               </Button>
             </div>
           </>
         )}
 
-        {/* Phase 2: After a category is selected, show filtered docs only */}
         {selectedCategory && (
           <>
             <div className="mb-4 flex items-center justify-between">
@@ -421,9 +287,10 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
-                const Icon = categoryMeta[selectedCategory]?.icon || FileText;
-                const badge = badges[doc.id];
-                const href = `/${locale}/docs/${resolveDocSlug(doc.id)}/`;
+                const IconComponent = categoryMeta[selectedCategory]?.icon || FileText;
+                const badge = DOC_BADGES[doc.id];
+                const href = `/${locale}/docs/${resolveDocSlug(doc.id)}`;
+
                 return (
                   <Link
                     key={doc.id}
@@ -432,11 +299,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2">
-                        {React.createElement(Icon, {
-                          className: 'h-4 w-4 text-primary/80',
-                        })}
+                        <IconComponent className="h-4 w-4 text-primary/80" />
                         <span className="text-sm font-medium">
-                          {doc.translations?.[locale as 'en' | 'es']?.name ||
+                          {doc.translations?.[locale]?.name ||
                             doc.translations?.en?.name ||
                             doc.title ||
                             doc.id}
@@ -445,10 +310,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                       {badge && (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Badge
-                              variant="secondary"
-                              className="flex items-center space-x-1"
-                            >
+                            <Badge variant="secondary" className="flex items-center space-x-1">
                               {badge === 'new' ? (
                                 <Zap className="h-3 w-3" />
                               ) : (
@@ -480,7 +342,11 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                           ~3 min
                         </span>
                       </TooltipTrigger>
-                      <TooltipContent>Average completion time</TooltipContent>
+                      <TooltipContent>
+                        {tCommon('TopDocsChips.estimatedCompletion', {
+                          defaultValue: 'Average completion time',
+                        })}
+                      </TooltipContent>
                     </Tooltip>
                   </Link>
                 );
@@ -494,17 +360,20 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               )}
               <Button
                 variant="link"
-                onClick={() => router.push(`/${locale}/category/${selectedCategory}/`)}
+                onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
                 className="text-primary text-sm"
               >
-                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })} →
+                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })}{' '}
+                →
               </Button>
             </div>
           </>
         )}
-        
       </section>
     </TooltipProvider>
   );
 });
+
+TopDocsChips.displayName = 'TopDocsChips';
+
 export default TopDocsChips;

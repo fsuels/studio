@@ -5,11 +5,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'next/navigation';
 import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
 import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
+import TopDocsChips from '@/components/shared/TopDocsChips';
+import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 
 const SpinnerIcon = () => (
   <svg
@@ -45,6 +46,11 @@ const CATEGORY_KEYS = new Set([
   'Miscellaneous',
 ]);
 
+type HomePageClientProps = {
+  locale: 'en' | 'es';
+  popularDocs: DocumentSummary[];
+};
+
 // Minimal loading spinner without text
 const _MinimalLoadingSpinner = () => (
   <div className="flex justify-center items-center h-32" role="status" aria-live="polite">
@@ -70,17 +76,6 @@ const TestimonialsSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {[...Array(2)].map((_, i) => (
         <div key={i} className="bg-muted rounded-lg p-6 h-48"></div>
-      ))}
-    </div>
-  </div>
-);
-
-const TopDocsSkeleton = () => (
-  <div className="container mx-auto px-4 py-8">
-    <div className="h-8 bg-muted rounded w-1/4 mx-auto mb-6"></div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="bg-muted rounded-lg h-16"></div>
       ))}
     </div>
   </div>
@@ -113,13 +108,6 @@ const TrustAndTestimonialsSection = lazyOnView(
   },
 );
 
-const TopDocsChips = lazyOnView(
-  () => import('@/components/shared/TopDocsChips'),
-  {
-    placeholder: <TopDocsSkeleton />,
-  },
-);
-
 const AnnouncementBar = lazyOnView(
   () => import('@/components/shared/engagement/AnnouncementBar'),
   {
@@ -127,11 +115,12 @@ const AnnouncementBar = lazyOnView(
   },
 );
 
-export default function HomePageClient() {
+export default function HomePageClient({
+  locale,
+  popularDocs,
+}: HomePageClientProps) {
   const { t } = useTranslation('common');
   const searchParams = useCurrentSearchParams();
-  const params = useParams();
-  const locale = (params!.locale as 'en' | 'es') || 'en';
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
@@ -345,7 +334,7 @@ export default function HomePageClient() {
 
       {/* Popular Documents by Category */}
       <div className="cv-auto">
-        <TopDocsChips />
+        <TopDocsChips locale={locale} initialDocs={popularDocs} />
       </div>
 
 
