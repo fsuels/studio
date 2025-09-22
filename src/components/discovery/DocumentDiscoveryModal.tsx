@@ -338,6 +338,10 @@ export default function DocumentDiscoveryModal() {
     <Dialog open={showDiscoveryModal} onOpenChange={handleOpenChange}>
       <DialogContent 
         className="ai-finder-modal !max-w-none w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100dvh-1.5rem)] sm:h-[90vh] max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl !left-0 !top-0 !translate-x-0 !translate-y-0 sm:!left-1/2 sm:!top-1/2 sm:!-translate-x-1/2 sm:!-translate-y-1/2 [&>button:last-child]:hidden"
+        style={{
+          paddingTop: "max(env(safe-area-inset-top, 0px), 0px)",
+          paddingBottom: "max(env(safe-area-inset-bottom, 0px), 0px)",
+        }}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Smart Document Finder</DialogTitle>
@@ -352,7 +356,7 @@ export default function DocumentDiscoveryModal() {
           <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse pointer-events-none"></div>
           <div className="absolute -bottom-2 -left-4 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div className="relative px-4 py-4 pb-5 sm:px-6">
+          <div className="relative px-4 py-3 sm:px-6 sm:py-5">
             <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3 sm:gap-4">
               <div className="relative">
                 <div className="p-2.5 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
@@ -368,7 +372,11 @@ export default function DocumentDiscoveryModal() {
             <DialogClose asChild>
               <button
                 onClick={handleClose}
-                className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                className="absolute top-4 right-4 p-2.5 sm:p-3 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                style={{
+                  top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 1rem)",
+                  right: "calc(max(env(safe-area-inset-right, 0px), 0px) + 1rem)",
+                }}
                 aria-label="Close modal"
                 type="button"
               >
@@ -380,7 +388,7 @@ export default function DocumentDiscoveryModal() {
         
         {/* Content Container */}
         <div className="flex-1 flex flex-col bg-gray-50/50 dark:bg-gray-800/50 overflow-hidden">
-          <div className="flex-shrink-0 px-4 py-4 pb-3 sm:px-6 sticky top-0 bg-gray-50/50 dark:bg-gray-800/50 z-10 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex-shrink-0 px-4 py-3 pb-2 sm:px-6 sm:py-4 sticky top-0 bg-gray-50/50 dark:bg-gray-800/50 z-10 border-b border-gray-200 dark:border-gray-700">
             <SearchInput
               value={searchInput}
               onChange={(value) => {
@@ -499,14 +507,6 @@ export default function DocumentDiscoveryModal() {
                 </div>
               }>
                 <div className="space-y-4 pb-8">
-                  {isUsingLocalFallback && (
-                    <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
-                        <Brain className="inline-block w-4 h-4 mr-2" />
-                        Showing results from local document library
-                      </p>
-                    </div>
-                  )}
                   <ResultsGrid
                     results={results as DiscoveryResult[]}
                     locale={locale}

@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
-import { FileText, Zap, Star, ArrowRight } from 'lucide-react';
+import { FileText, Star, ArrowRight } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
 import type { DiscoveryResult } from '@/types/discovery';
@@ -24,7 +24,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
   if (isLoading) {
     return (
       <div className="space-y-4 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
           {[...Array(4)].map((_, i) => <ResultCardSkeleton key={i} />)}
         </div>
       </div>
@@ -38,33 +38,14 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
   return (
     <div className="space-y-4 pb-8">
       {/* Results Header */}
-      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
-              <Zap className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div>
-              <h3 className="font-bold text-lg text-emerald-900 dark:text-emerald-100">
-                AI Recommendations
-              </h3>
-              <p className="text-sm text-emerald-700 dark:text-emerald-300">
-                Documents that may help with your situation
-              </p>
-            </div>
-          </div>
-          <div className="text-left sm:text-right">
-            <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700">
-              <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
-                {results.length} {results.length === 1 ? 'match' : 'matches'}
-              </span>
-            </div>
-          </div>
+      <div className="flex justify-end">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-700 shadow-sm dark:border-emerald-700 dark:bg-gray-900 dark:text-emerald-300">
+          {results.length} {results.length === 1 ? 'match' : 'matches'}
         </div>
       </div>
       
       {/* Results Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
         {results.map((result, index) => {
           // Handle both SemanticResult and DiscoveryResult types
           const isSemanticResult = 'doc' in result;
