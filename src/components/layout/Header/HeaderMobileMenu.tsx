@@ -5,7 +5,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Menu as MenuIcon, X as CloseIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { ProgressiveLoader } from '@/components/ui/ProgressiveLoader';
 import {
   MobileNavigation,
@@ -85,9 +84,7 @@ export default function HeaderMobileMenu({
           {/* Content */}
           <div className="flex-1 overflow-y-auto">
             <ProgressiveLoader
-              component={() =>
-                import('@/components/mobile/MobileDocsAccordion')
-              }
+              component={() => import('./MobileMenuContent')}
               fallback={<MobileNavigationSkeleton />}
               delay={50}
               props={{ locale: clientLocale, onLinkClick: onClose }}

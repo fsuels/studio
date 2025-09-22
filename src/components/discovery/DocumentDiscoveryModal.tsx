@@ -337,7 +337,7 @@ export default function DocumentDiscoveryModal() {
   return (
     <Dialog open={showDiscoveryModal} onOpenChange={handleOpenChange}>
       <DialogContent 
-        className="ai-finder-modal w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100vh-1.5rem)] sm:h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl [&>button:last-child]:hidden"
+        className="ai-finder-modal !max-w-none w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100dvh-1.5rem)] sm:h-[90vh] max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl !left-0 !top-0 !translate-x-0 !translate-y-0 sm:!left-1/2 sm:!top-1/2 sm:!-translate-x-1/2 sm:!-translate-y-1/2 [&>button:last-child]:hidden"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Smart Document Finder</DialogTitle>

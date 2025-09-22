@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
-import { FileText, Zap, Star } from 'lucide-react';
+import { FileText, Zap, Star, ArrowRight } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { SemanticResult } from '@/lib/semantic-analysis-engine';
 import type { DiscoveryResult } from '@/types/discovery';
@@ -39,8 +39,8 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
     <div className="space-y-4 pb-8">
       {/* Results Header */}
       <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
               <Zap className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
             </div>
@@ -53,8 +53,8 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
               </p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="bg-white dark:bg-gray-900 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700">
+          <div className="text-left sm:text-right">
+            <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700">
               <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
                 {results.length} {results.length === 1 ? 'match' : 'matches'}
               </span>
@@ -115,7 +115,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                 event.preventDefault();
                 onDocumentClick(href);
               }}
-              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 block ${
+              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-4 sm:p-6 block ${
                 isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
               }`}
               style={{
@@ -124,7 +124,7 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
             >
               
               {/* Content */}
-              <div className="relative flex items-start gap-4">
+              <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
                 {/* Icon */}
                 <div className="flex-shrink-0">
                   <div className="p-3 bg-gray-100 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 group-hover:scale-110 transition-transform duration-300">
@@ -155,15 +155,15 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                   
                   {/* Primary CTA - Prominent Button */}
                   <div className="mt-4">
-                    <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                    <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800">
                       <span>Create Document Now</span>
-                      <span className="text-emerald-100 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                      <ArrowRight className="h-4 w-4 text-emerald-100 transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
                   </div>
                 </div>
 
                 {/* Match percentage badge - right aligned */}
-                <div className="flex-shrink-0 flex flex-col items-end gap-1">
+                <div className="flex-shrink-0 flex w-full items-center justify-between gap-2 sm:w-auto sm:flex-col sm:items-end sm:justify-start sm:gap-1">
                   {/* Excellence indicator */}
                   {isBestMatch && (
                     <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">

@@ -32,7 +32,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
-import { CURATED_CATEGORY_KEYS, CATEGORY_MATCHES } from '@/lib/homepage/popular-docs-config';
+import { CURATED_CATEGORY_KEYS, matchesCategoryLabel } from '@/lib/homepage/popular-docs-config';
 
 type TopDocsChipsProps = {
   locale: 'en' | 'es';
@@ -82,16 +82,11 @@ const DOC_BADGES: Record<string, 'new' | 'updated'> = {
   leaseAgreement: 'updated',
 };
 
-function matchesCategory(doc: DocumentSummary, categoryKey: string): boolean {
-  const synonyms = CATEGORY_MATCHES[categoryKey] ?? [];
-  const categoryLabel = doc.category.toLowerCase();
+const normalizeDisplayName = (doc: DocumentSummary) => {
+  const name = doc.translations?.en?.name || doc.title || doc.id;
+  return name.trim().toLowerCase();
+};
 
-  if (synonyms.length === 0) {
-    return categoryLabel.includes(categoryKey.replace(/-/g, ' '));
-  }
-
-  return synonyms.some((value) => categoryLabel.includes(value.toLowerCase()));
-}
 
 const TopDocsChips = React.memo(function TopDocsChips({
   locale,
@@ -192,7 +187,25 @@ const TopDocsChips = React.memo(function TopDocsChips({
 
   const filteredDocs = useMemo(() => {
     if (!selectedCategory) return [] as DocumentSummary[];
-    return topDocs.filter((doc) => matchesCategory(doc, selectedCategory));
+
+    const deduped: DocumentSummary[] = [];
+    const seenNames = new Set<string>();
+
+    for (const doc of topDocs) {
+      if (!matchesCategoryLabel(doc.category, selectedCategory)) {
+        continue;
+      }
+
+      const normalizedName = normalizeDisplayName(doc);
+      if (seenNames.has(normalizedName)) {
+        continue;
+      }
+
+      seenNames.add(normalizedName);
+      deduped.push(doc);
+    }
+
+    return deduped;
   }, [selectedCategory, topDocs]);
 
   const handleExploreAll = () => {
@@ -268,8 +281,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
               >
                 {tCommon('stepOne.exploreAllCategoriesButton', {
                   defaultValue: 'Explore All Document Categories',
-                })}{' '}
-                →
+                })}{'->'}
               </Button>
             </div>
           </>
@@ -363,8 +375,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
                 onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
                 className="text-primary text-sm"
               >
-                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })}{' '}
-                →
+                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })}{'->'}
               </Button>
             </div>
           </>
@@ -377,3 +388,5 @@ const TopDocsChips = React.memo(function TopDocsChips({
 TopDocsChips.displayName = 'TopDocsChips';
 
 export default TopDocsChips;
+
+

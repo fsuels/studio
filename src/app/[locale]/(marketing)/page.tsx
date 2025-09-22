@@ -12,34 +12,38 @@ import {
 } from '@/lib/seo/site';
 import { getWorkflowDocuments } from '@/lib/workflow/document-workflow';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
-import { CURATED_CATEGORY_KEYS, CATEGORY_MATCHES } from '@/lib/homepage/popular-docs-config';
+import { CURATED_CATEGORY_KEYS, matchesCategoryLabel } from '@/lib/homepage/popular-docs-config';
 
 const MAX_DOCS_PER_CATEGORY = 24;
 
-function matchesCategory(doc: DocumentSummary, categoryKey: string): boolean {
-  const synonyms = CATEGORY_MATCHES[categoryKey] ?? [];
-  const categoryLabel = doc.category.toLowerCase();
-
-  if (synonyms.length === 0) {
-    return categoryLabel.includes(categoryKey.replace(/-/g, ' '));
-  }
-
-  return synonyms.some((value) => categoryLabel.includes(value.toLowerCase()));
-}
+const normalizeDisplayName = (doc: DocumentSummary) => {
+  const name = doc.translations?.en?.name || doc.title || doc.id;
+  return name.trim().toLowerCase();
+};
 
 function buildPopularDocs(): DocumentSummary[] {
   const allDocs = getWorkflowDocuments({ jurisdiction: 'us' });
-  const seen = new Set<string>();
+  const seenIds = new Set<string>();
+  const seenDisplayNames = new Set<string>();
   const curated: DocumentSummary[] = [];
 
   for (const categoryKey of CURATED_CATEGORY_KEYS) {
     let count = 0;
+
     for (const doc of allDocs) {
-      if (matchesCategory(doc, categoryKey) && !seen.has(doc.id)) {
-        curated.push(doc);
-        seen.add(doc.id);
-        count += 1;
+      if (!matchesCategoryLabel(doc.category, categoryKey)) {
+        continue;
       }
+
+      const normalizedName = normalizeDisplayName(doc);
+      if (seenIds.has(doc.id) || seenDisplayNames.has(normalizedName)) {
+        continue;
+      }
+
+      curated.push(doc);
+      seenIds.add(doc.id);
+      seenDisplayNames.add(normalizedName);
+      count += 1;
 
       if (count >= MAX_DOCS_PER_CATEGORY) {
         break;
@@ -128,3 +132,4 @@ export default async function HomePageContainer({ params }: PageProps) {
     </>
   );
 }
+
