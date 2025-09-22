@@ -8,9 +8,9 @@ import { validateInviteToken } from '@/lib/tenant-invites';
 export default async function TenantRoomPage({
   params,
 }: {
-  params: { slug: string; token: string };
+  params: Promise<{ slug: string; token: string }>;
 }) {
-  const { slug, token } = params;
+  const { slug, token } = await params;
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
@@ -46,7 +46,7 @@ export default async function TenantRoomPage({
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string; token: string };
+  params: Promise<{ slug: string; token: string }>;
 }) {
   await params; // ensure compatibility with Next.js 15 types
   const headersList = headers();

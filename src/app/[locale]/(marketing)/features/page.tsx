@@ -224,9 +224,9 @@ function buildFeaturesStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: FeaturesPageParams;
+  params: Promise<FeaturesPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -286,9 +286,9 @@ export async function generateStaticParams() {
 export default async function FeaturesPage({
   params,
 }: {
-  params: FeaturesPageParams;
+  params: Promise<FeaturesPageParams>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
 
   const features = Object.entries(content.features).map(([key, feature]) => ({

@@ -13,9 +13,9 @@ interface PricingPageParams {
 export async function generateMetadata({
   params,
 }: {
-  params: PricingPageParams;
+  params: Promise<PricingPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const metadataByLocale = {
     en: {
@@ -160,9 +160,9 @@ export async function generateStaticParams() {
 export default async function PricingPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' } & Record<string, string>;
+  params: Promise<{ locale: 'en' | 'es' } & Record<string, string>>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const pricingJsonLd = buildPricingStructuredData(locale);
   const t = (en: string, es?: string) => (locale === 'es' && es ? es : en);
   const comparisonRows = [

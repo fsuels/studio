@@ -10,9 +10,9 @@ interface DocPageParams {
 export default async function Head({
   params,
 }: {
-  params: DocPageParams;
+  params: Promise<DocPageParams>;
 }) {
-  const { locale, docId } = params;
+  const { locale, docId } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
   const docConfig = getDocumentMetadata(docId);

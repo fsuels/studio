@@ -7,8 +7,9 @@ type Locale = 'en' | 'es';
 export default async function DashboardPage({
   params,
 }: {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 }) {
-  const { locale } = params;
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   return <DashboardView locale={locale} />;
 }

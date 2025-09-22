@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 export default async function CompletePage({
   params,
 }: {
-  params: { locale: 'en' | 'es'; docId: string };
+  params: Promise<{ locale: 'en' | 'es'; docId: string }>;
 }) {
   const resolved = await params;
   const allDocuments = await getAllDocuments();

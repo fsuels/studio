@@ -30,9 +30,9 @@ export const dynamicParams = false;
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: 'en' | 'es'; category: string };
+  params: Promise<{ locale: 'en' | 'es'; category: string }>;
 }): Promise<Metadata> {
-  const { locale, category } = params;
+  const { locale, category } = await params;
   const categoryData = taxonomy.categories[category as keyof typeof taxonomy.categories];
   
   if (!categoryData) {
@@ -92,9 +92,9 @@ export async function generateMetadata({
 export default async function CategoryPage({
   params,
 }: {
-  params: { locale: 'en' | 'es'; category: string };
+  params: Promise<{ locale: 'en' | 'es'; category: string }>;
 }) {
-  const { locale, category } = params;
+  const { locale, category } = await params;
   const categoryData = taxonomy.categories[category as keyof typeof taxonomy.categories];
   
   if (!categoryData) {

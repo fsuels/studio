@@ -13,7 +13,7 @@ type BlogPageParams = {
 };
 
 type BlogPageProps = {
-  params: BlogPageParams;
+  params: Promise<BlogPageParams>;
 };
 
 const localizedContent = {
@@ -81,9 +81,9 @@ function buildBlogStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: BlogPageParams;
+  params: Promise<BlogPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -131,7 +131,7 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
   const langSuffix = locale === 'es' ? 'es' : 'en';
   const articles = blogArticles
     .slice()

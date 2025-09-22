@@ -11,7 +11,7 @@ import { getSiteUrl, LOCALE_LANGUAGE_TAGS } from '@/lib/seo/site';
 
 // Metadata will be generated dynamically based on locale
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
   
   const metadataByLocale = {
     en: {
@@ -77,11 +77,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 interface PageProps {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }
 
 export default async function LeaseAgreementBlogPost({ params }: PageProps) {
-  const { locale } = params;
+  const { locale } = await params;
   
   const content = {
     en: {

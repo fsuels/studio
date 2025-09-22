@@ -124,9 +124,9 @@ function buildTemplatesStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: TemplatesPageParams;
+  params: Promise<TemplatesPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -177,9 +177,9 @@ export async function generateStaticParams() {
 export default async function TemplatesPage({
   params,
 }: {
-  params: TemplatesPageParams;
+  params: Promise<TemplatesPageParams>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const structuredData = buildTemplatesStructuredData(locale);
 
   return (

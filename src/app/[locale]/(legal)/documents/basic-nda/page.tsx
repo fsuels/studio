@@ -30,10 +30,10 @@ export async function generateStaticParams() {
 export default async function BasicNDAPage({
   params,
 }: {
-  params: { locale: 'en' | 'es' };
+  params: Promise<{ locale: 'en' | 'es' }>;
 }) {
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { locale } = params; // kept for future enhancement
+  const { locale } = await params; // kept for future enhancement
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   return (

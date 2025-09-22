@@ -174,9 +174,9 @@ function buildPartnersStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: PartnersPageParams;
+  params: Promise<PartnersPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -226,9 +226,9 @@ export async function generateStaticParams() {
 export default async function PartnersPage({
   params,
 }: {
-  params: PartnersPageParams;
+  params: Promise<PartnersPageParams>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
   const partnersJsonLd = buildPartnersStructuredData(locale);
 

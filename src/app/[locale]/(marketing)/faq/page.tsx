@@ -128,9 +128,9 @@ function buildFaqStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: FaqPageParams;
+  params: Promise<FaqPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -177,8 +177,8 @@ export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
 }
 
-export default async function FAQPage({ params }: { params: FaqPageParams }) {
-  const { locale } = params;
+export default async function FAQPage({ params }: { params: Promise<FaqPageParams> }) {
+  const { locale } = await params;
   const content = localizedContent[locale];
 
   const faqStructuredData = buildFaqStructuredData(locale);

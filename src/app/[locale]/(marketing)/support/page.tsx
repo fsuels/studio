@@ -101,9 +101,9 @@ function buildSupportStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: SupportPageParams;
+  params: Promise<SupportPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -153,9 +153,9 @@ export async function generateStaticParams() {
 export default async function SupportPage({
   params,
 }: {
-  params: SupportPageParams;
+  params: Promise<SupportPageParams>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
 
   const supportJsonLd = buildSupportStructuredData(locale);

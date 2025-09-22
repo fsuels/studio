@@ -5,11 +5,12 @@ import { Layout } from "@/components/layout/Layout";
 
 interface StateLayoutProps {
   children: ReactNode;
-  params: { locale?: string };
+  params: Promise<{ locale?: string }>;
 }
 
-export default function StateLayout({ children, params }: StateLayoutProps) {
-  const detectedLocale = params.locale === "es" ? "es" : "en";
+export default async function StateLayout({ children, params }: StateLayoutProps) {
+  const resolvedParams = await params;
+  const detectedLocale = resolvedParams?.locale === "es" ? "es" : "en";
 
   return (
     <Suspense fallback={null}>

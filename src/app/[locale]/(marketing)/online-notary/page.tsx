@@ -150,9 +150,9 @@ function buildOnlineNotaryStructuredData(locale: 'en' | 'es') {
 export async function generateMetadata({
   params,
 }: {
-  params: OnlineNotaryPageParams;
+  params: Promise<OnlineNotaryPageParams>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
 
   const siteUrl = getSiteUrl();
   const metadataBase = new URL(siteUrl + '/');
@@ -202,9 +202,9 @@ export async function generateStaticParams() {
 export default async function OnlineNotaryPage({
   params,
 }: {
-  params: OnlineNotaryPageParams;
+  params: Promise<OnlineNotaryPageParams>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const content = localizedContent[locale];
   const structuredData = buildOnlineNotaryStructuredData(locale);
 

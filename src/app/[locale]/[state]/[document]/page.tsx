@@ -15,11 +15,11 @@ import { StateSpecificLegalSchema } from '@/components/seo/LocalBusinessSchema';
 import Link from 'next/link';
 
 interface StateDocumentPageProps {
-  params: {
+  params: Promise<{
     locale: string;
     state: string;
     document: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -52,7 +52,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: StateDocumentPageProps): Promise<Metadata> {
-  const { state: stateSlug, document: documentSlug, locale } = params;
+  const { state: stateSlug, document: documentSlug, locale } = await params;
   const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(
@@ -113,7 +113,7 @@ export async function generateMetadata({
 }
 
 export default async function StateDocumentPage({ params }: StateDocumentPageProps) {
-  const { state: stateSlug, document: documentSlug, locale } = params;
+  const { state: stateSlug, document: documentSlug, locale } = await params;
   const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(

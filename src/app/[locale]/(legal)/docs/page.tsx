@@ -4,11 +4,12 @@
 import { redirect } from 'next/navigation';
 
 interface DocsIndexPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export default async function DocsIndexPage({ params }: DocsIndexPageProps) {
-  const { locale } = params;
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
 
   // For now, redirect to the homepage's document selection area
   redirect(`/${locale}/marketplace`);
