@@ -1,4 +1,4 @@
-'use client';
+
 'use client';
 /*
 Prompt Objective:
@@ -38,7 +38,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Progress } from '@/components/ui/progress';
 import { usStates } from '@/lib/usStates';
 import { vehicleBillOfSaleFaqs } from './faqs';
 import { requiresNotaryForVehicleBillOfSale } from '@/lib/compliance-helper';
@@ -191,8 +190,6 @@ export default function VehicleBillOfSalePage() {
               </AccordionItem>
             ))}
           </Accordion>
-        </section>
-
         </section>
 
         <section className="text-center mb-20">

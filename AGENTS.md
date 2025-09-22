@@ -15,3 +15,4 @@
 - Before drafting any legal template, consult the Jurisdiction Pack `official_forms` map to identify states or regions that require a prescribed form; when mandated, render and deliver that official form instead of a custom template and flag the requirement in outputs.
 - When the pack confirms no mandate, proceed with the custom template workflow and cite the authority that permits it.
 - Always document which path was used (official form vs custom template) and include form identifiers where applicable to keep downstream automation aligned.
+Code must keep each module single responsibility; split or refactor when scope drifts.

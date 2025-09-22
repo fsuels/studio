@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Brain, Check, X } from 'lucide-react';
 import { getDocumentTitle } from '@/lib/format-utils';
@@ -34,8 +34,27 @@ const ResultsGrid = React.lazy(() =>
 
 export default function DocumentDiscoveryModal() {
   const { t } = useTranslation('common');
-  const params = useParams();
-  const locale = (params!.locale as 'en' | 'es') || 'en';
+  const router = useRouter();
+  const [locale, setLocale] = useState<'en' | 'es'>(() => {
+    if (typeof document !== 'undefined') {
+      const html = document.documentElement;
+      const detected = html.getAttribute('lang');
+      if (detected === 'es') {
+        return 'es';
+      }
+    }
+    return 'en';
+  });
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const observer = new MutationObserver(() => {
+      const lang = document.documentElement.getAttribute('lang');
+      setLocale(lang === 'es' ? 'es' : 'en');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    return () => observer.disconnect();
+  }, []);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -174,6 +193,7 @@ export default function DocumentDiscoveryModal() {
 
   const hasResults = results.length > 0;
   const showLoadingState = isSearching && !hasResults;
+  const gridIsLoading = isSearching && !isUsingLocalFallback && remoteQuery !== activeQuery;
 
   const {
     isListening,
@@ -287,11 +307,12 @@ export default function DocumentDiscoveryModal() {
   }, [clearResults, setDiscoveryInput]);
 
   const handleDocumentClick = useCallback(
-    (_docId: string) => {
+    (href: string) => {
       setShowDiscoveryModal(false);
       handleDismiss();
+      router.push(href);
     },
-    [handleDismiss, setShowDiscoveryModal],
+    [handleDismiss, router, setShowDiscoveryModal],
   );
 
   const handleClose = useCallback(() => {
@@ -490,7 +511,7 @@ export default function DocumentDiscoveryModal() {
                     results={results as DiscoveryResult[]}
                     locale={locale}
                     onDocumentClick={handleDocumentClick}
-                    isLoading={isSearching}
+                    isLoading={gridIsLoading}
                   />
                 </div>
               </React.Suspense>

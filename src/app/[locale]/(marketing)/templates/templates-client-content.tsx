@@ -146,7 +146,7 @@ export default function TemplatesClientContent({
         <h2 className="text-2xl font-semibold text-center mb-4 text-foreground">
           {t("browseTemplates.featured", "Featured Templates")}
         </h2>
-        <TopDocsChips />
+        <TopDocsChips locale={locale} />
       </section>
 
       <section className="text-center">

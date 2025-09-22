@@ -15,7 +15,7 @@ const isDebugEnabled = process.env.NODE_ENV !== 'production';
 interface ResultsGridProps {
   results: (SemanticResult | DiscoveryResult)[];
   locale: 'en' | 'es';
-  onDocumentClick: (docId: string) => void;
+  onDocumentClick: (href: string) => void;
   isLoading: boolean;
 }
 
@@ -99,13 +99,22 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
             });
           }
           
-          const docId = resolveDocSlug(isSemanticResult ? result.doc.id : result.id);
+          const docSlug = resolveDocSlug(isSemanticResult ? result.doc.id : result.id);
+          const href = `/${locale}/docs/${docSlug}`;
 
           return (
             <Link
-              key={docId}
-              href={`/${locale}/docs/${docId}`}
-              onClick={() => onDocumentClick(docId)}
+              key={docSlug}
+              href={href}
+              prefetch={false}
+              onClick={(event) => {
+                if (event.defaultPrevented) return;
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) {
+                  return;
+                }
+                event.preventDefault();
+                onDocumentClick(href);
+              }}
               className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-6 block ${
                 isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
               }`}
