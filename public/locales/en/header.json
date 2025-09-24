@@ -17,6 +17,9 @@
     "viewAllInCategoryShort": "More >>",
     "createAccount": "Create Free Account",
     "logoutShort": "Logout",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "signin": "Sign In",
     "noDocumentsInCategory": "No documents in this category yet.",
     "noDocumentsAvailable": "No documents available for the selected categories at this time.",
     "noCategoriesAvailable": "No document categories available."
@@ -46,5 +49,64 @@
   "My Account": "My Account",
   "Logout": "Logout",
   "Sign Up": "Sign Up",
-  "Sign In": "Sign In"
+  "Sign In": "Sign In",
+  "mobileMenu": {
+    "headline": "Browse documents",
+    "subtitle": "Search thousands of state-compliant templates.",
+    "docCount_one": "{{count}} document",
+    "docCount_other": "{{count}} documents",
+    "empty": "No documents available yet.",
+    "categories": {
+      "agreements-contracts": {
+        "title": "Business",
+        "subtitle": "Run, hire, and grow with confidence.",
+        "sections": {
+          "business-operations": "Operations & Services",
+          "employment-hr": "Employment & HR",
+          "partnerships-investors": "Partnerships & Investors",
+          "formation-compliance": "Formation & Compliance"
+        }
+      },
+      "family-personal": {
+        "title": "Family",
+        "subtitle": "Protect relationships, children, and everyday life.",
+        "sections": {
+          "relationship-planning": "Marriage & Relationships",
+          "children-guardianship": "Children & Guardianship",
+          "family-health": "Health & Care",
+          "everyday-life": "Personal Agreements"
+        }
+      },
+      "forms-authorizations": {
+        "title": "Estate",
+        "subtitle": "Plan wills, trusts, and end-of-life care.",
+        "sections": {
+          "wills-trusts": "Wills & Trusts",
+          "powers-attorney": "Powers of Attorney",
+          "health-directives": "Health Directives",
+          "legacy-transfers": "Legacy & Transfers"
+        }
+      },
+      "letters-notices": {
+        "title": "Financial",
+        "subtitle": "Manage loans, debt, and authorizations.",
+        "sections": {
+          "loans-credit": "Loans & Credit",
+          "debt-resolution": "Debt Resolution",
+          "banking-authorizations": "Banking & Authorizations",
+          "investor-documents": "Investments & Finance"
+        }
+      },
+      "business-commercial": {
+        "title": "Real Estate",
+        "subtitle": "Lease, manage, buy, and sell property.",
+        "sections": {
+          "residential-leases": "Residential Leases",
+          "landlord-notices": "Landlord Notices",
+          "property-transfers": "Property Transfers",
+          "commercial-spaces": "Commercial Spaces"
+        }
+      }
+    }
+  }
 }

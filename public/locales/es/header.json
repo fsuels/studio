@@ -17,6 +17,9 @@
     "viewAllInCategoryShort": "Más >>",
     "createAccount": "Crear cuenta gratuita",
     "logoutShort": "Cerrar sesión",
+    "dashboard": "Panel",
+    "logout": "Cerrar sesión",
+    "signin": "Iniciar sesión",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "noDocumentsAvailable": "No hay documentos disponibles para las categorías seleccionadas en este momento.",
     "noCategoriesAvailable": "No hay categorías de documentos disponibles."
@@ -46,5 +49,64 @@
   "My Account": "Mi Cuenta",
   "Logout": "Cerrar Sesión",
   "Sign Up": "Registrarse",
-  "Sign In": "Iniciar Sesión"
+  "Sign In": "Iniciar Sesión",
+  "mobileMenu": {
+    "headline": "Explorar documentos",
+    "subtitle": "Busca entre miles de plantillas compatibles con cada estado.",
+    "docCount_one": "{{count}} documento",
+    "docCount_other": "{{count}} documentos",
+    "empty": "Aún no hay documentos disponibles.",
+    "categories": {
+      "agreements-contracts": {
+        "title": "Negocios",
+        "subtitle": "Gestiona, contrata y crece con confianza.",
+        "sections": {
+          "business-operations": "Operaciones y servicios",
+          "employment-hr": "Empleo y RR. HH.",
+          "partnerships-investors": "Socios e inversionistas",
+          "formation-compliance": "Constitución y cumplimiento"
+        }
+      },
+      "family-personal": {
+        "title": "Familia",
+        "subtitle": "Protege relaciones, hijos y la vida diaria.",
+        "sections": {
+          "relationship-planning": "Matrimonio y relaciones",
+          "children-guardianship": "Hijos y tutelas",
+          "family-health": "Salud y cuidados",
+          "everyday-life": "Acuerdos personales"
+        }
+      },
+      "forms-authorizations": {
+        "title": "Patrimonio",
+        "subtitle": "Planifica testamentos, fideicomisos y cuidados al final de la vida.",
+        "sections": {
+          "wills-trusts": "Testamentos y fideicomisos",
+          "powers-attorney": "Poderes notariales",
+          "health-directives": "Directivas médicas",
+          "legacy-transfers": "Legados y traspasos"
+        }
+      },
+      "letters-notices": {
+        "title": "Finanzas",
+        "subtitle": "Gestiona préstamos, deudas y autorizaciones.",
+        "sections": {
+          "loans-credit": "Préstamos y crédito",
+          "debt-resolution": "Resolución de deudas",
+          "banking-authorizations": "Banca y autorizaciones",
+          "investor-documents": "Inversiones y finanzas"
+        }
+      },
+      "business-commercial": {
+        "title": "Bienes raíces",
+        "subtitle": "Arrienda, administra, compra y vende propiedades.",
+        "sections": {
+          "residential-leases": "Arrendamientos residenciales",
+          "landlord-notices": "Avisos para arrendadores",
+          "property-transfers": "Traspasos de propiedad",
+          "commercial-spaces": "Espacios comerciales"
+        }
+      }
+    }
+  }
 }

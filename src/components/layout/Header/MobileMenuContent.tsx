@@ -25,7 +25,6 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import { formatDocumentTitle } from '@/lib/format-utils';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { cn } from '@/lib/utils';
-import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 
 const AuthModal = dynamic(() => import('@/components/shared/AuthModal'), {
   ssr: false,
@@ -241,10 +240,10 @@ export default function MobileMenuContent({
       <div className="rounded-3xl border border-border/50 bg-card shadow-lg overflow-hidden">
         <div className="px-5 pt-4 pb-3 border-b border-border/40 bg-gradient-to-r from-primary/5 via-card to-card">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
+            {tHeader('mobileMenu.headline', { defaultValue: 'Browse documents' })}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {tHeader('nav.browseDocumentsSearchOnly', {
+            {tHeader('mobileMenu.subtitle', {
               defaultValue: 'Search thousands of state-compliant templates.',
             })}
           </p>
@@ -256,6 +255,17 @@ export default function MobileMenuContent({
             const Icon = category.icon;
             const sectionExpandedId = expandedSections[category.id] ?? null;
             const categoryContent = CATEGORY_MENU_CONTENT[category.id];
+            const localizedCategoryTitle = tHeader(
+              `mobileMenu.categories.${category.id}.title`,
+              { defaultValue: category.title },
+            );
+            const localizedCategorySubtitle = tHeader(
+              `mobileMenu.categories.${category.id}.subtitle`,
+              { defaultValue: category.subtitle || '' },
+            );
+            const categoryDocCountText = tHeader('mobileMenu.docCount', {
+              count: category.docCount,
+            });
 
             return (
               <div key={category.id} className="bg-background/80">
@@ -270,24 +280,24 @@ export default function MobileMenuContent({
                   )}
                   aria-expanded={isExpanded}
                 >
-                  <span className="flex items-center gap-3">
+                    <span className="flex items-center gap-3">
                     <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary">
                       <Icon className="h-5 w-5" />
                     </span>
                     <span className="flex flex-col">
                       <span className="text-base font-semibold">
-                        {category.title}
+                        {localizedCategoryTitle}
                       </span>
-                      {category.subtitle && (
+                      {localizedCategorySubtitle && (
                         <span className="text-xs text-muted-foreground">
-                          {category.subtitle}
+                          {localizedCategorySubtitle}
                         </span>
                       )}
                     </span>
                   </span>
                   <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                     <span className="hidden xs:inline">
-                      {category.docCount} docs
+                      {categoryDocCountText}
                     </span>
                     <span className={cn(
                       'inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/20 text-primary transition-transform duration-200',
@@ -306,6 +316,13 @@ export default function MobileMenuContent({
                         .filter((doc): doc is DocumentSummary => Boolean(doc));
                       const sectionDocCount = sectionDocs.length;
                       const sectionIsExpanded = sectionExpandedId === section.id;
+                      const localizedSectionLabel = tHeader(
+                        `mobileMenu.categories.${category.id}.sections.${section.id}`,
+                        { defaultValue: section.label },
+                      );
+                      const sectionDocCountText = tHeader('mobileMenu.docCount', {
+                        count: sectionDocCount,
+                      });
 
                       return (
                         <div
@@ -320,11 +337,10 @@ export default function MobileMenuContent({
                           >
                             <div className="flex flex-col">
                               <span className="text-sm font-semibold text-primary">
-                                {section.label}
+                                {localizedSectionLabel}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                {sectionDocCount}{' '}
-                                {sectionDocCount === 1 ? 'document' : 'documents'}
+                                {sectionDocCountText}
                               </span>
                             </div>
                             <span
@@ -347,7 +363,7 @@ export default function MobileMenuContent({
                                 </div>
                               ) : sectionDocCount === 0 ? (
                                 <p className="text-sm text-muted-foreground">
-                                  {tHeader('nav.noDocumentsAvailable', {
+                                  {tHeader('mobileMenu.empty', {
                                     defaultValue: 'No documents available yet.',
                                   })}
                                 </p>
