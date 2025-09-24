@@ -3,6 +3,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -28,9 +29,15 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import { formatDocumentTitle } from '@/lib/format-utils';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { cn } from '@/lib/utils';
+import HeaderSearch from './HeaderSearch';
+
+const AuthModal = dynamic(() => import('@/components/shared/AuthModal'), {
+  ssr: false,
+});
 
 interface MobileMenuContentProps {
   locale: 'en' | 'es';
+  mounted: boolean;
   onLinkClick?: () => void;
 }
 
@@ -56,12 +63,15 @@ const FEATURED_CATEGORY_ORDER: string[] = [
 
 export default function MobileMenuContent({
   locale,
+  mounted,
   onLinkClick,
 }: MobileMenuContentProps) {
   const { t: tHeader } = useTranslation('header');
   const { isLoggedIn, isLoading, logout } = useAuth();
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
 
   useEffect(() => {
     let cancelled = false;
@@ -94,6 +104,20 @@ export default function MobileMenuContent({
     },
     [onLinkClick, router],
   );
+
+  const openAuthModal = (mode: 'signin' | 'signup') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
+  const handleAuthSuccess = () => {
+    setIsAuthModalOpen(false);
+    onLinkClick?.();
+  };
 
   const documentMap = useMemo(() => {
     const map = new Map<string, DocumentSummary>();
@@ -210,15 +234,18 @@ export default function MobileMenuContent({
   };
 
   const renderAccountSection = () => (
-    <div className="p-4 border-b border-border bg-background/80 backdrop-blur-xs">
+    <div className="p-5 border-b border-border/70 bg-background/95 backdrop-blur-xs">
       {isLoading ? (
         <div className="space-y-2" aria-label="Loading user menu">
           <div className="h-10 rounded-md bg-muted animate-pulse" />
           <div className="h-10 rounded-md bg-muted animate-pulse" />
         </div>
       ) : isLoggedIn ? (
-        <div className="space-y-2">
-          <Button asChild variant="outline" className="justify-start gap-2">
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            {tHeader('nav.welcomeBack', { defaultValue: 'Your account' })}
+          </p>
+          <Button asChild variant="outline" className="justify-start gap-2 font-medium">
             <Link onClick={handleNavigate(`/${locale}/dashboard`)} href={`/${locale}/dashboard`}>
               <LayoutDashboard className="h-4 w-4" />
               {tHeader('nav.dashboard', { defaultValue: 'Dashboard' })}
@@ -234,56 +261,74 @@ export default function MobileMenuContent({
           </Button>
         </div>
       ) : (
-        <div className="space-y-2">
-          <Button asChild variant="default" className="justify-start gap-2">
-            <Link onClick={handleNavigate(`/${locale}/signin`)} href={`/${locale}/signin`}>
-              <LogIn className="h-4 w-4" />
-              {tHeader('nav.signin', { defaultValue: 'Sign In' })}
-            </Link>
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            {tHeader('nav.authPrompt', {
+              defaultValue: 'Sign in to save progress and manage documents.',
+            })}
+          </p>
+          <Button
+            variant="default"
+            className="justify-start gap-2 font-medium"
+            onClick={() => openAuthModal('signin')}
+          >
+            <LogIn className="h-4 w-4" />
+            {tHeader('nav.signin', { defaultValue: 'Sign In' })}
           </Button>
-          <Button asChild variant="outline" className="justify-start gap-2">
-            <Link onClick={handleNavigate(`/${locale}/signup`)} href={`/${locale}/signup`}>
-              <UserPlus className="h-4 w-4" />
-              {tHeader('nav.signup', { defaultValue: 'Sign Up' })}
-            </Link>
+          <Button
+            variant="outline"
+            className="justify-start gap-2"
+            onClick={() => openAuthModal('signup')}
+          >
+            <UserPlus className="h-4 w-4" />
+            {tHeader('nav.signup', { defaultValue: 'Sign Up' })}
           </Button>
         </div>
       )}
     </div>
   );
 
-  const renderQuickActions = () => (
-    <section className="space-y-3">
-      <div className="rounded-2xl bg-gradient-to-r from-primary/90 to-primary/70 text-primary-foreground p-4 shadow-sm">
+  const renderBrowseSection = () => (
+    <section className="space-y-4">
+      <div className="rounded-3xl border border-border/60 bg-card/95 p-5 shadow-sm">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm font-semibold tracking-wide uppercase">
-              {tHeader('nav.quickAccess', { defaultValue: 'Quick access' })}
+          <div className="space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
             </p>
-            <p className="mt-1 text-xs text-primary-foreground/80">
-              {tHeader('nav.quickAccessSubtitle', {
-                defaultValue: 'Find the right template in a few taps.',
+            <p className="text-sm text-muted-foreground">
+              {tHeader('nav.browseDocumentsSubtitle', {
+                defaultValue: 'Search thousands of state-compliant templates or explore curated picks.',
               })}
             </p>
           </div>
-          <Compass className="h-5 w-5" />
+          <Compass className="h-5 w-5 text-primary" />
         </div>
-        <div className="mt-4 grid grid-cols-1 gap-2">
-          <Button
-            asChild
-            className="justify-start gap-2 bg-primary-foreground text-primary hover:bg-primary-foreground/90"
-          >
-            <Link onClick={handleNavigate(`/${locale}/marketplace`)} href={`/${locale}/marketplace`}>
-              <Search className="h-4 w-4" />
-              {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
-            </Link>
-          </Button>
-          <Button asChild variant="secondary" className="justify-start gap-2">
-            <Link onClick={handleNavigate(`/${locale}/generate`)} href={`/${locale}/generate`}>
-              <PlusCircle className="h-4 w-4" />
-              {tHeader('nav.makeDocuments', { defaultValue: 'Create a document' })}
-            </Link>
-          </Button>
+
+        <div className="mt-4 space-y-3">
+          <HeaderSearch
+            clientLocale={locale}
+            mounted={mounted}
+            className="w-full"
+            onNavigate={onLinkClick}
+          />
+          <div className="grid grid-cols-1 gap-2">
+            <Button
+              asChild
+              className="justify-start gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Link onClick={handleNavigate(`/${locale}/marketplace`)} href={`/${locale}/marketplace`}>
+                <Search className="h-4 w-4" />
+                {tHeader('nav.viewMarketplace', { defaultValue: 'Browse full library' })}
+              </Link>
+            </Button>
+            <Button asChild variant="secondary" className="justify-start gap-2">
+              <Link onClick={handleNavigate(`/${locale}/generate`)} href={`/${locale}/generate`}>
+                <PlusCircle className="h-4 w-4" />
+                {tHeader('nav.makeDocuments', { defaultValue: 'Create a document' })}
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>
@@ -382,9 +427,16 @@ export default function MobileMenuContent({
     <div className="flex h-full flex-col bg-background">
       {renderAccountSection()}
       <div className="flex-1 overflow-y-auto bg-muted/10 px-4 pb-8 pt-6 space-y-8">
-        {renderQuickActions()}
+        {renderBrowseSection()}
         {renderCategories()}
       </div>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={closeAuthModal}
+        onAuthSuccess={handleAuthSuccess}
+        initialMode={authModalMode}
+      />
     </div>
   );
 }

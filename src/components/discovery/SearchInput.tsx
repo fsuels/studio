@@ -41,7 +41,7 @@ export function SearchInput({
   return (
     <div className="space-y-3">
       {showHelpText && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200/60 dark:border-blue-800/40 rounded-lg p-3">
+        <div className="hidden sm:block bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200/60 dark:border-blue-800/40 rounded-lg p-3">
           <div className="flex items-center gap-2">
             <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
             <p className="text-sm leading-snug text-blue-800 dark:text-blue-200">
@@ -52,12 +52,12 @@ export function SearchInput({
       )}
 
       <div className="space-y-2">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
           <Zap className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           Start typing to see results instantly
         </h3>
         
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <button
             type="button"
             onClick={onVoiceToggle}
@@ -65,13 +65,14 @@ export function SearchInput({
             disabled={!isVoiceSupported}
             aria-label={isListening ? 'Stop voice input (Shift+⌘+S)' : 'Start voice input (Shift+⌘+S)'}
             aria-describedby="voice-shortcut-hint"
+            aria-pressed={isListening}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 ${
               isListening
                 ? 'bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 focus-visible:ring-red-500/50 focus-visible:border-red-400 animate-pulse'
                 : isVoiceSupported
                 ? `bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-400 ${!hasAnimated ? 'animate-subtle-pulse' : ''}`
                 : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed focus-visible:ring-gray-400/50'
-            }`}
+            } w-full justify-center sm:w-auto sm:justify-start`}
           >
             {isListening ? (
               <>
@@ -88,12 +89,14 @@ export function SearchInput({
               </>
             )}
           </button>
-          
-          <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center px-2">
+          <span id="voice-shortcut-hint" className="sr-only">
+            Use Shift plus Command and S (or Control and S) to toggle voice input.
+          </span>
+          <span className="hidden sm:flex text-sm text-gray-500 dark:text-gray-400 items-center px-2">
             or
           </span>
-          
-          <div className="flex-1 relative">
+
+          <div className="flex-1 w-full relative">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input

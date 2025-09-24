@@ -87,7 +87,7 @@ export default function HeaderMobileMenu({
               component={() => import('./MobileMenuContent')}
               fallback={<MobileNavigationSkeleton />}
               delay={50}
-              props={{ locale: clientLocale, onLinkClick: onClose }}
+              props={{ locale: clientLocale, onLinkClick: onClose, mounted }}
             />
           </div>
         </div>

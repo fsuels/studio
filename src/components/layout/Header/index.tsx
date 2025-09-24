@@ -189,15 +189,6 @@ const Header = React.memo(function Header() {
             <HeaderUserMenu clientLocale={clientLocale} mounted={mounted} />
           </div>
         </div>
-
-        {/* Mobile Search */}
-        <div className="md:hidden pb-3">
-          <SmartHeaderSearch
-            clientLocale={clientLocale}
-            mounted={mounted}
-            className="w-full"
-          />
-        </div>
       </div>
       </header>
 

@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, FileText, ExternalLink } from 'lucide-react';
@@ -11,17 +12,20 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import { cn } from '@/lib/utils';
 
 interface HeaderSearchProps {
   clientLocale: 'en' | 'es';
   mounted: boolean;
   className?: string;
+  onNavigate?: () => void;
 }
 
 export default function HeaderSearch({
   clientLocale,
   mounted,
   className = '',
+  onNavigate,
 }: HeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,6 +35,8 @@ export default function HeaderSearch({
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const containerClassName = cn('relative w-full', className);
 
   const placeholderSearch = mounted
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
@@ -78,7 +84,7 @@ export default function HeaderSearch({
       setSearchResults([]);
       setShowResults(false);
     }
-  }, [searchQuery, clientLocale, mounted]);
+  }, [searchQuery, clientLocale, mounted, workflowModule]);
 
   // Click outside to close results
   useEffect(() => {
@@ -101,13 +107,15 @@ export default function HeaderSearch({
     e.preventDefault();
     if (searchResults.length > 0) {
       const firstResult = searchResults[0];
-      window.location.href = `/${clientLocale}/docs/${resolveDocSlug(firstResult.id)}`;
+      const href = `/${clientLocale}/docs/${resolveDocSlug(firstResult.id)}`;
+      router.push(href);
+      onNavigate?.();
     }
   };
 
   if (!mounted) {
     return (
-      <div className={`relative flex-1 max-w-xs ${className}`}>
+      <div className={containerClassName}>
         <Skeleton className="h-10 w-full rounded-md" />
       </div>
     );
@@ -115,7 +123,7 @@ export default function HeaderSearch({
 
   return (
     <form
-      className={`relative flex-1 max-w-xs ${className}`}
+      className={containerClassName}
       onSubmit={handleSearchSubmit}
     >
       <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -132,7 +140,7 @@ export default function HeaderSearch({
           searchResults.length > 0 &&
           setShowResults(true)
         }
-        className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+        className="h-11 pl-10 text-sm rounded-lg w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
         disabled={!mounted}
         aria-label={placeholderSearch}
       />
@@ -151,7 +159,10 @@ export default function HeaderSearch({
                     href={`/${clientLocale}/docs/${resolveDocSlug(doc.id)}`}
                     className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                     prefetch
-                    onClick={() => setShowResults(false)}
+                    onClick={() => {
+                      setShowResults(false);
+                      onNavigate?.();
+                    }}
                   >
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                     <span className="truncate">{docName}</span>

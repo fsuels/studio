@@ -15,11 +15,12 @@ const isDebugEnabled = process.env.NODE_ENV !== 'production';
 interface ResultsGridProps {
   results: (SemanticResult | DiscoveryResult)[];
   locale: 'en' | 'es';
-  onDocumentClick: (href: string) => void;
+  onDocumentClick: (payload: { href: string; docId: string }) => void;
+  onDocumentPrefetch?: (docId: string) => void;
   isLoading: boolean;
 }
 
-export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: ResultsGridProps) {
+export function ResultsGrid({ results, locale, onDocumentClick, onDocumentPrefetch, isLoading }: ResultsGridProps) {
 
   if (isLoading) {
     return (
@@ -80,7 +81,8 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
             });
           }
           
-          const docSlug = resolveDocSlug(isSemanticResult ? result.doc.id : result.id);
+          const docId = isSemanticResult ? result.doc.id : result.id;
+          const docSlug = resolveDocSlug(docId);
           const href = `/${locale}/docs/${docSlug}`;
 
           return (
@@ -94,8 +96,10 @@ export function ResultsGrid({ results, locale, onDocumentClick, isLoading }: Res
                   return;
                 }
                 event.preventDefault();
-                onDocumentClick(href);
+                onDocumentClick({ href, docId });
               }}
+              onMouseEnter={() => onDocumentPrefetch?.(docId)}
+              onFocus={() => onDocumentPrefetch?.(docId)}
               className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-lg p-4 sm:p-6 block ${
                 isBestMatch ? 'border-emerald-500 animate-subtle-glow' : ''
               }`}

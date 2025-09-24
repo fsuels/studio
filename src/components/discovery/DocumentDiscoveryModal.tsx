@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Brain, Check, X } from 'lucide-react';
@@ -17,6 +23,7 @@ import { useDiscoverySearch } from '@/hooks/useDiscoverySearch';
 import { useDebounce } from '@/hooks/use-debounce';
 import type { DiscoveryResult } from '@/types/discovery';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { resolveDocSlug } from '@/lib/slug-alias';
 import {
   findMatchingDocuments,
   findMatchingDocumentsSync,
@@ -27,6 +34,7 @@ import type { LegalDocument } from '@/types/documents';
 import { SearchInput } from './SearchInput';
 import { NoResults } from './NoResults';
 import { ResultCardSkeleton } from './ResultCardSkeleton';
+import { cn } from '@/lib/utils';
 
 const ResultsGrid = React.lazy(() => 
   import('./ResultsGrid').then(module => ({ default: module.ResultsGrid }))
@@ -81,6 +89,8 @@ export default function DocumentDiscoveryModal() {
   const [remoteQuery, setRemoteQuery] = useState('');
   const latestQueryRef = useRef('');
   const localCacheRef = useRef<Map<string, DiscoveryResult[]>>(new Map());
+  const prefetchedDocIdsRef = useRef<Set<string>>(new Set());
+  const navigationLockRef = useRef(false);
   
   // Debounce search input to avoid excessive API calls
   const debouncedSearchInput = useDebounce(searchInput, 300);
@@ -199,7 +209,9 @@ export default function DocumentDiscoveryModal() {
     isListening,
     isSupported: isVoiceSupported,
     startListening,
-    transcript
+    stopListening,
+    transcript,
+    error: voiceError,
   } = useSpeechRecognition({
     locale,
     onResult: (text) => {
@@ -208,6 +220,14 @@ export default function DocumentDiscoveryModal() {
       performSearch(text);
     }
   });
+
+  const toggleVoiceCapture = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  }, [isListening, startListening, stopListening]);
 
   // Hydration check
   useEffect(() => {
@@ -251,7 +271,7 @@ export default function DocumentDiscoveryModal() {
       if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key === 'S') {
         e.preventDefault();
         if (showDiscoveryModal && isVoiceSupported) {
-          startListening();
+          toggleVoiceCapture();
         }
       }
     };
@@ -260,7 +280,7 @@ export default function DocumentDiscoveryModal() {
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
     }
-  }, [showDiscoveryModal, isVoiceSupported, startListening]);
+  }, [showDiscoveryModal, isVoiceSupported, toggleVoiceCapture]);
 
   // Background content accessibility
   useEffect(() => {
@@ -304,15 +324,69 @@ export default function DocumentDiscoveryModal() {
   const handleDismiss = useCallback(() => {
     clearResults();
     setDiscoveryInput('');
-  }, [clearResults, setDiscoveryInput]);
+    stopListening();
+    prefetchedDocIdsRef.current.clear();
+  }, [clearResults, setDiscoveryInput, stopListening]);
+
+  const prefetchDocRoutes = useCallback(
+    (docId: string) => {
+      if (!docId || prefetchedDocIdsRef.current.has(docId)) {
+        return;
+      }
+
+      prefetchedDocIdsRef.current.add(docId);
+
+      const slug = resolveDocSlug(docId);
+      const detailPath = `/${locale}/docs/${slug}`;
+
+      try {
+        router.prefetch(detailPath);
+        router.prefetch(`${detailPath}/start`);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.debug('DocumentDiscoveryModal prefetch failed', { docId, error });
+        }
+      }
+    },
+    [locale, router],
+  );
+
+  useEffect(() => {
+    if (!results.length) {
+      return;
+    }
+
+    const nextIds = results
+      .slice(0, 6)
+      .map((result) => ('doc' in result ? result.doc.id : result.id))
+      .filter((value): value is string => Boolean(value));
+
+    nextIds.forEach((docId) => {
+      prefetchDocRoutes(docId);
+    });
+  }, [results, prefetchDocRoutes]);
 
   const handleDocumentClick = useCallback(
-    (href: string) => {
+    ({ href, docId }: { href: string; docId: string }) => {
+      if (!href || navigationLockRef.current) {
+        return;
+      }
+
+      navigationLockRef.current = true;
+      prefetchDocRoutes(docId);
       setShowDiscoveryModal(false);
       handleDismiss();
-      router.push(href);
+
+      // Defer navigation slightly to allow modal close animation to start.
+      setTimeout(() => {
+        try {
+          router.push(href);
+        } finally {
+          navigationLockRef.current = false;
+        }
+      }, 10);
     },
-    [handleDismiss, router, setShowDiscoveryModal],
+    [handleDismiss, prefetchDocRoutes, router, setShowDiscoveryModal],
   );
 
   const handleClose = useCallback(() => {
@@ -337,7 +411,10 @@ export default function DocumentDiscoveryModal() {
   return (
     <Dialog open={showDiscoveryModal} onOpenChange={handleOpenChange}>
       <DialogContent 
-        className="ai-finder-modal !max-w-none w-[min(100vw-1.5rem,80rem)] sm:w-full sm:max-w-5xl lg:max-w-6xl h-[calc(100dvh-1.5rem)] sm:h-[90vh] max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl !left-0 !top-0 !translate-x-0 !translate-y-0 sm:!left-1/2 sm:!top-1/2 sm:!-translate-x-1/2 sm:!-translate-y-1/2 [&>button:last-child]:hidden"
+        className={cn(
+          'ai-finder-modal w-full max-w-none sm:max-w-5xl lg:max-w-6xl h-[100dvh] sm:h-[90vh] max-h-[100dvh] sm:max-h-[90vh] flex flex-col p-0 border-0 shadow-2xl bg-white dark:bg-gray-900 overflow-hidden rounded-none sm:rounded-3xl [&>button:last-child]:hidden',
+          'left-0 top-0 translate-x-0 translate-y-0 sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2'
+        )}
         style={{
           paddingTop: "max(env(safe-area-inset-top, 0px), 0px)",
           paddingBottom: "max(env(safe-area-inset-bottom, 0px), 0px)",
@@ -351,38 +428,37 @@ export default function DocumentDiscoveryModal() {
         <div className="relative overflow-hidden rounded-none sm:rounded-t-3xl header-gradient">
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-white/20 pointer-events-none"></div>
-          {/* Contrast overlay for WCAG compliance - 40% for H1 contrast ≈ 5.8:1 */}
-          <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
-          <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse pointer-events-none"></div>
-          <div className="absolute -bottom-2 -left-4 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+          {/* Contrast overlay for WCAG compliance */}
+          <div className="absolute inset-0 bg-black/35 sm:bg-black/45 pointer-events-none"></div>
+          <div className="absolute -top-4 -right-4 hidden sm:block w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse pointer-events-none"></div>
+          <div className="absolute -bottom-2 -left-4 hidden sm:block w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div className="relative px-4 py-3 sm:px-6 sm:py-5">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3 sm:gap-4">
-              <div className="relative">
-                <div className="p-2.5 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-                  <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-white drop-shadow-lg" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
+          <div className="relative px-4 py-2 sm:px-6 sm:py-5">
+            <div className="flex items-start justify-between gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="relative">
+                  <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+                    <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-white drop-shadow-lg" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-yellow-400 rounded-full animate-ping"></div>
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full animate-ping"></div>
+                <div className="flex flex-col">
+                  <span className="text-sm sm:text-base font-semibold text-white">Smart Document Finder</span>
+                  <span className="text-xs sm:text-sm text-emerald-50/90">Describe your legal goal to get matched instantly.</span>
+                </div>
               </div>
-              <div>
-                <span className="block">Smart Document Finder</span>
-              </div>
-            </h2>
-            
-            <DialogClose asChild>
-              <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 p-2.5 sm:p-3 bg-white/20 hover:bg-white/40 focus:bg-white/40 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                style={{
-                  top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 1rem)",
-                  right: "calc(max(env(safe-area-inset-right, 0px), 0px) + 1rem)",
-                }}
-                aria-label="Close modal"
-                type="button"
-              >
-                <X className="h-5 w-5 text-white" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
-              </button>
-            </DialogClose>
+
+              <DialogClose asChild>
+                <button
+                  onClick={handleClose}
+                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/40 bg-white/20 backdrop-blur-sm text-white transition hover:bg-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                  aria-label="Close modal"
+                  type="button"
+                >
+                  <X className="h-5 w-5 text-white" style={{ color: '#E7FFF9', strokeWidth: '2px' }} />
+                </button>
+              </DialogClose>
+            </div>
           </div>
         </div>
         
@@ -395,10 +471,11 @@ export default function DocumentDiscoveryModal() {
                 setSearchInput(value);
                 setDiscoveryInput(value);
               }}
-              onVoiceToggle={startListening}
+              onVoiceToggle={toggleVoiceCapture}
               isListening={isListening}
               isVoiceSupported={isVoiceSupported}
               showHelpText={results.length === 0}
+              voiceError={voiceError}
             />
 
             {/* Enhanced Voice feedback */}
@@ -511,6 +588,7 @@ export default function DocumentDiscoveryModal() {
                     results={results as DiscoveryResult[]}
                     locale={locale}
                     onDocumentClick={handleDocumentClick}
+                    onDocumentPrefetch={prefetchDocRoutes}
                     isLoading={gridIsLoading}
                   />
                 </div>

@@ -33,12 +33,14 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAuthSuccess: (uid?: string) => void;
+  initialMode?: 'signin' | 'signup' | 'reset';
 }
 
 export default function AuthModal({
   isOpen,
   onClose,
   onAuthSuccess,
+  initialMode = 'signin',
 }: AuthModalProps) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
@@ -46,7 +48,7 @@ export default function AuthModal({
   const params = useParams();
   const _locale = (params?.locale as 'en' | 'es') || 'en';
 
-  const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'reset'>('signin');
+  const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'reset'>(initialMode);
   const [emailModal, setEmailModal] = useState('');
   const [passwordModal, setPasswordModal] = useState('');
   const [confirmPasswordModal, setConfirmPasswordModal] = useState('');
@@ -61,9 +63,9 @@ export default function AuthModal({
       setConfirmPasswordModal('');
       setIsSubmitting(false);
       setIsResetEmailSent(false);
-      setAuthMode('signin');
+      setAuthMode(initialMode);
     }
-  }, [isOpen]);
+  }, [isOpen, initialMode]);
 
   /* ------------------------- handler ---------------------------------- */
 
