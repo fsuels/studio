@@ -14,6 +14,8 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "seeAllInCategory": "Ver todo en {{categoryName}}...",
+    "viewAllInCategoryShort": "Más >>",
+    "createAccount": "Crear cuenta gratuita",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "noDocumentsAvailable": "No hay documentos disponibles para las categorías seleccionadas en este momento.",
     "noCategoriesAvailable": "No hay categorías de documentos disponibles."
@@ -30,11 +32,11 @@
     "exploreAll": "Explorar Todas las Categorías"
   },
   "directCategories": {
-    "agreements": "Acuerdos",
-    "letters": "Cartas",
-    "forms": "Formularios",
+    "business": "Negocios",
     "family": "Familia",
-    "business": "Negocios"
+    "estate": "Patrimonio",
+    "financial": "Finanzas",
+    "realEstate": "Bienes Raíces"
   },
   "aiFinder": "Buscador de IA",
   "search": {

@@ -5,7 +5,6 @@ import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { FileText, ExternalLink, ArrowRight } from 'lucide-react';
 import {
   getRelatedDocuments,
@@ -41,7 +40,7 @@ export default function InternalLinkWidget({
   const params = useParams();
   const locale = (params?.locale as 'en' | 'es') || 'en';
   const { t } = useTranslation('common');
-  const { setShowDiscoveryModal } = useDiscoveryModal();
+  const marketplaceHref = `/${locale}/marketplace`;
 
   const docs = React.useMemo(() => getLinkableDocuments(), []);
 
@@ -154,13 +153,13 @@ export default function InternalLinkWidget({
 
       {variant === 'sidebar' && (
         <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-800">
-          <button
-            onClick={() => setShowDiscoveryModal(true)}
+          <Link
+            href={marketplaceHref}
             className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
           >
             <span>{t('Browse All Templates', 'Browse All Templates')}</span>
             <ExternalLink className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
       )}
     </div>

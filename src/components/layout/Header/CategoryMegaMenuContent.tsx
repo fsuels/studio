@@ -22,97 +22,102 @@ interface CategoryMegaMenuContentProps {
 }
 
 // Category definitions with document mappings
-const categoryContent = {
-  'agreements': {
+const categoryContent: Record<string, { sections: { id: string; label: string; documents: string[] }[] }> = {
+  'agreements-contracts': {
     sections: [
+      {
+        id: 'operations',
+        label: 'Operations & Services',
+        documents: ['business-contract', 'service-agreement', 'consulting-agreement'],
+      },
       {
         id: 'confidentiality',
         label: 'Confidentiality',
-        documents: ['non-disclosure-agreement', 'confidentiality-agreement', 'employee-non-disclosure-agreement']
-      },
-      {
-        id: 'service-sales',
-        label: 'Service & Sales',
-        documents: ['service-agreement', 'business-contract', 'consulting-agreement']
+        documents: ['non-disclosure-agreement', 'employee-non-disclosure-agreement'],
       },
       {
         id: 'employment',
         label: 'Employment',
-        documents: ['employment-contract', 'independent-contractor-agreement', 'non-compete-agreement']
-      }
-    ]
+        documents: ['employment-contract', 'independent-contractor-agreement', 'non-compete-agreement'],
+      },
+    ],
   },
-  'letters-notices': {
+  'family-personal': {
     sections: [
       {
-        id: 'payment-debt',
-        label: 'Payment & Debt',
-        documents: ['demand-letter-payment', 'collection-letter', 'debt-validation-letter']
+        id: 'relationships',
+        label: 'Marriage & Relationships',
+        documents: ['prenuptial-agreement', 'postnuptial-agreement', 'separation-agreement'],
       },
       {
-        id: 'tenancy',
-        label: 'Tenancy',
-        documents: ['eviction-notice', 'late-rent-notice']
+        id: 'children',
+        label: 'Children & Guardianship',
+        documents: ['child-custody-agreement', 'child-support-agreement', 'parenting-plan'],
       },
       {
-        id: 'general',
-        label: 'General',
-        documents: ['complaint-letter', 'cease-desist-letter', 'breach-contract-notice']
-      }
-    ]
+        id: 'family-health',
+        label: 'Health & Care',
+        documents: ['child-medical-consent', 'personal-care-agreement'],
+      },
+    ],
   },
   'forms-authorizations': {
     sections: [
       {
-        id: 'personal',
-        label: 'Personal',
-        documents: ['durable-power-of-attorney', 'advance-directive', 'living-will']
+        id: 'wills-trusts',
+        label: 'Wills & Trusts',
+        documents: ['last-will-testament', 'living-trust', 'codicil-to-will'],
       },
       {
-        id: 'financial',
-        label: 'Financial',
-        documents: ['ach-authorization-form', 'promissory-note', 'loan-agreement']
+        id: 'powers',
+        label: 'Powers of Attorney',
+        documents: ['durable-power-of-attorney', 'power-of-attorney', 'medical-power-of-attorney'],
       },
       {
-        id: 'medical',
-        label: 'Medical',
-        documents: ['child-medical-consent']
-      }
-    ]
+        id: 'directives',
+        label: 'Health Directives',
+        documents: ['advance-directive', 'living-will', 'health-care-directive'],
+      },
+    ],
   },
-  'family-legacy': {
+  'letters-notices': {
     sections: [
       {
-        id: 'protect',
-        label: 'Protect',
-        documents: ['last-will-testament']
+        id: 'loans',
+        label: 'Loans & Credit',
+        documents: ['loan-agreement', 'promissory-note', 'personal-loan-agreement'],
       },
       {
-        id: 'care',
-        label: 'Care',
-        documents: ['child-custody-agreement', 'child-support-agreement']
+        id: 'debt',
+        label: 'Debt Resolution',
+        documents: ['debt-settlement-agreement', 'demand-letter-payment', 'collection-letter'],
       },
       {
-        id: 'healthcare',
-        label: 'Healthcare',
-        documents: ['advance-directive', 'living-will']
-      }
-    ]
+        id: 'authorizations',
+        label: 'Authorizations',
+        documents: ['ach-authorization-form', 'direct-deposit-form'],
+      },
+    ],
   },
-  'business-finance-property': {
+  'business-commercial': {
     sections: [
       {
-        id: 'finance',
-        label: 'Finance',
-        documents: ['promissory-note', 'loan-agreement']
+        id: 'leases',
+        label: 'Residential Leases',
+        documents: ['lease-agreement', 'rental-agreement', 'residential-lease-agreement'],
       },
       {
-        id: 'property',
-        label: 'Property',
-        documents: ['lease-agreement', 'quitclaim-deed', 'property-deed', 'vehicle-bill-of-sale']
-      }
-    ]
-  }
+        id: 'landlord-notices',
+        label: 'Landlord Notices',
+        documents: ['eviction-notice', 'late-rent-notice', 'notice-to-pay-rent-or-quit'],
+      },
+      {
+        id: 'property-sales',
+        label: 'Property Transfers',
+        documents: ['real-estate-purchase-agreement', 'property-deed', 'quitclaim-deed'],
+      },
+    ],
+  },
 };
 
 export default function CategoryMegaMenuContent({

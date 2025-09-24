@@ -11,17 +11,13 @@ import {
   UserPlus,
   LayoutDashboard,
   LogOut,
-  Search,
-  PlusCircle,
-  Compass,
-  ArrowRight,
-  FileText,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DIRECT_CATEGORY_ITEMS } from './directCategoryConfig';
-import { CATEGORY_MENU_CONTENT } from './categoryMenuContent';
+import { CATEGORY_MENU_CONTENT } from '@/components/layout/Header/categoryMenuContent';
 import { useAuth } from '@/hooks/useAuth';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
@@ -29,11 +25,18 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import { formatDocumentTitle } from '@/lib/format-utils';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { cn } from '@/lib/utils';
-import HeaderSearch from './HeaderSearch';
 
 const AuthModal = dynamic(() => import('@/components/shared/AuthModal'), {
   ssr: false,
 });
+
+const FEATURED_CATEGORY_ORDER: string[] = [
+  'agreements-contracts',
+  'family-personal',
+  'forms-authorizations',
+  'letters-notices',
+  'business-commercial',
+];
 
 interface MobileMenuContentProps {
   locale: 'en' | 'es';
@@ -49,17 +52,7 @@ interface CategorySummary {
   icon: React.ComponentType<{ className?: string }>;
   docIds: string[];
   docCount: number;
-  topDocIds: string[];
 }
-
-const MAX_TOP_DOCS = 3;
-const FEATURED_CATEGORY_ORDER: string[] = [
-  'agreements-contracts',
-  'business-commercial',
-  'forms-authorizations',
-  'letters-notices',
-  'family-personal',
-];
 
 export default function MobileMenuContent({
   locale,
@@ -72,6 +65,8 @@ export default function MobileMenuContent({
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Record<string, string | null>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -127,15 +122,6 @@ export default function MobileMenuContent({
     return map;
   }, [documents]);
 
-  const formatDocumentCount = (count: number) => {
-    const fallback = count === 1 ? `${count} document` : `${count} documents`;
-    const localized = tHeader('nav.documentCount', {
-      count,
-      defaultValue: fallback,
-    });
-    return localized.includes('{{count}}') ? fallback : localized;
-  };
-
   const categorySummaries = useMemo<CategorySummary[]>(() => {
     return FEATURED_CATEGORY_ORDER.map((categoryId) => {
       const directCategory = DIRECT_CATEGORY_ITEMS.find(
@@ -158,11 +144,9 @@ export default function MobileMenuContent({
         icon: directCategory.icon,
         docIds,
         docCount: docIds.length,
-        topDocIds: docIds.slice(0, MAX_TOP_DOCS),
       } satisfies CategorySummary;
     }).filter(Boolean) as CategorySummary[];
   }, []);
-
 
   const handleLogout = async () => {
     try {
@@ -174,63 +158,27 @@ export default function MobileMenuContent({
     }
   };
 
-  const renderDocPreview = (docIds: string[]) => {
-    if (isLoadingDocuments && documentMap.size === 0) {
-      return (
-        <div className="space-y-2" aria-hidden="true">
-          <Skeleton className="h-6 w-full rounded-md" />
-          <Skeleton className="h-6 w-5/6 rounded-md" />
-          <Skeleton className="h-6 w-3/4 rounded-md" />
-        </div>
-      );
-    }
+  const handleCategoryToggle = (categoryId: string) => {
+    const nextCategory = expandedCategoryId === categoryId ? null : categoryId;
 
-    if (docIds.length === 0) {
-      return (
-        <p className="text-xs text-muted-foreground">
-          {tHeader('nav.noDocumentsAvailable', {
-            defaultValue: 'No documents available yet.',
-          })}
-        </p>
-      );
-    }
+    setExpandedCategoryId(nextCategory);
+    setExpandedSections((prev) => {
+      if (!nextCategory) {
+        return prev;
+      }
 
-    return (
-      <ul className="space-y-2">
-        {docIds.map((docId) => {
-          const docSummary = documentMap.get(docId);
-          const translated = docSummary
-            ? getDocTranslation(docSummary, locale)
-            : undefined;
-          const title = translated?.name ?? formatDocumentTitle(docId);
-          const description = translated?.description;
-          const href = `/${locale}/docs/${resolveDocSlug(docId)}`;
+      return {
+        ...prev,
+        [nextCategory]: prev[nextCategory] ?? null,
+      };
+    });
+  };
 
-          return (
-            <li key={docId}>
-              <Link
-                href={href}
-                onClick={handleNavigate(href)}
-                className="group flex items-start gap-3 rounded-lg border border-border/50 bg-card/70 px-3 py-2 transition-all duration-150 hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
-              >
-                <FileText className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-foreground line-clamp-1 group-hover:text-primary">
-                    {title}
-                  </p>
-                  {description && (
-                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                      {description}
-                    </p>
-                  )}
-                </div>
-                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary" />
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    );
+  const handleSectionToggle = (categoryId: string, sectionId: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [categoryId]: prev[categoryId] === sectionId ? null : sectionId,
+    }));
   };
 
   const renderAccountSection = () => (
@@ -262,163 +210,194 @@ export default function MobileMenuContent({
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
+          <div className="flex items-center justify-between text-primary text-sm font-semibold">
+            <button
+              type="button"
+              onClick={() => openAuthModal('signup')}
+              className="hover:underline"
+            >
+              {tHeader('nav.createAccount', { defaultValue: 'Create Free Account' })}
+            </button>
+            <button
+              type="button"
+              onClick={() => openAuthModal('signin')}
+              className="hover:underline"
+            >
+              {tHeader('nav.signin', { defaultValue: 'Sign In' })}
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground">
             {tHeader('nav.authPrompt', {
-              defaultValue: 'Sign in to save progress and manage documents.',
+              defaultValue: 'Save progress, manage documents, and access personalized dashboards.',
             })}
           </p>
-          <Button
-            variant="default"
-            className="justify-start gap-2 font-medium"
-            onClick={() => openAuthModal('signin')}
-          >
-            <LogIn className="h-4 w-4" />
-            {tHeader('nav.signin', { defaultValue: 'Sign In' })}
-          </Button>
-          <Button
-            variant="outline"
-            className="justify-start gap-2"
-            onClick={() => openAuthModal('signup')}
-          >
-            <UserPlus className="h-4 w-4" />
-            {tHeader('nav.signup', { defaultValue: 'Sign Up' })}
-          </Button>
         </div>
       )}
     </div>
   );
 
-  const renderBrowseSection = () => (
+  const renderCategoryList = () => (
     <section className="space-y-4">
-      <div className="rounded-3xl border border-border/60 bg-card/95 p-5 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-              {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {tHeader('nav.browseDocumentsSubtitle', {
-                defaultValue: 'Search thousands of state-compliant templates or explore curated picks.',
-              })}
-            </p>
-          </div>
-          <Compass className="h-5 w-5 text-primary" />
+      <div className="rounded-3xl border border-border/50 bg-card shadow-lg overflow-hidden">
+        <div className="px-6 pt-6 pb-4 border-b border-border/40 bg-gradient-to-r from-primary/5 via-card to-card">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {tHeader('nav.browseDocumentsSearchOnly', {
+              defaultValue: 'Search thousands of state-compliant templates.',
+            })}
+          </p>
         </div>
 
-        <div className="mt-4 space-y-3">
-          <HeaderSearch
-            clientLocale={locale}
-            mounted={mounted}
-            className="w-full"
-            onNavigate={onLinkClick}
-          />
-          <div className="grid grid-cols-1 gap-2">
-            <Button
-              asChild
-              className="justify-start gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              <Link onClick={handleNavigate(`/${locale}/marketplace`)} href={`/${locale}/marketplace`}>
-                <Search className="h-4 w-4" />
-                {tHeader('nav.viewMarketplace', { defaultValue: 'Browse full library' })}
-              </Link>
-            </Button>
-            <Button asChild variant="secondary" className="justify-start gap-2">
-              <Link onClick={handleNavigate(`/${locale}/generate`)} href={`/${locale}/generate`}>
-                <PlusCircle className="h-4 w-4" />
-                {tHeader('nav.makeDocuments', { defaultValue: 'Create a document' })}
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        <div className="divide-y divide-border/40">
+          {categorySummaries.map((category) => {
+            const isExpanded = expandedCategoryId === category.id;
+            const Icon = category.icon;
+            const sectionExpandedId = expandedSections[category.id] ?? null;
+            const categoryContent = CATEGORY_MENU_CONTENT[category.id];
 
-  const renderCategories = () => (
-    <section className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {tHeader('nav.documents', { defaultValue: 'Explore documents' })}
-        </h2>
-        <Button asChild variant="link" size="sm" className="h-auto px-0 text-xs">
-          <Link onClick={handleNavigate(`/${locale}/marketplace`)} href={`/${locale}/marketplace`}>
-            {tHeader('nav.viewMarketplace', { defaultValue: 'View marketplace' })}
-            <ArrowRight className="ml-1 h-3 w-3" />
-          </Link>
-        </Button>
-      </div>
-
-      <div className="space-y-4">
-        {categorySummaries.map((category) => {
-          const Icon = category.icon;
-          const hasDocs = category.docIds.length > 0;
-
-          return (
-            <div
-              key={category.id}
-              className={cn(
-                'rounded-2xl border border-border/60 bg-card/80 shadow-sm transition hover:shadow-md',
-                'p-4'
-              )}
-            >
-              <div className="flex items-start gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground">
-                        {category.title}
-                        <span className="ml-2 text-xs font-normal text-muted-foreground">
-                          {formatDocumentCount(category.docCount)}
-                        </span>
-                      </p>
-                      {category.subtitle && (
-                        <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                          {category.subtitle}
-                        </p>
-                      )}
-                    </div>
-                    <Badge variant="secondary" className="shrink-0">
-                      {category.docCount}
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                {renderDocPreview(category.topDocIds)}
-              </div>
-
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="mt-4 w-full justify-center gap-2"
-              >
-                <Link
-                  href={`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`}
-                  onClick={handleNavigate(`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`)}
+            return (
+              <div key={category.id} className="bg-background/80">
+                <button
+                  type="button"
+                  onClick={() => handleCategoryToggle(category.id)}
+                  className={cn(
+                    'w-full flex items-center justify-between px-6 py-4 text-left transition-colors duration-200',
+                    isExpanded ? 'bg-primary/10 text-primary' : 'hover:bg-muted/40',
+                  )}
+                  aria-expanded={isExpanded}
                 >
-                  {tHeader('nav.seeAllInCategory', {
-                    categoryName: category.title,
-                    defaultValue: `View all ${category.title.toLowerCase()}`,
-                  })}
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </Button>
+                  <span className="flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-base font-semibold">
+                        {category.title}
+                      </span>
+                      {category.subtitle && (
+                        <span className="text-xs text-muted-foreground">
+                          {category.subtitle}
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                  <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                    <span className="hidden xs:inline">
+                      {category.docCount} docs
+                    </span>
+                    <span className={cn(
+                      'inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/20 text-primary transition-transform duration-200',
+                      isExpanded && 'rotate-180',
+                    )}>
+                      <ChevronDown className="h-4 w-4" />
+                    </span>
+                  </span>
+                </button>
 
-              {!hasDocs && (
-                <p className="mt-3 text-xs text-muted-foreground">
-                  {tHeader('nav.noDocumentsInCategory', {
-                    defaultValue: 'Documents are being added here soon.',
-                  })}
-                </p>
-              )}
-            </div>
-          );
-        })}
+                {isExpanded && (
+                  <div className="px-5 pb-5 pt-3 space-y-3 bg-muted/15">
+                    {categoryContent.sections.map((section) => {
+                      const sectionDocs = section.documents
+                        .map((docId) => documentMap.get(docId))
+                        .filter((doc): doc is DocumentSummary => Boolean(doc));
+                      const sectionDocCount = sectionDocs.length;
+                      const sectionIsExpanded = sectionExpandedId === section.id;
+
+                      return (
+                        <div
+                          key={section.id}
+                          className="rounded-2xl border border-border/50 bg-card/90 shadow-inner"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleSectionToggle(category.id, section.id)}
+                            className="flex w-full items-center justify-between px-4 py-3 text-left"
+                            aria-expanded={sectionIsExpanded}
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-sm font-semibold text-foreground">
+                                {section.label}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {sectionDocCount}{' '}
+                                {sectionDocCount === 1 ? 'document' : 'documents'}
+                              </span>
+                            </div>
+                            <span
+                              className={cn(
+                                'inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-primary transition-transform duration-200',
+                                sectionIsExpanded && 'rotate-180',
+                              )}
+                            >
+                              <ChevronDown className="h-4 w-4" />
+                            </span>
+                          </button>
+
+                          {sectionIsExpanded && (
+                            <div className="px-4 pb-4 space-y-2">
+                              {isLoadingDocuments && sectionDocCount === 0 ? (
+                                <div className="space-y-2" aria-hidden="true">
+                                  <Skeleton className="h-6 w-full rounded-md" />
+                                  <Skeleton className="h-6 w-5/6 rounded-md" />
+                                  <Skeleton className="h-6 w-2/3 rounded-md" />
+                                </div>
+                              ) : sectionDocCount === 0 ? (
+                                <p className="text-sm text-muted-foreground">
+                                  {tHeader('nav.noDocumentsAvailable', {
+                                    defaultValue: 'No documents available yet.',
+                                  })}
+                                </p>
+                              ) : (
+                                <ul className="space-y-1">
+                                  {sectionDocs.map((doc) => {
+                                    const translated = getDocTranslation(doc, locale);
+                                    const href = `/${locale}/docs/${resolveDocSlug(doc.id)}`;
+
+                                    return (
+                                      <li key={doc.id}>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            onLinkClick?.();
+                                            router.push(href);
+                                          }}
+                                          className="w-full rounded-lg bg-background px-3 py-2 text-left text-sm font-medium text-primary shadow-sm transition hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                                        >
+                                          {translated?.name ?? formatDocumentTitle(doc.id)}
+                                        </button>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full justify-start px-3 py-2 text-sm font-semibold text-primary hover:text-primary"
+                    >
+                      <Link
+                        href={`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`}
+                        onClick={handleNavigate(`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`)}
+                      >
+                        {tHeader('nav.viewAllInCategoryShort', {
+                          defaultValue: 'More >>',
+                        })}
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -426,9 +405,8 @@ export default function MobileMenuContent({
   return (
     <div className="flex h-full flex-col bg-background">
       {renderAccountSection()}
-      <div className="flex-1 overflow-y-auto bg-muted/10 px-4 pb-8 pt-6 space-y-8">
-        {renderBrowseSection()}
-        {renderCategories()}
+      <div className="flex-1 overflow-y-auto bg-muted/10 px-4 pb-8 pt-6 space-y-6">
+        {renderCategoryList()}
       </div>
 
       <AuthModal
@@ -440,12 +418,3 @@ export default function MobileMenuContent({
     </div>
   );
 }
-
-
-
-
-
-
-
-
-

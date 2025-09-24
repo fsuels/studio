@@ -1,33 +1,23 @@
 // src/components/layout/Header/directCategoryConfig.ts
 import type { LucideIcon } from 'lucide-react';
-import { FileText, Mail, FileCheck, Users, Building } from 'lucide-react';
+import { Building, Users, ScrollText, LineChart, Home } from 'lucide-react';
 
 export interface DirectCategoryItem {
   id:
     | 'agreements-contracts'
-    | 'letters-notices'
-    | 'forms-authorizations'
     | 'family-personal'
+    | 'forms-authorizations'
+    | 'letters-notices'
     | 'business-commercial';
-  labelKey: 'agreements' | 'letters' | 'forms' | 'family' | 'business';
+  labelKey: 'business' | 'family' | 'estate' | 'financial' | 'realEstate';
   icon: LucideIcon;
 }
 
 export const DIRECT_CATEGORY_ITEMS: DirectCategoryItem[] = [
   {
     id: 'agreements-contracts',
-    labelKey: 'agreements',
-    icon: FileText,
-  },
-  {
-    id: 'letters-notices',
-    labelKey: 'letters',
-    icon: Mail,
-  },
-  {
-    id: 'forms-authorizations',
-    labelKey: 'forms',
-    icon: FileCheck,
+    labelKey: 'business',
+    icon: Building,
   },
   {
     id: 'family-personal',
@@ -35,8 +25,18 @@ export const DIRECT_CATEGORY_ITEMS: DirectCategoryItem[] = [
     icon: Users,
   },
   {
+    id: 'forms-authorizations',
+    labelKey: 'estate',
+    icon: ScrollText,
+  },
+  {
+    id: 'letters-notices',
+    labelKey: 'financial',
+    icon: LineChart,
+  },
+  {
     id: 'business-commercial',
-    labelKey: 'business',
-    icon: Building,
+    labelKey: 'realEstate',
+    icon: Home,
   },
 ];

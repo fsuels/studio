@@ -14,11 +14,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import { cn } from '@/lib/utils';
 
+type HeaderSearchVariant = 'default' | 'menu';
+
 interface HeaderSearchProps {
   clientLocale: 'en' | 'es';
   mounted: boolean;
   className?: string;
   onNavigate?: () => void;
+  variant?: HeaderSearchVariant;
 }
 
 export default function HeaderSearch({
@@ -26,6 +29,7 @@ export default function HeaderSearch({
   mounted,
   className = '',
   onNavigate,
+  variant = 'default',
 }: HeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,7 +40,23 @@ export default function HeaderSearch({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const containerClassName = cn('relative w-full', className);
+  const isMenuVariant = variant === 'menu';
+  const containerClassName = cn(
+    'relative w-full',
+    isMenuVariant && 'rounded-xl bg-transparent',
+    className,
+  );
+  const iconClassName = cn(
+    'absolute top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none',
+    isMenuVariant ? 'left-4 text-primary/70' : 'left-3',
+  );
+  const inputClassName = isMenuVariant
+    ? 'h-12 pl-12 pr-4 text-sm rounded-full w-full bg-card text-foreground border border-border/60 focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 shadow-sm'
+    : 'h-11 pl-10 text-sm rounded-lg w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2';
+  const resultsContainerClassName = cn(
+    'absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]',
+    isMenuVariant && 'mt-3 rounded-2xl border-border/60 shadow-xl',
+  );
 
   const placeholderSearch = mounted
     ? tHeader('search.placeholder', { defaultValue: 'Search documents...' })
@@ -116,7 +136,7 @@ export default function HeaderSearch({
   if (!mounted) {
     return (
       <div className={containerClassName}>
-        <Skeleton className="h-10 w-full rounded-md" />
+        <Skeleton className={cn('w-full', isMenuVariant ? 'h-12 rounded-full' : 'h-10 rounded-md')} />
       </div>
     );
   }
@@ -126,7 +146,7 @@ export default function HeaderSearch({
       className={containerClassName}
       onSubmit={handleSearchSubmit}
     >
-      <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+      <SearchIcon className={iconClassName} />
       <Input
         ref={searchInputRef}
         id="header-search"
@@ -140,14 +160,14 @@ export default function HeaderSearch({
           searchResults.length > 0 &&
           setShowResults(true)
         }
-        className="h-11 pl-10 text-sm rounded-lg w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+        className={inputClassName}
         disabled={!mounted}
         aria-label={placeholderSearch}
       />
       {showResults && searchResults.length > 0 && (
         <div
           ref={searchResultsRef}
-          className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
+          className={resultsContainerClassName}
         >
           <ul>
             {searchResults.map((doc) => {

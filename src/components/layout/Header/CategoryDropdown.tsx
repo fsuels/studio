@@ -7,12 +7,11 @@ import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight, Loader2 } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Loader2, LineChart } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
-import { CATEGORY_MENU_CONTENT } from './categoryMenuContent';
+import { CATEGORY_MENU_CONTENT } from '@/components/layout/Header/categoryMenuContent';
 
 
 interface CategoryDropdownProps {
@@ -29,60 +28,75 @@ const highValueDocumentsByCategory: Record<string, Set<string>> = {
     'non-disclosure-agreement',
     'service-agreement',
     'consulting-agreement',
-    'business-contract'
-  ]),
-  'intellectual-property': new Set([
-    'copyright-assignment',
-    'trademark-license-agreement',
-    'software-license-agreement',
-    'licensing-agreement'
+    'business-contract',
   ]),
   'employment-hr': new Set([
     'employment-contract',
     'independent-contractor-agreement',
     'non-compete-agreement',
-    'employee-non-disclosure-agreement'
+    'employee-non-disclosure-agreement',
   ]),
-  'partnerships': new Set([
+  'partnerships-investors': new Set([
     'partnership-agreement',
     'llc-operating-agreement',
     'joint-venture-agreement',
-    'shareholder-agreement'
+    'shareholder-agreement',
   ]),
-  'payment-debt': new Set([
-    'promissory-note',
-    'loan-agreement',
-    'demand-letter-payment'
+  'formation-compliance': new Set([
+    'articles-of-incorporation',
+    'corporate-bylaws',
+    'llc-operating-agreement',
   ]),
-  'property-tenancy': new Set([
-    'lease-agreement',
-    'eviction-notice',
-    'lease-termination-letter'
+  'relationship-planning': new Set([
+    'prenuptial-agreement',
+    'postnuptial-agreement',
+    'separation-agreement',
   ]),
-  'legal-affidavits': new Set([
-    'affidavit-general',
-    'affidavit-of-identity'
+  'children-guardianship': new Set([
+    'child-custody-agreement',
+    'child-support-agreement',
+    'parenting-plan',
   ]),
-  'powers-attorney-directives': new Set([
-    'durable-power-of-attorney',
-    'living-will',
-    'advance-directive'
-  ]),
-  'property-transactions': new Set([
-    'vehicle-bill-of-sale',
-    'bill-of-sale-general',
-    'real-estate-purchase-agreement'
-  ]),
-  'estate-planning': new Set([
+  'wills-trusts': new Set([
     'last-will-testament',
     'living-trust',
-    'simple-will'
+    'simple-will',
   ]),
-  'business-formation': new Set([
-    'llc-operating-agreement',
-    'articles-of-incorporation',
-    'corporate-bylaws'
-  ])
+  'powers-attorney': new Set([
+    'durable-power-of-attorney',
+    'power-of-attorney',
+    'medical-power-of-attorney',
+  ]),
+  'loans-credit': new Set([
+    'loan-agreement',
+    'personal-loan-agreement',
+    'promissory-note',
+  ]),
+  'debt-resolution': new Set([
+    'debt-settlement-agreement',
+    'demand-letter-payment',
+    'collection-letter',
+  ]),
+  'residential-leases': new Set([
+    'lease-agreement',
+    'rental-agreement',
+    'residential-lease-agreement',
+  ]),
+  'landlord-notices': new Set([
+    'eviction-notice',
+    'notice-to-pay-rent-or-quit',
+    'lease-termination-letter',
+  ]),
+  'property-transfers': new Set([
+    'real-estate-purchase-agreement',
+    'property-deed',
+    'quitclaim-deed',
+  ]),
+  'commercial-spaces': new Set([
+    'commercial-lease-agreement',
+    'office-space-lease',
+    'property-manager-agreement',
+  ]),
 };
 
 // Best selling documents based on conversion data
@@ -115,50 +129,51 @@ const getSectionIcon = (sectionId: string) => {
     // Business & Commercial
     case 'business-operations':
       return <Briefcase {...iconProps} />;
-    case 'business-formation':
-      return <Building {...iconProps} />;
-    case 'intellectual-property':
-      return <Shield {...iconProps} />;
-    case 'partnerships':
-      return <Handshake {...iconProps} />;
-    
-    // Employment & HR
     case 'employment-hr':
       return <UserCheck {...iconProps} />;
-    case 'employment-hr-letters':
-      return <Clipboard {...iconProps} />;
-    
-    // Financial & Legal
-    case 'payment-debt':
-      return <Banknote {...iconProps} />;
-    case 'legal-affidavits':
-      return <Gavel {...iconProps} />;
-    case 'legal-business':
-      return <Scale {...iconProps} />;
-    
-    // Healthcare & Personal
-    case 'powers-attorney-directives':
-      return <FileText {...iconProps} />;
-    case 'medical-healthcare':
-      return <Heart {...iconProps} />;
-    
-    // Family & Estate
-    case 'estate-planning':
-      return <Shield {...iconProps} />;
-    case 'marriage-relationships':
-      return <HeartHandshake {...iconProps} />;
-    case 'children-family':
-      return <Users {...iconProps} />;
-    case 'personal-recreation':
-      return <Star {...iconProps} />;
-    
-    // Real Estate & Property
-    case 'commercial-real-estate':
+    case 'partnerships-investors':
+      return <Handshake {...iconProps} />;
+    case 'formation-compliance':
       return <Building {...iconProps} />;
-    case 'property-transactions':
+
+    // Family
+    case 'relationship-planning':
+      return <HeartHandshake {...iconProps} />;
+    case 'children-guardianship':
+      return <Users {...iconProps} />;
+    case 'family-health':
+      return <Heart {...iconProps} />;
+    case 'everyday-life':
+      return <Star {...iconProps} />;
+
+    // Estate
+    case 'wills-trusts':
+      return <Shield {...iconProps} />;
+    case 'powers-attorney':
+      return <FileText {...iconProps} />;
+    case 'health-directives':
+      return <Heart {...iconProps} />;
+    case 'legacy-transfers':
+      return <Scale {...iconProps} />;
+
+    // Financial
+    case 'loans-credit':
+      return <Banknote {...iconProps} />;
+    case 'debt-resolution':
+      return <Gavel {...iconProps} />;
+    case 'banking-authorizations':
+      return <Clipboard {...iconProps} />;
+    case 'investor-documents':
+      return <LineChart {...iconProps} />;
+
+    // Real Estate
+    case 'residential-leases':
+    case 'landlord-notices':
       return <Home {...iconProps} />;
-    case 'property-tenancy':
+    case 'property-transfers':
       return <Home {...iconProps} />;
+    case 'commercial-spaces':
+      return <Building {...iconProps} />;
     case 'financial-authorizations':
       return <Banknote {...iconProps} />;
     
@@ -249,7 +264,6 @@ export default function CategoryDropdown({
   }, [isOpen, documents.length, isLoadingDocuments]);
   const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
   const [hoveredDocument, setHoveredDocument] = React.useState<string | null>(null);
-  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => ({
@@ -337,56 +351,12 @@ export default function CategoryDropdown({
                   defaultValue: content.subtitle || 'Choose from our professionally crafted templates',
                 })}
               </p>
-              <div className="flex items-center justify-between mt-2">
-                <p className="text-xs text-primary font-medium">
-                  {t('categoryDropdown.tagline', {
-                    defaultValue:
-                      '✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time',
-                  })}
-                </p>
-                <p className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-full animate-pulse">
-                  {t('categoryDropdown.aiFinder', { defaultValue: 'AI Powered ✨' })}
-                </p>
+              <div className="text-xs text-primary font-medium mt-2">
+                {t('categoryDropdown.tagline', {
+                  defaultValue:
+                    '✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time',
+                })}
               </div>
-            </div>
-              <div className="ml-4 text-right">
-              <button 
-                onClick={() => {
-                  setShowDiscoveryModal(true);
-                  onLinkClick();
-                }}
-                className="group relative overflow-hidden inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5"
-                title="AI-powered document finder - describe what you need in plain English!"
-              >
-                {/* Animated background effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300"></div>
-                
-                {/* Main content */}
-                <div className="relative flex items-center gap-3">
-                  {/* AI Brain Icon with glow effect */}
-                  <div className="relative">
-                    <Brain className="w-5 h-5 text-white drop-shadow-lg" />
-                    <div className="absolute inset-0 bg-white/30 rounded-full blur-md animate-pulse"></div>
-                  </div>
-                  
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm font-bold leading-none">AI Document Finder</span>
-                    <span className="text-xs text-emerald-100 leading-none mt-0.5">Find exactly what you need</span>
-                  </div>
-                  
-                  {/* Arrow with movement animation */}
-                  <ArrowRight className="w-4 h-4 text-white/90 group-hover:translate-x-1 transition-transform duration-300" />
-                </div>
-                
-                {/* Sparkle indicators */}
-                <div className="absolute -top-1 -right-1 flex gap-1">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
-                  <div className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse delay-100"></div>
-                </div>
-                
-                {/* Bottom highlight */}
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
-              </button>
             </div>
           </div>
         </div>

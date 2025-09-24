@@ -14,6 +14,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "seeAllInCategory": "See all in {{categoryName}}...",
+    "viewAllInCategoryShort": "More >>",
+    "createAccount": "Create Free Account",
     "noDocumentsInCategory": "No documents in this category yet.",
     "noDocumentsAvailable": "No documents available for the selected categories at this time.",
     "noCategoriesAvailable": "No document categories available."
@@ -30,11 +32,11 @@
     "exploreAll": "Explore All Categories"
   },
   "directCategories": {
-    "agreements": "Agreements",
-    "letters": "Letters",
-    "forms": "Forms",
+    "business": "Business",
     "family": "Family",
-    "business": "Business"
+    "estate": "Estate",
+    "financial": "Financial",
+    "realEstate": "Real Estate"
   },
   "aiFinder": "AI Finder",
   "search": {

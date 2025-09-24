@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
+import { useParams, useRouter } from 'next/navigation';
 
 interface BrowseTemplatesButtonProps {
   children: React.ReactNode;
@@ -9,11 +9,14 @@ interface BrowseTemplatesButtonProps {
 }
 
 export default function BrowseTemplatesButton({ children, className }: BrowseTemplatesButtonProps) {
-  const { setShowDiscoveryModal } = useDiscoveryModal();
+  const router = useRouter();
+  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
+  const locale = params?.locale === 'es' ? 'es' : 'en';
+  const destination = `/${locale}/marketplace`;
 
   return (
     <button
-      onClick={() => setShowDiscoveryModal(true)}
+      onClick={() => router.push(destination)}
       className={className}
     >
       {children}

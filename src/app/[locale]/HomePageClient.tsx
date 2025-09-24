@@ -2,13 +2,13 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
 import { useTranslation } from 'react-i18next';
 import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
-import { useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import TopDocsChips from '@/components/shared/TopDocsChips';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 
@@ -121,6 +121,7 @@ export default function HomePageClient({
 }: HomePageClientProps) {
   const { t } = useTranslation('common');
   const searchParams = useCurrentSearchParams();
+  const router = useRouter();
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
@@ -128,17 +129,15 @@ export default function HomePageClient({
   >(null);
   // Removed selectedDocument to avoid importing the full document library on client
   const [isHydrated, setIsHydrated] = useState(false);
-  
-  const { setShowDiscoveryModal } = useDiscoveryModal();
 
   const handleHeroCtaClick = useCallback(() => {
     track('home_cta_click', {
       locale,
       surface: 'hero',
-      action: 'open_discovery_modal',
+      action: 'open_marketplace',
     });
-    setShowDiscoveryModal(true);
-  }, [locale, setShowDiscoveryModal]);
+    router.push(`/${locale}/marketplace`);
+  }, [locale, router]);
 
   useEffect(() => {
     setIsHydrated(true);

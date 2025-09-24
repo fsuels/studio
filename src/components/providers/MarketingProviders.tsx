@@ -1,46 +1,15 @@
 // src/components/providers/MarketingProviders.tsx
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { AuthProvider } from '@/hooks/useAuth';
 import { ThemeProvider } from 'next-themes';
 import { Loader2 } from 'lucide-react';
-import { DiscoveryModalProvider, useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
-import { useDeferredComponent } from '@/hooks/useDeferredComponent';
 
 interface MarketingProvidersProps {
   children: ReactNode;
   locale: 'en' | 'es';
-}
-
-function MarketingDiscoveryModalLayer({ children }: { children: ReactNode }) {
-  const { showDiscoveryModal } = useDiscoveryModal();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const DocumentDiscoveryModalComponent = useDeferredComponent(
-    () => import('@/components/global/DocumentDiscoveryModal'),
-    {
-      trigger: showDiscoveryModal,
-      preload: isMounted,
-    },
-  );
-
-  return (
-    <>
-      {children}
-      {DocumentDiscoveryModalComponent && <DocumentDiscoveryModalComponent />}
-      {showDiscoveryModal && !DocumentDiscoveryModalComponent && (
-        <div className="fixed inset-0 z-[999] grid place-items-center bg-background/75">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
-        </div>
-      )}
-    </>
-  );
 }
 
 /**
@@ -68,12 +37,8 @@ export function MarketingProviders({ children, locale }: MarketingProvidersProps
           </div>
         }
       >
-        {/* Ensure header components using useAuth and modal context have providers on marketing pages */}
-        <AuthProvider>
-          <DiscoveryModalProvider>
-            <MarketingDiscoveryModalLayer>{children}</MarketingDiscoveryModalLayer>
-          </DiscoveryModalProvider>
-        </AuthProvider>
+        {/* Ensure header components using useAuth have providers on marketing pages */}
+        <AuthProvider>{children}</AuthProvider>
       </I18nClientProvider>
     </ThemeProvider>
   );

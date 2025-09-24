@@ -8,7 +8,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { AccessibilityProvider } from '@/contexts/AccessibilityProvider';
-import { DiscoveryModalProvider, useDiscoveryModal } from '@/contexts/DiscoveryModalContext';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import { usePathname } from 'next/navigation';
@@ -30,8 +29,6 @@ const AppShell = React.memo(function AppShell({
 }) {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
-  const { showDiscoveryModal } = useDiscoveryModal();
-
   const isHomePage = pathname === '/' || pathname === '/en' || pathname === '/es';
 
   const ActivityTickerComponent = useDeferredComponent(
@@ -48,24 +45,6 @@ const AppShell = React.memo(function AppShell({
       })),
     {
       preload: isMounted,
-    },
-  );
-
-  const DocumentDiscoveryModalComponent = useDeferredComponent(
-    () => import('@/components/global/DocumentDiscoveryModal'),
-    {
-      trigger: showDiscoveryModal,
-      preload: isMounted,
-    },
-  );
-
-  const shouldShowTooltip = isMounted && !/^\/?$|^\/(en|es)\/?$/.test(pathname || '');
-
-  const AIFeatureTooltipComponent = useDeferredComponent(
-    () => import('@/components/shared/AIFeatureTooltip'),
-    {
-      trigger: shouldShowTooltip,
-      idleDelay: 1200,
     },
   );
 
@@ -86,17 +65,6 @@ const AppShell = React.memo(function AppShell({
       {/* Conditionally render accessibility components only on the client after mount */}
       {isMounted && GlobalKeyboardShortcutsComponent && (
         <GlobalKeyboardShortcutsComponent />
-      )}
-      {/* Global Document Discovery Modal */}
-      {DocumentDiscoveryModalComponent && <DocumentDiscoveryModalComponent />}
-      {showDiscoveryModal && !DocumentDiscoveryModalComponent && (
-        <div className="fixed inset-0 z-[999] grid place-items-center bg-background/75">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
-        </div>
-      )}
-      {/* AI Feature Educational Tooltip */}
-      {AIFeatureTooltipComponent && shouldShowTooltip && (
-        <AIFeatureTooltipComponent />
       )}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
@@ -137,11 +105,9 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <AccessibilityProvider>
-              <DiscoveryModalProvider>
-                <CartProvider>
-                  <AppShell>{children}</AppShell>
-                </CartProvider>
-              </DiscoveryModalProvider>
+              <CartProvider>
+                <AppShell>{children}</AppShell>
+              </CartProvider>
             </AccessibilityProvider>
           </AuthProvider>
         </QueryClientProvider>

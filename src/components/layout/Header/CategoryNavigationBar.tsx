@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { 
-  FileText, 
-  Mail, 
-  FileCheck, 
-  Users, 
   Building,
+  Users,
+  ScrollText,
+  LineChart,
+  Home,
   ChevronDown,
   Search
 } from 'lucide-react';
@@ -38,34 +38,34 @@ interface CategoryNavigationBarProps {
 
 const categories: Category[] = [
   {
-    id: 'agreements',
-    label: 'Agreements & Contracts',
-    icon: FileText,
-    description: 'NDAs, Service agreements, Employment contracts'
+    id: 'agreements-contracts',
+    label: 'Business',
+    icon: Building,
+    description: 'Contracts, partnerships, and HR essentials',
   },
   {
-    id: 'letters-notices',
-    label: 'Letters & Notices',
-    icon: Mail,
-    description: 'Demand letters, Tenant notices, Legal correspondence'
+    id: 'family-personal',
+    label: 'Family',
+    icon: Users,
+    description: 'Marriage, custody, and daily life agreements'
   },
   {
     id: 'forms-authorizations',
-    label: 'Forms & Authorizations',
-    icon: FileCheck,
-    description: 'Power of Attorney, Medical forms, Government documents'
+    label: 'Estate',
+    icon: ScrollText,
+    description: 'Wills, trusts, and powers of attorney'
   },
   {
-    id: 'family-legacy',
-    label: 'Family & Legacy',
-    icon: Users,
-    description: 'Wills, Custody agreements, Healthcare directives'
+    id: 'letters-notices',
+    label: 'Financial',
+    icon: LineChart,
+    description: 'Loans, debt resolution, and authorizations'
   },
   {
-    id: 'business-finance-property',
-    label: 'Business & Property',
-    icon: Building,
-    description: 'Loans, Real estate, Bills of sale'
+    id: 'business-commercial',
+    label: 'Real Estate',
+    icon: Home,
+    description: 'Leases, landlord notices, and property sales'
   }
 ];
 
