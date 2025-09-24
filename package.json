@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "20"
   },
   "scripts": {
     "predev": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\"",
@@ -161,7 +161,7 @@
     "markdown-it": "^13.0.1",
     "minisearch": "^7.2.0",
     "nanoid": "^5.0.7",
-    "next": "^15.3.3",
+    "next": "^15.5.3",
     "next-intl": "^4.1.0",
     "next-seo": "^6.5.0",
     "next-themes": "^0.3.0",
@@ -251,3 +251,4 @@
   },
   "packageManager": "npm@10.8.2"
 }
+
