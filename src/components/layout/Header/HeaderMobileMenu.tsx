@@ -11,6 +11,7 @@ import {
   MobileNavigationSkeleton,
 } from '@/components/ui/MobileNavigation';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
+import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 
 interface HeaderMobileMenuProps {
   clientLocale: 'en' | 'es';
@@ -61,27 +62,24 @@ export default function HeaderMobileMenu({
         className="md:hidden"
       >
         <div className="h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border">
-            <h2 className="text-lg font-semibold">
-              {tHeader('nav.documents', { defaultValue: 'Documents' })}
-            </h2>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95">
+            <div className="flex items-center gap-3">
               <ThemeToggleButton />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onClose}
-                aria-label={tHeader('nav.closeMenu', {
-                  defaultValue: 'Close menu',
-                })}
-              >
-                <CloseIcon className="h-5 w-5" />
-              </Button>
+              <LanguageSwitcher size="sm" hideCaret />
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              aria-label={tHeader('nav.closeMenu', {
+                defaultValue: 'Close menu',
+              })}
+              className="rounded-full h-12 w-12"
+            >
+              <CloseIcon className="h-6 w-6" />
+            </Button>
           </div>
 
-          {/* Content */}
           <div className="flex-1 overflow-y-auto">
             <ProgressiveLoader
               component={() => import('./MobileMenuContent')}

@@ -16,6 +16,7 @@
     "seeAllInCategory": "Ver todo en {{categoryName}}...",
     "viewAllInCategoryShort": "Más >>",
     "createAccount": "Crear cuenta gratuita",
+    "logoutShort": "Cerrar sesión",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "noDocumentsAvailable": "No hay documentos disponibles para las categorías seleccionadas en este momento.",
     "noCategoriesAvailable": "No hay categorías de documentos disponibles."

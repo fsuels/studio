@@ -25,6 +25,7 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 import { formatDocumentTitle } from '@/lib/format-utils';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { cn } from '@/lib/utils';
+import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 
 const AuthModal = dynamic(() => import('@/components/shared/AuthModal'), {
   ssr: false,
@@ -182,55 +183,54 @@ export default function MobileMenuContent({
   };
 
   const renderAccountSection = () => (
-    <div className="p-5 border-b border-border/70 bg-background/95 backdrop-blur-xs">
+    <div className="px-4 py-4 border-b border-border/70 bg-background/95 backdrop-blur-xs">
       {isLoading ? (
-        <div className="space-y-2" aria-label="Loading user menu">
-          <div className="h-10 rounded-md bg-muted animate-pulse" />
-          <div className="h-10 rounded-md bg-muted animate-pulse" />
+        <div className="flex items-center justify-between" aria-label="Loading user menu">
+          <Skeleton className="h-8 w-28 rounded-full" />
+          <Skeleton className="h-8 w-20 rounded-full" />
         </div>
       ) : isLoggedIn ? (
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            {tHeader('nav.welcomeBack', { defaultValue: 'Your account' })}
-          </p>
-          <Button asChild variant="outline" className="justify-start gap-2 font-medium">
+        <div className="flex items-center justify-between gap-3">
+          <Button
+            asChild
+            size="sm"
+            variant="outline"
+            className="rounded-full px-4"
+          >
             <Link onClick={handleNavigate(`/${locale}/dashboard`)} href={`/${locale}/dashboard`}>
-              <LayoutDashboard className="h-4 w-4" />
+              <LayoutDashboard className="h-4 w-4 mr-2" />
               {tHeader('nav.dashboard', { defaultValue: 'Dashboard' })}
             </Link>
           </Button>
           <Button
+            size="sm"
             variant="ghost"
-            className="justify-start gap-2 text-destructive hover:text-destructive"
+            className="rounded-full px-4 text-destructive"
             onClick={handleLogout}
           >
-            <LogOut className="h-4 w-4" />
-            {tHeader('nav.logout', { defaultValue: 'Logout' })}
+            <LogOut className="h-4 w-4 mr-2" />
+            {tHeader('nav.logoutShort', { defaultValue: 'Logout' })}
           </Button>
         </div>
       ) : (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-primary text-sm font-semibold">
-            <button
-              type="button"
-              onClick={() => openAuthModal('signup')}
-              className="hover:underline"
-            >
-              {tHeader('nav.createAccount', { defaultValue: 'Create Free Account' })}
-            </button>
-            <button
-              type="button"
-              onClick={() => openAuthModal('signin')}
-              className="hover:underline"
-            >
-              {tHeader('nav.signin', { defaultValue: 'Sign In' })}
-            </button>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {tHeader('nav.authPrompt', {
-              defaultValue: 'Save progress, manage documents, and access personalized dashboards.',
-            })}
-          </p>
+        <div className="flex items-center justify-between gap-3">
+          <Button
+            size="sm"
+            className="rounded-full px-4 flex-1"
+            onClick={() => openAuthModal('signup')}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            {tHeader('nav.createAccount', { defaultValue: 'Create Free Account' })}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-full px-4"
+            onClick={() => openAuthModal('signin')}
+          >
+            <LogIn className="h-4 w-4 mr-2" />
+            {tHeader('nav.signin', { defaultValue: 'Sign In' })}
+          </Button>
         </div>
       )}
     </div>
@@ -239,7 +239,7 @@ export default function MobileMenuContent({
   const renderCategoryList = () => (
     <section className="space-y-4">
       <div className="rounded-3xl border border-border/50 bg-card shadow-lg overflow-hidden">
-        <div className="px-6 pt-6 pb-4 border-b border-border/40 bg-gradient-to-r from-primary/5 via-card to-card">
+        <div className="px-5 pt-4 pb-3 border-b border-border/40 bg-gradient-to-r from-primary/5 via-card to-card">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             {tHeader('nav.browseDocuments', { defaultValue: 'Browse documents' })}
           </p>
@@ -263,8 +263,10 @@ export default function MobileMenuContent({
                   type="button"
                   onClick={() => handleCategoryToggle(category.id)}
                   className={cn(
-                    'w-full flex items-center justify-between px-6 py-4 text-left transition-colors duration-200',
-                    isExpanded ? 'bg-primary/10 text-primary' : 'hover:bg-muted/40',
+                    'w-full flex items-center justify-between px-6 py-4 text-left transition-colors duration-200 border-l-4',
+                    isExpanded
+                      ? 'bg-primary/15 text-primary border-primary shadow-sm'
+                      : 'bg-background hover:bg-muted/40 text-foreground border-transparent',
                   )}
                   aria-expanded={isExpanded}
                 >
@@ -297,7 +299,7 @@ export default function MobileMenuContent({
                 </button>
 
                 {isExpanded && (
-                  <div className="px-5 pb-5 pt-3 space-y-3 bg-muted/15">
+                  <div className="px-5 pb-5 pt-3 space-y-3 bg-background shadow-inner rounded-b-3xl">
                     {categoryContent.sections.map((section) => {
                       const sectionDocs = section.documents
                         .map((docId) => documentMap.get(docId))
@@ -308,7 +310,7 @@ export default function MobileMenuContent({
                       return (
                         <div
                           key={section.id}
-                          className="rounded-2xl border border-border/50 bg-card/90 shadow-inner"
+                          className="rounded-2xl border border-primary/20 bg-primary/5 shadow-sm"
                         >
                           <button
                             type="button"
@@ -317,7 +319,7 @@ export default function MobileMenuContent({
                             aria-expanded={sectionIsExpanded}
                           >
                             <div className="flex flex-col">
-                              <span className="text-sm font-semibold text-foreground">
+                              <span className="text-sm font-semibold text-primary">
                                 {section.label}
                               </span>
                               <span className="text-xs text-muted-foreground">
@@ -336,7 +338,7 @@ export default function MobileMenuContent({
                           </button>
 
                           {sectionIsExpanded && (
-                            <div className="px-4 pb-4 space-y-2">
+                            <div className="px-4 pb-4 space-y-2 bg-card/90 rounded-b-2xl border-t border-primary/15">
                               {isLoadingDocuments && sectionDocCount === 0 ? (
                                 <div className="space-y-2" aria-hidden="true">
                                   <Skeleton className="h-6 w-full rounded-md" />
@@ -357,16 +359,16 @@ export default function MobileMenuContent({
 
                                     return (
                                       <li key={doc.id}>
-                                        <button
-                                          type="button"
+                                        <Link
+                                          href={href}
+                                          prefetch
                                           onClick={() => {
                                             onLinkClick?.();
-                                            router.push(href);
                                           }}
-                                          className="w-full rounded-lg bg-background px-3 py-2 text-left text-sm font-medium text-primary shadow-sm transition hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                                          className="block w-full rounded-lg bg-background px-3 py-2 text-left text-sm font-medium text-primary shadow-sm transition hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                                         >
                                           {translated?.name ?? formatDocumentTitle(doc.id)}
-                                        </button>
+                                        </Link>
                                       </li>
                                     );
                                   })}
@@ -378,20 +380,6 @@ export default function MobileMenuContent({
                       );
                     })}
 
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="w-full justify-start px-3 py-2 text-sm font-semibold text-primary hover:text-primary"
-                    >
-                      <Link
-                        href={`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`}
-                        onClick={handleNavigate(`/${locale}/marketplace?category=${encodeURIComponent(category.id)}`)}
-                      >
-                        {tHeader('nav.viewAllInCategoryShort', {
-                          defaultValue: 'More >>',
-                        })}
-                      </Link>
-                    </Button>
                   </div>
                 )}
               </div>

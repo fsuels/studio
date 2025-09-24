@@ -25,6 +25,8 @@ export function MobileNavigation({
   const [mounted, setMounted] = React.useState(false);
   const panelRef = React.useRef<HTMLDivElement>(null);
   const previouslyFocusedElement = React.useRef<Element | null>(null);
+  const touchStartX = React.useRef<number | null>(null);
+  const touchDeltaX = React.useRef<number>(0);
 
   React.useEffect(() => {
     setMounted(true);
@@ -41,6 +43,25 @@ export function MobileNavigation({
       previouslyFocusedElement.current = null;
     }
   }, [isOpen]);
+
+  const handleTouchStart = React.useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+    touchDeltaX.current = 0;
+  }, []);
+
+  const handleTouchMove = React.useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const currentX = event.touches[0]?.clientX ?? touchStartX.current;
+    touchDeltaX.current = currentX - touchStartX.current;
+  }, []);
+
+  const handleTouchEnd = React.useCallback(() => {
+    if (touchStartX.current !== null && touchDeltaX.current > 60) {
+      onClose();
+    }
+    touchStartX.current = null;
+    touchDeltaX.current = 0;
+  }, [onClose]);
 
   // Prevent body scroll when menu is open
   React.useEffect(() => {
@@ -141,7 +162,7 @@ export function MobileNavigation({
         className={cn(
           slideClasses.base,
           isOpen ? slideClasses.open : slideClasses.closed,
-          'bg-background border-border shadow-2xl z-[90] w-80 max-w-[85vw] focus:outline-none',
+          'bg-background border-border shadow-2xl z-[90] w-full max-w-[100vw] sm:max-w-[420px] focus:outline-none',
           isOpen ? 'pointer-events-auto' : 'pointer-events-none',
           slideDirection === 'left' && 'border-r',
           slideDirection === 'right' && 'border-l',
@@ -149,6 +170,9 @@ export function MobileNavigation({
           slideDirection === 'bottom' && 'border-t',
           className,
         )}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {children}
       </div>
