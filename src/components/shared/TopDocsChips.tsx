@@ -1,7 +1,7 @@
 // src/components/shared/TopDocsChips.tsx
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { Button } from '@/components/ui/button';
@@ -111,6 +111,35 @@ const TopDocsChips = React.memo(function TopDocsChips({
   const [isLoading, setIsLoading] = useState(initialDocs.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showAllForCategory, setShowAllForCategory] = useState(false);
+  const prefetchedDocIds = useRef<Set<string>>(new Set());
+
+  const buildDocHref = useCallback(
+    (docId: string) => `/${locale}/docs/${resolveDocSlug(docId)}`,
+    [locale],
+  );
+
+  const prefetchDocRoutes = useCallback(
+    (docId: string) => {
+      const canonicalId = resolveDocSlug(docId);
+      if (!canonicalId || prefetchedDocIds.current.has(canonicalId)) {
+        return;
+      }
+
+      prefetchedDocIds.current.add(canonicalId);
+
+      const detailPath = `/${locale}/docs/${canonicalId}`;
+      try {
+        router.prefetch(detailPath);
+        router.prefetch(`${detailPath}/start`);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.debug('Prefetch doc routes failed', { canonicalId, error });
+        }
+        prefetchedDocIds.current.delete(canonicalId);
+      }
+    },
+    [locale, router],
+  );
 
   useEffect(() => {
     if (initialDocs.length > 0) {
@@ -208,6 +237,16 @@ const TopDocsChips = React.memo(function TopDocsChips({
     return deduped;
   }, [selectedCategory, topDocs]);
 
+  useEffect(() => {
+    if (!selectedCategory) return;
+    if (filteredDocs.length === 0) return;
+
+    const docsToWarm = (showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).slice(0, 8);
+    docsToWarm.forEach((doc) => {
+      prefetchDocRoutes(doc.id);
+    });
+  }, [filteredDocs, prefetchDocRoutes, selectedCategory, showAllForCategory]);
+
   const handleExploreAll = () => {
     router.push(exploreAllDestination);
   };
@@ -301,13 +340,16 @@ const TopDocsChips = React.memo(function TopDocsChips({
               {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
                 const IconComponent = categoryMeta[selectedCategory]?.icon || FileText;
                 const badge = DOC_BADGES[doc.id];
-                const href = `/${locale}/docs/${resolveDocSlug(doc.id)}`;
+                const href = buildDocHref(doc.id);
 
                 return (
                   <Link
                     key={doc.id}
                     href={href}
+                    prefetch
                     className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
+                    onMouseEnter={() => prefetchDocRoutes(doc.id)}
+                    onFocus={() => prefetchDocRoutes(doc.id)}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2">

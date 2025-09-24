@@ -1,11 +1,12 @@
 // src/components/layout/Header/CategoryDropdown.tsx
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import { ChevronRight, ChevronDown, TrendingUp, Layers, Star, Sparkles, FileText, Shield, Users, Building, Briefcase, Scale, Heart, UserCheck, Home, Banknote, Gavel, Clipboard, Handshake, Globe, Car, Plane, Hotel, HeartHandshake, Zap, Search, Brain, ArrowRight, Loader2 } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
@@ -185,8 +186,38 @@ export default function CategoryDropdown({
   isOpen
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
+  const router = useRouter();
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
+  const prefetchedDocIds = useRef<Set<string>>(new Set());
+
+  const buildDocHref = useCallback(
+    (docId: string) => `/${locale}/docs/${resolveDocSlug(docId)}`,
+    [locale],
+  );
+
+  const prefetchDocRoutes = useCallback(
+    (docId: string) => {
+      const canonicalId = resolveDocSlug(docId);
+      if (!canonicalId || prefetchedDocIds.current.has(canonicalId)) {
+        return;
+      }
+
+      prefetchedDocIds.current.add(canonicalId);
+
+      const detailPath = `/${locale}/docs/${canonicalId}`;
+      try {
+        router.prefetch(detailPath);
+        router.prefetch(`${detailPath}/start`);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.debug('CategoryDropdown prefetch failed', { canonicalId, error });
+        }
+        prefetchedDocIds.current.delete(canonicalId);
+      }
+    },
+    [locale, router],
+  );
 
   useEffect(() => {
     if (!isOpen || documents.length > 0 || isLoadingDocuments) {
@@ -250,9 +281,21 @@ export default function CategoryDropdown({
     return map;
   }, [documents]);
 
-  if (!isOpen || !activeCategory) return null;
+  const content = activeCategory
+    ? CATEGORY_MENU_CONTENT[activeCategory as keyof typeof CATEGORY_MENU_CONTENT]
+    : null;
 
-  const content = CATEGORY_MENU_CONTENT[activeCategory as keyof typeof CATEGORY_MENU_CONTENT];
+  useEffect(() => {
+    if (!isOpen || !content) return;
+    const primaryDocIds = content.sections.flatMap((section) => section.documents.slice(0, 4));
+    primaryDocIds.forEach((docId) => {
+      if (documentMap.has(docId)) {
+        prefetchDocRoutes(docId);
+      }
+    });
+  }, [content, documentMap, isOpen, prefetchDocRoutes]);
+
+  if (!isOpen || !activeCategory) return null;
   if (!content) return null;
 
   if (documents.length === 0) {
@@ -416,9 +459,14 @@ export default function CategoryDropdown({
                           )}
                         >
                           <Link
-                            href={`/${locale}/docs/${resolveDocSlug(doc.id)}`}
+                            href={buildDocHref(doc.id)}
+                            prefetch
                             onClick={onLinkClick}
-                            onMouseEnter={() => setHoveredDocument(doc.id)}
+                            onMouseEnter={() => {
+                              setHoveredDocument(doc.id);
+                              prefetchDocRoutes(doc.id);
+                            }}
+                            onFocus={() => prefetchDocRoutes(doc.id)}
                             onMouseLeave={() => setHoveredDocument(null)}
                             className={cn(
                               "group flex items-start justify-between p-2 rounded-md transition-all duration-200 hover:shadow-sm",
