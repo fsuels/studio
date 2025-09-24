@@ -30,6 +30,21 @@ const nextConfig = {
     webpackBuildWorker: false,
   },
 
+  outputFileTracingIncludes: {
+    '/[locale]/(legal)/docs/[docId]/page': [
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+    ],
+    '/[locale]/(legal)/docs/[docId]/start/page': [
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+    ],
+    '/[locale]/(legal)/docs/[docId]/complete/page': [
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+    ],
+    '/[locale]/(legal)/docs/[docId]/view/page': [
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+    ]
+  },
+
   // Note: If the vendor-chunk issue persists, we can consider
   // adding a modularizeImports rule for lucide-react. Leaving it
   // off by default to avoid case-mapping pitfalls across icons.
