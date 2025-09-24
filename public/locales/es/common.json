@@ -558,5 +558,16 @@
     "showFewer": "Mostrar menos",
     "viewAllInSection": "Ver todos los {{count}} en {{section}}",
     "viewAllCategory": "Ver todos los {{category}}"
-  }
+  },
+  "home.hero2.badges.save": "Ahorra miles",
+  "home.hero2.badges.noExperience": "Sin experiencia legal",
+  "home.hero2.badges.instant": "Resultados al instante",
+  "home.hero2.badge.main": "Garantía de reembolso de 30 días",
+  "home.hero2.badge.sub": "Sin preguntas",
+  "home.hero2.trustRow.noCard": "Sin tarjeta de crédito",
+  "home.hero2.trustRow.instant": "Descarga inmediata",
+  "home.hero2.trustRow.ssl": "Pago seguro SSL",
+  "home.hero2.trustRow.templates": "Plantillas legales inteligentes",
+  "home.hero2.trustRow.fast": "Rápido y seguro",
+  "home.hero2.trustRow.edit": "Editable en tiempo real"
 }

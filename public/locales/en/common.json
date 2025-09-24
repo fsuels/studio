@@ -547,17 +547,27 @@
     "generalForms": "General Forms",
     "ipCreativeWorksMedia": "IP & Creative Works (Media)",
     "assetsGear": "Assets & Gear"
-  }
-  ,
+  },
   "categoryDropdown": {
     "agreementsContracts": {
       "title": "Agreements & Contracts",
       "subtitle": "Protect your business interests and avoid costly disputes"
     },
-    "tagline": "\u2713 Empower Your Legal Needs \u2022 \u2713 Professionally Drafted Templates \u2022 \u2713 Ready in Minutes, Editable in Real Time",
-    "aiFinder": "Try our AI finder \u2192",
+    "tagline": "✓ Empower Your Legal Needs • ✓ Professionally Drafted Templates • ✓ Ready in Minutes, Editable in Real Time",
+    "aiFinder": "Try our AI finder →",
     "showFewer": "Show fewer",
     "viewAllInSection": "View all {{count}} in {{section}}",
     "viewAllCategory": "View all {{category}}"
-  }
+  },
+  "home.hero2.badges.save": "Save Thousands",
+  "home.hero2.badges.noExperience": "No Legal Experience",
+  "home.hero2.badges.instant": "Instant Results",
+  "home.hero2.badge.main": "30-Day Money-Back Guarantee",
+  "home.hero2.badge.sub": "No questions asked",
+  "home.hero2.trustRow.noCard": "No credit card required",
+  "home.hero2.trustRow.instant": "Instant download",
+  "home.hero2.trustRow.ssl": "SSL secure",
+  "home.hero2.trustRow.templates": "Smart Legal Templates",
+  "home.hero2.trustRow.fast": "Fast & Secure",
+  "home.hero2.trustRow.edit": "Editable in Real Time"
 }

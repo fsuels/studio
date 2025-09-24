@@ -108,13 +108,6 @@ const TrustAndTestimonialsSection = lazyOnView(
   },
 );
 
-const AnnouncementBar = lazyOnView(
-  () => import('@/components/shared/engagement/AnnouncementBar'),
-  {
-    placeholder: null,
-  },
-);
-
 export default function HomePageClient({
   locale,
   popularDocs,
@@ -174,21 +167,19 @@ export default function HomePageClient({
 
   return (
     <>
-      <AnnouncementBar />
-
       {/* HERO SECTION */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+      <section className="bg-white pt-6 pb-12 md:pt-16 md:pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:gap-8 items-center">
           {/* Left column */}
           <div>
-            <div className="space-y-3">
-              <h1 className="text-4xl lg:text-5xl font-bold text-[#1F2937] leading-tight">
+            <div className="space-y-2 md:space-y-3">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F2937] leading-tight">
                 {t('home.hero2.title', {
                   defaultValue: 'Legal Documents Made Easy:',
                 })}
               </h1>
               <div className="relative inline-block">
-                <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
                   {t('home.hero2.subtitle2', {
                     defaultValue: 'Generate Any Form in Minutes.',
                   })}
@@ -196,25 +187,31 @@ export default function HomePageClient({
                 <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 rounded-xl blur-lg -z-10"></div>
               </div>
               {isHydrated && (
-                <div className="flex items-center gap-2 mt-4">
+                <div className="hidden md:flex items-center gap-2 mt-4">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-emerald-700">Save Thousands</span>
+                    <span className="text-sm font-medium text-emerald-700">
+                      {t('home.hero2.badges.save')}
+                    </span>
                   </div>
                   <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-blue-700">No Legal Experience</span>
+                    <span className="text-sm font-medium text-blue-700">
+                      {t('home.hero2.badges.noExperience')}
+                    </span>
                   </div>
                   <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-purple-700">Instant Results</span>
+                    <span className="text-sm font-medium text-purple-700">
+                      {t('home.hero2.badges.instant')}
+                    </span>
                   </div>
                 </div>
               )}
             </div>
-            <p className="mt-6 text-lg text-gray-800 tracking-wide leading-relaxed">
+            <p className="mt-4 md:mt-6 text-base sm:text-lg text-gray-800 tracking-wide leading-relaxed">
               {t('home.hero2.subtitle', {
                 defaultValue:
                   'Choose from 400+ professionally drafted templates. Save $500+ per document. Create legally binding forms in under 5 minutes—no lawyer required.',
@@ -222,27 +219,25 @@ export default function HomePageClient({
             </p>
             
             {/* Prominent CTA Section */}
-            <div className="mt-8 space-y-4">
-              <div className="space-y-3">
-                {/* 30-Day Money-Back Guarantee Badge */}
-                <div className="flex items-center justify-start mb-2">
+            <div className="mt-6 md:mt-8 space-y-4">
+            <div className="space-y-3">
+                <div className="hidden md:flex items-center justify-start mb-2">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full shadow-sm">
                     <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     <span className="text-sm font-semibold text-green-800">
-                      30-Day Money-Back Guarantee
+                      {t('home.hero2.badge.main')}
                     </span>
-                                    <span className="inline-flex items-center gap-1 text-green-700">
-                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>No questions asked</span>
-                </span>
+                    <span className="inline-flex items-center gap-1 text-green-700">
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>{t('home.hero2.badge.sub')}</span>
+                    </span>
                   </div>
                 </div>
-                
-                {/* Main CTA Button */}
+
                 <div className="flex justify-start">
                   <button 
                     onClick={handleHeroCtaClick}
@@ -262,53 +257,53 @@ export default function HomePageClient({
               </div>
               
               {/* Trust indicators under CTA */}
-              <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-sm text-gray-700 pt-2">
+              <div className="hidden md:flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-sm text-gray-700 pt-2">
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>No credit card required</span>
+                  <span>{t('home.hero2.trustRow.noCard')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Instant download</span>
+                  <span>{t('home.hero2.trustRow.instant')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>SSL secure</span>
+                  <span>{t('home.hero2.trustRow.ssl')}</span>
                 </div>
               </div>
             </div>
             {/* Trust Line */}
-            <div className="mt-6">
+            <div className="hidden md:block mt-6">
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Smart Legal Templates</span>
+                  <span>{t('home.hero2.trustRow.templates')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Fast & Secure</span>
+                  <span>{t('home.hero2.trustRow.fast')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Editable in Real Time</span>
+                  <span>{t('home.hero2.trustRow.edit')}</span>
                 </div>
               </div>
             </div>
           </div>
           {/* Right column */}
-          <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
+          <div className="mt-6 md:mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
             <AutoImage
               src={
                 locale === 'es'
@@ -318,7 +313,7 @@ export default function HomePageClient({
               alt="Hero image illustrating legal document generation"
               width={1536}
               height={1024}
-              className="w-full max-w-lg rounded-xl shadow-lg"
+              className="w-full max-w-[320px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[520px] xl:max-w-[560px] rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
               priority
             />

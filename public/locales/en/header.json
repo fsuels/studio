@@ -53,8 +53,8 @@
   "mobileMenu": {
     "headline": "Browse documents",
     "subtitle": "Search thousands of state-compliant templates.",
-    "docCount_one": "{{count}} document",
-    "docCount_other": "{{count}} documents",
+    "docCount": "{{count}} document",
+    "docCount_plural": "{{count}} documents",
     "empty": "No documents available yet.",
     "categories": {
       "agreements-contracts": {

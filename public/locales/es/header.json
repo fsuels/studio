@@ -53,8 +53,8 @@
   "mobileMenu": {
     "headline": "Explorar documentos",
     "subtitle": "Busca entre miles de plantillas compatibles con cada estado.",
-    "docCount_one": "{{count}} documento",
-    "docCount_other": "{{count}} documentos",
+    "docCount": "{{count}} documento",
+    "docCount_plural": "{{count}} documentos",
     "empty": "Aún no hay documentos disponibles.",
     "categories": {
       "agreements-contracts": {

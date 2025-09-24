@@ -265,6 +265,8 @@ export default function MobileMenuContent({
             );
             const categoryDocCountText = tHeader('mobileMenu.docCount', {
               count: category.docCount,
+              defaultValue: '{{count}} document',
+              defaultValue_plural: '{{count}} documents',
             });
 
             return (
@@ -322,6 +324,8 @@ export default function MobileMenuContent({
                       );
                       const sectionDocCountText = tHeader('mobileMenu.docCount', {
                         count: sectionDocCount,
+                        defaultValue: '{{count}} document',
+                        defaultValue_plural: '{{count}} documents',
                       });
 
                       return (
