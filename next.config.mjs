@@ -2,6 +2,7 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { createRequire } from 'module';
 import path from 'path';
+import fs from 'node:fs/promises';
 
 const require = createRequire(import.meta.url);
 
@@ -13,6 +14,31 @@ const resolvePackagePath = (pkgName, ...segments) => {
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
+
+const policySourceDir = path.join(process.cwd(), 'docs', 'legal');
+const policyTargetDir = path.join(process.cwd(), '.next', 'server', 'docs', 'legal');
+
+let policiesCopied = false;
+
+async function copyPolicyMarkdown() {
+  if (policiesCopied) return;
+  try {
+    await fs.access(policySourceDir);
+  } catch (error) {
+    console.warn(`[policies] Source directory missing: ${policySourceDir}`);
+    return;
+  }
+
+  try {
+    await fs.rm(policyTargetDir, { recursive: true, force: true });
+    await fs.mkdir(policyTargetDir, { recursive: true });
+    await fs.cp(policySourceDir, policyTargetDir, { recursive: true });
+    policiesCopied = true;
+    console.log(`[policies] Copied markdown from ${policySourceDir} to ${policyTargetDir}`);
+  } catch (error) {
+    console.error('[policies] Failed to copy markdown files', error);
+  }
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Core Next.js config                                                       */
@@ -183,6 +209,13 @@ if (process.env.NODE_ENV === 'production' && !process.env.NEXT_TURBOPACK) {
         { 'pdf-lib': 'commonjs2 pdf-lib' },
         { '@pdf-lib/fontkit': 'commonjs2 @pdf-lib/fontkit' }
       );
+
+      config.plugins = config.plugins || [];
+      config.plugins.push({
+        apply(compiler) {
+          compiler.hooks.afterEmit.tapPromise('CopyPolicyMarkdownPlugin', copyPolicyMarkdown);
+        },
+      });
     }
 
     return config;
