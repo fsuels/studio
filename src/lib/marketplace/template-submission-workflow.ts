@@ -1,6 +1,4 @@
 // src/lib/marketplace/template-submission-workflow.ts
-'use client';
-
 import { getDb } from '@/lib/firebase';
 import {
   collection,

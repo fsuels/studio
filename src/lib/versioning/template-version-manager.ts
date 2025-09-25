@@ -1,6 +1,4 @@
 // src/lib/versioning/template-version-manager.ts
-'use client';
-
 import { getDb } from '@/lib/firebase';
 import {
   collection,

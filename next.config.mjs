@@ -1,20 +1,36 @@
 // next.config.mjs — Optimized configuration for production builds
-import bundleAnalyzer from '@next/bundle-analyzer';
-import { createRequire } from 'module';
-import path from 'path';
+import path from 'node:path';
 import fs from 'node:fs/promises';
-import webpack from 'webpack';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
+if (typeof globalThis.require !== 'function') {
+  globalThis.require = require;
+  if (typeof globalThis.eval === 'function') {
+    globalThis.eval('var require = globalThis.require;');
+  }
+}
+
+let withBundleAnalyzer = (config) => config;
+try {
+  const bundleAnalyzer = require('@next/bundle-analyzer');
+  withBundleAnalyzer = bundleAnalyzer({
+    enabled: process.env.ANALYZE === 'true',
+  });
+} catch (error) {
+  if (process.env.ANALYZE === 'true') {
+    console.warn('[next.config] bundle analyzer unavailable', error);
+  }
+}
+
+const webpack = require('webpack');
 
 const resolvePackagePath = (pkgName, ...segments) => {
-  const pkgDir = path.dirname(require.resolve(`${pkgName}/package.json`));
+  const pkgUrl = import.meta.resolve(`${pkgName}/package.json`);
+  const pkgDir = path.dirname(fileURLToPath(pkgUrl));
   return path.join(pkgDir, ...segments);
 };
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
 
 const policySourceDir = path.join(process.cwd(), 'docs', 'legal');
 const policyTargetDir = path.join(process.cwd(), '.next', 'server', 'docs', 'legal');

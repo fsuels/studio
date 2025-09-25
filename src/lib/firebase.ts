@@ -48,11 +48,7 @@ const getFirebaseConfig = () => ({
 /* ------------------------------------------------------------------ */
 /* Initialize the Firebase App (only once)                            */
 /* ------------------------------------------------------------------ */
-const ensureClientEnv = () => {
-  if (typeof window === 'undefined') {
-    throw new Error('[firebase] Firebase client SDK requested during SSR. Move this call inside a client-only effect/component.');
-  }
-};
+const isBrowser = typeof window !== 'undefined';
 
 const validateConfig = () => {
   const config = getFirebaseConfig();
@@ -65,12 +61,13 @@ const validateConfig = () => {
 let clientApp: FirebaseApp | null = null;
 
 const ensureClientApp = (): FirebaseApp => {
-  ensureClientEnv();
   if (clientApp) return clientApp;
 
   const config = validateConfig();
   clientApp = getApps().length ? getApp() : initializeApp(config);
-  console.log('[firebase] Initialized client SDK');
+  if (isBrowser) {
+    console.log('[firebase] Initialized client SDK');
+  }
   return clientApp;
 };
 
@@ -79,7 +76,7 @@ const ensureClientApp = (): FirebaseApp => {
 /* ------------------------------------------------------------------ */
 let analytics: Analytics | null = null;
 export async function getAnalyticsInstance(): Promise<Analytics | null> {
-  if (analytics || typeof window === 'undefined') return analytics;
+  if (analytics || !isBrowser) return analytics;
   const { getAnalytics, isSupported } = await import('firebase/analytics');
   if (await isSupported()) {
     analytics = getAnalytics(ensureClientApp());
@@ -92,7 +89,6 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
 const ensureClientDb = (): Firestore => {
-  ensureClientEnv();
   if (dbInstance) return dbInstance;
 
   const forcePolling =
@@ -100,9 +96,11 @@ const ensureClientDb = (): Firestore => {
 
   const settings = forcePolling
     ? { experimentalForceLongPolling: true }
-    : { experimentalAutoDetectLongPolling: true };
+    : isBrowser
+      ? { experimentalAutoDetectLongPolling: true }
+      : {};
 
-  dbInstance = initializeFirestore(ensureClientApp(), settings);
+  dbInstance = initializeFirestore(ensureClientApp(), settings as any);
   setLogLevel('error');
   return dbInstance;
 };
