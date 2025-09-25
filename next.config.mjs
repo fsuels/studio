@@ -32,16 +32,32 @@ const nextConfig = {
 
   outputFileTracingIncludes: {
     '/[locale]/(legal)/docs/[docId]/page': [
-      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js',
+      './public/templates/**/*.md'
     ],
     '/[locale]/(legal)/docs/[docId]/start/page': [
-      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js',
+      './public/templates/**/*.md'
     ],
     '/[locale]/(legal)/docs/[docId]/complete/page': [
-      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js',
+      './public/templates/**/*.md'
     ],
     '/[locale]/(legal)/docs/[docId]/view/page': [
-      './node_modules/next/dist/shared/lib/no-fallback-error.external.js'
+      './node_modules/next/dist/shared/lib/no-fallback-error.external.js',
+      './public/templates/**/*.md'
+    ],
+    '/[locale]/(legal)/privacy-policy/page': [
+      './docs/legal/**/*.md'
+    ],
+    '/[locale]/(legal)/terms-of-service/page': [
+      './docs/legal/**/*.md'
+    ],
+    '/[locale]/(legal)/disclaimer/page': [
+      './docs/legal/**/*.md'
+    ],
+    '/[locale]/(legal)/refund-policy/page': [
+      './docs/legal/**/*.md'
     ]
   },
 
