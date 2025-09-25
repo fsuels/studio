@@ -84,7 +84,8 @@
     "test:accessibility:ci": "playwright test e2e/accessibility*.spec.ts --reporter=json --output-dir=test-results",
     "ai:evaluate": "tsx scripts/ai/run-evaluations.ts",
     "legal:validate": "tsx scripts/legal/validatePolicies.ts",
-    "i18n:check": "tsx scripts/i18n/check-mojibake.ts"
+    "i18n:check": "tsx scripts/i18n/check-mojibake.ts",
+    "postbuild": "node scripts/copy-policies.mjs"
   },
   "dependencies": {
     "@firebase/auth": "^1.10.7",
@@ -251,4 +252,3 @@
   },
   "packageManager": "npm@10.8.2"
 }
-

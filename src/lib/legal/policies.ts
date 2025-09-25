@@ -57,11 +57,22 @@ export async function loadPolicy(
     throw new Error(`Unsupported policy slug: ${slug}`);
   }
 
-  const baseDir = path.join(process.cwd(), 'docs', 'legal');
-  const candidatePaths =
-    locale === 'en'
-      ? [path.join(baseDir, fileName)]
-      : [path.join(baseDir, locale, fileName), path.join(baseDir, fileName)];
+  const baseDirs = [
+    path.join(process.cwd(), 'docs', 'legal'),
+    path.join(process.cwd(), '.next', 'server', 'docs', 'legal'),
+  ];
+
+  const candidatePaths: string[] = [];
+  for (const baseDir of baseDirs) {
+    if (locale === 'en') {
+      candidatePaths.push(path.join(baseDir, fileName));
+    } else {
+      candidatePaths.push(
+        path.join(baseDir, locale, fileName),
+        path.join(baseDir, fileName),
+      );
+    }
+  }
 
   let fileContents: string | null = null;
   for (const candidate of candidatePaths) {
