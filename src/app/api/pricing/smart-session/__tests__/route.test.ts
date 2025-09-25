@@ -19,7 +19,7 @@ type MockedStripe = {
   };
 };
 
-const { smartPricingEngine } = require('@/lib/smart-pricing-engine');
+const { getSmartPricingEngine } = require('@/lib/smart-pricing-engine');
 const { getStripeServerClient } = require('@/lib/stripe-server');
 const { POST } = require('../route');
 
@@ -39,11 +39,11 @@ describe('POST /api/pricing/smart-session', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
-    smartPricingEngine.getUserCurrency.mockResolvedValue('USD');
+    getSmartPricingEngine().getUserCurrency.mockResolvedValue('USD');
   });
 
   it('returns purchase order requirement when plan allows it', async () => {
-    smartPricingEngine.getPricingSummary.mockResolvedValue({
+    getSmartPricingEngine().getPricingSummary.mockResolvedValue({
       availablePlans: [
         {
           id: 'enterprise',
@@ -71,7 +71,7 @@ describe('POST /api/pricing/smart-session', () => {
   });
 
   it('creates Stripe checkout session when plan is available', async () => {
-    smartPricingEngine.getPricingSummary.mockResolvedValue({
+    getSmartPricingEngine().getPricingSummary.mockResolvedValue({
       availablePlans: [
         {
           id: 'starter',

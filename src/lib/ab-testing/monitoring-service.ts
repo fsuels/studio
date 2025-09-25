@@ -68,6 +68,9 @@ class ExperimentMonitoringService {
   private monitoringInterval: NodeJS.Timeout | null = null;
 
   constructor() {
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.startMonitoring();
   }
 

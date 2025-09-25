@@ -3,6 +3,7 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 import { createRequire } from 'module';
 import path from 'path';
 import fs from 'node:fs/promises';
+import webpack from 'webpack';
 
 const require = createRequire(import.meta.url);
 
@@ -208,6 +209,16 @@ if (process.env.NODE_ENV === 'production' && !process.env.NEXT_TURBOPACK) {
         { '@google-cloud/aiplatform': 'commonjs2 @google-cloud/aiplatform' },
         { 'pdf-lib': 'commonjs2 pdf-lib' },
         { '@pdf-lib/fontkit': 'commonjs2 @pdf-lib/fontkit' }
+      );
+
+
+      const abTestingStub = path.join(process.cwd(), 'src/lib/ab-testing/server-stub.ts');
+
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /@\/lib\/ab-testing(\/.*)?$/,
+          abTestingStub,
+        ),
       );
 
       config.plugins = config.plugins || [];

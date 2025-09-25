@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { getStripeServerClient } from '@/lib/stripe-server';
-import { smartPricingEngine } from '@/lib/smart-pricing-engine';
+import { getSmartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
 
@@ -25,10 +25,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Get user's preferred currency based on location
-    const userCurrency = await smartPricingEngine.getUserCurrency(req);
-    
+    const pricingEngine = getSmartPricingEngine();
+    const userCurrency = await pricingEngine.getUserCurrency(req);
+
     // Get pricing summary with tax info
-    const pricingSummary = await smartPricingEngine.getPricingSummary(req, planId);
+    const pricingSummary = await pricingEngine.getPricingSummary(req, planId);
     
     const origin = req.headers.get('origin') || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
     const successUrl = `${origin}/${locale}${successPath}?session_id={CHECKOUT_SESSION_ID}`;
@@ -103,7 +104,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const planId = searchParams.get('planId');
     
-    const pricingSummary = await smartPricingEngine.getPricingSummary(req, planId || undefined);
+    const pricingEngine = getSmartPricingEngine();
+    const pricingSummary = await pricingEngine.getPricingSummary(req, planId || undefined);
     
     return NextResponse.json(pricingSummary);
   } catch (error: any) {

@@ -168,6 +168,10 @@ class ExperimentEngine {
   private userAssignmentsCache: Map<string, Record<string, string>> = new Map();
 
   constructor() {
+    if (typeof window === 'undefined') {
+      // Skip client-only bootstrap during SSR to avoid Firebase initialization.
+      return;
+    }
     this.initializeFromFirestore();
   }
 

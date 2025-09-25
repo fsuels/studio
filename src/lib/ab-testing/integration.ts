@@ -39,6 +39,9 @@ export interface ExperimentAwareFunnelSession extends FunnelSession {
 
 class ABTestingIntegrationService {
   constructor() {
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.initializeIntegration();
   }
 

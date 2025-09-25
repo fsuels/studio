@@ -48,14 +48,31 @@ const getFirebaseConfig = () => ({
 /* ------------------------------------------------------------------ */
 /* Initialize the Firebase App (only once)                            */
 /* ------------------------------------------------------------------ */
-let app: FirebaseApp;
-if (!getApps().length) {
+const ensureClientEnv = () => {
+  if (typeof window === 'undefined') {
+    throw new Error('[firebase] Firebase client SDK requested during SSR. Move this call inside a client-only effect/component.');
+  }
+};
+
+const validateConfig = () => {
   const config = getFirebaseConfig();
-  app = initializeApp(config);
+  if (!config.apiKey || config.apiKey === 'YOUR_FIREBASE_API_KEY') {
+    throw new Error('[firebase] Missing NEXT_PUBLIC_FIREBASE_* environment variables.');
+  }
+  return config;
+};
+
+let clientApp: FirebaseApp | null = null;
+
+const ensureClientApp = (): FirebaseApp => {
+  ensureClientEnv();
+  if (clientApp) return clientApp;
+
+  const config = validateConfig();
+  clientApp = getApps().length ? getApp() : initializeApp(config);
   console.log('[firebase] Initialized client SDK');
-} else {
-  app = getApp();
-}
+  return clientApp;
+};
 
 /* ------------------------------------------------------------------ */
 /* Lazy Analytics (client only)                                       */
@@ -65,7 +82,7 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
   if (analytics || typeof window === 'undefined') return analytics;
   const { getAnalytics, isSupported } = await import('firebase/analytics');
   if (await isSupported()) {
-    analytics = getAnalytics(app);
+    analytics = getAnalytics(ensureClientApp());
   }
   return analytics;
 }
@@ -74,29 +91,24 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 /* Firestore - optional HTTP long-polling and show only errors        */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
-export function getDb(): Firestore {
+const ensureClientDb = (): Firestore => {
+  ensureClientEnv();
   if (dbInstance) return dbInstance;
 
   const forcePolling =
     process.env.NEXT_PUBLIC_FIRESTORE_FORCE_POLLING === 'true';
 
-  /* -------------------------------------------------------------
-     ?  initializeFirestore **requires** a settings object.
-        If we omit it (i.e. pass `undefined`) the SDK dereferences
-        `settings.cacheSizeBytes` and crashes.
-     ------------------------------------------------------------- */
-  // Auto-detect whether the network requires long polling. Allow forcing
-  // polling via environment variable when gRPC is blocked.
   const settings = forcePolling
     ? { experimentalForceLongPolling: true }
     : { experimentalAutoDetectLongPolling: true };
 
-  dbInstance = initializeFirestore(app, settings);
-
-  // Suppress all Firestore logs except errors
+  dbInstance = initializeFirestore(ensureClientApp(), settings);
   setLogLevel('error');
-
   return dbInstance;
+};
+
+export function getDb(): Firestore {
+  return ensureClientDb();
 }
 
 /* ------------------------------------------------------------------ */
@@ -104,13 +116,29 @@ export function getDb(): Firestore {
 /* ------------------------------------------------------------------ */
 import { getAuth as getFirebaseAuth } from 'firebase/auth';
 
-// Initialize auth synchronously to avoid timing issues
-export const auth = getFirebaseAuth(app);
+export function getClientAuth() {
+  return getFirebaseAuth(ensureClientApp());
+}
 
 /* ------------------------------------------------------------------ */
 /* Exports                                                            */
 /* ------------------------------------------------------------------ */
-export { app };
-// Export a Firestore instance getter to avoid collection() errors
-export const db = getDb();
+const appProxy = new Proxy({} as FirebaseApp, {
+  get(_target, prop) {
+    const instance = ensureClientApp() as any;
+    const value = instance[prop as keyof FirebaseApp];
+    return typeof value === 'function' ? value.bind(instance) : value;
+  },
+});
+
+const dbProxy = new Proxy({} as Firestore, {
+  get(_target, prop) {
+    const instance = ensureClientDb() as any;
+    const value = instance[prop as keyof Firestore];
+    return typeof value === 'function' ? value.bind(instance) : value;
+  },
+});
+
+export { appProxy as app };
+export { dbProxy as db };
 

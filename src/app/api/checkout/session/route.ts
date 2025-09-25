@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { STRIPE_API_VERSION } from '@/lib/stripe-config';
 import { loadWorkflowDocument } from '@/lib/workflow/document-workflow';
-import { smartPricingEngine } from '@/lib/smart-pricing-engine';
+import { getSmartPricingEngine } from '@/lib/smart-pricing-engine';
 
 // Initialize Stripe only if the secret key is available
 
@@ -41,8 +41,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Get user's currency and location for smart pricing
-    const userCurrency = await smartPricingEngine.getUserCurrency(req);
-    const pricingSummary = await smartPricingEngine.getPricingSummary(req);
+    const pricingEngine = getSmartPricingEngine();
+    const userCurrency = await pricingEngine.getUserCurrency(req);
+    const pricingSummary = await pricingEngine.getPricingSummary(req);
 
     // Convert price to user's currency if not USD
     let unitAmount = Math.round((doc.basePrice || 0) * 100); // price in cents

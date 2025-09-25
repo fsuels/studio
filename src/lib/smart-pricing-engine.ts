@@ -177,15 +177,19 @@ export class SmartPricingEngine {
     this.initializeExchangeRates();
   }
 
-  private async initializeExchangeRates(): Promise<void> {
-    // Initialize with static rates, update with live rates in production
+  private initializeStaticRates(): void {
     this.exchangeRates.set('USD', 1.0);
     this.exchangeRates.set('EUR', 0.92);
     this.exchangeRates.set('GBP', 0.80);
     this.lastRateUpdate = Date.now();
+  }
+
+  private async initializeExchangeRates(): Promise<void> {
+    // Initialize with static rates, update with live rates in production
+    this.initializeStaticRates();
 
     // In production, fetch live rates
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
       await this.updateExchangeRates();
     }
   }
@@ -507,4 +511,6 @@ export class SmartPricingEngine {
 }
 
 // Export singleton instance
-export const smartPricingEngine = SmartPricingEngine.getInstance();
+export function getSmartPricingEngine(): SmartPricingEngine {
+  return SmartPricingEngine.getInstance();
+}
