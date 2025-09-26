@@ -4,6 +4,16 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { resolveDocSlug } from '@/lib/slug-alias';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import {
+  buildCategoryOptionDescriptors,
+  CATEGORY_ROLE_FILTERS,
+  buildDocumentSearchIndex,
+  filterDocumentsByRoleCriteria,
+  filterDocumentsForCategory,
+  normalizeFilterConfig,
+  type NormalizedFilterCriteria,
+} from '@/lib/homepage/document-selection';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -20,7 +30,6 @@ import {
   FileText,
   Home,
   Users,
-  Clock,
   Zap,
   RefreshCcw,
   Briefcase,
@@ -82,6 +91,23 @@ const DOC_BADGES: Record<string, 'new' | 'updated'> = {
   leaseAgreement: 'updated',
 };
 
+const POPULAR_TO_BUILDER_CATEGORY: Record<string, string> = {
+  'real-estate-property': 'real-estate',
+  'employment-hr': 'employment',
+  'personal-family': 'personal-family',
+  'health-care': 'health',
+  'finance-lending': 'finance',
+  'business-startups': 'business',
+  'ip-creative': 'creative',
+  'legal-process-disputes': 'legal',
+};
+
+type RoleFilterOption = {
+  id: string;
+  label: string;
+  criteria: NormalizedFilterCriteria | null;
+};
+
 const normalizeDisplayName = (doc: DocumentSummary) => {
   const name = doc.translations?.en?.name || doc.title || doc.id;
   return name.trim().toLowerCase();
@@ -107,11 +133,29 @@ const TopDocsChips = React.memo(function TopDocsChips({
     }
   }, [exploreAllDestination, router]);
 
-  const [topDocs, setTopDocs] = useState<DocumentSummary[]>(initialDocs);
+  const [documents, setDocuments] = useState<DocumentSummary[]>(initialDocs);
   const [isLoading, setIsLoading] = useState(initialDocs.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedFilterId, setSelectedFilterId] = useState<string>('all');
   const [showAllForCategory, setShowAllForCategory] = useState(false);
   const prefetchedDocIds = useRef<Set<string>>(new Set());
+
+  const popularDocIdsByCategory = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+
+    initialDocs.forEach((doc) => {
+      CURATED_CATEGORY_KEYS.forEach((categoryKey) => {
+        if (matchesCategoryLabel(doc.category, categoryKey)) {
+          if (!map.has(categoryKey)) {
+            map.set(categoryKey, new Set<string>());
+          }
+          map.get(categoryKey)!.add(doc.id);
+        }
+      });
+    });
+
+    return map;
+  }, [initialDocs]);
 
   const buildDocHref = useCallback(
     (docId: string) => `/${locale}/docs/${resolveDocSlug(docId)}`,
@@ -141,19 +185,46 @@ const TopDocsChips = React.memo(function TopDocsChips({
     [locale, router],
   );
 
+  const getFriendlyDescription = useCallback(
+    (doc: DocumentSummary): string => {
+      const rawDescription = (
+        doc.translations?.[locale]?.description ||
+        doc.translations?.en?.description ||
+        doc.description ||
+        ''
+      );
+
+      const normalized = rawDescription.replace(/\s+/g, ' ').trim();
+      if (!normalized) {
+        return '';
+      }
+
+      const firstSentence = normalized.split(/[.!?]/)[0]?.trim() ?? '';
+      if (!firstSentence) {
+        return '';
+      }
+
+      const words = firstSentence.split(/\s+/);
+      const shortened = words.slice(0, 12).join(' ');
+      const cleaned = shortened.replace(/[,;:]+$/g, '');
+      return words.length > 12 ? `${cleaned}...` : cleaned;
+    },
+    [locale],
+  );
+
   useEffect(() => {
+    let cancelled = false;
+
     if (initialDocs.length > 0) {
       setIsLoading(false);
-      return;
     }
 
-    let cancelled = false;
     (async () => {
       try {
-        const module = await import('@/lib/workflow/document-workflow');
+        const module = await loadWorkflowModule();
         if (cancelled) return;
         const docs = module.getWorkflowDocuments({ jurisdiction: 'us' });
-        setTopDocs(docs);
+        setDocuments(docs);
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
           console.error('Failed to load popular documents', error);
@@ -179,6 +250,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
       categoryFromUrl !== selectedCategory
     ) {
       setSelectedCategory(categoryFromUrl);
+      setSelectedFilterId('all');
       setShowAllForCategory(false);
     }
   }, [searchParams, selectedCategory]);
@@ -214,57 +286,172 @@ const TopDocsChips = React.memo(function TopDocsChips({
     }, {});
   }, [categories, tCommon]);
 
-  const filteredDocs = useMemo(() => {
-    if (!selectedCategory) return [] as DocumentSummary[];
+  const builderCategoryOptions = useMemo(
+    () => buildCategoryOptionDescriptors(documents),
+    [documents],
+  );
 
-    const deduped: DocumentSummary[] = [];
-    const seenNames = new Set<string>();
+  const builderCategoryMap = useMemo(
+    () => new Map(builderCategoryOptions.map((option) => [option.id, option])),
+    [builderCategoryOptions],
+  );
 
-    for (const doc of topDocs) {
-      if (!matchesCategoryLabel(doc.category, selectedCategory)) {
-        continue;
-      }
+  const mappedCategoryId = selectedCategory
+    ? POPULAR_TO_BUILDER_CATEGORY[selectedCategory] ?? null
+    : null;
 
-      const normalizedName = normalizeDisplayName(doc);
-      if (seenNames.has(normalizedName)) {
-        continue;
-      }
+  const activeBuilderCategory = mappedCategoryId
+    ? builderCategoryMap.get(mappedCategoryId) ?? null
+    : null;
 
-      seenNames.add(normalizedName);
-      deduped.push(doc);
+  const getDocName = useCallback(
+    (doc: DocumentSummary) =>
+      doc.translations?.[locale]?.name ??
+      doc.translations?.en?.name ??
+      doc.title ??
+      doc.id,
+    [locale],
+  );
+
+  const docsForCategory = useMemo(() => {
+    if (!activeBuilderCategory) {
+      return [] as DocumentSummary[];
     }
 
-    return deduped;
-  }, [selectedCategory, topDocs]);
+    const docs = filterDocumentsForCategory(
+      documents,
+      activeBuilderCategory.matches,
+      getDocName,
+    );
+
+    const seenNames = new Set<string>();
+    const deduped: DocumentSummary[] = [];
+
+    docs.forEach((doc) => {
+      const normalizedName = normalizeDisplayName(doc);
+      if (seenNames.has(normalizedName)) {
+        return;
+      }
+      seenNames.add(normalizedName);
+      deduped.push(doc);
+    });
+
+    if (!selectedCategory) {
+      return deduped;
+    }
+
+    const curatedSet = popularDocIdsByCategory.get(selectedCategory);
+    if (!curatedSet || curatedSet.size === 0) {
+      return deduped;
+    }
+
+    return [...deduped].sort((a, b) => {
+      const aCurated = curatedSet.has(a.id) ? 0 : 1;
+      const bCurated = curatedSet.has(b.id) ? 0 : 1;
+      if (aCurated !== bCurated) {
+        return aCurated - bCurated;
+      }
+      return getDocName(a).localeCompare(getDocName(b));
+    });
+  }, [
+    activeBuilderCategory,
+    documents,
+    getDocName,
+    popularDocIdsByCategory,
+    selectedCategory,
+  ]);
+
+  const docSearchIndex = useMemo(
+    () => buildDocumentSearchIndex(documents),
+    [documents],
+  );
+
+  const roleFilters = useMemo<RoleFilterOption[]>(() => {
+    const base: RoleFilterOption[] = [
+      {
+        id: 'all',
+        label: tCommon('home.hero2.builder.filters.all', { defaultValue: 'All documents' }),
+        criteria: null,
+      },
+    ];
+
+    if (!activeBuilderCategory) {
+      return base;
+    }
+
+    const configs = CATEGORY_ROLE_FILTERS[activeBuilderCategory.id] ?? [];
+
+    configs.forEach((config) => {
+      const normalized = normalizeFilterConfig(config);
+
+      base.push({
+        id: config.id,
+        label: tCommon(
+          normalized.translationKey
+            ?? `home.hero2.builder.filters.${activeBuilderCategory.id}.${config.id}`,
+          { defaultValue: normalized.fallback },
+        ),
+        criteria: normalized,
+      });
+    });
+
+    return base;
+  }, [activeBuilderCategory, tCommon]);
+
+  useEffect(() => {
+    if (!roleFilters.some((filter) => filter.id === selectedFilterId)) {
+      setSelectedFilterId(roleFilters[0]?.id ?? 'all');
+    }
+  }, [roleFilters, selectedFilterId]);
+
+  useEffect(() => {
+    setShowAllForCategory(false);
+  }, [selectedCategory, selectedFilterId]);
+
+  const filteredDocs = useMemo(() => {
+    if (!selectedCategory) {
+      return [] as DocumentSummary[];
+    }
+
+    if (!selectedFilterId || selectedFilterId === 'all') {
+      return docsForCategory;
+    }
+
+    const activeFilter = roleFilters.find((filter) => filter.id === selectedFilterId);
+    if (!activeFilter || !activeFilter.criteria) {
+      return docsForCategory;
+    }
+
+    return filterDocumentsByRoleCriteria(docsForCategory, activeFilter.criteria, docSearchIndex);
+  }, [
+    selectedCategory,
+    selectedFilterId,
+    roleFilters,
+    docsForCategory,
+    docSearchIndex,
+  ]);
+
+  const displayedDocs = useMemo(() => {
+    if (selectedFilterId === 'all' && !showAllForCategory) {
+      return filteredDocs.slice(0, 12);
+    }
+    return filteredDocs;
+  }, [filteredDocs, selectedFilterId, showAllForCategory]);
 
   useEffect(() => {
     if (!selectedCategory) return;
-    if (filteredDocs.length === 0) return;
+    if (displayedDocs.length === 0) return;
 
-    const docsToWarm = (showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).slice(0, 8);
-    docsToWarm.forEach((doc) => {
+    displayedDocs.slice(0, 8).forEach((doc) => {
       prefetchDocRoutes(doc.id);
     });
-  }, [filteredDocs, prefetchDocRoutes, selectedCategory, showAllForCategory]);
+  }, [displayedDocs, prefetchDocRoutes, selectedCategory]);
 
   const handleExploreAll = () => {
     router.push(exploreAllDestination);
   };
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
-        <p className="text-sm text-slate-700 dark:text-slate-200 mt-2">
-          {tCommon('TopDocsChips.loading', {
-            defaultValue: 'Loading popular documents...',
-          })}
-        </p>
-      </div>
-    );
-  }
-
-  if (topDocs.length === 0) {
+  if (documents.length === 0) {
     return null;
   }
 
@@ -279,6 +466,10 @@ const TopDocsChips = React.memo(function TopDocsChips({
 
         {!selectedCategory && categories.length > 0 && (
           <>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500 text-center md:text-left">
+              <span className="text-blue-500">1.</span>{' '}
+              {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
               {categories.map((cat) => {
                 const meta = categoryMeta[cat];
@@ -290,6 +481,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
                     type="button"
                     onClick={() => {
                       setSelectedCategory(cat);
+                      setSelectedFilterId('all');
                       setShowAllForCategory(false);
                     }}
                     className="text-left rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-sky-300 hover:bg-white/90"
@@ -326,102 +518,166 @@ const TopDocsChips = React.memo(function TopDocsChips({
           </>
         )}
 
-        {selectedCategory && (
-          <>
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-medium text-foreground" id="popular-docs-selected">
-                {categoryMeta[selectedCategory]?.label || selectedCategory}
-              </h3>
-              <Button variant="ghost" size="sm" onClick={() => setSelectedCategory(null)}>
-                {tCommon('changeCategory', { defaultValue: 'Back to categories' })}
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {(showAllForCategory ? filteredDocs : filteredDocs.slice(0, 12)).map((doc) => {
-                const IconComponent = categoryMeta[selectedCategory]?.icon || FileText;
-                const badge = DOC_BADGES[doc.id];
-                const href = buildDocHref(doc.id);
 
-                return (
-                  <Link
-                    key={doc.id}
-                    href={href}
-                    prefetch
-                    className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
-                    onMouseEnter={() => prefetchDocRoutes(doc.id)}
-                    onFocus={() => prefetchDocRoutes(doc.id)}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-2">
-                        <IconComponent className="h-4 w-4 text-primary/80" />
-                        <span className="text-sm font-medium">
-                          {doc.translations?.[locale]?.name ||
-                            doc.translations?.en?.name ||
-                            doc.title ||
-                            doc.id}
-                        </span>
-                      </div>
-                      {badge && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Badge variant="secondary" className="flex items-center space-x-1">
-                              {badge === 'new' ? (
-                                <Zap className="h-3 w-3" />
-                              ) : (
-                                <RefreshCcw className="h-3 w-3" />
-                              )}
-                              <span className="capitalize">
-                                {tCommon(`TopDocsChips.badge.${badge}`, {
-                                  defaultValue: badge === 'new' ? 'New' : 'Updated',
-                                })}
-                              </span>
-                            </Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            {badge === 'new'
-                              ? tCommon('TopDocsChips.tooltip.new', {
-                                  defaultValue: 'Recently added',
-                                })
-                              : tCommon('TopDocsChips.tooltip.updated', {
-                                  defaultValue: 'Recently refreshed',
-                                })}
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-                    </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="mt-2 flex items-center gap-1 text-xs text-slate-700 dark:text-slate-200">
-                          <Clock className="h-3 w-3" />
-                          ~3 min
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {tCommon('TopDocsChips.estimatedCompletion', {
-                          defaultValue: 'Average completion time',
-                        })}
-                      </TooltipContent>
-                    </Tooltip>
-                  </Link>
-                );
-              })}
-            </div>
-            <div className="text-center mt-6 space-x-4">
-              {!showAllForCategory && filteredDocs.length > 12 && (
-                <Button variant="secondary" size="sm" onClick={() => setShowAllForCategory(true)}>
-                  {tCommon('showMore', { defaultValue: 'Show more' })}
-                </Button>
-              )}
+{selectedCategory && (
+  <>
+    <div className="mb-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <span className="text-blue-500">1.</span>{' '}
+            {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
+          </p>
+          <h3 className="mt-1 text-2xl font-semibold text-[#1D4ED8]" id="popular-docs-selected">
+            {categoryMeta[selectedCategory]?.label || selectedCategory}
+          </h3>
+        </div>
+        <Button
+          variant="link"
+          size="sm"
+          className="text-[#2563EB] hover:text-[#1D4ED8] inline-flex items-center gap-1"
+          onClick={() => {
+            setSelectedCategory(null);
+            setSelectedFilterId('all');
+            setShowAllForCategory(false);
+          }}
+        >
+          {tCommon('changeCategory', { defaultValue: 'Back to categories' })} →
+        </Button>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <span className="text-blue-500">2.</span>{' '}
+          {tCommon('home.hero2.builder.step2', { defaultValue: 'Narrow your focus' })}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {roleFilters.map((filter) => {
+            const isActive = selectedFilterId === filter.id;
+            return (
               <Button
-                variant="link"
-                onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
-                className="text-primary text-sm"
+                key={filter.id}
+                type="button"
+                size="sm"
+                variant="outline"
+                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-[#2563EB] text-white shadow-sm hover:bg-[#1D4ED8]'
+                    : 'border-transparent bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+                onClick={() => {
+                  setSelectedFilterId(filter.id);
+                  setShowAllForCategory(false);
+                }}
+                disabled={roleFilters.length <= 1 && filter.id === 'all'}
               >
-                {tCommon('viewAllInCategory', { defaultValue: 'View all in category' })}{'->'}
+                {filter.label}
               </Button>
-            </div>
-          </>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <span className="text-blue-500">3.</span>{' '}
+          {tCommon('home.hero2.builder.step3', { defaultValue: 'Select a specific document' })}
+        </p>
+        {filteredDocs.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-600">
+            {tCommon('home.hero2.builder.step3Empty', {
+              defaultValue: 'No documents match this focus yet. Try a different option.',
+            })}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {displayedDocs.map((doc) => {
+              const badge = DOC_BADGES[doc.id];
+              const href = buildDocHref(doc.id);
+              const friendlyDescription = getFriendlyDescription(doc);
+              return (
+                <Link
+                  key={doc.id}
+                  href={href}
+                  prefetch
+                  className="group block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#1D4ED8]/70 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+                  onMouseEnter={() => prefetchDocRoutes(doc.id)}
+                  onFocus={() => prefetchDocRoutes(doc.id)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+                        <FileText className="h-5 w-5" />
+                      </span>
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-slate-900 group-hover:text-[#1D4ED8] transition-colors">
+                          {getDocName(doc)}
+                        </h4>
+                        {friendlyDescription && (
+                          <p className="text-xs text-slate-500">
+                            {tCommon('TopDocsChips.hoverLabel', { defaultValue: 'For' })}: {friendlyDescription}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    {badge && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge variant="secondary" className="flex items-center space-x-1">
+                            {badge === 'new' ? (
+                              <Zap className="h-3 w-3" />
+                            ) : (
+                              <RefreshCcw className="h-3 w-3" />
+                            )}
+                            <span className="capitalize">
+                              {tCommon(`TopDocsChips.badge.${badge}`, {
+                                defaultValue: badge === 'new' ? 'New' : 'Updated',
+                              })}
+                            </span>
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {badge === 'new'
+                            ? tCommon('TopDocsChips.tooltip.new', {
+                                defaultValue: 'Recently added',
+                              })
+                            : tCommon('TopDocsChips.tooltip.updated', {
+                                defaultValue: 'Recently refreshed',
+                              })}
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )}
+      </div>
+    </div>
+    <div className="text-center mt-6 space-x-4">
+      {selectedFilterId === 'all' && !showAllForCategory && filteredDocs.length > 12 && (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="rounded-full border-transparent bg-slate-100 px-6 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
+          onClick={() => setShowAllForCategory(true)}
+        >
+          {tCommon('TopDocsChips.showMore', { defaultValue: 'Show more' })}
+        </Button>
+      )}
+      <Button
+        variant="link"
+        onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
+        className="inline-flex items-center gap-1 text-[#2563EB] text-sm font-semibold hover:text-[#1D4ED8]"
+      >
+        {tCommon('TopDocsChips.viewAll', { defaultValue: 'View all in category →' })}
+      </Button>
+    </div>
+  </>
+)}
+
       </section>
     </TooltipProvider>
   );

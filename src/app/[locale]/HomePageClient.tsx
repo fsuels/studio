@@ -13,6 +13,15 @@ import TopDocsChips from '@/components/shared/TopDocsChips';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
 import { resolveDocSlug } from '@/lib/slug-alias';
+import {
+  buildCategoryOptionDescriptors,
+  CATEGORY_ROLE_FILTERS,
+  buildDocumentSearchIndex,
+  filterDocumentsByRoleCriteria,
+  filterDocumentsForCategory,
+  normalizeFilterConfig,
+  type NormalizedFilterCriteria,
+} from '@/lib/homepage/document-selection';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { CheckCircle2, DownloadCloud, FileText, PenSquare, ShieldCheck } from 'lucide-react';
 
@@ -23,343 +32,13 @@ const HERO_TRUST_ITEMS = [
   { key: 'home.hero2.trustRow.edit', icon: PenSquare },
 ] as const;
 
-const CATEGORY_CANONICAL_GROUPS = [
-  {
-    id: 'real-estate',
-    label: 'Real Estate & Property',
-    labelKey: 'home.hero2.builder.categories.realEstate',
-    patterns: [
-      'Real Estate & Property',
-      'Real Estate',
-      'Property Management',
-      'Construction & Home Improvement',
-      'Construction',
-    ],
-  },
-  {
-    id: 'employment',
-    label: 'Employment & HR',
-    labelKey: 'home.hero2.builder.categories.employment',
-    patterns: ['Employment & HR', 'Employment', 'HR'],
-  },
-  {
-    id: 'personal-family',
-    label: 'Personal & Family',
-    labelKey: 'home.hero2.builder.categories.personalFamily',
-    patterns: [
-      'Personal',
-      'Family',
-      'Family & Personal',
-      'Personal & Lifestyle',
-      'Estate Planning',
-    ],
-  },
-  {
-    id: 'health',
-    label: 'Health & Care',
-    labelKey: 'home.hero2.builder.categories.health',
-    patterns: ['Healthcare & Medical', 'Health & Care', 'Health'],
-  },
-  {
-    id: 'finance',
-    label: 'Finance & Lending',
-    labelKey: 'home.hero2.builder.categories.finance',
-    patterns: ['Finance & Lending', 'Finance', 'Investments'],
-  },
-  {
-    id: 'business',
-    label: 'Business & Operations',
-    labelKey: 'home.hero2.builder.categories.business',
-    patterns: [
-      'Business & Commercial',
-      'Business',
-      'Professional Services',
-      'Sales',
-      'Marketing & Advertising',
-      'Technology & IT',
-      'Digital Assets & Blockchain',
-      'Gaming & Esports',
-      'Corporate',
-    ],
-  },
-  {
-    id: 'creative',
-    label: 'IP & Creative',
-    labelKey: 'home.hero2.builder.categories.creative',
-    patterns: ['Intellectual Property', 'Entertainment & Media', 'Creative'],
-  },
-  {
-    id: 'legal',
-    label: 'Legal Process & Disputes',
-    labelKey: 'home.hero2.builder.categories.legal',
-    patterns: [
-      'Legal',
-      'Dispute Resolution',
-      'Government & Legal Services',
-      'Risk & Liability',
-      'Risk Management',
-    ],
-  },
-];
-
-
-type CategoryFilterConfig = {
-  id: string;
-  fallback: string;
-  matchTags?: string[];
-  keywords?: string[];
-  docIds?: string[];
-  excludeKeywords?: string[];
-  translationKey?: string;
-};
-
-const CATEGORY_ROLE_FILTERS: Record<string, CategoryFilterConfig[]> = {
-  'real-estate': [
-    {
-      id: 'buyer',
-      fallback: 'Buyer',
-      matchTags: ['buyer', 'purchase', 'purchaser'],
-      keywords: ['purchase', 'buyer', 'offer', 'earnest', 'closing', 'sale contract'],
-      docIds: [
-        'real-estate-purchase-agreement',
-        'earnest-money-agreement',
-        'mortgage-agreement',
-        'warranty-deed',
-      ],
-      excludeKeywords: ['lease', 'rent'],
-      translationKey: 'home.hero2.builder.scenario.realEstate.buyer',
-    },
-    {
-      id: 'seller',
-      fallback: 'Seller',
-      matchTags: ['seller', 'sale', 'disclosure'],
-      keywords: ['seller', 'sale', 'disclosure', 'listing', 'transfer'],
-      docIds: [
-        'real-estate-purchase-agreement',
-        'warranty-deed',
-        'timber-sale-agreement',
-        'water-rights-agreement',
-      ],
-      translationKey: 'home.hero2.builder.scenario.realEstate.seller',
-    },
-    {
-      id: 'landlord',
-      fallback: 'Landlord',
-      matchTags: ['landlord', 'rental', 'property-owner'],
-      keywords: ['landlord', 'rent', 'lease', 'eviction', 'property management'],
-      docIds: [
-        'lease-addendum',
-        'lease-amendment',
-        'notice-of-lease-violation',
-        'notice-to-enter',
-        'notice-to-pay-rent-or-quit',
-        'rent-increase-letter',
-        'rent-receipt',
-        'residential-rental-inspection-report',
-        'pet-addendum',
-        'farm-lease-agreement',
-        'hunting-lease-agreement',
-        'mining-lease-agreement',
-        'parking-space-lease-agreement',
-        'storage-space-lease-agreement',
-        'oil-gas-lease-agreement',
-      ],
-      translationKey: 'home.hero2.builder.scenario.realEstate.landlord',
-    },
-    {
-      id: 'tenant',
-      fallback: 'Tenant',
-      matchTags: ['tenant', 'renter'],
-      keywords: ['tenant', 'renter', 'rental application', 'security deposit', 'rent receipt'],
-      docIds: [
-        'residential-rental-application',
-        'rent-receipt',
-      ],
-      excludeKeywords: ['landlord'],
-      translationKey: 'home.hero2.builder.scenario.realEstate.tenant',
-    },
-    {
-      id: 'homeowner',
-      fallback: 'Homeowner',
-      matchTags: ['homeowner', 'owner'],
-      keywords: ['homeowner', 'remodel', 'renovation', 'contractor', 'neighbor'],
-      docIds: [
-        'mortgage-agreement',
-        'warranty-deed',
-        'water-rights-agreement',
-      ],
-      translationKey: 'home.hero2.builder.scenario.realEstate.homeowner',
-    },
-  ],
-  'employment': [
-    {
-      id: 'employer',
-      fallback: 'Employer / HR',
-      matchTags: ['employer', 'hr'],
-      keywords: ['employer', 'policy', 'hr', 'handbook', 'discipline', 'termination'],
-      translationKey: 'home.hero2.builder.scenario.employment.employer',
-    },
-    {
-      id: 'employee',
-      fallback: 'Employee',
-      matchTags: ['employee', 'worker'],
-      keywords: ['employee', 'performance', 'evaluation', 'complaint', 'warning'],
-      translationKey: 'home.hero2.builder.scenario.employment.employee',
-    },
-    {
-      id: 'contractor',
-      fallback: 'Contractor / Freelancer',
-      matchTags: ['contractor', 'freelancer'],
-      keywords: ['contractor', 'independent', 'freelance', 'gig', 'statement of work'],
-      translationKey: 'home.hero2.builder.scenario.employment.contractor',
-    },
-  ],
-  'personal-family': [
-    {
-      id: 'family',
-      fallback: 'Family & Dependents',
-      matchTags: ['family', 'dependent'],
-      keywords: ['family', 'dependent', 'child', 'care', 'travel consent', 'guardianship'],
-      translationKey: 'home.hero2.builder.scenario.personal.family',
-    },
-    {
-      id: 'estate',
-      fallback: 'Estate Planning',
-      matchTags: ['estate', 'will'],
-      keywords: ['estate', 'will', 'trust', 'probate', 'inheritance'],
-      translationKey: 'home.hero2.builder.scenario.personal.estate',
-    },
-    {
-      id: 'lifeEvent',
-      fallback: 'Life Events',
-      matchTags: ['life-event', 'affidavit', 'name-change'],
-      keywords: ['affidavit', 'name change', 'personal finance', 'notary', 'consent'],
-      translationKey: 'home.hero2.builder.scenario.personal.lifeEvent',
-    },
-  ],
-  health: [
-    {
-      id: 'patient',
-      fallback: 'Patient',
-      matchTags: ['patient', 'medical'],
-      keywords: ['patient', 'medical', 'consent', 'hipaa', 'treatment'],
-      translationKey: 'home.hero2.builder.scenario.health.patient',
-    },
-    {
-      id: 'caregiver',
-      fallback: 'Caregiver',
-      matchTags: ['caregiver', 'care'],
-      keywords: ['caregiver', 'care plan', 'support', 'assistance'],
-      translationKey: 'home.hero2.builder.scenario.health.caregiver',
-    },
-    {
-      id: 'provider',
-      fallback: 'Healthcare Provider',
-      matchTags: ['provider', 'physician'],
-      keywords: ['provider', 'clinic', 'medical services', 'compliance', 'practice'],
-      translationKey: 'home.hero2.builder.scenario.health.provider',
-    },
-  ],
-  finance: [
-    {
-      id: 'lender',
-      fallback: 'Lender',
-      matchTags: ['lender', 'loan'],
-      keywords: ['lender', 'loan', 'credit', 'financing', 'collateral'],
-      translationKey: 'home.hero2.builder.scenario.finance.lender',
-    },
-    {
-      id: 'borrower',
-      fallback: 'Borrower',
-      matchTags: ['borrower', 'debtor'],
-      keywords: ['borrower', 'repayment', 'hardship', 'debt', 'payment plan'],
-      translationKey: 'home.hero2.builder.scenario.finance.borrower',
-    },
-    {
-      id: 'vehicle',
-      fallback: 'Vehicle Sale',
-      matchTags: ['vehicle', 'auto', 'car'],
-      keywords: ['vehicle', 'auto', 'car', 'odometer', 'title'],
-      translationKey: 'home.hero2.builder.scenario.finance.vehicle',
-    },
-  ],
-  business: [
-    {
-      id: 'founder',
-      fallback: 'Founder / Owner',
-      matchTags: ['founder', 'owner'],
-      keywords: ['founder', 'startup', 'operating agreement', 'bylaws', 'formation'],
-      translationKey: 'home.hero2.builder.scenario.business.founder',
-    },
-    {
-      id: 'partnership',
-      fallback: 'Partners & Investors',
-      matchTags: ['partner', 'investor'],
-      keywords: ['partner', 'investor', 'equity', 'capital', 'joint venture'],
-      translationKey: 'home.hero2.builder.scenario.business.partnership',
-    },
-    {
-      id: 'hr',
-      fallback: 'HR & Operations',
-      matchTags: ['hr', 'operations'],
-      keywords: ['hr', 'operations', 'employment', 'policy', 'onboarding'],
-      translationKey: 'home.hero2.builder.scenario.business.hr',
-    },
-  ],
-  creative: [
-    {
-      id: 'creator',
-      fallback: 'Creator / Artist',
-      matchTags: ['creator', 'artist'],
-      keywords: ['creator', 'artist', 'creative', 'collaboration', 'commission'],
-      translationKey: 'home.hero2.builder.scenario.ip.creator',
-    },
-    {
-      id: 'brand',
-      fallback: 'Brand & Marketing',
-      matchTags: ['brand', 'marketing'],
-      keywords: ['brand', 'marketing', 'influencer', 'sponsorship', 'campaign'],
-      translationKey: 'home.hero2.builder.scenario.ip.brand',
-    },
-    {
-      id: 'technology',
-      fallback: 'Technology & Digital',
-      matchTags: ['technology', 'digital'],
-      keywords: ['technology', 'software', 'saas', 'digital', 'license'],
-      translationKey: 'home.hero2.builder.scenario.ip.technology',
-    },
-  ],
-  legal: [
-    {
-      id: 'demand',
-      fallback: 'Demand & Enforcement',
-      matchTags: ['demand', 'enforcement'],
-      keywords: ['demand', 'cease and desist', 'claim', 'payment demand'],
-      translationKey: 'home.hero2.builder.scenario.legal.demand',
-    },
-    {
-      id: 'court',
-      fallback: 'Court & Sworn Statements',
-      matchTags: ['court', 'affidavit'],
-      keywords: ['court', 'affidavit', 'declaration', 'sworn', 'testimony'],
-      translationKey: 'home.hero2.builder.scenario.legal.court',
-    },
-    {
-      id: 'compliance',
-      fallback: 'Compliance & Risk',
-      matchTags: ['compliance', 'risk'],
-      keywords: ['compliance', 'policy', 'waiver', 'liability', 'risk'],
-      translationKey: 'home.hero2.builder.scenario.legal.compliance',
-    },
-  ],
-};
 
 
 
-type RoleFilter = {
+type RoleFilterOption = {
   id: string;
   label: string;
-  config: CategoryFilterConfig;
+  criteria: NormalizedFilterCriteria | null;
 };
 
 
@@ -492,44 +171,20 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
     [locale],
   );
 
-  const categories = useMemo(() => {
-    const unique = new Set<string>();
-    documents.forEach((doc) => {
-      if (doc.category) {
-        unique.add(doc.category);
-      }
-    });
-    return Array.from(unique).sort((a, b) => a.localeCompare(b));
-  }, [documents]);
+  const categoryOptionDescriptors = useMemo(
+    () => buildCategoryOptionDescriptors(documents),
+    [documents],
+  );
 
-  const categoryOptions = useMemo(() => {
-    const remaining = new Set(categories);
-    const options: Array<{ id: string; label: string; matches: string[] }> = [];
-
-    CATEGORY_CANONICAL_GROUPS.forEach((group) => {
-      const matches = group.patterns.filter((name) => remaining.has(name));
-      if (matches.length > 0) {
-        const translatedLabel = group.labelKey
-          ? t(group.labelKey, { defaultValue: group.label })
-          : group.label;
-        options.push({ id: group.id, label: translatedLabel, matches });
-        matches.forEach((name) => remaining.delete(name));
-      }
-    });
-
-    Array.from(remaining)
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((category) => {
-        const slug = category
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-        const translated = t(`home.hero2.builder.categories.dynamic.${slug}`, { defaultValue: category });
-        options.push({ id: `other-${slug}`, label: translated, matches: [category] });
-      });
-
-    return options;
-  }, [categories, t]);
+  const categoryOptions = useMemo(() =>
+    categoryOptionDescriptors.map((option) => ({
+      id: option.id,
+      label: option.translationKey
+        ? t(option.translationKey, { defaultValue: option.defaultLabel })
+        : option.defaultLabel,
+      matches: option.matches,
+    })),
+  [categoryOptionDescriptors, t]);
 
   const activeCategoryOption = useMemo(() =>
     categoryOptions.find((option) => option.id === selectedCategoryId) ?? null,
@@ -538,60 +193,24 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
   const activeCategoryLabel = activeCategoryOption?.label ?? null;
 
   const docsForCategory = useMemo(() => {
-    if (!activeCategoryOption) return [] as DocumentSummary[];
-    const allowed = new Set(activeCategoryOption.matches);
-    const subset = documents.filter((doc) => allowed.has(doc.category));
-    return [...subset].sort((a, b) => getDocName(a).localeCompare(getDocName(b)));
+    if (!activeCategoryOption) {
+      return [] as DocumentSummary[];
+    }
+
+    return filterDocumentsForCategory(documents, activeCategoryOption.matches, getDocName);
   }, [documents, activeCategoryOption, getDocName]);
 
-  const docSearchIndex = useMemo(() => {
-    const index = new Map<string, string>();
+  const docSearchIndex = useMemo(
+    () => buildDocumentSearchIndex(documents),
+    [documents],
+  );
 
-    documents.forEach((doc) => {
-      const fields: string[] = [
-        doc.title,
-        doc.description,
-        ...(doc.tags ?? []),
-        ...(doc.aliases ?? []),
-      ];
-
-      const translationEntries = Object.values(doc.translations ?? {});
-      translationEntries.forEach((translation) => {
-        if (!translation) {
-          return;
-        }
-
-        if (translation.name) {
-          fields.push(translation.name);
-        }
-
-        if (translation.description) {
-          fields.push(translation.description);
-        }
-
-        if (Array.isArray(translation.aliases)) {
-          fields.push(...translation.aliases);
-        }
-      });
-
-      index.set(
-        doc.id,
-        fields
-          .filter((value): value is string => Boolean(value))
-          .map((value) => value.toLowerCase())
-          .join(' | '),
-      );
-    });
-
-    return index;
-  }, [documents]);
-
-  const roleFilters = useMemo<RoleFilter[]>(() => {
-    const base: RoleFilter[] = [
+  const roleFilters = useMemo<RoleFilterOption[]>(() => {
+    const base: RoleFilterOption[] = [
       {
         id: 'all',
         label: t('home.hero2.builder.filters.all', { defaultValue: 'All documents' }),
-        config: { id: 'all', fallback: 'All documents' },
+        criteria: null,
       },
     ];
 
@@ -602,23 +221,16 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
     const configs = CATEGORY_ROLE_FILTERS[activeCategoryOption.id] ?? [];
 
     configs.forEach((config) => {
-      const normalizedMatchTags = config.matchTags?.map((tag) => tag.toLowerCase());
-      const normalizedKeywords = config.keywords?.map((keyword) => keyword.toLowerCase());
-      const normalizedExclude = config.excludeKeywords?.map((keyword) => keyword.toLowerCase());
+      const normalized = normalizeFilterConfig(config);
 
       base.push({
         id: config.id,
         label: t(
-          config.translationKey
+          normalized.translationKey
             ?? `home.hero2.builder.filters.${activeCategoryOption.id}.${config.id}`,
-          { defaultValue: config.fallback },
+          { defaultValue: normalized.fallback },
         ),
-        config: {
-          ...config,
-          matchTags: normalizedMatchTags,
-          keywords: normalizedKeywords,
-          excludeKeywords: normalizedExclude,
-        },
+        criteria: normalized,
       });
     });
 
@@ -642,59 +254,12 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
     }
 
     const activeFilter = roleFilters.find((filter) => filter.id === selectedFilterId);
-    if (!activeFilter || activeFilter.id === 'all') {
+    if (!activeFilter || !activeFilter.criteria) {
       return docsForCategory;
     }
 
-    const matchTags = (activeFilter.config.matchTags ?? []).map((tag) => tag.toLowerCase());
-    const keywords = (activeFilter.config.keywords ?? []).map((keyword) => keyword.toLowerCase());
-    const docIds = activeFilter.config.docIds ?? [];
-    const excludeKeywords = (activeFilter.config.excludeKeywords ?? []).map((keyword) => keyword.toLowerCase());
-
-    const hasCriteria = docIds.length > 0 || matchTags.length > 0 || keywords.length > 0;
-    if (!hasCriteria) {
-      return [];
-    }
-
-    const filtered = docsForCategory.filter((doc) => {
-      let include = false;
-
-      if (docIds.length && docIds.includes(doc.id)) {
-        include = true;
-      }
-
-      if (!include && matchTags.length) {
-        const docTags = doc.tags?.map((tag) => tag.toLowerCase()) ?? [];
-        include = matchTags.some((tag) => docTags.includes(tag));
-      }
-
-      if (!include && matchTags.length) {
-        const docAliases = doc.aliases?.map((alias) => alias.toLowerCase()) ?? [];
-        include = matchTags.some((tag) => docAliases.includes(tag));
-      }
-
-      const docText = docSearchIndex.get(doc.id) ?? '';
-
-      if (!include && keywords.length && docText) {
-        include = keywords.some((keyword) => docText.includes(keyword));
-      }
-
-      if (!include) {
-        return false;
-      }
-
-      if (excludeKeywords.length && docText) {
-        const hasExcluded = excludeKeywords.some((keyword) => docText.includes(keyword));
-        if (hasExcluded) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-
-    return filtered;
-  }, [docsForCategory, docSearchIndex, roleFilters, selectedFilterId]);
+    return filterDocumentsByRoleCriteria(docsForCategory, activeFilter.criteria, docSearchIndex);
+  }, [selectedFilterId, roleFilters, docsForCategory, docSearchIndex]);
 
   useEffect(() => {
     if (selectedDocId && !filteredDocs.some((doc) => doc.id === selectedDocId)) {
@@ -848,8 +413,6 @@ export default function HomePageClient({
   popularDocs,
 }: HomePageClientProps) {
   const { t } = useTranslation('common');
-  const router = useRouter();
-
   // Removed selectedDocument to avoid importing the full document library on client
 
 

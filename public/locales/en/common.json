@@ -322,6 +322,9 @@
   "TopDocsChips.badge.updated": "Updated",
   "TopDocsChips.tooltip.new": "Recently added",
   "TopDocsChips.tooltip.updated": "Recently refreshed",
+  "TopDocsChips.hoverLabel": "For",
+  "TopDocsChips.showMore": "Show more",
+  "TopDocsChips.viewAll": "View all in category →",
   "useCases": {
     "freelancers": {
       "title": "For Freelancers",
