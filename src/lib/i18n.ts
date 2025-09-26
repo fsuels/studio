@@ -35,9 +35,34 @@ export async function ensureI18nInitialized(
 ): Promise<void> {
   ensurePluginsBound();
 
-  if (i18n.isInitialized && options.locale) {
-    if (i18n.language !== options.locale) {
-      await i18n.changeLanguage(options.locale);
+  const targetLocale = (
+    options.locale ?? (i18n.language as SupportedLocale | undefined) ?? 'en'
+  ) as SupportedLocale;
+  const namespaces = options.namespaces ?? ['common', 'header', 'footer'];
+
+  if (i18n.isInitialized) {
+    const missingNamespaces = namespaces.filter(
+      (ns) => !i18n.hasResourceBundle(targetLocale, ns),
+    );
+
+    if (missingNamespaces.length > 0) {
+      try {
+        const resources = await loadLocaleResources(targetLocale, namespaces);
+        namespaces.forEach((ns) => {
+          const payload = (resources as Record<string, unknown>)[ns];
+          if (payload && !i18n.hasResourceBundle(targetLocale, ns)) {
+            i18n.addResourceBundle(targetLocale, ns, payload, true, true);
+          }
+        });
+      } catch (err) {
+        console.error('[ensureI18nInitialized] Failed to load resources', err);
+      }
+    }
+
+    if (i18n.language !== targetLocale) {
+      await i18n.changeLanguage(targetLocale).catch((err) => {
+        console.error('[ensureI18nInitialized] changeLanguage error', err);
+      });
     }
     return;
   }
@@ -50,11 +75,11 @@ export async function ensureI18nInitialized(
     try {
       ensurePluginsBound();
 
-      const locale: SupportedLocale = options.locale ?? 'en';
+      const locale: SupportedLocale = targetLocale;
 
       let localeResources: Resource[string] | null = null;
       try {
-        localeResources = await loadLocaleResources(locale, options.namespaces);
+        localeResources = await loadLocaleResources(locale, namespaces);
       } catch (err) {
         console.error(
           'i18n resource load error; falling back to minimal resources',
@@ -74,8 +99,6 @@ export async function ensureI18nInitialized(
         } as unknown as Resource[string];
       }
 
-      const ns = options.namespaces ?? ['common', 'header', 'footer'];
-
       const resources: Resource = {
         [locale]: localeResources!,
       } as Resource;
@@ -85,7 +108,7 @@ export async function ensureI18nInitialized(
           lng: locale,
           fallbackLng: 'en',
           supportedLngs: ['en', 'es'],
-          ns,
+          ns: namespaces,
           defaultNS: 'common',
           resources,
           interpolation: { escapeValue: false },
