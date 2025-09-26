@@ -2,22 +2,15 @@
 'use client';
 
 import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
-import {
-  usePathname,
-  useRouter,
-  useParams,
-} from 'next/navigation';
+import { usePathname, useRouter, useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { getDirAttribute } from '@/lib/rtl-utils';
+import i18nInstance, { ensureI18nInitialized } from '@/lib/i18n';
 
 const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
 const COUNTRY_CODE = 'US';
@@ -25,11 +18,13 @@ const COUNTRY_CODE = 'US';
 interface LanguageSwitcherProps {
   size?: 'sm' | 'md';
   hideCaret?: boolean;
+  onLocaleChangeStart?: (targetLocale: 'en' | 'es') => void;
 }
 
 const LanguageSwitcher = React.memo(function LanguageSwitcher({
   size = 'md',
   hideCaret = false,
+  onLocaleChangeStart,
 }: LanguageSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
@@ -64,10 +59,21 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher({
     }
   }, [currentRouteLocale, isHydrated]);
 
-  const handleLocaleChange = (newLocale: 'en' | 'es') => {
+  const handleLocaleChange = async (newLocale: 'en' | 'es') => {
     if (newLocale === currentRouteLocale) {
       setIsPopoverOpen(false);
       return;
+    }
+
+    onLocaleChangeStart?.(newLocale);
+
+    try {
+      await ensureI18nInitialized({ locale: newLocale, namespaces: ['common', 'header', 'footer'] });
+      if (i18nInstance.language !== newLocale) {
+        await i18nInstance.changeLanguage(newLocale);
+      }
+    } catch (error) {
+      console.error('[LanguageSwitcher] Failed to sync language', error);
     }
 
     // Update document direction attribute

@@ -7,6 +7,7 @@ import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { toast } from 'sonner';
+import i18nInstance, { ensureI18nInitialized } from '@/lib/i18n';
 
 interface LanguageSwitchProps {
   currentLocale: 'en' | 'es';
@@ -26,7 +27,7 @@ export default function LanguageSwitch({ currentLocale, showToast = true }: Lang
   const { t } = useTranslation('common');
 
   const switchLanguage = useCallback(
-    (targetLocale?: 'en' | 'es') => {
+    async (targetLocale?: 'en' | 'es') => {
       const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
 
       if (newLocale === currentLocale) {
@@ -56,6 +57,15 @@ export default function LanguageSwitch({ currentLocale, showToast = true }: Lang
         );
       }
 
+      try {
+        await ensureI18nInitialized({ locale: newLocale, namespaces: ['common', 'header', 'footer'] });
+        if (i18nInstance.language !== newLocale) {
+          await i18nInstance.changeLanguage(newLocale);
+        }
+      } catch (error) {
+        console.error('[LanguageSwitch] Failed to sync language', error);
+      }
+
       router.push(newPath);
     },
     [currentLocale, pathname, searchParams, router, t, showToast],
@@ -66,7 +76,7 @@ export default function LanguageSwitch({ currentLocale, showToast = true }: Lang
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        switchLanguage();
+        void switchLanguage();
       }
     };
 
@@ -84,7 +94,7 @@ export function useLanguageSwitch(currentLocale: 'en' | 'es') {
   const { t } = useTranslation('common');
 
   const switchLanguage = useCallback(
-    (targetLocale?: 'en' | 'es', showToast = true) => {
+    async (targetLocale?: 'en' | 'es', showToast = true) => {
       const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
 
       if (newLocale === currentLocale) {
@@ -112,6 +122,15 @@ export function useLanguageSwitch(currentLocale: 'en' | 'es') {
           }),
           { icon: <Languages className="h-4 w-4" />, duration: 2000 },
         );
+      }
+
+      try {
+        await ensureI18nInitialized({ locale: newLocale, namespaces: ['common', 'header', 'footer'] });
+        if (i18nInstance.language !== newLocale) {
+          await i18nInstance.changeLanguage(newLocale);
+        }
+      } catch (error) {
+        console.error('[useLanguageSwitch] Failed to sync language', error);
       }
 
       router.push(newPath);

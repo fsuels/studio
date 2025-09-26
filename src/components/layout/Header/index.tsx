@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@/components/layout/Logo';
 import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
@@ -20,12 +20,14 @@ const CategoryDropdown = dynamic(() => import('./CategoryDropdown'), {
   ssr: false,
 });
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
+import { MOBILE_MENU_REOPEN_STORAGE_KEY } from './mobileMenu.constants';
 
 const Header = React.memo(function Header() {
   const params = (useParams<{ locale?: string }>() ?? {}) as {
     locale?: 'en' | 'es';
   };
   const clientLocale = params.locale ?? 'en';
+  const pathname = usePathname();
   const { t: tHeader } = useTranslation('header');
 
   // Component state
@@ -54,6 +56,18 @@ const Header = React.memo(function Header() {
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const shouldReopen = sessionStorage.getItem(MOBILE_MENU_REOPEN_STORAGE_KEY);
+    if (shouldReopen === 'true') {
+      setIsMobileMenuOpen(true);
+      sessionStorage.removeItem(MOBILE_MENU_REOPEN_STORAGE_KEY);
+    }
+  }, [pathname]);
 
   // Close mobile menu when mega menu opens
   useEffect(() => {
