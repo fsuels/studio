@@ -727,14 +727,11 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/70 backdrop-blur-sm md:p-8"
+      className="rounded-3xl border border-slate-300 bg-white p-6 shadow-xl shadow-slate-300/60 backdrop-blur-sm md:p-8"
     >
       <div className="space-y-6">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-600">
-            {t('home.hero2.builder.overline', { defaultValue: 'Document Builder' })}
-          </p>
-          <h3 className="text-2xl font-semibold text-slate-900">
+        <div>
+          <h3 className="text-xl font-semibold text-slate-900">
             {t('home.hero2.builder.title', { defaultValue: 'Create Your Document' })}
           </h3>
         </div>
@@ -749,7 +746,7 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
               onValueChange={handleCategoryChange}
               disabled={isLoading || !categoryOptions.length}
             >
-              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+              <SelectTrigger className="h-12 rounded-xl border border-slate-400 bg-white text-sm font-medium text-slate-900 shadow-lg transition-colors focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/60 hover:border-slate-500">
                 <SelectValue
                   placeholder={t('home.hero2.builder.step1Placeholder', { defaultValue: 'Select a category' })}
                 />
@@ -773,7 +770,7 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
               onValueChange={handleFilterChange}
               disabled={isLoading || roleFilters.length <= 1}
             >
-              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+              <SelectTrigger className="h-12 rounded-xl border border-slate-400 bg-white text-sm font-medium text-slate-900 shadow-lg transition-colors focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/60 hover:border-slate-500">
                 <SelectValue
                   placeholder={t('home.hero2.builder.step2Placeholder', { defaultValue: 'Select a focus (optional)' })}
                 />
@@ -797,7 +794,7 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
               onValueChange={handleDocChange}
               disabled={isLoading}
             >
-              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+              <SelectTrigger className="h-12 rounded-xl border border-slate-400 bg-white text-sm font-medium text-slate-900 shadow-lg transition-colors focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/60 hover:border-slate-500">
                 <SelectValue
                   placeholder={t('home.hero2.builder.step3Placeholder', { defaultValue: 'e.g. NDA, Lease Agreement, Will...' })}
                 />
@@ -849,22 +846,16 @@ export default function HomePageClient({
   return (
     <>
       {/* HERO SECTION */}
-      <section className="bg-white pt-12 pb-16 lg:pt-20">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 lg:flex-row lg:items-start lg:gap-16">
-          <div className="w-full max-w-xl space-y-6 lg:space-y-8">
-            <div className="space-y-4">
+      <section className="bg-gradient-to-br from-slate-100 via-white to-blue-50 pt-2 pb-16 lg:pt-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 lg:flex-row lg:items-start lg:gap-10">
+          <div className="w-full max-w-xl space-y-4 lg:space-y-4">
+            <div className="space-y-2.5">
               <h1 className="text-[40px] font-semibold tracking-tight text-[#111827] sm:text-[46px] lg:text-[52px] lg:leading-[1.08] antialiased">
                 {t('home.hero2.heading.main', { defaultValue: 'Legal Documents Made' })}{' '}
                 <span className="font-bold text-[#2563EB]">
                   {t('home.hero2.heading.highlight', { defaultValue: 'Easy.' })}
                 </span>
               </h1>
-              <p className="mt-3 text-[17px] font-medium leading-7 text-[#6A7689] sm:text-lg">
-                {t('home.hero2.subtitle', {
-                  defaultValue:
-                    'Avoid costly lawyers and complex processes. Our AI platform guides you through creating legally sound documents with ease.',
-                })}
-              </p>
             </div>
             <HeroDocumentBuilder locale={locale} />
             <div className="grid w-full grid-cols-2 gap-6 pt-6 sm:grid-cols-4">
@@ -885,14 +876,14 @@ export default function HomePageClient({
           </div>
           <div className="relative w-full max-w-[560px]">
             <div
-              className="absolute -top-12 right-10 hidden h-40 w-40 rounded-full bg-blue-100 blur-3xl lg:block"
+              className="absolute -top-12 right-10 hidden h-40 w-40 rounded-full bg-gradient-to-br from-blue-200/60 via-blue-100/40 to-transparent blur-3xl lg:block"
               aria-hidden="true"
             />
             <div
-              className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-emerald-100 blur-3xl lg:block"
+              className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-gradient-to-tr from-emerald-200/50 via-emerald-100/30 to-transparent blur-3xl lg:block"
               aria-hidden="true"
             />
-            <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-white via-white to-slate-50 p-4 shadow-2xl shadow-blue-200/40 ring-1 ring-slate-100">
+            <div className="relative overflow-hidden rounded-[32px] border border-white/50 bg-white/70 p-4 pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
               <AutoImage
                 src={
                   locale === 'es'
@@ -907,7 +898,7 @@ export default function HomePageClient({
                 className="h-full w-full rounded-[24px] object-cover"
                 priority
               />
-              <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/90 p-6 shadow-lg shadow-slate-200/80 backdrop-blur">
+              <div className="absolute bottom-0 left-8 right-8 md:left-12 md:right-12 rounded-2xl bg-white/90 p-6 shadow-lg shadow-slate-200/80 backdrop-blur">
                 <div className="mb-3 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 shadow-sm">
                     <FileText className="h-5 w-5" aria-hidden="true" />
