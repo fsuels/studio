@@ -1,7 +1,7 @@
 ﻿// src/components/layout/Header/MobileMenuContent.tsx
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -67,6 +67,31 @@ export default function MobileMenuContent({
   const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
   const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<string, string | null>>({});
+
+  const menuContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = menuContentRef.current;
+    if (!node) {
+      return undefined;
+    }
+
+    if (isAuthModalOpen) {
+      node.setAttribute('aria-hidden', 'true');
+      node.setAttribute('inert', '');
+      node.style.pointerEvents = 'none';
+    } else {
+      node.removeAttribute('aria-hidden');
+      node.removeAttribute('inert');
+      node.style.pointerEvents = '';
+    }
+
+    return () => {
+      node.removeAttribute('aria-hidden');
+      node.removeAttribute('inert');
+      node.style.pointerEvents = '';
+    };
+  }, [isAuthModalOpen]);
 
   useEffect(() => {
     let cancelled = false;
@@ -412,9 +437,11 @@ export default function MobileMenuContent({
 
   return (
     <div className="flex h-full flex-col bg-background">
-      {renderAccountSection()}
-      <div className="flex-1 overflow-y-auto bg-muted/10 px-4 pb-8 pt-6 space-y-6">
-        {renderCategoryList()}
+      <div ref={menuContentRef} className="flex h-full flex-col">
+        {renderAccountSection()}
+        <div className="flex-1 overflow-y-auto bg-muted/10 px-4 pb-8 pt-6 space-y-6">
+          {renderCategoryList()}
+        </div>
       </div>
 
       <AuthModal

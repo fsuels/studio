@@ -64,8 +64,12 @@ const Header = React.memo(function Header() {
 
     const shouldReopen = sessionStorage.getItem(MOBILE_MENU_REOPEN_STORAGE_KEY);
     if (shouldReopen === 'true') {
-      setIsMobileMenuOpen(true);
       sessionStorage.removeItem(MOBILE_MENU_REOPEN_STORAGE_KEY);
+
+      const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+      if (isMobileViewport) {
+        setIsMobileMenuOpen(true);
+      }
     }
   }, [pathname]);
 

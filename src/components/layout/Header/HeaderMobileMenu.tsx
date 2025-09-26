@@ -97,7 +97,7 @@ export default function HeaderMobileMenu({
               aria-label={tHeader('nav.closeMenu', {
                 defaultValue: 'Close menu',
               })}
-              className="h-12 w-12 rounded-full border border-border/70 shadow-sm text-foreground/85 hover:text-foreground"
+              className="h-12 w-12 rounded-2xl border border-primary/40 bg-background/95 text-primary shadow-md hover:bg-primary/10"
             >
               <CloseIcon className="h-6 w-6" />
             </Button>

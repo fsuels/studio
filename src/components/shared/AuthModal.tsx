@@ -252,6 +252,7 @@ export default function AuthModal({
 
   return (
     <Dialog
+      modal
       open={isOpen}
       onOpenChange={(open) => !open && handleCloseAndReset()}
     >
