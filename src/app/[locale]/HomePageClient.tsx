@@ -858,7 +858,7 @@ export default function HomePageClient({
   return (
     <>
       {/* HERO SECTION */}
-      <section className="bg-gradient-to-br from-slate-100 via-white to-blue-50 pt-2 pb-16 lg:pt-6">
+      <section className="bg-gradient-to-br from-slate-100 via-white to-blue-50 pt-8 pb-16 lg:pt-6">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 lg:flex-row lg:items-start lg:gap-10">
           <div className="w-full max-w-xl space-y-4 lg:space-y-4">
             <div className="space-y-2.5">
@@ -870,7 +870,7 @@ export default function HomePageClient({
               </h1>
             </div>
             <HeroDocumentBuilder locale={locale} />
-            <div className="grid w-full grid-cols-2 gap-6 pt-6 sm:grid-cols-4">
+            <div className="grid w-full grid-cols-2 gap-2 -mt-2 sm:-mt-1 sm:grid-cols-4">
               {HERO_TRUST_ITEMS.map(({ icon: Icon, key }) => (
                 <div
                   key={key}
@@ -895,7 +895,7 @@ export default function HomePageClient({
               className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-gradient-to-tr from-emerald-200/50 via-emerald-100/30 to-transparent blur-3xl lg:block"
               aria-hidden="true"
             />
-            <div className="relative overflow-hidden rounded-[32px] border border-white/50 bg-white/70 p-4 pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
+            <div className="relative overflow-hidden rounded-[32px] border border-white/50 bg-white/70 p-4 pb-28 md:pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
               <AutoImage
                 src={
                   locale === 'es'
@@ -907,10 +907,10 @@ export default function HomePageClient({
                 })}
                 width={1536}
                 height={1024}
-                className="h-full w-full rounded-[24px] object-cover"
+                className="h-full w-full rounded-[24px] object-cover object-top md:object-center"
                 priority
               />
-              <div className="absolute bottom-0 left-8 right-8 md:left-12 md:right-12 rounded-2xl bg-white/90 p-6 shadow-lg shadow-slate-200/80 backdrop-blur">
+              <div className="absolute -bottom-16 left-6 right-6 mx-auto max-w-[calc(100%-3rem)] rounded-2xl bg-white/90 p-5 shadow-lg shadow-slate-200/80 backdrop-blur md:left-12 md:right-12 md:bottom-0 md:p-6">
                 <div className="mb-3 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 shadow-sm">
                     <FileText className="h-5 w-5" aria-hidden="true" />
