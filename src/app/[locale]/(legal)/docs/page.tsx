@@ -12,7 +12,7 @@ export default async function DocsIndexPage({ params }: DocsIndexPageProps) {
   const { locale } = resolvedParams;
 
   // For now, redirect to the homepage's document selection area
-  redirect(`/${locale}/marketplace`);
+  redirect(`/${locale}`);
 
   // Or, you could render a list of all documents/categories:
   // return (

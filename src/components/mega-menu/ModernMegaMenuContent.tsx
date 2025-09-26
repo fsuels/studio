@@ -418,7 +418,7 @@ interface ModernMegaMenuContentProps {
 const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, onLinkClick }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const exploreDestination = `/${locale}/marketplace`;
+  const exploreDestination = `/${locale}/docs`;
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all'>('all');
   const [isClient, setIsClient] = useState(false);

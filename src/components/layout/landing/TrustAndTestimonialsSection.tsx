@@ -259,7 +259,7 @@ const TrustAndTestimonialsSection = React.memo(
 
     const handleExploreTemplates = () => {
       const locale = i18n.language === 'es' ? 'es' : 'en';
-      router.push(`/${locale}/marketplace`);
+      router.push(`/${locale}/docs`);
     };
 
     return (

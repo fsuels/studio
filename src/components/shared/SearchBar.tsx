@@ -1,7 +1,13 @@
 // src/components/SearchBar.tsx
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
+import React, {
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
@@ -9,25 +15,27 @@ import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
 import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import { cn } from '@/lib/utils';
+import { track } from '@/lib/analytics';
 
-const SearchBar = React.memo(function SearchBar() {
+type SearchBarProps = React.ComponentPropsWithoutRef<'form'> & {
+  variant?: 'default' | 'hero';
+  'data-testid'?: string;
+};
+
+const SearchBar = React.memo(function SearchBar({
+  className,
+  variant = 'default',
+  'data-testid': dataTestId,
+  ...rest
+}: SearchBarProps) {
   const { t: tHeader } = useTranslation('header');
   const router = useRouter();
   const params = (useParams<{ locale?: string }>() ?? {}) as {
     locale?: string;
   };
   const locale = (params.locale as 'en' | 'es') || 'en';
-  const marketplaceDestination = `/${locale}/marketplace/`;
-
-  const prefetchMarketplace = React.useCallback(() => {
-    try {
-      router.prefetch(marketplaceDestination);
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.debug('Prefetch failed', error);
-      }
-    }
-  }, [marketplaceDestination, router]);
+  const docsBasePath = `/${locale}/docs`;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<DocumentSummary[]>([]);
@@ -36,7 +44,8 @@ const SearchBar = React.memo(function SearchBar() {
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const deferredSearchTerm = useDeferredValue(searchTerm);
-  const [workflowModule, setWorkflowModule] = useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
+  const [workflowModule, setWorkflowModule] =
+    useState<typeof import('@/lib/workflow/document-workflow') | null>(null);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -77,7 +86,7 @@ const SearchBar = React.memo(function SearchBar() {
     });
 
     return results.slice(0, 5);
-  }, [deferredSearchTerm, isHydrated, locale]);
+  }, [deferredSearchTerm, isHydrated, locale, workflowModule]);
 
   useEffect(() => {
     setSuggestions(hydratedSuggestions);
@@ -85,7 +94,7 @@ const SearchBar = React.memo(function SearchBar() {
     setShowSuggestions(isHydrated && hasQuery && hydratedSuggestions.length > 0);
   }, [deferredSearchTerm, hydratedSuggestions, isHydrated]);
 
-  // Close on outside click
+  // Close the suggestion panel when users click away
   useEffect(() => {
     if (!isHydrated) return;
     function handleClickOutside(event: MouseEvent) {
@@ -105,19 +114,47 @@ const SearchBar = React.memo(function SearchBar() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isHydrated) return;
-    if (searchTerm.trim()) {
-      router.push(
-        `${marketplaceDestination}?search=${encodeURIComponent(searchTerm)}`
-      );
-      setSearchTerm('');
-      setShowSuggestions(false);
+
+    const term = searchTerm.trim();
+    if (!term) return;
+
+    const immediateMatch = suggestions[0];
+    let targetDocId = immediateMatch?.id;
+
+    if (!targetDocId && workflowModule) {
+      const fallbackResults = workflowModule.searchWorkflowDocuments(term, {
+        jurisdiction: 'us',
+        language: locale === 'es' ? 'es' : 'en',
+      });
+      targetDocId = fallbackResults[0]?.id;
     }
+
+    track('global_search_submit', {
+      locale,
+      query: term,
+      docId: targetDocId ?? null,
+      surface: variant,
+    });
+
+    if (targetDocId) {
+      router.push(`${docsBasePath}/${resolveDocSlug(targetDocId)}`);
+    } else {
+      router.push(`${docsBasePath}?search=${encodeURIComponent(term)}`);
+    }
+
+    setSearchTerm('');
+    setShowSuggestions(false);
   };
 
   const handleSuggestionClick = async (docId: string) => {
     if (!isHydrated) return;
     setSearchTerm('');
     setShowSuggestions(false);
+    track('global_search_suggestion_click', {
+      locale,
+      docId,
+      surface: variant,
+    });
     router.push(`/${locale}/docs/${resolveDocSlug(docId)}`);
   };
 
@@ -125,7 +162,7 @@ const SearchBar = React.memo(function SearchBar() {
     ? tHeader('SearchBar.placeholder', {
         defaultValue: 'e.g. Lease, Will, NDA...',
       })
-    : 'Loading…';
+    : 'Loading...';
   const suggestionsHint = isHydrated
     ? tHeader('SearchBar.suggestionsHint', {
         defaultValue:
@@ -133,20 +170,41 @@ const SearchBar = React.memo(function SearchBar() {
       })
     : '';
 
+  const isHero = variant === 'hero';
+  const formProps = {
+    ...rest,
+    'data-testid': dataTestId ?? 'searchbar',
+  };
+
   return (
     <form
       onSubmit={handleSearchSubmit}
-      className="relative w-full max-w-md mx-auto"
+      className={cn(
+        'relative w-full',
+        isHero ? 'max-w-2xl' : 'mx-auto max-w-md',
+        className,
+      )}
+      {...formProps}
     >
-      <div className="relative flex items-center shadow-lg rounded-full border border-gray-300 bg-background">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+      <div
+        className={cn(
+          'relative flex items-center rounded-full border border-gray-300 bg-background shadow-lg transition-shadow duration-300 focus-within:shadow-xl',
+          isHero &&
+            'border-transparent bg-white/85 px-2 py-2 ring-1 ring-emerald-200/70 backdrop-blur supports-[backdrop-filter]:backdrop-blur-xl',
+        )}
+      >
+        <Search
+          className={cn(
+            'pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground',
+            isHero && 'h-5 w-5 text-emerald-500',
+          )}
+        />
         <Input
           ref={searchInputRef}
           type="search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => {
-            prefetchMarketplace();
             if (
               isHydrated &&
               searchTerm.trim().length > 1 &&
@@ -156,14 +214,19 @@ const SearchBar = React.memo(function SearchBar() {
             }
           }}
           placeholder={placeholderText}
-          className="flex-grow pl-10 pr-32 py-3 h-12 text-base rounded-full border-none placeholder-gray-400 focus:border-[#006EFF] focus:ring-2 focus:ring-offset-2 focus:ring-[#00C3A3]"
+          className={cn(
+            'flex-grow rounded-full border-none pl-10 pr-32 placeholder-gray-400 focus:border-[#006EFF] focus:ring-2 focus:ring-[#00C3A3] focus:ring-offset-2',
+            isHero ? 'h-14 py-4 text-lg' : 'h-12 py-3 text-base',
+          )}
           aria-label={placeholderText}
           disabled={!isHydrated}
         />
         <button
           type="submit"
-          onMouseEnter={prefetchMarketplace}
-          className="absolute right-1.5 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-medium text-white px-3 py-2 rounded-full bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600"
+          className={cn(
+            'absolute right-1.5 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-electric-500 to-electric-700 text-sm font-medium text-white transition hover:to-electric-600',
+            isHero ? 'px-5 py-3 text-base shadow-md md:px-6' : 'px-3 py-2',
+          )}
         >
           {tHeader('SearchBar.cta', { defaultValue: 'Find Template' })}
         </button>
@@ -171,7 +234,7 @@ const SearchBar = React.memo(function SearchBar() {
         {isHydrated && showSuggestions && suggestions.length > 0 && (
           <ul
             ref={suggestionsRef}
-            className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+            className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-border bg-popover shadow-lg"
           >
             {suggestions.map((suggestion) => {
               const translation =
@@ -183,12 +246,11 @@ const SearchBar = React.memo(function SearchBar() {
                   <button
                     type="button"
                     onClick={() => handleSuggestionClick(suggestion.id)}
-                    /* Removed eager prefetch to reduce network overhead */
-                    className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
+                    className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm transition hover:bg-muted"
                   >
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                     <span className="truncate">{name}</span>
-                    <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground shrink-0" />
+                    <ExternalLink className="ml-auto h-3 w-3 shrink-0 text-muted-foreground" />
                   </button>
                 </li>
               );
@@ -197,7 +259,12 @@ const SearchBar = React.memo(function SearchBar() {
         )}
       </div>
       {suggestionsHint && (
-        <p className="mt-2 text-center text-sm text-slate-700 dark:text-slate-200">
+        <p
+          className={cn(
+            'mt-2 text-center text-sm text-slate-700 dark:text-slate-200',
+            isHero && 'text-left text-xs text-slate-600 md:text-sm',
+          )}
+        >
           {suggestionsHint}
         </p>
       )}

@@ -40,7 +40,7 @@ export default function InternalLinkWidget({
   const params = useParams();
   const locale = (params?.locale as 'en' | 'es') || 'en';
   const { t } = useTranslation('common');
-  const marketplaceHref = `/${locale}/marketplace`;
+  const marketplaceHref = `/${locale}/docs`;
 
   const docs = React.useMemo(() => getLinkableDocuments(), []);
 

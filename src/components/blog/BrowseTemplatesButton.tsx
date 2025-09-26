@@ -12,7 +12,7 @@ export default function BrowseTemplatesButton({ children, className }: BrowseTem
   const router = useRouter();
   const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
   const locale = params?.locale === 'es' ? 'es' : 'en';
-  const destination = `/${locale}/marketplace`;
+  const destination = `/${locale}/docs`;
 
   return (
     <button

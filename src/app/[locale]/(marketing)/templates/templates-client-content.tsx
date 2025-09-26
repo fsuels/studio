@@ -75,7 +75,7 @@ export default function TemplatesClientContent({
   const { t } = useTranslation("common");
 
   const categoryHref = (categoryId: string) =>
-    `/${locale}/marketplace?category=${encodeURIComponent(categoryId)}`;
+    `/${locale}/category/${encodeURIComponent(categoryId)}`;
 
   const handleTemplatesQuizClick = useCallback(() => {
     track("templates_cta_click", {

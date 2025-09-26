@@ -96,7 +96,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
   const router = useRouter();
   const searchParams = useCurrentSearchParams();
 
-  const exploreAllDestination = `/${locale}/marketplace`;
+  const exploreAllDestination = `/${locale}/docs`;
   const prefetchExplore = React.useCallback(() => {
     try {
       router.prefetch(exploreAllDestination);

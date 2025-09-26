@@ -1,16 +1,27 @@
 // src/app/[locale]/HomePageClient.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import lazyOnView from '@/components/shared/media/LazyOnView';
 import { Separator } from '@/components/ui/separator';
 import { useTranslation } from 'react-i18next';
-import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { track } from '@/lib/analytics';
 import AutoImage from '@/components/shared/media/AutoImage';
 import TopDocsChips from '@/components/shared/TopDocsChips';
 import type { DocumentSummary } from '@/lib/workflow/document-workflow';
+import { loadWorkflowModule } from '@/lib/workflow/load-workflow-module';
+import { resolveDocSlug } from '@/lib/slug-alias';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { CheckCircle2, DownloadCloud, FileText, PenSquare, ShieldCheck } from 'lucide-react';
+
+const HERO_TRUST_ITEMS = [
+  { key: 'home.hero2.trustRow.noCard', icon: CheckCircle2 },
+  { key: 'home.hero2.trustRow.instant', icon: DownloadCloud },
+  { key: 'home.hero2.trustRow.ssl', icon: ShieldCheck },
+  { key: 'home.hero2.trustRow.edit', icon: PenSquare },
+] as const;
 
 const SpinnerIcon = () => (
   <svg
@@ -34,17 +45,6 @@ const SpinnerIcon = () => (
     />
   </svg>
 );
-
-const CATEGORY_KEYS = new Set([
-  'Finance',
-  'Business',
-  'Real Estate',
-  'Family',
-  'Personal',
-  'Estate Planning',
-  'Employment',
-  'Miscellaneous',
-]);
 
 type HomePageClientProps = {
   locale: 'en' | 'es';
@@ -81,19 +81,6 @@ const TestimonialsSkeleton = () => (
   </div>
 );
 
-const SearchBarSkeleton = () => (
-  <div className="relative max-w-md">
-    <div className="h-12 bg-muted rounded-full w-full"></div>{' '}
-    {/* Input field skeleton */}
-    <div className="mt-2 h-4 bg-muted rounded w-3/4"></div>{' '}
-    {/* Trustline/Hint skeleton */}
-  </div>
-);
-
-const _SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
-  placeholder: <SearchBarSkeleton />,
-});
-
 const HowItWorks = lazyOnView(
   () => import('@/components/layout/landing/HowItWorks'),
   {
@@ -108,219 +95,347 @@ const TrustAndTestimonialsSection = lazyOnView(
   },
 );
 
+type HeroDocumentBuilderProps = {
+  locale: 'en' | 'es';
+};
+
+const formatLabel = (value: string) =>
+  value
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+
+const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
+  locale,
+}: HeroDocumentBuilderProps) {
+  const { t } = useTranslation('common');
+  const router = useRouter();
+  const [documents, setDocuments] = useState<DocumentSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [selectedDocId, setSelectedDocId] = useState<string | undefined>();
+  const [selectedEvent, setSelectedEvent] = useState<string | undefined>();
+
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    loadWorkflowModule()
+      .then((module) => {
+        if (cancelled) return;
+        const docs = module.getWorkflowDocuments({
+          jurisdiction: 'us',
+          language: locale === 'es' ? 'es' : 'en',
+        });
+        setDocuments(docs);
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error('Failed to load documents for hero builder:', error);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
+
+  const getDocName = useCallback(
+    (doc: DocumentSummary) =>
+      doc.translations?.[locale]?.name ??
+      doc.translations?.en?.name ??
+      doc.title,
+    [locale],
+  );
+
+  const categories = useMemo(() => {
+    const unique = new Set<string>();
+    documents.forEach((doc) => {
+      if (doc.category) {
+        unique.add(doc.category);
+      }
+    });
+    return Array.from(unique).sort((a, b) => a.localeCompare(b));
+  }, [documents]);
+
+  const docsForCategory = useMemo(() => {
+    if (!selectedCategory) return [] as DocumentSummary[];
+    const subset = documents.filter((doc) => doc.category === selectedCategory);
+    return [...subset].sort((a, b) => getDocName(a).localeCompare(getDocName(b)));
+  }, [documents, selectedCategory, getDocName]);
+
+  const lifeEventOptions = useMemo(() => {
+    const sourceDocs =
+      selectedDocId != null
+        ? documents.filter((doc) => doc.id === selectedDocId)
+        : docsForCategory;
+    const tags = new Set<string>();
+    sourceDocs.forEach((doc) => {
+      doc.tags?.forEach((tag) => tags.add(tag));
+    });
+    return Array.from(tags).sort((a, b) => formatLabel(a).localeCompare(formatLabel(b)));
+  }, [documents, docsForCategory, selectedDocId]);
+
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategory(value);
+    setSelectedDocId(undefined);
+    setSelectedEvent(undefined);
+  }, []);
+
+  const handleDocChange = useCallback((value: string) => {
+    setSelectedDocId(value);
+    setSelectedEvent(undefined);
+  }, []);
+
+  const handleEventChange = useCallback((value: string) => {
+    if (value === '__none__') {
+      setSelectedEvent(undefined);
+      return;
+    }
+    setSelectedEvent(value);
+  }, []);
+
+  const isSubmitDisabled = isLoading || !selectedDocId;
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (!selectedDocId) return;
+      const slug = resolveDocSlug(selectedDocId);
+      track('hero_document_builder_start', {
+        locale,
+        category: selectedCategory ?? null,
+        docId: selectedDocId,
+        event: selectedEvent ?? null,
+      });
+      router.push(`/${locale}/docs/${slug}`);
+    },
+    [locale, router, selectedCategory, selectedDocId, selectedEvent],
+  );
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/70 backdrop-blur-sm md:p-8"
+    >
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-600">
+            {t('home.hero2.builder.overline', { defaultValue: 'Document Builder' })}
+          </p>
+          <h3 className="text-2xl font-semibold text-slate-900">
+            {t('home.hero2.builder.title', { defaultValue: 'Create Your Document' })}
+          </h3>
+        </div>
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <span className="text-blue-500">1.</span>{' '}
+              {t('home.hero2.builder.step1', { defaultValue: 'What type of document do you need?' })}
+            </p>
+            <Select
+              value={selectedCategory ?? undefined}
+              onValueChange={handleCategoryChange}
+              disabled={isLoading || !categories.length}
+            >
+              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+                <SelectValue
+                  placeholder={t('home.hero2.builder.step1Placeholder', { defaultValue: 'Select a category' })}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <span className="text-blue-500">2.</span>{' '}
+              {t('home.hero2.builder.step2', { defaultValue: 'What is the specific document?' })}
+            </p>
+            <Select
+              value={selectedDocId ?? undefined}
+              onValueChange={handleDocChange}
+              disabled={isLoading || !docsForCategory.length}
+            >
+              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+                <SelectValue
+                  placeholder={t('home.hero2.builder.step2Placeholder', { defaultValue: 'e.g. NDA, Lease Agreement, Will...' })}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {docsForCategory.map((doc) => (
+                  <SelectItem key={doc.id} value={doc.id}>
+                    {getDocName(doc)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <span className="text-blue-500">3.</span>{' '}
+              {t('home.hero2.builder.step3', { defaultValue: 'Primary purpose or life event' })}
+            </p>
+            <Select
+              value={selectedEvent ?? undefined}
+              onValueChange={handleEventChange}
+              disabled={isLoading || !lifeEventOptions.length}
+            >
+              <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+                <SelectValue
+                  placeholder={t('home.hero2.builder.step3Placeholder', { defaultValue: 'Select an event (optional)' })}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">
+                  {t('home.hero2.builder.step3None', { defaultValue: 'No specific event' })}
+                </SelectItem>
+                {lifeEventOptions.map((eventOption) => (
+                  <SelectItem key={eventOption} value={eventOption}>
+                    {formatLabel(eventOption)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <Button
+          type="submit"
+          disabled={isSubmitDisabled}
+          className="h-12 rounded-2xl bg-blue-600 text-base font-semibold text-white shadow-lg shadow-blue-300/50 transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
+        >
+          {isLoading
+            ? t('home.hero2.builder.loading', { defaultValue: 'Loading...' })
+            : t('home.hero2.builder.submit', { defaultValue: 'Start Generation' })}
+        </Button>
+      </div>
+    </form>
+  );
+});
+
 export default function HomePageClient({
   locale,
   popularDocs,
 }: HomePageClientProps) {
   const { t } = useTranslation('common');
-  const searchParams = useCurrentSearchParams();
   const router = useRouter();
 
-  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
-  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
-    string | null
-  >(null);
   // Removed selectedDocument to avoid importing the full document library on client
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  const handleHeroCtaClick = useCallback(() => {
-    track('home_cta_click', {
-      locale,
-      surface: 'hero',
-      action: 'open_marketplace',
-    });
-    router.push(`/${locale}/marketplace`);
-  }, [locale, router]);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
 
 
-  useEffect(() => {
-    if (!isHydrated) return;
 
-    const _docIdFromQuery = searchParams!.get('docId');
-    const categoryFromQuery = searchParams!.get('category');
-    const searchFromQuery = searchParams!.get('search');
-
-    if (searchFromQuery && !globalSearchTerm) {
-      setGlobalSearchTerm(searchFromQuery);
-    }
-
-    if (
-      categoryFromQuery &&
-      !selectedCategoryForFilter &&
-      CATEGORY_KEYS.has(categoryFromQuery)
-    ) {
-      setSelectedCategoryForFilter(categoryFromQuery);
-    }
-
-    // If a docId is provided, we could set a default category via a lightweight map.
-    // Skipping category auto-select to keep homepage bundle lean.
-  }, [
-    searchParams,
-    globalSearchTerm,
-    selectedCategoryForFilter,
-    isHydrated,
-  ]);
 
   return (
     <>
       {/* HERO SECTION */}
-      <section className="bg-white pt-6 pb-12 md:pt-16 md:pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-          {/* Left column */}
-          <div>
-            <div className="space-y-2 md:space-y-3">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F2937] leading-tight">
-                {t('home.hero2.title', {
-                  defaultValue: 'Legal Documents Made Easy:',
-                })}
+      <section className="bg-white pt-12 pb-16 lg:pt-20">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 lg:flex-row lg:items-start lg:gap-16">
+          <div className="w-full max-w-xl space-y-6 lg:space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-[40px] font-semibold tracking-tight text-[#111827] sm:text-[46px] lg:text-[52px] lg:leading-[1.08] antialiased">
+                {t('home.hero2.heading.main', { defaultValue: 'Legal Documents Made' })}{' '}
+                <span className="font-bold text-[#2563EB]">
+                  {t('home.hero2.heading.highlight', { defaultValue: 'Easy.' })}
+                </span>
               </h1>
-              <div className="relative inline-block">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-                  {t('home.hero2.subtitle2', {
-                    defaultValue: 'Generate Any Form in Minutes.',
-                  })}
-                </h2>
-                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 rounded-xl blur-lg -z-10"></div>
-              </div>
-              {isHydrated && (
-                <div className="hidden md:flex items-center gap-2 mt-4">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-emerald-700">
-                      {t('home.hero2.badges.save')}
-                    </span>
-                  </div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-blue-700">
-                      {t('home.hero2.badges.noExperience')}
-                    </span>
-                  </div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-purple-700">
-                      {t('home.hero2.badges.instant')}
-                    </span>
-                  </div>
-                </div>
-              )}
+              <p className="mt-3 text-[17px] font-medium leading-7 text-[#6A7689] sm:text-lg">
+                {t('home.hero2.subtitle', {
+                  defaultValue:
+                    'Avoid costly lawyers and complex processes. Our AI platform guides you through creating legally sound documents with ease.',
+                })}
+              </p>
             </div>
-            <p className="mt-4 md:mt-6 text-base sm:text-lg text-gray-800 tracking-wide leading-relaxed">
-              {t('home.hero2.subtitle', {
-                defaultValue:
-                  'Choose from 400+ professionally drafted templates. Save $500+ per document. Create legally binding forms in under 5 minutes—no lawyer required.',
-              })}
-            </p>
-            
-            {/* Prominent CTA Section */}
-            <div className="mt-6 md:mt-8 space-y-4">
-            <div className="space-y-3">
-                <div className="hidden md:flex items-center justify-start mb-2">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full shadow-sm">
-                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span className="text-sm font-semibold text-green-800">
-                      {t('home.hero2.badge.main')}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-green-700">
-                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      <span>{t('home.hero2.badge.sub')}</span>
-                    </span>
+            <HeroDocumentBuilder locale={locale} />
+            <div className="grid w-full grid-cols-2 gap-6 pt-6 sm:grid-cols-4">
+              {HERO_TRUST_ITEMS.map(({ icon: Icon, key }) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center text-center sm:items-start sm:text-left"
+                >
+                  <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-blue-600 shadow-sm">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
+                  <p className="text-sm font-medium text-slate-600">
+                    {t(key)}
+                  </p>
                 </div>
-
-                <div className="flex justify-start">
-                  <button 
-                    onClick={handleHeroCtaClick}
-                    className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden" 
-                    suppressHydrationWarning
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <span className="relative z-10 flex items-center gap-2" suppressHydrationWarning>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      {t('home.hero2.cta.primaryC', { defaultValue: 'Create Legal Forms Now' })}
-                    </span>
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald-500/20 to-blue-600/20 blur-xl"></div>
-                  </button>
-                </div>
-              </div>
-              
-              {/* Trust indicators under CTA */}
-              <div className="hidden md:flex flex-wrap items-center justify-start gap-x-6 gap-y-2 text-sm text-gray-700 pt-2">
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.noCard')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.instant')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.ssl')}</span>
-                </div>
-              </div>
-            </div>
-            {/* Trust Line */}
-            <div className="hidden md:block mt-6">
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.templates')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.fast')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{t('home.hero2.trustRow.edit')}</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-          {/* Right column */}
-          <div className="mt-6 md:mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
-            <AutoImage
-              src={
-                locale === 'es'
-                  ? '/images/hero-main-es.png'
-                  : '/images/hero-main.png'
-              }
-              alt="Hero image illustrating legal document generation"
-              width={1536}
-              height={1024}
-              className="w-full max-w-[320px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[520px] xl:max-w-[560px] rounded-xl shadow-lg"
-              data-ai-hint="team collaboration"
-              priority
+          <div className="relative w-full max-w-[560px]">
+            <div
+              className="absolute -top-12 right-10 hidden h-40 w-40 rounded-full bg-blue-100 blur-3xl lg:block"
+              aria-hidden="true"
             />
+            <div
+              className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-emerald-100 blur-3xl lg:block"
+              aria-hidden="true"
+            />
+            <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-white via-white to-slate-50 p-4 shadow-2xl shadow-blue-200/40 ring-1 ring-slate-100">
+              <AutoImage
+                src={
+                  locale === 'es'
+                    ? '/images/hero-main-es.png'
+                    : '/images/hero-main.png'
+                }
+                alt={t('home.hero2.imageAlt', {
+                  defaultValue: 'Professional reviewing a legal document on a tablet',
+                })}
+                width={1536}
+                height={1024}
+                className="h-full w-full rounded-[24px] object-cover"
+                priority
+              />
+              <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/90 p-6 shadow-lg shadow-slate-200/80 backdrop-blur">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 shadow-sm">
+                    <FileText className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h4 className="text-base font-semibold text-slate-900">
+                    {t('home.hero2.preview.title', { defaultValue: 'Vehicle Bill of Sale' })}
+                  </h4>
+                </div>
+                <ul className="space-y-2 text-sm text-slate-600">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500" aria-hidden="true" />
+                    <span>
+                      {t('home.hero2.preview.bullet1', {
+                        defaultValue: 'Legally Sound & State-Specific',
+                      })}
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500" aria-hidden="true" />
+                    <span>
+                      {t('home.hero2.preview.bullet2', {
+                        defaultValue: 'Quick & Easy Customization',
+                      })}
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500" aria-hidden="true" />
+                    <span>
+                      {t('home.hero2.preview.bullet3', {
+                        defaultValue: 'Instant Download & Secure',
+                      })}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-
       {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
       <div className="cv-auto">
         <HowItWorks />
