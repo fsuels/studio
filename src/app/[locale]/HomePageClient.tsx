@@ -874,7 +874,7 @@ export default function HomePageClient({
               {HERO_TRUST_ITEMS.map(({ icon: Icon, key }) => (
                 <div
                   key={key}
-                  className="flex flex-col items-center text-center sm:items-start sm:text-left"
+                    className="flex flex-col items-center text-center sm:items-start sm:text-left"
                 >
                   <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-blue-600 shadow-sm">
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -895,22 +895,24 @@ export default function HomePageClient({
               className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-gradient-to-tr from-emerald-200/50 via-emerald-100/30 to-transparent blur-3xl lg:block"
               aria-hidden="true"
             />
-            <div className="relative overflow-hidden rounded-[32px] border border-white/50 bg-white/70 p-4 pb-28 md:pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
-              <AutoImage
-                src={
-                  locale === 'es'
+            <div className="relative rounded-[32px] border border-white/50 bg-white/70 p-4 pb-36 md:pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
+              <div className="overflow-hidden rounded-[24px]">
+                <AutoImage
+                  src={
+                    locale === 'es'
                     ? '/images/hero-main-es.png'
                     : '/images/hero-main.png'
-                }
-                alt={t('home.hero2.imageAlt', {
-                  defaultValue: 'Professional reviewing a legal document on a tablet',
-                })}
-                width={1536}
-                height={1024}
-                className="h-full w-full rounded-[24px] object-cover object-top md:object-center"
-                priority
-              />
-              <div className="absolute -bottom-16 left-6 right-6 mx-auto max-w-[calc(100%-3rem)] rounded-2xl bg-white/90 p-5 shadow-lg shadow-slate-200/80 backdrop-blur md:left-12 md:right-12 md:bottom-0 md:p-6">
+                  }
+                  alt={t('home.hero2.imageAlt', {
+                    defaultValue: 'Professional reviewing a legal document on a tablet',
+                  })}
+                  width={1536}
+                  height={1024}
+                  className="h-full w-full object-cover object-top md:object-center"
+                  priority
+                />
+              </div>
+              <div className="absolute -bottom-16 left-6 right-6 mx-auto max-w-[calc(100%-3rem)] rounded-2xl bg-white/90 p-5 pb-8 shadow-lg shadow-slate-200/80 backdrop-blur md:left-12 md:right-12 md:bottom-0 md:p-6">
                 <div className="mb-3 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 shadow-sm">
                     <FileText className="h-5 w-5" aria-hidden="true" />
