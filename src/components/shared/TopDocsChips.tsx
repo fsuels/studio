@@ -108,6 +108,8 @@ type RoleFilterOption = {
   criteria: NormalizedFilterCriteria | null;
 };
 
+const CURATED_BUILDER_IDS = new Set<string>(Object.values(POPULAR_TO_BUILDER_CATEGORY));
+
 const normalizeDisplayName = (doc: DocumentSummary) => {
   const name = doc.translations?.en?.name || doc.title || doc.id;
   return name.trim().toLowerCase();
@@ -122,22 +124,12 @@ const TopDocsChips = React.memo(function TopDocsChips({
   const router = useRouter();
   const searchParams = useCurrentSearchParams();
 
-  const exploreAllDestination = `/${locale}/docs`;
-  const prefetchExplore = React.useCallback(() => {
-    try {
-      router.prefetch(exploreAllDestination);
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.debug('Explore all prefetch failed', error);
-      }
-    }
-  }, [exploreAllDestination, router]);
-
   const [documents, setDocuments] = useState<DocumentSummary[]>(initialDocs);
   const [isLoading, setIsLoading] = useState(initialDocs.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedFilterId, setSelectedFilterId] = useState<string>('all');
   const [showAllForCategory, setShowAllForCategory] = useState(false);
+  const [showAllCategories, setShowAllCategories] = useState(false);
   const prefetchedDocIds = useRef<Set<string>>(new Set());
 
   const popularDocIdsByCategory = useMemo(() => {
@@ -296,8 +288,58 @@ const TopDocsChips = React.memo(function TopDocsChips({
     [builderCategoryOptions],
   );
 
+  const curatedCategoryEntries = useMemo(() =>
+    categories.map((cat) => ({
+      id: cat,
+      label: categoryMeta[cat]?.label || cat,
+      description: categoryDescriptions[cat] || '',
+      Icon: categoryMeta[cat]?.icon || FileText,
+    })),
+  [categories, categoryMeta, categoryDescriptions]);
+
+  const additionalCategoryEntries = useMemo(() => {
+    const curatedLabels = new Set(
+      curatedCategoryEntries.map((entry) => entry.label.toLowerCase()),
+    );
+    const seenLabels = new Set<string>();
+
+    return builderCategoryOptions
+      .filter((option) => !CURATED_BUILDER_IDS.has(option.id))
+      .map((option) => {
+        const label = option.translationKey
+          ? tCommon(option.translationKey, { defaultValue: option.defaultLabel })
+          : option.defaultLabel;
+
+        return {
+          id: option.id,
+          label,
+          description: '',
+          Icon: FileText,
+        };
+      })
+      .filter((entry) => {
+        const normalized = entry.label.toLowerCase();
+        if (curatedLabels.has(normalized)) {
+          return false;
+        }
+        if (seenLabels.has(normalized)) {
+          return false;
+        }
+        seenLabels.add(normalized);
+        return true;
+      })
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [builderCategoryOptions, curatedCategoryEntries, tCommon]);
+
+  const displayedCategories = useMemo(() => {
+    if (showAllCategories) {
+      return [...curatedCategoryEntries, ...additionalCategoryEntries];
+    }
+    return curatedCategoryEntries;
+  }, [showAllCategories, curatedCategoryEntries, additionalCategoryEntries]);
+
   const mappedCategoryId = selectedCategory
-    ? POPULAR_TO_BUILDER_CATEGORY[selectedCategory] ?? null
+    ? POPULAR_TO_BUILDER_CATEGORY[selectedCategory] ?? selectedCategory
     : null;
 
   const activeBuilderCategory = mappedCategoryId
@@ -471,50 +513,52 @@ const TopDocsChips = React.memo(function TopDocsChips({
               {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-              {categories.map((cat) => {
-                const meta = categoryMeta[cat];
-                if (!meta) return null;
-                const Icon = meta.icon || FileText;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setSelectedFilterId('all');
-                      setShowAllForCategory(false);
-                    }}
-                    className="text-left rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-sky-300 hover:bg-white/90"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
-                        <Icon className="h-6 w-6" />
-                      </span>
-                      <div>
-                        <div className="font-semibold text-[15px] text-slate-900">
-                          {meta.label}
-                        </div>
-                        <p className="mt-1 text-[12.5px] leading-5 text-slate-600">
-                          {categoryDescriptions[cat] || ''}
-                        </p>
+              {displayedCategories.map(({ id, label, description, Icon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(id);
+                    setSelectedFilterId('all');
+                    setShowAllForCategory(false);
+                    setShowAllCategories(false);
+                  }}
+                  className="text-left rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-sky-300 hover:bg-white/90"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                      <Icon className="h-6 w-6" />
+                    </span>
+                    <div>
+                      <div className="font-semibold text-[15px] text-slate-900">
+                        {label}
                       </div>
+                      {description && (
+                        <p className="mt-1 text-[12.5px] leading-5 text-slate-600">
+                          {description}
+                        </p>
+                      )}
                     </div>
-                  </button>
-                );
-              })}
+                  </div>
+                </button>
+              ))}
             </div>
-            <div className="text-center mt-2">
-              <Button
-                variant="link"
-                onClick={handleExploreAll}
-                onMouseEnter={prefetchExplore}
-                className="text-primary text-sm"
-              >
-                {tCommon('stepOne.exploreAllCategoriesButton', {
-                  defaultValue: 'Explore All Document Categories',
-                })}{'->'}
-              </Button>
-            </div>
+            {additionalCategoryEntries.length > 0 && (
+              <div className="text-center mt-2">
+                <Button
+                  variant="link"
+                  type="button"
+                  className="text-[#2563EB] text-sm font-semibold hover:text-[#1D4ED8]"
+                  onClick={() => setShowAllCategories((current) => !current)}
+                >
+                  {showAllCategories
+                    ? tCommon('TopDocsChips.showLess', { defaultValue: 'Show less' })
+                    : tCommon('TopDocsChips.exploreCategories', {
+                        defaultValue: 'Explore All Document Categories →',
+                      })}
+                </Button>
+              </div>
+            )}
           </>
         )}
 
@@ -540,6 +584,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
             setSelectedCategory(null);
             setSelectedFilterId('all');
             setShowAllForCategory(false);
+            setShowAllCategories(false);
           }}
         >
           {tCommon('changeCategory', { defaultValue: 'Back to categories' })} →
@@ -655,16 +700,18 @@ const TopDocsChips = React.memo(function TopDocsChips({
         )}
       </div>
     </div>
-    <div className="text-center mt-6 space-x-4">
-      {selectedFilterId === 'all' && !showAllForCategory && filteredDocs.length > 12 && (
+    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+      {selectedFilterId === 'all' && filteredDocs.length > 12 && (
         <Button
           type="button"
           size="sm"
           variant="outline"
           className="rounded-full border-transparent bg-slate-100 px-6 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
-          onClick={() => setShowAllForCategory(true)}
+          onClick={() => setShowAllForCategory((current) => !current)}
         >
-          {tCommon('TopDocsChips.showMore', { defaultValue: 'Show more' })}
+          {showAllForCategory
+            ? tCommon('TopDocsChips.showLess', { defaultValue: 'Show less' })
+            : tCommon('TopDocsChips.showMore', { defaultValue: 'Show more' })}
         </Button>
       )}
       <Button

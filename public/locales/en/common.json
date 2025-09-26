@@ -325,6 +325,8 @@
   "TopDocsChips.hoverLabel": "For",
   "TopDocsChips.showMore": "Show more",
   "TopDocsChips.viewAll": "View all in category →",
+  "TopDocsChips.exploreCategories": "Explore All Document Categories →",
+  "TopDocsChips.showLess": "Show less",
   "useCases": {
     "freelancers": {
       "title": "For Freelancers",
