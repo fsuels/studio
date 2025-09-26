@@ -588,5 +588,13 @@
   "home.hero2.preview.bullet1": "Legally Sound & State-Specific",
   "home.hero2.preview.bullet2": "Quick & Easy Customization",
   "home.hero2.preview.bullet3": "Instant Download & Secure",
-  "home.hero2.imageAlt": "Professional reviewing a legal document on a tablet"
+  "home.hero2.imageAlt": "Professional reviewing a legal document on a tablet",
+  "home.hero2.builder.categories.realEstate": "Real Estate & Property",
+  "home.hero2.builder.categories.employment": "Employment & HR",
+  "home.hero2.builder.categories.personalFamily": "Personal & Family",
+  "home.hero2.builder.categories.health": "Health & Care",
+  "home.hero2.builder.categories.finance": "Finance & Lending",
+  "home.hero2.builder.categories.business": "Business & Operations",
+  "home.hero2.builder.categories.creative": "IP & Creative",
+  "home.hero2.builder.categories.legal": "Legal Process & Disputes"
 }

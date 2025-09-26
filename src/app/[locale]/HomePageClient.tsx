@@ -27,6 +27,7 @@ const CATEGORY_CANONICAL_GROUPS = [
   {
     id: 'real-estate',
     label: 'Real Estate & Property',
+    labelKey: 'home.hero2.builder.categories.realEstate',
     patterns: [
       'Real Estate & Property',
       'Real Estate',
@@ -38,11 +39,13 @@ const CATEGORY_CANONICAL_GROUPS = [
   {
     id: 'employment',
     label: 'Employment & HR',
+    labelKey: 'home.hero2.builder.categories.employment',
     patterns: ['Employment & HR', 'Employment', 'HR'],
   },
   {
     id: 'personal-family',
     label: 'Personal & Family',
+    labelKey: 'home.hero2.builder.categories.personalFamily',
     patterns: [
       'Personal',
       'Family',
@@ -54,16 +57,19 @@ const CATEGORY_CANONICAL_GROUPS = [
   {
     id: 'health',
     label: 'Health & Care',
+    labelKey: 'home.hero2.builder.categories.health',
     patterns: ['Healthcare & Medical', 'Health & Care', 'Health'],
   },
   {
     id: 'finance',
     label: 'Finance & Lending',
+    labelKey: 'home.hero2.builder.categories.finance',
     patterns: ['Finance & Lending', 'Finance', 'Investments'],
   },
   {
     id: 'business',
     label: 'Business & Operations',
+    labelKey: 'home.hero2.builder.categories.business',
     patterns: [
       'Business & Commercial',
       'Business',
@@ -79,11 +85,13 @@ const CATEGORY_CANONICAL_GROUPS = [
   {
     id: 'creative',
     label: 'IP & Creative',
+    labelKey: 'home.hero2.builder.categories.creative',
     patterns: ['Intellectual Property', 'Entertainment & Media', 'Creative'],
   },
   {
     id: 'legal',
     label: 'Legal Process & Disputes',
+    labelKey: 'home.hero2.builder.categories.legal',
     patterns: [
       'Legal',
       'Dispute Resolution',
@@ -501,7 +509,10 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
     CATEGORY_CANONICAL_GROUPS.forEach((group) => {
       const matches = group.patterns.filter((name) => remaining.has(name));
       if (matches.length > 0) {
-        options.push({ id: group.id, label: group.label, matches });
+        const translatedLabel = group.labelKey
+          ? t(group.labelKey, { defaultValue: group.label })
+          : group.label;
+        options.push({ id: group.id, label: translatedLabel, matches });
         matches.forEach((name) => remaining.delete(name));
       }
     });
@@ -513,11 +524,12 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
-        options.push({ id: `other-${slug}`, label: category, matches: [category] });
+        const translated = t(`home.hero2.builder.categories.dynamic.${slug}`, { defaultValue: category });
+        options.push({ id: `other-${slug}`, label: translated, matches: [category] });
       });
 
     return options;
-  }, [categories]);
+  }, [categories, t]);
 
   const activeCategoryOption = useMemo(() =>
     categoryOptions.find((option) => option.id === selectedCategoryId) ?? null,
