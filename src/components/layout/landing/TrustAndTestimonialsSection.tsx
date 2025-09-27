@@ -262,9 +262,9 @@ const TrustAndTestimonialsSection = React.memo(
     return (
       <section
         ref={sectionRef}
-        className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 text-center"
+        className="bg-gradient-to-b from-secondary/40 to-secondary/20 pt-16 pb-8 md:py-16 text-center"
       >
-        <div className="mb-12 md:mb-16">
+        <div className="hidden md:block md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
             {isHydrated
               ? t('home.trustStrip.title', {
