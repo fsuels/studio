@@ -17,7 +17,10 @@ const Breadcrumb = React.memo(function Breadcrumb({ items }: BreadcrumbProps) {
   const { t } = useTranslation('common'); // Changed to common namespace
 
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
+    <nav
+      aria-label="Breadcrumb"
+      className="hidden text-sm text-muted-foreground mb-6 md:block"
+    >
       <ol className="flex items-center space-x-1.5">
         {items.map((item, index) => (
           <li key={index} className="flex items-center">

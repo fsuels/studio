@@ -47,14 +47,15 @@ export function Breadcrumbs({
     <>
       {showSchema && <SchemaMarkup type="BreadcrumbList" data={schemaData} />}
 
-      <nav
-        className={`flex items-center space-x-2 text-sm text-gray-600 ${className}`}
-        aria-label="Breadcrumb"
-      >
-        <ol className="flex items-center space-x-2">
-          {breadcrumbItems.map((item, index) => (
-            <li key={item.href} className="flex items-center">
-              {index > 0 && (
+      <div className={className}>
+        <nav
+          className="hidden text-sm text-gray-600 md:flex md:items-center md:space-x-2"
+          aria-label="Breadcrumb"
+        >
+          <ol className="md:flex md:items-center md:space-x-2">
+            {breadcrumbItems.map((item, index) => (
+              <li key={item.href} className="flex items-center">
+                {index > 0 && (
                 <ChevronRight
                   className="h-4 w-4 text-gray-600 dark:text-gray-400 mx-2"
                   aria-hidden="true"
@@ -89,8 +90,9 @@ export function Breadcrumbs({
               )}
             </li>
           ))}
-        </ol>
-      </nav>
+          </ol>
+        </nav>
+      </div>
     </>
   );
 }
