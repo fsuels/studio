@@ -329,7 +329,7 @@ export default function DocPageClient({
 
   return (
     <TooltipProvider>
-      <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <main className="container mx-auto px-4 pt-8 pb-12 sm:px-6 lg:px-8 lg:pt-6">
         <nav
           className="hidden text-sm mb-6 space-x-1 text-muted-foreground md:flex"
           aria-label="Breadcrumb"
@@ -347,7 +347,7 @@ export default function DocPageClient({
         </nav>
 
         {/* Hero Section */}
-        <div className="text-center mb-10 md:mb-16">
+        <div className="text-center mb-10 md:mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
             {documentDisplayName}
           </h1>
@@ -406,7 +406,7 @@ export default function DocPageClient({
 
         </div>
 
-        <Separator className="my-8 md:my-12" />
+        <Separator className="my-8 md:my-8" />
 
         <div className="space-y-6 max-w-3xl mx-auto">
           <Card className="shadow-lg border-primary" data-testid="price-sticky">
@@ -712,6 +712,7 @@ export default function DocPageClient({
                       altText={`${documentDisplayName} preview`}
                       markdownContent={markdownContent}
                       documentDisplayName={documentDisplayName}
+                      showClauseIcons={false}
                     />
                   </div>
                 </div>
