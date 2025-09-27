@@ -38,6 +38,7 @@ interface ClauseTooltipProps {
   children: React.ReactNode;
   className?: string;
   importance?: 'low' | 'medium' | 'high';
+  hideIcon?: boolean;
 }
 
 function ClauseTooltip({
@@ -46,6 +47,7 @@ function ClauseTooltip({
   children,
   className,
   importance = 'medium',
+  hideIcon = false,
 }: ClauseTooltipProps) {
   const { preferences } = useAccessibility();
   const [content, setContent] = useState<string>('');
@@ -179,6 +181,10 @@ function ClauseTooltip({
 
     return children;
   };
+
+  if (hideIcon) {
+    return <>{renderChildren()}</>;
+  }
 
   return (
     <Tooltip

@@ -4,7 +4,7 @@ import { notFound, useRouter, useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Dialog,
@@ -158,6 +158,8 @@ export default function DocPageClient({
   const [isHydrated, setIsHydrated] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [isPricingCtaVisible, setIsPricingCtaVisible] = useState(true);
+  const pricingCtaRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -184,6 +186,23 @@ export default function DocPageClient({
       document.documentElement.style.overflow = previous;
     };
   }, [isPreviewOpen, isMobileViewport]);
+
+  useEffect(() => {
+    const target = pricingCtaRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsPricingCtaVisible(entry?.isIntersecting ?? false);
+      },
+      {
+        root: null,
+        threshold: 0.25,
+      },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [pricingCtaRef]);
 
   // Preload detail + next-step route
   useEffect(() => {
@@ -385,14 +404,6 @@ export default function DocPageClient({
             ))}
           </div>
 
-          <Button
-            size="lg"
-            className="mt-8 w-full max-w-xs sm:w-auto sm:px-8 sm:py-3 text-base"
-            onClick={handleStartWizard}
-            disabled={!isHydrated}
-          >
-            {t('Start For Free', { defaultValue: 'Start For Free' })}
-          </Button>
         </div>
 
         <Separator className="my-8 md:my-12" />
@@ -440,6 +451,7 @@ export default function DocPageClient({
                 className="w-full mt-2"
                 onClick={handleStartWizard}
                 disabled={!isHydrated}
+                ref={pricingCtaRef}
               >
                 {t('Start For Free', { defaultValue: 'Start For Free' })}
               </Button>
@@ -665,16 +677,18 @@ export default function DocPageClient({
         )}
 
         {/* Mobile CTA */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
-          <Button
-            size="lg"
-            className="w-full text-base"
-            onClick={handleStartWizard}
-            disabled={!isHydrated}
-          >
-            {t('Start For Free', { defaultValue: 'Start For Free' })}
-          </Button>
-        </div>
+        {isMobileViewport && !isPricingCtaVisible && (
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <Button
+              size="lg"
+              className="w-full text-base"
+              onClick={handleStartWizard}
+              disabled={!isHydrated}
+            >
+              {t('Start For Free', { defaultValue: 'Start For Free' })}
+            </Button>
+          </div>
+        )}
       </main>
 
       {!isMobileViewport && (

@@ -49,7 +49,7 @@ export default function DocPreviewClient({
 
           <main className="flex-1 overflow-auto bg-white sm:bg-slate-100/80 sm:px-6 sm:py-4">
             <div className="mx-auto w-full max-w-[700px] sm:max-w-[760px] md:max-w-[840px] px-4 pb-6 sm:px-0">
-              <DocumentDetail {...documentProps} />
+          <DocumentDetail {...documentProps} showClauseIcons={false} />
             </div>
           </main>
         </div>

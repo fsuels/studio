@@ -24,6 +24,7 @@ export interface DocumentDetailProps {
   altText?: string;
   markdownContent?: string | null; // Add this line
   documentDisplayName?: string; // Lightweight display name provided by server/client parent
+  showClauseIcons?: boolean;
 }
 
 const DocumentDetail = React.memo(function DocumentDetail({
@@ -32,6 +33,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
   altText,
   markdownContent: initialMarkdown,
   documentDisplayName,
+  showClauseIcons = true,
 }: DocumentDetailProps) {
   const { t } = useTranslation('common');
   const [md, setMd] = useState<string>(initialMarkdown || ''); // Initialize with prop
@@ -160,6 +162,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
                   <ClauseTooltip
                     id={`p-${node.position?.start.offset ?? Math.random()}`}
                     text={extractText(props.children)}
+                    hideIcon={!showClauseIcons}
                   >
                     <p {...props} className="select-none" />
                   </ClauseTooltip>
@@ -168,6 +171,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
                   <ClauseTooltip
                     id={`li-${node.position?.start.offset ?? Math.random()}`}
                     text={extractText(props.children)}
+                    hideIcon={!showClauseIcons}
                   >
                     <li {...props} />
                   </ClauseTooltip>
