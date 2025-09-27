@@ -587,7 +587,7 @@
   "home.hero2.builder.step3Placeholder": "p. ej., NDA, Contrato de arrendamiento, Testamento...",
   "home.hero2.builder.filters.all": "Todos los documentos",
   "home.hero2.builder.step3None": "Sin evento específico",
-  "home.hero2.builder.submit": "Iniciar generación",
+  "home.hero2.builder.submit": "Crear mi documento",
   "home.hero2.builder.loading": "Cargando...",
   "home.hero2.preview.title": "Plantillas legales guiadas para cada necesidad",
   "home.hero2.preview.bullet1": "Templates confiables con información estatal actualizada",
@@ -629,3 +629,4 @@
   "home.hero2.builder.scenario.legal.court": "Tribunales y declaraciones juradas",
   "home.hero2.builder.scenario.legal.compliance": "Cumplimiento y riesgo"
 }
+

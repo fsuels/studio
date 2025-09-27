@@ -562,10 +562,6 @@ const TopDocsChips = React.memo(function TopDocsChips({
 
         {!selectedCategory && categories.length > 0 && (
           <>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500 text-center md:text-left">
-              <span className="text-blue-500">1.</span>{' '}
-              {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
-            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
               {displayedCategories.map(({ id, label, description, Icon }) => (
                 <button
@@ -623,10 +619,6 @@ const TopDocsChips = React.memo(function TopDocsChips({
       <div className="mb-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              <span className="text-blue-500">1.</span>{' '}
-              {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
-            </p>
             <h3 className="mt-1 text-2xl font-semibold text-[#1D4ED8]" id="popular-docs-selected">
               {categoryMeta[selectedCategory]?.label || selectedCategory}
             </h3>

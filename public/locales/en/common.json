@@ -587,7 +587,7 @@
   "home.hero2.builder.step3Placeholder": "e.g. NDA, Lease Agreement, Will...",
   "home.hero2.builder.filters.all": "All documents",
   "home.hero2.builder.step3None": "No specific event",
-  "home.hero2.builder.submit": "Start Generation",
+  "home.hero2.builder.submit": "Build My Document",
   "home.hero2.builder.loading": "Loading...",
   "home.hero2.preview.title": "Guided Legal Templates for Everyday Needs",
   "home.hero2.preview.bullet1": "Reliable templates with up-to-date state guidance",
@@ -603,3 +603,4 @@
   "home.hero2.builder.categories.creative": "IP & Creative",
   "home.hero2.builder.categories.legal": "Legal Process & Disputes"
 }
+

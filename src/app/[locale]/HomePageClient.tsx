@@ -296,7 +296,7 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
         filter: selectedFilterId === 'all' ? null : selectedFilterId,
       });
 
-      router.push(`/${locale}/docs/${slug}`);
+      router.push(`/${locale}/docs/${slug}/start`);
     },
     [locale, router, activeCategoryLabel, selectedDocId, selectedFilterId],
   );
@@ -401,7 +401,7 @@ const HeroDocumentBuilder = React.memo(function HeroDocumentBuilder({
         >
           {isLoading
             ? t('home.hero2.builder.loading', { defaultValue: 'Loading...' })
-            : t('home.hero2.builder.submit', { defaultValue: 'Start Generation' })}
+            : t('home.hero2.builder.submit', { defaultValue: 'Build My Document' })}
         </Button>
       </div>
     </form>
@@ -518,7 +518,7 @@ export default function HomePageClient({
         </div>
       </section>
       {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
-      <div className="cv-auto">
+      <div className="cv-auto mt-28 sm:mt-24 md:mt-12 lg:mt-10">
         <HowItWorks />
       </div>
 
@@ -540,6 +540,7 @@ export default function HomePageClient({
     </>
   );
 }
+
 
 
 
