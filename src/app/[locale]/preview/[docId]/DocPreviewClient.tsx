@@ -35,12 +35,12 @@ export default function DocPreviewClient({
             type="button"
             onClick={() => router.back()}
             aria-label="Close preview"
-            className="absolute right-4 top-5 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-100"
+            className="absolute right-4 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white/95 text-slate-600 shadow-sm backdrop-blur transition hover:bg-slate-100"
           >
             <X className="h-4 w-4" />
           </button>
 
-          <header className="flex flex-col items-center justify-center border-b px-6 pt-6 pb-3 text-center sm:px-10">
+          <header className="flex flex-col items-center justify-center border-b px-6 pt-8 pb-4 text-center sm:px-10">
             <span className="text-base font-semibold text-slate-900">
               {displayName ?? 'Document Preview'}
             </span>
