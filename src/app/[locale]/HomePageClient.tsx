@@ -458,8 +458,8 @@ export default function HomePageClient({
               className="absolute -bottom-10 left-0 hidden h-48 w-48 rounded-full bg-gradient-to-tr from-emerald-200/50 via-emerald-100/30 to-transparent blur-3xl lg:block"
               aria-hidden="true"
             />
-            <div className="relative rounded-[32px] border border-white/50 bg-white/70 p-4 pb-36 md:pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
-              <div className="overflow-hidden rounded-[24px]">
+            <div className="relative rounded-[32px] border border-white/50 bg-white/80 px-2 sm:px-3 md:px-5 pt-0 sm:pt-1 md:pt-2 pb-24 sm:pb-28 md:pb-14 lg:pb-12 shadow-xl shadow-blue-200/30 backdrop-blur">
+              <div className="relative overflow-hidden rounded-[24px]">
                 <AutoImage
                   src={
                     locale === 'es'
@@ -471,9 +471,11 @@ export default function HomePageClient({
                   })}
                   width={1536}
                   height={1024}
-                  className="h-full w-full object-cover object-top md:object-center"
+                  className="h-full w-full object-cover object-top md:object-center scale-[1.12] origin-center -translate-y-[12%] md:-translate-y-[8%]"
                   priority
                 />
+                <div className="pointer-events-none absolute inset-0 rounded-[24px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_70%,rgba(255,255,255,0.7)_100%)] mix-blend-screen opacity-80 transition-opacity duration-500" aria-hidden="true" />
+                <div className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-white/60" aria-hidden="true" />
               </div>
               <div className="absolute -bottom-16 left-6 right-6 mx-auto max-w-[calc(100%-3rem)] rounded-2xl bg-white/90 p-5 pb-8 shadow-lg shadow-slate-200/80 backdrop-blur md:left-12 md:right-12 md:bottom-0 md:p-6">
                 <div className="mb-3 flex items-center gap-3">
@@ -538,3 +540,4 @@ export default function HomePageClient({
     </>
   );
 }
+

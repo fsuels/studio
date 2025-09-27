@@ -329,7 +329,7 @@ export default function DocPageClient({
 
   return (
     <TooltipProvider>
-      <main className="container mx-auto px-4 pb-8 sm:px-6 lg:px-8">
+      <main className="container mx-auto px-4 pb-8 pt-12 sm:pt-8 md:pt-0 sm:px-6 lg:px-8">
         <nav
           className="hidden text-sm mt-4 mb-6 space-x-1 text-muted-foreground md:flex"
           aria-label="Breadcrumb"
