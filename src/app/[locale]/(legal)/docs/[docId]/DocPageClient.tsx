@@ -693,43 +693,30 @@ export default function DocPageClient({
 
       {!isMobileViewport && (
         <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-          <DialogContent className="mx-auto w-screen max-w-none h-[94vh] overflow-hidden rounded-none border-0 bg-white px-0 pb-0 pt-0 sm:h-auto sm:w-[80vw] sm:max-w-5xl sm:rounded-3xl sm:border sm:border-slate-200 sm:pb-4 sm:pt-6">
-          <DialogHeader className="px-6 pt-6 pb-3 text-center sm:px-12">
-            <DialogTitle className="mx-auto text-base font-semibold text-foreground md:text-lg">
-              {t('docDetail.previewTitle', { defaultValue: 'Document Preview' })}
-            </DialogTitle>
-            <p className="mt-1 text-xs text-muted-foreground md:text-sm">
-              {t('docDetail.previewSubtitleCompact', { defaultValue: 'Read-only snapshot' })}
-            </p>
-          </DialogHeader>
-          <div className="px-4 pb-6 sm:px-8 sm:pb-6">
-            <div className="max-h-[78vh] md:max-h-[80vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-8 sm:py-6 shadow-inner flex justify-center">
-              <div className="relative w-full max-w-[780px] md:max-w-[820px] mx-auto">
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/50" />
-                <div className="select-none">
-                  {isPreviewOpen ? (
+          <DialogContent className="mx-auto h-[94vh] w-[90vw] max-w-[1100px] overflow-hidden rounded-3xl border border-slate-200 bg-white px-0 pb-4 pt-6">
+            <div className="flex h-full flex-col">
+              <DialogHeader className="flex-shrink-0 px-8 pb-3">
+                <DialogTitle className="text-lg font-semibold text-foreground text-center">
+                  {t('docDetail.previewTitle', { defaultValue: 'Document Preview' })}
+                </DialogTitle>
+                <p className="mt-1 text-sm text-muted-foreground text-center">
+                  {t('docDetail.previewSubtitleCompact', { defaultValue: 'Read-only snapshot' })}
+                </p>
+              </DialogHeader>
+              <div className="flex-1 overflow-hidden px-6 pb-4">
+                <div className="mx-auto flex h-full max-w-[820px] justify-center">
+                  <div className="h-full w-full overflow-auto rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-inner">
                     <DocumentDetail
                       locale={currentLocale as 'en' | 'es'}
-                      docId={docId as string}
+                      docId={canonicalDocId}
                       altText={`${documentDisplayName} preview`}
                       markdownContent={markdownContent}
                       documentDisplayName={documentDisplayName}
                     />
-                  ) : (
-                    <div className="flex h-64 items-center justify-center text-sm text-muted-foreground">
-                      {t('docDetail.previewLoading', { defaultValue: 'Loading preview…' })}
-                    </div>
-                  )}
+                  </div>
                 </div>
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/65 to-transparent" />
               </div>
             </div>
-            <p className="text-[11px] text-muted-foreground mt-3 text-center uppercase tracking-wide">
-              {t('docDetail.previewProtectionNotice', {
-                defaultValue: 'Preview is read-only. Content copy is disabled.',
-              })}
-            </p>
-          </div>
           </DialogContent>
         </Dialog>
       )}
