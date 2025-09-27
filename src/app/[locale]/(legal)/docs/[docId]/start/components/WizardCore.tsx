@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -25,6 +25,7 @@ import type { OverlayConfig } from '@/lib/config-loader';
 import { generateQuestions } from '@/lib/question-generator';
 import { buildOverlayFromAcro } from '@/lib/pdf/acro-introspect';
 import type { Question } from '@/types/documents';
+import type { WizardFormRef } from '@/components/forms/WizardForm';
 import { loadDocumentDefinition } from '@/lib/document-loader';
 
 const Loading = () => (
@@ -74,9 +75,7 @@ export default function WizardCore({ locale, docId, docMeta }: WizardCoreProps) 
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
   const [currentFieldId, setCurrentFieldId] = useState<string | undefined>();
-  const [wizardFormRef, setWizardFormRef] = useState<{
-    navigateToField: (fieldId: string) => void;
-  } | null>(null);
+  const wizardFormRef = useRef<WizardFormRef | null>(null);
   const [selectedState, setSelectedState] = useState<string>(stateFromUrl || '');
   const [useDirectFormFilling, setUseDirectFormFilling] = useState(false);
   const [dynamicQuestions, setDynamicQuestions] = useState<Question[] | null>(null);
@@ -380,14 +379,15 @@ export default function WizardCore({ locale, docId, docMeta }: WizardCoreProps) 
 
   const handleFieldClick = useCallback(
     (fieldId: string) => {
-      if (wizardFormRef?.navigateToField) {
-        wizardFormRef.navigateToField(fieldId);
-        if (window.innerWidth < 1024) {
+      const formRef = wizardFormRef.current;
+      if (formRef?.navigateToField) {
+        formRef.navigateToField(fieldId);
+        if (typeof window !== 'undefined' && window.innerWidth < 1024) {
           setActiveMobileTab('form');
         }
       }
     },
-    [wizardFormRef]
+    [setActiveMobileTab]
   );
 
   const handlePaymentRequired = useCallback(
@@ -522,7 +522,7 @@ export default function WizardCore({ locale, docId, docMeta }: WizardCoreProps) 
               doc={docStrict}
               onComplete={handleWizardComplete}
               onFieldFocus={setCurrentFieldId}
-              ref={setWizardFormRef}
+              ref={wizardFormRef}
               overrideQuestions={questionsLoaded && dynamicQuestions ? dynamicQuestions : undefined}
             />
             <div className="mt-6 lg:mt-8">
