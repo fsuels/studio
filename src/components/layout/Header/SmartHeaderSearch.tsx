@@ -12,12 +12,14 @@ interface SmartHeaderSearchProps {
   clientLocale: 'en' | 'es';
   mounted: boolean;
   className?: string;
+  autoFocus?: boolean;
 }
 
 const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
   clientLocale,
   mounted,
   className,
+  autoFocus = false,
 }) => {
   // Get user role from localStorage if available
   const [userRole, setUserRole] = React.useState<string | undefined>();
@@ -58,6 +60,7 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
       mounted={mounted}
       className={className}
       userRole={userRole}
+      autoFocus={autoFocus}
     />
   );
 };

@@ -22,7 +22,9 @@
     "signin": "Iniciar sesión",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "noDocumentsAvailable": "No hay documentos disponibles para las categorías seleccionadas en este momento.",
-    "noCategoriesAvailable": "No hay categorías de documentos disponibles."
+    "noCategoriesAvailable": "No hay categorías de documentos disponibles.",
+    "openSearch": "Abrir búsqueda",
+    "closeSearch": "Cerrar búsqueda"
   },
   "logoAlt": "123LegalDoc Inicio",
   "SearchBar": {
@@ -107,6 +109,16 @@
           "commercial-spaces": "Espacios comerciales"
         }
       }
+    }
+  },
+  "mobileSearch": {
+    "title": "Buscar plantillas legales",
+    "subtitle": "Encuentra el documento ideal en segundos.",
+    "quickLinks": {
+      "title": "Accesos rápidos populares",
+      "vehicleBillOfSale": "Factura de venta de vehículo",
+      "llcOperatingAgreement": "Contrato operativo de LLC",
+      "mutualNDA": "NDA mutuo"
     }
   }
 }

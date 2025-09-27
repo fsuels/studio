@@ -14,6 +14,7 @@ const HeaderUserMenu = dynamic(() => import('./HeaderUserMenu'), {
   loading: () => null,
 });
 import HeaderMobileMenu from './HeaderMobileMenu';
+import HeaderMobileSearch from './HeaderMobileSearch';
 import DirectCategoryNav from './DirectCategoryNav';
 import dynamic from 'next/dynamic';
 const CategoryDropdown = dynamic(() => import('./CategoryDropdown'), {
@@ -35,6 +36,7 @@ const Header = React.memo(function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
 
   // Mount and scroll effects
@@ -73,19 +75,36 @@ const Header = React.memo(function Header() {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    setIsMobileSearchOpen(false);
+  }, [pathname]);
+
   // Close mobile menu when mega menu opens
   useEffect(() => {
     if (isMegaMenuOpen) {
       setIsMobileMenuOpen(false);
+      setIsMobileSearchOpen(false);
     }
   }, [isMegaMenuOpen]);
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen((prev) => !prev);
+    setIsMobileSearchOpen(false);
     if (isMegaMenuOpen) {
       setIsMegaMenuOpen(false);
       setActiveCategoryId(null);
     }
+  };
+
+  const handleMobileSearchOpen = () => {
+    setIsMobileSearchOpen(true);
+    setIsMobileMenuOpen(false);
+    setIsMegaMenuOpen(false);
+    setActiveCategoryId(null);
+  };
+
+  const handleMobileSearchClose = () => {
+    setIsMobileSearchOpen(false);
   };
 
   const handleCategorySelect = (categoryId: string) => {
@@ -144,7 +163,14 @@ const Header = React.memo(function Header() {
           </div>
 
           {/* Mobile Actions */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-3">
+            <HeaderMobileSearch
+              clientLocale={clientLocale}
+              mounted={mounted}
+              isOpen={isMobileSearchOpen}
+              onOpen={handleMobileSearchOpen}
+              onClose={handleMobileSearchClose}
+            />
             <HeaderMobileMenu
               clientLocale={clientLocale}
               mounted={mounted}
@@ -196,3 +222,4 @@ const Header = React.memo(function Header() {
 });
 
 export default Header;
+

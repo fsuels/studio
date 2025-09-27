@@ -22,7 +22,9 @@
     "signin": "Sign In",
     "noDocumentsInCategory": "No documents in this category yet.",
     "noDocumentsAvailable": "No documents available for the selected categories at this time.",
-    "noCategoriesAvailable": "No document categories available."
+    "noCategoriesAvailable": "No document categories available.",
+    "openSearch": "Open search",
+    "closeSearch": "Close search"
   },
   "logoAlt": "123LegalDoc Home",
   "SearchBar": {
@@ -107,6 +109,16 @@
           "commercial-spaces": "Commercial Spaces"
         }
       }
+    }
+  },
+  "mobileSearch": {
+    "title": "Search legal templates",
+    "subtitle": "Find the right document in seconds.",
+    "quickLinks": {
+      "title": "Popular shortcuts",
+      "vehicleBillOfSale": "Vehicle Bill of Sale",
+      "llcOperatingAgreement": "LLC Operating Agreement",
+      "mutualNDA": "Mutual NDA"
     }
   }
 }

@@ -31,6 +31,7 @@ interface SearchResult {
 }
 
 interface EnhancedHeaderSearchProps {
+  autoFocus?: boolean;
   clientLocale: 'en' | 'es';
   mounted: boolean;
   className?: string;
@@ -42,6 +43,7 @@ export default function EnhancedHeaderSearch({
   mounted,
   className = '',
   userRole,
+  autoFocus = false,
 }: EnhancedHeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
@@ -230,6 +232,7 @@ export default function EnhancedHeaderSearch({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onFocus={handleFocus}
+        autoFocus={autoFocus}
         className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
         disabled={!mounted}
         aria-label={placeholderSearch}
@@ -308,3 +311,4 @@ export default function EnhancedHeaderSearch({
     </form>
   );
 }
+
