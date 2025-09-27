@@ -18,7 +18,7 @@ export function Layout({ children }: LayoutProps) {
       <Suspense fallback={null}>
         <Header />
       </Suspense>
-      <main className="flex-grow w-full">{children}</main>
+      <main className="w-full bg-white md:flex-1 md:bg-transparent">{children}</main>
       <Footer />
     </div>
   );

@@ -262,7 +262,7 @@ const TrustAndTestimonialsSection = React.memo(
     return (
       <section
         ref={sectionRef}
-        className="bg-gradient-to-b from-secondary/40 to-secondary/20 pt-16 pb-8 md:py-16 text-center"
+        className="bg-white md:bg-gradient-to-b md:from-secondary/40 md:to-secondary/20 pt-16 pb-0 md:py-16 text-center"
       >
         <div className="hidden md:block md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
@@ -318,7 +318,7 @@ const TrustAndTestimonialsSection = React.memo(
 
         <div className="relative max-w-6xl mx-auto">
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="overflow-x-auto pb-4 sm:overflow-visible">
+          <div className="overflow-x-auto pb-0 sm:pb-4 sm:overflow-visible">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-x sm:snap-none">
               {(testimonialsData.length > 0
                 ? testimonialsData

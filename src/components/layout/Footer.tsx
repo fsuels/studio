@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
 
 export const FooterSkeleton = () => (
-  <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border animate-pulse">
+  <footer className="bg-muted text-muted-foreground py-12 mt-6 md:mt-16 border-t border-border animate-pulse">
     <div className="container mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
         {[...Array(4)].map((_, i) => (
@@ -129,7 +129,7 @@ export const Footer = React.memo(function Footer() {
   }
 
   return (
-    <footer className="mt-16 bg-[#0f172a] text-slate-300">
+    <footer className="mt-6 md:mt-16 bg-[#0f172a] text-slate-300">
       <div className="container mx-auto px-4 py-12">
         {/* Top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
