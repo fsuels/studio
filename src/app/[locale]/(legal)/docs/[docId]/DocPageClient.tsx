@@ -329,7 +329,7 @@ export default function DocPageClient({
 
   return (
     <TooltipProvider>
-      <main className="container mx-auto px-4 pt-8 pb-12 sm:px-6 lg:px-8 lg:pt-6">
+      <main className="container mx-auto px-4 pb-8 sm:px-6 lg:px-8">
         <nav
           className="hidden text-sm mb-6 space-x-1 text-muted-foreground md:flex"
           aria-label="Breadcrumb"
@@ -347,7 +347,7 @@ export default function DocPageClient({
         </nav>
 
         {/* Hero Section */}
-        <div className="text-center mb-10 md:mb-12">
+        <div className="text-center mb-6 md:mb-8">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
             {documentDisplayName}
           </h1>
@@ -366,11 +366,11 @@ export default function DocPageClient({
             </span>
           </div>
 
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
             {documentDescription}
           </p>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-5 flex justify-center">
             <Button
               type="button"
               variant="outline"
@@ -390,7 +390,7 @@ export default function DocPageClient({
             </Button>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3 max-w-3xl mx-auto">
+          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 max-w-3xl mx-auto">
             {benefits.map((benefit, index) => (
               <div
                 key={index}
@@ -406,16 +406,16 @@ export default function DocPageClient({
 
         </div>
 
-        <Separator className="my-8 md:my-8" />
+        <Separator className="my-0.5 md:my-1" />
 
-        <div className="space-y-6 max-w-3xl mx-auto">
+          <div className="space-y-2 max-w-3xl mx-auto">
           <Card className="shadow-lg border-primary" data-testid="price-sticky">
             <CardHeader>
               <CardTitle className="text-lg text-primary">
                 {t('docDetail.pricingTitle', 'Transparent Pricing')}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2">
               <div className="flex items-baseline justify-between">
                 <p className="text-2xl font-bold">
                   ${(docConfig?.basePrice || 0).toFixed(2)}
@@ -458,7 +458,7 @@ export default function DocPageClient({
             </CardContent>
           </Card>
 
-          <div className="space-y-2 text-center">
+          <div className="space-y-1 text-center">
             <p className="text-xs text-gray-500">
               <strong>104,213</strong> {t('docDetail.templatesDownloaded', 'templates downloaded this year')}
             </p>
