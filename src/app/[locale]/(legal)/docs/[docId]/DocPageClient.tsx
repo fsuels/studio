@@ -331,7 +331,7 @@ export default function DocPageClient({
     <TooltipProvider>
       <main className="container mx-auto px-4 pb-8 sm:px-6 lg:px-8">
         <nav
-          className="hidden text-sm mb-6 space-x-1 text-muted-foreground md:flex"
+          className="hidden text-sm mt-4 mb-6 space-x-1 text-muted-foreground md:flex"
           aria-label="Breadcrumb"
         >
           <Link
@@ -458,25 +458,10 @@ export default function DocPageClient({
             </CardContent>
           </Card>
 
-          <div className="space-y-1 text-center">
+          <div className="text-center">
             <p className="text-xs text-gray-500">
               <strong>104,213</strong> {t('docDetail.templatesDownloaded', 'templates downloaded this year')}
             </p>
-            <div className="inline-flex items-center gap-1 text-xs text-gray-500">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              {t('docDetail.moneyBack30', '30-day money-back guarantee')}
-            </div>
           </div>
 
           {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
