@@ -46,6 +46,7 @@
   },
   "aiFinder": "Buscador de IA",
   "search": {
+    "sitePages": "P\u00e1ginas del sitio",
     "placeholder": "Buscar documentos..."
   },
   "My Account": "Mi Cuenta",

@@ -4,13 +4,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { Search as SearchIcon, X as CloseIcon, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Search as SearchIcon, X as CloseIcon, ArrowUpRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { MobileNavigation } from '@/components/ui/MobileNavigation';
 import SmartHeaderSearch from './SmartHeaderSearch';
 import { resolveDocSlug } from '@/lib/slug-alias';
 import { cn } from '@/lib/utils';
+import { Logo } from '@/components/layout/Logo';
 
 interface HeaderMobileSearchProps {
   clientLocale: 'en' | 'es';
@@ -41,17 +42,6 @@ export default function HeaderMobileSearch({
     defaultValue: 'Close search',
   });
 
-  React.useEffect(() => {
-    if (!isOpen) return;
-
-    const timeout = window.setTimeout(() => {
-      const input = document.getElementById('enhanced-header-search') as HTMLInputElement | null;
-      input?.focus();
-    }, 200);
-
-    return () => window.clearTimeout(timeout);
-  }, [isOpen]);
-
   const quickTitle = tHeader('mobileSearch.quickLinks.title', {
     defaultValue: 'Popular shortcuts',
   });
@@ -75,13 +65,15 @@ export default function HeaderMobileSearch({
         slideDirection="right"
         className="md:hidden"
       >
-        <div className="flex h-full flex-col bg-gradient-to-b from-slate-50 via-white to-white">
+        <div className="flex h-full flex-col bg-background">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200/70 bg-white/95 shadow-sm">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-inner">
-                <Sparkles className="h-4 w-4" />
-              </span>
-              <div>
+              <Logo
+                wrapperClassName="flex-row items-center gap-2"
+                svgClassName="h-7 w-7"
+                textClassName="text-sm font-semibold"
+              />
+              <div className="flex flex-col">
                 <p className="text-sm font-semibold text-slate-900">
                   {tHeader('mobileSearch.title', {
                     defaultValue: 'Search legal templates',
@@ -106,16 +98,14 @@ export default function HeaderMobileSearch({
           </div>
 
           <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
-            {isOpen && (
-              <div className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-lg shadow-sky-100/50 backdrop-blur-sm">
-                <SmartHeaderSearch
-                  clientLocale={clientLocale}
-                  mounted={mounted}
-                  className="relative w-full"
-                  autoFocus
-                />
-              </div>
-            )}
+            <div className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-lg shadow-sky-100/50 backdrop-blur-sm">
+              <SmartHeaderSearch
+                clientLocale={clientLocale}
+                mounted={mounted}
+                className="relative w-full"
+                onNavigate={onClose}
+              />
+            </div>
 
             <div>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">

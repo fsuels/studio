@@ -13,6 +13,7 @@ interface SmartHeaderSearchProps {
   mounted: boolean;
   className?: string;
   autoFocus?: boolean;
+  onNavigate?: () => void;
 }
 
 const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
@@ -20,6 +21,7 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
   mounted,
   className,
   autoFocus = false,
+  onNavigate,
 }) => {
   // Get user role from localStorage if available
   const [userRole, setUserRole] = React.useState<string | undefined>();
@@ -61,6 +63,7 @@ const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
       className={className}
       userRole={userRole}
       autoFocus={autoFocus}
+      onNavigate={onNavigate}
     />
   );
 };

@@ -46,6 +46,7 @@
   },
   "aiFinder": "AI Finder",
   "search": {
+    "sitePages": "Website pages",
     "placeholder": "Search documents..."
   },
   "My Account": "My Account",
