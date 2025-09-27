@@ -28,6 +28,7 @@ import { useCurrentSearchParams } from '@/hooks/useCurrentSearchParams';
 import {
   Loader2,
   FileText,
+  ChevronRight,
   Home,
   Users,
   Zap,
@@ -131,6 +132,10 @@ const TopDocsChips = React.memo(function TopDocsChips({
   const [showAllForCategory, setShowAllForCategory] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const prefetchedDocIds = useRef<Set<string>>(new Set());
+  const popularSectionHeadingRef = useRef<HTMLHeadingElement | null>(null);
+
+  const selectedCategorySectionRef = useRef<HTMLDivElement | null>(null);
+  const MOBILE_SCROLL_OFFSET = 112;
 
   const popularDocIdsByCategory = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -154,6 +159,37 @@ const TopDocsChips = React.memo(function TopDocsChips({
     [locale],
   );
 
+  const scrollPopularDocsIntoView = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (!isMobile) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    const scrollTarget = popularSectionHeadingRef.current ?? selectedCategorySectionRef.current;
+    if (!scrollTarget) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      const { top } = scrollTarget.getBoundingClientRect();
+      const absoluteTop = top + window.scrollY;
+      const targetTop = Math.max(absoluteTop - MOBILE_SCROLL_OFFSET, 0);
+
+      window.scrollTo({
+        top: targetTop,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
+    });
+  }, []);
+
   const prefetchDocRoutes = useCallback(
     (docId: string) => {
       const canonicalId = resolveDocSlug(docId);
@@ -176,6 +212,13 @@ const TopDocsChips = React.memo(function TopDocsChips({
     },
     [locale, router],
   );
+
+  const resetCategorySelection = useCallback(() => {
+    setSelectedCategory(null);
+    setSelectedFilterId('all');
+    setShowAllForCategory(false);
+    setShowAllCategories(false);
+  }, [setSelectedCategory, setSelectedFilterId, setShowAllForCategory, setShowAllCategories]);
 
   const getFriendlyDescription = useCallback(
     (doc: DocumentSummary): string => {
@@ -251,6 +294,14 @@ const TopDocsChips = React.memo(function TopDocsChips({
     () => CURATED_CATEGORY_KEYS.filter((key) => CATEGORY_DISPLAY_META[key]),
     [],
   );
+
+  useEffect(() => {
+    if (!selectedCategory) {
+      return;
+    }
+
+    scrollPopularDocsIntoView();
+  }, [selectedCategory, scrollPopularDocsIntoView]);
 
   const categoryMeta = useMemo(() => {
     return categories.reduce<Record<string, { label: string; icon: LucideIcon }>>(
@@ -500,7 +551,10 @@ const TopDocsChips = React.memo(function TopDocsChips({
   return (
     <TooltipProvider>
       <section className="container mx-auto px-4 py-16">
-        <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
+        <h2
+          ref={popularSectionHeadingRef}
+          className="text-xl font-semibold text-center mb-6 text-foreground scroll-mt-24"
+        >
           {tCommon('TopDocsChips.title', {
             defaultValue: 'Popular Legal Documents',
           })}
@@ -564,37 +618,182 @@ const TopDocsChips = React.memo(function TopDocsChips({
 
 
 {selectedCategory && (
-  <>
-    <div className="mb-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
+  <div ref={selectedCategorySectionRef}>
+    <div className="hidden md:block">
+      <div className="mb-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <span className="text-blue-500">1.</span>{' '}
+              {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
+            </p>
+            <h3 className="mt-1 text-2xl font-semibold text-[#1D4ED8]" id="popular-docs-selected">
+              {categoryMeta[selectedCategory]?.label || selectedCategory}
+            </h3>
+          </div>
+          <Button
+            variant="link"
+            size="sm"
+            className="text-[#2563EB] hover:text-[#1D4ED8] inline-flex items-center gap-1"
+            onClick={resetCategorySelection}
+          >
+            {tCommon('changeCategory', { defaultValue: 'Back to categories' })}
+          </Button>
+        </div>
+
+        <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <span className="text-blue-500">1.</span>{' '}
-            {tCommon('home.hero2.builder.step1', { defaultValue: 'Choose a category' })}
+            <span className="text-blue-500">2.</span>{' '}
+            {tCommon('home.hero2.builder.step2', { defaultValue: 'Narrow your focus' })}
           </p>
-          <h3 className="mt-1 text-2xl font-semibold text-[#1D4ED8]" id="popular-docs-selected">
+          <div className="flex flex-wrap gap-2">
+            {roleFilters.map((filter) => {
+              const isActive = selectedFilterId === filter.id;
+              return (
+                <Button
+                  key={filter.id}
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-[#2563EB] text-white shadow-sm hover:bg-[#1D4ED8]'
+                      : 'border-transparent bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                  onClick={() => {
+                    setSelectedFilterId(filter.id);
+                    setShowAllForCategory(false);
+                  }}
+                  disabled={roleFilters.length <= 1 && filter.id === 'all'}
+                >
+                  {filter.label}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <span className="text-blue-500">3.</span>{' '}
+            {tCommon('home.hero2.builder.step3', { defaultValue: 'Select a specific document' })}
+          </p>
+          {filteredDocs.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-600">
+              {tCommon('home.hero2.builder.step3Empty', {
+                defaultValue: 'No documents match this focus yet. Try a different option.',
+              })}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {displayedDocs.map((doc) => {
+                const badge = DOC_BADGES[doc.id];
+                const href = buildDocHref(doc.id);
+                const friendlyDescription = getFriendlyDescription(doc);
+                return (
+                  <Link
+                    key={doc.id}
+                    href={href}
+                    prefetch
+                    className="group block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#1D4ED8]/70 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+                    onMouseEnter={() => prefetchDocRoutes(doc.id)}
+                    onFocus={() => prefetchDocRoutes(doc.id)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3">
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+                          <FileText className="h-5 w-5" />
+                        </span>
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-semibold text-slate-900 group-hover:text-[#1D4ED8] transition-colors">
+                            {getDocName(doc)}
+                          </h4>
+                          {friendlyDescription && (
+                            <p className="text-xs text-slate-500">
+                              {tCommon('TopDocsChips.hoverLabel', { defaultValue: 'For' })}: {friendlyDescription}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {badge && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge variant="secondary" className="flex items-center space-x-1">
+                              {badge === 'new' ? (
+                                <Zap className="h-3 w-3" />
+                              ) : (
+                                <RefreshCcw className="h-3 w-3" />
+                              )}
+                              <span className="capitalize">
+                                {tCommon(`TopDocsChips.badge.${badge}`, {
+                                  defaultValue: badge === 'new' ? 'New' : 'Updated',
+                                })}
+                              </span>
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {badge === 'new'
+                              ? tCommon('TopDocsChips.tooltip.new', {
+                                  defaultValue: 'Recently added',
+                                })
+                              : tCommon('TopDocsChips.tooltip.updated', {
+                                  defaultValue: 'Recently refreshed',
+                                })}
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="mt-6 flex flex-col items-center gap-3 md:flex-row md:justify-center">
+        {selectedFilterId === 'all' && filteredDocs.length > 12 && (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className="rounded-full border-transparent bg-slate-100 px-6 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
+            onClick={() => setShowAllForCategory((current) => !current)}
+          >
+            {showAllForCategory
+              ? tCommon('TopDocsChips.showLess', { defaultValue: 'Show less' })
+              : tCommon('TopDocsChips.showMore', { defaultValue: 'Show more' })}
+          </Button>
+        )}
+        <Button
+          variant="link"
+          onClick={resetCategorySelection}
+          className="inline-flex items-center gap-1 text-[#2563EB] text-sm font-semibold hover:text-[#1D4ED8]"
+        >
+          {tCommon('TopDocsChips.viewAll', { defaultValue: 'View all in category' })}
+        </Button>
+      </div>
+    </div>
+
+    <div className="space-y-5 rounded-3xl bg-white/80 p-4 shadow-sm md:hidden">
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <h3 className="text-2xl font-semibold text-slate-900">
             {categoryMeta[selectedCategory]?.label || selectedCategory}
           </h3>
         </div>
         <Button
           variant="link"
           size="sm"
-          className="text-[#2563EB] hover:text-[#1D4ED8] inline-flex items-center gap-1"
-          onClick={() => {
-            setSelectedCategory(null);
-            setSelectedFilterId('all');
-            setShowAllForCategory(false);
-            setShowAllCategories(false);
-          }}
+          className="p-0 text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8]"
+          onClick={resetCategorySelection}
         >
-          {tCommon('changeCategory', { defaultValue: 'Back to categories' })} →
+          {tCommon('TopDocsChips.mobile.changeCategory', { defaultValue: 'Change' })}
         </Button>
       </div>
 
-      <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-          <span className="text-blue-500">2.</span>{' '}
-          {tCommon('home.hero2.builder.step2', { defaultValue: 'Narrow your focus' })}
+      <div className="space-y-3">
+        <p className="text-sm font-medium text-slate-600">
+          {tCommon('TopDocsChips.mobile.filterByRole', { defaultValue: 'Filter by role' })}
         </p>
         <div className="flex flex-wrap gap-2">
           {roleFilters.map((filter) => {
@@ -605,7 +804,7 @@ const TopDocsChips = React.memo(function TopDocsChips({
                 type="button"
                 size="sm"
                 variant="outline"
-                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                   isActive
                     ? 'bg-[#2563EB] text-white shadow-sm hover:bg-[#1D4ED8]'
                     : 'border-transparent bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -623,19 +822,15 @@ const TopDocsChips = React.memo(function TopDocsChips({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-          <span className="text-blue-500">3.</span>{' '}
-          {tCommon('home.hero2.builder.step3', { defaultValue: 'Select a specific document' })}
-        </p>
+      <div className="space-y-3">
         {filteredDocs.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-600">
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-center text-sm text-slate-600">
             {tCommon('home.hero2.builder.step3Empty', {
               defaultValue: 'No documents match this focus yet. Try a different option.',
             })}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="space-y-3">
             {displayedDocs.map((doc) => {
               const badge = DOC_BADGES[doc.id];
               const href = buildDocHref(doc.id);
@@ -645,68 +840,42 @@ const TopDocsChips = React.memo(function TopDocsChips({
                   key={doc.id}
                   href={href}
                   prefetch
-                  className="group block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#1D4ED8]/70 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+                  className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-colors hover:border-[#2563EB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
                   onMouseEnter={() => prefetchDocRoutes(doc.id)}
                   onFocus={() => prefetchDocRoutes(doc.id)}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
-                        <FileText className="h-5 w-5" />
-                      </span>
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-slate-900 group-hover:text-[#1D4ED8] transition-colors">
-                          {getDocName(doc)}
-                        </h4>
-                        {friendlyDescription && (
-                          <p className="text-xs text-slate-500">
-                            {tCommon('TopDocsChips.hoverLabel', { defaultValue: 'For' })}: {friendlyDescription}
-                          </p>
-                        )}
-                      </div>
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+                    <FileText className="h-5 w-5" />
+                  </span>
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <h4 className="text-base font-semibold text-slate-900">{getDocName(doc)}</h4>
+                      {badge && (
+                        <Badge variant="secondary" className="px-2 py-0.5 text-[11px] font-semibold capitalize">
+                          {tCommon(`TopDocsChips.badge.${badge}`, {
+                            defaultValue: badge === 'new' ? 'New' : 'Updated',
+                          })}
+                        </Badge>
+                      )}
                     </div>
-                    {badge && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Badge variant="secondary" className="flex items-center space-x-1">
-                            {badge === 'new' ? (
-                              <Zap className="h-3 w-3" />
-                            ) : (
-                              <RefreshCcw className="h-3 w-3" />
-                            )}
-                            <span className="capitalize">
-                              {tCommon(`TopDocsChips.badge.${badge}`, {
-                                defaultValue: badge === 'new' ? 'New' : 'Updated',
-                              })}
-                            </span>
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {badge === 'new'
-                            ? tCommon('TopDocsChips.tooltip.new', {
-                                defaultValue: 'Recently added',
-                              })
-                            : tCommon('TopDocsChips.tooltip.updated', {
-                                defaultValue: 'Recently refreshed',
-                              })}
-                        </TooltipContent>
-                      </Tooltip>
+                    {friendlyDescription && (
+                      <p className="text-sm leading-snug text-slate-500">{friendlyDescription}</p>
                     )}
                   </div>
+                  <ChevronRight className="h-5 w-5 text-slate-300 transition-colors group-hover:text-[#2563EB]" />
                 </Link>
               );
             })}
           </div>
         )}
       </div>
-    </div>
-    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+
       {selectedFilterId === 'all' && filteredDocs.length > 12 && (
         <Button
           type="button"
           size="sm"
           variant="outline"
-          className="rounded-full border-transparent bg-slate-100 px-6 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
+          className="w-full rounded-full border-transparent bg-slate-100 px-6 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-200"
           onClick={() => setShowAllForCategory((current) => !current)}
         >
           {showAllForCategory
@@ -714,15 +883,16 @@ const TopDocsChips = React.memo(function TopDocsChips({
             : tCommon('TopDocsChips.showMore', { defaultValue: 'Show more' })}
         </Button>
       )}
+
       <Button
         variant="link"
-        onClick={() => router.push(`/${locale}/category/${selectedCategory}`)}
-        className="inline-flex items-center gap-1 text-[#2563EB] text-sm font-semibold hover:text-[#1D4ED8]"
+        onClick={resetCategorySelection}
+        className="w-full justify-start text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8]"
       >
-        {tCommon('TopDocsChips.viewAll', { defaultValue: 'View all in category →' })}
+        {tCommon('TopDocsChips.viewAll', { defaultValue: 'View all in category' })}
       </Button>
     </div>
-  </>
+  </div>
 )}
 
       </section>
