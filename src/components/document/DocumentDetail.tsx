@@ -6,7 +6,6 @@ import React, { useEffect, useState, Children, isValidElement } from 'react';
 const ReactMarkdown = React.lazy(() => import('react-markdown'));
 import { useTranslation } from 'react-i18next';
 import { Loader2, AlertTriangle } from 'lucide-react';
-import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { cn } from '@/lib/utils';
 import { ClauseTooltip } from '@/components/shared';
@@ -109,18 +108,16 @@ const DocumentDetail = React.memo(function DocumentDetail({
     );
   }
 
-  const displayName = documentDisplayName;
-  const imgSrc = `/images/previews/${locale}/${docId}.png`;
-  const fallbackAlt = altText || `${displayName || docId} preview`;
   const watermarkText = t('preview.watermark', { defaultValue: 'DRAFT' });
+  const hasMarkdown = Boolean(initialMarkdown && md);
 
   return (
     <div
       id="live-preview"
       data-watermark={watermarkText}
       className={cn(
-        'relative w-full h-auto min-h-[500px] md:min-h-[650px]',
-        'max-w-[850px] mx-auto border shadow-md bg-white dark:bg-background text-foreground',
+        'relative mx-auto w-full h-auto min-h-[500px] md:min-h-[650px]',
+        'max-w-[680px] sm:max-w-[760px] md:max-w-[840px] border shadow-md bg-white dark:bg-background text-foreground',
         'overflow-hidden select-none aspect-[8.5/11]',
       )}
       style={{
@@ -151,8 +148,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
         </div>
       )}
 
-      {/* Case 1: Display Markdown if initialMarkdown was provided, processed into md, and no error occurred */}
-      {!isLoading && !error && md && initialMarkdown ? (
+      {hasMarkdown ? (
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
           <React.Suspense
             fallback={<Loader2 className="h-8 w-8 animate-spin" />}
@@ -190,25 +186,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
             </ReactMarkdown>
           </React.Suspense>
         </div>
-      ) : // Case 2: Display Image Preview if no initialMarkdown was provided, not loading, no error, and docConfig IS available
-      !isLoading && !error && !md && !initialMarkdown && docConfig ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center">
-          <Image
-            src={imgSrc} // imgSrc relies on docId, which comes from docConfig
-            alt={fallbackAlt} // fallbackAlt relies on documentDisplayName, which comes from docConfig
-            width={850}
-            height={1100}
-            className="object-contain w-full h-full"
-            data-ai-hint="document template screenshot"
-            loading="lazy"
-            onError={() => {
-              console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}.`);
-            }}
-          />
-        </div>
-      ) : // Case 3: Fallback "Preview not available" if not loading, no error, but neither markdown nor image can be shown
-      // This can happen if !initialMarkdown and !docConfig (after loading attempt)
-      !isLoading && !error && !md ? (
+      ) : !isLoading && !error ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20 p-4 text-center">
           <AlertTriangle className="h-8 w-8 text-muted-foreground mb-2" />
           <p className="text-sm text-muted-foreground">

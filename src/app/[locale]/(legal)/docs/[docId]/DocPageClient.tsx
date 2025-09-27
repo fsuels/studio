@@ -152,24 +152,48 @@ export default function DocPageClient({
       : urlParams.docId)) as string;
 
   const docConfig = useMemo(() => docMeta, [docMeta]);
+  const canonicalDocId = docConfig?.id ?? docId;
 
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobileViewport(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (isMobileViewport || !isPreviewOpen) {
+      return;
+    }
+    const previous = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = previous;
+    };
+  }, [isPreviewOpen, isMobileViewport]);
 
   // Preload detail + next-step route
   useEffect(() => {
     if (typeof DocumentDetail.preload === 'function') {
       DocumentDetail.preload();
     }
-    if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    if (canonicalDocId && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${canonicalDocId}/start`);
     }
-  }, [router, docId, currentLocale]);
+  }, [router, canonicalDocId, currentLocale]);
 
   useEffect(() => {
     if (isHydrated) {
@@ -332,11 +356,17 @@ export default function DocPageClient({
               type="button"
               variant="outline"
               className="flex w-full max-w-xs items-center justify-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-6 py-3 text-sm font-semibold text-blue-600 shadow-sm transition-colors hover:bg-blue-100 hover:text-blue-700"
-              onClick={() => setIsPreviewOpen(true)}
+              onClick={() => {
+                if (isMobileViewport) {
+                  router.push(`/${currentLocale}/preview/${canonicalDocId}`);
+                } else {
+                  setIsPreviewOpen(true);
+                }
+              }}
             >
               <Eye className="h-5 w-5" />
               {t('docDetail.previewCta', {
-                defaultValue: 'Preview Document',
+                defaultValue: 'Preview Template',
               })}
             </Button>
           </div>
@@ -647,22 +677,21 @@ export default function DocPageClient({
         </div>
       </main>
 
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-5xl w-[96vw] md:w-[82vw] max-h-[92vh] overflow-hidden p-0">
-          <DialogHeader className="px-4 pt-5 pb-2 md:px-6">
-            <DialogTitle className="text-base font-semibold text-muted-foreground md:text-lg md:text-foreground">
-              {t('docDetail.previewModeLabel', { defaultValue: 'Preview Mode' })}
+      {!isMobileViewport && (
+        <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+          <DialogContent className="mx-auto w-screen max-w-none h-[94vh] overflow-hidden rounded-none border-0 bg-white px-0 pb-0 pt-0 sm:h-auto sm:w-[80vw] sm:max-w-5xl sm:rounded-3xl sm:border sm:border-slate-200 sm:pb-4 sm:pt-6">
+          <DialogHeader className="px-6 pt-6 pb-3 text-center sm:px-12">
+            <DialogTitle className="mx-auto text-base font-semibold text-foreground md:text-lg">
+              {t('docDetail.previewTitle', { defaultValue: 'Document Preview' })}
             </DialogTitle>
             <p className="mt-1 text-xs text-muted-foreground md:text-sm">
-              {t('docDetail.previewHint', {
-                defaultValue: 'Interactive preview of the completed template.',
-              })}
+              {t('docDetail.previewSubtitleCompact', { defaultValue: 'Read-only snapshot' })}
             </p>
           </DialogHeader>
-          <div className="px-2 pb-5 md:px-6 md:pb-6">
-            <div className="max-h-[72vh] md:max-h-[74vh] overflow-y-auto rounded-lg border border-dashed border-slate-200 bg-slate-50/80 p-2 md:p-4 shadow-inner">
-              <div className="relative">
-                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-slate-50 opacity-70" />
+          <div className="px-4 pb-6 sm:px-8 sm:pb-6">
+            <div className="max-h-[78vh] md:max-h-[80vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-8 sm:py-6 shadow-inner flex justify-center">
+              <div className="relative w-full max-w-[780px] md:max-w-[820px] mx-auto">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/50" />
                 <div className="select-none">
                   {isPreviewOpen ? (
                     <DocumentDetail
@@ -678,7 +707,7 @@ export default function DocPageClient({
                     </div>
                   )}
                 </div>
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 via-slate-50/70 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/65 to-transparent" />
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-3 text-center uppercase tracking-wide">
@@ -687,8 +716,9 @@ export default function DocPageClient({
               })}
             </p>
           </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </TooltipProvider>
   );
 }
